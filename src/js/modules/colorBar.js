@@ -122,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const iconKvPaths = section.querySelectorAll('.top-kv__icon svg path');
             const iconHeaderPaths = mainHeader.querySelectorAll('.header__nav-icon svg path');
+            const logoHamburgerPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
             if (iconKvPaths.length > 0) {
                 timeline.to(iconKvPaths, {
                     fill: scheme.iconBg,
@@ -136,18 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     ease: 'power2.inOut'
                 }, startTime);
             }
-
-            const hamburgerPaths = mainHeader.querySelectorAll('.js-header-hamburger .header__hamburger-line');
-            const hamburgerPaths2 = mainHeader.querySelectorAll('.js-header-hamburger .hamburger__hamburger-line');
-            if (hamburgerPaths.length > 0) {
-                timeline.to(hamburgerPaths, {
-                    backgroundColor: scheme.textColor,
+            if (logoHamburgerPaths.length > 0) {
+                timeline.to(logoHamburgerPaths, {
+                    fill: scheme.iconBg,
                     duration: animationDuration,
                     ease: 'power2.inOut'
                 }, startTime);
             }
-            if (hamburgerPaths2.length > 0) {
-                timeline.to(hamburgerPaths2, {
+
+            const hamburgerPaths = mainHeader.querySelectorAll('.js-header-hamburger .header__hamburger-line');
+            if (hamburgerPaths.length > 0) {
+                timeline.to(hamburgerPaths, {
                     backgroundColor: scheme.textColor,
                     duration: animationDuration,
                     ease: 'power2.inOut'

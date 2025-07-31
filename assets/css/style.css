@@ -523,23 +523,23 @@ a {
     gap: 28px;
   }
 }
-.header__logo {
+.header__logo, .header__logo-nav {
   margin: 0 auto;
   width: 231px;
   position: relative;
 }
-.header__logo svg, .header__logo path {
+.header__logo svg, .header__logo path, .header__logo-nav svg, .header__logo-nav path {
   transition: fill 0.4s ease-in-out;
 }
 .header__logo-img {
   mix-blend-mode: screen;
 }
-.header__sub-logo {
+.header__sub-logo, .header__sub-logo-nav {
   margin: 0 auto;
   width: 50px;
   position: relative;
 }
-.header__sub-logo svg, .header__sub-logo path {
+.header__sub-logo svg, .header__sub-logo path, .header__sub-logo-nav svg, .header__sub-logo-nav path {
   transition: fill 0.4s ease-in-out;
 }
 .header__nav {
@@ -750,12 +750,12 @@ a {
   }
 }
 @media screen and (min-width: 768px) {
-  .header.is-home .header__logo {
+  .header.is-home .header__logo, .header.is-home .header__logo-nav {
     width: 336px;
   }
 }
 @media screen and (min-width: 768px) {
-  .header.is-home .header__sub-logo {
+  .header.is-home .header__sub-logo, .header.is-home .header__sub-logo-nav {
     width: 80px;
   }
 }
@@ -865,7 +865,7 @@ a {
   top: 52px;
   right: 20px;
   width: 81px;
-  z-index: 101;
+  z-index: -1;
 }
 .hamburger__list {
   border-top: 1px solid var(--color-white);
