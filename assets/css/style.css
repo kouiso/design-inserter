@@ -662,9 +662,6 @@ a {
     width: 55px;
   }
 }
-.header__nav-icon svg, .header__nav-icon path {
-  transition: fill 0.4s ease-in-out;
-}
 .header__hamburger {
   width: 32px;
   aspect-ratio: 1/1;
@@ -1217,9 +1214,12 @@ a {
   line-height: 1.15;
 }
 .top-section__title-text {
+  --title-bg-width: 0%;
+  --title-bg-color: var(--color-orange);
+  --title-text-color: var(--color-white);
   padding: 0 5px;
   font-size: 20px;
-  color: var(--color-white);
+  color: var(--title-text-color);
   font-family: "Helvetica", "Noto Sans JP", sans-serif;
   line-height: 1.15;
   font-weight: 700;
@@ -1229,8 +1229,6 @@ a {
   position: relative;
   z-index: 1;
   background-color: transparent;
-  --title-bg-width: 0%;
-  --title-bg-color: var(--color-orange);
 }
 @media screen and (min-width: 768px) {
   .top-section__title-text {

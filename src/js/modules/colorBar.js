@@ -21,14 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const colorSchemes = [
-        { name: 'red',    mainBg: 'var(--color-red)',    textColor: 'white', titleBg: 'var(--color-orange)', iconBg: 'var(--color-blue)' },
-        { name: 'orange', mainBg: 'var(--color-orange)', textColor: 'black', titleBg: 'var(--color-red)', iconBg: 'var(--color-yellow)' },
-        { name: 'yellow', mainBg: 'var(--color-yellow)', textColor: 'white', titleBg: 'var(--color-red)', iconBg: 'var(--color-sky)' },
-        { name: 'green',  mainBg: 'var(--color-green)',  textColor: 'black', titleBg: 'var(--color-blue)', iconBg: 'var(--color-red)' },
-        { name: 'sky',    mainBg: 'var(--color-sky)',    textColor: 'black', titleBg: 'var(--color-orange)', iconBg: 'var(--color-pink)' },
-        { name: 'blue',   mainBg: 'var(--color-blue)',   textColor: 'white', titleBg: 'var(--color-yellow)', iconBg: 'var(--color-purple)' },
-        { name: 'purple', mainBg: 'var(--color-purple)', textColor: 'black', titleBg: 'var(--color-green)', iconBg: 'var(--color-orange)' },
-        { name: 'pink',   mainBg: 'var(--color-pink)',   textColor: 'white', titleBg: 'var(--color-blue)', iconBg: 'var(--color-green)' }
+        { name: 'red',    mainBg: 'var(--color-red)',    textColor: 'white', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-blue)' },
+        { name: 'orange', mainBg: 'var(--color-orange)', textColor: 'black', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-yellow)' },
+        { name: 'yellow', mainBg: 'var(--color-yellow)', textColor: 'white', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-sky)' },
+        { name: 'green',  mainBg: 'var(--color-green)',  textColor: 'black', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-red)' },
+        { name: 'sky',    mainBg: 'var(--color-sky)',    textColor: 'black', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-pink)' },
+        { name: 'blue',   mainBg: 'var(--color-blue)',   textColor: 'white', titleBg: 'var(--color-yellow)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-purple)' },
+        { name: 'purple', mainBg: 'var(--color-purple)', textColor: 'black', titleBg: 'var(--color-green)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-orange)' },
+        { name: 'pink',   mainBg: 'var(--color-pink)',   textColor: 'white', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-green)' }
     ];
 
     const colorButtons = document.querySelectorAll('.color-bar__button');
@@ -119,9 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (stickyNav) stickyNav.dataset.logoColor = scheme.textColor;
             if (scrollNav) scrollNav.dataset.logoColor = scheme.textColor;
 
-            const iconPaths = section.querySelectorAll('.top-kv__icon svg path');
-            if (iconPaths.length > 0) {
-                timeline.to(iconPaths, {
+            const iconKvPaths = section.querySelectorAll('.top-kv__icon svg path');
+            const iconHeaderPaths = mainHeader.querySelectorAll('.header__nav-icon svg path');
+            if (iconKvPaths.length > 0) {
+                timeline.to(iconKvPaths, {
+                    fill: scheme.iconBg,
+                    duration: animationDuration,
+                    ease: 'power2.inOut'
+                }, startTime);
+            }
+            if (iconHeaderPaths.length > 0) {
+                timeline.to(iconHeaderPaths, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
                     ease: 'power2.inOut'
