@@ -229,62 +229,73 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        if (specificScheme) {
-            const allSections = Array.from(sections);
-            const activeSection = document.querySelector('.is-active-section');
-            const activeIndex = allSections.findIndex(s => s === activeSection);
+        const allSections = Array.from(sections);
+        const activeSection = document.querySelector('.is-active-section');
+        const activeIndex = allSections.findIndex(s => s === activeSection);
 
-            if (activeIndex === -1 || activeSection.dataset.currentColor === specificScheme.mainBg) {
-                isAnimating = false;
-                resetTimer();
-                return;
-            }
-
-            const otherSchemes = availableColorSchemes.filter(s => s.mainBg !== specificScheme.mainBg);
-            for (let i = otherSchemes.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [otherSchemes[i], otherSchemes[j]] = [otherSchemes[j], otherSchemes[i]];
-            }
-            
-            const colorAssignments = new Map();
-            const otherSections = allSections.filter(s => s !== activeSection);
-            otherSections.forEach((section, index) => {
-                let scheme = otherSchemes[index % otherSchemes.length];
-                if (scheme.mainBg === section.dataset.currentColor && otherSchemes.length > 1) {
-                    const nextIndex = (index + 1) % otherSchemes.length;
-                    scheme = otherSchemes[nextIndex];
-                }
-                colorAssignments.set(section, scheme);
-            });
-
-            allSections.forEach((section, index) => {
-                const distance = Math.abs(index - activeIndex);
-                const startTime = distance * 0.5;
-                const scheme = (section === activeSection) ? specificScheme : colorAssignments.get(section);
-                if (scheme) {
-                    section.dataset.currentColor = scheme.mainBg;
-                    animateSection(section, scheme, masterTimeline, startTime);
-                }
-            });
-
-        } else {
+        // If no section is active, do a simple random shuffle for all sections at once
+        if (activeIndex === -1) {
             let shuffledSchemes = [...availableColorSchemes];
             for (let i = shuffledSchemes.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffledSchemes[i], shuffledSchemes[j]] = [shuffledSchemes[j], shuffledSchemes[i]];
             }
-
             sections.forEach((section, index) => {
                 const currentColor = section.dataset.currentColor;
                 let scheme = shuffledSchemes[index % shuffledSchemes.length];
                 if (scheme.mainBg === currentColor && shuffledSchemes.length > 1) {
-                    const nextIndex = (index + 1) % shuffledSchemes.length;
-                    scheme = shuffledSchemes[nextIndex];
+                    scheme = shuffledSchemes[(index + 1) % shuffledSchemes.length];
                 }
                 section.dataset.currentColor = scheme.mainBg;
                 animateSection(section, scheme, masterTimeline, 0);
             });
+
+            shuffleColorBar();
+            return;
         }
+        
+        // Determine the target color for the active section
+        let targetSchemeForActiveSection;
+        if (specificScheme) { // A button was clicked
+            if (activeSection.dataset.currentColor === specificScheme.mainBg) {
+                isAnimating = false; // color is already active, do nothing
+                resetTimer();
+                return;
+            }
+            targetSchemeForActiveSection = specificScheme;
+        } else { // 8-second timer triggered the change
+            const currentActiveColor = activeSection.dataset.currentColor;
+            let newPossibleSchemes = availableColorSchemes.filter(s => s.mainBg !== currentActiveColor);
+            targetSchemeForActiveSection = newPossibleSchemes[Math.floor(Math.random() * newPossibleSchemes.length)];
+        }
+
+        // Determine colors for other sections
+        const otherSchemes = availableColorSchemes.filter(s => s.mainBg !== targetSchemeForActiveSection.mainBg);
+        for (let i = otherSchemes.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [otherSchemes[i], otherSchemes[j]] = [otherSchemes[j], otherSchemes[i]];
+        }
+        
+        const colorAssignments = new Map();
+        const otherSections = allSections.filter(s => s !== activeSection);
+        otherSections.forEach((section, index) => {
+            let scheme = otherSchemes[index % otherSchemes.length];
+            if (scheme.mainBg === section.dataset.currentColor && otherSchemes.length > 1) {
+                scheme = otherSchemes[(index + 1) % otherSchemes.length];
+            }
+            colorAssignments.set(section, scheme);
+        });
+
+        // Animate all sections with the staggered delay
+        allSections.forEach((section, index) => {
+            const distance = Math.abs(index - activeIndex);
+            const startTime = distance * 0.5;
+            const scheme = (section === activeSection) ? targetSchemeForActiveSection : colorAssignments.get(section);
+            if (scheme) {
+                section.dataset.currentColor = scheme.mainBg;
+                animateSection(section, scheme, masterTimeline, startTime);
+            }
+        });
         
         shuffleColorBar();
     }
