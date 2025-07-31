@@ -1,0 +1,246 @@
+@use '../setting' as *;
+
+.top-news{
+  position: relative;
+
+  &__bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: var(--color-red);
+  }
+
+  &__inner{
+    padding: 40px 40px 160px;
+
+    @include mq(md){
+      margin: 0 auto;
+      padding: 160px 0 322px;
+      width: vw-max(1056, 1440);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: vw-max(80, 1440);
+    }
+  }
+
+  &__title-wrapper{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__contents-wrapper{
+    margin-top: 56px;
+
+    @include mq(md){
+      margin-top: 20px;
+    }
+  }
+
+  &__contents-title{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-white);
+    transition: color 0.3s ease;
+
+    @include mq(md){
+      font-size: 16px;
+      line-height: 2;
+    }
+  }
+
+  &__list{
+    margin-top: 40px;
+    border-top: 1px solid var(--color-white);
+    transition: border-color 0.3s ease;
+
+    @include mq(md){
+      margin-top: 26px;
+    }
+  }
+
+  &__item{
+    border-bottom: 1px solid var(--color-white);
+    transition: border-color 0.3s ease;
+  }
+
+  &__link{
+    display: block;
+    padding: 24px 0;
+
+    @include mq(md){
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: vw-max(70, 1440);
+    }
+  }
+
+  &__date-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 21px;
+
+    @include mq(md){
+      gap: 50px;
+    }
+  }
+
+  &__date{
+    font-size: 10px;
+    color: var(--color-white);
+    position: relative;
+    transition: color 0.3s ease;
+
+    @include mq(md){
+      font-size: 12px;
+    }
+
+    &::after{
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 1px;
+      height: 12px;
+      background-color: var(--color-white);
+      transform: translateY(-50%);
+      transition: background-color 0.3s ease;
+
+      @include mq(md){
+        right: -25px;
+        height: 24px;
+      }
+    }
+  }
+
+  &__category{
+    font-size: 10px;
+    color: var(--color-white);
+    transition: color 0.3s ease;
+
+    @include mq(md){
+      font-size: 12px;
+    }
+  }
+
+  &__article-wrapper{
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 16px;
+    align-items: center;
+
+    @include mq(md){
+      margin-top: 0;
+      grid-template-columns: 1fr 24px;
+    }
+  }
+
+  &__article-title{
+    padding-right: 8px;
+    font-size: 12px;
+    color: var(--color-white);
+    @include line-clamp(1);
+    transition: color 0.3s ease;
+
+    @include mq(md){
+      font-size: 16px;
+    }
+  }
+
+  &__more{
+    margin-top: 24px;
+
+    @include mq(md){
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  &__more-link{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--color-white);
+    transition: color 0.3s ease;
+
+    @include mq(md){
+      font-size: 14px;
+      gap: 10px;
+    }
+  }
+
+  &__more-icon-wrapper{
+    width: 20px;
+
+    @include mq(md){
+      width: 24px;
+    }
+  }
+}
+
+[data-text-color="black"]{
+  .top-news__contents-title,
+  .top-news__date,
+  .top-news__category,
+  .top-news__article-title,
+  .top-news__more-link{
+    color: var(--color-black);
+  }
+
+  .top-news__date::after,
+  .top-news__more-link::after{
+    background-color: var(--color-black);
+  }
+
+  .top-news__list,
+  .top-news__item{
+    border-color: var(--color-black);
+  }
+
+  .top-news__arrow-path {
+    fill: var(--color-black);
+  }
+
+  .top-news__article-icon-path {
+    fill: var(--color-black);
+  }
+
+  .top-news__more-icon-path {
+    fill: var(--color-black);
+  }
+}
+
+[data-text-color="white"]{
+  .top-news__contents-title,
+  .top-news__date,
+  .top-news__category,
+  .top-news__article-title,
+  .top-news__more-link{
+    color: var(--color-white);
+  }
+
+  .top-news__date::after,
+  .top-news__more-link::after{
+    background-color: var(--color-white);
+  }
+
+  .top-news__list,
+  .top-news__item{
+    border-color: var(--color-white);
+  }
+
+  .top-news__arrow-path {
+    fill: var(--color-white);
+  }
+
+  .top-news__article-icon-path {
+    fill: var(--color-white);
+  }
+
+  .top-news__more-icon-path {
+    fill: var(--color-white);
+  }
+}

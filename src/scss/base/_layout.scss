@@ -1,0 +1,27 @@
+// ==========================================================================
+// Layout
+// ==========================================================================
+
+@use '../setting' as *;
+
+.site-wrapper{
+  overflow-x: hidden;
+}
+
+.main{
+  margin-top: 110px;
+
+  @include mq(md){
+    margin-top: 174px;
+  }
+}
+
+.home{
+  .main{
+    margin-top: 0;
+    
+    @include mq(md){
+      margin-top: 0;
+    }
+  }
+}

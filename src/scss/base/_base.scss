@@ -1,0 +1,116 @@
+// ==========================================================================
+// Base
+// ==========================================================================
+
+@use '../setting' as *;
+
+@font-face {
+  font-family: 'Overused Grotesk';
+  src: url('../fonts/OverusedGrotesk-VF.woff2') format('woff2'),
+       url('../fonts/OverusedGrotesk-VF.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+body {
+  font-family: $font-family-noto-sans-jp;
+  letter-spacing: 0;
+  line-height: 1.5;
+  font-size: 16px;
+  color: var(--color-black);
+  overflow-x: clip;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: auto;
+}
+
+@media all and (-ms-high-contrast: none) {
+  * {
+    min-height: 0;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+button {
+  color: inherit;
+  background-color: inherit;
+}
+
+ul,ol {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+picture {
+  max-width: none;
+}
+
+img {
+  width: 100%;
+  object-fit: cover;
+  height: auto;
+  vertical-align: middle;
+  font-style: italic;
+  background-repeat: no-repeat;
+  background-size: cover;
+  shape-margin: 0.75rem;
+	image-rendering: -webkit-optimize-contrast;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+button {
+  border: none;
+  padding: 0;
+}
+
+input {
+  border: none;
+}
+
+//iPhoneの文字サイズ
+body {
+  -webkit-text-size-adjust: 100%;
+}
+
+//クリック時の青色を削除
+*:focus {
+  outline: none;
+}
+
+//タップ時の青色を削除
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+}

@@ -1,0 +1,82 @@
+@use '../setting' as *;
+
+.top-sustainability{
+  position: relative;
+
+  @include mq(md){
+    margin-top: -16px;
+  }
+
+  &__wave{
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    z-index: 0;
+    display: none;
+
+    @include mq(md){
+      display: block;
+    }
+  }
+
+  &__bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-blue);
+    z-index: 0;
+  }
+
+  &__inner{
+    padding: 0 20px 60px 40px;
+    position: relative;
+    z-index: 2;
+    
+    @include mq(md){
+      position: relative;
+      padding: 195px vw(220, 1440) 100px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      z-index: 1;
+    }
+  }
+
+  &__pic{
+    padding-right: 90px;
+
+    @include mq(md){
+      padding-right: 0;
+      width: vw(500, 1440);
+    }
+  }
+
+  &__title-wrapper{
+    position: absolute;
+    top: vw(154);
+    left: calc(vw(178) + 40px);
+
+    @include mq(md){
+      margin-top: vw(120, 1440);
+      position: static;
+    }
+  }
+
+  &__contents{
+    margin: 40px 0 0 40px;
+    width: 200px;
+
+    @include mq(md){
+      margin: vw(130, 1440) 0 0 vw(240, 1440);
+      padding-right: 60px;
+      width: 280px;
+    }
+
+    @include mq(xl){
+      padding-right: 0;
+    }
+  }
+}
+

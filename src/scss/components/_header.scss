@@ -1,0 +1,346 @@
+@use '../setting' as *;
+
+.header {
+  width: 100%;
+  position: relative;
+
+  &__bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-pink);
+    z-index: 0;
+  }
+
+  &__inner {
+    padding: 25px 0 0;
+    position: relative;
+    height: 110px;
+
+    @include mq(md){
+      height: 174px;
+    }
+  }
+
+  &__top {
+    display: grid;
+    gap: 4px;
+
+    @include mq(md){
+      gap: 28px;
+    }
+  }
+
+  &__logo {
+    margin: 0 auto;
+    width: 231px;
+    position: relative;
+    
+    svg, path {
+      transition: fill 0.4s ease-in-out;
+    }
+  }
+
+  &__logo-img {
+    mix-blend-mode: screen;
+  }
+
+  &__sub-logo{
+    margin: 0 auto;
+    width: 50px;
+    position: relative;
+
+    svg, path {
+      transition: fill 0.4s ease-in-out;
+    }
+  }
+
+  &__nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: var(--color-white);
+    padding: 25px 0 0;
+    height: 110px;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+    
+    @include mq(md){
+      padding: 0;
+      height: 86px;
+    }
+
+    &.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  &__nav-inner{
+    position: relative;
+    display: grid;
+    gap: 4px;
+
+    @include mq(md){
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+  }
+
+  &__nav-logo{
+    margin: 0 auto;
+    width: 231px;
+
+    @include mq(md){
+      margin: 0;
+      width: vw-max(250, 1440);
+    }
+
+    svg, path {
+      transition: fill 0.4s ease-in-out;
+    }
+  }
+
+  &__nav-sub-logo{
+    margin: 0 auto;
+    width: 50px;
+
+    @include mq(md){
+      display: none;
+    }
+
+    svg, path {
+      transition: fill 0.4s ease-in-out;
+    }
+  }
+
+  &__nav-list{
+    display: none;
+
+    @include mq(md){
+      display: flex;
+      align-items: center;
+      gap: vw-max(60, 1440);
+    }
+  }
+
+  &__nav-item{
+    &:last-of-type{
+      margin-left: 20px;
+    }
+  }
+
+  &__nav-link{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-white);
+    transition: color 0.4s ease-in-out;
+    position: relative;
+
+    &::after{
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--color-white);
+      transition: background-color 0.4s ease-in-out, transform 0.2s ease-in-out;
+      transform: scaleX(0);
+      transform-origin: right;
+    }
+
+    @include hover{
+      &::after{
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+    }
+
+    &.is-active{
+      &::after{
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+    }
+  }
+
+  &__nav-icon{
+    display: none;
+
+    @include mq(md){
+      display: block;
+      position: absolute;
+      top: 56px;
+      left: vw-max(250, 1440);
+      width: 55px;
+    }
+    
+    svg, path {
+      transition: fill 0.4s ease-in-out;
+    }
+  }
+
+  &__hamburger {
+    width: 32px;
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    cursor: pointer;
+    appearance: none;
+    border: none;
+    background: transparent;
+
+    @include mq(md){
+      display: none;
+    }
+
+    &.is-active{
+      .header__hamburger-line{
+        &:nth-child(1) {
+          top: 50%;
+          transform: translate(-50%, -50%) rotate(45deg);
+        }
+  
+        &:nth-child(2) {
+          opacity: 0;
+        }
+  
+        &:nth-child(3) {
+          width: 24px;
+          top: 50%;
+          transform: translate(-50%, -50%) rotate(-45deg);
+        }
+      }
+    }
+  }
+
+  &__hamburger-line {
+    display: block;
+    position: absolute;
+    left: 50%;
+    height: 2px;
+    background-color: var(--color-white);
+    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out, opacity 0.3s ease-in-out, width 0.3s ease-in-out;
+    &:nth-child(1) {
+      width: 24px;
+      top: 10px;
+      transform: translate(-50%, 0);
+    }
+
+    &:nth-child(2) {
+      width: 20px;
+      top: 15px;
+      transform: translate(calc(-50% - 2px), 0);
+    }
+
+    &:nth-child(3) {
+      width: 16px;
+      top: 20px;
+      transform: translate(calc(-50% - 4px), 0);
+    }
+  }
+
+  &__hamburger-nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: var(--color-nav-black);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s, visibility 0.4s;
+
+    @include mq(md){
+      display: none;
+    }
+
+    &.is-active{
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+  }
+
+  &.is-home{
+    .header{
+      &__inner {
+        @include mq(md){
+          padding: 40px 0 36px;
+        }
+      }
+
+      &__top{
+        @include mq(md){
+          gap: 28px;
+        }
+      }
+
+      &__logo{
+        @include mq(md){
+          width: 336px;
+        }
+      }
+
+      &__sub-logo{
+        @include mq(md){
+          width: 80px;
+        }
+      }
+    }
+  }
+}
+
+[data-logo-color="white"] {
+  .header__logo, .header__sub-logo, .header__nav-logo, .header__nav-sub-logo {
+    svg path {
+      fill: var(--color-white);
+    }
+  }
+  .header__logo-img {
+      mix-blend-mode: normal;
+  }
+  .header__nav-link{
+    color: var(--color-white);
+
+    &::after{
+      background-color: var(--color-white);
+    }
+  }
+}
+
+[data-logo-color="black"] {
+  .header__logo, .header__sub-logo, .header__nav-logo, .header__nav-sub-logo {
+    svg path {
+      fill: var(--color-black);
+    }
+  }
+  .header__logo-img {
+      mix-blend-mode: normal;
+  }
+  .header__nav-link{
+    color: var(--color-black);
+
+    &::after{
+      background-color: var(--color-black);
+    }
+  }
+}

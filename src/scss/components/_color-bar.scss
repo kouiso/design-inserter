@@ -1,0 +1,52 @@
+@use '../setting' as *;
+
+.color-bar {
+  display: none;
+
+  @include mq(md){
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: vw-max(24, 1200);
+    height: 100%;
+    z-index: 1001;
+    display: grid;
+    grid-template-rows: repeat(8, 1fr);
+  }
+
+  &__button{
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 0;
+    display: block;
+
+    &--red{
+      background-color: var(--color-red);
+    }
+    &--orange{
+      background-color: var(--color-orange);
+    }
+    &--yellow{
+      background-color: var(--color-yellow);
+    }
+    &--green{
+      background-color: var(--color-green);
+    }
+    &--sky{
+      background-color: var(--color-sky);
+    }
+    &--blue{
+      background-color: var(--color-blue);
+    }
+    &--purple{
+      background-color: var(--color-purple);
+    }
+    &--pink{
+      background-color: var(--color-pink);
+    }
+  }
+}
