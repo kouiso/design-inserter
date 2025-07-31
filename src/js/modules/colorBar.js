@@ -135,6 +135,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     ease: 'power2.inOut'
                 }, startTime);
             }
+
+            const hamburgerPaths = mainHeader.querySelectorAll('.js-header-hamburger .header__hamburger-line');
+            const hamburgerPaths2 = mainHeader.querySelectorAll('.js-header-hamburger .hamburger__hamburger-line');
+            if (hamburgerPaths.length > 0) {
+                timeline.to(hamburgerPaths, {
+                    backgroundColor: scheme.textColor,
+                    duration: animationDuration,
+                    ease: 'power2.inOut'
+                }, startTime);
+            }
+            if (hamburgerPaths2.length > 0) {
+                timeline.to(hamburgerPaths2, {
+                    backgroundColor: scheme.textColor,
+                    duration: animationDuration,
+                    ease: 'power2.inOut'
+                }, startTime);
+            }
         }
         
         bgElements.forEach(bgElement => {
