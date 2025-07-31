@@ -35,10 +35,13 @@ get_header();
         <div class="top-kv__message-bg u-visible-md-up">
             <p class="top-section__title">
                 <span class="top-section__title-text top-section__title-text--kv" data-inview data-bg-clip-to-right data-delay="0.4">
-                ENRICHING THE WORLD WITH
+                ENRICHING THE WORLD
                 </span><br>
                 <span class="top-section__title-text top-section__title-text--kv" data-inview data-bg-clip-to-right data-delay="0.45">
-                OUR COLORS AND TECHNOLOGY 
+                WITH OUR COLORS
+                </span><br>
+                <span class="top-section__title-text top-section__title-text--kv" data-inview data-bg-clip-to-right data-delay="0.5">
+                AND TECHNOLOGY 
                 </span>
             </p>
         </div>
