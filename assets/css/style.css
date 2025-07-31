@@ -665,7 +665,7 @@ a {
 .header__hamburger {
   width: 32px;
   aspect-ratio: 1/1;
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 10px;
   display: block;
@@ -673,6 +673,7 @@ a {
   appearance: none;
   border: none;
   background: transparent;
+  z-index: 100;
 }
 @media screen and (min-width: 768px) {
   .header__hamburger {

@@ -47,43 +47,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyNav = document.querySelector('.js-header-scroll-nav');
 
     if (mainHeader && stickyNav) {
-        let activationPoint = 0;
-        let lastScrollY = 0;
+        ScrollTrigger.matchMedia({
+            "(min-width: 768px)": function() {
+                let activationPoint = 0;
+                let lastScrollY = 0;
 
-        const updateActivationPoint = () => {
-            activationPoint = mainHeader.offsetHeight;
-        };
-        
-        // Run initial calculation
-        updateActivationPoint();
+                const updateActivationPoint = () => {
+                    activationPoint = mainHeader.offsetHeight;
+                };
+                
+                // Run initial calculation
+                updateActivationPoint();
 
-        ScrollTrigger.create({
-            start: 0,
-            end: "max",
-            onUpdate: (self) => {
-                const currentScrollY = self.scroll();
+                ScrollTrigger.create({
+                    start: 0,
+                    end: "max",
+                    onUpdate: (self) => {
+                        const currentScrollY = self.scroll();
 
-                // Determine if we are past the main header
-                if (currentScrollY > activationPoint) {
-                    // We are below the main header, sticky nav can be shown
-                    if (self.direction === -1) { // Scrolling UP
-                        stickyNav.classList.add('is-visible');
-                    } else { // Scrolling DOWN
-                        // Only hide if we just passed the activation point going down
-                        if (lastScrollY <= activationPoint) {
-                             stickyNav.classList.add('is-visible'); // Show it for a moment as we cross
+                        // Determine if we are past the main header
+                        if (currentScrollY > activationPoint) {
+                            // We are below the main header, sticky nav can be shown
+                            if (self.direction === -1) { // Scrolling UP
+                                stickyNav.classList.add('is-visible');
+                            } else { // Scrolling DOWN
+                                // Only hide if we just passed the activation point going down
+                                if (lastScrollY <= activationPoint) {
+                                     stickyNav.classList.add('is-visible'); // Show it for a moment as we cross
+                                } else {
+                                     stickyNav.classList.remove('is-visible');
+                                }
+                            }
                         } else {
-                             stickyNav.classList.remove('is-visible');
+                            // We are in or above the main header, sticky nav must be hidden
+                            stickyNav.classList.remove('is-visible');
                         }
-                    }
-                } else {
-                    // We are in or above the main header, sticky nav must be hidden
+                        lastScrollY = currentScrollY;
+                    },
+                    // Recalculate the height on resize/refresh
+                    onRefresh: updateActivationPoint
+                });
+
+                // Return a cleanup function
+                return () => {
                     stickyNav.classList.remove('is-visible');
-                }
-                lastScrollY = currentScrollY;
-            },
-            // Recalculate the height on resize/refresh
-            onRefresh: updateActivationPoint
+                };
+            }
         });
 
         // Ensure the height is correct after all page assets are loaded
