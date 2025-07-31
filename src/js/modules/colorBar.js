@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         backgroundColor: currentColor,
                         '--title-bg-width': '0%',
                         '--title-bg-color': scheme.titleBg,
+                        '--title-text-color': scheme.titleTextColor,
                     }, startTime)
                     .to(titleText, {
                         '--title-bg-width': '100%',

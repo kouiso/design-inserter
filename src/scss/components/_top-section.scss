@@ -23,6 +23,7 @@
     position: relative;
     z-index: 1;
     background-color: transparent;
+    transition: color 0.3s 0.8s ease-in-out;
 
     @include mq(md){
       padding: 0 7px;
