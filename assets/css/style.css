@@ -1220,7 +1220,7 @@ a {
   padding: 0 5px;
   font-size: 20px;
   color: var(--title-text-color);
-  font-family: "Helvetica", "Noto Sans JP", sans-serif;
+  font-family: "Helvetica", "Helvetica Neue", "Noto Sans JP", sans-serif;
   line-height: 1.15;
   font-weight: 700;
   display: inline-block;
