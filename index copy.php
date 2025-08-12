@@ -83,29 +83,17 @@ get_header();
         </ul>
     </nav>
 
-    <!-- svg -->
-    <svg width="0" height="0" style="position: absolute;">
-        <defs>
-            <clipPath id="sp-header-wave" clipPathUnits="objectBoundingBox">
-            <!-- 元のパスを変換 -->
-            <path d="M1 0 H0 V0.208 C0 0.208, 0.125 1, 0.225 1 C0.325 1, 0.5115 0.4688, 0.6174 0.4688 C0.7232 0.4688, 0.8094 0.8125, 0.8715 0.8125 C0.9337 0.8125, 1 0.5, 1 0.5 V0 Z" />
-            </clipPath>
-        </defs>
-    </svg>
-    <svg width="0" height="0" style="position: absolute;">
-    <defs>
-        <clipPath id="pc-header-wave" clipPathUnits="objectBoundingBox">
-        <!-- 元のパスを変換 -->
-        <path d="M1 0 H0 V0.208 C0 0.208, 0.125 1, 0.225 1 C0.325 1, 0.5194 0.4688, 0.6174 0.4688 C0.7153 0.4688, 0.8094 0.8125, 0.8715 0.8125 C0.9337 0.8125, 1 0.5, 1 0.5 V0 Z" />
-        </clipPath>
-    </defs>
-    </svg>
-
     <div class="top-kv__wave">
         <div class="wave">
-            <div class="wave__sp" style="clip-path: url(#sp-header-wave); height: 24px;">
+            <div class="wave__sp">
+                <svg width="390" height="24" viewBox="0 0 390 24" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path class="js-color-fill" d="M390 0H0V5C0 5 48.75 24 87.75 24C126.75 24 199.5 11.25 240.771 11.25C282.042 11.25 315.656 19.5 339.896 19.5C364.135 19.5 390 12 390 12V0Z"/>
+                </svg>
             </div>
-            <div class="wave__pc" style="clip-path: url(#pc-header-wave); height: 48px; position: relative; z-index: 10;">
+            <div class="wave__pc">
+                <svg width="1440" height="48" viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path class="js-color-fill" d="M1440 0H0V10C0 10 180 48 324 48C468 48 748 22.5 889 22.5C1030 22.5 1165.5 39 1255 39C1344.5 39 1440 24 1440 24V0Z"/>
+                </svg>
             </div>
         </div>
     </div>
@@ -210,27 +198,17 @@ get_header();
         </div>
     </div>
 
-    <!-- svg -->
-    <svg width="0" height="0" style="position:absolute;">
-        <defs>
-            <clipPath id="wave-clip" clipPathUnits="objectBoundingBox">
-                <path d="M1 0 H0 V0.0925 C0.0375 0.6707, 0.1319 1, 0.2486 1 C0.3995 1, 0.4658 0.4063, 0.6694 0.2966 C0.7806 0.2367, 0.9306 0.4413, 1 0.7406 V0 Z" />
-            </clipPath>
-        </defs>
-    </svg>
-    <svg width="0" height="0" style="position: absolute;">
-      <defs>
-        <clipPath id="mobile-wave-clip" clipPathUnits="objectBoundingBox">
-          <path d="M0 1 H1 C1 0.691, 0.896 0, 0.695 0 C0.494 0, 0.424 0.875, 0.264 0.875 C0.104 0.875, 0 0.524, 0 0.524 V1 Z" />
-        </clipPath>
-      </defs>
-    </svg>
-
     <div class="top-about__wave">
         <div class="wave">
-            <div class="wave__sp" style="clip-path: url(#mobile-wave-clip); height: 360px;">
+            <div class="wave__sp">
+                <svg width="390" height="80" viewBox="0 0 390 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path class="js-color-fill" d="M-3.05176e-05 80H390C390 55.3006 349.5 0 271 0C192.5 0 165.5 70 103 70C40.5 70 -3.05176e-05 41.9234 -3.05176e-05 41.9234V80Z"/>
+                </svg>
             </div>
-            <div class="wave__pc" style="clip-path: url(#wave-clip); height: 360px;">
+            <div class="wave__pc">
+                <svg width="1440" height="360" viewBox="0 0 1440 360" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path class="js-color-fill" d="M1440 0H0V33.3038C53.9999 241.469 190 360 358 360C575.329 360 670.745 146.275 964 106.776C1124 85.2245 1340 158.857 1440 266.612V0Z"/>
+                </svg>
             </div>
         </div>
     </div>

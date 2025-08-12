@@ -3,7 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initializeColorBar() {
+export function initializeColorBar04() {
     const inviewTitles = document.querySelectorAll('.top-section__title-text[data-inview]');
     inviewTitles.forEach(title => {
         const delay = parseFloat(title.dataset.delay) || 0;
@@ -58,7 +58,7 @@ export function initializeColorBar() {
     const availableColorSchemes = colorSchemes;
 
     function animateSection(section, scheme, timeline, startTime = 0) {
-        const animationDuration = 1.2;
+        const animationDuration = 0.6;
         
         section.dataset.textColor = scheme.textColor;
 
@@ -93,7 +93,7 @@ export function initializeColorBar() {
         if (waveDivs.length > 0) {
             bgElements.push(...waveDivs);
         }
-
+        
         if (section.classList.contains('top-kv')) {
             const mainHeader = document.querySelector('.js-header');
             const stickyNav = document.querySelector('.js-header-nav');
@@ -143,7 +143,7 @@ export function initializeColorBar() {
                 timeline.to(iconKvPaths, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
-                    ease: 'none'
+                    ease: 'power4.inOut'
                 }, startTime);
             }
             if (iconHeaderPaths.length > 0) {

@@ -3,15 +3,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initializeColorBar() {
+export function initializeColorBar05() {
     const inviewTitles = document.querySelectorAll('.top-section__title-text[data-inview]');
     inviewTitles.forEach(title => {
         const delay = parseFloat(title.dataset.delay) || 0;
         gsap.to(title, {
             '--title-bg-width': '100%',
-            duration: 1,
+            duration: 0.6,
             delay: delay,
-            ease: 'power4.inOut',
+            ease: 'power2.inOut',
             scrollTrigger: {
                 trigger: title,
                 start: 'top 85%',
@@ -37,20 +37,6 @@ export function initializeColorBar() {
     
     if (sections.length === 0) return;
 
-    sections.forEach(section => {
-        const bg = section.querySelector('.js-color-bg');
-        if (bg) {
-            const color = getComputedStyle(bg).backgroundColor;
-            section.dataset.currentColor = color;
-            
-            // Apply the section's color to its wave divs on initialization
-            const waveDivs = section.querySelectorAll('.wave__sp, .wave__pc');
-            waveDivs.forEach(div => {
-                div.style.backgroundColor = color;
-            });
-        }
-    });
-
     let isAnimating = false;
     let autoChangeTimer = null;
     const AUTO_CHANGE_INTERVAL = 8000;
@@ -58,11 +44,10 @@ export function initializeColorBar() {
     const availableColorSchemes = colorSchemes;
 
     function animateSection(section, scheme, timeline, startTime = 0) {
-        const animationDuration = 1.2;
+        const animationDuration = 0.6;
         
         section.dataset.textColor = scheme.textColor;
 
-        // Animate title reveal
         const titleTexts = section.querySelectorAll('.top-section__title-text');
         if (titleTexts.length > 0) {
             titleTexts.forEach(titleText => {
@@ -78,7 +63,7 @@ export function initializeColorBar() {
                     .to(titleText, {
                         '--title-bg-width': '100%',
                         duration: animationDuration,
-                        ease: 'power4.inOut',
+                        ease: 'power2.inOut',
                         delay: 0.4,
                         onComplete: () => {
                             gsap.set(titleText, { backgroundColor: 'transparent' });
@@ -87,11 +72,36 @@ export function initializeColorBar() {
             });
         }
 
-        // --- Animate Backgrounds and new Wave Divs ---
         const bgElements = [section.querySelector('.js-color-bg')];
-        const waveDivs = section.querySelectorAll('.wave__sp, .wave__pc');
-        if (waveDivs.length > 0) {
-            bgElements.push(...waveDivs);
+        let paths = Array.from(section.querySelectorAll('.js-color-fill'));
+        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+        if (section.classList.contains('top-about')) {
+            if (!isDesktop) {
+                paths = paths.filter(el => !el.closest('.top-about__wave'));
+            }
+        }
+
+        if (section.classList.contains('top-sustainability')) {
+            if (!isDesktop) {
+                const aboutWavePaths = document.querySelectorAll('.top-about__wave .js-color-fill');
+                aboutWavePaths.forEach(p => {
+                    const pathAnimator = p.cloneNode(true);
+                    pathAnimator.style.fill = scheme.mainBg;
+                    pathAnimator.style.clipPath = 'inset(0 100% 0 0)';
+                    p.parentNode.appendChild(pathAnimator);
+
+                    timeline.to(pathAnimator, {
+                        clipPath: 'inset(0 0% 0 0)',
+                        duration: animationDuration,
+                        ease: 'power2.inOut',
+                        onComplete: () => {
+                            p.style.fill = scheme.mainBg;
+                            p.parentNode.removeChild(pathAnimator);
+                        }
+                    }, startTime);
+                });
+            }
         }
 
         if (section.classList.contains('top-kv')) {
@@ -109,55 +119,29 @@ export function initializeColorBar() {
             if (mainHeader) mainHeader.dataset.logoColor = scheme.textColor;
             if (stickyNav) stickyNav.dataset.logoColor = scheme.textColor;
             if (scrollNav) scrollNav.dataset.logoColor = scheme.textColor;
-        }
-        
-        bgElements.forEach(bgElement => {
-            if (!bgElement) return;
 
-            let currentBgColor = getComputedStyle(bgElement).backgroundColor;
-            
-            bgElement.style.background = `linear-gradient(to right, ${scheme.mainBg} 0%, ${scheme.mainBg} 25%, ${currentBgColor} 75%, ${currentBgColor} 100%)`;
-            bgElement.style.backgroundSize = '400% 100%';
-            bgElement.style.backgroundPosition = '100% 0';
-
-            timeline.to(bgElement, {
-                backgroundPosition: '0% 0',
-                duration: animationDuration,
-                ease: 'none',
-                onComplete: () => {
-                    bgElement.style.background = scheme.mainBg;
-                    bgElement.style.backgroundSize = '';
-                    bgElement.style.backgroundPosition = '';
-                }
-            }, startTime);
-        });
-
-        // --- Animate Icons and other UI ---
-        if (section.classList.contains('top-kv')) {
-            const mainHeader = document.querySelector('.js-header');
             const iconKvPaths = section.querySelectorAll('.top-kv__icon svg path');
             const iconHeaderPaths = mainHeader.querySelectorAll('.header__nav-icon svg path');
             const logoHamburgerPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
-            
             if (iconKvPaths.length > 0) {
                 timeline.to(iconKvPaths, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
-                    ease: 'none'
+                    ease: 'power2.inOut'
                 }, startTime);
             }
             if (iconHeaderPaths.length > 0) {
                 timeline.to(iconHeaderPaths, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
-                    ease: 'power4.inOut'
+                    ease: 'power2.inOut'
                 }, startTime);
             }
             if (logoHamburgerPaths.length > 0) {
                 timeline.to(logoHamburgerPaths, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
-                    ease: 'power4.inOut'
+                    ease: 'power2.inOut'
                 }, startTime);
             }
 
@@ -166,10 +150,46 @@ export function initializeColorBar() {
                 timeline.to(hamburgerPaths, {
                     backgroundColor: scheme.textColor,
                     duration: animationDuration,
-                    ease: 'power4.inOut'
+                    ease: 'power2.inOut'
                 }, startTime);
             }
         }
+        
+        bgElements.forEach(bgElement => {
+            if (!bgElement) return;
+
+            const animator = document.createElement('div');
+            animator.style.cssText = `position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: ${scheme.mainBg}; z-index: 2; clip-path: inset(0 100% 0 0);`;
+            bgElement.style.position = 'absolute';
+            bgElement.appendChild(animator);
+
+            timeline.to(animator, {
+                clipPath: 'inset(0 0% 0 0)',
+                duration: animationDuration,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    bgElement.style.backgroundColor = scheme.mainBg;
+                    bgElement.removeChild(animator);
+                }
+            }, startTime);
+        });
+
+        paths.forEach(path => {
+            const pathAnimator = path.cloneNode(true);
+            pathAnimator.style.fill = scheme.mainBg;
+            pathAnimator.style.clipPath = 'inset(0 100% 0 0)';
+            path.parentNode.appendChild(pathAnimator);
+
+            timeline.to(pathAnimator, {
+                clipPath: 'inset(0 0% 0 0)',
+                duration: animationDuration,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    path.style.fill = scheme.mainBg;
+                    path.parentNode.removeChild(pathAnimator);
+                }
+            }, startTime);
+        });
     }
 
     function shuffleColorBar() {
