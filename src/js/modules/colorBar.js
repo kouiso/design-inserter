@@ -179,6 +179,21 @@ export function initializeColorBar() {
                 }, startTime);
             }
         }
+        
+        // --- Animate footer icon for top-news section ---
+        if (section.classList.contains('top-news')) {
+            const footerIconPaths = document.querySelectorAll('.footer__icon svg path');
+            if (footerIconPaths.length > 0) {
+                const currentFooterIconColor = getComputedStyle(footerIconPaths[0]).fill;
+                timeline.fromTo(footerIconPaths, {
+                    fill: currentFooterIconColor
+                }, {
+                    fill: scheme.iconBg,
+                    duration: animationDuration,
+                    ease: 'power4.inOut'
+                }, startTime);
+            }
+        }
     }
 
     function shuffleColorBar() {
@@ -243,7 +258,7 @@ export function initializeColorBar() {
             // Second round of color changes
             const shuffledSchemes2 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
             items.forEach((item, index) => {
-                const delay = Math.random() * 0.4 + 1.2; // Delay between 1.2s - 1.6s
+                const delay = Math.random() * 0.4 + 1.0; // Delay between 1.2s - 1.6s
                 const button = item.querySelector('.color-bar__button');
                 if (button) {
                     const newScheme = shuffledSchemes2[(index + 3) % shuffledSchemes2.length];

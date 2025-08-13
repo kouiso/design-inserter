@@ -23,11 +23,13 @@
 
     @include mq(md){
       height: 174px;
+      padding: 25px vw-max(24, 1200) 0 0;
     }
 
     &--page{
       @include mq(md){
         padding: 0;
+        padding: 0 vw-max(24, 1200) 0 0;
         height: 86px;
       }
     }
@@ -307,7 +309,7 @@
     .header{
       &__inner {
         @include mq(md){
-          padding: 40px 0 36px;
+          padding: 40px vw-max(24, 1200) 36px 0;
         }
       }
 

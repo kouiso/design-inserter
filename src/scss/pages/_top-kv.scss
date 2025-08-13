@@ -30,16 +30,20 @@
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
+
+    @include mq(md){
+      padding-right: vw-max(24, 1200);
+    }
   }
 
   &__message-bg{
-    width: 218px;
+    // width: 218px;
     position: absolute;
     top: 0;
     left: 0;
 
     @include mq(md){
-      width: 610px;
+      // width: 610px;
     }
   }
 

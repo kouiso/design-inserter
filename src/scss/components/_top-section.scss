@@ -2,53 +2,81 @@
 
 .top-section {
 
-  &__title{
-    line-height: 1.15;
-  }
-  
-  &__title-text{
-    --title-bg-width: 0%;
-    --title-bg-color: var(--color-orange);
-    --title-text-color: var(--color-white);
-    
-    padding: 0 5px;
-    font-size: 20px;
-    color: var(--title-text-color);
-    font-family: $font-family-helvetica;
-    line-height: 1.15;
-    font-weight: 700;
-    display: inline-block;
-    text-transform: uppercase;
-    white-space: nowrap;
+  &__title-wrapper{
     position: relative;
     z-index: 1;
-    background-color: transparent;
-    transition: color 0.3s 0.8s ease-in-out;
+  }
+
+  &__title-text{
+    position: relative;
+    top: 3px;
+    left: 4px;
+    z-index: 1;
 
     @include mq(md){
-      padding: 0 7px;
-      font-size: vw-max(40, 1000);
+      top: 8px;
+      left: 8px;
     }
 
-    &::before{
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      z-index: -1;
-      width: var(--title-bg-width);
-      background-color: var(--title-bg-color);
-    }
-
-    &--kv{
-      font-size: 32px;
-      
-      @include mq(md){
-        font-size: vw-max(40, 1000);
-      }
+    svg{
+      max-width: none;
     }
   }
+
+  &__title-bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+
+    svg{
+      max-width: none;
+    }
+  }
+
+  // &__title-text{
+  //   --title-bg-width: 0%;
+  //   --title-bg-color: var(--color-orange);
+  //   --title-text-color: var(--color-white);
+    
+  //   padding: 0 5px;
+  //   font-size: 20px;
+  //   color: var(--title-text-color);
+  //   font-family: $font-family-helvetica;
+  //   line-height: 1.15;
+  //   font-weight: 700;
+  //   display: inline-block;
+  //   text-transform: uppercase;
+  //   white-space: nowrap;
+  //   position: relative;
+  //   z-index: 1;
+  //   background-color: transparent;
+  //   transition: color 0.3s 0.8s ease-in-out;
+
+  //   @include mq(md){
+  //     padding: 0 7px;
+  //     font-size: vw-max(40, 1000);
+  //   }
+
+  //   &::before{
+  //     content: '';
+  //     position: absolute;
+  //     top: 0;
+  //     left: 0;
+  //     height: 100%;
+  //     z-index: -1;
+  //     width: var(--title-bg-width);
+  //     background-color: var(--title-bg-color);
+  //   }
+
+  //   &--kv{
+  //     font-size: 32px;
+      
+  //     @include mq(md){
+  //       font-size: vw-max(40, 1000);
+  //     }
+  //   }
+  // }
 
   &__text-wrapper{
     transition: color 0.3s 0.8s ease-in-out;
