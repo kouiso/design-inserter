@@ -4,20 +4,34 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export function initializeColorBar() {
-    const inviewTitles = document.querySelectorAll('.top-section__title-text[data-inview]');
-    inviewTitles.forEach(title => {
-        const delay = parseFloat(title.dataset.delay) || 0;
-        gsap.to(title, {
-            '--title-bg-width': '100%',
-            duration: 1,
-            delay: delay,
-            ease: 'power4.inOut',
-            scrollTrigger: {
-                trigger: title,
-                start: 'top 85%',
-                once: true
-            }
-        });
+    // Initial scroll trigger animation for title backgrounds with clip-path
+    const inviewTitleBgs = document.querySelectorAll('.top-section__title-bg[data-inview]');
+    inviewTitleBgs.forEach(titleBg => {
+        const delay = parseFloat(titleBg.dataset.delay) || 0;
+        const svgElement = titleBg.querySelector('svg');
+        
+        if (svgElement) {
+            // Set initial clip-path
+            gsap.set(svgElement, {
+                clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)'
+            });
+            
+            // Animate clip-path on scroll
+            gsap.to(svgElement, {
+                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                duration: 1,
+                delay: delay,
+                ease: 'power4.inOut',
+                scrollTrigger: {
+                    trigger: titleBg,
+                    start: 'top 85%',
+                    once: true,
+                    onEnter: () => {
+                        titleBg.classList.add('is-inview');
+                    }
+                }
+            });
+        }
     });
 
     const colorSchemes = [
@@ -62,28 +76,65 @@ export function initializeColorBar() {
         
         section.dataset.textColor = scheme.textColor;
 
-        // Animate title reveal
-        const titleTexts = section.querySelectorAll('.top-section__title-text');
-        if (titleTexts.length > 0) {
-            titleTexts.forEach(titleText => {
-                const currentColor = getComputedStyle(titleText).getPropertyValue('--title-bg-color').trim();
-        
-                timeline
-                    .set(titleText, {
-                        backgroundColor: currentColor,
-                        '--title-bg-width': '0%',
-                        '--title-bg-color': scheme.titleBg,
-                        '--title-text-color': scheme.titleTextColor,
-                    }, startTime)
-                    .to(titleText, {
-                        '--title-bg-width': '100%',
+        // Animate title reveal (SVG)
+        const titleWrappers = section.querySelectorAll('.top-section__title-wrapper');
+        if (titleWrappers.length > 0) {
+            titleWrappers.forEach(wrapper => {
+                // Title text SVG paths
+                const titleTextPaths = wrapper.querySelectorAll('.top-section__title-text svg path');
+                // Title background SVG rect - get all rect elements, not just the first
+                const titleBgRects = wrapper.querySelectorAll('.top-section__title-bg svg rect');
+                
+                if (titleTextPaths.length > 0) {
+                    const currentTextColor = getComputedStyle(titleTextPaths[0]).fill || 'white';
+                    timeline.fromTo(titleTextPaths, {
+                        fill: currentTextColor
+                    }, {
+                        fill: scheme.titleTextColor,
                         duration: animationDuration,
                         ease: 'power4.inOut',
-                        delay: 0.4,
-                        onComplete: () => {
-                            gsap.set(titleText, { backgroundColor: 'transparent' });
-                        }
+                        delay: 0.4
                     }, startTime);
+                }
+                
+                if (titleBgRects.length > 0) {
+                    titleBgRects.forEach(rect => {
+                        const currentBgColor = getComputedStyle(rect).fill || '#FFC194';
+                        const parentSvg = rect.closest('svg');
+                        const titleBg = wrapper.querySelector('.top-section__title-bg');
+                        
+                        // Check if this element has already been revealed with clip-path
+                        const isInview = titleBg && titleBg.classList.contains('is-inview');
+                        
+                        if (parentSvg) {
+                            if (isInview || !titleBg.hasAttribute('data-inview')) {
+                                // If already visible or no inview animation, use color transition
+                                const newRect = rect.cloneNode(true);
+                                newRect.style.fill = scheme.titleBg;
+                                parentSvg.appendChild(newRect);
+                                
+                                // Use clip-path for color transition to maintain consistency
+                                timeline.fromTo(newRect, {
+                                    clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)'
+                                }, {
+                                    clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                                    duration: 0.6,
+                                    ease: 'power4.inOut',
+                                    delay: 0.4,
+                                    onComplete: () => {
+                                        rect.style.fill = scheme.titleBg;
+                                        if (newRect.parentNode) {
+                                            newRect.parentNode.removeChild(newRect);
+                                        }
+                                    }
+                                }, startTime);
+                            } else {
+                                // If not yet visible, just update the color for when it appears
+                                rect.style.fill = scheme.titleBg;
+                            }
+                        }
+                    });
+                }
             });
         }
 
@@ -189,6 +240,135 @@ export function initializeColorBar() {
                     fill: currentFooterIconColor
                 }, {
                     fill: scheme.iconBg,
+                    duration: animationDuration,
+                    ease: 'power4.inOut'
+                }, startTime);
+            }
+        }
+    }
+
+    function animatePageColors(scheme, timeline, startTime = 0) {
+        const animationDuration = 1.2;
+        
+        // Animate page__bg-main
+        const pageBgMain = document.querySelector('.page__bg-main');
+        if (pageBgMain) {
+            const currentMainColor = getComputedStyle(pageBgMain).backgroundColor;
+            timeline.fromTo(pageBgMain, {
+                backgroundColor: currentMainColor
+            }, {
+                backgroundColor: scheme.mainBg,
+                duration: animationDuration,
+                ease: 'power4.inOut'
+            }, startTime);
+        }
+        
+        // Animate page__bg-sub
+        const pageBgSub = document.querySelector('.page__bg-sub');
+        if (pageBgSub) {
+            const currentSubColor = getComputedStyle(pageBgSub).backgroundColor;
+            timeline.fromTo(pageBgSub, {
+                backgroundColor: currentSubColor
+            }, {
+                backgroundColor: scheme.titleBg,
+                duration: animationDuration,
+                ease: 'power4.inOut'
+            }, startTime);
+        }
+        
+        // Animate page__kv-icon
+        const pageKvIconPaths = document.querySelectorAll('.page__kv-icon svg path');
+        if (pageKvIconPaths.length > 0) {
+            const currentIconColor = getComputedStyle(pageKvIconPaths[0]).fill;
+            timeline.fromTo(pageKvIconPaths, {
+                fill: currentIconColor
+            }, {
+                fill: scheme.iconBg,
+                duration: animationDuration,
+                ease: 'power4.inOut'
+            }, startTime);
+        }
+        
+        // Animate footer__icon for subpages
+        const footerIconPaths = document.querySelectorAll('.footer__icon svg path');
+        if (footerIconPaths.length > 0) {
+            const currentFooterIconColor = getComputedStyle(footerIconPaths[0]).fill;
+            timeline.fromTo(footerIconPaths, {
+                fill: currentFooterIconColor
+            }, {
+                fill: scheme.iconBg,
+                duration: animationDuration,
+                ease: 'power4.inOut'
+            }, startTime);
+        }
+        
+        // Update header colors to ensure contrast
+        const mainHeader = document.querySelector('.js-header');
+        const stickyNav = document.querySelector('.js-header-nav');
+        const scrollNav = document.querySelector('.js-header-scroll-nav');
+        
+        // Set header background to match main background
+        const headerBgs = [];
+        if (mainHeader) {
+            const mainHeaderBg = mainHeader.querySelector('.js-color-bg');
+            if (mainHeaderBg) headerBgs.push(mainHeaderBg);
+            mainHeader.dataset.logoColor = scheme.textColor;
+        }
+        if (stickyNav) {
+            const stickyNavBg = stickyNav.querySelector('.js-color-bg');
+            if (stickyNavBg) headerBgs.push(stickyNavBg);
+            stickyNav.dataset.logoColor = scheme.textColor;
+        }
+        if (scrollNav) {
+            const scrollNavBg = scrollNav.querySelector('.js-color-bg');
+            if (scrollNavBg) headerBgs.push(scrollNavBg);
+            scrollNav.dataset.logoColor = scheme.textColor;
+        }
+        
+        headerBgs.forEach(bg => {
+            if (bg) {
+                const currentBgColor = getComputedStyle(bg).backgroundColor;
+                timeline.fromTo(bg, {
+                    backgroundColor: currentBgColor
+                }, {
+                    backgroundColor: scheme.mainBg,
+                    duration: animationDuration,
+                    ease: 'power4.inOut'
+                }, startTime);
+            }
+        });
+        
+        // Update header icon colors
+        if (mainHeader) {
+            const iconHeaderPaths = mainHeader.querySelectorAll('.header__nav-icon svg path');
+            const logoHamburgerPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
+            
+            if (iconHeaderPaths.length > 0) {
+                const currentHeaderIconColor = getComputedStyle(iconHeaderPaths[0]).fill;
+                timeline.fromTo(iconHeaderPaths, {
+                    fill: currentHeaderIconColor
+                }, {
+                    fill: scheme.iconBg,
+                    duration: animationDuration,
+                    ease: 'power4.inOut'
+                }, startTime);
+            }
+            
+            if (logoHamburgerPaths.length > 0) {
+                const currentHamburgerIconColor = getComputedStyle(logoHamburgerPaths[0]).fill;
+                timeline.fromTo(logoHamburgerPaths, {
+                    fill: currentHamburgerIconColor
+                }, {
+                    fill: scheme.iconBg,
+                    duration: animationDuration,
+                    ease: 'power4.inOut'
+                }, startTime);
+            }
+            
+            const hamburgerLines = mainHeader.querySelectorAll('.js-header-hamburger .header__hamburger-line');
+            if (hamburgerLines.length > 0) {
+                timeline.to(hamburgerLines, {
+                    backgroundColor: scheme.textColor,
                     duration: animationDuration,
                     ease: 'power4.inOut'
                 }, startTime);
@@ -313,6 +493,13 @@ export function initializeColorBar() {
                 section.dataset.currentColor = scheme.mainBg;
                 animateSection(section, scheme, masterTimeline, 0);
             });
+            
+            // Handle page backgrounds for subpages
+            const pageElement = document.querySelector('.page');
+            if (pageElement) {
+                const selectedScheme = specificScheme || shuffledSchemes[0];
+                animatePageColors(selectedScheme, masterTimeline, 0);
+            }
 
             shuffleColorBar();
             return;

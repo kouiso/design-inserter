@@ -1254,6 +1254,9 @@ a {
 .top-section__title-bg svg {
   max-width: none;
 }
+.top-section__title-bg[data-inview] svg {
+  clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+}
 .top-section__text-wrapper {
   transition: color 0.3s 0.8s ease-in-out;
 }
@@ -1524,9 +1527,9 @@ a {
   bottom: 0;
   left: 0;
   width: min(480px, calc(480 / 1440 * 100vw));
-  height: 100vh;
   background-color: var(--color-purple);
   padding-right: 20px;
+  padding-bottom: 160px;
   display: grid;
   justify-content: flex-end;
 }
@@ -1536,7 +1539,7 @@ a {
   }
 }
 .navigation__list {
-  margin-top: 64px;
+  margin-top: 80px;
 }
 .navigation__item:not(:first-of-type) .navigation__item-title {
   border-top: 1px solid rgba(0, 0, 0, 0.1);

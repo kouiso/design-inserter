@@ -32,6 +32,11 @@
     svg{
       max-width: none;
     }
+    
+    // Hide initially when data-inview is set
+    &[data-inview] svg{
+      clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+    }
   }
 
   // &__title-text{
