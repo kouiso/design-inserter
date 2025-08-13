@@ -140,21 +140,30 @@ export function initializeColorBar() {
             const logoHamburgerPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
             
             if (iconKvPaths.length > 0) {
-                timeline.to(iconKvPaths, {
+                const currentIconColor = getComputedStyle(iconKvPaths[0]).fill;
+                timeline.fromTo(iconKvPaths, {
+                    fill: currentIconColor
+                }, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
                     ease: 'none'
                 }, startTime);
             }
             if (iconHeaderPaths.length > 0) {
-                timeline.to(iconHeaderPaths, {
+                const currentHeaderIconColor = getComputedStyle(iconHeaderPaths[0]).fill;
+                timeline.fromTo(iconHeaderPaths, {
+                    fill: currentHeaderIconColor
+                }, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
                     ease: 'power4.inOut'
                 }, startTime);
             }
             if (logoHamburgerPaths.length > 0) {
-                timeline.to(logoHamburgerPaths, {
+                const currentHamburgerIconColor = getComputedStyle(logoHamburgerPaths[0]).fill;
+                timeline.fromTo(logoHamburgerPaths, {
+                    fill: currentHamburgerIconColor
+                }, {
                     fill: scheme.iconBg,
                     duration: animationDuration,
                     ease: 'power4.inOut'
