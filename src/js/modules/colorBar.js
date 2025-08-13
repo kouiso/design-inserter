@@ -184,27 +184,87 @@ export function initializeColorBar() {
     function shuffleColorBar() {
         const shuffleTimeline = gsap.timeline();
         const items = Array.from(colorBarList.children);
-        const shuffleDuration = 0.15;
-
+        const totalDuration = 2.4; // Extended from 1.6s to 2.4s
+        
+        // Phase 1: Fade out all items at once (0.3s)
         shuffleTimeline.to(items, {
             opacity: 0,
-            duration: shuffleDuration,
-            ease: 'power1.inOut',
-            stagger: 0.01,
+            duration: 0.3,
+            ease: 'power2.in',
+            stagger: 0
         })
+        // Shuffle the DOM order during the hidden state
         .call(() => {
+            // Only shuffle DOM order, don't change colors yet
             for (let i = items.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [items[i], items[j]] = [items[j], items[i]];
             }
             items.forEach(item => colorBarList.appendChild(item));
         })
-        .to(items, {
-            opacity: 1,
-            duration: shuffleDuration,
-            ease: 'power1.inOut',
-            stagger: 0.01
-        });
+        // Phase 2: Stagger appearance randomly (0.8s total)
+        .call(() => {
+            const randomItems = [...items].sort(() => Math.random() - 0.5);
+            gsap.to(randomItems, {
+                opacity: 1,
+                duration: 0.4,
+                ease: 'power2.out',
+                stagger: {
+                    each: 0.8 / items.length,
+                    from: 'random'
+                }
+            });
+        }, null, '+=0.1') // Small pause after fade out
+        // Phase 3: Start color changes after all items are visible
+        .call(() => {
+            // First round of color changes
+            const shuffledSchemes1 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
+            items.forEach((item, index) => {
+                const delay = Math.random() * 0.4; // Delay between 0s - 0.4s
+                const button = item.querySelector('.color-bar__button');
+                if (button) {
+                    const currentColor = getComputedStyle(button).backgroundColor;
+                    const newScheme = shuffledSchemes1[index % shuffledSchemes1.length];
+                    
+                    gsap.fromTo(button, {
+                        backgroundColor: currentColor
+                    }, {
+                        backgroundColor: newScheme.mainBg,
+                        duration: 0.8,
+                        delay: delay,
+                        ease: 'none',
+                        onComplete: () => {
+                            button.dataset.colorName = newScheme.name;
+                        }
+                    });
+                }
+            });
+            
+            // Second round of color changes
+            const shuffledSchemes2 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
+            items.forEach((item, index) => {
+                const delay = Math.random() * 0.4 + 1.2; // Delay between 1.2s - 1.6s
+                const button = item.querySelector('.color-bar__button');
+                if (button) {
+                    const newScheme = shuffledSchemes2[(index + 3) % shuffledSchemes2.length];
+                    
+                    // Get the color after first animation (delayed to ensure first animation has started)
+                    setTimeout(() => {
+                        const currentColor = getComputedStyle(button).backgroundColor;
+                        gsap.fromTo(button, {
+                            backgroundColor: currentColor
+                        }, {
+                            backgroundColor: newScheme.mainBg,
+                            duration: 0.8,
+                            ease: 'none',
+                            onComplete: () => {
+                                button.dataset.colorName = newScheme.name;
+                            }
+                        });
+                    }, delay * 1000);
+                }
+            });
+        }, null, '+=0.8'); // Wait for Phase 2 to complete (0.8s)
     }
 
     function triggerColorChange(specificScheme = null) {
