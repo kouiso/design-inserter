@@ -47,8 +47,11 @@
 
     @include mq(lg){
       top: -88px;
-      right: -40px;
       width: 90px;
+    }
+
+    @include mq(xl){
+      right: 40px;
     }
 
     svg{
@@ -70,7 +73,7 @@
       @include mq(lg){
         display: grid;
         grid-template-columns: auto auto 1fr;
-        gap: vw-max(100, 1200);
+        gap: vw-max(100, 1440);
       }
     }
   }

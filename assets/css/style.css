@@ -1011,8 +1011,12 @@ a {
 @media screen and (min-width: 992px) {
   .footer__icon {
     top: -88px;
-    right: -40px;
     width: 90px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .footer__icon {
+    right: 40px;
   }
 }
 .footer__icon svg {
@@ -1031,7 +1035,7 @@ a {
   .footer__nav--pc {
     display: grid;
     grid-template-columns: auto auto 1fr;
-    gap: min(100px, calc(100 / 1200 * 100vw));
+    gap: min(100px, calc(100 / 1440 * 100vw));
   }
 }
 .footer__list {

@@ -48,8 +48,10 @@ export function initializeColorBar() {
     const colorButtons = document.querySelectorAll('.color-bar__button');
     const sections = document.querySelectorAll('[data-bg-color="changeable"]');
     const colorBarList = document.querySelector('.color-bar');
+    const pageElement = document.querySelector('.page'); // Check for subpage
     
-    if (sections.length === 0) return;
+    // Continue if either sections exist or we're on a subpage
+    if (sections.length === 0 && !pageElement) return;
 
     sections.forEach(section => {
         const bg = section.querySelector('.js-color-bg');
@@ -188,7 +190,7 @@ export function initializeColorBar() {
             const mainHeader = document.querySelector('.js-header');
             const iconKvPaths = section.querySelectorAll('.top-kv__icon svg path');
             const iconHeaderPaths = mainHeader.querySelectorAll('.header__nav-icon svg path');
-            const logoHamburgerPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
+            const iconHeaderPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
             
             if (iconKvPaths.length > 0) {
                 const currentIconColor = getComputedStyle(iconKvPaths[0]).fill;
@@ -250,6 +252,10 @@ export function initializeColorBar() {
     function animatePageColors(scheme, timeline, startTime = 0) {
         const animationDuration = 1.2;
         
+        // Get a different scheme for the header (use next color in sequence)
+        const schemeIndex = availableColorSchemes.findIndex(s => s.name === scheme.name);
+        const headerScheme = availableColorSchemes[(schemeIndex + 1) % availableColorSchemes.length];
+        
         // Animate page__bg-main
         const pageBgMain = document.querySelector('.page__bg-main');
         if (pageBgMain) {
@@ -271,6 +277,23 @@ export function initializeColorBar() {
                 backgroundColor: currentSubColor
             }, {
                 backgroundColor: scheme.titleBg,
+                duration: animationDuration,
+                ease: 'power4.inOut'
+            }, startTime);
+        }
+        
+        // Animate navigation__inner to titleBg color and text color
+        const navigationInner = document.querySelector('.navigation__inner');
+        if (navigationInner) {
+            const currentNavColor = getComputedStyle(navigationInner).backgroundColor;
+            const currentTextColor = getComputedStyle(navigationInner).color;
+            
+            timeline.fromTo(navigationInner, {
+                backgroundColor: currentNavColor,
+                color: currentTextColor
+            }, {
+                backgroundColor: scheme.titleBg,
+                color: scheme.textColor,
                 duration: animationDuration,
                 ease: 'power4.inOut'
             }, startTime);
@@ -302,38 +325,44 @@ export function initializeColorBar() {
             }, startTime);
         }
         
-        // Update header colors to ensure contrast
+        // Update all headers with different color scheme (like TOP page does with KV section)
         const mainHeader = document.querySelector('.js-header');
         const stickyNav = document.querySelector('.js-header-nav');
         const scrollNav = document.querySelector('.js-header-scroll-nav');
         
-        // Set header background to match main background
-        const headerBgs = [];
+        // Collect ALL header__bg.js-color-bg elements
+        const allHeaderBgs = document.querySelectorAll('.header__bg.js-color-bg');
+        const headerBgs = Array.from(allHeaderBgs);
+        
+        // Set logo colors for headers
         if (mainHeader) {
-            const mainHeaderBg = mainHeader.querySelector('.js-color-bg');
-            if (mainHeaderBg) headerBgs.push(mainHeaderBg);
-            mainHeader.dataset.logoColor = scheme.textColor;
+            mainHeader.dataset.logoColor = headerScheme.textColor;
         }
         if (stickyNav) {
-            const stickyNavBg = stickyNav.querySelector('.js-color-bg');
-            if (stickyNavBg) headerBgs.push(stickyNavBg);
-            stickyNav.dataset.logoColor = scheme.textColor;
+            stickyNav.dataset.logoColor = headerScheme.textColor;
         }
         if (scrollNav) {
-            const scrollNavBg = scrollNav.querySelector('.js-color-bg');
-            if (scrollNavBg) headerBgs.push(scrollNavBg);
-            scrollNav.dataset.logoColor = scheme.textColor;
+            scrollNav.dataset.logoColor = headerScheme.textColor;
         }
         
-        headerBgs.forEach(bg => {
-            if (bg) {
-                const currentBgColor = getComputedStyle(bg).backgroundColor;
-                timeline.fromTo(bg, {
-                    backgroundColor: currentBgColor
-                }, {
-                    backgroundColor: scheme.mainBg,
+        // Use gradient animation like TOP page
+        headerBgs.forEach(bgElement => {
+            if (bgElement) {
+                const currentBgColor = getComputedStyle(bgElement).backgroundColor;
+                
+                bgElement.style.background = `linear-gradient(to right, ${headerScheme.mainBg} 0%, ${headerScheme.mainBg} 25%, ${currentBgColor} 75%, ${currentBgColor} 100%)`;
+                bgElement.style.backgroundSize = '400% 100%';
+                bgElement.style.backgroundPosition = '100% 0';
+                
+                timeline.to(bgElement, {
+                    backgroundPosition: '0% 0',
                     duration: animationDuration,
-                    ease: 'power4.inOut'
+                    ease: 'none',
+                    onComplete: () => {
+                        bgElement.style.background = headerScheme.mainBg;
+                        bgElement.style.backgroundSize = '';
+                        bgElement.style.backgroundPosition = '';
+                    }
                 }, startTime);
             }
         });
@@ -348,7 +377,7 @@ export function initializeColorBar() {
                 timeline.fromTo(iconHeaderPaths, {
                     fill: currentHeaderIconColor
                 }, {
-                    fill: scheme.iconBg,
+                    fill: headerScheme.iconBg,
                     duration: animationDuration,
                     ease: 'power4.inOut'
                 }, startTime);
@@ -359,7 +388,7 @@ export function initializeColorBar() {
                 timeline.fromTo(logoHamburgerPaths, {
                     fill: currentHamburgerIconColor
                 }, {
-                    fill: scheme.iconBg,
+                    fill: headerScheme.iconBg,
                     duration: animationDuration,
                     ease: 'power4.inOut'
                 }, startTime);
@@ -368,7 +397,7 @@ export function initializeColorBar() {
             const hamburgerLines = mainHeader.querySelectorAll('.js-header-hamburger .header__hamburger-line');
             if (hamburgerLines.length > 0) {
                 timeline.to(hamburgerLines, {
-                    backgroundColor: scheme.textColor,
+                    backgroundColor: headerScheme.textColor,
                     duration: animationDuration,
                     ease: 'power4.inOut'
                 }, startTime);
@@ -560,14 +589,17 @@ export function initializeColorBar() {
         autoChangeTimer = setTimeout(runRandomChange, AUTO_CHANGE_INTERVAL);
     }
 
-    sections.forEach(section => {
-        ScrollTrigger.create({
-            trigger: section,
-            start: "top 50%",
-            end: "bottom 50%",
-            toggleClass: { targets: section, className: "is-active-section" },
+    // Only set up ScrollTrigger for sections if they exist
+    if (sections.length > 0) {
+        sections.forEach(section => {
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top 50%",
+                end: "bottom 50%",
+                toggleClass: { targets: section, className: "is-active-section" },
+            });
         });
-    });
+    }
     
     colorButtons.forEach(button => {
         button.addEventListener('click', () => {
