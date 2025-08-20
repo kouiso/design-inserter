@@ -35,14 +35,14 @@ export function initializeColorBar() {
     });
 
     const colorSchemes = [
-        { name: 'red',    mainBg: 'var(--color-red)',    textColor: 'white', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-blue)' },
-        { name: 'orange', mainBg: 'var(--color-orange)', textColor: 'black', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-yellow)' },
-        { name: 'yellow', mainBg: 'var(--color-yellow)', textColor: 'white', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-sky)' },
-        { name: 'green',  mainBg: 'var(--color-green)',  textColor: 'black', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-red)' },
-        { name: 'sky',    mainBg: 'var(--color-sky)',    textColor: 'black', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-pink)' },
-        { name: 'blue',   mainBg: 'var(--color-blue)',   textColor: 'white', titleBg: 'var(--color-yellow)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-purple)' },
-        { name: 'purple', mainBg: 'var(--color-purple)', textColor: 'black', titleBg: 'var(--color-green)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-orange)' },
-        { name: 'pink',   mainBg: 'var(--color-pink)',   textColor: 'white', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-green)' }
+        { name: 'red',    mainBg: 'var(--color-red)',    textColor: 'white', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-blue)', footerIconBg: 'var(--color-blue)' },
+        { name: 'orange', mainBg: 'var(--color-orange)', textColor: 'black', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-yellow)', footerIconBg: 'var(--color-yellow)' },
+        { name: 'yellow', mainBg: 'var(--color-yellow)', textColor: 'white', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-sky)', footerIconBg: 'var(--color-blue)' },
+        { name: 'green',  mainBg: 'var(--color-green)',  textColor: 'black', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-red)', footerIconBg: 'var(--color-red)' },
+        { name: 'sky',    mainBg: 'var(--color-sky)',    textColor: 'black', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-pink)', footerIconBg: 'var(--color-pink)' },
+        { name: 'blue',   mainBg: 'var(--color-blue)',   textColor: 'white', titleBg: 'var(--color-yellow)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-purple)', footerIconBg: 'var(--color-pink)' },
+        { name: 'purple', mainBg: 'var(--color-purple)', textColor: 'black', titleBg: 'var(--color-green)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-orange)', footerIconBg: 'var(--color-orange)' },
+        { name: 'pink',   mainBg: 'var(--color-pink)',   textColor: 'white', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-green)', footerIconBg: 'var(--color-green)' }
     ];
 
     const colorButtons = document.querySelectorAll('.color-bar__button');
@@ -241,7 +241,7 @@ export function initializeColorBar() {
                 timeline.fromTo(footerIconPaths, {
                     fill: currentFooterIconColor
                 }, {
-                    fill: scheme.iconBg,
+                    fill: scheme.footerIconBg,
                     duration: animationDuration,
                     ease: 'power4.inOut'
                 }, startTime);
@@ -319,7 +319,7 @@ export function initializeColorBar() {
             timeline.fromTo(footerIconPaths, {
                 fill: currentFooterIconColor
             }, {
-                fill: scheme.iconBg,
+                fill: scheme.footerIconBg,
                 duration: animationDuration,
                 ease: 'power4.inOut'
             }, startTime);
