@@ -190,7 +190,7 @@ export function initializeColorBar() {
             const mainHeader = document.querySelector('.js-header');
             const iconKvPaths = section.querySelectorAll('.top-kv__icon svg path');
             const iconHeaderPaths = mainHeader.querySelectorAll('.header__nav-icon svg path');
-            const iconHeaderPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
+            const logoHamburgerPaths = mainHeader.querySelectorAll('.hamburger__icon svg path');
             
             if (iconKvPaths.length > 0) {
                 const currentIconColor = getComputedStyle(iconKvPaths[0]).fill;
@@ -406,89 +406,78 @@ export function initializeColorBar() {
     }
 
     function shuffleColorBar() {
-        const shuffleTimeline = gsap.timeline();
         const items = Array.from(colorBarList.children);
-        const totalDuration = 2.4; // Extended from 1.6s to 2.4s
         
-        // Phase 1: Fade out all items at once (0.3s)
-        shuffleTimeline.to(items, {
-            opacity: 0,
-            duration: 0.3,
-            ease: 'power2.in',
-            stagger: 0
-        })
-        // Shuffle the DOM order during the hidden state
-        .call(() => {
-            // Only shuffle DOM order, don't change colors yet
-            for (let i = items.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [items[i], items[j]] = [items[j], items[i]];
+        // First round of color changes
+        const shuffledSchemes1 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
+        items.forEach((item, index) => {
+            const delay = Math.random() * 0.4; // Delay between 0s - 0.4s
+            const button = item.querySelector('.color-bar__button');
+            if (button) {
+                const currentColor = getComputedStyle(button).backgroundColor;
+                const newScheme = shuffledSchemes1[index % shuffledSchemes1.length];
+                
+                gsap.fromTo(button, {
+                    backgroundColor: currentColor
+                }, {
+                    backgroundColor: newScheme.mainBg,
+                    duration: 0.8,
+                    delay: delay,
+                    ease: 'power2.inOut',
+                    onComplete: () => {
+                        button.dataset.colorName = newScheme.name;
+                    }
+                });
             }
-            items.forEach(item => colorBarList.appendChild(item));
-        })
-        // Phase 2: Stagger appearance randomly (0.8s total)
-        .call(() => {
-            const randomItems = [...items].sort(() => Math.random() - 0.5);
-            gsap.to(randomItems, {
-                opacity: 1,
-                duration: 0.4,
-                ease: 'power2.out',
-                stagger: {
-                    each: 0.8 / items.length,
-                    from: 'random'
-                }
-            });
-        }, null, '+=0.1') // Small pause after fade out
-        // Phase 3: Start color changes after all items are visible
-        .call(() => {
-            // First round of color changes
-            const shuffledSchemes1 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
-            items.forEach((item, index) => {
-                const delay = Math.random() * 0.4; // Delay between 0s - 0.4s
-                const button = item.querySelector('.color-bar__button');
-                if (button) {
+        });
+        
+        // Second round of color changes
+        const shuffledSchemes2 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
+        items.forEach((item, index) => {
+            const delay = Math.random() * 0.4 + 1.0; // Delay between 1.0s - 1.4s
+            const button = item.querySelector('.color-bar__button');
+            if (button) {
+                const newScheme = shuffledSchemes2[(index + 3) % shuffledSchemes2.length];
+                
+                setTimeout(() => {
                     const currentColor = getComputedStyle(button).backgroundColor;
-                    const newScheme = shuffledSchemes1[index % shuffledSchemes1.length];
-                    
                     gsap.fromTo(button, {
                         backgroundColor: currentColor
                     }, {
                         backgroundColor: newScheme.mainBg,
                         duration: 0.8,
-                        delay: delay,
-                        ease: 'none',
+                        ease: 'power2.inOut',
                         onComplete: () => {
                             button.dataset.colorName = newScheme.name;
                         }
                     });
-                }
-            });
-            
-            // Second round of color changes
-            const shuffledSchemes2 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
-            items.forEach((item, index) => {
-                const delay = Math.random() * 0.4 + 1.0; // Delay between 1.2s - 1.6s
-                const button = item.querySelector('.color-bar__button');
-                if (button) {
-                    const newScheme = shuffledSchemes2[(index + 3) % shuffledSchemes2.length];
-                    
-                    // Get the color after first animation (delayed to ensure first animation has started)
-                    setTimeout(() => {
-                        const currentColor = getComputedStyle(button).backgroundColor;
-                        gsap.fromTo(button, {
-                            backgroundColor: currentColor
-                        }, {
-                            backgroundColor: newScheme.mainBg,
-                            duration: 0.8,
-                            ease: 'none',
-                            onComplete: () => {
-                                button.dataset.colorName = newScheme.name;
-                            }
-                        });
-                    }, delay * 1000);
-                }
-            });
-        }, null, '+=0.8'); // Wait for Phase 2 to complete (0.8s)
+                }, delay * 1000);
+            }
+        });
+        
+        // Third round of color changes
+        const shuffledSchemes3 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
+        items.forEach((item, index) => {
+            const delay = Math.random() * 0.4 + 2.0; // Delay between 2.0s - 2.4s
+            const button = item.querySelector('.color-bar__button');
+            if (button) {
+                const newScheme = shuffledSchemes3[(index + 5) % shuffledSchemes3.length];
+                
+                setTimeout(() => {
+                    const currentColor = getComputedStyle(button).backgroundColor;
+                    gsap.fromTo(button, {
+                        backgroundColor: currentColor
+                    }, {
+                        backgroundColor: newScheme.mainBg,
+                        duration: 0.8,
+                        ease: 'power2.inOut',
+                        onComplete: () => {
+                            button.dataset.colorName = newScheme.name;
+                        }
+                    });
+                }, delay * 1000);
+            }
+        });
     }
 
     function triggerColorChange(specificScheme = null) {
