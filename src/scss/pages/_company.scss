@@ -1,0 +1,108 @@
+@use '../setting' as *;
+
+.company{
+  &__section{
+    &:not(:first-child){
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+      @include mq(lg){
+        margin-top: 80px;
+        padding-top: 80px;
+      }
+    }
+  }
+
+  &__section-title{
+    font-size: 20px;
+
+    @include mq(lg){
+      font-size: 24px;
+    }
+  }
+
+  &__list{
+    display: grid;
+    gap: 24px;
+  }
+
+  &__item{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+
+    @include mq(lg){
+      gap: 20px;
+    }
+  }
+
+  &__item-title{
+    font-size: 10px;
+    line-height: 21px;
+    min-width: 60px;
+
+    @include mq(lg){
+      font-size: 14px;
+      min-width: 120px;
+    }
+  }
+
+  &__item-text{
+    font-size: 12px;
+    line-height: 21px;
+
+    @include mq(lg){
+      font-size: 14px;
+    }
+  }
+
+  &__image-text-wrapper{
+    margin-top: 24px;
+    display: grid;
+    gap: 24px;
+
+    @include mq(lg){
+      margin-top: 48px;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+    }
+  }
+
+  &__image-wrapper{
+    margin: 0 auto;
+    width: 180px;
+
+    @include mq(lg){
+      width: 100%;
+    }
+  }
+
+  &__message-wrapper{
+    display: grid;
+    gap: 24px;
+
+    @include mq(lg){
+      gap: 32px;
+    }
+  }
+
+  &__message-title{
+    font-size: 14px;
+
+    @include mq(lg){
+      font-size: 16px;
+    }
+  }
+
+  &__message-text{
+    font-size: 12px;
+    line-height: 21px;
+
+    @include mq(lg){
+      font-size: 14px;
+      line-height: 24px;
+    }
+  }
+}
+

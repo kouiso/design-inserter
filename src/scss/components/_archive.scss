@@ -1,0 +1,45 @@
+@use '../setting' as *;
+
+.archive {
+  @include mq(lg){
+    padding-bottom: 80px;
+  }
+
+  &__item{
+    &:first-child{
+      .archive__link{
+        padding-top: 0;
+      }
+    }
+  }
+
+  &__link{
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: grid;
+    gap: 16px;
+
+    @include mq(lg){
+      padding: 20px 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: none;
+    }
+
+  }
+
+  &__text-wrapper{
+    display: grid;
+    gap: 8px;
+  }
+
+  &__title{
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  &__text{
+    font-size: 10px;
+    line-height: 1;
+    text-align: right;
+  }
+}

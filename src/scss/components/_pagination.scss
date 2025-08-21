@@ -1,0 +1,37 @@
+@use '../setting' as *;
+
+.pagination {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  @include mq(lg){
+    margin-top: 80px;
+  }
+
+  &__link{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__icon{
+    width: 24px;
+
+    @include mq(lg){
+      width: 38px;
+    }
+  }
+
+  &__text{
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline;
+
+    @include mq(lg){
+      font-size: 20px;
+    }
+  }
+}

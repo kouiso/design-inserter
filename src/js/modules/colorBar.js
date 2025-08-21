@@ -35,14 +35,14 @@ export function initializeColorBar() {
     });
 
     const colorSchemes = [
-        { name: 'red',    mainBg: 'var(--color-red)',    textColor: 'white', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-blue)', footerIconBg: 'var(--color-blue)' },
-        { name: 'orange', mainBg: 'var(--color-orange)', textColor: 'black', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-yellow)', footerIconBg: 'var(--color-yellow)' },
-        { name: 'yellow', mainBg: 'var(--color-yellow)', textColor: 'white', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-sky)', footerIconBg: 'var(--color-blue)' },
-        { name: 'green',  mainBg: 'var(--color-green)',  textColor: 'black', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-red)', footerIconBg: 'var(--color-red)' },
-        { name: 'sky',    mainBg: 'var(--color-sky)',    textColor: 'black', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-pink)', footerIconBg: 'var(--color-pink)' },
-        { name: 'blue',   mainBg: 'var(--color-blue)',   textColor: 'white', titleBg: 'var(--color-yellow)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-purple)', footerIconBg: 'var(--color-pink)' },
-        { name: 'purple', mainBg: 'var(--color-purple)', textColor: 'black', titleBg: 'var(--color-green)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-orange)', footerIconBg: 'var(--color-orange)' },
-        { name: 'pink',   mainBg: 'var(--color-pink)',   textColor: 'white', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-green)', footerIconBg: 'var(--color-green)' }
+        { name: 'red',    mainBg: 'var(--color-red)',    textColor: 'white', pageNavigationTextColor: 'var(--color-black)', titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-blue)', footerIconBg: 'var(--color-blue)' },
+        { name: 'orange', mainBg: 'var(--color-orange)', textColor: 'black', pageNavigationTextColor: 'var(--color-white)', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-yellow)', footerIconBg: 'var(--color-yellow)' },
+        { name: 'yellow', mainBg: 'var(--color-yellow)', textColor: 'white', pageNavigationTextColor: 'var(--color-white)', titleBg: 'var(--color-red)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-sky)', footerIconBg: 'var(--color-blue)' },
+        { name: 'green',  mainBg: 'var(--color-green)',  textColor: 'black', pageNavigationTextColor: 'var(--color-white)', titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-red)', footerIconBg: 'var(--color-red)' },
+        { name: 'sky',    mainBg: 'var(--color-sky)',    textColor: 'black', pageNavigationTextColor: 'var(--color-black)',titleBg: 'var(--color-orange)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-pink)', footerIconBg: 'var(--color-pink)' },
+        { name: 'blue',   mainBg: 'var(--color-blue)',   textColor: 'white', pageNavigationTextColor: 'var(--color-white)',titleBg: 'var(--color-yellow)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-purple)', footerIconBg: 'var(--color-pink)' },
+        { name: 'purple', mainBg: 'var(--color-purple)', textColor: 'black', pageNavigationTextColor: 'var(--color-black)',titleBg: 'var(--color-green)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-orange)', footerIconBg: 'var(--color-orange)' },
+        { name: 'pink',   mainBg: 'var(--color-pink)',   textColor: 'white', pageNavigationTextColor: 'var(--color-white)',titleBg: 'var(--color-blue)', titleTextColor: 'var(--color-white)', iconBg: 'var(--color-green)', footerIconBg: 'var(--color-green)' }
     ];
 
     const colorButtons = document.querySelectorAll('.color-bar__button');
@@ -252,9 +252,23 @@ export function initializeColorBar() {
     function animatePageColors(scheme, timeline, startTime = 0) {
         const animationDuration = 1.2;
         
-        // Get a different scheme for the header (use next color in sequence)
+        // Get a different scheme for the header that doesn't conflict with navigation__inner
         const schemeIndex = availableColorSchemes.findIndex(s => s.name === scheme.name);
-        const headerScheme = availableColorSchemes[(schemeIndex + 1) % availableColorSchemes.length];
+        let headerScheme;
+        
+        // Find a header scheme where mainBg and iconBg don't match navigation's titleBg
+        for (let i = 1; i < availableColorSchemes.length; i++) {
+            const candidateScheme = availableColorSchemes[(schemeIndex + i) % availableColorSchemes.length];
+            if (candidateScheme.mainBg !== scheme.titleBg && candidateScheme.iconBg !== scheme.titleBg) {
+                headerScheme = candidateScheme;
+                break;
+            }
+        }
+        
+        // Fallback to next scheme if no suitable scheme found
+        if (!headerScheme) {
+            headerScheme = availableColorSchemes[(schemeIndex + 1) % availableColorSchemes.length];
+        }
         
         // Animate page__bg-main
         const pageBgMain = document.querySelector('.page__bg-main');
@@ -282,20 +296,27 @@ export function initializeColorBar() {
             }, startTime);
         }
         
-        // Animate navigation__inner to titleBg color and text color
+        // Animate navigation__inner to titleBg color and text color with gradient
         const navigationInner = document.querySelector('.navigation__inner');
         if (navigationInner) {
             const currentNavColor = getComputedStyle(navigationInner).backgroundColor;
             const currentTextColor = getComputedStyle(navigationInner).color;
             
-            timeline.fromTo(navigationInner, {
-                backgroundColor: currentNavColor,
-                color: currentTextColor
-            }, {
-                backgroundColor: scheme.titleBg,
-                color: scheme.textColor,
+            // Apply gradient background like other elements
+            navigationInner.style.background = `linear-gradient(to right, ${scheme.titleBg} 0%, ${scheme.titleBg} 25%, ${currentNavColor} 75%, ${currentNavColor} 100%)`;
+            navigationInner.style.backgroundSize = '400vw 100%';
+            navigationInner.style.backgroundPosition = '100% 0';
+            
+            timeline.to(navigationInner, {
+                backgroundPosition: '0% 0',
+                color: scheme.pageNavigationTextColor,
                 duration: animationDuration,
-                ease: 'power4.inOut'
+                ease: 'none',
+                onComplete: () => {
+                    navigationInner.style.background = scheme.titleBg;
+                    navigationInner.style.backgroundSize = '';
+                    navigationInner.style.backgroundPosition = '';
+                }
             }, startTime);
         }
         

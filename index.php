@@ -63,7 +63,7 @@ get_header();
                 </a>
             </li>
             <li class="top-kv__nav-item">
-                <a href="" class="top-kv__nav-link">
+                <a href="<?= URL_ABOUT_US; ?>" class="top-kv__nav-link">
                     <span class="top-kv__nav-link-text">私たちについて</span>
                 </a>
             </li>

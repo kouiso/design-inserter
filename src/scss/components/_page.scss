@@ -62,7 +62,6 @@
     @include mq(lg){
       display: none;
     }
-
     svg{
       width: 100%;
     }
@@ -85,6 +84,10 @@
       margin-top: 40px;
       padding: 0 0 260px;
     }
+
+    &--narrow{
+      padding: 20px 20px 160px;
+    }
   }
 
   &__title{
@@ -95,6 +98,25 @@
     @include mq(lg){
       padding-left: 0;
       font-size: 24px;
+    }
+  }
+
+  &--no-image{
+    .page__bg-sub{
+      top: 20px;
+      height: calc(100% - 20px);
+    }
+
+    .page__kv-icon{
+      top: 10px;
+    }
+
+    .page__content{
+      padding-top: 50px;
+
+      @include mq(lg){
+        padding-top: 80px;
+      }
     }
   }
 }
