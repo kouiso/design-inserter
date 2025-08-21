@@ -168,6 +168,10 @@
     &:last-of-type{
       margin-left: 20px;
     }
+
+    &--lang{
+      display: flex;
+    }
   }
 
   &__nav-link{
@@ -201,6 +205,15 @@
       &::after{
         transform: scaleX(1);
         transform-origin: left;
+      }
+    }
+
+    &--lang{
+      &:not(:first-of-type){
+        &::before{
+          content: '|';
+          margin: 0 0.3em;
+        }
       }
     }
   }

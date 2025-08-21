@@ -634,6 +634,9 @@ a {
 .header__nav-item:last-of-type {
   margin-left: 20px;
 }
+.header__nav-item--lang {
+  display: flex;
+}
 .header__nav-link {
   font-size: 14px;
   font-weight: 700;
@@ -662,6 +665,10 @@ a {
 .header__nav-link.is-active::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+.header__nav-link--lang:not(:first-of-type)::before {
+  content: "|";
+  margin: 0 0.3em;
 }
 .header__nav-icon {
   display: none;
@@ -1677,11 +1684,18 @@ a {
   bottom: 0;
   left: 0;
 }
+.top-kv__nav-link--lang {
+  display: flex;
+}
 .top-kv__nav-link-text {
   font-size: 14px;
   color: var(--color-white);
   font-weight: 700;
   transition: color 0.4s ease-in-out;
+}
+.top-kv__nav-link-text--lang:not(:first-of-type)::before {
+  content: "|";
+  margin: 0 0.3em;
 }
 
 .top-kv[data-text-color=white] .top-kv__nav-link-text {

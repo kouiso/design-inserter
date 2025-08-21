@@ -78,8 +78,9 @@ get_header();
                 </a>
             </li>
             <li class="top-kv__nav-item">
-                <a href="" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">En | 中文</span>
+                <a href="" class="top-kv__nav-link top-kv__nav-link--lang">
+                    <span class="top-kv__nav-link-text top-kv__nav-link-text--lang">En</span>
+                    <span class="top-kv__nav-link-text top-kv__nav-link-text--lang">中文</span>
                 </a>
             </li>
         </ul>
