@@ -319,6 +319,18 @@ export function initializeColorBar() {
                 }
             }, startTime);
         }
+
+        const pageTitle = document.querySelector('.js-page-title');
+        if (pageTitle) {
+            const mm = gsap.matchMedia();
+            mm.add("(max-width: 1024px)", () => {
+                timeline.to(pageTitle, {
+                    color: scheme.pageNavigationTextColor,
+                    duration: animationDuration,
+                    ease: 'none'
+                }, startTime);
+            });
+        }
         
         // Animate page__kv-icon
         const pageKvIconPaths = document.querySelectorAll('.page__kv-icon svg path');

@@ -1737,8 +1737,13 @@ a {
 @media screen and (min-width: 768px) {
   .top-kv__icon {
     bottom: 40px;
-    right: max(-40px, calc(-10 / 768 * 100vw));
+    right: 10px;
     width: 150px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .top-kv__icon {
+    right: clamp(-40px, -20.8333333333vw + 16.25rem, 10px);
   }
 }
 .top-kv__nav {

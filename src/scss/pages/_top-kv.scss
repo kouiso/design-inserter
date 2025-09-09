@@ -78,8 +78,12 @@
 
     @include mq(md){
       bottom: 40px;
-      right: max(-40px, vw(-10, 768));
+      right: 10px;
       width: 150px;
+    }
+
+    @include mq(xl){
+      right: vw-clamp(10, 1200, -40, 1440);
     }
   }
 
