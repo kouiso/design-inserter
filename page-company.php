@@ -42,7 +42,7 @@ get_header();
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="" class="navigation__item-title">
+                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
                     お客様の声
                     </a>
                 </li>
@@ -62,137 +62,17 @@ get_header();
             </div>
 
             <div class="page__content page__content--no-image">
-                    
-                <h1 id="01" class="page__title js-page-title">
-                会社概要
-                </h1>
-                <div class="page__inner">
 
-                    <div class="company">
-
-                        <div class="company__section">
-                            <dl class="company__list">
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    商号
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    武蔵塗料ホールディングス株式会社<br>
-                                    Musashi Paint Holdings Co., Ltd.
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    設立
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    1958年 (昭和33年) 6月30日
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    資本金
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    2,300万円 (授権資本9,200万円)
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    従業員数
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    248名 (グループ合計1,000名)
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    海外拠点
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    26カ所 (開発センター含む)
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    本社所在地
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    〒171-0022 東京都豊島区南池袋 2-30-16 グリックビル<br>
-                                    Google Maps
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    取引銀行
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    三菱東京UFJ銀行、りそな銀行、三井住友銀行
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    営業種目
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    自動車、家電製品、AV・OA機器、携帯電話、パソコン等に使用される合成樹脂塗料の製造及び販売
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    特約店
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    日本全国280ヵ所、及び韓国、マレーシア、香港、台湾、アメリカ等
-                                    </dd>
-                                </div>
-                                <div class="company__item">
-                                    <dt class="company__item-title">
-                                    加盟団体
-                                    </dt>
-                                    <dd class="company__item-text">
-                                    社団法人日本塗料協会<br>
-                                    社団法人日本塗料工業会<br>
-                                    関東塗料工業組合<br>
-                                    東京商工会議所<br>
-                                    東部塗料工業協同組合
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-
-                        <div id="02" class="company__section">
-                            <h2 class="company__section-title js-page-title">
-                            代表メッセージ
-                            </h2>
-
-                            <div class="company__image-text-wrapper">
-                                <div class="company__image-wrapper">
-                                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/company/president.jpg" alt="" class="company__image">
-                                </div>
-                                <div class="company__message-wrapper">
-                                    <p class="company__message-title">
-                                    人を支え、社会に尽くす企業であり続けます。
-                                    </p>
-                                    <p class="company__message-text">
-                                    企業の使命とは、雇用を維持することで社員の生活を支え、健全な社会づくりに貢献することです。この想いは、1958年の武蔵塗料の創業から半世紀以上が過ぎた今も変わらずに受け継がれています。<br>
-                                    想いは行動につながり、行動は企業としてのあり方につながっていきます。<br>
-                                    無論、その前提として企業自身がまず強くなければなりません。<br>
-                                    そして、強さの源泉とは、言うまでもなく事業と人にあります。<br>
-                                    武蔵塗料は、多様な素材を“混ぜる”技術によってお客さまのニーズにきめ細かくお応えする塗料を開発・提供。家電から通信機器、そして自動車へとその用途を広げてきました。<br>
-                                    同時にグローバル化も推進し、アジア・米国・欧州の世界三拠点体制で、現地のニーズに応えつつ事業の世界戦略を展開してきました。既に外国人社員の割合が8割に達し、さらには外国人の執行役員が誕生するなど、グローバル企業にふさわしいダイバシティも実現しています。<br>
-                                    このように、企業としての普遍の想いをかなえるために、事業の姿は環境に合わせて柔軟に変わってきました。<br>
-                                    さらに、組織面でも、国籍・性別にとらわれないマネジメント体制を構築。真の多様性によって「企業は人なり」の想いを具現化したいと考えています。<br>
-                                    こうした取り組みを通じ、武蔵塗料は技術力とグローバル・ネットワーク、そして創業以来の変わらぬ"志"を強みとして、新製品・新市場の開拓に注力し、さらなる発展を目指してまいります。
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+            <?php if ( have_posts() ) : ?>
+                <?php while( have_posts() ) : the_post(); ?>
+                    <h1 class="page__title">
+                    <?php the_title(); ?>
+                    </h1>
+                    <div class="page__inner">
+                    <?php the_content(); ?>
                     </div>
-
-
-                </div>
-
+                <?php endwhile;?>
+            <?php endif; ?>
             </div>
 
         </div>

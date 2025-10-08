@@ -52,7 +52,7 @@ get_header();
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="" class="navigation__item-title">
+                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
                     お客様の声
                     </a>
                 </li>
@@ -77,80 +77,17 @@ get_header();
             </div>
 
             <div class="page__content">
-                    
-                <h1 class="page__title">
-                企業情報
-                </h1>
-                <div class="page__inner">
 
-                    <div class="about__section">
-                        <h2 id="about-01" class="about__section-title">
-                        武蔵塗料グループについて
-                        </h2>
-                        <div class="about__section-content">
-                            <p class="about__section-text">
-                            武蔵塗料グループは、1958年の創業からスタートし、現在では世界9カ国、13の拠点をネットワークし、グローバルで同一品質の塗料を開発、生産が可能な体制を実現している塗料業界をリードするペイントカンパニーグループです。
-                            </p>
-                        </div>
+            <?php if ( have_posts() ) : ?>
+                <?php while( have_posts() ) : the_post(); ?>
+                    <h1 class="page__title">
+                    <?php the_title(); ?>
+                    </h1>
+                    <div class="page__inner">
+                    <?php the_content(); ?>
                     </div>
-
-                    <div class="about__section">
-                        <h2 id="about-02" class="about__section-title">
-                        経営理念
-                        </h2>
-                        <div class="about__section-content">
-                            <p class="about__section-text">
-                            武蔵塗料グループは、独自の発想により社会に貢献できる商品を開発・供給し、塗料納入先・原材料仕入先・株主・社員の利益を確保し、社員一人一人が精神的に物質的に豊かとなり誇りを持って働けるグループとする。
-                            </p>
-                            <h3 class="about__section-sub-title">
-                            事業領域
-                            </h3>
-                            <p class="about__section-text">
-                            武蔵塗料グループは、世界中の塗料を扱う会社へ、グローバル力、開発力、対応力で 「塗る」ことへの問題解決を提案する企業グループである。
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="about__section">
-                        <h2 id="about-03" class="about__section-title">
-                        色と機能で世界を豊かに
-                        </h2>
-                        <div class="about__section-content">
-                            <p class="about__section-text">
-                            塗料の色と機能がもたらす無限の組み合わせは、塗料の用途を広げ、私たちの事業を成長させてきました。私たちのパーパス（存在意義）である「色と機能で世界を豊かに」は、企業活動の未来を照らす言葉として策定しています。そして「世界を豊かに」は、複雑多様な社会課題に立ち向かうことで実現するのだと最近強く感じます。私たちは武蔵塗料らしい自社の持つ能力・強みを発揮し、社会課題の解決に貢献し、長期的な企業価値向上をめざします。
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="about__section">
-                        <h2 id="about-04" class="about__section-title">
-                        コーポレートアイデンティティ
-                        </h2>
-                        <div class="about__section-content">
-                            <h3 class="about__section-sub-title">
-                            社名および由来
-                            </h3>
-                            <p class="about__section-text">
-                            日本の南関東に広がっていた武蔵国は現在の東京、神奈川、埼玉の一部にまたがっていました。<br>
-                            武蔵の地を代表する塗料企業として成長することを願い武蔵塗料はスタートしました。現在では武蔵は日本を代表する塗料グループとなり、世界に日本の武蔵を伝えるために日々成長を続けています。
-                            </p>
-                            <h3 class="about__section-sub-title">
-                            シンボルマーク
-                            </h3>
-                            <div class="about__section-symbol-wrapper">
-                                <div class="about__section-symbol-image">
-                                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/page/symbol.png" alt="">
-                                </div>
-                                <p class="about__section-text">
-                                現シンボルマークは創業社長福井敏雄が定め、塗料製造のシンボル三本ロールを表しています。三つの円は、製•販•装の和を、また内にあっては従業員、経営者、株主の三つの和、ひいては天•地•人の三つの和を表徴しています。<br>
-                                シンボルカラーは「赤」。赤誠、情熱をあらわし、全体として生命の根源たる太陽を表現しています。日本語のひらがなであるむさしの「む」の字を組み合わせてデザインしました。日本発祥のグローバルグループとしてひらがなをモチーフにしたロゴが世界中に広がり、世界へ塗料を通じて色と幸せを提供できるグループとなる願いが込められています。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
+                <?php endwhile;?>
+            <?php endif; ?>
             </div>
 
         </div>

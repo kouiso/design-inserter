@@ -5,19 +5,50 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 4px;
+
+  @include mq(md){
+    gap: 20px;
+  }
 
   @include mq(lg){
     margin-top: 80px;
   }
 
-  &__link{
+  &--sp{
+    @include mq(md){
+      display: none;
+    }
+  }
+
+  &--pc{
+    display: none;
+
+    @include mq(md){
+      display: flex;
+    }
+  }
+
+  &__num-wrapper{
     display: flex;
-    align-items: center;
-    gap: 5px;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  &__link{
+    transition: opacity .3s ease, color .3s ease;
+
+    @include hover(){
+      opacity: 0.4;
+    }
+
+    &.is-current { 
+      color: #FF4D88;
+    }
   }
 
   &__icon{
+    display: block;
     width: 24px;
 
     @include mq(lg){
@@ -28,10 +59,15 @@
   &__text{
     font-size: 14px;
     font-weight: 500;
-    text-decoration: underline;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
 
-    @include mq(lg){
+    @include mq(md){
       font-size: 20px;
+      width: 40px;
+      height: 32px;
     }
   }
 }

@@ -1,0 +1,118 @@
+@use '../setting' as *;
+
+/* Generic Form Block
+   ================================================================== */
+
+.form {
+
+  &__fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @include mq(lg){
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+
+    @include mq(lg){
+      font-size: 15px;
+    }
+  }
+
+  &__required {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 6px;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 2px;
+    background: rgba(0,0,0,.08);
+  }
+
+  &__input,
+  &__textarea,
+  &__select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    line-height: 1.6;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    background: #fff;
+    appearance: none;
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 180px;
+  }
+
+  &__checkbox {
+    display: inline-flex;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.6;
+
+    input[type='checkbox']{
+      margin-top: 4px;
+      margin-right: 10px;
+      transform: translateY(2px);
+    }
+
+    a{
+      text-decoration: underline;
+    }
+  }
+
+  &__actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+
+    @include mq(lg){
+      margin-top: 32px;
+    }
+  }
+
+  &__submit-button {
+    display: inline-block;
+    min-width: 220px;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 32px;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity .2s ease-in-out;
+
+    &:hover{
+      opacity: .85;
+    }
+  }
+
+  &__note{
+    margin-top: 12px;
+    font-size: 12px;
+    text-align: center;
+    opacity: .7;
+  }
+}

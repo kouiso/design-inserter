@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="footer__item">
-                    <p class="footer__title">製品について</p>
+                    <a href="<?= URL_PRODUCT ?>" class="footer__title">製品について</a>
                     <ul class="footer__sub-list">
                         <li class="footer__sub-item">
                             <button class="footer__accordion js-accordion-button">
@@ -55,91 +55,45 @@
                             </button>
                             <div class="footer__accordion-list-wrapper js-accordion-list">
                                 <ul class="footer__accordion-list">
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">成型プラスチック用塗料</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">紫外線硬化塗料（UV硬化塗料）</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">レーザーカット用塗料</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">金属用塗料</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">新感覚表現塗料</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">金属用特殊下地塗料</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">環境対応型塗料</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">特殊プライマー</span>
-                                            <span class="footer__accordion-link-icon">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </li>
+                                    <?php
+                                    // 'product'カスタム投稿タイプの投稿を取得するための設定
+                                    $args = array(
+                                        'post_type'      => 'product',      // 投稿タイプを 'product' に指定
+                                        'posts_per_page' => -1,             // 全ての投稿を取得
+                                        'orderby'        => 'date',         // 日付順に並べる
+                                        'order'          => 'DESC',         // 新しいものから
+                                    );
+                                    $product_query = new WP_Query($args);
+
+                                    // 投稿データが存在する場合にループ処理を開始
+                                    if ($product_query->have_posts()) :
+                                        while ($product_query->have_posts()) :
+                                            $product_query->the_post();
+                                    ?>
+                                            <li class="footer__accordion-item">
+
+                                                <a href="<?php echo esc_url(get_permalink()); ?>" class="footer__accordion-link">
+
+                                                    <span class="footer__accordion-link-text"><?php echo esc_html(get_the_title()); ?></span>
+                                                    
+                                                    <span class="footer__accordion-link-icon">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.411147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black" />
+                                                        </svg>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                    <?php
+                                        endwhile;
+                                    endif;
+                                    // ループの後にクエリをリセット
+                                    wp_reset_postdata();
+                                    ?>
                                 </ul>
-                            <div>
+                            </div>
                         </li>
                         <li class="footer__sub-item">
-                            <a href="" class="footer__accordion">
+                            <a href="<?= URL_FEATURED ?>" class="footer__accordion">
                                 <span class="footer__accordion-text">注目製品</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -149,7 +103,7 @@
                             </a>
                         </li>
                         <li class="footer__sub-item">
-                            <a href="" class="footer__accordion">
+                            <a href="<?= URL_APPLICATIONS ?>" class="footer__accordion">
                                 <span class="footer__accordion-text">製品用途紹介</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -175,7 +129,7 @@
                             <div class="footer__accordion-list-wrapper js-accordion-list">
                                 <ul class="footer__accordion-list">
                                     <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
+                                        <a href="<?= URL_COMPANY ?>" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">会社概要</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +139,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
+                                        <a href="<?= URL_GLOBAL_NETWORK ?>" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">グローバルネットワーク</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -215,7 +169,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
+                                        <a href="<?= URL_SUSTAINABILITY ?>" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">サステナビリティ</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -228,7 +182,7 @@
                             </div>
                         </li>
                         <li class="footer__sub-item">
-                            <a href="" class="footer__accordion">
+                            <a href="<?= URL_STORY ?>" class="footer__accordion">
                                 <span class="footer__accordion-text">ストーリー</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -238,7 +192,7 @@
                             </a>
                         </li>
                         <li class="footer__sub-item">
-                            <a href="" class="footer__accordion">
+                            <a href="<?= URL_VOICE ?>" class="footer__accordion">
                                 <span class="footer__accordion-text">お客様の声</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -250,7 +204,7 @@
                     </ul>
                 </li>
                 <li class="footer__item">
-                    <a href="<?= URL_HOME ?>" class="footer__link">
+                    <a href="<?= URL_NEWS ?>" class="footer__link">
                         <span class="footer__link-text">ニュース</span>
                         <span class="footer__link-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -260,7 +214,7 @@
                     </a>
                 </li>
                 <li class="footer__item">
-                    <a href="<?= URL_HOME ?>" class="footer__link">
+                    <a href="<?= URL_CAREER ?>" class="footer__link">
                         <span class="footer__link-text">採用情報</span>
                         <span class="footer__link-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -273,7 +227,7 @@
 
             <ul class="footer__other-list">
                 <li class="footer__other-item">
-                    <a href="" class="footer__other-link">
+                    <a href="<?= URL_CONTACT ?>" class="footer__other-link">
                         <icon class="footer__other-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3.33398 3.33337H12.0007C12.5311 3.33337 13.0398 3.54409 13.4149 3.91916C13.7899 4.29423 14.0007 4.80294 14.0007 5.33337V11.3334C14.0007 11.8638 13.7899 12.3725 13.4149 12.7476C13.0398 13.1227 12.5311 13.3334 12.0007 13.3334H3.33398C2.80355 13.3334 2.29484 13.1227 1.91977 12.7476C1.5447 12.3725 1.33398 11.8638 1.33398 11.3334V5.33337C1.33398 4.80294 1.5447 4.29423 1.91977 3.91916C2.29484 3.54409 2.80355 3.33337 3.33398 3.33337ZM3.33398 4.00004C3.00065 4.00004 2.70732 4.11337 2.48065 4.31337L7.66732 7.66671L12.854 4.31337C12.6273 4.11337 12.334 4.00004 12.0007 4.00004H3.33398ZM7.66732 8.47337L2.08732 4.85337C2.03398 5.00004 2.00065 5.16671 2.00065 5.33337V11.3334C2.00065 11.687 2.14113 12.0261 2.39118 12.2762C2.64122 12.5262 2.98036 12.6667 3.33398 12.6667H12.0007C12.3543 12.6667 12.6934 12.5262 12.9435 12.2762C13.1935 12.0261 13.334 11.687 13.334 11.3334V5.33337C13.334 5.16671 13.3007 5.00004 13.2473 4.85337L7.66732 8.47337Z" fill="black"/>
@@ -306,21 +260,35 @@
                     <div class="footer__nav-pc-item">
                         <p class="footer__nav-pc-text">製品情報</p>
                         <div class="footer__nav-pc-link-wrapper footer__nav-pc-link-wrapper--double">
-                            <a href="" class="footer__nav-pc-link">成型プラスチック用塗料</a>
-                            <a href="" class="footer__nav-pc-link">レーザーカット用塗料</a>
-                            <a href="" class="footer__nav-pc-link">新感覚表現塗料</a>
-                            <a href="" class="footer__nav-pc-link">PRTR法対応塗料</a>
-                            <a href="" class="footer__nav-pc-link">UV硬化塗料</a>
-                            <a href="" class="footer__nav-pc-link">金属用塗料</a>
-                            <a href="" class="footer__nav-pc-link">金属用特殊下地塗料</a>
-                            <a href="" class="footer__nav-pc-link">特殊プライマー</a>
+                            <?php
+                            // 'product'カスタム投稿タイプの投稿を取得するための設定
+                            $args = array(
+                                'post_type'      => 'product',      // 投稿タイプを 'product' に指定
+                                'posts_per_page' => -1,             // 全ての投稿を取得
+                                'orderby'        => 'date',         // 日付順に並べる
+                                'order'          => 'DESC',         // 新しいものから
+                            );
+                            $product_query = new WP_Query($args);
+
+                            // 投稿データが存在する場合にループ処理を開始
+                            if ($product_query->have_posts()) :
+                                while ($product_query->have_posts()) :
+                                    $product_query->the_post();
+                            ?>
+                                    <a href="<?php echo esc_url(get_permalink()); ?>" class="footer__nav-pc-link"><?php echo esc_html(get_the_title()); ?></a>
+                            <?php
+                                endwhile;
+                            endif;
+                            // ループの後にクエリをリセット
+                            wp_reset_postdata();
+                            ?>
                         </div>
                     </div>
                     <div class="footer__nav-pc-item">
-                        <a href="" class="footer__nav-pc-link">注目製品</a>
+                        <a href="<?= URL_FEATURED ?>" class="footer__nav-pc-link">注目製品</a>
                     </div>
                     <div class="footer__nav-pc-item">
-                        <a href="" class="footer__nav-pc-link">製品用途紹介</a>
+                        <a href="<?= URL_APPLICATIONS ?>" class="footer__nav-pc-link">製品用途紹介</a>
                     </div>
                 </div>
             </div>
@@ -331,30 +299,30 @@
                     <div class="footer__nav-pc-item">
                         <p class="footer__nav-pc-text">企業情報</p>
                         <div class="footer__nav-pc-link-wrapper">
-                            <a href="" class="footer__nav-pc-link">会社概要</a>
-                            <a href="" class="footer__nav-pc-link">グローバルネットワーク</a>
+                            <a href="<?= URL_COMPANY ?>" class="footer__nav-pc-link">会社概要</a>
+                            <a href="<?= URL_GLOBAL_NETWORK ?>" class="footer__nav-pc-link">グローバルネットワーク</a>
                             <a href="" class="footer__nav-pc-link">ヒストリー</a>
                             <a href="" class="footer__nav-pc-link">品質管理</a>
-                            <a href="" class="footer__nav-pc-link">サステナビリティ</a>
+                            <a href="<?= URL_SUSTAINABILITY ?>" class="footer__nav-pc-link">サステナビリティ</a>
                         </div>
                     </div>
                     <div class="footer__nav-pc-item">
-                        <a href="" class="footer__nav-pc-link">ストーリー</a>
+                        <a href="<?= URL_STORY ?>" class="footer__nav-pc-link">ストーリー</a>
                     </div>
                     <div class="footer__nav-pc-item">
-                        <a href="" class="footer__nav-pc-link">お客様の声</a>
+                        <a href="<?= URL_VOICE ?>" class="footer__nav-pc-link">お客様の声</a>
                     </div>
                 </div>
             </div>
 
             <div class="footer__nav-pc-other-section">
                 <div class="footer__nav-pc-other-link-top">
-                    <a href="" class="footer__nav-pc-link">ホーム</a>
-                    <a href="" class="footer__nav-pc-link">ニュース</a>
-                    <a href="" class="footer__nav-pc-link">採用情報</a>
+                    <a href="<?= URL_HOME ?>" class="footer__nav-pc-link">ホーム</a>
+                    <a href="<?= URL_NEWS ?>" class="footer__nav-pc-link">ニュース</a>
+                    <a href="<?= URL_CAREER ?>" class="footer__nav-pc-link">採用情報</a>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
-                    <a href="" class="footer__nav-pc-other-link">
+                    <a href="<?= URL_CONTACT ?>" class="footer__nav-pc-other-link">
                         <icon class="footer__nav-pc-other-link-icon">
                             <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5 5.93555H18C18.7956 5.93555 19.5587 6.25162 20.1213 6.81423C20.6839 7.37684 21 8.1399 21 8.93555V17.9355C21 18.7312 20.6839 19.4943 20.1213 20.0569C19.5587 20.6195 18.7956 20.9355 18 20.9355H5C4.20435 20.9355 3.44129 20.6195 2.87868 20.0569C2.31607 19.4943 2 18.7312 2 17.9355V8.93555C2 8.1399 2.31607 7.37684 2.87868 6.81423C3.44129 6.25162 4.20435 5.93555 5 5.93555ZM5 6.93555C4.5 6.93555 4.06 7.10555 3.72 7.40555L11.5 12.4355L19.28 7.40555C18.94 7.10555 18.5 6.93555 18 6.93555H5ZM11.5 13.6455L3.13 8.21555C3.05 8.43555 3 8.68555 3 8.93555V17.9355C3 18.466 3.21071 18.9747 3.58579 19.3498C3.96086 19.7248 4.46957 19.9355 5 19.9355H18C18.5304 19.9355 19.0391 19.7248 19.4142 19.3498C19.7893 18.9747 20 18.466 20 17.9355V8.93555C20 8.68555 19.95 8.43555 19.87 8.21555L11.5 13.6455Z" fill="black"/>

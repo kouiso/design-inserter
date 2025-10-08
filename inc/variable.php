@@ -1,9 +1,18 @@
 <?php
 // URL
 define('URL_HOME', home_url('/'));
-define('URL_ABOUT_PRODUCT', home_url('/about-product/'));
+define('URL_PRODUCT', home_url('/products/'));
+define('URL_FEATURED', home_url('/featured/'));
+define('URL_APPLICATIONS', home_url('/applications/'));
 define('URL_ABOUT_US', home_url('/about-us/'));
 define('URL_COMPANY', home_url('/company/'));
 define('URL_STORY', home_url('/story/'));
-define('URL_RECRUIT', home_url('/recruit/'));
+define('URL_VOICE', home_url('/voices/'));
+define('URL_CAREER', home_url('/careers/'));
 define('URL_CONTACT', home_url('/contact/'));
+define('URL_TECHNOLOGY', home_url('/technology/'));
+define('URL_GLOBAL_NETWORK', home_url('/global-network/'));
+define('URL_SUSTAINABILITY', home_url('/sustainability/'));
+define('URL_CUSTOMIZATION', home_url('/customization/'));
+define('URL_NEWS', home_url('/news/'));
+define('URL_DOWNLOAD', home_url('/download/'));

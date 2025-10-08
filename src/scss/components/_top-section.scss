@@ -9,17 +9,70 @@
 
   &__title-text{
     position: relative;
-    top: 3px;
-    left: 4px;
     z-index: 1;
-
-    @include mq(md){
-      top: 8px;
-      left: 8px;
-    }
 
     svg{
       max-width: none;
+    }
+
+    &--kv{
+      top: 4px;
+      left: 4px;
+
+      @include mq(md){
+        top: 9px;
+        left: 10px;
+      }
+    }
+
+    &--product{
+      top: 3px;
+      left: 4px;
+
+      @include mq(md){
+        top: 9px;
+        left: 9px;
+      }
+    }
+
+    &--about{
+      top: 3px;
+      left: 4px;
+
+      @include mq(md){
+        top: 8px;
+        left: 8px;
+      }
+    }
+
+    &--sustainability{
+      top: 3px;
+      left: 5px;
+
+      @include mq(md){
+        top: 10px;
+        left: 10px;
+      }
+    }
+
+    &--customer{
+      top: 2px;
+      left: 5px;
+
+      @include mq(md){
+        top: 9px;
+        left: 10px;
+      }
+    }
+
+    &--news{
+      top: 3px;
+      left: 5px;
+
+      @include mq(md){
+        top: 10px;
+        left: 11px;
+      }
     }
   }
 

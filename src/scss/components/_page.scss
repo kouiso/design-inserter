@@ -88,6 +88,247 @@
     &--narrow{
       padding: 20px 20px 160px;
     }
+
+    .wp-block-group {
+      margin-bottom: 24px;
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .wp-block-post-date {
+      time {
+        font-family: $font-family-helvetica;
+      }
+    }
+
+    .wp-block-cover{
+      margin-bottom: 16px;
+    }
+
+    h2.wp-block-heading,
+    h3.wp-block-heading {
+      margin-top: 40px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    h2.wp-block-heading {
+      font-size: 20px;
+
+      @include mq(lg) {
+        font-size: 24px;
+      }
+    }
+
+    h3.wp-block-heading {
+      font-size: 16px;
+
+      @include mq(lg) {
+        font-size: 20px;
+      }
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.8;
+
+      @include mq(lg) {
+        font-size: 16px;
+      }
+    }
+
+    a {
+      color: var(--color-text-gray);
+      text-decoration: underline;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: darken(#007bff, 10%);
+      }
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    hr.wp-block-separator {
+      margin-top: 40px;
+      margin-bottom: 40px;
+      opacity: 0.1;
+    }
+
+    ul.wp-block-list,
+    ol.wp-block-list {
+      padding-left: 24px;
+      list-style-type: disc;
+      li {
+        margin-bottom: 8px;
+        list-style: disc;
+      }
+    }
+
+    blockquote.wp-block-quote {
+      margin: 24px 0;
+      padding: 16px 24px;
+      border-left: 4px solid #eee;
+      background-color: #f9f9f9;
+
+      p {
+        margin-bottom: 8px;
+      }
+
+      cite {
+        font-style: normal;
+        font-size: 12px;
+        color: #777;
+      }
+    }
+
+    figure.wp-block-image {
+      margin: 24px 0;
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+      figcaption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+      }
+    }
+
+    figure.wp-block-table {
+      margin: 24px 0;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      td{
+        background-color: var(--color-white);
+
+        &:first-child{
+          white-space: nowrap;
+        }
+      }
+      thead {
+        background-color: #f5f5f5;
+        border-bottom: 1px solid;
+      }
+      figcaption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #777;
+      }
+
+      &.no-border{
+        th,
+        td {
+          border: none;
+        }
+      }
+    }
+
+    pre.wp-block-code {
+      background-color: #282c34;
+      color: #abb2bf;
+      padding: 32px 24px 24px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 14px;
+      font-family: "Fira Code", "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+      position: relative;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      code {
+        font-family: inherit;
+        background: none;
+        padding: 0;
+      }
+    }
+
+    .wp-block-buttons {
+      margin: 24px 0;
+      display: flex;
+      gap: 16px;
+    }
+
+    .wp-block-button {
+      .wp-block-button__link{
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+        border-radius: 1000px;
+        transition: opacity 0.3s;
+      }
+      
+      &.is-style-fill {
+        .wp-block-button__link{
+          background-color: var(--color-text-gray);
+          color: var(--color-white) !important;
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+      }
+
+      &.is-style-outline {
+        .wp-block-button__link{
+          border: 1px solid var(--color-text-gray);
+          color: var(--color-text-gray);
+          background-color: transparent;
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+      }
+    }
+
+    figure.wp-block-gallery {
+      margin: 24px 0;
+    }
+
+    figure.wp-block-embed {
+      margin: 24px 0;
+      figcaption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+      }
+    }
+
+    p.has-text-align-right {
+      text-align: right;
+      font-size: 12px;
+      color: #888;
+      margin-top: 40px;
+    }
   }
 
   &__title{

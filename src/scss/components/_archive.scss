@@ -9,6 +9,10 @@
     &:first-child{
       .archive__link{
         padding-top: 0;
+
+        @include mq(lg){
+          padding-top: 24px;
+        }
       }
     }
   }
@@ -20,26 +24,58 @@
     gap: 16px;
 
     @include mq(lg){
-      padding: 20px 0;
+      padding: 24px 0;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       border-bottom: none;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 20px;
     }
+  }
 
+  &__image-wrapper{
+    aspect-ratio: 320 / 180;
+
+    @include mq(lg){
+      width: vw-max(320, 1440);
+    }
+  }
+
+  &__image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &__text-wrapper{
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 8px;
+
+    @include mq(lg){
+      gap: vw-max(50, 1440);
+    }
   }
 
   &__title{
     font-size: 12px;
     line-height: 18px;
+
+    @include mq(lg){
+      font-size: 14px;
+      line-height: 24px;
+    }
   }
 
   &__text{
     font-size: 10px;
     line-height: 1;
     text-align: right;
+
+    @include mq(lg){
+      font-size: 14px;
+      text-align: left;
+    }
   }
 }

@@ -68,6 +68,7 @@ export function initializeColorBar() {
     });
 
     let isAnimating = false;
+    let isColorBarAnimating = false; // Add flag for color bar animation
     let autoChangeTimer = null;
     const AUTO_CHANGE_INTERVAL = 8000;
 
@@ -440,72 +441,76 @@ export function initializeColorBar() {
 
     function shuffleColorBar() {
         const items = Array.from(colorBarList.children);
+        isColorBarAnimating = true; // Start color bar animation
         
-        // First round of color changes
-        const shuffledSchemes1 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
-        items.forEach((item, index) => {
-            const delay = Math.random() * 0.4; // Delay between 0s - 0.4s
-            const button = item.querySelector('.color-bar__button');
-            if (button) {
-                const currentColor = getComputedStyle(button).backgroundColor;
-                const newScheme = shuffledSchemes1[index % shuffledSchemes1.length];
+        // Track completion of all animations
+        let animationsCompleted = 0;
+        const totalAnimations = items.length * 5; // 5 rounds × number of items
+        
+        const checkAnimationComplete = () => {
+            animationsCompleted++;
+            if (animationsCompleted >= totalAnimations) {
+                isColorBarAnimating = false; // End color bar animation
+            }
+        };
+        
+        // Pre-calculate all 5 rounds to ensure no duplicates
+        // Each round will have all 8 colors distributed across 8 buttons
+        const rounds = [];
+        
+        for (let round = 0; round < 5; round++) {
+            // Shuffle colors for this round
+            const shuffled = [...availableColorSchemes].sort(() => Math.random() - 0.5);
+            
+            // Ensure each button gets a different color than its previous round
+            if (round > 0) {
+                const prevRound = rounds[round - 1];
+                const needsReshuffle = [];
                 
-                gsap.fromTo(button, {
-                    backgroundColor: currentColor
-                }, {
-                    backgroundColor: newScheme.mainBg,
-                    duration: 0.8,
-                    delay: delay,
-                    ease: 'power2.inOut',
-                    onComplete: () => {
-                        button.dataset.colorName = newScheme.name;
+                // Check if any button would get the same color as previous round
+                for (let i = 0; i < items.length && i < shuffled.length; i++) {
+                    if (shuffled[i].name === prevRound[i].name) {
+                        needsReshuffle.push(i);
                     }
+                }
+                
+                // Swap positions to ensure colors change
+                needsReshuffle.forEach(idx => {
+                    // Find a different position to swap with
+                    const swapIdx = (idx + 1) % shuffled.length;
+                    [shuffled[idx], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[idx]];
                 });
             }
-        });
+            
+            rounds.push(shuffled);
+        }
         
-        // Second round of color changes
-        const shuffledSchemes2 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
-        items.forEach((item, index) => {
-            const delay = Math.random() * 0.4 + 1.0; // Delay between 1.0s - 1.4s
+        // Calculate delays to fit within 3.2s total
+        const baseDelays = [0, 0.48, 0.96, 1.44, 1.92]; // Start times for each round
+        
+        // Apply animations to each button
+        items.forEach((item, buttonIndex) => {
             const button = item.querySelector('.color-bar__button');
-            if (button) {
-                const newScheme = shuffledSchemes2[(index + 3) % shuffledSchemes2.length];
+            if (!button) return;
+            
+            const randomOffset = Math.random() * 0.2; // Add some randomness per button
+            
+            // Schedule all 5 color changes for this button
+            for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
+                const delay = baseDelays[roundIndex] + randomOffset;
+                const scheme = rounds[roundIndex][buttonIndex % availableColorSchemes.length];
                 
                 setTimeout(() => {
                     const currentColor = getComputedStyle(button).backgroundColor;
                     gsap.fromTo(button, {
                         backgroundColor: currentColor
                     }, {
-                        backgroundColor: newScheme.mainBg,
-                        duration: 0.8,
+                        backgroundColor: scheme.mainBg,
+                        duration: 0.5,
                         ease: 'power2.inOut',
                         onComplete: () => {
-                            button.dataset.colorName = newScheme.name;
-                        }
-                    });
-                }, delay * 1000);
-            }
-        });
-        
-        // Third round of color changes
-        const shuffledSchemes3 = [...availableColorSchemes].sort(() => Math.random() - 0.5);
-        items.forEach((item, index) => {
-            const delay = Math.random() * 0.4 + 2.0; // Delay between 2.0s - 2.4s
-            const button = item.querySelector('.color-bar__button');
-            if (button) {
-                const newScheme = shuffledSchemes3[(index + 5) % shuffledSchemes3.length];
-                
-                setTimeout(() => {
-                    const currentColor = getComputedStyle(button).backgroundColor;
-                    gsap.fromTo(button, {
-                        backgroundColor: currentColor
-                    }, {
-                        backgroundColor: newScheme.mainBg,
-                        duration: 0.8,
-                        ease: 'power2.inOut',
-                        onComplete: () => {
-                            button.dataset.colorName = newScheme.name;
+                            button.dataset.colorName = scheme.name;
+                            checkAnimationComplete();
                         }
                     });
                 }, delay * 1000);
@@ -625,6 +630,9 @@ export function initializeColorBar() {
     
     colorButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Prevent clicks during color bar animation
+            if (isColorBarAnimating) return;
+            
             clearTimeout(autoChangeTimer);
             const colorName = button.dataset.colorName;
             const selectedScheme = availableColorSchemes.find(s => s.name === colorName);
