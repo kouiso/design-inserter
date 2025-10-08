@@ -79,7 +79,7 @@ get_header();
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">お知らせはまだありません。</p>
+                                    <p class="archive__title">投稿はまだありません。</p>
                                 </div>
                                 </li>
                             <?php endif; ?>

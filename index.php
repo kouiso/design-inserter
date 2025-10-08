@@ -488,7 +488,7 @@ get_header();
                     <li class="top-news__item">
                         <div class="top-news__article-wrapper" style="width: 100%;">
                             <p class="top-news__article-title">
-                                お知らせはまだありません。
+                                投稿はまだありません。
                             </p>
                         </div>
                     </li>

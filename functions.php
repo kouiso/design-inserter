@@ -398,16 +398,58 @@ function create_post_type() {
                 'edit_item'     => 'インタビューを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'interviews',
+            'has_archive'   => 'careers/interview',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'interviews'),
+            'rewrite'       => array(
+                'slug'       => 'careers/interview',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-format-chat',
+        )
+    );
+
+    // グローバルネットワーク
+    register_post_type(
+        'globalnetwork',
+        array(
+            'labels' => array(
+                'name'          => 'グローバルネットワーク',
+                'singular_name' => 'グローバルネットワーク',
+                'add_new_item'  => '新規グローバルネットワークを追加',
+                'edit_item'     => 'グローバルネットワークを編集',
+            ),
+            'public'        => true,
+            'has_archive'   => 'global-network',
+            'menu_position' => 5,
+            'show_in_rest'  => true,
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'rewrite'       => array('slug' => 'global-network'),
+            'menu_icon'     => 'dashicons-admin-site-alt3',
         )
     );
 }
 add_action('init', 'create_post_type');
+
+/**
+ * インタビュー用のリライトルールを追加
+ */
+function register_interview_rewrite_rules() {
+    add_rewrite_rule('^careers/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
+    add_rewrite_rule('^careers/interview/?$', 'index.php?post_type=interview', 'top');
+}
+add_action('init', 'register_interview_rewrite_rules', 11);
+
+/**
+ * インタビューのパーマリンクを採用配下に固定
+ */
+add_filter( 'post_type_link', function( $post_link, $post ) {
+    if ( 'interview' === $post->post_type ) {
+        return home_url( user_trailingslashit( 'careers/interview/' . $post->post_name ) );
+    }
+    return $post_link;
+}, 10, 2 );
 
 /**
  * CF7: フロントのフォーム出力に wpautop を適用しない（メール側は既定のまま）
