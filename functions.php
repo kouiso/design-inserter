@@ -433,6 +433,102 @@ function create_post_type() {
 add_action('init', 'create_post_type');
 
 /**
+ * 製品情報タクソノミー設定を取得
+ */
+function muashi_get_product_taxonomy_config() {
+    return array(
+        'product_application' => array(
+            'label'        => '用途',
+            'plural'       => '用途',
+            'slug'         => 'products/application',
+            'hierarchical' => true,
+        ),
+        'product_material'   => array(
+            'label'        => '基材',
+            'plural'       => '基材',
+            'slug'         => 'products/material',
+            'hierarchical' => true,
+        ),
+        'product_design'     => array(
+            'label'        => '意匠性',
+            'plural'       => '意匠性',
+            'slug'         => 'products/design',
+            'hierarchical' => true,
+        ),
+        'product_function'   => array(
+            'label'        => '機能',
+            'plural'       => '機能',
+            'slug'         => 'products/function',
+            'hierarchical' => true,
+        ),
+        'product_environment'=> array(
+            'label'        => '環境キーワード',
+            'plural'       => '環境キーワード',
+            'slug'         => 'products/environment',
+            'hierarchical' => true,
+        ),
+    );
+}
+
+/**
+ * 製品情報タクソノミーの登録
+ */
+function muashi_register_product_taxonomies() {
+    $taxonomies = muashi_get_product_taxonomy_config();
+
+    foreach ( $taxonomies as $taxonomy => $settings ) {
+        register_taxonomy(
+            $taxonomy,
+            array( 'product' ),
+            array(
+                'hierarchical'      => $settings['hierarchical'],
+                'show_ui'           => true,
+                'show_admin_column' => true,
+                'show_in_rest'      => true,
+                'rewrite'           => array(
+                    'slug'       => $settings['slug'],
+                    'with_front' => false,
+                    'hierarchical' => true,
+                ),
+                'labels'            => array(
+                    'name'          => $settings['plural'],
+                    'singular_name' => $settings['label'],
+                    'search_items'  => $settings['label'] . 'を検索',
+                    'all_items'     => $settings['plural'],
+                    'parent_item'   => '親' . $settings['label'],
+                    'parent_item_colon' => '親' . $settings['label'] . '：',
+                    'edit_item'     => $settings['label'] . 'を編集',
+                    'update_item'   => $settings['label'] . 'を更新',
+                    'add_new_item'  => '新規' . $settings['label'] . 'を追加',
+                    'new_item_name' => '新規' . $settings['label'],
+                    'menu_name'     => $settings['plural'],
+                ),
+            )
+        );
+    }
+}
+add_action( 'init', 'muashi_register_product_taxonomies', 11 );
+
+/**
+ * 製品タクソノミー用の独自リライトルール
+ */
+add_action( 'init', function() {
+    $taxonomies = muashi_get_product_taxonomy_config();
+    foreach ( $taxonomies as $taxonomy => $settings ) {
+        $slug = trim( $settings['slug'], '/' );
+        if ( $slug === '' ) {
+            continue;
+        }
+
+        $escaped_slug = preg_quote( $slug, '/' );
+        $term_pattern = '(.+?)';
+
+        add_rewrite_rule( '^' . $escaped_slug . '/' . $term_pattern . '/page/([0-9]+)/?$', 'index.php?' . $taxonomy . '=$matches[1]&paged=$matches[2]', 'top' );
+        add_rewrite_rule( '^' . $escaped_slug . '/' . $term_pattern . '/?$', 'index.php?' . $taxonomy . '=$matches[1]', 'top' );
+    }
+}, 12 );
+
+/**
  * インタビュー用のリライトルールを追加
  */
 function register_interview_rewrite_rules() {
@@ -450,6 +546,93 @@ add_filter( 'post_type_link', function( $post_link, $post ) {
     }
     return $post_link;
 }, 10, 2 );
+
+/**
+ * 製品タクソノミーのテンプレートを共通化
+ */
+add_filter( 'taxonomy_template', function( $template ) {
+    if ( is_tax( array( 'product_application', 'product_material', 'product_design', 'product_function', 'product_environment' ) ) ) {
+        $custom_template = locate_template( 'taxonomy-product-term.php' );
+        if ( $custom_template ) {
+            return $custom_template;
+        }
+    }
+    return $template;
+} );
+
+/**
+ * 製品タクソノミーのアーカイブで製品投稿を取得
+ */
+add_action( 'pre_get_posts', function( $query ) {
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return;
+    }
+
+    if ( $query->is_tax( array( 'product_application', 'product_material', 'product_design', 'product_function', 'product_environment' ) ) ) {
+        $query->set( 'post_type', array( 'product' ) );
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+} );
+
+/**
+ * 共通KV画像の出力ヘルパー
+ */
+function muashi_render_kv_picture( $args = array() ) {
+    $args = wp_parse_args(
+        $args,
+        array(
+            'post_id'        => get_queried_object_id(),
+            'class'          => 'page__kv-pic',
+            'fallback_pc'    => '',
+            'fallback_sp'    => '',
+            'media_query'    => '(min-width: 768px)',
+            'include_source' => false,
+        )
+    );
+
+    if ( $args['fallback_pc'] === '' ) {
+        return;
+    }
+
+    $post_id        = $args['post_id'] ? (int) $args['post_id'] : 0;
+    $include_source = ! empty( $args['include_source'] );
+    $fallback_pc    = $args['fallback_pc'];
+    $fallback_sp    = $args['fallback_sp'] !== '' ? $args['fallback_sp'] : $fallback_pc;
+    $media_query    = $include_source ? $args['media_query'] : '';
+
+    if ( $post_id && has_post_thumbnail( $post_id ) ) {
+        $thumbnail_id     = get_post_thumbnail_id( $post_id );
+        $thumbnail_pc     = wp_get_attachment_image_url( $thumbnail_id, 'full' );
+        $thumbnail_srcset = wp_get_attachment_image_srcset( $thumbnail_id, 'full' );
+        $thumbnail_sp     = wp_get_attachment_image_url( $thumbnail_id, 'medium_large' );
+        $thumbnail_alt    = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
+
+        if ( $thumbnail_alt === '' ) {
+            $thumbnail_alt = get_the_title( $post_id );
+        }
+
+        echo '<picture class="' . esc_attr( $args['class'] ) . '">';
+        if ( $include_source && $media_query ) {
+            $source_srcset = $thumbnail_srcset ? $thumbnail_srcset : $thumbnail_pc;
+            echo '<source srcset="' . esc_attr( $source_srcset ) . '" media="' . esc_attr( $media_query ) . '">';
+        }
+        $img_src = $thumbnail_sp ? $thumbnail_sp : $thumbnail_pc;
+        echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $thumbnail_alt ) . '">';
+        echo '</picture>';
+        return;
+    }
+
+    echo '<picture class="' . esc_attr( $args['class'] ) . '">';
+    if ( $include_source && $media_query ) {
+        echo '<source srcset="' . esc_url( $fallback_pc ) . '" media="' . esc_attr( $media_query ) . '">';
+        echo '<img src="' . esc_url( $fallback_sp ) . '" alt="">';
+    } else {
+        echo '<img src="' . esc_url( $fallback_pc ) . '" alt="">';
+    }
+    echo '</picture>';
+}
 
 /**
  * CF7: フロントのフォーム出力に wpautop を適用しない（メール側は既定のまま）

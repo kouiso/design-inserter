@@ -27,9 +27,11 @@ get_header();
         <div class="page__container">
 
             <div class="page__kv">
-                <picture class="page__kv-pic">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/kv.jpg" alt="">
-                </picture>
+                <?php
+                muashi_render_kv_picture( array(
+                    'fallback_pc' => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                ) );
+                ?>
 
                 <div class="page__kv-icon">
                     <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,4 +106,3 @@ get_header();
 <?php
 get_footer();
 ?>
-

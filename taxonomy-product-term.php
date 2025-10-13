@@ -1,6 +1,14 @@
 <?php
+// 製品情報タクソノミー共通テンプレート
+
 global $description;
 $description = '';
+
+$term      = get_queried_object();
+$taxonomy  = $term ? get_taxonomy( $term->taxonomy ) : null;
+$term_name = $term ? $term->name : '';
+$term_desc = $term ? term_description( $term ) : '';
+
 get_header();
 ?>
 
@@ -15,9 +23,9 @@ get_header();
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <p class="navigation__item-title">
+                    <a href="<?php echo esc_url( get_post_type_archive_link( 'product' ) ); ?>" class="navigation__item-title">
                     製品情報
-                    </p>
+                    </a>
                     <?php
                     $current_term_obj      = get_queried_object();
                     $current_taxonomy_name = $current_term_obj instanceof WP_Term ? $current_term_obj->taxonomy : '';
@@ -27,10 +35,10 @@ get_header();
                     <ul class="navigation__sub-list">
                         <?php
                         $product_taxonomies = muashi_get_product_taxonomy_config();
-                        foreach ( $product_taxonomies as $taxonomy => $settings ) :
+                        foreach ( $product_taxonomies as $taxonomy_key => $settings ) :
                             $terms = get_terms(
                                 array(
-                                    'taxonomy'   => $taxonomy,
+                                    'taxonomy'   => $taxonomy_key,
                                     'hide_empty' => false,
                                     'orderby'    => 'name',
                                     'parent'     => 0,
@@ -39,7 +47,7 @@ get_header();
                             $has_terms = ! is_wp_error( $terms ) && ! empty( $terms );
                             ?>
                             <?php
-                            $should_open = $current_taxonomy_name === $taxonomy;
+                            $should_open = $current_taxonomy_name === $taxonomy_key;
                             $sub_link_classes = 'navigation__sub-link';
                             if ( $has_terms ) {
                                 $sub_link_classes .= ' js-navigation-accordion has-accordion';
@@ -54,44 +62,42 @@ get_header();
                                 </p>
                                 <?php if ( $has_terms ) : ?>
                                     <ul class="navigation__sub-accordion-list<?php echo $should_open ? ' is-active' : ''; ?>"<?php echo $has_terms ? ' aria-hidden="' . ( $should_open ? 'false' : 'true' ) . '"' : ''; ?>>
-                                        <?php foreach ( $terms as $term ) : ?>
+                                        <?php foreach ( $terms as $term_item ) : ?>
                                             <?php
-                                            $is_current_term  = $should_open && (int) $current_term_id === (int) $term->term_id;
-                                            $is_term_ancestor = $should_open && in_array( (int) $term->term_id, $current_term_anc, true );
+                                            $is_current_term  = $should_open && (int) $current_term_id === (int) $term_item->term_id;
+                                            $is_term_ancestor = $should_open && in_array( (int) $term_item->term_id, $current_term_anc, true );
                                             $item_classes     = 'navigation__sub-accordion-item';
                                             if ( $is_current_term || $is_term_ancestor ) {
                                                 $item_classes .= ' is-current';
                                             }
                                             ?>
                                             <li class="<?php echo esc_attr( $item_classes ); ?>">
-                                                <a href="<?php echo esc_url( get_term_link( $term ) ); ?>" class="navigation__sub-accordion-link<?php echo $is_current_term ? ' is-current' : ''; ?>">
-                                                <?php echo esc_html( $term->name ); ?>
+                                                <a href="<?php echo esc_url( get_term_link( $term_item ) ); ?>" class="navigation__sub-accordion-link<?php echo $is_current_term ? ' is-current' : ''; ?>">
+                                                <?php echo esc_html( $term_item->name ); ?>
                                                 </a>
                                             </li>
                                             <?php
                                             $child_terms = get_terms(
                                                 array(
-                                                    'taxonomy'   => $taxonomy,
+                                                    'taxonomy'   => $taxonomy_key,
                                                     'hide_empty' => false,
                                                     'orderby'    => 'name',
-                                                    'parent'     => $term->term_id,
+                                                    'parent'     => $term_item->term_id,
                                                 )
                                             );
                                             if ( ! is_wp_error( $child_terms ) && ! empty( $child_terms ) ) {
-                                                foreach ( $child_terms as $child ) {
+                                                foreach ( $child_terms as $child_item ) {
                                                     ?>
                                                     <?php
-                                                    $is_current_child = $should_open && (int) $current_term_id === (int) $child->term_id;
-                                                    ?>
-                                                    <?php
+                                                    $is_current_child = $should_open && (int) $current_term_id === (int) $child_item->term_id;
                                                     $child_item_classes = 'navigation__sub-accordion-item navigation__sub-accordion-item--child';
                                                     if ( $is_current_child ) {
                                                         $child_item_classes .= ' is-current';
                                                     }
                                                     ?>
                                                     <li class="<?php echo esc_attr( $child_item_classes ); ?>">
-                                                        <a href="<?php echo esc_url( get_term_link( $child ) ); ?>" class="navigation__sub-accordion-link<?php echo $is_current_child ? ' is-current' : ''; ?>">
-                                                        <?php echo esc_html( $child->name ); ?>
+                                                        <a href="<?php echo esc_url( get_term_link( $child_item ) ); ?>" class="navigation__sub-accordion-link<?php echo $is_current_child ? ' is-current' : ''; ?>">
+                                                        <?php echo esc_html( $child_item->name ); ?>
                                                         </a>
                                                     </li>
                                                     <?php
@@ -106,12 +112,17 @@ get_header();
                     </ul>
                 </li>
                 <li class="navigation__item">
-                    <a href="<?php echo URL_FEATURED; ?>" class="navigation__item-title">
+                    <p class="navigation__item-title">
+                    <?php echo esc_html( $term_name ); ?>
+                    </p>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo esc_url( URL_FEATURED ); ?>" class="navigation__item-title">
                     注目製品
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="<?php echo URL_APPLICATIONS; ?>" class="navigation__item-title">
+                    <a href="<?php echo esc_url( URL_APPLICATIONS ); ?>" class="navigation__item-title">
                     製品用途紹介
                     </a>
                 </li>
@@ -138,9 +149,15 @@ get_header();
 
             <div class="page__content">
                 <h1 class="page__title js-page-title">
-                製品情報
+                <?php echo esc_html( $term_name ); ?>
                 </h1>
+
                 <div class="page__inner page__inner--narrow">
+                    <?php if ( $term_desc ) : ?>
+                        <div class="page__lead">
+                            <?php echo wp_kses_post( wpautop( $term_desc ) ); ?>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="story">
                         <div class="archive">
@@ -177,7 +194,7 @@ get_header();
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">投稿はまだありません。</p>
+                                    <p class="archive__title">該当する製品がありません。</p>
                                 </div>
                                 </li>
                             <?php endif; ?>
@@ -191,11 +208,8 @@ get_header();
                 </div>
             </div>
 
-
         </div>
     </div>
-
-
 
 </section>
 

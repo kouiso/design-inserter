@@ -15,22 +15,27 @@ get_header();
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <a href="<?php echo URL_TECHNOLOGY; ?>" class="navigation__item-title">
-                    最先端の開発技術力
+                    <a href="<?= URL_ABOUT_US ?>" class="navigation__item-title">
+                    企業情報
                     </a>
                 </li>
                 <li class="navigation__item">
                     <p class="navigation__item-title">
-                    グローバルネットワーク
+                    ヒストリー
                     </p>
                 </li>
                 <li class="navigation__item">
-                    <a href="<?php echo URL_SUSTAINABILITY; ?>" class="navigation__item-title">
-                    顧客志向のカスタマイズ
+                    <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
+                    会社概要
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="<?php echo URL_CUSTOMIZATION; ?>" class="navigation__item-title">
+                    <a href="<?php echo URL_STORY; ?>" class="navigation__item-title">
+                    ストーリー
+                    </a>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
                     お客様の声
                     </a>
                 </li>
@@ -42,10 +47,13 @@ get_header();
         <div class="page__container">
 
             <div class="page__kv">
-                <picture class="page__kv-pic">
-                    <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/page/kv.jpg" media="(min-width: 768px)">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/page/kv_sp.jpg" alt="">
-                </picture>
+                <?php
+                muashi_render_kv_picture( array(
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
+                    'include_source' => true,
+                ) );
+                ?>
 
                 <div class="page__kv-icon">
                     <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,4 +86,3 @@ get_header();
 <?php
 get_footer();
 ?>
-

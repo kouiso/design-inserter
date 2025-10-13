@@ -258,8 +258,8 @@
                 <p class="footer__nav-pc-title">製品について</p>
                 <div class="footer__nav-pc-contents">
                     <div class="footer__nav-pc-item">
-                        <p class="footer__nav-pc-text">製品情報</p>
-                        <div class="footer__nav-pc-link-wrapper footer__nav-pc-link-wrapper--double">
+                        <a href="<?= URL_PRODUCT ?>" class="footer__nav-pc-text">製品情報</a>
+                        <!-- <div class="footer__nav-pc-link-wrapper footer__nav-pc-link-wrapper--double">
                             <?php
                             // 'product'カスタム投稿タイプの投稿を取得するための設定
                             $args = array(
@@ -282,7 +282,7 @@
                             // ループの後にクエリをリセット
                             wp_reset_postdata();
                             ?>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="footer__nav-pc-item">
                         <a href="<?= URL_FEATURED ?>" class="footer__nav-pc-link">注目製品</a>

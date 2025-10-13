@@ -16,3 +16,4 @@ define('URL_SUSTAINABILITY', home_url('/sustainability/'));
 define('URL_CUSTOMIZATION', home_url('/customization/'));
 define('URL_NEWS', home_url('/news/'));
 define('URL_DOWNLOAD', home_url('/download/'));
+define('URL_HISTORY', home_url('/history/'));

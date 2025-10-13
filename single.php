@@ -95,30 +95,12 @@ get_header();
 
             <div class="page__kv">
                 <?php
-                $kv_pc_fallback = get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg';
-                $kv_sp_fallback = get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg';
-
-                if ( has_post_thumbnail() ) :
-                    $thumbnail_id        = get_post_thumbnail_id();
-                    $thumbnail_srcset_pc = wp_get_attachment_image_srcset( $thumbnail_id, 'full' );
-                    $thumbnail_pc        = wp_get_attachment_image_url( $thumbnail_id, 'full' );
-                    $thumbnail_sp        = wp_get_attachment_image_url( $thumbnail_id, 'medium_large' );
-                    $thumbnail_alt       = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
-
-                    if ( $thumbnail_alt === '' ) {
-                        $thumbnail_alt = get_the_title();
-                    }
-                    ?>
-                    <picture class="page__kv-pic">
-                        <source srcset="<?php echo esc_attr( $thumbnail_srcset_pc ? $thumbnail_srcset_pc : $thumbnail_pc ); ?>" media="(min-width: 768px)">
-                        <img src="<?php echo esc_url( $thumbnail_sp ? $thumbnail_sp : $thumbnail_pc ); ?>" alt="<?php echo esc_attr( $thumbnail_alt ); ?>">
-                    </picture>
-                <?php else : ?>
-                    <picture class="page__kv-pic">
-                        <source srcset="<?php echo esc_url( $kv_pc_fallback ); ?>" media="(min-width: 768px)">
-                        <img src="<?php echo esc_url( $kv_sp_fallback ); ?>" alt="">
-                    </picture>
-                <?php endif; ?>
+                muashi_render_kv_picture( array(
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
+                    'include_source' => true,
+                ) );
+                ?>
 
                 <div class="page__kv-icon">
                     <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">

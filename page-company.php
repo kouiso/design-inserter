@@ -20,6 +20,11 @@ get_header();
                     </a>
                 </li>
                 <li class="navigation__item">
+                    <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
+                    ヒストリー
+                    </a>
+                </li>
+                <li class="navigation__item">
                     <p class="navigation__item-title">
                     会社概要
                     </p>
