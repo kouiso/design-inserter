@@ -13,6 +13,8 @@ import './modules/slideTopBanner.js';
 import './modules/smoothScroll.js';
 import './modules/gsap.js';
 import './modules/accordion.js';
+import './modules/productDownloadButton.js';
+import './modules/download.js';
 
 // Import all colorBar modules statically
 import { initializeColorBar } from './modules/colorBar.js';
@@ -20,4 +22,3 @@ import { initializeColorBar } from './modules/colorBar.js';
 document.addEventListener('DOMContentLoaded', () => {
     initializeColorBar();
 });
-

@@ -154,6 +154,92 @@ function save_custom_fields( $post_id ) {
     else delete_post_meta($post_id, 'description');
 }
 
+/**
+ * 製品資料PDFのメタボックス
+ */
+function muashi_register_product_pdf_metabox() {
+    add_meta_box(
+        'muashi-product-pdf',
+        '資料PDF',
+        'muashi_render_product_pdf_metabox',
+        'product',
+        'side',
+        'default'
+    );
+}
+add_action('add_meta_boxes', 'muashi_register_product_pdf_metabox');
+
+/**
+ * メタボックスの描画
+ */
+function muashi_render_product_pdf_metabox( $post ) {
+    wp_nonce_field('muashi_product_pdf_nonce', 'muashi_product_pdf_nonce');
+
+    $attachment_id = (int) get_post_meta($post->ID, 'product_pdf_attachment_id', true);
+    $pdf_url       = $attachment_id ? wp_get_attachment_url($attachment_id) : '';
+
+    echo '<div id="muashi-product-pdf-meta" class="muashi-product-pdf-meta">';
+    echo '<input type="hidden" id="muashi_product_pdf_attachment_id" name="muashi_product_pdf_attachment_id" value="' . esc_attr($attachment_id) . '">';
+    echo '<p><input type="text" id="muashi_product_pdf_url_display" class="widefat" value="' . esc_attr($pdf_url) . '" placeholder="PDFのURL" readonly></p>';
+    echo '<p><button type="button" class="button muashi-product-pdf-select">PDFを選択</button> ';
+    echo '<button type="button" class="button muashi-product-pdf-clear">クリア</button></p>';
+    echo '<p class="description">メディアライブラリからPDFファイルを選択してください。</p>';
+    echo '</div>';
+}
+
+/**
+ * 製品資料PDFメタ情報の保存
+ */
+function muashi_save_product_pdf_meta( $post_id ) {
+    if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( ! isset($_POST['muashi_product_pdf_nonce']) || ! wp_verify_nonce($_POST['muashi_product_pdf_nonce'], 'muashi_product_pdf_nonce') ) {
+        return;
+    }
+
+    if ( ! current_user_can('edit_post', $post_id) ) {
+        return;
+    }
+
+    if ( isset($_POST['muashi_product_pdf_attachment_id']) ) {
+        $raw_value = wp_unslash($_POST['muashi_product_pdf_attachment_id']);
+        $attachment_id = $raw_value !== '' ? (int) $raw_value : 0;
+
+        if ( $attachment_id > 0 && 'attachment' === get_post_type($attachment_id) ) {
+            update_post_meta($post_id, 'product_pdf_attachment_id', $attachment_id);
+        } else {
+            delete_post_meta($post_id, 'product_pdf_attachment_id');
+        }
+    }
+}
+add_action('save_post_product', 'muashi_save_product_pdf_meta');
+
+/**
+ * 製品資料PDFメタボックス用スクリプト
+ */
+function muashi_enqueue_product_meta_admin_assets( $hook ) {
+    if ( ! in_array($hook, array('post.php', 'post-new.php'), true) ) {
+        return;
+    }
+
+    $screen = get_current_screen();
+    if ( ! $screen || 'product' !== $screen->post_type ) {
+        return;
+    }
+
+    wp_enqueue_media();
+    wp_enqueue_script(
+        'muashi-product-pdf-meta',
+        get_template_directory_uri() . '/admin/js/product-meta.js',
+        array('jquery'),
+        '1.0.0',
+        true
+    );
+}
+add_action('admin_enqueue_scripts', 'muashi_enqueue_product_meta_admin_assets');
+
 
 add_filter( 'wpcf7_validate_email', 'wpcf7_validate_email_filter_extend', 11, 2 );
 add_filter( 'wpcf7_validate_email*', 'wpcf7_validate_email_filter_extend', 11, 2 );
@@ -175,6 +261,178 @@ function wpcf7_validate_email_filter_extend( $result, $tag ) {
         }
     }
     return $result;
+}
+
+add_filter('wpcf7_validate_hidden', 'muashi_validate_selected_products_field', 20, 2);
+add_filter('wpcf7_validate_hidden*', 'muashi_validate_selected_products_field', 20, 2);
+
+function muashi_validate_selected_products_field( $result, $tag ) {
+    $tag_name = '';
+    if ( is_array($tag) && isset($tag['name']) ) {
+        $tag_name = $tag['name'];
+    } elseif ( is_object($tag) && isset($tag->name) ) {
+        $tag_name = $tag->name;
+    }
+
+    if ( 'selected_products' !== $tag_name ) {
+        return $result;
+    }
+
+    $raw_value = isset($_POST['selected_products']) ? wp_unslash($_POST['selected_products']) : '';
+    if ( is_array($raw_value) ) {
+        $raw_value = implode(',', $raw_value);
+    }
+    $raw_value = trim( (string) $raw_value );
+
+    $error_message_empty = '資料を少なくとも1件選択してください。';
+    $error_message_limit = '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。';
+
+    if ( $raw_value === '' ) {
+        if ( method_exists($result, 'invalidate') ) {
+            $result->invalidate( $tag, $error_message_empty );
+        } else {
+            $result['valid']        = false;
+            $result['reason'][$tag_name] = $error_message_empty;
+        }
+        return $result;
+    }
+
+    $ids = array_filter( array_map( 'intval', explode( ',', $raw_value ) ) );
+    $ids = array_values( array_unique( $ids ) );
+
+    if ( empty( $ids ) ) {
+        if ( method_exists($result, 'invalidate') ) {
+            $result->invalidate( $tag, $error_message_empty );
+        } else {
+            $result['valid']        = false;
+            $result['reason'][$tag_name] = $error_message_empty;
+        }
+        return $result;
+    }
+
+    if ( count( $ids ) > 5 ) {
+        if ( method_exists($result, 'invalidate') ) {
+            $result->invalidate( $tag, $error_message_limit );
+        } else {
+            $result['valid']        = false;
+            $result['reason'][$tag_name] = $error_message_limit;
+        }
+        return $result;
+    }
+
+    $valid_ids = array();
+    foreach ( $ids as $id ) {
+        $post = get_post( $id );
+        if ( $post && 'product' === $post->post_type && 'publish' === $post->post_status ) {
+            $valid_ids[] = $id;
+        }
+    }
+
+    if ( empty( $valid_ids ) ) {
+        if ( method_exists($result, 'invalidate') ) {
+            $result->invalidate( $tag, $error_message_empty );
+        } else {
+            $result['valid']        = false;
+            $result['reason'][$tag_name] = $error_message_empty;
+        }
+        return $result;
+    }
+
+    $_POST['selected_products'] = implode( ',', $valid_ids );
+
+    return $result;
+}
+
+add_filter('wpcf7_mail_components', 'muashi_append_download_summary_to_mail', 10, 3);
+
+function muashi_append_download_summary_to_mail( $components, $contact_form, $instance ) {
+    if ( empty($_POST['selected_products']) ) {
+        return $components;
+    }
+
+    $raw_ids = wp_unslash( $_POST['selected_products'] );
+    $ids     = array_filter( array_map( 'intval', explode( ',', $raw_ids ) ) );
+    $ids     = array_values( array_unique( $ids ) );
+
+    if ( empty( $ids ) ) {
+        return $components;
+    }
+
+    $lines = array();
+    foreach ( $ids as $id ) {
+        $post = get_post( $id );
+        if ( ! $post || 'product' !== $post->post_type ) {
+            continue;
+        }
+
+        $title     = get_the_title( $post );
+        $permalink = get_permalink( $post );
+        $pdf_id    = (int) get_post_meta( $id, 'product_pdf_attachment_id', true );
+        $pdf_url   = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
+
+        $line  = '・' . $title;
+        $line .= '\n  PDF: ' . ( $pdf_url ? $pdf_url : '未設定' );
+        $line .= '\n  製品ページ: ' . $permalink;
+        $lines[] = $line;
+    }
+
+    if ( empty( $lines ) ) {
+        return $components;
+    }
+
+    $summary = "==== 選択した資料 ====\n" . implode( "\n\n", $lines );
+
+    $source_id = isset( $_POST['source_product'] ) ? (int) $_POST['source_product'] : 0;
+    if ( $source_id && ! in_array( $source_id, $ids, true ) ) {
+        $source_post = get_post( $source_id );
+        if ( $source_post && 'product' === $source_post->post_type ) {
+            $source_title = get_the_title( $source_post );
+            $source_line  = '※ このページから遷移: ' . $source_title;
+            $source_line .= '\n  製品ページ: ' . get_permalink( $source_post );
+            $source_pdf_id  = (int) get_post_meta( $source_id, 'product_pdf_attachment_id', true );
+            $source_pdf_url = $source_pdf_id ? wp_get_attachment_url( $source_pdf_id ) : '';
+            if ( $source_pdf_url ) {
+                $source_line .= '\n  PDF: ' . $source_pdf_url;
+            }
+            $summary .= "\n\n" . $source_line;
+        }
+    }
+
+    $summary .= "\n";
+
+    foreach ( array( 'mail', 'mail_2' ) as $mail_key ) {
+        if ( ! isset( $components[ $mail_key ] ) ) {
+            continue;
+        }
+        if ( isset( $components[ $mail_key ]['active'] ) && ! $components[ $mail_key ]['active'] ) {
+            continue;
+        }
+        $body = isset( $components[ $mail_key ]['body'] ) ? $components[ $mail_key ]['body'] : '';
+        $components[ $mail_key ]['body'] = muashi_integrate_download_summary_into_body( $body, $summary );
+    }
+
+    $_POST['download_summary'] = $summary;
+
+    return $components;
+}
+
+function muashi_integrate_download_summary_into_body( $body, $summary ) {
+    $body = (string) $body;
+
+    if ( strpos( $body, '[download_summary]' ) !== false ) {
+        return str_replace( '[download_summary]', $summary, $body );
+    }
+
+    if ( strpos( $body, '==== 選択した資料 ====' ) !== false ) {
+        return $body;
+    }
+
+    $trimmed = trim( $body );
+    if ( '' === $trimmed ) {
+        return $summary;
+    }
+
+    return $trimmed . "\n\n" . $summary;
 }
 
 // 抜粋の文字数
@@ -433,9 +691,9 @@ function create_post_type() {
 add_action('init', 'create_post_type');
 
 /**
- * 製品情報タクソノミー設定を取得
+ * 製品情報タクソノミー設定 (固定値)
  */
-function muashi_get_product_taxonomy_config() {
+function muashi_get_product_taxonomy_base_config() {
     return array(
         'product_application' => array(
             'label'        => '用途',
@@ -469,6 +727,349 @@ function muashi_get_product_taxonomy_config() {
         ),
     );
 }
+
+/**
+ * 製品情報タクソノミー設定を取得
+ */
+function muashi_get_product_taxonomy_config() {
+    $config = muashi_get_product_taxonomy_base_config();
+    $stored_order = get_option('muashi_product_taxonomy_order', array());
+
+    if (is_array($stored_order) && ! empty($stored_order)) {
+        $ordered = array();
+
+        foreach ($stored_order as $taxonomy) {
+            $taxonomy = sanitize_key($taxonomy);
+
+            if (isset($config[$taxonomy])) {
+                $ordered[$taxonomy] = $config[$taxonomy];
+                unset($config[$taxonomy]);
+            }
+        }
+
+        if (! empty($ordered)) {
+            $config = $ordered + $config;
+        }
+    }
+
+    return $config;
+}
+
+if (! defined('MUASHI_TERM_ORDER_META_KEY')) {
+    define('MUASHI_TERM_ORDER_META_KEY', 'muashi_term_order');
+}
+
+function muashi_get_sorted_product_terms($taxonomy, $parent_id = 0) {
+    if (! taxonomy_exists($taxonomy)) {
+        return array();
+    }
+
+    $terms = get_terms(
+        array(
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+            'parent'     => (int) $parent_id,
+        )
+    );
+
+    if (is_wp_error($terms) || empty($terms)) {
+        return array();
+    }
+
+    foreach ($terms as $term) {
+        $order = get_term_meta($term->term_id, MUASHI_TERM_ORDER_META_KEY, true);
+        $term->muashi_term_order = ('' === $order) ? PHP_INT_MAX : (int) $order;
+    }
+
+    usort(
+        $terms,
+        function ($a, $b) {
+            if ($a->muashi_term_order === $b->muashi_term_order) {
+                return strcasecmp($a->name, $b->name);
+            }
+
+            return ($a->muashi_term_order < $b->muashi_term_order) ? -1 : 1;
+        }
+    );
+
+    return $terms;
+}
+
+function muashi_render_product_taxonomy_term_sortable_list($taxonomy, $parent_id = 0, $terms = null) {
+    if (null === $terms) {
+        $terms = muashi_get_sorted_product_terms($taxonomy, $parent_id);
+    }
+
+    if (empty($terms)) {
+        return false;
+    }
+
+    echo '<ul class="muashi-term-sortable js-muashi-term-sortable" data-taxonomy="' . esc_attr($taxonomy) . '" data-parent="' . esc_attr((int) $parent_id) . '">';
+
+    foreach ($terms as $term) {
+        echo '<li class="muashi-term-sortable__item" data-term-id="' . esc_attr((int) $term->term_id) . '">';
+        echo '<div class="muashi-term-sortable__label">' . esc_html($term->name) . '</div>';
+        echo '<input type="hidden" name="muashi_product_term_order[' . esc_attr($taxonomy) . '][' . esc_attr((int) $parent_id) . '][]" value="' . esc_attr((int) $term->term_id) . '">';
+
+        muashi_render_product_taxonomy_term_sortable_list($taxonomy, (int) $term->term_id);
+
+        echo '</li>';
+    }
+
+    echo '</ul>';
+
+    return true;
+}
+
+function muashi_get_sorted_product_terms_flat($taxonomy, $parent_id = 0) {
+    $flat_terms = array();
+    $terms      = muashi_get_sorted_product_terms($taxonomy, $parent_id);
+
+    if (empty($terms)) {
+        return $flat_terms;
+    }
+
+    foreach ($terms as $term) {
+        $flat_terms[] = $term;
+        $children     = muashi_get_sorted_product_terms_flat($taxonomy, (int) $term->term_id);
+
+        if (! empty($children)) {
+            $flat_terms = array_merge($flat_terms, $children);
+        }
+    }
+
+    return $flat_terms;
+}
+
+function muashi_sanitize_product_taxonomy_order($input) {
+    $sanitized = array();
+
+    if (! is_array($input)) {
+        return $sanitized;
+    }
+
+    $base_keys = array_keys(muashi_get_product_taxonomy_base_config());
+
+    foreach ($input as $taxonomy) {
+        $taxonomy = sanitize_key($taxonomy);
+
+        if (in_array($taxonomy, $base_keys, true) && ! in_array($taxonomy, $sanitized, true)) {
+            $sanitized[] = $taxonomy;
+        }
+    }
+
+    return $sanitized;
+}
+
+function muashi_register_product_taxonomy_order_setting() {
+    register_setting(
+        'muashi_product_taxonomy_order_group',
+        'muashi_product_taxonomy_order',
+        array(
+            'sanitize_callback' => 'muashi_sanitize_product_taxonomy_order',
+            'default'           => array(),
+        )
+    );
+
+    register_setting(
+        'muashi_product_taxonomy_order_group',
+        'muashi_product_term_order',
+        array(
+            'sanitize_callback' => 'muashi_sanitize_product_term_order',
+            'default'           => array(),
+        )
+    );
+}
+add_action('admin_init', 'muashi_register_product_taxonomy_order_setting');
+
+function muashi_sanitize_product_term_order($input) {
+    $sanitized = array();
+
+    if (! is_array($input)) {
+        return $sanitized;
+    }
+
+    $base_config = muashi_get_product_taxonomy_base_config();
+
+    foreach ($input as $taxonomy => $groups) {
+        $taxonomy = sanitize_key($taxonomy);
+
+        if (! isset($base_config[$taxonomy]) || ! taxonomy_exists($taxonomy)) {
+            continue;
+        }
+
+        if (! is_array($groups)) {
+            continue;
+        }
+
+        foreach ($groups as $parent_id => $term_ids) {
+            $parent_id = (int) $parent_id;
+
+            if (! is_array($term_ids)) {
+                continue;
+            }
+
+            $sanitized[$taxonomy][$parent_id] = array();
+
+            $order = 1;
+
+            foreach ($term_ids as $term_id) {
+                $term_id = (int) $term_id;
+
+                if ($term_id <= 0) {
+                    continue;
+                }
+
+                if (in_array($term_id, $sanitized[$taxonomy][$parent_id], true)) {
+                    continue;
+                }
+
+                $term = get_term($term_id, $taxonomy);
+
+                if (! $term || is_wp_error($term)) {
+                    continue;
+                }
+
+                if ((int) $term->parent !== $parent_id) {
+                    continue;
+                }
+
+                update_term_meta($term_id, MUASHI_TERM_ORDER_META_KEY, $order);
+                clean_term_cache($term_id, $taxonomy);
+
+                $sanitized[$taxonomy][$parent_id][] = $term_id;
+                $order++;
+            }
+        }
+    }
+
+    return $sanitized;
+}
+
+function muashi_add_product_taxonomy_order_page() {
+    add_theme_page(
+        '製品カテゴリー並び順',
+        '製品カテゴリー並び順',
+        'manage_options',
+        'muashi-product-taxonomy-order',
+        'muashi_render_product_taxonomy_order_page'
+    );
+}
+add_action('admin_menu', 'muashi_add_product_taxonomy_order_page');
+
+function muashi_render_product_taxonomy_order_page() {
+    if (! current_user_can('manage_options')) {
+        return;
+    }
+
+    $base_config  = muashi_get_product_taxonomy_base_config();
+    $stored_order = get_option('muashi_product_taxonomy_order', array());
+    $taxonomies   = array();
+
+    if (is_array($stored_order)) {
+        foreach ($stored_order as $taxonomy) {
+            if (isset($base_config[$taxonomy])) {
+                $taxonomies[$taxonomy] = $base_config[$taxonomy];
+                unset($base_config[$taxonomy]);
+            }
+        }
+    }
+
+    $taxonomies += $base_config;
+
+    ?>
+    <div class="wrap">
+        <h1>製品カテゴリー並び順</h1>
+        <p>「製品情報」ページのメニューに表示されるカテゴリーの並び順をドラッグ＆ドロップで変更できます。</p>
+        <form method="post" action="options.php">
+            <?php settings_fields('muashi_product_taxonomy_order_group'); ?>
+            <ul id="muashi-product-taxonomy-sortable">
+                <?php foreach ($taxonomies as $taxonomy => $settings) : ?>
+                    <li class="muashi-product-taxonomy-sortable__item">
+                        <span class="muashi-product-taxonomy-sortable__label"><?php echo esc_html($settings['label']); ?></span>
+                        <input type="hidden" name="muashi_product_taxonomy_order[]" value="<?php echo esc_attr($taxonomy); ?>">
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <hr class="muashi-settings-divider">
+
+            <h2>カテゴリー内の項目の並び順</h2>
+            <p>それぞれのカテゴリー内で表示される項目（ターム）の順番もドラッグ＆ドロップで変更できます。</p>
+
+            <div class="muashi-term-sortable-sections">
+                <?php foreach ($taxonomies as $taxonomy => $settings) : ?>
+                    <div class="muashi-term-sortable-section">
+                        <h3><?php echo esc_html($settings['label']); ?></h3>
+                        <?php
+                        $top_terms = muashi_get_sorted_product_terms($taxonomy, 0);
+
+                        if (! muashi_render_product_taxonomy_term_sortable_list($taxonomy, 0, $top_terms)) {
+                            echo '<p class="description">項目がまだ登録されていません。</p>';
+                        }
+                        ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+function muashi_admin_enqueue_product_taxonomy_order_assets($hook_suffix) {
+    if ('appearance_page_muashi-product-taxonomy-order' !== $hook_suffix) {
+        return;
+    }
+
+    wp_enqueue_script('jquery-ui-sortable');
+
+    $script = 'jQuery(function($){
+        var $taxonomyList = $("#muashi-product-taxonomy-sortable");
+        if($taxonomyList.length){
+            $taxonomyList.sortable({
+                axis: "y",
+                cursor: "move",
+                opacity: 0.8,
+                tolerance: "pointer"
+            });
+        }
+
+        $(".js-muashi-term-sortable").each(function(){
+            var $termList = $(this);
+            $termList.sortable({
+                axis: "y",
+                cursor: "move",
+                opacity: 0.8,
+                tolerance: "pointer",
+                placeholder: "muashi-term-sortable__placeholder"
+            });
+        });
+    });';
+
+    wp_add_inline_script('jquery-ui-sortable', $script);
+
+    if (! wp_style_is('muashi-product-taxonomy-order', 'enqueued')) {
+        wp_register_style('muashi-product-taxonomy-order', false);
+        wp_enqueue_style('muashi-product-taxonomy-order');
+    }
+
+    $style = '#muashi-product-taxonomy-sortable { margin: 20px 0; max-width: 420px; }
+#muashi-product-taxonomy-sortable .muashi-product-taxonomy-sortable__item { background: #fff; border: 1px solid #dcdcde; border-radius: 4px; padding: 12px 16px; margin-bottom: 8px; cursor: move; display: flex; align-items: center; }
+#muashi-product-taxonomy-sortable .muashi-product-taxonomy-sortable__item:hover { border-color: #787c82; }
+#muashi-product-taxonomy-sortable .muashi-product-taxonomy-sortable__label { font-weight: 600; }
+.muashi-settings-divider { margin: 40px 0; }
+.muashi-term-sortable-section { margin-bottom: 32px; }
+.muashi-term-sortable { margin: 16px 0 0; padding-left: 0; list-style: none; max-width: 420px; }
+.muashi-term-sortable .muashi-term-sortable { margin-left: 24px; }
+.muashi-term-sortable__item { background: #fff; border: 1px solid #dcdcde; border-radius: 4px; padding: 10px 14px; margin-bottom: 6px; cursor: move; }
+.muashi-term-sortable__item:hover { border-color: #787c82; }
+.muashi-term-sortable__label { font-weight: 500; }
+.muashi-term-sortable__placeholder { border: 2px dashed #8c8f94; height: 40px; margin-bottom: 6px; }';
+
+    wp_add_inline_style('muashi-product-taxonomy-order', $style);
+}
+add_action('admin_enqueue_scripts', 'muashi_admin_enqueue_product_taxonomy_order_assets');
 
 /**
  * 製品情報タクソノミーの登録

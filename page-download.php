@@ -1,10 +1,182 @@
 <?php
 /*
-Template Name: Contact
+Template Name: Download
 */
+
 global $description;
 $description = '';
+
 get_header();
+
+$max_selectable = 5;
+$taxonomy_config = function_exists('muashi_get_product_taxonomy_config') ? muashi_get_product_taxonomy_config() : array();
+
+$product_posts = get_posts(
+    array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    )
+);
+
+$products_data     = array();
+$slug_to_id        = array();
+$all_product_ids   = array();
+$all_product_slugs = array();
+
+foreach ( $product_posts as $product_post ) {
+    $product_id  = (int) $product_post->ID;
+    $product_url = get_permalink( $product_post );
+    $thumbnail   = get_the_post_thumbnail_url( $product_post, 'medium' );
+    $pdf_id      = (int) get_post_meta( $product_id, 'product_pdf_attachment_id', true );
+    $pdf_url     = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
+
+    $slug_to_id[ $product_post->post_name ] = $product_id;
+    $all_product_ids[]                      = $product_id;
+    $all_product_slugs[]                    = $product_post->post_name;
+
+    $terms_data = array();
+
+    foreach ( $taxonomy_config as $taxonomy => $settings ) {
+        $terms = get_the_terms( $product_id, $taxonomy );
+        if ( is_wp_error( $terms ) || empty( $terms ) ) {
+            $terms_data[ $taxonomy ] = array();
+            continue;
+        }
+
+        $terms_data[ $taxonomy ] = array_map(
+            function( $term ) {
+                return array(
+                    'id'   => (int) $term->term_id,
+                    'name' => $term->name,
+                    'slug' => $term->slug,
+                );
+            },
+            $terms
+        );
+    }
+
+    $products_data[] = array(
+        'id'         => $product_id,
+        'title'      => get_the_title( $product_post ),
+        'slug'       => $product_post->post_name,
+        'permalink'  => $product_url,
+        'pdfUrl'     => $pdf_url ? $pdf_url : '',
+        'thumbnail'  => $thumbnail ? $thumbnail : '',
+        'taxonomies' => $terms_data,
+        'date'       => get_the_date( 'Y-m-d', $product_post ),
+        'timestamp'  => get_post_timestamp( $product_post ),
+    );
+}
+
+$taxonomy_terms = array();
+
+foreach ( $taxonomy_config as $taxonomy => $settings ) {
+    $terms = muashi_get_sorted_product_terms_flat( $taxonomy );
+
+    if ( empty( $terms ) ) {
+        $taxonomy_terms[ $taxonomy ] = array(
+            'label' => $settings['label'],
+            'terms' => array(),
+        );
+        continue;
+    }
+
+    $taxonomy_terms[ $taxonomy ] = array(
+        'label' => $settings['label'],
+        'terms' => array_map(
+            function( $term ) {
+                return array(
+                    'id'     => (int) $term->term_id,
+                    'name'   => $term->name,
+                    'slug'   => $term->slug,
+                    'parent' => (int) $term->parent,
+                );
+            },
+            $terms
+        ),
+    );
+}
+
+$requested_ids = array();
+
+$raw_product_slug = isset( $_GET['dl_product'] ) ? sanitize_text_field( wp_unslash( $_GET['dl_product'] ) ) : '';
+if ( $raw_product_slug !== '' ) {
+    $slugs = array_filter( array_map( 'sanitize_title', explode( ',', $raw_product_slug ) ) );
+    foreach ( $slugs as $slug ) {
+        if ( isset( $slug_to_id[ $slug ] ) ) {
+            $requested_ids[] = $slug_to_id[ $slug ];
+        }
+    }
+}
+
+$raw_products_slug = isset( $_GET['dl_products'] ) ? sanitize_text_field( wp_unslash( $_GET['dl_products'] ) ) : '';
+if ( $raw_products_slug !== '' ) {
+    $slugs = array_filter( array_map( 'sanitize_title', explode( ',', $raw_products_slug ) ) );
+    foreach ( $slugs as $slug ) {
+        if ( isset( $slug_to_id[ $slug ] ) ) {
+            $requested_ids[] = $slug_to_id[ $slug ];
+        }
+    }
+}
+
+$raw_product_ids = isset( $_GET['dl_product_id'] ) ? sanitize_text_field( wp_unslash( $_GET['dl_product_id'] ) ) : '';
+if ( $raw_product_ids !== '' ) {
+    $ids = array_filter( array_map( 'intval', explode( ',', $raw_product_ids ) ) );
+    foreach ( $ids as $id ) {
+        if ( in_array( $id, $all_product_ids, true ) ) {
+            $requested_ids[] = $id;
+        }
+    }
+}
+
+$requested_ids = array_slice( array_values( array_unique( $requested_ids ) ), 0, $max_selectable );
+
+$source_product_id = 0;
+$raw_source_id     = isset( $_GET['source_product_id'] ) ? (int) $_GET['source_product_id'] : 0;
+if ( $raw_source_id && in_array( $raw_source_id, $all_product_ids, true ) ) {
+    $source_product_id = $raw_source_id;
+}
+
+$raw_source_slug = isset( $_GET['source'] ) ? sanitize_text_field( wp_unslash( $_GET['source'] ) ) : '';
+if ( ! $source_product_id && $raw_source_slug !== '' && isset( $slug_to_id[ $raw_source_slug ] ) ) {
+    $source_product_id = $slug_to_id[ $raw_source_slug ];
+}
+
+if ( ! $source_product_id && ! empty( $requested_ids ) ) {
+    $source_product_id = $requested_ids[0];
+}
+
+$download_data = array(
+    'maxSelectable'   => $max_selectable,
+    'products'        => $products_data,
+    'taxonomies'      => $taxonomy_terms,
+    'initialSelection'=> $requested_ids,
+    'sourceProductId' => $source_product_id,
+    'i18n'            => array(
+        'selectedHeading'    => '選択中',
+        'selectedEmpty'      => '資料が選択されていません。',
+        'remove'             => '削除',
+        'searchPlaceholder'  => '製品名やキーワードで検索',
+        'resultCount'        => '該当件数: %d件',
+        'noResults'          => '該当する製品がありません。',
+        'limitReached'       => '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。',
+        'noneSelectedError'  => '資料を1件以上選択してください。',
+        'resetFilters'       => '条件をクリア',
+        'allOption'          => 'すべて',
+    ),
+);
+
+$download_data_json = wp_json_encode( $download_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+
+$page_content = '';
+if ( have_posts() ) {
+    the_post();
+    $page_content = apply_filters( 'the_content', get_the_content() );
+    rewind_posts();
+}
 ?>
 
 <section class="page page--no-image">
@@ -14,7 +186,6 @@ get_header();
         <div class="page__bg-sub"></div>
     </div>
 
-    <!-- ベースのナビゲーション（簡略） -->
     <div class="navigation">
         <div class="navigation__inner">
             <ul class="navigation__list">
@@ -42,18 +213,77 @@ get_header();
             資料ダウンロード
             </h1>
 
-            <div class="page__inner">
-              <section class="contact">
-                    <!-- エディタ本文（任意の注意書き等） -->
-                    <div class="contact__content">
-                        <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-                            <div class="contact__inner">
-                                <?php the_content(); ?>
-                            </div>
-                        <?php endwhile; endif; ?>
-                    </div>
+            <div class="page__inner page__inner--narrow">
 
-                </section>
+              <section class="download" data-download-page data-download-max="<?php echo esc_attr( $max_selectable ); ?>">
+                <div class="contact__content">
+                  <div class="contact__inner">
+                    <div class="download__layout">
+                      <aside class="download__sidebar">
+                        <h2 class="download__sidebar-title">
+                          選択中 <span class="download__selected-count" data-download-selected-count>0</span>/<span><?php echo esc_html( $max_selectable ); ?></span>
+                        </h2>
+                        <ol class="download__selected-list" data-download-selected-list>
+                          <li class="download__selected-empty" data-download-selected-empty>資料が選択されていません。</li>
+                        </ol>
+                        <p class="download__selected-note">※ 最大<?php echo esc_html( $max_selectable ); ?>件まで選択できます。</p>
+                      </aside>
+
+                      <div class="download__main">
+                        <div class="download__controls">
+                          <label class="download__search">
+                            <span class="download__search-label">キーワード</span>
+                            <input type="search" class="download__search-input" data-download-search placeholder="製品名やキーワードで検索">
+                          </label>
+
+                          <?php foreach ( $taxonomy_terms as $taxonomy => $info ) : ?>
+                            <label class="download__filter">
+                              <span class="download__filter-label"><?php echo esc_html( $info['label'] ); ?></span>
+                              <select class="download__filter-select" data-download-filter="<?php echo esc_attr( $taxonomy ); ?>">
+                                <option value=""><?php echo esc_html( $download_data['i18n']['allOption'] ); ?></option>
+                                <?php foreach ( $info['terms'] as $term ) : ?>
+                                  <option value="<?php echo esc_attr( $term['id'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </label>
+                          <?php endforeach; ?>
+
+                          <label class="download__sort">
+                            <span class="download__sort-label">並べ替え</span>
+                            <select class="download__sort-select" data-download-sort>
+                              <option value="title-asc">名前（あ-わ順）</option>
+                              <option value="title-desc">名前（わ-あ順）</option>
+                              <option value="date-desc">新しい順</option>
+                              <option value="date-asc">古い順</option>
+                            </select>
+                          </label>
+
+                          <button type="button" class="download__reset" data-download-reset><?php echo esc_html( $download_data['i18n']['resetFilters'] ); ?></button>
+                        </div>
+
+                        <div class="download__feedback" data-download-feedback hidden></div>
+
+                        <p class="download__result-count" data-download-result-count></p>
+
+                        <ul class="download__list" data-download-list></ul>
+
+                        <p class="download__contact-note">5件を超える資料をご希望の場合は <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">お問い合わせフォーム</a> からご連絡ください。</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <script type="application/json" id="download-page-data"><?php echo $download_data_json ? $download_data_json : '{}'; ?></script>
+              </section>
+
+              <?php if ( ! empty( $page_content ) ) : ?>
+              <section class="contact">
+                <div class="contact__content">
+                  <div class="contact__inner">
+                    <?php echo $page_content; ?>
+                  </div>
+                </div>
+              </section>
+              <?php endif; ?>
 
             </div>
           </div>

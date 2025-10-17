@@ -332,7 +332,7 @@ if (is_home()){
                                                 <div class="hamburger__accordion-list-wrapper js-accordion-list">
                                                     <ul class="hamburger__accordion-list">
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_APPLICATIONS ?>" class="hamburger__accordion-link">
+                                                            <a href="<?= URL_COMPANY ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">会社概要</span>
                                                                 <span class="hamburger__accordion-link-icon">
                                                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -352,7 +352,7 @@ if (is_home()){
                                                             </a>
                                                         </li>
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="" class="hamburger__accordion-link">
+                                                            <a href="<?= URL_HISTORY ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">ヒストリー</span>
                                                                 <span class="hamburger__accordion-link-icon">
                                                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -362,7 +362,7 @@ if (is_home()){
                                                             </a>
                                                         </li>
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="" class="hamburger__accordion-link">
+                                                            <a href="<?= URL_TECHNOLOGY ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">品質管理</span>
                                                                 <span class="hamburger__accordion-link-icon">
                                                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -385,7 +385,7 @@ if (is_home()){
                                                 </div>
                                             </li>
                                             <li class="hamburger__sub-item">
-                                                <a href=<?= URL_STORY ?>" class="hamburger__accordion">
+                                                <a href="<?= URL_STORY ?>" class="hamburger__accordion">
                                                     <span class="hamburger__accordion-text">ストーリー</span>
                                                     <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow">
                                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -407,7 +407,7 @@ if (is_home()){
                                         </ul>
                                     </li>
                                     <li class="hamburger__item">
-                                        <a href="<?= URL_HOME ?>" class="hamburger__link">
+                                        <a href="<?= URL_NEWS ?>" class="hamburger__link">
                                             <span class="hamburger__link-text">ニュース</span>
                                             <span class="hamburger__link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -417,7 +417,7 @@ if (is_home()){
                                         </a>
                                     </li>
                                     <li class="hamburger__item">
-                                        <a href="<?= URL_HOME ?>" class="hamburger__link">
+                                        <a href="<?= URL_CAREER ?>" class="hamburger__link">
                                             <span class="hamburger__link-text">採用情報</span>
                                             <span class="hamburger__link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -442,7 +442,7 @@ if (is_home()){
                                         </a>
                                     </li>
                                     <li class="hamburger__other-item">
-                                        <a href="" class="hamburger__other-link">
+                                        <a href="<?= URL_DOWNLOAD ?>" class="hamburger__other-link">
                                             <icon class="hamburger__other-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.66602 2H10.666C11.1964 2 11.7052 2.21071 12.0802 2.58579C12.4553 2.96086 12.666 3.46957 12.666 4V12.6667C12.666 13.1971 12.4553 13.7058 12.0802 14.0809C11.7052 14.456 11.1964 14.6667 10.666 14.6667H4.66602C4.13558 14.6667 3.62687 14.456 3.2518 14.0809C2.87673 13.7058 2.66602 13.1971 2.66602 12.6667V4C2.66602 3.46957 2.87673 2.96086 3.2518 2.58579C3.62687 2.21071 4.13558 2 4.66602 2ZM4.66602 2.66667C4.31239 2.66667 3.97326 2.80714 3.72321 3.05719C3.47316 3.30724 3.33268 3.64638 3.33268 4V12.6667C3.33268 13.0203 3.47316 13.3594 3.72321 13.6095C3.97326 13.8595 4.31239 14 4.66602 14H10.666C11.0196 14 11.3588 13.8595 11.6088 13.6095C11.8589 13.3594 11.9993 13.0203 11.9993 12.6667V4C11.9993 3.64638 11.8589 3.30724 11.6088 3.05719C11.3588 2.80714 11.0196 2.66667 10.666 2.66667H8.66602V7.13333L6.66602 5.73333L4.66602 7.13333V2.66667ZM7.99935 2.66667H5.33268V5.85333L6.66602 4.92L7.99935 5.85333V2.66667Z" fill="white"/>

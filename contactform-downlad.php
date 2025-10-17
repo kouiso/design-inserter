@@ -50,8 +50,10 @@
     [textarea* your-message id:contact-message class:form__textarea placeholder "お問い合わせ内容をご記入ください"]
   </div>
 
-  <!-- 自動返信メールで使うダウンロードURL（差し替え必須） -->
-  [hidden download-url "https://example.com/downloads/your-material.pdf"]
+  <!-- 資料選択情報（JSが書き込み） -->
+  [hidden selected_products id:download-selected-products]
+  [hidden source_product id:download-source-product]
+  [hidden download_summary id:download-summary]
 
   <div class="form__field form__field--full">
     [acceptance agree class:form__checkbox]

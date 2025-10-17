@@ -17,3 +17,6 @@ define('URL_CUSTOMIZATION', home_url('/customization/'));
 define('URL_NEWS', home_url('/news/'));
 define('URL_DOWNLOAD', home_url('/download/'));
 define('URL_HISTORY', home_url('/history/'));
+define('URL_INTERVIEW', home_url('/careers/interview/'));
+define('URL_PRIVACY_POLICY', home_url('/privacy-policy/'));
+define('URL_TERMS', home_url('/terms/'));

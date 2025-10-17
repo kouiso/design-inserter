@@ -116,6 +116,20 @@ get_header();
                     <div class="single__contents">
                         <?php echo $content; // id付与済みの本文を出力 ?>
                     </div>
+
+                    <?php if ( 'product' === get_post_type() ) : ?>
+                        <?php
+                        $product_slug     = get_post_field( 'post_name', get_the_ID() );
+                        $download_args    = array(
+                            'dl_product'         => $product_slug,
+                            'source_product_id'  => get_the_ID(),
+                        );
+                        $download_permalink = add_query_arg( $download_args, home_url( '/download/' ) );
+                        ?>
+                        <div class="single__cta">
+                            <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">資料ダウンロード</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 

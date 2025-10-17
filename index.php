@@ -58,7 +58,7 @@ get_header();
     <nav class="top-kv__nav">
         <ul class="top-kv__nav-list">
             <li class="top-kv__nav-item">
-                <a href="" class="top-kv__nav-link">
+                <a href="<?= URL_PRODUCT; ?>" class="top-kv__nav-link">
                     <span class="top-kv__nav-link-text">商品について</span>
                 </a>
             </li>
@@ -68,12 +68,12 @@ get_header();
                 </a>
             </li>
             <li class="top-kv__nav-item">
-                <a href="" class="top-kv__nav-link">
+                <a href="<?= URL_CAREER; ?>" class="top-kv__nav-link">
                     <span class="top-kv__nav-link-text">採用情報</span>
                 </a>
             </li>
             <li class="top-kv__nav-item">
-                <a href="" class="top-kv__nav-link">
+                <a href="<?= URL_CONTACT; ?>" class="top-kv__nav-link">
                     <span class="top-kv__nav-link-text">お問い合わせ</span>
                 </a>
             </li>
@@ -161,7 +161,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     60年以上の実績を基に、市場と顧客のニーズを捉え、独自のアイデアで、高品質で革新的な製品を生み出します。
                     </p>
-                    <a href="" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_PRODUCT; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         Product
                         </span>
@@ -227,7 +227,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     20年前からグローバル。アジアを中心に、欧州、北米に広がる生産拠点と販売網で世界中の市場と顧客に対応します。世界で高品質かつ同一品質の塗料を提供します。
                     </p>
-                    <a href="" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_ABOUT_US; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         About us
                         </span>
@@ -320,7 +320,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     環境に配慮した製品開発と社会貢献に本気で取り組み、サステナブルな社会の実現を目指しています。
                     </p>
-                    <a href="" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_SUSTAINABILITY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         Sustainability
                         </span>
@@ -387,7 +387,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="0.6">
                     完全オーダーメイドで、常にお客様に寄り添い、多様なニーズに対応します。
                     </p>
-                    <a href="" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
+                    <a href="<?= URL_VOICE; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
                         <span class="top-section__contents-link-text">
                         Our Customer
                         </span>
@@ -521,4 +521,3 @@ get_header();
 <?php
 get_footer();
 ?>
-

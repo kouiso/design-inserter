@@ -149,7 +149,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
+                                        <a href="<?= URL_HISTORY ?>" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">ヒストリー</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -159,7 +159,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="" class="footer__accordion-link">
+                                        <a href="<?= URL_TECHNOLOGY ?>" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">品質管理</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -239,7 +239,7 @@
                     </a>
                 </li>
                 <li class="footer__other-item">
-                    <a href="" class="footer__other-link">
+                    <a href="<?= URL_DOWNLOAD ?>" class="footer__other-link">
                         <icon class="footer__other-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.66602 2H10.666C11.1964 2 11.7052 2.21071 12.0802 2.58579C12.4553 2.96086 12.666 3.46957 12.666 4V12.6667C12.666 13.1971 12.4553 13.7058 12.0802 14.0809C11.7052 14.456 11.1964 14.6667 10.666 14.6667H4.66602C4.13558 14.6667 3.62687 14.456 3.2518 14.0809C2.87673 13.7058 2.66602 13.1971 2.66602 12.6667V4C2.66602 3.46957 2.87673 2.96086 3.2518 2.58579C3.62687 2.21071 4.13558 2 4.66602 2ZM4.66602 2.66667C4.31239 2.66667 3.97326 2.80714 3.72321 3.05719C3.47316 3.30724 3.33268 3.64638 3.33268 4V12.6667C3.33268 13.0203 3.47316 13.3594 3.72321 13.6095C3.97326 13.8595 4.31239 14 4.66602 14H10.666C11.0196 14 11.3588 13.8595 11.6088 13.6095C11.8589 13.3594 11.9993 13.0203 11.9993 12.6667V4C11.9993 3.64638 11.8589 3.30724 11.6088 3.05719C11.3588 2.80714 11.0196 2.66667 10.666 2.66667H8.66602V7.13333L6.66602 5.73333L4.66602 7.13333V2.66667ZM7.99935 2.66667H5.33268V5.85333L6.66602 4.92L7.99935 5.85333V2.66667Z" fill="black"/>
@@ -301,8 +301,8 @@
                         <div class="footer__nav-pc-link-wrapper">
                             <a href="<?= URL_COMPANY ?>" class="footer__nav-pc-link">会社概要</a>
                             <a href="<?= URL_GLOBAL_NETWORK ?>" class="footer__nav-pc-link">グローバルネットワーク</a>
-                            <a href="" class="footer__nav-pc-link">ヒストリー</a>
-                            <a href="" class="footer__nav-pc-link">品質管理</a>
+                            <a href="<?= URL_HISTORY ?>" class="footer__nav-pc-link">ヒストリー</a>
+                            <a href="<?= URL_TECHNOLOGY ?>" class="footer__nav-pc-link">品質管理</a>
                             <a href="<?= URL_SUSTAINABILITY ?>" class="footer__nav-pc-link">サステナビリティ</a>
                         </div>
                     </div>
@@ -311,6 +311,9 @@
                     </div>
                     <div class="footer__nav-pc-item">
                         <a href="<?= URL_VOICE ?>" class="footer__nav-pc-link">お客様の声</a>
+                    </div>
+                    <div class="footer__nav-pc-item">
+                        <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">インタビュー</a>
                     </div>
                 </div>
             </div>
@@ -332,7 +335,7 @@
                         お問い合わせ
                         </span>
                     </a>
-                    <a href="" class="footer__nav-pc-other-link">
+                    <a href="<?= URL_DOWNLOAD ?>" class="footer__nav-pc-other-link">
                         <icon class="footer__nav-pc-other-link-icon">
                             <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7 3.93555H16C16.7956 3.93555 17.5587 4.25162 18.1213 4.81423C18.6839 5.37684 19 6.1399 19 6.93555V19.9355C19 20.7312 18.6839 21.4943 18.1213 22.0569C17.5587 22.6195 16.7956 22.9355 16 22.9355H7C6.20435 22.9355 5.44129 22.6195 4.87868 22.0569C4.31607 21.4943 4 20.7312 4 19.9355V6.93555C4 6.1399 4.31607 5.37684 4.87868 4.81423C5.44129 4.25162 6.20435 3.93555 7 3.93555ZM7 4.93555C6.46957 4.93555 5.96086 5.14626 5.58579 5.52133C5.21071 5.89641 5 6.40511 5 6.93555V19.9355C5 20.466 5.21071 20.9747 5.58579 21.3498C5.96086 21.7248 6.46957 21.9355 7 21.9355H16C16.5304 21.9355 17.0391 21.7248 17.4142 21.3498C17.7893 20.9747 18 20.466 18 19.9355V6.93555C18 6.40511 17.7893 5.89641 17.4142 5.52133C17.0391 5.14626 16.5304 4.93555 16 4.93555H13V11.6355L10 9.53555L7 11.6355V4.93555ZM12 4.93555H8V9.71555L10 8.31555L12 9.71555V4.93555Z" fill="black"/>
@@ -348,8 +351,8 @@
 
         <div class="footer__bottom-wrapper">
             <div class="footer__bottom-link-wrapper">
-                <a href="" class="footer__bottom-link">プライバシーポリシー</a>
-                <a href="" class="footer__bottom-link">利用規約</a>
+                <a href="<?= URL_PRIVACY_POLICY ?>" class="footer__bottom-link">プライバシーポリシー</a>
+                <a href="<?= URL_TERMS ?>" class="footer__bottom-link">利用規約</a>
             </div>
 
             <p class="footer__copyright">© Musashi Paint Co.,Ltd. All Rights Reserved.</p>

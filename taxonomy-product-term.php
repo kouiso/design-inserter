@@ -36,15 +36,8 @@ get_header();
                         <?php
                         $product_taxonomies = muashi_get_product_taxonomy_config();
                         foreach ( $product_taxonomies as $taxonomy_key => $settings ) :
-                            $terms = get_terms(
-                                array(
-                                    'taxonomy'   => $taxonomy_key,
-                                    'hide_empty' => false,
-                                    'orderby'    => 'name',
-                                    'parent'     => 0,
-                                )
-                            );
-                            $has_terms = ! is_wp_error( $terms ) && ! empty( $terms );
+                            $terms = muashi_get_sorted_product_terms( $taxonomy_key, 0 );
+                            $has_terms = ! empty( $terms );
                             ?>
                             <?php
                             $should_open = $current_taxonomy_name === $taxonomy_key;
@@ -77,15 +70,8 @@ get_header();
                                                 </a>
                                             </li>
                                             <?php
-                                            $child_terms = get_terms(
-                                                array(
-                                                    'taxonomy'   => $taxonomy_key,
-                                                    'hide_empty' => false,
-                                                    'orderby'    => 'name',
-                                                    'parent'     => $term_item->term_id,
-                                                )
-                                            );
-                                            if ( ! is_wp_error( $child_terms ) && ! empty( $child_terms ) ) {
+                                            $child_terms = muashi_get_sorted_product_terms( $taxonomy_key, $term_item->term_id );
+                                            if ( ! empty( $child_terms ) ) {
                                                 foreach ( $child_terms as $child_item ) {
                                                     ?>
                                                     <?php
