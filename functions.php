@@ -809,32 +809,32 @@ add_action('init', 'create_post_type');
 function muashi_get_product_taxonomy_base_config() {
     return array(
         'product_application' => array(
-            'label'        => '用途',
-            'plural'       => '用途',
+            'label'        => '用途でえらぶ',
+            'plural'       => '用途でえらぶ',
             'slug'         => 'products/application',
             'hierarchical' => true,
         ),
         'product_material'   => array(
-            'label'        => '基材',
-            'plural'       => '基材',
+            'label'        => '基材でえらぶ',
+            'plural'       => '基材でえらぶ',
             'slug'         => 'products/material',
             'hierarchical' => true,
         ),
         'product_design'     => array(
-            'label'        => '意匠性',
-            'plural'       => '意匠性',
+            'label'        => '意匠性でえらぶ',
+            'plural'       => '意匠性でえらぶ',
             'slug'         => 'products/design',
             'hierarchical' => true,
         ),
         'product_function'   => array(
-            'label'        => '機能',
-            'plural'       => '機能',
+            'label'        => '機能でえらぶ',
+            'plural'       => '機能でえらぶ',
             'slug'         => 'products/function',
             'hierarchical' => true,
         ),
         'product_environment'=> array(
-            'label'        => '環境キーワード',
-            'plural'       => '環境キーワード',
+            'label'        => '環境キーワードでえらぶ',
+            'plural'       => '環境キーワードでえらぶ',
             'slug'         => 'products/environment',
             'hierarchical' => true,
         ),
