@@ -49,6 +49,57 @@ export function initializeColorBar() {
     const sections = document.querySelectorAll('[data-bg-color="changeable"]');
     const colorBarList = document.querySelector('.color-bar');
     const pageElement = document.querySelector('.page'); // Check for subpage
+    const pageTitle = document.querySelector('.js-page-title');
+    const pageTitleMediaQuery = (typeof window !== 'undefined' && window.matchMedia)
+        ? window.matchMedia('(max-width: 1024px)')
+        : null;
+
+    let colorResolverElement = null;
+    const resolveColorValue = (value) => {
+        if (!value || typeof document === 'undefined') return value;
+        const trimmedValue = value.trim();
+        if (!trimmedValue.startsWith('var(')) return trimmedValue;
+        if (!colorResolverElement) {
+            colorResolverElement = document.createElement('div');
+            colorResolverElement.style.display = 'none';
+            document.body.appendChild(colorResolverElement);
+        }
+        colorResolverElement.style.color = '';
+        colorResolverElement.style.color = trimmedValue;
+        const computed = getComputedStyle(colorResolverElement).color;
+        return computed || trimmedValue;
+    };
+
+    if (pageTitle && !pageTitle.dataset.initialInlineColor) {
+        pageTitle.dataset.initialInlineColor = pageTitle.style.color || '';
+    }
+
+    const updatePageTitleColorForViewport = (media) => {
+        if (!pageTitle) return;
+        if (!media) return;
+        const matches = media.matches;
+
+        gsap.killTweensOf(pageTitle, 'color');
+
+        if (matches) {
+            if (pageTitle.dataset.mobileColor) {
+                pageTitle.style.color = pageTitle.dataset.mobileColor;
+            }
+        } else {
+            pageTitle.style.color = pageTitle.dataset.initialInlineColor || '';
+        }
+    };
+
+    if (pageTitle && pageTitleMediaQuery && !pageTitle.dataset.mediaListenerAttached) {
+        const handleMediaChange = (event) => updatePageTitleColorForViewport(event);
+        if (pageTitleMediaQuery.addEventListener) {
+            pageTitleMediaQuery.addEventListener('change', handleMediaChange);
+        } else if (pageTitleMediaQuery.addListener) {
+            pageTitleMediaQuery.addListener(handleMediaChange);
+        }
+        pageTitle.dataset.mediaListenerAttached = 'true';
+        updatePageTitleColorForViewport(pageTitleMediaQuery);
+    }
     
     // Continue if either sections exist or we're on a subpage
     if (sections.length === 0 && !pageElement) return;
@@ -307,10 +358,11 @@ export function initializeColorBar() {
             navigationInner.style.background = `linear-gradient(to right, ${scheme.titleBg} 0%, ${scheme.titleBg} 25%, ${currentNavColor} 75%, ${currentNavColor} 100%)`;
             navigationInner.style.backgroundSize = '400vw 100%';
             navigationInner.style.backgroundPosition = '100% 0';
+            const resolvedNavigationTextColor = resolveColorValue(scheme.pageNavigationTextColor);
             
             timeline.to(navigationInner, {
                 backgroundPosition: '0% 0',
-                color: scheme.pageNavigationTextColor,
+                color: resolvedNavigationTextColor,
                 duration: animationDuration,
                 ease: 'none',
                 onComplete: () => {
@@ -320,17 +372,25 @@ export function initializeColorBar() {
                 }
             }, startTime);
         }
-
-        const pageTitle = document.querySelector('.js-page-title');
+        
         if (pageTitle) {
-            const mm = gsap.matchMedia();
-            mm.add("(max-width: 1024px)", () => {
+            const resolvedPageTitleColor = resolveColorValue(scheme.pageNavigationTextColor);
+            pageTitle.dataset.mobileColor = resolvedPageTitleColor;
+
+            if (pageTitleMediaQuery && pageTitleMediaQuery.matches) {
                 timeline.to(pageTitle, {
-                    color: scheme.pageNavigationTextColor,
+                    color: resolvedPageTitleColor,
                     duration: animationDuration,
                     ease: 'none'
                 }, startTime);
-            });
+            } else {
+                const initialColor = pageTitle.dataset.initialInlineColor || '';
+                gsap.killTweensOf(pageTitle, 'color');
+                pageTitle.style.color = initialColor;
+                timeline.add(() => {
+                    pageTitle.style.color = initialColor;
+                }, startTime);
+            }
         }
         
         // Animate page__kv-icon
@@ -485,15 +545,15 @@ export function initializeColorBar() {
             rounds.push(shuffled);
         }
         
-        // Calculate delays to fit within 3.2s total
-        const baseDelays = [0, 0.48, 0.96, 1.44, 1.92]; // Start times for each round
+        // Calculate delays to fit within ~1.5s total
+        const baseDelays = [0, 0.3, 0.6, 0.9, 1.2]; // Start times for each round
         
         // Apply animations to each button
         items.forEach((item, buttonIndex) => {
             const button = item.querySelector('.color-bar__button');
             if (!button) return;
             
-            const randomOffset = Math.random() * 0.2; // Add some randomness per button
+            const randomOffset = Math.random() * 0.1; // Add some randomness per button
             
             // Schedule all 5 color changes for this button
             for (let roundIndex = 0; roundIndex < 5; roundIndex++) {
@@ -506,7 +566,7 @@ export function initializeColorBar() {
                         backgroundColor: currentColor
                     }, {
                         backgroundColor: scheme.mainBg,
-                        duration: 0.5,
+                        duration: 0.3,
                         ease: 'power2.inOut',
                         onComplete: () => {
                             button.dataset.colorName = scheme.name;

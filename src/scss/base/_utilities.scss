@@ -14,6 +14,14 @@
   display: block !important;
 }
 
+.pc-only{
+  display: none;
+
+  @include mq(lg){
+    display: block;
+  }
+}
+
 // レスポンシブ表示・非表示
 // --------------------------------------------------------------------------
 @each $breakpoint, $value in $breakpoints {

@@ -15,10 +15,14 @@ import './modules/gsap.js';
 import './modules/accordion.js';
 import './modules/productDownloadButton.js';
 import './modules/download.js';
+import { initializeScrollHint } from './modules/scrollHint.js';
+import { initializeHistoryImages } from './modules/historyImages.js';
 
 // Import all colorBar modules statically
 import { initializeColorBar } from './modules/colorBar.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeColorBar();
+    initializeHistoryImages();
+    initializeScrollHint();
 });

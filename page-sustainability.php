@@ -28,6 +28,33 @@ get_header();
                     <p class="navigation__item-title">
                     サステナブルなビジネス展開
                     </p>
+                    <ul class="navigation__sub-list">
+                        <li class="navigation__sub-item">
+                            <a href="/sustainability/scm/" class="navigation__sub-link">
+                            SCM
+                            </a>
+                        </li>
+                        <li class="navigation__sub-item">
+                            <a href="/sustainability/governance/" class="navigation__sub-link">
+                            ガバナンス
+                            </a>
+                        </li>
+                        <li class="navigation__sub-item">
+                            <a href="/sustainability/environment/" class="navigation__sub-link">
+                            環境
+                            </a>
+                        </li>
+                        <li class="navigation__sub-item">
+                            <a href="/sustainability/society/" class="navigation__sub-link">
+                            社会
+                            </a>
+                        </li>
+                        <li class="navigation__sub-item">
+                            <a href="/sustainability/value-creation-process/" class="navigation__sub-link">
+                            ライブラリー
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_CUSTOMIZATION; ?>" class="navigation__item-title">
@@ -61,7 +88,7 @@ get_header();
 
             <?php if ( have_posts() ) : ?>
                 <?php while( have_posts() ) : the_post(); ?>
-                    <h1 class="page__title">
+                    <h1 class="page__title js-page-title">
                     <?php the_title(); ?>
                     </h1>
                     <div class="page__inner">

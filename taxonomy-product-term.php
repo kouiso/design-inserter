@@ -98,11 +98,6 @@ get_header();
                     </ul>
                 </li>
                 <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    <?php echo esc_html( $term_name ); ?>
-                    </p>
-                </li>
-                <li class="navigation__item">
                     <a href="<?php echo esc_url( URL_FEATURED ); ?>" class="navigation__item-title">
                     注目製品
                     </a>

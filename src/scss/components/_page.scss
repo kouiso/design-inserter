@@ -339,6 +339,16 @@
       color: #888;
       margin-top: 40px;
     }
+
+    .pc-only{
+      + h2 {
+        margin-top: 0;
+
+        @include mq(lg){
+          margin-top: 40px;
+        }
+      }
+    }
   }
 
   &__title{

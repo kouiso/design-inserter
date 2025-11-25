@@ -59,7 +59,7 @@ get_header();
         <ul class="top-kv__nav-list">
             <li class="top-kv__nav-item">
                 <a href="<?= URL_PRODUCT; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">商品について</span>
+                    <span class="top-kv__nav-link-text">製品について</span>
                 </a>
             </li>
             <li class="top-kv__nav-item">
@@ -161,7 +161,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     60年以上の実績を基に、市場と顧客のニーズを捉え、独自のアイデアで、高品質で革新的な製品を生み出します。
                     </p>
-                    <a href="<?= URL_PRODUCT; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_TECHNOLOGY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         Product
                         </span>
@@ -227,7 +227,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     20年前からグローバル。アジアを中心に、欧州、北米に広がる生産拠点と販売網で世界中の市場と顧客に対応します。世界で高品質かつ同一品質の塗料を提供します。
                     </p>
-                    <a href="<?= URL_ABOUT_US; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_GLOBAL_NETWORK; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         About us
                         </span>
@@ -387,7 +387,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="0.6">
                     完全オーダーメイドで、常にお客様に寄り添い、多様なニーズに対応します。
                     </p>
-                    <a href="<?= URL_VOICE; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
+                    <a href="<?= URL_CUSTOMIZATION; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
                         <span class="top-section__contents-link-text">
                         Our Customer
                         </span>
@@ -457,9 +457,11 @@ get_header();
                                     </p>
                                     <p class="top-news__category">
                                         <?php
-                                        $category = get_the_category();
-                                        if (!empty($category)) {
-                                            echo esc_html($category[0]->name);
+                                        $category_name = function_exists('muashi_get_primary_category_name') ? muashi_get_primary_category_name(get_the_ID()) : '';
+                                        if ($category_name !== '') {
+                                            echo esc_html($category_name);
+                                        } else {
+                                            echo esc_html__('カテゴリ未設定', 'muashi');
                                         }
                                         ?>
                                     </p>
@@ -499,6 +501,120 @@ get_header();
                 <a href="<?php echo esc_url( home_url( '/news/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
                     ニュース一覧はこちら
+                    </span>
+                    <div class="top-news__more-icon-wrapper">
+                        <div class="top-news__more-icon u-hidden-md-up">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="top-news__more-icon-path" d="M7.15828 15.1333L11.875 10.4166L7.15828 5.69995L6.57495 6.29162L10.7 10.4166L6.57495 14.5416L7.15828 15.1333Z"/>
+                        </svg>
+                        </div>
+                        <div class="top-news__more-icon u-visible-md-up">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="top-news__more-icon-path" d="M8.59001 18.1598L14.25 12.4998L8.59001 6.83984L7.89001 7.54984L12.84 12.4998L7.89001 17.4498L8.59001 18.1598Z"/>
+                        </svg>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="top-news__inner top-news__inner--bottom">
+        <div class="top-news__title-wrapper">
+            <div class="top-section__title-wrapper u-hidden-md-up">
+                <p class="top-section__title-text top-section__title-text--news">
+                    <svg width="63" height="15" viewBox="0 0 63 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.80273 14.3945H0V0H4.375L6.99219 11.3184L9.58984 0H13.916V14.3945H11.1133V4.6582C11.1133 4.37826 11.1165 3.98763 11.123 3.48633C11.1296 2.97852 11.1328 2.58789 11.1328 2.31445L8.4082 14.3945H5.48828L2.7832 2.31445C2.7832 2.58789 2.78646 2.97852 2.79297 3.48633C2.79948 3.98763 2.80273 4.37826 2.80273 4.6582V14.3945ZM26.7285 8.10547H19.7363V11.8066H27.7051V14.3945H16.7969V0H27.3535V2.54883H19.7363V5.60547H26.7285V8.10547ZM36.25 14.3945H30.0488V0H36.25C37.1419 0.0130208 37.8841 0.117188 38.4766 0.3125C39.4857 0.644531 40.3027 1.25326 40.9277 2.13867C41.429 2.85482 41.7708 3.62956 41.9531 4.46289C42.1354 5.29622 42.2266 6.09049 42.2266 6.8457C42.2266 8.75977 41.8424 10.3809 41.0742 11.709C40.0326 13.4993 38.4245 14.3945 36.25 14.3945ZM38.4863 3.67188C38.0241 2.89062 37.1094 2.5 35.7422 2.5H32.9688V11.8945H35.7422C37.1615 11.8945 38.151 11.1947 38.7109 9.79492C39.0169 9.02669 39.1699 8.11198 39.1699 7.05078C39.1699 5.58594 38.9421 4.45964 38.4863 3.67188ZM44.2676 0H47.2559V14.3945H44.2676V0ZM58.4961 11.4355H53.1934L52.1973 14.3945H49.0527L54.1895 0H57.5879L62.6855 14.3945H59.4238L58.4961 11.4355ZM57.6562 8.95508L55.8594 3.29102L54.0039 8.95508H57.6562Z" fill="white"/>
+                    </svg>
+                </p>
+                <div class="top-section__title-bg" data-inview>
+                    <svg width="70" height="22" viewBox="0 0 70 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="70" height="22" fill="#FFC194"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="top-section__title-wrapper u-visible-md-up">
+                <p class="top-section__title-text top-section__title-text--news">
+                    <svg width="126" height="29" viewBox="0 0 126 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.60547 28.7891H0V0H8.75L13.9844 22.6367L19.1797 0H27.832V28.7891H22.2266V9.31641C22.2266 8.75651 22.2331 7.97526 22.2461 6.97266C22.2591 5.95703 22.2656 5.17578 22.2656 4.62891L16.8164 28.7891H10.9766L5.56641 4.62891C5.56641 5.17578 5.57292 5.95703 5.58594 6.97266C5.59896 7.97526 5.60547 8.75651 5.60547 9.31641V28.7891ZM53.457 16.2109H39.4727V23.6133H55.4102V28.7891H33.5938V0H54.707V5.09766H39.4727V11.2109H53.457V16.2109ZM72.5 28.7891H60.0977V0H72.5C74.2839 0.0260417 75.7682 0.234375 76.9531 0.625C78.9714 1.28906 80.6055 2.50651 81.8555 4.27734C82.8581 5.70964 83.5417 7.25911 83.9062 8.92578C84.2708 10.5924 84.4531 12.181 84.4531 13.6914C84.4531 17.5195 83.6849 20.7617 82.1484 23.418C80.0651 26.9987 76.849 28.7891 72.5 28.7891ZM76.9727 7.34375C76.0482 5.78125 74.2188 5 71.4844 5H65.9375V23.7891H71.4844C74.3229 23.7891 76.3021 22.3893 77.4219 19.5898C78.0339 18.0534 78.3398 16.224 78.3398 14.1016C78.3398 11.1719 77.8841 8.91927 76.9727 7.34375ZM88.5352 0H94.5117V28.7891H88.5352V0ZM116.992 22.8711H106.387L104.395 28.7891H98.1055L108.379 0H115.176L125.371 28.7891H118.848L116.992 22.8711ZM115.312 17.9102L111.719 6.58203L108.008 17.9102H115.312Z" fill="white"/>
+                    </svg>
+                </p>
+                <div class="top-section__title-bg" data-inview>
+                    <svg width="145" height="48" viewBox="0 0 145 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="145" height="48" fill="#FFC194"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-news__contents-wrapper">
+            <p class="top-news__contents-title" data-inview data-fade-in data-delay="0.4">
+                メディア
+            </p>
+
+            <?php
+            $args = array(
+                'post_type' => 'media_post',      // 投稿タイプ
+                'posts_per_page' => 3,      // 表示件数
+            );
+            $the_query = new WP_Query($args);
+            ?>
+
+            <ul class="top-news__list" data-inview data-fade-in data-delay="0.6">
+                <?php if ($the_query->have_posts()) : ?>
+                    <?php while ($the_query->have_posts()) : $the_query->the_post(); ?>
+                        <li class="top-news__item">
+                            <a href="<?php the_permalink(); ?>" class="top-news__link">
+                                <div class="top-news__date-wrapper">
+                                    <p class="top-news__date">
+                                        <?php echo get_the_date('Y.m.d'); ?>
+                                    </p>
+                                    <p class="top-news__category">
+                                        <?php
+                                        $category_name = function_exists('muashi_get_primary_category_name') ? muashi_get_primary_category_name(get_the_ID()) : '';
+                                        if ($category_name !== '') {
+                                            echo esc_html($category_name);
+                                        } else {
+                                            echo esc_html__('カテゴリ未設定', 'muashi');
+                                        }
+                                        ?>
+                                    </p>
+                                </div>
+                                <div class="top-news__article-wrapper">
+                                    <p class="top-news__article-title">
+                                        <?php the_title(); ?>
+                                    </p>
+                                    <div class="top-news__article-icon-wrapper">
+                                        <div class="top-news__article-icon u-hidden-md-up">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path class="top-news__article-icon-path" d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="top-news__article-icon u-visible-md-up">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path class="top-news__article-icon-path" d="M6 12H14.25L11 8.75L11.67 8L16.17 12.5L11.67 17L11 16.25L14.25 13H6V12ZM21 12.5C21 15.0196 19.9991 17.4359 18.2175 19.2175C16.4359 20.9991 14.0196 22 11.5 22C6.26 22 2 17.75 2 12.5C2 9.98044 3.00089 7.56408 4.78249 5.78249C6.56408 4.00089 8.98044 3 11.5 3C14.0196 3 16.4359 4.00089 18.2175 5.78249C19.9991 7.56408 21 9.98044 21 12.5ZM20 12.5C20 10.2457 19.1045 8.08365 17.5104 6.48959C15.9163 4.89553 13.7543 4 11.5 4C9.24566 4 7.08365 4.89553 5.48959 6.48959C3.89553 8.08365 3 10.2457 3 12.5C3 14.7543 3.89553 16.9163 5.48959 18.5104C7.08365 20.1045 9.24566 21 11.5 21C12.6162 21 13.7215 20.7801 14.7528 20.353C15.7841 19.9258 16.7211 19.2997 17.5104 18.5104C18.2997 17.7211 18.9258 16.7841 19.353 15.7528C19.7801 14.7215 20 13.6162 20 12.5Z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    <?php endwhile; ?>
+                <?php else : ?>
+                    <li class="top-news__item">
+                        <div class="top-news__article-wrapper" style="width: 100%;">
+                            <p class="top-news__article-title">
+                                投稿はまだありません。
+                            </p>
+                        </div>
+                    </li>
+                <?php endif; ?>
+                <?php wp_reset_postdata(); ?>
+            </ul>
+            <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
+                <a href="<?php echo esc_url( home_url( '/news/' ) ); ?>" class="top-news__more-link">
+                    <span class="top-news__more-text">
+                    メディア一覧はこちら
                     </span>
                     <div class="top-news__more-icon-wrapper">
                         <div class="top-news__more-icon u-hidden-md-up">

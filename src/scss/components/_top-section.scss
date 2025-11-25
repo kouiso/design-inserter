@@ -74,6 +74,16 @@
         left: 11px;
       }
     }
+
+    &--media{
+      top: 3px;
+      left: 5px;
+
+      @include mq(md){
+        top: 10px;
+        left: 11px;
+      }
+    }
   }
 
   &__title-bg{

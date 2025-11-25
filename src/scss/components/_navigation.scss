@@ -22,6 +22,13 @@
     padding-bottom: 160px;
     display: grid;
     justify-content: flex-end;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px);
+    -webkit-overflow-scrolling: touch;
+
+    @include mq(lg){
+      padding: 0 20px 160px vw-max(40, 1440);
+    }
 
     @include mq(xxl){
       width: calc(480px + (100vw - 1440px) * 0.5);

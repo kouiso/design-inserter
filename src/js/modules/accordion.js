@@ -12,7 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  const navigationAccordions = document.querySelectorAll('.js-navigation-accordion');
+  const navigationAccordions = Array.from(document.querySelectorAll('.js-navigation-accordion'));
+  const navigationAccordionPairs = [];
+
+  const closeOtherNavigationAccordions = (currentTrigger) => {
+    navigationAccordionPairs.forEach(({ trigger: otherTrigger, setState }) => {
+      if (otherTrigger !== currentTrigger) {
+        setState(false);
+      }
+    });
+  };
 
   navigationAccordions.forEach(trigger => {
     const targetList = trigger.nextElementSibling;
@@ -32,11 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
       targetList.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
     };
 
+    navigationAccordionPairs.push({ trigger, setState });
+
     const initialState = targetList.classList.contains('is-active');
     setState(initialState);
 
     const toggleState = () => {
       const willOpen = !targetList.classList.contains('is-active');
+      if (willOpen) {
+        closeOtherNavigationAccordions(trigger);
+      }
       setState(willOpen);
     };
 

@@ -208,13 +208,15 @@
   }
 
   &__nav-pc-other-link-top{
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 28px;
   }
 
   &__nav-pc-other-link-bottom{
     margin-top: 76px;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
   }
 

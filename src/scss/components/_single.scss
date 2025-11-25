@@ -1,6 +1,75 @@
 @use '../setting' as *;
 
 .single {
+  &__meta{
+    margin-bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+
+    @include mq(lg){
+      font-size: 13px;
+    }
+  }
+
+  &__meta-date{
+    font-family: $font-family-helvetica;
+    letter-spacing: 0.08em;
+  }
+
+  &__meta-category{
+    position: relative;
+    padding-left: 14px;
+
+    &::before{
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-text-gray);
+      transform: translateY(-50%);
+    }
+  }
+
+  &__featured-image{
+    margin-bottom: 24px;
+
+    img{
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+  }
+
+  &__back {
+    margin-top: 24px;
+    text-align: center;
+
+    @include mq(lg) {
+      margin-top: 32px;
+    }
+  }
+
+  &__back-button {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-gray);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color .2s ease;
+
+    &:hover {
+      color: rgba(0, 0, 0, .6);
+    }
+  }
+
   &__cta {
     margin: 24px 0;
     display: flex;

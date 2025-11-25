@@ -1,0 +1,250 @@
+@use '../setting' as *;
+@use '../vendor/scroll-hint';
+
+.page{
+  &__inner--history{
+    margin-top: 32px;
+
+    @include mq(lg){
+      margin-top: 56px;
+    }
+
+    > .page__history-content{
+      margin-bottom: 40px;
+
+      @include mq(lg){
+        margin-bottom: 56px;
+      }
+    }
+  }
+}
+
+.history{
+  margin-top: 40px;
+
+  @include mq(lg){
+    margin-top: 56px;
+  }
+
+  &__heading{
+    font-size: 22px;
+    font-weight: 700;
+
+    @include mq(lg){
+      font-size: 28px;
+    }
+  }
+
+  &__description{
+    margin-top: 16px;
+    font-size: 12px;
+    line-height: 22px;
+
+    @include mq(lg){
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 26px;
+    }
+  }
+
+  &__navigation{
+    margin-top: 32px;
+    text-align: center;
+
+    @include mq(lg){
+      margin-top: 40px;
+    }
+  }
+
+  &__navigation-title{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  &__navigation-list{
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+
+    @include mq(md){
+      flex-direction: row;
+      justify-content: center;
+      gap: 16px;
+    }
+  }
+
+  &__navigation-item{
+    padding: 10px 18px;
+    border-radius: 24px;
+    background-color: #f5f5f5;
+    color: #333;
+    font-size: 12px;
+    font-weight: 500;
+
+    @include mq(lg){
+      font-size: 14px;
+      padding: 12px 28px;
+    }
+  }
+
+  &__navigation-item--current{
+    background-color: #fdd347;
+    color: #633900;
+    font-weight: 700;
+  }
+
+  &__table-wrapper{
+    margin-top: 32px;
+    overflow-x: auto;
+    padding: 48px 20px 24px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+
+    @include mq(lg){
+      margin: 16px -60px 0;
+      padding: 0 60px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  .table_style{
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 960px;
+  }
+
+  .table_style th,
+  .table_style td{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 16px 18px;
+    font-size: 12px;
+    line-height: 22px;
+    vertical-align: top;
+    background-color: #fff;
+
+    @include mq(lg){
+      font-size: 14px;
+      line-height: 26px;
+      padding: 18px 20px;
+    }
+  }
+
+  .table_style th{
+    background-color: #f7f7f7;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .table_style .title{
+    background-color: var(--color-pink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+
+    @include mq(lg){
+      font-size: 14px;
+    }
+  }
+
+  .table_style .width_285{
+    width: 285px;
+  }
+
+  .table_style .width_145{
+    width: 145px;
+  }
+
+  .table_style .end_border{
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .table_style .yellow_area th,
+  .table_style .yellow_area td{
+    background-color: #fff8df;
+  }
+
+  .table_style .txt_align{
+    text-align: left;
+  }
+
+  .table_style img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .table_style .photo_list{
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .table_style .last_one{
+    justify-self: center;
+  }
+
+  .table_style .photo_top{
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .table_style .text_top{
+    font-weight: 700;
+  }
+
+  .table_style .explain_text,
+  .table_style .explain_text02,
+  .table_style .last_td{
+    margin-top: 8px;
+  }
+
+  .table_style .explain_text{
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .table_style .explain_text02{
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+.scroll-hint{
+  &-icon{
+    top: 16px;
+    left: auto;
+    right: 16px;
+    width: 180px;
+    padding: 12px 18px 10px;
+    color: #fff;
+    z-index: 10;
+  }
+
+  &-text{
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #fff;
+  }
+}
+
+@include mq(lg){
+  .scroll-hint-icon{
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

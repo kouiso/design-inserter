@@ -120,6 +120,119 @@ function post_has_archive($args, $post_type)
 add_filter('register_post_type_args', 'post_has_archive', 10, 2);
 
 
+/**
+ * メディア投稿タイプ
+ */
+function muashi_register_media_post_type() {
+    $labels = array(
+        'name'               => 'メディア',
+        'singular_name'      => 'メディア',
+        'menu_name'          => 'メディア',
+        'name_admin_bar'     => 'メディア',
+        'add_new'            => '新規追加',
+        'add_new_item'       => 'メディアを追加',
+        'edit_item'          => 'メディアを編集',
+        'new_item'           => '新しいメディア',
+        'view_item'          => 'メディアを表示',
+        'search_items'       => 'メディアを検索',
+        'not_found'          => 'メディアが見つかりませんでした',
+        'not_found_in_trash' => 'ゴミ箱にメディアはありません',
+        'all_items'          => 'すべてのメディア',
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'has_archive'        => true,
+        'rewrite'            => array( 'slug' => 'media' ),
+        'menu_icon'          => 'dashicons-megaphone',
+        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+        'taxonomies'         => array( 'media_category', 'category' ),
+        'show_in_rest'       => true,
+    );
+
+    register_post_type( 'media_post', $args );
+}
+add_action( 'init', 'muashi_register_media_post_type' );
+
+/**
+ * メディアカテゴリ
+ */
+function muashi_register_media_category_taxonomy() {
+    $labels = array(
+        'name'              => 'メディアカテゴリー',
+        'singular_name'     => 'メディアカテゴリー',
+        'search_items'      => 'カテゴリーを検索',
+        'all_items'         => 'すべてのカテゴリー',
+        'parent_item'       => '親カテゴリー',
+        'parent_item_colon' => '親カテゴリー:',
+        'edit_item'         => 'カテゴリーを編集',
+        'update_item'       => 'カテゴリーを更新',
+        'add_new_item'      => '新規カテゴリーを追加',
+        'new_item_name'     => '新しいカテゴリー名',
+        'menu_name'         => 'メディアカテゴリー',
+    );
+
+    $args = array(
+        'labels'            => $labels,
+        'hierarchical'      => true,
+        'public'            => true,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'show_in_rest'      => true,
+        'rewrite'           => array( 'slug' => 'media-category' ),
+    );
+
+    register_taxonomy( 'media_category', array( 'media_post' ), $args );
+
+    register_taxonomy_for_object_type( 'media_category', 'media_post' );
+}
+add_action( 'init', 'muashi_register_media_category_taxonomy' );
+
+
+if ( ! function_exists( 'muashi_get_primary_category_name' ) ) {
+    /**
+     * Returns the first available category name for a post.
+     * Prefers the custom media taxonomy but falls back to the default category taxonomy.
+     * Logs detailed information when categories cannot be resolved.
+     */
+    function muashi_get_primary_category_name( $post_id ) {
+        if ( ! $post_id ) {
+            error_log( 'muashi_get_primary_category_name: Missing post ID' );
+            return '';
+        }
+
+        $taxonomies = array( 'media_category', 'category' );
+
+        foreach ( $taxonomies as $taxonomy ) {
+            if ( ! taxonomy_exists( $taxonomy ) ) {
+                error_log( sprintf( 'muashi_get_primary_category_name: Taxonomy %s does not exist', $taxonomy ) );
+                continue;
+            }
+
+            $terms = get_the_terms( $post_id, $taxonomy );
+
+            if ( is_wp_error( $terms ) ) {
+                error_log( sprintf( 'muashi_get_primary_category_name: WP_Error for post %d taxonomy %s: %s', $post_id, $taxonomy, $terms->get_error_message() ) );
+                continue;
+            }
+
+            if ( empty( $terms ) ) {
+                continue;
+            }
+
+            $term = reset( $terms );
+            if ( $term && isset( $term->name ) ) {
+                return $term->name;
+            }
+        }
+
+        error_log( sprintf( 'muashi_get_primary_category_name: No category terms found for post %d', $post_id ) );
+        return '';
+    }
+}
+
+
 
 //ディスクリプション
 add_action('admin_menu', 'add_custom_fields');
