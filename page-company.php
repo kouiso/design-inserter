@@ -70,7 +70,7 @@ get_header();
 
             <?php if ( have_posts() ) : ?>
                 <?php while( have_posts() ) : the_post(); ?>
-                    <h1 class="page__title js-page-title">
+                    <h1 class="page__title js-page-title" id="01">
                     <?php the_title(); ?>
                     </h1>
                     <div class="page__inner">

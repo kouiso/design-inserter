@@ -1358,3 +1358,27 @@ add_filter( 'wpcf7_autop_or_not', function( $use_autop, $options ) {
     }
     return $use_autop; // メール側は従来の設定を維持
 }, 10, 2 );
+
+/**
+ * ダイナミックブロック: 国内拠点情報
+ * PHPで動的にレンダリングするため、コード変更が即座に反映される
+ */
+add_action( 'init', function() {
+    register_block_type( 'muashi/domestic-locations', array(
+        'api_version'     => 2,
+        'title'           => '国内拠点情報',
+        'description'     => '日本国内の拠点一覧（会社概要ページ用）',
+        'category'        => 'widgets',
+        'icon'            => 'location',
+        'render_callback' => 'muashi_render_domestic_locations_block',
+    ) );
+} );
+
+/**
+ * 国内拠点情報ブロックのレンダリング関数
+ */
+function muashi_render_domestic_locations_block( $attributes, $content ) {
+    ob_start();
+    include get_template_directory() . '/blocks/domestic-locations.php';
+    return ob_get_clean();
+}
