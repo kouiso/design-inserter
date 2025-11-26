@@ -2554,18 +2554,18 @@ a {
   position: relative;
 }
 
-figure.wp-block-table.is-style-expandable {
+.is-style-expandable {
   position: relative;
   max-height: 120px;
   overflow: hidden;
   transition: max-height 0.5s ease-out;
 }
 @media screen and (min-width: 992px) {
-  figure.wp-block-table.is-style-expandable {
+  .is-style-expandable {
     max-height: 150px;
   }
 }
-figure.wp-block-table.is-style-expandable::after {
+.is-style-expandable::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -2577,10 +2577,10 @@ figure.wp-block-table.is-style-expandable::after {
   transition: opacity 0.3s ease;
   z-index: 1;
 }
-figure.wp-block-table.is-style-expandable.is-expanded {
-  max-height: 2000px;
+.is-style-expandable.is-expanded {
+  max-height: 5000px;
 }
-figure.wp-block-table.is-style-expandable.is-expanded::after {
+.is-style-expandable.is-expanded::after {
   opacity: 0;
 }
 

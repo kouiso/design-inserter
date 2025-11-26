@@ -1399,41 +1399,56 @@ add_filter( 'the_content', function( $content ) {
 } );
 
 /**
- * テーブルブロックに「蛇腹（もっと見る）」スタイルを追加
+ * 蛇腹（もっと見る）スタイルを複数のブロックに追加
  */
 add_action( 'init', function() {
-    register_block_style(
-        'core/table',
-        array(
-            'name'  => 'expandable',
-            'label' => '蛇腹（もっと見る）',
-        )
+    $expandable_style = array(
+        'name'  => 'expandable',
+        'label' => '蛇腹（もっと見る）',
     );
+
+    // テーブルブロック
+    register_block_style( 'core/table', $expandable_style );
+
+    // グループブロック（人権方針など複数ブロックをまとめる場合）
+    register_block_style( 'core/group', $expandable_style );
 } );
 
 /**
- * 蛇腹スタイル適用時に「もっと見る」ボタンを自動追加
+ * 蛇腹スタイル適用時に「もっと見る」ボタンを自動追加（共通処理）
  */
-add_filter( 'render_block_core/table', function( $block_content, $block ) {
-    // is-style-expandable クラスがあるか確認
-    if ( strpos( $block_content, 'is-style-expandable' ) === false ) {
-        return $block_content;
-    }
-
-    // ボタンを追加（figureの外側に配置）
+function muashi_add_expandable_button( $block_content, $closing_tag ) {
     $button = '<button class="expandable-toggle" type="button"><span></span></button>';
 
-    // </figure> の後ろにボタンを挿入
+    // 閉じタグの後ろにボタンを挿入
     $block_content = preg_replace(
-        '/(<\/figure>)$/i',
+        '/(' . preg_quote( $closing_tag, '/' ) . ')$/i',
         '$1' . $button,
         $block_content
     );
 
-    // figureとボタンをラッパーで囲む
-    $block_content = '<div class="expandable-wrapper">' . $block_content . '</div>';
+    // ラッパーで囲む
+    return '<div class="expandable-wrapper">' . $block_content . '</div>';
+}
 
-    return $block_content;
+/**
+ * テーブルブロック用
+ */
+add_filter( 'render_block_core/table', function( $block_content, $block ) {
+    if ( strpos( $block_content, 'is-style-expandable' ) === false ) {
+        return $block_content;
+    }
+    return muashi_add_expandable_button( $block_content, '</figure>' );
+}, 10, 2 );
+
+/**
+ * グループブロック用
+ */
+add_filter( 'render_block_core/group', function( $block_content, $block ) {
+    if ( strpos( $block_content, 'is-style-expandable' ) === false ) {
+        return $block_content;
+    }
+    return muashi_add_expandable_button( $block_content, '</div>' );
 }, 10, 2 );
 
 /**

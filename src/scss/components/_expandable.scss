@@ -4,15 +4,16 @@
 // Expandable Content Component (蛇腹/もっと見る)
 // ==========================================================================
 // WordPressブロックスタイル「蛇腹（もっと見る）」として使用
-// ブロックエディタでテーブルを選択 → スタイル → 「蛇腹（もっと見る）」を選択
+// - テーブルブロック: ブロックエディタでテーブルを選択 → スタイル → 「蛇腹（もっと見る）」
+// - グループブロック: 複数ブロックをグループ化 → スタイル → 「蛇腹（もっと見る）」
 
 // ラッパー
 .expandable-wrapper {
   position: relative;
 }
 
-// テーブルブロック用の蛇腹スタイル（WordPressブロックスタイル: is-style-expandable）
-figure.wp-block-table.is-style-expandable {
+// 蛇腹スタイル共通（テーブル・グループ両対応）
+.is-style-expandable {
   position: relative;
   max-height: 120px; // 約2行分
   overflow: hidden;
@@ -43,7 +44,7 @@ figure.wp-block-table.is-style-expandable {
 
   // 展開時
   &.is-expanded {
-    max-height: 2000px; // 十分な高さ（none だとtransitionが効かない）
+    max-height: 5000px; // 十分な高さ（none だとtransitionが効かない）
 
     &::after {
       opacity: 0;
