@@ -1,6 +1,7 @@
 <?php
 /**
- * Template Name: History Page
+ * Template Name: History Global Page
+ * Description: グローバル展開期（2000年代〜）のヒストリーページ
  */
 
 global $description;
@@ -24,9 +25,9 @@ get_header();
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <p class="navigation__item-title">
+                    <a href="<?= URL_HISTORY ?>" class="navigation__item-title">
                     ヒストリー
-                    </p>
+                    </a>
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
@@ -75,21 +76,12 @@ get_header();
                     </h1>
                     <div class="page__inner page__inner--history">
                     <?php
-                    $content = get_the_content();
-                    if ( '' !== trim( wp_strip_all_tags( $content ) ) ) :
-                        ?>
-                        <!-- <div class="page__history-content">
-                        <?php echo apply_filters( 'the_content', $content ); ?>
-                        </div> -->
-                    <?php
-                    endif;
-
                     $history_image_base = get_theme_file_uri( '/assets/img/history' );
                     ?>
                         <section class="history" data-placeholder="<?= esc_url( get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg' ); ?>">
                             <div class="history__header">
-                                <p class="history__description">1958年の創業以来、半世紀にわたり武蔵塗料グループはお客様と共に歩んできました。<br>
-                                    創業からの主な出来事と当時の主力製品をご紹介します。
+                                <p class="history__description">
+                                    <!-- コンテンツが提供され次第、ここに説明文を入れる -->
                                 </p>
                             </div>
                             <div class="history__navigation">
@@ -101,10 +93,13 @@ get_header();
                                     <li class="history__navigation-item">
                                         <a href="<?= home_url('/history-innovation/'); ?>">1980〜1990年代 プラスチック事業へ</a>
                                     </li>
-                                    <li class="history__navigation-item">
-                                        <a href="<?= home_url('/history-global/'); ?>">2000年代〜 グローバル企業へ</a>
+                                    <li class="history__navigation-item history__navigation-item--current">
+                                        <span>2000年代〜 グローバル企業へ</span>
                                     </li>
                                 </ul>
+                            </div>
+                            <div class="history__table-wrapper">
+                                <?php the_content(); ?>
                             </div>
                         </section>
                     </div>
@@ -114,8 +109,6 @@ get_header();
 
         </div>
     </div>
-
-
 
 </section>
 
