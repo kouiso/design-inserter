@@ -32,8 +32,13 @@ get_header();
                     </p>
                     <ul class="navigation__sub-list">
                         <li class="navigation__sub-item">
-                            <a href="/sustainability/scm/" class="navigation__sub-link">
-                            SCM
+                            <a href="/sustainability/environment/" class="navigation__sub-link">
+                            環境
+                            </a>
+                        </li>
+                        <li class="navigation__sub-item">
+                            <a href="/sustainability/society/" class="navigation__sub-link">
+                            社会
                             </a>
                         </li>
                         <li class="navigation__sub-item">
@@ -42,13 +47,8 @@ get_header();
                             </a>
                         </li>
                         <li class="navigation__sub-item">
-                            <a href="/sustainability/environment/" class="navigation__sub-link">
-                            環境
-                            </a>
-                        </li>
-                        <li class="navigation__sub-item">
-                            <a href="/sustainability/society/" class="navigation__sub-link">
-                            社会
+                            <a href="/sustainability/scm/" class="navigation__sub-link">
+                            SCM
                             </a>
                         </li>
                         <li class="navigation__sub-item">
