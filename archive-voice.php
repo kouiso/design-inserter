@@ -15,6 +15,11 @@ get_header();
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
+                    <p class="navigation__item-title">
+                    お客様の声
+                    </p>
+                </li>
+                <li class="navigation__item">
                     <a href="<?php echo URL_ABOUT_US; ?>" class="navigation__item-title">
                     企業情報
                     </a>
@@ -33,11 +38,6 @@ get_header();
                     <a href="<?php echo URL_STORY; ?>" class="navigation__item-title">
                     ストーリー
                     </a>
-                </li>
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    お客様の声
-                    </p>
                 </li>
             </ul>
         </div>
