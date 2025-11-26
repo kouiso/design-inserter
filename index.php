@@ -163,7 +163,7 @@ get_header();
                     </p>
                     <a href="<?= URL_TECHNOLOGY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
-                        Product
+                        Technology
                         </span>
                         <div class="top-section__contents-link-icon-wrapper">
                             <div class="top-section__contents-link-icon top-section__contents-link-icon--sp">
@@ -229,7 +229,7 @@ get_header();
                     </p>
                     <a href="<?= URL_GLOBAL_NETWORK; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
-                        About us
+                        Global Network
                         </span>
                         <div class="top-section__contents-link-icon-wrapper">
                             <div class="top-section__contents-link-icon top-section__contents-link-icon--sp">
@@ -389,7 +389,7 @@ get_header();
                     </p>
                     <a href="<?= URL_CUSTOMIZATION; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
                         <span class="top-section__contents-link-text">
-                        Our Customer
+                        Resolve
                         </span>
                         <picture class="top-section__contents-link-pic">
                             <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/arrow_white.svg" media="(min-width: 768px)">
