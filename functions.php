@@ -1360,6 +1360,83 @@ add_filter( 'wpcf7_autop_or_not', function( $use_autop, $options ) {
 }, 10, 2 );
 
 /**
+ * ページの見出しにアンカーIDを自動付与
+ */
+add_filter( 'the_content', function( $content ) {
+    $page_anchors = array(
+        'about-us' => array(
+            '武蔵塗料グループについて' => 'about-01',
+            '経営理念' => 'about-02',
+            '色と機能で世界を豊かに' => 'about-03',
+            'コーポレートアイデンティティ' => 'about-04',
+        ),
+        'company' => array(
+            '会社概要' => '01',
+            '代表メッセージ' => '02',
+        ),
+    );
+
+    $anchors = null;
+    foreach ( $page_anchors as $page_slug => $anchor_map ) {
+        if ( is_page( $page_slug ) ) {
+            $anchors = $anchor_map;
+            break;
+        }
+    }
+
+    if ( ! $anchors ) {
+        return $content;
+    }
+
+    foreach ( $anchors as $text => $id ) {
+        $content = preg_replace(
+            '/(<h2[^>]*)(>[\s]*' . preg_quote( $text, '/' ) . ')/u',
+            '$1 id="' . $id . '"$2',
+            $content
+        );
+    }
+    return $content;
+} );
+
+/**
+ * テーブルブロックに「蛇腹（もっと見る）」スタイルを追加
+ */
+add_action( 'init', function() {
+    register_block_style(
+        'core/table',
+        array(
+            'name'  => 'expandable',
+            'label' => '蛇腹（もっと見る）',
+        )
+    );
+} );
+
+/**
+ * 蛇腹スタイル適用時に「もっと見る」ボタンを自動追加
+ */
+add_filter( 'render_block_core/table', function( $block_content, $block ) {
+    // is-style-expandable クラスがあるか確認
+    if ( strpos( $block_content, 'is-style-expandable' ) === false ) {
+        return $block_content;
+    }
+
+    // ボタンを追加（figureの外側に配置）
+    $button = '<button class="expandable-toggle" type="button"><span></span></button>';
+
+    // </figure> の後ろにボタンを挿入
+    $block_content = preg_replace(
+        '/(<\/figure>)$/i',
+        '$1' . $button,
+        $block_content
+    );
+
+    // figureとボタンをラッパーで囲む
+    $block_content = '<div class="expandable-wrapper">' . $block_content . '</div>';
+
+    return $block_content;
+}, 10, 2 );
+
+/**
  * ダイナミックブロック: 国内拠点情報
  * PHPで動的にレンダリングするため、コード変更が即座に反映される
  */
