@@ -732,7 +732,7 @@ function create_post_type() {
             'has_archive'   => 'voices',
             'menu_position' => 5,
             'show_in_rest'  => true,
-            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
             'rewrite'       => array('slug' => 'voices'),
             'menu_icon'     => 'dashicons-testimonial',
         )
@@ -1291,6 +1291,20 @@ add_action( 'pre_get_posts', function( $query ) {
 } );
 
 /**
+ * お客様の声アーカイブをmenu_order順で並び替え
+ */
+add_action( 'pre_get_posts', function( $query ) {
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return;
+    }
+
+    if ( $query->is_post_type_archive( 'voice' ) ) {
+        $query->set( 'orderby', 'menu_order' );
+        $query->set( 'order', 'ASC' );
+    }
+} );
+
+/**
  * 共通KV画像の出力ヘルパー
  */
 function muashi_render_kv_picture( $args = array() ) {
@@ -1412,6 +1426,41 @@ add_action( 'init', function() {
 
     // グループブロック（人権方針など複数ブロックをまとめる場合）
     register_block_style( 'core/group', $expandable_style );
+} );
+
+/**
+ * ダウンロードボタン ブロックパターン
+ */
+add_action( 'init', function() {
+    register_block_pattern(
+        'muashi/download-button',
+        array(
+            'title'       => 'ダウンロードボタン',
+            'description' => 'ダウンロードアイコン付きのボタン',
+            'categories'  => array( 'buttons' ),
+            'content'     => '<!-- wp:group {"layout":{"type":"constrained","justifyContent":"left"}} -->
+<div class="wp-block-group"><!-- wp:button {"className":"is-style-download"} -->
+<div class="wp-block-button is-style-download"><a class="wp-block-button__link wp-element-button" href="#">ダウンロード</a></div>
+<!-- /wp:button -->
+
+<!-- wp:paragraph {"fontSize":"small"} -->
+<p class="has-small-font-size">発行：2024年6月　報告対象期間：2023年1月〜12月</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->',
+        )
+    );
+} );
+
+/**
+ * ダウンロードボタン用エディタCSS
+ */
+add_action( 'enqueue_block_editor_assets', function() {
+    wp_enqueue_style(
+        'muashi-editor-download-button',
+        get_template_directory_uri() . '/assets/css/editor-download-button.css',
+        array(),
+        filemtime( get_template_directory() . '/assets/css/editor-download-button.css' )
+    );
 } );
 
 /**
