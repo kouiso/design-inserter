@@ -18,6 +18,7 @@
   max-height: 120px; // 約2行分
   overflow: hidden;
   transition: max-height 0.5s ease-out;
+  color: var(--color-black); // 文字色を周囲と同じ黒に
 
   @include mq(lg) {
     max-height: 150px;
@@ -30,11 +31,10 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 40px;
     background: linear-gradient(
       to bottom,
       rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.8) 50%,
       rgba(255, 255, 255, 1) 100%
     );
     pointer-events: none;

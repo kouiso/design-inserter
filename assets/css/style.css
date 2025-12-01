@@ -1596,7 +1596,7 @@ a {
 .page__inner--narrow {
   padding: 20px 20px 160px;
 }
-.page__inner .wp-block-group {
+.page__inner .wp-block-group:not(.is-style-expandable) {
   margin-bottom: 24px;
   display: flex;
   gap: 16px;
@@ -2559,6 +2559,7 @@ a {
   max-height: 120px;
   overflow: hidden;
   transition: max-height 0.5s ease-out;
+  color: var(--color-black);
 }
 @media screen and (min-width: 992px) {
   .is-style-expandable {
@@ -2571,8 +2572,8 @@ a {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgb(255, 255, 255) 100%);
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%);
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 1;
