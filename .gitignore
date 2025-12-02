@@ -2,6 +2,15 @@
 wp-admin/
 wp-includes/
 wp-config.php
+*.php
+!wp-content/themes/muashi/**/*.php
+
+# WordPress default files
+license.txt
+readme.html
+.htaccess
+
+# WordPress content - system directories
 wp-content/uploads/
 wp-content/upgrade/
 wp-content/cache/
@@ -9,11 +18,21 @@ wp-content/backups/
 wp-content/ai1wm-backups/
 wp-content/siteguard/
 wp-content/plugins/
-wp-content/themes/index.php
-wp-content/index.php
 wp-content/plugins/all-in-one-wp-migration/storage/
-*.php
-!wp-content/themes/muashi/**/*.php
+wp-content/index.php
+wp-content/themes/index.php
+wp-content/languages/
+
+# WordPress default themes
+wp-content/themes/twentytwenty/
+wp-content/themes/twentytwentyone/
+wp-content/themes/twentytwentytwo/
+wp-content/themes/twentytwentythree/
+wp-content/themes/twentytwentyfour/
+wp-content/themes/twentytwentyfive/
+
+# Development files
+TODO.md
 
 # System files
 .DS_Store
