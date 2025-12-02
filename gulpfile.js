@@ -9,19 +9,22 @@ const browserSync = require("browser-sync").create();
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 
+// テーマディレクトリへの相対パス
+const themeDir = "./wp-content/themes/muashi";
+
 let path = {
   src: {
-    scss: "./src/scss/**/*.scss",
-    js: "./src/js/main.js",
+    scss: `${themeDir}/src/scss/**/*.scss`,
+    js: `${themeDir}/src/js/main.js`,
   },
   dist: {
-    css: "./assets/css",
-    js: "./assets/js",
+    css: `${themeDir}/assets/css`,
+    js: `${themeDir}/assets/js`,
   },
   watch: {
-    scss: "./src/scss/**/*.scss",
-    js: "./src/js/**/*.js",
-    php: "./**/*.php",
+    scss: `${themeDir}/src/scss/**/*.scss`,
+    js: `${themeDir}/src/js/**/*.js`,
+    php: `${themeDir}/**/*.php`,
   }
 };
 
