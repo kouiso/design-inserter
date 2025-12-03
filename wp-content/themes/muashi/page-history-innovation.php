@@ -29,11 +29,6 @@ $history_image_base = get_theme_file_uri( '/assets/img/history' );
                     <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
                     ヒストリー
                     </a>
-                    <ul class="navigation__item-children">
-                        <li><a href="<?php echo URL_HISTORY_FOUNDING; ?>">創業期 1958年〜</a></li>
-                        <li class="is-current"><a href="<?php echo URL_HISTORY_INNOVATION; ?>">技術革新期 1980年〜</a></li>
-                        <li><a href="<?php echo URL_HISTORY_GLOBAL; ?>">グローバル展開期 2000年〜</a></li>
-                    </ul>
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
@@ -81,42 +76,7 @@ $history_image_base = get_theme_file_uri( '/assets/img/history' );
                     <?php the_title(); ?>
                     </h1>
                     <div class="page__inner page__inner--history">
-                        <section class="history" data-placeholder="<?= esc_url( get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg' ); ?>">
-                            <div class="history__header">
-                                <p class="history__description">1958年の創業以来、半世紀にわたり武蔵塗料グループはお客様と共に歩んできました。<br>
-                                    創業からの主な出来事と当時の主力製品をご紹介します。
-                                </p>
-                            </div>
-                            <div class="history__navigation">
-                                <p class="history__navigation-title">武蔵塗料グループ年表</p>
-                                <ul class="history__navigation-list">
-                                    <li class="history__navigation-item"><a href="<?php echo URL_HISTORY_FOUNDING; ?>">創業期 1958年〜</a></li>
-                                    <li class="history__navigation-item history__navigation-item--current">技術革新期 1980年〜</li>
-                                    <li class="history__navigation-item"><a href="<?php echo URL_HISTORY_GLOBAL; ?>">グローバル展開期 2000年〜</a></li>
-                                </ul>
-                            </div>
-                            <div class="history__table-wrapper">
-                                <table class="table_style">
-                                    <tbody>
-                                        <tr class="tr1">
-                                            <td class="title">&nbsp;</td>
-                                            <td class="title width_285">主な出来事</td>
-                                            <td class="title width_145">当時の主力製品</td>
-                                            <td class="title end_border">グループの変化と成長</td>
-                                        </tr>
-                                        <!-- 1980年代〜1990年代のデータをここに追加 -->
-                                        <tr class="yellow_area">
-                                            <th>1980年</th>
-                                            <td class="txt_align">
-                                                <p>（データを追加してください）</p>
-                                            </td>
-                                            <td>&nbsp;</td>
-                                            <td class="end_border">&nbsp;</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
+                        <?php the_content(); ?>
                     </div>
                 <?php endwhile; ?>
             <?php endif; ?>

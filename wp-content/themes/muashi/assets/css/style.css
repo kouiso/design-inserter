@@ -1230,6 +1230,49 @@ a {
     font-size: 12px;
   }
 }
+.footer__sns-list {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  padding-left: 20px;
+}
+@media screen and (min-width: 992px) {
+  .footer__sns-list {
+    display: none;
+  }
+}
+.footer__sns-list--pc {
+  display: none;
+}
+@media screen and (min-width: 992px) {
+  .footer__sns-list--pc {
+    display: flex;
+    margin-top: 24px;
+    padding-left: 0;
+  }
+}
+.footer__sns-item {
+  display: flex;
+}
+.footer__sns-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--color-black);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.footer__sns-link:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+.footer__sns-link svg {
+  width: 24px;
+  height: 24px;
+}
 
 .wave__sp {
   display: block;
