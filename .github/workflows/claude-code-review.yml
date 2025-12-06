@@ -6,11 +6,6 @@ on:
   issue_comment:
     types: [created]
 
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
-
 jobs:
   claude-code-review:
     # PRに対するレビュー、またはPRコメントで @claude-code と呼び出された場合に実行
@@ -20,124 +15,36 @@ jobs:
        github.event.issue.pull_request && 
        contains(github.event.comment.body, '@claude-code'))
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
     steps:
-      - name: Check Claude Code subscription
-        id: check-subscription
-        run: |
-          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
-            echo "ANTHROPIC_API_KEY is not set. Please add your Anthropic API key to repository secrets."
-            echo "subscription_active=false" >> $GITHUB_OUTPUT
-          else
-            echo "subscription_active=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Checkout repository
-        if: steps.check-subscription.outputs.subscription_active == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get PR diff
-        if: steps.check-subscription.outputs.subscription_active == 'true'
-        id: get-diff
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            PR_NUMBER="${{ github.event.pull_request.number }}"
-          else
-            PR_NUMBER="${{ github.event.issue.number }}"
-          fi
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@beta
+        with:
+          # Claude Code サブスクリプションを使用（APIキー不要）
+          use_bedrock: false
+          use_vertex: false
           
-          # Get the diff from the PR
-          gh pr diff "$PR_NUMBER" > pr_diff.txt || true
+          # PRレビューの場合は自動的にdiffをレビュー
+          # コメントで呼び出された場合はそのコメントに対応
+          direct_prompt: |
+            このPull Requestをレビューしてください。以下の観点でフィードバックをお願いします：
+            
+            1. **概要**: 変更内容の簡潔な要約
+            2. **良い点**: コードの良い点
+            3. **改善提案**: 改善が必要な箇所と具体的な提案
+            4. **セキュリティ**: セキュリティ上の懸念があれば指摘
+            5. **総合評価**: 全体的な評価
+            
+            日本語で回答してください。
           
-          # Check if diff file exists and has content
-          if [ -s pr_diff.txt ]; then
-            echo "diff_exists=true" >> "$GITHUB_OUTPUT"
-            echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
-          else
-            echo "diff_exists=false" >> "$GITHUB_OUTPUT"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get PR information
-        if: steps.check-subscription.outputs.subscription_active == 'true' && steps.get-diff.outputs.diff_exists == 'true'
-        id: pr-info
-        run: |
-          PR_NUMBER="${{ steps.get-diff.outputs.pr_number }}"
-          
-          # Get PR title and body using gh CLI (safe from injection)
-          gh pr view "$PR_NUMBER" --json title -q '.title' > pr_title.txt
-          gh pr view "$PR_NUMBER" --json body -q '.body' > pr_body.txt
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Request Claude Code review
-        if: steps.check-subscription.outputs.subscription_active == 'true' && steps.get-diff.outputs.diff_exists == 'true'
-        id: claude-review
-        run: |
-          # Read files
-          PR_TITLE=$(cat pr_title.txt)
-          PR_DIFF=$(head -n 1500 pr_diff.txt)
-          PR_BODY=$(cat pr_body.txt)
-          
-          # Prepare the prompt for Claude
-          PROMPT="You are a senior code reviewer. Please review the following pull request changes and provide constructive feedback in Japanese.
-
-          ## PR Title
-          ${PR_TITLE}
-
-          ## PR Description
-          ${PR_BODY}
-
-          ## Code Changes (Diff)
-          \`\`\`diff
-          ${PR_DIFF}
-          \`\`\`
-
-          Please provide:
-          1. **概要**: 変更内容の簡潔な要約
-          2. **良い点**: コードの良い点や改善点
-          3. **改善提案**: 改善が必要な箇所と具体的な提案
-          4. **セキュリティ**: セキュリティ上の懸念があれば指摘
-          5. **総合評価**: 全体的な評価とマージ可否の推奨
-
-          Please format your response in Markdown."
-
-          # Call Claude API
-          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
-            -H "Content-Type: application/json" \
-            -H "x-api-key: ${{ secrets.ANTHROPIC_API_KEY }}" \
-            -H "anthropic-version: 2023-06-01" \
-            -d "$(jq -n --arg prompt "$PROMPT" '{
-              "model": "claude-sonnet-4-20250514",
-              "max_tokens": 4096,
-              "messages": [{"role": "user", "content": $prompt}]
-            }')")
-
-          # Extract the response content
-          REVIEW_CONTENT=$(echo "$RESPONSE" | jq -r '.content[0].text // "レビューの生成に失敗しました。"')
-          
-          # Save to file for the next step
-          echo "$REVIEW_CONTENT" > review_content.txt
-
-      - name: Post review comment
-        if: steps.check-subscription.outputs.subscription_active == 'true' && steps.get-diff.outputs.diff_exists == 'true'
-        run: |
-          PR_NUMBER="${{ steps.get-diff.outputs.pr_number }}"
-          REVIEW_CONTENT=$(cat review_content.txt)
-          
-          # Post comment to PR
-          gh pr comment "$PR_NUMBER" --body "## 🤖 Claude Code Review
-
-          $REVIEW_CONTENT
-
-          ---
-          *This review was automatically generated by Claude Code.*"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: No subscription message
-        if: steps.check-subscription.outputs.subscription_active == 'false'
-        run: |
-          echo "::warning::Claude Code subscription is not active. Please add ANTHROPIC_API_KEY to repository secrets to enable AI-powered code reviews."
+          # タイムアウト設定（分）
+          timeout_minutes: 10

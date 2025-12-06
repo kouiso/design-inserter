@@ -6,213 +6,50 @@ on:
   issue_comment:
     types: [created]
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
-
 jobs:
   claude-code-implementation:
-    # Issueに claude-code ラベルがある場合、またはIssueコメントで @claude-code implement と呼び出された場合に実行
+    # Issueに claude-code ラベルがある場合、またはIssueコメントで @claude-code と呼び出された場合に実行
     if: |
       (github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'claude-code')) ||
       (github.event_name == 'issue_comment' && 
        !github.event.issue.pull_request && 
        contains(github.event.comment.body, '@claude-code'))
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
     steps:
-      - name: Check Claude Code subscription
-        id: check-subscription
-        run: |
-          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
-            echo "ANTHROPIC_API_KEY is not set. Please add your Anthropic API key to repository secrets."
-            echo "subscription_active=false" >> $GITHUB_OUTPUT
-          else
-            echo "subscription_active=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Checkout repository
-        if: steps.check-subscription.outputs.subscription_active == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get Issue information
-        if: steps.check-subscription.outputs.subscription_active == 'true'
-        id: issue-info
-        run: |
-          ISSUE_NUMBER="${{ github.event.issue.number }}"
+      - name: Run Claude Code Implementation
+        uses: anthropics/claude-code-action@beta
+        with:
+          # Claude Code サブスクリプションを使用（APIキー不要）
+          use_bedrock: false
+          use_vertex: false
           
-          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          # Issueの内容に基づいて実装や提案を行う
+          direct_prompt: |
+            このIssueの内容を確認し、適切な対応を行ってください。
+            
+            コメントに以下のコマンドが含まれている場合は、それに従ってください：
+            - @claude-code suggest: 実装の提案を行う
+            - @claude-code implement: 実際のコード実装を行う
+            - @claude-code analyze: 問題の分析を行う
+            
+            日本語で回答してください。
           
-          # Use gh CLI to safely get issue details
-          gh issue view "$ISSUE_NUMBER" --json title,body -q '.title' > issue_title.txt
-          gh issue view "$ISSUE_NUMBER" --json title,body -q '.body' > issue_body.txt
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get repository structure
-        if: steps.check-subscription.outputs.subscription_active == 'true'
-        id: repo-structure
-        run: |
-          # Get list of main files and directories
-          find . -type f \( -name "*.php" -o -name "*.js" -o -name "*.css" -o -name "*.scss" -o -name "*.json" -o -name "*.yml" -o -name "*.yaml" \) \
-            -not -path "./node_modules/*" \
-            -not -path "./.git/*" \
-            | head -100 > repo_files.txt
+          # タイムアウト設定（分）
+          timeout_minutes: 30
           
-          # Get directory structure
-          tree -L 3 -I 'node_modules|.git' --noreport > repo_structure.txt 2>/dev/null || ls -la > repo_structure.txt
-
-      - name: Determine action type
-        if: steps.check-subscription.outputs.subscription_active == 'true'
-        id: action-type
-        run: |
-          if echo "$COMMENT_BODY" | grep -qi "@claude-code implement"; then
-            echo "action=implement" >> $GITHUB_OUTPUT
-          elif echo "$COMMENT_BODY" | grep -qi "@claude-code suggest"; then
-            echo "action=suggest" >> $GITHUB_OUTPUT
-          elif echo "$COMMENT_BODY" | grep -qi "@claude-code analyze"; then
-            echo "action=analyze" >> $GITHUB_OUTPUT
-          else
-            # Default action based on labels
-            if [[ "${{ contains(github.event.issue.labels.*.name, 'enhancement') }}" == "true" ]] || \
-               [[ "${{ contains(github.event.issue.labels.*.name, 'feature') }}" == "true" ]]; then
-              echo "action=suggest" >> $GITHUB_OUTPUT
-            elif [[ "${{ contains(github.event.issue.labels.*.name, 'bug') }}" == "true" ]]; then
-              echo "action=analyze" >> $GITHUB_OUTPUT
-            else
-              echo "action=suggest" >> $GITHUB_OUTPUT
-            fi
-          fi
-        env:
-          COMMENT_BODY: ${{ github.event.comment.body }}
-
-      - name: Generate Claude Code response
-        if: steps.check-subscription.outputs.subscription_active == 'true'
-        id: claude-response
-        run: |
-          # Read files (use line count for truncation to preserve data integrity)
-          ISSUE_TITLE=$(cat issue_title.txt)
-          ISSUE_BODY=$(cat issue_body.txt)
-          REPO_STRUCTURE=$(head -n 100 repo_structure.txt)
-          REPO_FILES=$(head -n 100 repo_files.txt)
-          ACTION_TYPE="${{ steps.action-type.outputs.action }}"
-          
-          # Dynamically detect and read relevant source files
-          RELEVANT_CODE=""
-          
-          # Find main entry point files (functions.php for WordPress, index.js for Node, etc.)
-          for pattern in "functions.php" "index.php" "index.js" "main.js" "app.js" "index.ts" "main.ts"; do
-            found_file=$(find . -name "$pattern" -not -path "./node_modules/*" -not -path "./.git/*" | head -1)
-            if [ -n "$found_file" ]; then
-              RELEVANT_CODE="${RELEVANT_CODE}\n\n## ${found_file}\n\`\`\`\n$(head -n 100 "$found_file")\n\`\`\`"
-            fi
-          done
-          
-          # Build prompt based on action type
-          if [ "$ACTION_TYPE" == "implement" ]; then
-            ACTION_INSTRUCTION="Please provide a complete implementation with actual code that can be directly used. Include file paths and full code snippets."
-          elif [ "$ACTION_TYPE" == "analyze" ]; then
-            ACTION_INSTRUCTION="Please analyze the issue and provide:
-            1. Root cause analysis
-            2. Affected files and code areas
-            3. Recommended fix approach
-            4. Potential side effects to consider"
-          else
-            ACTION_INSTRUCTION="Please provide implementation suggestions with:
-            1. Recommended approach
-            2. Code examples and snippets
-            3. Files that need to be modified
-            4. Step-by-step implementation guide"
-          fi
-          
-          PROMPT="You are an expert developer. Please help with the following issue in Japanese.
-
-          ## Issue Title
-          ${ISSUE_TITLE}
-
-          ## Issue Description
-          ${ISSUE_BODY}
-
-          ## Repository Structure
-          \`\`\`
-          ${REPO_STRUCTURE}
-          \`\`\`
-
-          ## Repository Files
-          \`\`\`
-          ${REPO_FILES}
-          \`\`\`
-
-          ## Relevant Code
-          ${RELEVANT_CODE}
-
-          ## Action Required
-          ${ACTION_INSTRUCTION}
-
-          Please format your response in Markdown with clear sections and code blocks."
-
-          # Call Claude API
-          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
-            -H "Content-Type: application/json" \
-            -H "x-api-key: ${{ secrets.ANTHROPIC_API_KEY }}" \
-            -H "anthropic-version: 2023-06-01" \
-            -d "$(jq -n --arg prompt "$PROMPT" '{
-              "model": "claude-sonnet-4-20250514",
-              "max_tokens": 4096,
-              "messages": [{"role": "user", "content": $prompt}]
-            }')")
-
-          # Extract the response content
-          RESPONSE_CONTENT=$(echo "$RESPONSE" | jq -r '.content[0].text // "レスポンスの生成に失敗しました。"')
-          
-          # Save to file
-          echo "$RESPONSE_CONTENT" > response_content.txt
-
-      - name: Post response comment
-        if: steps.check-subscription.outputs.subscription_active == 'true'
-        run: |
-          ISSUE_NUMBER="${{ steps.issue-info.outputs.issue_number }}"
-          RESPONSE_CONTENT=$(cat response_content.txt)
-          ACTION_TYPE="${{ steps.action-type.outputs.action }}"
-          
-          # Set emoji based on action type
-          case "$ACTION_TYPE" in
-            implement) EMOJI="💻" ;;
-            analyze) EMOJI="🔍" ;;
-            *) EMOJI="💡" ;;
-          esac
-          
-          # Post comment to issue
-          gh issue comment "$ISSUE_NUMBER" --body "${EMOJI} **Claude Code Response**
-
-          $RESPONSE_CONTENT
-
-          ---
-          *This response was automatically generated by Claude Code.*
-          
-          **Available commands:**
-          - \`@claude-code suggest\` - Get implementation suggestions
-          - \`@claude-code implement\` - Get complete implementation code
-          - \`@claude-code analyze\` - Get detailed analysis of the issue"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: No subscription message
-        if: steps.check-subscription.outputs.subscription_active == 'false'
-        run: |
-          ISSUE_NUMBER="${{ github.event.issue.number }}"
-          
-          gh issue comment "$ISSUE_NUMBER" --body "⚠️ **Claude Code is not configured**
-
-          To enable Claude Code AI assistance, please:
-          1. Subscribe to [Anthropic API](https://console.anthropic.com/)
-          2. Add \`ANTHROPIC_API_KEY\` to your repository secrets
-
-          Once configured, you can use:
-          - \`@claude-code suggest\` - Get implementation suggestions
-          - \`@claude-code implement\` - Get complete implementation code
-          - \`@claude-code analyze\` - Get detailed analysis"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 実装を許可
+          allowed_tools: |
+            mcp__github__create_or_update_file
+            mcp__github__push_files
+            mcp__github__create_branch
+            mcp__github__create_pull_request
