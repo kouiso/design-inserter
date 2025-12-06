@@ -1482,8 +1482,8 @@ add_action( 'init', function() {
             'title'       => '画像（小）',
             'description' => '小さいサイズの画像（最大幅300px）',
             'categories'  => array( 'muashi-images' ),
-            'content'     => '<!-- wp:image {"className":"is-style-size-small","sizeSlug":"large"} -->
-<figure class="wp-block-image size-large is-style-size-small"><img src="" alt=""/></figure>
+            'content'     => '<!-- wp:image {"className":"is-style-size-small"} -->
+<figure class="wp-block-image is-style-size-small"><img src="" alt=""/></figure>
 <!-- /wp:image -->',
         )
     );
@@ -1495,8 +1495,8 @@ add_action( 'init', function() {
             'title'       => '画像（中）',
             'description' => '中くらいのサイズの画像（最大幅500px）',
             'categories'  => array( 'muashi-images' ),
-            'content'     => '<!-- wp:image {"className":"is-style-size-medium","sizeSlug":"large"} -->
-<figure class="wp-block-image size-large is-style-size-medium"><img src="" alt=""/></figure>
+            'content'     => '<!-- wp:image {"className":"is-style-size-medium"} -->
+<figure class="wp-block-image is-style-size-medium"><img src="" alt=""/></figure>
 <!-- /wp:image -->',
         )
     );
@@ -1508,8 +1508,8 @@ add_action( 'init', function() {
             'title'       => '画像（大）',
             'description' => '大きいサイズの画像（最大幅800px）',
             'categories'  => array( 'muashi-images' ),
-            'content'     => '<!-- wp:image {"className":"is-style-size-large","sizeSlug":"large"} -->
-<figure class="wp-block-image size-large is-style-size-large"><img src="" alt=""/></figure>
+            'content'     => '<!-- wp:image {"className":"is-style-size-large"} -->
+<figure class="wp-block-image is-style-size-large"><img src="" alt=""/></figure>
 <!-- /wp:image -->',
         )
     );
