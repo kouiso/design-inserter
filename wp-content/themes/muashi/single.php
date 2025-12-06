@@ -138,7 +138,7 @@ get_header();
             <div class="page__content">
                 <h1 class="page__title"><?php the_title(); ?></h1>
 
-                <div class="page__inner">
+                <div class="page__inner page__inner--narrow">
                     <div class="single__contents">
                         <?php echo $content; // id付与済みの本文を出力 ?>
                     </div>

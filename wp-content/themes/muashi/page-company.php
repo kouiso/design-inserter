@@ -73,7 +73,7 @@ get_header();
                     <h1 class="page__title js-page-title" id="01">
                     <?php the_title(); ?>
                     </h1>
-                    <div class="page__inner">
+                    <div class="page__inner page__inner--narrow">
                     <?php the_content(); ?>
                     </div>
                 <?php endwhile;?>
