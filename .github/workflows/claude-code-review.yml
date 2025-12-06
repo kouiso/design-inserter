@@ -16,10 +16,14 @@ jobs:
   claude-code-review:
     # PRに対するレビュー、またはPRコメントで @claude-code と呼び出された場合に実行
     if: |
-      (github.event_name == 'pull_request') ||
-      (github.event_name == 'issue_comment' && 
-       github.event.issue.pull_request && 
-       contains(github.event.comment.body, '@claude-code'))
+      ((github.event_name == 'pull_request') ||
+       (github.event_name == 'issue_comment' && 
+        github.event.issue.pull_request && 
+        contains(github.event.comment.body, '@claude-code'))) &&
+      (github.event_name != 'issue_comment' ||
+       github.event.comment.author_association == 'OWNER' || 
+       github.event.comment.author_association == 'MEMBER' ||
+       github.event.comment.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
