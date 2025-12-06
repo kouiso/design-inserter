@@ -1,0 +1,55 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  claude-code-review:
+    # PRに対するレビュー、またはPRコメントで @claude-code と呼び出された場合に実行
+    if: |
+      ((github.event_name == 'pull_request') ||
+       (github.event_name == 'issue_comment' && 
+        github.event.issue.pull_request && 
+        contains(github.event.comment.body, '@claude-code'))) &&
+      (github.event_name != 'issue_comment' ||
+       github.event.comment.author_association == 'OWNER' || 
+       github.event.comment.author_association == 'MEMBER' ||
+       github.event.comment.author_association == 'COLLABORATOR')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@v1.0.0
+        with:
+          # Claude Code サブスクリプションを使用（APIキー不要）
+          use_bedrock: false
+          use_vertex: false
+          
+          # PRレビューの場合は自動的にdiffをレビュー
+          # コメントで呼び出された場合はそのコメントに対応
+          direct_prompt: |
+            このPull Requestをレビューしてください。以下の観点でフィードバックをお願いします：
+            
+            1. **概要**: 変更内容の簡潔な要約
+            2. **良い点**: コードの良い点
+            3. **改善提案**: 改善が必要な箇所と具体的な提案
+            4. **セキュリティ**: セキュリティ上の懸念があれば指摘
+            5. **総合評価**: 全体的な評価
+            
+            日本語で回答してください。
+          
+          # タイムアウト設定（大きなPRやサービス負荷時を考慮して20分に設定）
+          timeout_minutes: 20
