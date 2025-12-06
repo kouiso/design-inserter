@@ -31,8 +31,7 @@ function setupImageViewer(wrapper, img) {
 
   wrapper.setAttribute('data-image-viewer-initialized', 'true');
 
-  // クリック可能であることを示すスタイルを追加
-  wrapper.style.cursor = 'zoom-in';
+  // クリック可能であることを示す属性を追加（スタイルはCSSで定義済み）
   wrapper.setAttribute('role', 'button');
   wrapper.setAttribute('tabindex', '0');
   wrapper.setAttribute('aria-label', '画像を拡大表示');
@@ -99,7 +98,8 @@ function createOverlay(img) {
   overlay.appendChild(closeBtn);
   document.body.appendChild(overlay);
 
-  // スクロールを無効化
+  // スクロールを無効化（元の値を保存）
+  const originalOverflow = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
 
   // アニメーション用に少し遅延してクラスを追加
@@ -112,7 +112,7 @@ function createOverlay(img) {
     overlay.classList.remove('is-active');
     overlay.addEventListener('transitionend', () => {
       overlay.remove();
-      document.body.style.overflow = '';
+      document.body.style.overflow = originalOverflow;
     }, { once: true });
   };
 
