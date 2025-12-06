@@ -92,20 +92,23 @@ jobs:
         if: steps.check-subscription.outputs.subscription_active == 'true'
         id: claude-response
         run: |
-          # Read files
+          # Read files (use line count for truncation to preserve data integrity)
           ISSUE_TITLE=$(cat issue_title.txt)
           ISSUE_BODY=$(cat issue_body.txt)
-          REPO_STRUCTURE=$(head -c 5000 repo_structure.txt)
-          REPO_FILES=$(head -c 5000 repo_files.txt)
+          REPO_STRUCTURE=$(head -n 100 repo_structure.txt)
+          REPO_FILES=$(head -n 100 repo_files.txt)
           ACTION_TYPE="${{ steps.action-type.outputs.action }}"
           
-          # Read relevant source files based on issue content
+          # Dynamically detect and read relevant source files
           RELEVANT_CODE=""
           
-          # Try to find and read relevant files
-          if [ -f "wp-content/themes/muashi/functions.php" ]; then
-            RELEVANT_CODE="${RELEVANT_CODE}\n\n## functions.php\n$(head -c 3000 wp-content/themes/muashi/functions.php)"
-          fi
+          # Find main entry point files (functions.php for WordPress, index.js for Node, etc.)
+          for pattern in "functions.php" "index.php" "index.js" "main.js" "app.js" "index.ts" "main.ts"; do
+            found_file=$(find . -name "$pattern" -not -path "./node_modules/*" -not -path "./.git/*" | head -1)
+            if [ -n "$found_file" ]; then
+              RELEVANT_CODE="${RELEVANT_CODE}\n\n## ${found_file}\n\`\`\`\n$(head -n 100 "$found_file")\n\`\`\`"
+            fi
+          done
           
           # Build prompt based on action type
           if [ "$ACTION_TYPE" == "implement" ]; then

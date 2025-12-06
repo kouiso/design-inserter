@@ -78,7 +78,7 @@ jobs:
         run: |
           # Read files
           PR_TITLE=$(cat pr_title.txt)
-          PR_DIFF=$(head -c 50000 pr_diff.txt)
+          PR_DIFF=$(head -n 1500 pr_diff.txt)
           PR_BODY=$(cat pr_body.txt)
           
           # Prepare the prompt for Claude
