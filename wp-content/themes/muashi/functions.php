@@ -1464,6 +1464,100 @@ add_action( 'enqueue_block_editor_assets', function() {
 } );
 
 /**
+ * 画像サイズ用ブロックパターン
+ * 非エンジニアでも簡単に画像サイズを調整できるよう、
+ * 小・中・大サイズのブロックパターンを提供
+ */
+add_action( 'init', function() {
+    // 画像カテゴリーを登録
+    register_block_pattern_category(
+        'muashi-images',
+        array( 'label' => '画像サイズ' )
+    );
+
+    // 小サイズ画像パターン（max-width: 300px）
+    register_block_pattern(
+        'muashi/image-small',
+        array(
+            'title'       => '画像（小）',
+            'description' => '小さいサイズの画像（最大幅300px）',
+            'categories'  => array( 'muashi-images' ),
+            'content'     => '<!-- wp:image {"className":"is-style-size-small","sizeSlug":"large"} -->
+<figure class="wp-block-image size-large is-style-size-small"><img src="" alt=""/></figure>
+<!-- /wp:image -->',
+        )
+    );
+
+    // 中サイズ画像パターン（max-width: 500px）
+    register_block_pattern(
+        'muashi/image-medium',
+        array(
+            'title'       => '画像（中）',
+            'description' => '中くらいのサイズの画像（最大幅500px）',
+            'categories'  => array( 'muashi-images' ),
+            'content'     => '<!-- wp:image {"className":"is-style-size-medium","sizeSlug":"large"} -->
+<figure class="wp-block-image size-large is-style-size-medium"><img src="" alt=""/></figure>
+<!-- /wp:image -->',
+        )
+    );
+
+    // 大サイズ画像パターン（max-width: 800px）
+    register_block_pattern(
+        'muashi/image-large',
+        array(
+            'title'       => '画像（大）',
+            'description' => '大きいサイズの画像（最大幅800px）',
+            'categories'  => array( 'muashi-images' ),
+            'content'     => '<!-- wp:image {"className":"is-style-size-large","sizeSlug":"large"} -->
+<figure class="wp-block-image size-large is-style-size-large"><img src="" alt=""/></figure>
+<!-- /wp:image -->',
+        )
+    );
+} );
+
+/**
+ * 画像サイズ用ブロックスタイル
+ * 既存の画像ブロックにサイズスタイルを追加
+ */
+add_action( 'init', function() {
+    register_block_style(
+        'core/image',
+        array(
+            'name'  => 'size-small',
+            'label' => '小（300px）',
+        )
+    );
+
+    register_block_style(
+        'core/image',
+        array(
+            'name'  => 'size-medium',
+            'label' => '中（500px）',
+        )
+    );
+
+    register_block_style(
+        'core/image',
+        array(
+            'name'  => 'size-large',
+            'label' => '大（800px）',
+        )
+    );
+} );
+
+/**
+ * 画像サイズ用エディタCSS
+ */
+add_action( 'enqueue_block_editor_assets', function() {
+    wp_enqueue_style(
+        'muashi-editor-image-sizes',
+        get_template_directory_uri() . '/assets/css/editor-image-sizes.css',
+        array(),
+        filemtime( get_template_directory() . '/assets/css/editor-image-sizes.css' )
+    );
+} );
+
+/**
  * 蛇腹スタイル適用時に「もっと見る」ボタンを自動追加（共通処理）
  */
 function muashi_add_expandable_button( $block_content, $closing_tag ) {

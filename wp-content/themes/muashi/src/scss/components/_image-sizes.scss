@@ -1,0 +1,35 @@
+// ==========================================================================
+// Image Sizes
+// ==========================================================================
+// WordPressブロックスタイル「小（300px）」「中（500px）」「大（800px）」として使用
+// - 画像ブロック: ブロックエディタで画像を選択 → スタイル → サイズを選択
+
+// 小サイズ画像（最大幅300px）
+.wp-block-image.is-style-size-small {
+  max-width: 300px;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+// 中サイズ画像（最大幅500px）
+.wp-block-image.is-style-size-medium {
+  max-width: 500px;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+// 大サイズ画像（最大幅800px）
+.wp-block-image.is-style-size-large {
+  max-width: 800px;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

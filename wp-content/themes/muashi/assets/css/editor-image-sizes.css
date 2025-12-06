@@ -1,0 +1,31 @@
+/* 画像サイズスタイル - エディタ用 */
+
+/* 小サイズ画像（最大幅300px） */
+.wp-block-image.is-style-size-small {
+  max-width: 300px !important;
+}
+
+.wp-block-image.is-style-size-small img {
+  width: 100%;
+  height: auto;
+}
+
+/* 中サイズ画像（最大幅500px） */
+.wp-block-image.is-style-size-medium {
+  max-width: 500px !important;
+}
+
+.wp-block-image.is-style-size-medium img {
+  width: 100%;
+  height: auto;
+}
+
+/* 大サイズ画像（最大幅800px） */
+.wp-block-image.is-style-size-large {
+  max-width: 800px !important;
+}
+
+.wp-block-image.is-style-size-large img {
+  width: 100%;
+  height: auto;
+}
