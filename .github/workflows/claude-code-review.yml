@@ -6,6 +6,12 @@ on:
   issue_comment:
     types: [created]
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
 jobs:
   claude-code-review:
     # PRに対するレビュー、またはPRコメントで @claude-code と呼び出された場合に実行
@@ -15,11 +21,6 @@ jobs:
        github.event.issue.pull_request && 
        contains(github.event.comment.body, '@claude-code'))
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,5 +47,5 @@ jobs:
             
             日本語で回答してください。
           
-          # タイムアウト設定（分）
-          timeout_minutes: 10
+          # タイムアウト設定（大きなPRやサービス負荷時を考慮して20分に設定）
+          timeout_minutes: 20

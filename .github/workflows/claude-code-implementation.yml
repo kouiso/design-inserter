@@ -6,6 +6,12 @@ on:
   issue_comment:
     types: [created]
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
 jobs:
   claude-code-implementation:
     # Issueに claude-code ラベルがある場合、またはIssueコメントで @claude-code と呼び出された場合に実行
@@ -15,11 +21,6 @@ jobs:
        !github.event.issue.pull_request && 
        contains(github.event.comment.body, '@claude-code'))
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,10 +45,11 @@ jobs:
             
             日本語で回答してください。
           
-          # タイムアウト設定（分）
+          # 実装タスクはレビューより時間がかかるため、30分のタイムアウトを設定
+          # （コード生成、ファイル作成、PR作成などの複数ステップが必要なため）
           timeout_minutes: 30
           
-          # 実装を許可
+          # 実装に必要なツールのみを許可
           allowed_tools: |
             mcp__github__create_or_update_file
             mcp__github__push_files
