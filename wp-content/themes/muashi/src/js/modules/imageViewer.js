@@ -98,7 +98,7 @@ function createOverlay(img) {
   overlay.appendChild(closeBtn);
   document.body.appendChild(overlay);
 
-  // スクロールを無効化（元の値を保存）
+  // スクロールを無効化（インラインスタイルの元の値を保存）
   const originalOverflow = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
 
@@ -107,13 +107,35 @@ function createOverlay(img) {
     overlay.classList.add('is-active');
   });
 
-  // 閉じる処理
+  // ESCキーハンドラー
+  const handleKeydown = (e) => {
+    if (e.key === 'Escape') {
+      closeOverlay();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
+
+  // 閉じる処理（クリーンアップ含む）
   const closeOverlay = () => {
+    // キーボードイベントリスナーを削除
+    document.removeEventListener('keydown', handleKeydown);
+
     overlay.classList.remove('is-active');
-    overlay.addEventListener('transitionend', () => {
-      overlay.remove();
+
+    // トランジション終了を待つが、フォールバックも設定
+    const cleanup = () => {
+      if (overlay.parentNode) {
+        overlay.remove();
+      }
       document.body.style.overflow = originalOverflow;
-    }, { once: true });
+    };
+
+    overlay.addEventListener('transitionend', cleanup, { once: true });
+
+    // フォールバック: 500ms後にまだ存在する場合は強制削除
+    setTimeout(() => {
+      cleanup();
+    }, 500);
   };
 
   // 閉じるボタンのクリック
@@ -125,15 +147,6 @@ function createOverlay(img) {
       closeOverlay();
     }
   });
-
-  // ESCキーで閉じる
-  const handleKeydown = (e) => {
-    if (e.key === 'Escape') {
-      closeOverlay();
-      document.removeEventListener('keydown', handleKeydown);
-    }
-  };
-  document.addEventListener('keydown', handleKeydown);
 
   // 閉じるボタンにフォーカス
   closeBtn.focus();
