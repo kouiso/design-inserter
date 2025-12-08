@@ -1,0 +1,156 @@
+@use '../setting' as *;
+
+// ==========================================================================
+// Image Viewer Component (画像ビューワー)
+// ==========================================================================
+// WordPressブロックスタイル「画像ビューワー」として使用
+// - 画像ブロック: ブロックエディタで画像を選択 → スタイル → 「画像ビューワー」
+
+// 画像ビューワースタイル（トリガー）
+.is-style-image-viewer {
+  position: relative;
+  cursor: zoom-in;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary, #0073aa);
+    outline-offset: 2px;
+  }
+
+  // 拡大アイコンを右下に表示
+  &::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3Cline x1='11' y1='8' x2='11' y2='14'/%3E%3Cline x1='8' y1='11' x2='14' y2='11'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px;
+    pointer-events: none;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+
+    @include mq(lg) {
+      width: 40px;
+      height: 40px;
+      background-size: 24px;
+      right: 12px;
+      bottom: 12px;
+    }
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// オーバーレイ
+.image-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+
+  &.is-active {
+    background-color: rgba(0, 0, 0, 0.9);
+    opacity: 1;
+  }
+}
+
+// コンテナ
+.image-viewer-container {
+  position: relative;
+  max-width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include mq(lg) {
+    max-width: 90vw;
+    max-height: 85vh;
+  }
+}
+
+// 拡大画像
+.image-viewer-image {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+
+  .is-active & {
+    transform: scale(1);
+  }
+
+  @include mq(lg) {
+    max-height: 85vh;
+  }
+}
+
+// 閉じるボタン
+.image-viewer-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: var(--color-white, #fff);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  z-index: 1;
+
+  @include mq(lg) {
+    top: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    font-size: 32px;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  }
+
+  span {
+    display: block;
+  }
+}

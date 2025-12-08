@@ -1426,6 +1426,15 @@ add_action( 'init', function() {
 
     // グループブロック（人権方針など複数ブロックをまとめる場合）
     register_block_style( 'core/group', $expandable_style );
+
+    // 画像ビューワースタイル
+    $image_viewer_style = array(
+        'name'  => 'image-viewer',
+        'label' => '画像ビューワー',
+    );
+
+    // 画像ブロック
+    register_block_style( 'core/image', $image_viewer_style );
 } );
 
 /**
