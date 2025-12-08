@@ -42,10 +42,13 @@ get_header();
         <div class="page__container">
 
             <div class="page__kv">
-                <picture class="page__kv-pic">
-                    <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/page/kv.jpg" media="(min-width: 768px)">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/page/kv_sp.jpg" alt="">
-                </picture>
+                <?php
+                muashi_render_kv_picture( array(
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
+                    'include_source' => true,
+                ) );
+                ?>
 
                 <div class="page__kv-icon">
                     <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +61,7 @@ get_header();
 
             <?php if ( have_posts() ) : ?>
                 <?php while( have_posts() ) : the_post(); ?>
-                    <h1 class="page__title">
+                    <h1 class="page__title js-page-title">
                     <?php the_title(); ?>
                     </h1>
                     <div class="page__inner page__inner--narrow">
