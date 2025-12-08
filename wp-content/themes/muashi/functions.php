@@ -1463,90 +1463,9 @@ add_action( 'enqueue_block_editor_assets', function() {
     );
 } );
 
-/**
- * 画像サイズ用ブロックパターン
- * 非エンジニアでも簡単に画像サイズを調整できるよう、
- * 小・中・大サイズのブロックパターンを提供
- */
-add_action( 'init', function() {
-    // 画像カテゴリーを登録
-    register_block_pattern_category(
-        'muashi-images',
-        array( 'label' => '画像サイズ' )
-    );
-
-    // 小サイズ画像パターン（max-width: 300px）
-    register_block_pattern(
-        'muashi/image-small',
-        array(
-            'title'       => '画像（小）',
-            'description' => '小さいサイズの画像（最大幅300px）',
-            'categories'  => array( 'muashi-images' ),
-            'content'     => '<!-- wp:image {"className":"is-style-size-small"} -->
-<figure class="wp-block-image is-style-size-small"><img src="" alt=""/></figure>
-<!-- /wp:image -->',
-        )
-    );
-
-    // 中サイズ画像パターン（max-width: 500px）
-    register_block_pattern(
-        'muashi/image-medium',
-        array(
-            'title'       => '画像（中）',
-            'description' => '中くらいのサイズの画像（最大幅500px）',
-            'categories'  => array( 'muashi-images' ),
-            'content'     => '<!-- wp:image {"className":"is-style-size-medium"} -->
-<figure class="wp-block-image is-style-size-medium"><img src="" alt=""/></figure>
-<!-- /wp:image -->',
-        )
-    );
-
-    // 大サイズ画像パターン（max-width: 800px）
-    register_block_pattern(
-        'muashi/image-large',
-        array(
-            'title'       => '画像（大）',
-            'description' => '大きいサイズの画像（最大幅800px）',
-            'categories'  => array( 'muashi-images' ),
-            'content'     => '<!-- wp:image {"className":"is-style-size-large"} -->
-<figure class="wp-block-image is-style-size-large"><img src="" alt=""/></figure>
-<!-- /wp:image -->',
-        )
-    );
-} );
 
 /**
- * 画像サイズ用ブロックスタイル
- * 既存の画像ブロックにサイズスタイルを追加
- */
-add_action( 'init', function() {
-    register_block_style(
-        'core/image',
-        array(
-            'name'  => 'size-small',
-            'label' => '小（300px）',
-        )
-    );
-
-    register_block_style(
-        'core/image',
-        array(
-            'name'  => 'size-medium',
-            'label' => '中（500px）',
-        )
-    );
-
-    register_block_style(
-        'core/image',
-        array(
-            'name'  => 'size-large',
-            'label' => '大（800px）',
-        )
-    );
-} );
-
-/**
- * 画像サイズ用エディタCSS
+ * 画像サイズ用エディタCSS・JS
  */
 add_action( 'enqueue_block_editor_assets', function() {
     wp_enqueue_style(
@@ -1555,7 +1474,52 @@ add_action( 'enqueue_block_editor_assets', function() {
         array(),
         filemtime( get_template_directory() . '/assets/css/editor-image-sizes.css' )
     );
+
+    // 画像サイズスライダー
+    wp_enqueue_script(
+        'muashi-image-size-slider',
+        get_template_directory_uri() . '/admin/js/image-size-slider.js',
+        array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-compose', 'wp-hooks' ),
+        filemtime( get_template_directory() . '/admin/js/image-size-slider.js' ),
+        true
+    );
 } );
+
+/**
+ * 画像ブロックのカスタム幅をフロントエンドに適用
+ */
+add_filter( 'render_block_core/image', function( $block_content, $block ) {
+    if ( empty( $block['attrs']['customMaxWidth'] ) ) {
+        return $block_content;
+    }
+
+    $max_width = (int) $block['attrs']['customMaxWidth'];
+    $unit = isset( $block['attrs']['customMaxWidthUnit'] ) ? $block['attrs']['customMaxWidthUnit'] : 'px';
+
+    // 安全な単位のみ許可
+    if ( ! in_array( $unit, array( 'px', '%' ), true ) ) {
+        $unit = 'px';
+    }
+
+    $style_value = 'max-width:' . $max_width . $unit;
+
+    // 既存のstyle属性をチェック
+    if ( preg_match( '/style="([^"]*)"/', $block_content, $matches ) ) {
+        $existing_style = $matches[1];
+        // 既にmax-widthが設定されている場合は置換、なければ追加
+        if ( preg_match( '/max-width:[^;]+;?/', $existing_style ) ) {
+            $new_style = preg_replace( '/max-width:[^;]+;?/', $style_value . ';', $existing_style );
+        } else {
+            $new_style = rtrim( $existing_style, ';' ) . ';' . $style_value . ';';
+        }
+        $block_content = str_replace( 'style="' . $matches[1] . '"', 'style="' . $new_style . '"', $block_content );
+    } else {
+        // figureタグにstyle属性を追加
+        $block_content = preg_replace( '/<figure([^>]*)class="/', '<figure$1style="' . $style_value . ';" class="', $block_content );
+    }
+
+    return $block_content;
+}, 10, 2 );
 
 /**
  * 蛇腹スタイル適用時に「もっと見る」ボタンを自動追加（共通処理）
