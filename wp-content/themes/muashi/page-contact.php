@@ -42,7 +42,7 @@ get_header();
             お問い合わせ
             </h1>
 
-            <div class="page__inner">
+            <div class="page__inner page__inner--narrow">
               <section class="contact">
                     <!-- エディタ本文（任意の注意書き等） -->
                     <div class="contact__content">

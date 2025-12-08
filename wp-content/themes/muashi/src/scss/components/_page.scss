@@ -97,6 +97,14 @@
 
     &--narrow{
       padding: 20px 20px 160px;
+
+      > hr.wp-block-separator:first-child {
+        display: none;
+
+        @include mq(lg) {
+          display: block;
+        }
+      }
     }
 
     .wp-block-group:not(.is-style-expandable) {
@@ -122,6 +130,14 @@
       margin-top: 40px;
       margin-bottom: 24px;
       line-height: 1.5;
+
+      &:first-child {
+        margin-top: 0;
+
+        @include mq(lg) {
+          margin-top: 40px;
+        }
+      }
     }
 
     h2.wp-block-heading {
@@ -178,6 +194,14 @@
       margin-top: 40px;
       margin-bottom: 40px;
       opacity: 0.1;
+
+      &:first-child {
+        margin-top: 0;
+
+        @include mq(lg) {
+          margin-top: 40px;
+        }
+      }
     }
 
     ul.wp-block-list,
