@@ -1463,6 +1463,64 @@ add_action( 'enqueue_block_editor_assets', function() {
     );
 } );
 
+
+/**
+ * 画像サイズ用エディタCSS・JS
+ */
+add_action( 'enqueue_block_editor_assets', function() {
+    wp_enqueue_style(
+        'muashi-editor-image-sizes',
+        get_template_directory_uri() . '/assets/css/editor-image-sizes.css',
+        array(),
+        filemtime( get_template_directory() . '/assets/css/editor-image-sizes.css' )
+    );
+
+    // 画像サイズスライダー
+    wp_enqueue_script(
+        'muashi-image-size-slider',
+        get_template_directory_uri() . '/admin/js/image-size-slider.js',
+        array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-compose', 'wp-hooks' ),
+        filemtime( get_template_directory() . '/admin/js/image-size-slider.js' ),
+        true
+    );
+} );
+
+/**
+ * 画像ブロックのカスタム幅をフロントエンドに適用
+ */
+add_filter( 'render_block_core/image', function( $block_content, $block ) {
+    if ( empty( $block['attrs']['customMaxWidth'] ) ) {
+        return $block_content;
+    }
+
+    $max_width = (int) $block['attrs']['customMaxWidth'];
+    $unit = isset( $block['attrs']['customMaxWidthUnit'] ) ? $block['attrs']['customMaxWidthUnit'] : 'px';
+
+    // 安全な単位のみ許可
+    if ( ! in_array( $unit, array( 'px', '%' ), true ) ) {
+        $unit = 'px';
+    }
+
+    $style_value = 'max-width:' . $max_width . $unit;
+
+    // 既存のstyle属性をチェック
+    if ( preg_match( '/style="([^"]*)"/', $block_content, $matches ) ) {
+        $existing_style = $matches[1];
+        // 既にmax-widthが設定されている場合は置換、なければ追加
+        if ( preg_match( '/max-width:[^;]+;?/', $existing_style ) ) {
+            $new_style = preg_replace( '/max-width:[^;]+;?/', $style_value . ';', $existing_style );
+        } else {
+            $new_style = rtrim( $existing_style, ';' ) . ';' . $style_value . ';';
+        }
+        $block_content = str_replace( 'style="' . $matches[1] . '"', 'style="' . $new_style . '"', $block_content );
+    } else {
+        // figureタグにstyle属性を追加
+        $block_content = preg_replace( '/<figure([^>]*)class="/', '<figure$1style="' . $style_value . ';" class="', $block_content );
+    }
+
+    return $block_content;
+}, 10, 2 );
+
 /**
  * 蛇腹スタイル適用時に「もっと見る」ボタンを自動追加（共通処理）
  */
