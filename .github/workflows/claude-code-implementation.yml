@@ -1,0 +1,59 @@
+name: Claude Code Implementation
+
+on:
+  issues:
+    types: [opened, labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  claude-code-implementation:
+    # Issueに claude-code ラベルがある場合、またはIssueコメントで @claude-code と呼び出された場合に実行
+    if: |
+      (github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'claude-code')) ||
+      (github.event_name == 'issue_comment' && 
+       !github.event.issue.pull_request && 
+       contains(github.event.comment.body, '@claude-code') &&
+       (github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'COLLABORATOR'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code Implementation
+        uses: anthropics/claude-code-action@v1.0.0
+        with:
+          # Claude Code サブスクリプションを使用（APIキー不要）
+          use_bedrock: false
+          use_vertex: false
+          
+          # Issueの内容に基づいて実装や提案を行う
+          direct_prompt: |
+            このIssueの内容を確認し、適切な対応を行ってください。
+            
+            コメントに以下のコマンドが含まれている場合は、それに従ってください：
+            - @claude-code suggest: 実装の提案を行う
+            - @claude-code implement: 実際のコード実装を行う
+            - @claude-code analyze: 問題の分析を行う
+            
+            日本語で回答してください。
+          
+          # 実装タスクはレビューより時間がかかるため、30分のタイムアウトを設定
+          # （コード生成、ファイル作成、PR作成などの複数ステップが必要なため）
+          timeout_minutes: 30
+          
+          # 実装に必要なツールのみを許可
+          allowed_tools: |
+            mcp__github__create_or_update_file
+            mcp__github__create_branch
+            mcp__github__create_pull_request
