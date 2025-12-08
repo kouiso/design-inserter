@@ -41,10 +41,18 @@ get_header();
     <div class="page__wrapper">
         <div class="page__container">
 
+            <?php
+            // 固定ページ「グローバルネットワーク」(ID:169)の内容を取得
+            $page_id = 169;
+            $page = get_post( $page_id );
+            ?>
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc' => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'post_id'        => $page_id,
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
+                    'include_source' => true,
                 ) );
                 ?>
 
@@ -56,10 +64,16 @@ get_header();
             </div>
 
             <div class="page__content">
+                <?php if ( $page ) : ?>
                 <h1 class="page__title js-page-title">
-                グローバルネットワーク
+                <?php echo esc_html( $page->post_title ); ?>
                 </h1>
-                <div class="page__inner page__inner--narrow">
+                <div class="page__inner" style="padding-bottom: 40px;">
+                <?php echo apply_filters( 'the_content', $page->post_content ); ?>
+                </div>
+                <?php endif; ?>
+
+                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
 
                     <div class="story">
                         <div class="archive">
