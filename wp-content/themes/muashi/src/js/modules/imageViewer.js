@@ -72,6 +72,7 @@ function initZoomAndPan(img, container) {
   const MIN_SCALE = 1;
   const MAX_SCALE = 5;
   const ZOOM_SPEED = 0.1;
+  const PINCH_ZOOM_SENSITIVITY = 0.01;
   const DOUBLE_TAP_DELAY = 300; // milliseconds
 
   // State variables
@@ -83,6 +84,18 @@ function initZoomAndPan(img, container) {
   let startY = 0;
   let lastDistance = 0;
   let lastTap = 0;
+
+  /**
+   * Get client coordinates from either mouse or touch event
+   * @param {MouseEvent|TouchEvent} e - The event
+   * @returns {{x: number, y: number}} - The client coordinates
+   */
+  const getClientCoordinates = (e) => {
+    if (e.type.includes('touch')) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  };
 
   const updateTransform = () => {
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -101,7 +114,8 @@ function initZoomAndPan(img, container) {
     const newScale = Math.min(Math.max(scale + delta, MIN_SCALE), MAX_SCALE);
     
     if (newScale !== scale) {
-      // ズーム中心を維持するための座標調整
+      // Calculate new position to keep zoom centered on cursor
+      // Formula: new_position = cursor_offset - (cursor_offset - old_position) * scale_ratio
       const scaleChange = newScale / scale;
       translateX = offsetX - (offsetX - translateX) * scaleChange;
       translateY = offsetY - (offsetY - translateY) * scaleChange;
@@ -124,11 +138,9 @@ function initZoomAndPan(img, container) {
     isDragging = true;
     img.style.cursor = 'grabbing';
     
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-    
-    startX = clientX - translateX;
-    startY = clientY - translateY;
+    const coords = getClientCoordinates(e);
+    startX = coords.x - translateX;
+    startY = coords.y - translateY;
     
     e.preventDefault();
   };
@@ -137,11 +149,9 @@ function initZoomAndPan(img, container) {
   const handleDragMove = (e) => {
     if (!isDragging) return;
     
-    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-    
-    translateX = clientX - startX;
-    translateY = clientY - startY;
+    const coords = getClientCoordinates(e);
+    translateX = coords.x - startX;
+    translateY = coords.y - startY;
     
     updateTransform();
   };
@@ -186,7 +196,7 @@ function initZoomAndPan(img, container) {
         const offsetY = centerY - rect.top;
         
         const delta = distance - lastDistance;
-        const newScale = Math.min(Math.max(scale + delta * 0.01, MIN_SCALE), MAX_SCALE);
+        const newScale = Math.min(Math.max(scale + delta * PINCH_ZOOM_SENSITIVITY, MIN_SCALE), MAX_SCALE);
         
         if (newScale !== scale) {
           const scaleChange = newScale / scale;
