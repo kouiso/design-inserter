@@ -14,31 +14,26 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <?php
-    // 本文を取得（ショートコードなども反映）
     $raw_content = get_the_content();
     $content     = apply_filters( 'the_content', $raw_content );
 
-    // h2見出しを収集し、idがなければ付与して本文を置換
     $toc_items = [];
     $used_ids  = [];
 
     if ( preg_match_all( '/<h2([^>]*)>(.*?)<\/h2>/is', $content, $matches, PREG_SET_ORDER ) ) {
         foreach ( $matches as $m ) {
-            $attrs = $m[1];           // 例: ' class="..."'
+            $attrs = $m[1];
             $inner = trim( wp_strip_all_tags( $m[2] ) );
             if ( $inner === '' ) continue;
 
-            // 既存idの有無
             $existing_id = '';
             if ( preg_match( '/\sid=["\']([^"\']+)["\']/i', $attrs, $idmatch ) ) {
                 $existing_id = $idmatch[1];
             }
 
-            // id生成（既存なければタイトルから生成・重複回避）
             if ( $existing_id ) {
                 $id = $existing_id;
             } else {
-                // sanitize_title_with_dashes は WP関数（日本語にも対応）
                 $base = sanitize_title_with_dashes( $inner );
                 $id   = $base !== '' ? $base : 'section';
                 $i    = 2;
@@ -50,13 +45,11 @@ get_header();
 
             $used_ids[] = $id;
 
-            // 本文側：idが無いh2にはidを付与して置換（最初の該当のみ）
             if ( ! $existing_id ) {
                 $new_tag = '<h2' . $attrs . ' id="' . esc_attr( $id ) . '">' . $m[2] . '</h2>';
                 $content = preg_replace( '/' . preg_quote( $m[0], '/' ) . '/', addcslashes( $new_tag, '\\$' ), $content, 1 );
             }
 
-            // 目次用に追加
             $toc_items[] = [
                 'id'    => $id,
                 'title' => $inner,
@@ -127,7 +120,7 @@ get_header();
 
                 <div class="page__inner page__inner--narrow">
                     <div class="single__contents">
-                        <?php echo $content; // id付与済みの本文を出力 ?>
+                        <?php echo $content; ?>
                     </div>
 
                     <?php if ( 'product' === get_post_type() ) : ?>
