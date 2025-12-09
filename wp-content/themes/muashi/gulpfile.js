@@ -1,4 +1,3 @@
-//browserSync
 const gulp = require("gulp");
 const notify = require("gulp-notify");
 const plumber = require("gulp-plumber");
@@ -46,7 +45,6 @@ const webpackConfig = {
   },
 };
 
-// sassのコンパイル
 const scss = (done) => {
   gulp
     .src([
@@ -74,7 +72,6 @@ const scss = (done) => {
   done();
 };
 
-// JSのコンパイル
 const js = (done) => {
   gulp
     .src(path.src.js)
@@ -93,25 +90,22 @@ const js = (done) => {
   done();
 }
 
-//ブラウザの設定
 const browser_init = (done) => {
   browserSync.init({
-    proxy: "http://musashi-toryo.local/", // Local by Flywheelのドメイン
+    proxy: "http://musashi-toryo.local/",
     open: true,
     watchOptions: {
-      debounceDelay: 1000, //1秒間、タスクの再実行を抑制
+      debounceDelay: 1000,
     },
   });
   done();
 };
 
-//リロード実行タスク
 const browser_reload = (done) => {
   browserSync.reload();
   done();
 };
 
-//watch処理
 const watch_files = (done) => {
   gulp.watch(path.watch.scss, gulp.series(scss, browser_reload));
   gulp.watch(path.watch.js, gulp.series(js, browser_reload));
@@ -119,6 +113,5 @@ const watch_files = (done) => {
   done();
 };
 
-//タスク実行
 exports.default = gulp.series(browser_init, watch_files, gulp.parallel(scss, js));
 exports.build = gulp.parallel(scss, js);
