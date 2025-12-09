@@ -15,6 +15,17 @@ get_header();
         <div class="page__bg-sub"></div>
     </div>
 
+    <!-- ベースのナビゲーション（簡略） -->
+    <div class="navigation">
+        <div class="navigation__inner">
+            <ul class="navigation__list">
+                <li class="navigation__item">
+                    <span class="navigation__item-title is-current">利用規約</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <div class="page__wrapper">
         <div class="page__container">
 
