@@ -15,7 +15,6 @@ get_header();
         <div class="page__bg-sub"></div>
     </div>
 
-    <!-- ベースのナビゲーション（簡略） -->
     <div class="navigation">
         <div class="navigation__inner">
             <ul class="navigation__list">
