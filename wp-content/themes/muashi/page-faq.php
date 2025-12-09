@@ -43,16 +43,6 @@ get_header();
                     お客様の声
                     </a>
                 </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_INTERVIEW; ?>" class="navigation__item-title">
-                    インタビュー
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    よくある質問
-                    </p>
-                </li>
             </ul>
         </div>
     </div>
