@@ -55,7 +55,26 @@ function setupImageViewer(wrapper, img) {
   });
 }
 
+/**
+ * Initialize zoom and pan functionality for the image viewer
+ * 
+ * Features:
+ * - Mouse wheel zoom (scroll up/down)
+ * - Pinch-to-zoom for touch devices
+ * - Drag-to-pan when zoomed in
+ * - Double-click/double-tap to reset zoom
+ * 
+ * @param {HTMLImageElement} img - The image element to add zoom/pan to
+ * @param {HTMLElement} container - The container element that wraps the image
+ */
 function initZoomAndPan(img, container) {
+  // Configuration constants
+  const MIN_SCALE = 1;
+  const MAX_SCALE = 5;
+  const ZOOM_SPEED = 0.1;
+  const DOUBLE_TAP_DELAY = 300; // milliseconds
+
+  // State variables
   let scale = 1;
   let translateX = 0;
   let translateY = 0;
@@ -63,10 +82,7 @@ function initZoomAndPan(img, container) {
   let startX = 0;
   let startY = 0;
   let lastDistance = 0;
-
-  const MIN_SCALE = 1;
-  const MAX_SCALE = 5;
-  const ZOOM_SPEED = 0.1;
+  let lastTap = 0;
 
   const updateTransform = () => {
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
@@ -203,10 +219,8 @@ function initZoomAndPan(img, container) {
   };
 
   // ダブルクリック/ダブルタップでズームリセット
-  let lastTap = 0;
   const handleDoubleTap = (e) => {
     const now = Date.now();
-    const DOUBLE_TAP_DELAY = 300;
     
     if (now - lastTap < DOUBLE_TAP_DELAY) {
       e.preventDefault();
@@ -231,7 +245,6 @@ function initZoomAndPan(img, container) {
   container.addEventListener('touchend', handleTouchEnd);
   
   img.addEventListener('dblclick', handleDoubleTap);
-  img.addEventListener('click', handleDoubleTap);
 
   // 初期化
   updateTransform();
