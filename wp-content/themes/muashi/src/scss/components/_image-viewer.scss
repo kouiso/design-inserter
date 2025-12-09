@@ -82,6 +82,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; // パン時に画像がはみ出さないように
 
   @include mq(lg) {
     max-width: 90vw;
@@ -100,9 +101,14 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transform: scale(0.95);
   transition: transform 0.3s ease;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 
   .is-active & {
     transform: scale(1);
+    transition: none; // ズーム中はトランジションを無効化
   }
 
   @include mq(lg) {

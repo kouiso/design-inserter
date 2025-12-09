@@ -2814,6 +2814,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 @media screen and (min-width: 992px) {
   .image-viewer-container {
@@ -2832,9 +2833,14 @@ a {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transform: scale(0.95);
   transition: transform 0.3s ease;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }
 .is-active .image-viewer-image {
   transform: scale(1);
+  transition: none;
 }
 @media screen and (min-width: 992px) {
   .image-viewer-image {
@@ -4657,3 +4663,4 @@ a {
     transform: translateX(-50%);
   }
 }
+/*# sourceMappingURL=style.css.map */

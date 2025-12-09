@@ -55,6 +55,188 @@ function setupImageViewer(wrapper, img) {
   });
 }
 
+function initZoomAndPan(img, container) {
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let lastDistance = 0;
+
+  const MIN_SCALE = 1;
+  const MAX_SCALE = 5;
+  const ZOOM_SPEED = 0.1;
+
+  const updateTransform = () => {
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    img.style.cursor = scale > MIN_SCALE ? 'grab' : 'default';
+  };
+
+  // マウスホイールズーム
+  const handleWheel = (e) => {
+    e.preventDefault();
+    
+    const rect = img.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    
+    const delta = e.deltaY > 0 ? -ZOOM_SPEED : ZOOM_SPEED;
+    const newScale = Math.min(Math.max(scale + delta, MIN_SCALE), MAX_SCALE);
+    
+    if (newScale !== scale) {
+      // ズーム中心を維持するための座標調整
+      const scaleChange = newScale / scale;
+      translateX = offsetX - (offsetX - translateX) * scaleChange;
+      translateY = offsetY - (offsetY - translateY) * scaleChange;
+      scale = newScale;
+      
+      // スケールが1に戻ったら位置をリセット
+      if (scale === MIN_SCALE) {
+        translateX = 0;
+        translateY = 0;
+      }
+      
+      updateTransform();
+    }
+  };
+
+  // ドラッグ開始
+  const handleDragStart = (e) => {
+    if (scale <= MIN_SCALE) return;
+    
+    isDragging = true;
+    img.style.cursor = 'grabbing';
+    
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    
+    e.preventDefault();
+  };
+
+  // ドラッグ中
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+    
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    
+    updateTransform();
+  };
+
+  // ドラッグ終了
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    img.style.cursor = scale > MIN_SCALE ? 'grab' : 'default';
+  };
+
+  // ピンチズーム
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      lastDistance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+    } else if (e.touches.length === 1) {
+      handleDragStart(e);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const distance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      
+      if (lastDistance > 0) {
+        const centerX = (touch1.clientX + touch2.clientX) / 2;
+        const centerY = (touch1.clientY + touch2.clientY) / 2;
+        const rect = img.getBoundingClientRect();
+        const offsetX = centerX - rect.left;
+        const offsetY = centerY - rect.top;
+        
+        const delta = distance - lastDistance;
+        const newScale = Math.min(Math.max(scale + delta * 0.01, MIN_SCALE), MAX_SCALE);
+        
+        if (newScale !== scale) {
+          const scaleChange = newScale / scale;
+          translateX = offsetX - (offsetX - translateX) * scaleChange;
+          translateY = offsetY - (offsetY - translateY) * scaleChange;
+          scale = newScale;
+          
+          if (scale === MIN_SCALE) {
+            translateX = 0;
+            translateY = 0;
+          }
+          
+          updateTransform();
+        }
+      }
+      
+      lastDistance = distance;
+    } else if (e.touches.length === 1) {
+      handleDragMove(e);
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (e.touches.length < 2) {
+      lastDistance = 0;
+    }
+    if (e.touches.length === 0) {
+      handleDragEnd();
+    }
+  };
+
+  // ダブルクリック/ダブルタップでズームリセット
+  let lastTap = 0;
+  const handleDoubleTap = (e) => {
+    const now = Date.now();
+    const DOUBLE_TAP_DELAY = 300;
+    
+    if (now - lastTap < DOUBLE_TAP_DELAY) {
+      e.preventDefault();
+      scale = MIN_SCALE;
+      translateX = 0;
+      translateY = 0;
+      updateTransform();
+    }
+    
+    lastTap = now;
+  };
+
+  // イベントリスナーを追加
+  container.addEventListener('wheel', handleWheel, { passive: false });
+  container.addEventListener('mousedown', handleDragStart);
+  container.addEventListener('mousemove', handleDragMove);
+  container.addEventListener('mouseup', handleDragEnd);
+  container.addEventListener('mouseleave', handleDragEnd);
+  
+  container.addEventListener('touchstart', handleTouchStart, { passive: false });
+  container.addEventListener('touchmove', handleTouchMove, { passive: false });
+  container.addEventListener('touchend', handleTouchEnd);
+  
+  img.addEventListener('dblclick', handleDoubleTap);
+  img.addEventListener('click', handleDoubleTap);
+
+  // 初期化
+  updateTransform();
+}
+
 function createOverlay(img) {
   // 既存のオーバーレイがあれば削除
   const existingOverlay = document.querySelector('.image-viewer-overlay');
@@ -97,6 +279,9 @@ function createOverlay(img) {
   overlay.appendChild(container);
   overlay.appendChild(closeBtn);
   document.body.appendChild(overlay);
+
+  // ズーム・パン機能を初期化
+  initZoomAndPan(viewerImg, container);
 
   // スクロールを無効化（インラインスタイルの元の値を保存）
   const originalOverflow = document.body.style.overflow;
