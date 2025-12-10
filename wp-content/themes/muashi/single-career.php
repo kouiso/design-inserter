@@ -13,82 +13,11 @@ get_header();
 
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
-    <?php
-    $raw_content = get_the_content();
-    $content     = apply_filters( 'the_content', $raw_content );
-
-    $toc_items = [];
-    $used_ids  = [];
-
-    if ( preg_match_all( '/<h2([^>]*)>(.*?)<\/h2>/is', $content, $matches, PREG_SET_ORDER ) ) {
-        foreach ( $matches as $m ) {
-            $attrs = $m[1];
-            $inner = trim( wp_strip_all_tags( $m[2] ) );
-            if ( $inner === '' ) continue;
-
-            $existing_id = '';
-            if ( preg_match( '/\sid=["\']([^"\']+)["\']/i', $attrs, $idmatch ) ) {
-                $existing_id = $idmatch[1];
-            }
-
-            if ( $existing_id ) {
-                $id = $existing_id;
-            } else {
-                $base = sanitize_title_with_dashes( $inner );
-                $id   = $base !== '' ? $base : 'section';
-                $i    = 2;
-                while ( in_array( $id, $used_ids, true ) ) {
-                    $id = $base . '-' . $i;
-                    $i++;
-                }
-            }
-
-            $used_ids[] = $id;
-
-            if ( ! $existing_id ) {
-                $new_tag = '<h2' . $attrs . ' id="' . esc_attr( $id ) . '">' . $m[2] . '</h2>';
-                $content = preg_replace( '/' . preg_quote( $m[0], '/' ) . '/', addcslashes( $new_tag, '\\$' ), $content, 1 );
-            }
-
-            $toc_items[] = [
-                'id'    => $id,
-                'title' => $inner,
-            ];
-        }
-    }
-    ?>
-
-    <?php
-    $post_type = get_post_type();
-    $back_link = '';
-    if ( $post_type ) {
-        $custom_back_links = array(
-            'post'          => defined( 'URL_NEWS' ) ? URL_NEWS : get_post_type_archive_link( 'post' ),
-            'product'       => defined( 'URL_PRODUCT' ) ? URL_PRODUCT : get_post_type_archive_link( 'product' ),
-            'story'         => defined( 'URL_STORY' ) ? URL_STORY : get_post_type_archive_link( 'story' ),
-            'voice'         => defined( 'URL_VOICE' ) ? URL_VOICE : get_post_type_archive_link( 'voice' ),
-            'career'        => defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ),
-            'interview'     => defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : get_post_type_archive_link( 'interview' ),
-            'globalnetwork' => defined( 'URL_GLOBAL_NETWORK' ) ? URL_GLOBAL_NETWORK : get_post_type_archive_link( 'globalnetwork' ),
-            'media_post'    => get_post_type_archive_link( 'media_post' ),
-        );
-
-        if ( isset( $custom_back_links[ $post_type ] ) && $custom_back_links[ $post_type ] ) {
-            $back_link = $custom_back_links[ $post_type ];
-        } else {
-            $archive_link = get_post_type_archive_link( $post_type );
-            if ( $archive_link ) {
-                $back_link = $archive_link;
-            }
-        }
-    }
-    ?>
-
     <div class="navigation">
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <a href="<?php echo esc_url( URL_CAREER ); ?>" class="navigation__item-title">
+                    <a href="<?php echo esc_url( defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ) ); ?>" class="navigation__item-title">
                     採用情報
                     </a>
                 </li>
@@ -120,28 +49,12 @@ get_header();
 
                 <div class="page__inner page__inner--narrow">
                     <div class="single__contents">
-                        <?php echo $content; ?>
+                        <?php the_content(); ?>
                     </div>
 
-                    <?php if ( 'product' === get_post_type() ) : ?>
-                        <?php
-                        $product_slug     = get_post_field( 'post_name', get_the_ID() );
-                        $download_args    = array(
-                            'dl_product'         => $product_slug,
-                            'source_product_id'  => get_the_ID(),
-                        );
-                        $download_permalink = add_query_arg( $download_args, home_url( '/download/' ) );
-                        ?>
-                        <div class="single__cta">
-                            <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">資料ダウンロード</a>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $back_link ) : ?>
-                        <div class="single__back">
-                            <a class="single__back-button" href="<?php echo esc_url( $back_link ); ?>">一覧へ戻る</a>
-                        </div>
-                    <?php endif; ?>
+                    <div class="single__back">
+                        <a class="single__back-button" href="<?php echo esc_url( defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ) ); ?>">一覧へ戻る</a>
+                    </div>
                 </div>
             </div>
 
