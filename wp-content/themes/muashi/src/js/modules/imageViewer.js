@@ -66,8 +66,9 @@ function setupImageViewer(wrapper, img) {
  * 
  * @param {HTMLImageElement} img - The image element to add zoom/pan to
  * @param {HTMLElement} container - The container element that wraps the image
+ * @param {HTMLElement} zoomLevelDisplay - The element to display zoom level
  */
-function initZoomAndPan(img, container) {
+function initZoomAndPan(img, container, zoomLevelDisplay) {
   // Configuration constants
   const MIN_SCALE = 1;
   const MAX_SCALE = 5;
@@ -97,19 +98,11 @@ function initZoomAndPan(img, container) {
     return { x: e.clientX, y: e.clientY };
   };
 
-  const updateTransform = (updateUI = true) => {
+  const updateTransform = () => {
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     img.style.cursor = scale > MIN_SCALE ? 'grab' : 'default';
     
     // ズームレベル表示を更新
-    if (updateUI) {
-      updateZoomLevel();
-    }
-  };
-
-  // ズームレベル表示を更新
-  const updateZoomLevel = () => {
-    const zoomLevelDisplay = container.parentElement.querySelector('.image-viewer-zoom-level');
     if (zoomLevelDisplay) {
       zoomLevelDisplay.textContent = `${Math.round(scale * 100)}%`;
     }
@@ -397,7 +390,7 @@ function createOverlay(img) {
   document.body.appendChild(overlay);
 
   // ズーム・パン機能を初期化
-  const zoomPanControls = initZoomAndPan(viewerImg, container);
+  const zoomPanControls = initZoomAndPan(viewerImg, container, zoomLevel);
 
   // ズームボタンにイベントリスナーを追加
   zoomInBtn.addEventListener('click', (e) => {
