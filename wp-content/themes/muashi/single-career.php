@@ -13,11 +13,15 @@ get_header();
 
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
+    <?php
+    $career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' );
+    ?>
+
     <div class="navigation">
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <a href="<?php echo esc_url( defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ) ); ?>" class="navigation__item-title">
+                    <a href="<?php echo esc_url( $career_archive_url ); ?>" class="navigation__item-title">
                     採用情報
                     </a>
                 </li>
@@ -53,7 +57,7 @@ get_header();
                     </div>
 
                     <div class="single__back">
-                        <a class="single__back-button" href="<?php echo esc_url( defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ) ); ?>">一覧へ戻る</a>
+                        <a class="single__back-button" href="<?php echo esc_url( $career_archive_url ); ?>">一覧へ戻る</a>
                     </div>
                 </div>
             </div>
