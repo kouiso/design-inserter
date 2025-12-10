@@ -40,8 +40,8 @@ get_header();
                 while ( in_array( $id, $used_ids, true ) ) {
                     $id = $base . '-' . $i;
                     $i++;
-        }
-    }
+                }
+            }
 
             $used_ids[] = $id;
 
