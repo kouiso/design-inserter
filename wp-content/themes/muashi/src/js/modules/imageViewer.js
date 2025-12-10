@@ -97,9 +97,22 @@ function initZoomAndPan(img, container) {
     return { x: e.clientX, y: e.clientY };
   };
 
-  const updateTransform = () => {
+  const updateTransform = (updateUI = true) => {
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     img.style.cursor = scale > MIN_SCALE ? 'grab' : 'default';
+    
+    // ズームレベル表示を更新
+    if (updateUI) {
+      updateZoomLevel();
+    }
+  };
+
+  // ズームレベル表示を更新
+  const updateZoomLevel = () => {
+    const zoomLevelDisplay = container.parentElement.querySelector('.image-viewer-zoom-level');
+    if (zoomLevelDisplay) {
+      zoomLevelDisplay.textContent = `${Math.round(scale * 100)}%`;
+    }
   };
 
   // マウスホイールズーム
@@ -243,6 +256,34 @@ function initZoomAndPan(img, container) {
     lastTap = now;
   };
 
+  // ズームイン/アウト関数（ボタン用）
+  const zoomIn = () => {
+    const newScale = Math.min(scale + ZOOM_SPEED, MAX_SCALE);
+    if (newScale !== scale) {
+      scale = newScale;
+      updateTransform();
+    }
+  };
+
+  const zoomOut = () => {
+    const newScale = Math.max(scale - ZOOM_SPEED, MIN_SCALE);
+    if (newScale !== scale) {
+      scale = newScale;
+      if (scale === MIN_SCALE) {
+        translateX = 0;
+        translateY = 0;
+      }
+      updateTransform();
+    }
+  };
+
+  const resetZoom = () => {
+    scale = MIN_SCALE;
+    translateX = 0;
+    translateY = 0;
+    updateTransform();
+  };
+
   // イベントリスナーを追加
   container.addEventListener('wheel', handleWheel, { passive: false });
   container.addEventListener('mousedown', handleDragStart);
@@ -258,6 +299,13 @@ function initZoomAndPan(img, container) {
 
   // 初期化
   updateTransform();
+
+  // 外部から呼び出せるようにコントロール関数を返す
+  return {
+    zoomIn,
+    zoomOut,
+    resetZoom
+  };
 }
 
 function createOverlay(img) {
@@ -297,14 +345,75 @@ function createOverlay(img) {
   closeBtn.setAttribute('aria-label', '閉じる');
   closeBtn.innerHTML = '<span aria-hidden="true">&times;</span>';
 
+  // ズームコントロールを作成
+  const zoomControls = document.createElement('div');
+  zoomControls.className = 'image-viewer-zoom-controls';
+
+  // ズームインボタン
+  const zoomInBtn = document.createElement('button');
+  zoomInBtn.className = 'image-viewer-zoom-btn';
+  zoomInBtn.setAttribute('type', 'button');
+  zoomInBtn.setAttribute('aria-label', 'ズームイン');
+  zoomInBtn.innerHTML = '<span aria-hidden="true">+</span>';
+
+  // ズームアウトボタン
+  const zoomOutBtn = document.createElement('button');
+  zoomOutBtn.className = 'image-viewer-zoom-btn';
+  zoomOutBtn.setAttribute('type', 'button');
+  zoomOutBtn.setAttribute('aria-label', 'ズームアウト');
+  zoomOutBtn.innerHTML = '<span aria-hidden="true">−</span>';
+
+  // リセットボタン
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'image-viewer-zoom-btn';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.setAttribute('aria-label', 'ズームリセット');
+  resetBtn.innerHTML = '<span aria-hidden="true">1:1</span>';
+
+  zoomControls.appendChild(zoomInBtn);
+  zoomControls.appendChild(zoomOutBtn);
+  zoomControls.appendChild(resetBtn);
+
+  // ズームレベル表示
+  const zoomLevel = document.createElement('div');
+  zoomLevel.className = 'image-viewer-zoom-level';
+  zoomLevel.textContent = '100%';
+
+  // 操作ヒント
+  const hints = document.createElement('div');
+  hints.className = 'image-viewer-hints';
+  hints.innerHTML = `
+    <span class="hint-desktop">マウスホイールでズーム / ドラッグで移動 / ダブルクリックでリセット</span>
+    <span class="hint-mobile">ピンチでズーム / ドラッグで移動 / ダブルタップでリセット</span>
+  `;
+
   // 要素を追加
   container.appendChild(viewerImg);
   overlay.appendChild(container);
   overlay.appendChild(closeBtn);
+  overlay.appendChild(zoomControls);
+  overlay.appendChild(zoomLevel);
+  overlay.appendChild(hints);
   document.body.appendChild(overlay);
 
   // ズーム・パン機能を初期化
-  initZoomAndPan(viewerImg, container);
+  const zoomPanControls = initZoomAndPan(viewerImg, container);
+
+  // ズームボタンにイベントリスナーを追加
+  zoomInBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    zoomPanControls.zoomIn();
+  });
+
+  zoomOutBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    zoomPanControls.zoomOut();
+  });
+
+  resetBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    zoomPanControls.resetZoom();
+  });
 
   // スクロールを無効化（インラインスタイルの元の値を保存）
   const originalOverflow = document.body.style.overflow;
