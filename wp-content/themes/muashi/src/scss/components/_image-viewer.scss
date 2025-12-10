@@ -1,12 +1,5 @@
 @use '../setting' as *;
 
-// ==========================================================================
-// Image Viewer Component (画像ビューワー)
-// ==========================================================================
-// WordPressブロックスタイル「画像ビューワー」として使用
-// - 画像ブロック: ブロックエディタで画像を選択 → スタイル → 「画像ビューワー」
-
-// 画像ビューワースタイル（トリガー）
 .is-style-image-viewer {
   position: relative;
   cursor: zoom-in;
@@ -21,7 +14,6 @@
     outline-offset: 2px;
   }
 
-  // 拡大アイコンを右下に表示
   &::after {
     content: '';
     position: absolute;
@@ -53,7 +45,6 @@
   }
 }
 
-// オーバーレイ
 .image-viewer-overlay {
   position: fixed;
   top: 0;
@@ -74,7 +65,6 @@
   }
 }
 
-// コンテナ
 .image-viewer-container {
   position: relative;
   max-width: 95vw;
@@ -82,7 +72,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; // パン時に画像がはみ出さないように
+  overflow: hidden;
 
   @include mq(lg) {
     max-width: 90vw;
@@ -90,7 +80,6 @@
   }
 }
 
-// 拡大画像
 .image-viewer-image {
   max-width: 100%;
   max-height: 90vh;
@@ -108,7 +97,7 @@
 
   .is-active & {
     transform: scale(1);
-    transition: none; // ズーム中はトランジションを無効化
+    transition: none;
   }
 
   @include mq(lg) {
@@ -116,7 +105,6 @@
   }
 }
 
-// 閉じるボタン
 .image-viewer-close {
   position: fixed;
   top: 16px;
@@ -161,7 +149,6 @@
   }
 }
 
-// ズームコントロール
 .image-viewer-zoom-controls {
   position: fixed;
   right: 16px;
@@ -222,7 +209,6 @@
   }
 }
 
-// ズームレベル表示
 .image-viewer-zoom-level {
   position: fixed;
   top: 16px;
@@ -244,7 +230,6 @@
   }
 }
 
-// 操作ヒント
 .image-viewer-hints {
   position: fixed;
   bottom: 16px;

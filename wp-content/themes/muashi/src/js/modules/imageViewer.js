@@ -1,15 +1,8 @@
-// ==========================================================================
-// Image Viewer Component (画像ビューワー)
-// ==========================================================================
-// WordPressブロックスタイル「画像ビューワー」として使用
-// ブロックエディタで画像を選択 → スタイル → 「画像ビューワー」を選択
-
 document.addEventListener('DOMContentLoaded', () => {
   initImageViewer();
 });
 
 function initImageViewer() {
-  // is-style-image-viewer クラスを持つ画像ラッパーを検出
   const viewerTriggers = document.querySelectorAll('.is-style-image-viewer');
 
   viewerTriggers.forEach(wrapper => {
@@ -24,14 +17,12 @@ function initImageViewer() {
 }
 
 function setupImageViewer(wrapper, img) {
-  // 既に初期化済みの場合はスキップ
   if (wrapper.hasAttribute('data-image-viewer-initialized')) {
     return;
   }
 
   wrapper.setAttribute('data-image-viewer-initialized', 'true');
 
-  // クリック可能であることを示す属性を追加（スタイルはCSSで定義済み）
   wrapper.setAttribute('role', 'button');
   wrapper.setAttribute('tabindex', '0');
   wrapper.setAttribute('aria-label', '画像を拡大表示');
@@ -40,13 +31,11 @@ function setupImageViewer(wrapper, img) {
     createOverlay(img);
   };
 
-  // クリックで開く
   wrapper.addEventListener('click', (e) => {
     e.preventDefault();
     openViewer();
   });
 
-  // キーボードでも開けるようにする
   wrapper.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -55,28 +44,13 @@ function setupImageViewer(wrapper, img) {
   });
 }
 
-/**
- * Initialize zoom and pan functionality for the image viewer
- * 
- * Features:
- * - Mouse wheel zoom (scroll up/down)
- * - Pinch-to-zoom for touch devices
- * - Drag-to-pan when zoomed in
- * - Double-click/double-tap to reset zoom
- * 
- * @param {HTMLImageElement} img - The image element to add zoom/pan to
- * @param {HTMLElement} container - The container element that wraps the image
- * @param {HTMLElement} zoomLevelDisplay - The element to display zoom level
- */
 function initZoomAndPan(img, container, zoomLevelDisplay) {
-  // Configuration constants
   const MIN_SCALE = 1;
   const MAX_SCALE = 5;
   const ZOOM_SPEED = 0.1;
   const PINCH_ZOOM_SENSITIVITY = 0.01;
-  const DOUBLE_TAP_DELAY = 300; // milliseconds
+  const DOUBLE_TAP_DELAY = 300;
 
-  // State variables
   let scale = 1;
   let translateX = 0;
   let translateY = 0;
@@ -86,11 +60,6 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
   let lastDistance = 0;
   let lastTap = 0;
 
-  /**
-   * Get client coordinates from either mouse or touch event
-   * @param {MouseEvent|TouchEvent} e - The event
-   * @returns {{x: number, y: number}} - The client coordinates
-   */
   const getClientCoordinates = (e) => {
     if (e.type.includes('touch')) {
       return { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -102,13 +71,11 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     img.style.cursor = scale > MIN_SCALE ? 'grab' : 'default';
     
-    // ズームレベル表示を更新
     if (zoomLevelDisplay) {
       zoomLevelDisplay.textContent = `${Math.round(scale * 100)}%`;
     }
   };
 
-  // マウスホイールズーム
   const handleWheel = (e) => {
     e.preventDefault();
     
@@ -120,14 +87,11 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     const newScale = Math.min(Math.max(scale + delta, MIN_SCALE), MAX_SCALE);
     
     if (newScale !== scale) {
-      // Calculate new position to keep zoom centered on cursor
-      // Formula: new_position = cursor_offset - (cursor_offset - old_position) * scale_ratio
       const scaleChange = newScale / scale;
       translateX = offsetX - (offsetX - translateX) * scaleChange;
       translateY = offsetY - (offsetY - translateY) * scaleChange;
       scale = newScale;
       
-      // スケールが1に戻ったら位置をリセット
       if (scale === MIN_SCALE) {
         translateX = 0;
         translateY = 0;
@@ -137,7 +101,6 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     }
   };
 
-  // ドラッグ開始
   const handleDragStart = (e) => {
     if (scale <= MIN_SCALE) return;
     
@@ -151,7 +114,6 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     e.preventDefault();
   };
 
-  // ドラッグ中
   const handleDragMove = (e) => {
     if (!isDragging) return;
     
@@ -162,14 +124,12 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     updateTransform();
   };
 
-  // ドラッグ終了
   const handleDragEnd = () => {
     if (!isDragging) return;
     isDragging = false;
     img.style.cursor = scale > MIN_SCALE ? 'grab' : 'default';
   };
 
-  // ピンチズーム
   const handleTouchStart = (e) => {
     if (e.touches.length === 2) {
       e.preventDefault();
@@ -234,7 +194,6 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     }
   };
 
-  // ダブルクリック/ダブルタップでズームリセット
   const handleDoubleTap = (e) => {
     const now = Date.now();
     
@@ -249,7 +208,6 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     lastTap = now;
   };
 
-  // ズームイン/アウト関数（ボタン用）
   const zoomIn = () => {
     const newScale = Math.min(scale + ZOOM_SPEED, MAX_SCALE);
     if (newScale !== scale) {
@@ -277,7 +235,6 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
     updateTransform();
   };
 
-  // イベントリスナーを追加
   container.addEventListener('wheel', handleWheel, { passive: false });
   container.addEventListener('mousedown', handleDragStart);
   container.addEventListener('mousemove', handleDragMove);
@@ -290,10 +247,8 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
   
   img.addEventListener('dblclick', handleDoubleTap);
 
-  // 初期化
   updateTransform();
 
-  // 外部から呼び出せるようにコントロール関数を返す
   return {
     zoomIn,
     zoomOut,
@@ -302,61 +257,51 @@ function initZoomAndPan(img, container, zoomLevelDisplay) {
 }
 
 function createOverlay(img) {
-  // 既存のオーバーレイがあれば削除
   const existingOverlay = document.querySelector('.image-viewer-overlay');
   if (existingOverlay) {
     existingOverlay.remove();
   }
 
-  // オーバーレイを作成
   const overlay = document.createElement('div');
   overlay.className = 'image-viewer-overlay';
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
   overlay.setAttribute('aria-label', '画像ビューワー');
 
-  // コンテナを作成
   const container = document.createElement('div');
   container.className = 'image-viewer-container';
 
-  // 拡大画像を作成
   const viewerImg = document.createElement('img');
   viewerImg.className = 'image-viewer-image';
   viewerImg.src = img.src;
   viewerImg.alt = img.alt || '';
 
-  // srcset がある場合、より高解像度の画像を取得
   if (img.srcset) {
     viewerImg.srcset = img.srcset;
     viewerImg.sizes = '100vw';
   }
 
-  // 閉じるボタンを作成
   const closeBtn = document.createElement('button');
   closeBtn.className = 'image-viewer-close';
   closeBtn.setAttribute('type', 'button');
   closeBtn.setAttribute('aria-label', '閉じる');
   closeBtn.innerHTML = '<span aria-hidden="true">&times;</span>';
 
-  // ズームコントロールを作成
   const zoomControls = document.createElement('div');
   zoomControls.className = 'image-viewer-zoom-controls';
 
-  // ズームインボタン
   const zoomInBtn = document.createElement('button');
   zoomInBtn.className = 'image-viewer-zoom-btn';
   zoomInBtn.setAttribute('type', 'button');
   zoomInBtn.setAttribute('aria-label', 'ズームイン');
   zoomInBtn.innerHTML = '<span aria-hidden="true">+</span>';
 
-  // ズームアウトボタン
   const zoomOutBtn = document.createElement('button');
   zoomOutBtn.className = 'image-viewer-zoom-btn';
   zoomOutBtn.setAttribute('type', 'button');
   zoomOutBtn.setAttribute('aria-label', 'ズームアウト');
   zoomOutBtn.innerHTML = '<span aria-hidden="true">−</span>';
 
-  // リセットボタン
   const resetBtn = document.createElement('button');
   resetBtn.className = 'image-viewer-zoom-btn';
   resetBtn.setAttribute('type', 'button');
@@ -367,12 +312,10 @@ function createOverlay(img) {
   zoomControls.appendChild(zoomOutBtn);
   zoomControls.appendChild(resetBtn);
 
-  // ズームレベル表示
   const zoomLevel = document.createElement('div');
   zoomLevel.className = 'image-viewer-zoom-level';
   zoomLevel.textContent = '100%';
 
-  // 操作ヒント
   const hints = document.createElement('div');
   hints.className = 'image-viewer-hints';
   hints.innerHTML = `
@@ -380,7 +323,6 @@ function createOverlay(img) {
     <span class="hint-mobile">ピンチでズーム / ドラッグで移動 / ダブルタップでリセット</span>
   `;
 
-  // 要素を追加
   container.appendChild(viewerImg);
   overlay.appendChild(container);
   overlay.appendChild(closeBtn);
@@ -389,10 +331,8 @@ function createOverlay(img) {
   overlay.appendChild(hints);
   document.body.appendChild(overlay);
 
-  // ズーム・パン機能を初期化
   const zoomPanControls = initZoomAndPan(viewerImg, container, zoomLevel);
 
-  // ズームボタンにイベントリスナーを追加
   zoomInBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     zoomPanControls.zoomIn();
@@ -408,16 +348,13 @@ function createOverlay(img) {
     zoomPanControls.resetZoom();
   });
 
-  // スクロールを無効化（インラインスタイルの元の値を保存）
   const originalOverflow = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
 
-  // アニメーション用に少し遅延してクラスを追加
   requestAnimationFrame(() => {
     overlay.classList.add('is-active');
   });
 
-  // ESCキーハンドラー
   const handleKeydown = (e) => {
     if (e.key === 'Escape') {
       closeOverlay();
@@ -425,14 +362,11 @@ function createOverlay(img) {
   };
   document.addEventListener('keydown', handleKeydown);
 
-  // 閉じる処理（クリーンアップ含む）
   const closeOverlay = () => {
-    // キーボードイベントリスナーを削除
     document.removeEventListener('keydown', handleKeydown);
 
     overlay.classList.remove('is-active');
 
-    // トランジション終了を待つが、フォールバックも設定
     const cleanup = () => {
       if (overlay.parentNode) {
         overlay.remove();
@@ -442,25 +376,20 @@ function createOverlay(img) {
 
     overlay.addEventListener('transitionend', cleanup, { once: true });
 
-    // フォールバック: 500ms後にまだ存在する場合は強制削除
     setTimeout(() => {
       cleanup();
     }, 500);
   };
 
-  // 閉じるボタンのクリック
   closeBtn.addEventListener('click', closeOverlay);
 
-  // オーバーレイのクリック（画像以外の部分）
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay || e.target === container) {
       closeOverlay();
     }
   });
 
-  // 閉じるボタンにフォーカス
   closeBtn.focus();
 }
 
-// 動的に追加されたコンテンツ用に再初期化関数をエクスポート
 export { initImageViewer };
