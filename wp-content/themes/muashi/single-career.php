@@ -2,15 +2,6 @@
 global $description;
 $description = '';
 get_header();
-
-// 採用投稿一覧を取得（サイドバー用）
-$career_posts = get_posts( array(
-    'post_type'      => 'career',
-    'posts_per_page' => -1,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-) );
-$career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' );
 ?>
 
 <section class="page">
@@ -19,6 +10,21 @@ $career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archi
         <div class="page__bg-main"></div>
         <div class="page__bg-sub"></div>
     </div>
+
+    <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+    <?php
+    $career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' );
+    $current_post_id = get_the_ID();
+
+    // 採用投稿一覧を取得
+    $career_posts = get_posts( array(
+        'post_type'      => 'career',
+        'posts_per_page' => -1,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ) );
+    ?>
 
     <div class="navigation">
         <div class="navigation__inner">
@@ -29,7 +35,7 @@ $career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archi
                     </p>
                 </li>
                 <?php foreach ( $career_posts as $career_post ) : ?>
-                <li class="navigation__item">
+                <li class="navigation__item<?php echo ( $career_post->ID === $current_post_id ) ? ' is-current' : ''; ?>">
                     <a href="<?php echo esc_url( get_permalink( $career_post->ID ) ); ?>" class="navigation__item-title">
                         <?php echo esc_html( get_the_title( $career_post->ID ) ); ?>
                     </a>
@@ -57,68 +63,24 @@ $career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archi
             </div>
 
             <div class="page__content">
-                <h1 class="page__title js-page-title">
-                採用情報
-                </h1>
+                <h1 class="page__title"><?php the_title(); ?></h1>
+
                 <div class="page__inner page__inner--narrow">
-
-                    <div class="story">
-                        <div class="archive">
-
-                            <ul class="archive__list">
-                            <?php if ( have_posts() ) : ?>
-                                <?php while ( have_posts() ) : the_post(); ?>
-                                <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
-                                    <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail() ) : ?>
-                                        <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
-                                            class="archive__image">
-                                        <?php else : ?>
-                                        <img
-                                            src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg' ); ?>"
-                                            alt=""
-                                            class="archive__image">
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="archive__text-wrapper">
-                                        <p class="archive__title">
-                                        <?php the_title(); ?>
-                                        </p>
-                                        <p class="archive__text">
-                                        <?php echo esc_html( get_the_date('Y.m.d') ); ?>
-                                        </p>
-                                    </div>
-                                    </a>
-                                </li>
-                                <?php endwhile; ?>
-                            <?php else : ?>
-                                <li class="archive__item">
-                                <div class="archive__text-wrapper">
-                                    <p class="archive__title">投稿はまだありません。</p>
-                                </div>
-                                </li>
-                            <?php endif; ?>
-                            </ul>
-
-                            <?php ts_render_pagination(); ?>
-
-                        </div>
+                    <div class="single__contents">
+                        <?php the_content(); ?>
                     </div>
 
+                    <div class="single__back">
+                        <a class="single__back-button" href="<?php echo esc_url( $career_archive_url ); ?>">一覧へ戻る</a>
+                    </div>
                 </div>
             </div>
-
 
         </div>
     </div>
 
-
+    <?php endwhile; endif; ?>
 
 </section>
 
-<?php
-get_footer();
-?>
+<?php get_footer(); ?>
