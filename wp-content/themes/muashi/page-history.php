@@ -27,17 +27,21 @@ get_header();
                     <p class="navigation__item-title">
                     ヒストリー
                     </p>
-                    <ul class="navigation__sub-list">
-                        <li class="navigation__sub-item">
-                            <a href="<?php echo URL_HISTORY_FOUNDING; ?>" class="navigation__sub-link">創業期 1958年〜</a>
-                        </li>
-                        <li class="navigation__sub-item">
-                            <a href="<?php echo URL_HISTORY_INNOVATION; ?>" class="navigation__sub-link">技術革新期 1980年〜</a>
-                        </li>
-                        <li class="navigation__sub-item">
-                            <a href="<?php echo URL_HISTORY_GLOBAL; ?>" class="navigation__sub-link">グローバル展開期 2000年〜</a>
-                        </li>
-                    </ul>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_HISTORY_FOUNDING; ?>" class="navigation__item-title">
+                    創業期 1958年〜
+                    </a>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_HISTORY_INNOVATION; ?>" class="navigation__item-title">
+                    技術革新期 1980年〜
+                    </a>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_HISTORY_GLOBAL; ?>" class="navigation__item-title">
+                    グローバル展開期 2000年〜
+                    </a>
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
