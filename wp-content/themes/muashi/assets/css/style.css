@@ -4628,7 +4628,7 @@ a {
   .history__navigation-list {
     flex-direction: row;
     justify-content: center;
-    gap: 16px;
+    gap: 24px;
   }
 }
 .history__navigation-item {
