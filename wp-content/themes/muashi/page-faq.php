@@ -1,14 +1,14 @@
 <?php
 /**
- * Template Name: Privacy Policy
- * プライバシーポリシーページ用テンプレート
+ * Template Name: FAQ
+ * よくある質問ページ用テンプレート
  */
 global $description;
 $description = '';
 get_header();
 ?>
 
-<section class="page page--no-image page--legal">
+<section class="page page--no-image">
 
     <div class="page__bg-wrapper">
         <div class="page__bg-main"></div>
@@ -96,11 +96,11 @@ get_header();
                 </div>
             </div>
 
-            <div class="page__content page__content--no-image page__content--legal">
+            <div class="page__content page__content--no-image">
                 <h1 class="page__title js-page-title">
                     <?php the_title(); ?>
                 </h1>
-                <div class="page__inner page__inner--legal">
+                <div class="page__inner page__inner--narrow">
                     <?php echo $content; ?>
                 </div>
             </div>

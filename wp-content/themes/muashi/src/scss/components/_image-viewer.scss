@@ -1,12 +1,5 @@
 @use '../setting' as *;
 
-// ==========================================================================
-// Image Viewer Component (画像ビューワー)
-// ==========================================================================
-// WordPressブロックスタイル「画像ビューワー」として使用
-// - 画像ブロック: ブロックエディタで画像を選択 → スタイル → 「画像ビューワー」
-
-// 画像ビューワースタイル（トリガー）
 .is-style-image-viewer {
   position: relative;
   cursor: zoom-in;
@@ -21,7 +14,6 @@
     outline-offset: 2px;
   }
 
-  // 拡大アイコンを右下に表示
   &::after {
     content: '';
     position: absolute;
@@ -53,7 +45,6 @@
   }
 }
 
-// オーバーレイ
 .image-viewer-overlay {
   position: fixed;
   top: 0;
@@ -74,7 +65,6 @@
   }
 }
 
-// コンテナ
 .image-viewer-container {
   position: relative;
   max-width: 95vw;
@@ -82,6 +72,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
   @include mq(lg) {
     max-width: 90vw;
@@ -89,7 +80,6 @@
   }
 }
 
-// 拡大画像
 .image-viewer-image {
   max-width: 100%;
   max-height: 90vh;
@@ -100,9 +90,14 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transform: scale(0.95);
   transition: transform 0.3s ease;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 
   .is-active & {
     transform: scale(1);
+    transition: none;
   }
 
   @include mq(lg) {
@@ -110,7 +105,6 @@
   }
 }
 
-// 閉じるボタン
 .image-viewer-close {
   position: fixed;
   top: 16px;
@@ -152,5 +146,124 @@
 
   span {
     display: block;
+  }
+}
+
+.image-viewer-zoom-controls {
+  position: fixed;
+  right: 16px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1;
+
+  @include mq(lg) {
+    right: 24px;
+    bottom: 100px;
+    gap: 12px;
+  }
+}
+
+.image-viewer-zoom-btn {
+  width: 44px;
+  height: 44px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: var(--color-white, #fff);
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+
+  @include mq(lg) {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  }
+
+  span {
+    display: block;
+    user-select: none;
+  }
+}
+
+.image-viewer-zoom-level {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  color: var(--color-white, #fff);
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 1;
+  user-select: none;
+
+  @include mq(lg) {
+    top: 24px;
+    left: 24px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+
+.image-viewer-hints {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 24px;
+  color: var(--color-white, #fff);
+  font-size: 12px;
+  text-align: center;
+  z-index: 1;
+  user-select: none;
+  max-width: 90vw;
+
+  @include mq(lg) {
+    bottom: 24px;
+    padding: 14px 28px;
+    font-size: 14px;
+  }
+
+  .hint-desktop {
+    display: none;
+
+    @include mq(lg) {
+      display: inline;
+    }
+  }
+
+  .hint-mobile {
+    display: inline;
+
+    @include mq(lg) {
+      display: none;
+    }
   }
 }
