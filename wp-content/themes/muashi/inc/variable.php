@@ -23,3 +23,4 @@ define('URL_HISTORY_GLOBAL', home_url('/history-global/'));
 define('URL_INTERVIEW', home_url('/careers/interview/'));
 define('URL_PRIVACY_POLICY', home_url('/privacy-policy/'));
 define('URL_TERMS', home_url('/terms/'));
+define('URL_FAQ', home_url('/faq/'));
