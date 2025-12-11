@@ -54,5 +54,8 @@ npm-debug.log*
 # Build artifacts
 .sass-cache/
 
+# Test files
+test-*.html
+
 # Claude
 .claude/
