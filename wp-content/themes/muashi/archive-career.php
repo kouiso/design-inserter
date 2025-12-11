@@ -2,6 +2,15 @@
 global $description;
 $description = '';
 get_header();
+
+// 採用投稿一覧を取得（サイドバー用）
+$career_posts = get_posts( array(
+    'post_type'      => 'career',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
+$career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' );
 ?>
 
 <section class="page">
@@ -19,6 +28,13 @@ get_header();
                     採用情報
                     </p>
                 </li>
+                <?php foreach ( $career_posts as $career_post ) : ?>
+                <li class="navigation__item">
+                    <a href="<?php echo esc_url( get_permalink( $career_post->ID ) ); ?>" class="navigation__item-title">
+                        <?php echo esc_html( get_the_title( $career_post->ID ) ); ?>
+                    </a>
+                </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>
