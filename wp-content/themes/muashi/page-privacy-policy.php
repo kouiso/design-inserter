@@ -15,11 +15,71 @@ get_header();
         <div class="page__bg-sub"></div>
     </div>
 
+    <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+    <?php
+    $raw_content = get_the_content();
+    $content     = apply_filters( 'the_content', $raw_content );
+
+    $toc_items = [];
+    $used_ids  = [];
+
+    if ( preg_match_all( '/<h2([^>]*)>(.*?)<\/h2>/is', $content, $matches, PREG_SET_ORDER ) ) {
+        foreach ( $matches as $m ) {
+            $attrs = $m[1];
+            $inner = trim( wp_strip_all_tags( $m[2] ) );
+            if ( $inner === '' ) continue;
+
+            $existing_id = '';
+            if ( preg_match( '/\sid=["\']([^"\']+)["\']/i', $attrs, $idmatch ) ) {
+                $existing_id = $idmatch[1];
+            }
+
+            if ( $existing_id ) {
+                $id = $existing_id;
+            } else {
+                $base = sanitize_title_with_dashes( $inner );
+                $id   = $base !== '' ? $base : 'section';
+                $i    = 2;
+                while ( in_array( $id, $used_ids, true ) ) {
+                    $id = $base . '-' . $i;
+                    $i++;
+                }
+            }
+
+            $used_ids[] = $id;
+
+            if ( ! $existing_id ) {
+                $new_tag = '<h2' . $attrs . ' id="' . esc_attr( $id ) . '">' . $m[2] . '</h2>';
+                $content = preg_replace( '/' . preg_quote( $m[0], '/' ) . '/', addcslashes( $new_tag, '\\$' ), $content, 1 );
+            }
+
+            $toc_items[] = [
+                'id'    => $id,
+                'title' => $inner,
+            ];
+        }
+    }
+    ?>
+
     <div class="navigation">
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <span class="navigation__item-title is-current">プライバシーポリシー</span>
+                    <p class="navigation__item-title">
+                        <?php echo esc_html( get_the_title() ); ?>
+                    </p>
+                    <ul class="navigation__sub-list">
+                        <?php if ( ! empty( $toc_items ) ) : ?>
+                            <?php foreach ( $toc_items as $toc ) : ?>
+                                <li class="navigation__sub-item">
+                                    <a href="#<?php echo esc_attr( $toc['id'] ); ?>" class="navigation__sub-link">
+                                        <?php echo esc_html( $toc['title'] ); ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -37,21 +97,18 @@ get_header();
             </div>
 
             <div class="page__content page__content--no-image page__content--legal">
-
-            <?php if ( have_posts() ) : ?>
-                <?php while( have_posts() ) : the_post(); ?>
-                    <h1 class="page__title js-page-title">
+                <h1 class="page__title js-page-title">
                     <?php the_title(); ?>
-                    </h1>
-                    <div class="page__inner page__inner--legal">
-                    <?php the_content(); ?>
-                    </div>
-                <?php endwhile;?>
-            <?php endif; ?>
+                </h1>
+                <div class="page__inner page__inner--legal">
+                    <?php echo $content; ?>
+                </div>
             </div>
 
         </div>
     </div>
+
+    <?php endwhile; endif; ?>
 
 </section>
 
