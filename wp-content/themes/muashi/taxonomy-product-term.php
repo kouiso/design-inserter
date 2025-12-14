@@ -50,7 +50,7 @@ get_header();
                             }
                             ?>
                             <li class="navigation__sub-item">
-                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="' . ( $should_open ? 'true' : 'false' ) . '"' : ''; ?>>
+                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="' . ( $should_open ? 'true' : 'false' ) . '" data-taxonomy="' . esc_attr( $taxonomy_key ) . '"' : ''; ?>>
                                 <?php echo esc_html( $settings['label'] ); ?>
                                 </p>
                                 <?php if ( $has_terms ) : ?>

@@ -66,4 +66,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // URLハッシュに基づいてアコーディオンを開く
+  const openAccordionByHash = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) return;
+
+    navigationAccordionPairs.forEach(({ trigger, setState }) => {
+      const taxonomy = trigger.getAttribute('data-taxonomy');
+      if (taxonomy === hash) {
+        closeOtherNavigationAccordions(trigger);
+        setState(true);
+        // アコーディオンの位置までスクロール
+        setTimeout(() => {
+          trigger.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    });
+  };
+
+  // ページ読み込み時にハッシュを確認
+  openAccordionByHash();
+
+  // ハッシュ変更時も対応
+  window.addEventListener('hashchange', openAccordionByHash);
 });
