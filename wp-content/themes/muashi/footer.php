@@ -357,8 +357,8 @@
 
             <div class="footer__nav-pc-other-section">
                 <div class="footer__nav-pc-other-link-top">
-                    <a href="<?= URL_HOME ?>" class="footer__nav-pc-link">ホーム</a>
                     <a href="<?= URL_NEWS ?>" class="footer__nav-pc-link">ニュース</a>
+                    <a href="<?= URL_HOME ?>" class="footer__nav-pc-link">メディア</a>
                     <a href="<?= URL_CAREER ?>" class="footer__nav-pc-link">採用情報</a>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
@@ -379,7 +379,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                        資料をダウンロードする
+                        資料ダウンロード依頼
                         </span>
                     </a>
                 </div>
