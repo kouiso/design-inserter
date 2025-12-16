@@ -15,7 +15,7 @@ define('URL_GLOBAL_NETWORK', home_url('/global-network/'));
 define('URL_SUSTAINABILITY', home_url('/sustainability/'));
 define('URL_CUSTOMIZATION', home_url('/customization/'));
 define('URL_NEWS', home_url('/news/'));
-define('URL_MEDIA', home_url('/media/'));
+define('URL_MEDIA', home_url('/media-page/'));
 define('URL_DOWNLOAD', home_url('/download/'));
 define('URL_HISTORY', home_url('/history/'));
 define('URL_HISTORY_FOUNDING', home_url('/history-founding/'));
