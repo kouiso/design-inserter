@@ -612,7 +612,7 @@ get_header();
                 <?php wp_reset_postdata(); ?>
             </ul>
             <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
-                <a href="<?php echo esc_url( home_url( '/media/' ) ); ?>" class="top-news__more-link">
+                <a href="<?php echo esc_url( home_url( '/media-page/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
                     メディア一覧はこちら
                     </span>

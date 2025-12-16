@@ -1,7 +1,18 @@
 <?php
+/**
+ * Template Name: お客様の声
+ */
 global $description;
 $description = '';
 get_header();
+
+// お客様の声投稿一覧を取得
+$voice_posts = get_posts( array(
+    'post_type'      => 'voice',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
 ?>
 
 <section class="page">
@@ -15,8 +26,28 @@ get_header();
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
+                    <a href="<?php echo URL_ABOUT_US; ?>" class="navigation__item-title">
+                    企業情報
+                    </a>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
+                    ヒストリー
+                    </a>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
+                    会社概要
+                    </a>
+                </li>
+                <li class="navigation__item">
+                    <a href="<?php echo URL_STORY; ?>" class="navigation__item-title">
+                    ストーリー
+                    </a>
+                </li>
+                <li class="navigation__item">
                     <p class="navigation__item-title">
-                    メディア
+                    お客様の声
                     </p>
                 </li>
             </ul>
@@ -29,7 +60,9 @@ get_header();
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc' => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/story/kv_sp.jpg',
+                    'include_source' => true,
                 ) );
                 ?>
 
@@ -42,7 +75,7 @@ get_header();
 
             <div class="page__content">
                 <h1 class="page__title js-page-title">
-                メディア
+                お客様の声
                 </h1>
                 <div class="page__inner page__inner--narrow">
 
@@ -50,15 +83,15 @@ get_header();
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( have_posts() ) : ?>
-                                <?php while ( have_posts() ) : the_post(); ?>
+                            <?php if ( $voice_posts ) : ?>
+                                <?php foreach ( $voice_posts as $voice_post ) : ?>
                                 <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
+                                    <a href="<?php echo esc_url( get_permalink( $voice_post->ID ) ); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail() ) : ?>
+                                        <?php if ( has_post_thumbnail( $voice_post->ID ) ) : ?>
                                         <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $voice_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $voice_post->ID ) ); ?>"
                                             class="archive__image">
                                         <?php else : ?>
                                         <img
@@ -69,15 +102,15 @@ get_header();
                                     </div>
                                     <div class="archive__text-wrapper">
                                         <p class="archive__title">
-                                        <?php the_title(); ?>
+                                        <?php echo esc_html( get_the_title( $voice_post->ID ) ); ?>
                                         </p>
                                         <p class="archive__text">
-                                        <?php echo esc_html( get_the_date('Y.m.d') ); ?>
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $voice_post->ID ) ); ?>
                                         </p>
                                     </div>
                                     </a>
                                 </li>
-                                <?php endwhile; ?>
+                                <?php endforeach; ?>
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
@@ -86,8 +119,6 @@ get_header();
                                 </li>
                             <?php endif; ?>
                             </ul>
-
-                            <?php ts_render_pagination(); ?>
 
                         </div>
                     </div>

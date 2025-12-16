@@ -144,7 +144,8 @@ function muashi_register_media_post_type() {
         'labels'             => $labels,
         'public'             => true,
         'has_archive'        => true,
-        'rewrite'            => array( 'slug' => 'media' ),
+        // NOTE: /media/ はWordPressの予約語のため使用不可
+        'rewrite'            => array( 'slug' => 'media-page' ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -699,6 +700,7 @@ function create_post_type() {
     );
 
     // ストーリー
+    // NOTE: 固定ページ(page-story.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'story',
         array(
@@ -709,7 +711,7 @@ function create_post_type() {
                 'edit_item'     => 'ストーリーを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'story',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -782,6 +784,7 @@ function create_post_type() {
     );
 
     // グローバルネットワーク
+    // NOTE: 固定ページ(page-global-network.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'globalnetwork',
         array(
@@ -792,7 +795,7 @@ function create_post_type() {
                 'edit_item'     => 'グローバルネットワークを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'global-network',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),

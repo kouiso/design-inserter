@@ -1,7 +1,18 @@
 <?php
+/**
+ * Template Name: インタビュー
+ */
 global $description;
 $description = '';
 get_header();
+
+// インタビュー投稿一覧を取得
+$interview_posts = get_posts( array(
+    'post_type'      => 'interview',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
 ?>
 
 <section class="page">
@@ -15,24 +26,9 @@ get_header();
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <a href="<?php echo URL_TECHNOLOGY; ?>" class="navigation__item-title">
-                    最先端の開発技術力
-                    </a>
-                </li>
-                <li class="navigation__item">
                     <p class="navigation__item-title">
-                    グローバルネットワーク
+                    インタビュー
                     </p>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_SUSTAINABILITY; ?>" class="navigation__item-title">
-                    サステナブルなビジネス展開
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_CUSTOMIZATION; ?>" class="navigation__item-title">
-                    顧客志向のカスタマイズ
-                    </a>
                 </li>
             </ul>
         </div>
@@ -41,17 +37,11 @@ get_header();
     <div class="page__wrapper">
         <div class="page__container">
 
-            <?php
-            // 固定ページ「グローバルネットワーク」(ID:169)の内容を取得
-            $page_id = 169;
-            $page = get_post( $page_id );
-            ?>
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'post_id'        => $page_id,
-                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
-                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/story/kv_sp.jpg',
                     'include_source' => true,
                 ) );
                 ?>
@@ -64,30 +54,24 @@ get_header();
             </div>
 
             <div class="page__content">
-                <?php if ( $page ) : ?>
                 <h1 class="page__title js-page-title">
-                <?php echo esc_html( $page->post_title ); ?>
+                インタビュー
                 </h1>
-                <div class="page__inner" style="padding-bottom: 40px;">
-                <?php echo apply_filters( 'the_content', $page->post_content ); ?>
-                </div>
-                <?php endif; ?>
-
-                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
+                <div class="page__inner page__inner--narrow">
 
                     <div class="story">
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( have_posts() ) : ?>
-                                <?php while ( have_posts() ) : the_post(); ?>
+                            <?php if ( $interview_posts ) : ?>
+                                <?php foreach ( $interview_posts as $interview_post ) : ?>
                                 <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
+                                    <a href="<?php echo esc_url( get_permalink( $interview_post->ID ) ); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail() ) : ?>
+                                        <?php if ( has_post_thumbnail( $interview_post->ID ) ) : ?>
                                         <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $interview_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $interview_post->ID ) ); ?>"
                                             class="archive__image">
                                         <?php else : ?>
                                         <img
@@ -98,32 +82,29 @@ get_header();
                                     </div>
                                     <div class="archive__text-wrapper">
                                         <p class="archive__title">
-                                        <?php the_title(); ?>
+                                        <?php echo esc_html( get_the_title( $interview_post->ID ) ); ?>
                                         </p>
                                         <p class="archive__text">
-                                        <?php echo esc_html( get_the_date('Y.m.d') ); ?>
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $interview_post->ID ) ); ?>
                                         </p>
                                     </div>
                                     </a>
                                 </li>
-                                <?php endwhile; ?>
+                                <?php endforeach; ?>
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">お知らせはまだありません。</p>
+                                    <p class="archive__title">投稿はまだありません。</p>
                                 </div>
                                 </li>
                             <?php endif; ?>
                             </ul>
-
-                            <?php ts_render_pagination(); ?>
 
                         </div>
                     </div>
 
                 </div>
             </div>
-
 
         </div>
     </div>

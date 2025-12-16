@@ -1,7 +1,18 @@
 <?php
+/**
+ * Template Name: 採用情報
+ */
 global $description;
 $description = '';
 get_header();
+
+// 採用投稿一覧を取得（サイドバー用）
+$career_posts = get_posts( array(
+    'post_type'      => 'career',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
 ?>
 
 <section class="page">
@@ -15,30 +26,17 @@ get_header();
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item">
-                    <a href="<?php echo URL_ABOUT_US; ?>" class="navigation__item-title">
-                    企業情報
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
-                    ヒストリー
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
-                    会社概要
-                    </a>
-                </li>
-                <li class="navigation__item">
                     <p class="navigation__item-title">
-                    ストーリー
+                    採用情報
                     </p>
                 </li>
+                <?php foreach ( $career_posts as $career_post ) : ?>
                 <li class="navigation__item">
-                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
-                    お客様の声
+                    <a href="<?php echo esc_url( get_permalink( $career_post->ID ) ); ?>" class="navigation__item-title">
+                        <?php echo esc_html( get_the_title( $career_post->ID ) ); ?>
                     </a>
                 </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>
@@ -49,7 +47,9 @@ get_header();
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc' => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
+                    'include_source' => true,
                 ) );
                 ?>
 
@@ -62,7 +62,7 @@ get_header();
 
             <div class="page__content">
                 <h1 class="page__title js-page-title">
-                ストーリー
+                採用情報
                 </h1>
                 <div class="page__inner page__inner--narrow">
 
@@ -70,15 +70,15 @@ get_header();
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( have_posts() ) : ?>
-                                <?php while ( have_posts() ) : the_post(); ?>
+                            <?php if ( $career_posts ) : ?>
+                                <?php foreach ( $career_posts as $career_post ) : ?>
                                 <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
+                                    <a href="<?php echo esc_url( get_permalink( $career_post->ID ) ); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail() ) : ?>
+                                        <?php if ( has_post_thumbnail( $career_post->ID ) ) : ?>
                                         <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $career_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $career_post->ID ) ); ?>"
                                             class="archive__image">
                                         <?php else : ?>
                                         <img
@@ -89,15 +89,15 @@ get_header();
                                     </div>
                                     <div class="archive__text-wrapper">
                                         <p class="archive__title">
-                                        <?php the_title(); ?>
+                                        <?php echo esc_html( get_the_title( $career_post->ID ) ); ?>
                                         </p>
                                         <p class="archive__text">
-                                        <?php echo esc_html( get_the_date('Y.m.d') ); ?>
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $career_post->ID ) ); ?>
                                         </p>
                                     </div>
                                     </a>
                                 </li>
-                                <?php endwhile; ?>
+                                <?php endforeach; ?>
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
@@ -107,14 +107,11 @@ get_header();
                             <?php endif; ?>
                             </ul>
 
-                            <?php ts_render_pagination(); ?>
-
                         </div>
                     </div>
 
                 </div>
             </div>
-
 
         </div>
     </div>

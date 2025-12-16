@@ -1,7 +1,18 @@
 <?php
+/**
+ * Template Name: ストーリー
+ */
 global $description;
 $description = '';
 get_header();
+
+// ストーリー投稿一覧を取得
+$story_posts = get_posts( array(
+    'post_type'      => 'story',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
 ?>
 
 <section class="page">
@@ -20,6 +31,11 @@ get_header();
                     </a>
                 </li>
                 <li class="navigation__item">
+                    <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
+                    ヒストリー
+                    </a>
+                </li>
+                <li class="navigation__item">
                     <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
                     会社概要
                     </a>
@@ -30,7 +46,7 @@ get_header();
                     </p>
                 </li>
                 <li class="navigation__item">
-                    <a href="" class="navigation__item-title">
+                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
                     お客様の声
                     </a>
                 </li>
@@ -42,9 +58,13 @@ get_header();
         <div class="page__container">
 
             <div class="page__kv">
-                <picture class="page__kv-pic">
-                    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/kv.jpg" alt="">
-                </picture>
+                <?php
+                muashi_render_kv_picture( array(
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/story/kv_sp.jpg',
+                    'include_source' => true,
+                ) );
+                ?>
 
                 <div class="page__kv-icon">
                     <svg viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,196 +74,56 @@ get_header();
             </div>
 
             <div class="page__content">
-                    
                 <h1 class="page__title js-page-title">
                 ストーリー
                 </h1>
                 <div class="page__inner page__inner--narrow">
 
                     <div class="story">
-
                         <div class="archive">
 
                             <ul class="archive__list">
+                            <?php if ( $story_posts ) : ?>
+                                <?php foreach ( $story_posts as $story_post ) : ?>
                                 <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_01.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            和の静寂を纏う美しさ〜日本の伝統文化を彩る深い色合い「Matcha（抹茶） color」をカラーコレクションに追加！
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
+                                    <a href="<?php echo esc_url( get_permalink( $story_post->ID ) ); ?>" class="archive__link">
+                                    <div class="archive__image-wrapper">
+                                        <?php if ( has_post_thumbnail( $story_post->ID ) ) : ?>
+                                        <img
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $story_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $story_post->ID ) ); ?>"
+                                            class="archive__image">
+                                        <?php else : ?>
+                                        <img
+                                            src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg' ); ?>"
+                                            alt=""
+                                            class="archive__image">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="archive__text-wrapper">
+                                        <p class="archive__title">
+                                        <?php echo esc_html( get_the_title( $story_post->ID ) ); ?>
+                                        </p>
+                                        <p class="archive__text">
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $story_post->ID ) ); ?>
+                                        </p>
+                                    </div>
                                     </a>
                                 </li>
+                                <?php endforeach; ?>
+                            <?php else : ?>
                                 <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_02.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            『塗料が環境の歯車を回す』"手に触れるアイテムに関わる特殊塗料メーカー武蔵塗料が70％のバイオマス含有塗料で未来を描く
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
+                                <div class="archive__text-wrapper">
+                                    <p class="archive__title">投稿はまだありません。</p>
+                                </div>
                                 </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_03.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            持続可能性を追求する製品！SDGsへの関心の高まりを受け開発、PP（ポリプロピレン）素材向けの環境配慮型プライマー「VITA PANUCO PP EA-NVP81-」
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_01.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            和の静寂を纏う美しさ〜日本の伝統文化を彩る深い色合い「Matcha（抹茶） color」をカラーコレクションに追加！
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_02.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            『塗料が環境の歯車を回す』"手に触れるアイテムに関わる特殊塗料メーカー武蔵塗料が70％のバイオマス含有塗料で未来を描く
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_03.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            持続可能性を追求する製品！SDGsへの関心の高まりを受け開発、PP（ポリプロピレン）素材向けの環境配慮型プライマー「VITA PANUCO PP EA-NVP81-」
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_01.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            和の静寂を纏う美しさ〜日本の伝統文化を彩る深い色合い「Matcha（抹茶） color」をカラーコレクションに追加！
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_02.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            『塗料が環境の歯車を回す』"手に触れるアイテムに関わる特殊塗料メーカー武蔵塗料が70％のバイオマス含有塗料で未来を描く
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_03.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            持続可能性を追求する製品！SDGsへの関心の高まりを受け開発、PP（ポリプロピレン）素材向けの環境配慮型プライマー「VITA PANUCO PP EA-NVP81-」
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="archive__item">
-                                    <a href="" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/story/test_01.jpg" alt="" class="archive__image">
-                                        </div>
-                                        <div class="archive__text-wrapper">
-                                            <p class="archive__title">
-                                            和の静寂を纏う美しさ〜日本の伝統文化を彩る深い色合い「Matcha（抹茶） color」をカラーコレクションに追加！
-                                            </p>
-                                            <p class="archive__text">
-                                            2025.08.21
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
+                            <?php endif; ?>
                             </ul>
 
-                            <div class="pagination">
-                                <a href="" class="pagination__link">
-                                    <span class="pagination__icon">
-                                        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M30.0831 20.5833H10.6873L18.9998 28.8958L17.9548 30.0833L7.66309 19.7917L17.9548 9.5L18.9998 10.6875L10.6873 19H30.0831V20.5833Z" fill="black"/>
-                                        </svg>
-                                    </span>
-                                    <span class="pagination__text">
-                                    前のページ
-                                    </span>
-                                </a>
-                                <a href="" class="pagination__link">
-                                    <span class="pagination__text">
-                                    次のページ
-                                    </span>
-                                    <span class="pagination__icon">
-                                        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M6.33301 19H25.7288L17.4163 10.6875L18.4613 9.5L28.753 19.7917L18.4613 30.0833L17.4163 28.8958L25.7288 20.5833H6.33301V19Z" fill="black"/>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </div>
                         </div>
                     </div>
 
                 </div>
-
             </div>
 
         </div>
@@ -256,4 +136,3 @@ get_header();
 <?php
 get_footer();
 ?>
-
