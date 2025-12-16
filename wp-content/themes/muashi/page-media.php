@@ -6,12 +6,6 @@ global $description;
 $description = '';
 get_header();
 
-// デバッグ: KV画像の状態を確認
-$debug_page_id = get_queried_object_id();
-$debug_has_thumb = has_post_thumbnail( $debug_page_id );
-$debug_thumb_id = get_post_thumbnail_id( $debug_page_id );
-echo '<!-- DEBUG: page_id=' . $debug_page_id . ', has_thumbnail=' . ($debug_has_thumb ? 'yes' : 'no') . ', thumbnail_id=' . $debug_thumb_id . ' -->';
-
 // メディア投稿一覧を取得
 $media_posts = get_posts( array(
     'post_type'      => 'media_post',
