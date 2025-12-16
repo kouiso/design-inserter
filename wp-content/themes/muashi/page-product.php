@@ -1,7 +1,21 @@
 <?php
+/**
+ * Template Name: 製品情報
+ */
 global $description;
 $description = '';
 get_header();
+
+// 製品投稿一覧を取得
+$product_posts = get_posts( array(
+    'post_type'      => 'product',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
+
+// タクソノミーナビゲーション用
+$product_taxonomies = muashi_get_product_taxonomy_config();
 ?>
 
 <section class="page">
@@ -18,46 +32,27 @@ get_header();
                     <p class="navigation__item-title">
                     製品情報
                     </p>
-                    <?php
-                    $current_term_obj      = get_queried_object();
-                    $current_taxonomy_name = $current_term_obj instanceof WP_Term ? $current_term_obj->taxonomy : '';
-                    $current_term_id       = $current_term_obj instanceof WP_Term ? (int) $current_term_obj->term_id : 0;
-                    $current_term_anc      = $current_term_obj instanceof WP_Term ? array_map( 'intval', get_ancestors( $current_term_id, $current_taxonomy_name ) ) : array();
-                    ?>
                     <ul class="navigation__sub-list">
                         <?php
-                        $product_taxonomies = muashi_get_product_taxonomy_config();
                         foreach ( $product_taxonomies as $taxonomy => $settings ) :
                             $terms = muashi_get_sorted_product_terms( $taxonomy, 0 );
                             $has_terms = ! empty( $terms );
                             ?>
                             <?php
-                            $should_open = $current_taxonomy_name === $taxonomy;
                             $sub_link_classes = 'navigation__sub-link';
                             if ( $has_terms ) {
                                 $sub_link_classes .= ' js-navigation-accordion has-accordion';
-                                if ( $should_open ) {
-                                    $sub_link_classes .= ' is-active';
-                                }
                             }
                             ?>
                             <li class="navigation__sub-item">
-                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="' . ( $should_open ? 'true' : 'false' ) . '" data-taxonomy="' . esc_attr( $taxonomy ) . '"' : ''; ?>>
+                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="false" data-taxonomy="' . esc_attr( $taxonomy ) . '"' : ''; ?>>
                                 <?php echo esc_html( $settings['label'] ); ?>
                                 </p>
                                 <?php if ( $has_terms ) : ?>
-                                    <ul class="navigation__sub-accordion-list<?php echo $should_open ? ' is-active' : ''; ?>"<?php echo $has_terms ? ' aria-hidden="' . ( $should_open ? 'false' : 'true' ) . '"' : ''; ?>>
+                                    <ul class="navigation__sub-accordion-list" aria-hidden="true">
                                         <?php foreach ( $terms as $term ) : ?>
-                                            <?php
-                                            $is_current_term  = $should_open && (int) $current_term_id === (int) $term->term_id;
-                                            $is_term_ancestor = $should_open && in_array( (int) $term->term_id, $current_term_anc, true );
-                                            $item_classes     = 'navigation__sub-accordion-item';
-                                            if ( $is_current_term || $is_term_ancestor ) {
-                                                $item_classes .= ' is-current';
-                                            }
-                                            ?>
-                                            <li class="<?php echo esc_attr( $item_classes ); ?>">
-                                                <a href="<?php echo esc_url( get_term_link( $term ) ); ?>" class="navigation__sub-accordion-link<?php echo $is_current_term ? ' is-current' : ''; ?>">
+                                            <li class="navigation__sub-accordion-item">
+                                                <a href="<?php echo esc_url( get_term_link( $term ) ); ?>" class="navigation__sub-accordion-link">
                                                 <?php echo esc_html( $term->name ); ?>
                                                 </a>
                                             </li>
@@ -66,17 +61,8 @@ get_header();
                                             if ( ! empty( $child_terms ) ) {
                                                 foreach ( $child_terms as $child ) {
                                                     ?>
-                                                    <?php
-                                                    $is_current_child = $should_open && (int) $current_term_id === (int) $child->term_id;
-                                                    ?>
-                                                    <?php
-                                                    $child_item_classes = 'navigation__sub-accordion-item navigation__sub-accordion-item--child';
-                                                    if ( $is_current_child ) {
-                                                        $child_item_classes .= ' is-current';
-                                                    }
-                                                    ?>
-                                                    <li class="<?php echo esc_attr( $child_item_classes ); ?>">
-                                                        <a href="<?php echo esc_url( get_term_link( $child ) ); ?>" class="navigation__sub-accordion-link<?php echo $is_current_child ? ' is-current' : ''; ?>">
+                                                    <li class="navigation__sub-accordion-item navigation__sub-accordion-item--child">
+                                                        <a href="<?php echo esc_url( get_term_link( $child ) ); ?>" class="navigation__sub-accordion-link">
                                                         <?php echo esc_html( $child->name ); ?>
                                                         </a>
                                                     </li>
@@ -111,7 +97,9 @@ get_header();
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc' => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/story/kv_sp.jpg',
+                    'include_source' => true,
                 ) );
                 ?>
 
@@ -132,15 +120,15 @@ get_header();
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( have_posts() ) : ?>
-                                <?php while ( have_posts() ) : the_post(); ?>
+                            <?php if ( $product_posts ) : ?>
+                                <?php foreach ( $product_posts as $product_post ) : ?>
                                 <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
+                                    <a href="<?php echo esc_url( get_permalink( $product_post->ID ) ); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail() ) : ?>
+                                        <?php if ( has_post_thumbnail( $product_post->ID ) ) : ?>
                                         <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $product_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $product_post->ID ) ); ?>"
                                             class="archive__image">
                                         <?php else : ?>
                                         <img
@@ -151,15 +139,15 @@ get_header();
                                     </div>
                                     <div class="archive__text-wrapper">
                                         <p class="archive__title">
-                                        <?php the_title(); ?>
+                                        <?php echo esc_html( get_the_title( $product_post->ID ) ); ?>
                                         </p>
                                         <p class="archive__text">
-                                        <?php echo esc_html( get_the_date('Y.m.d') ); ?>
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $product_post->ID ) ); ?>
                                         </p>
                                     </div>
                                     </a>
                                 </li>
-                                <?php endwhile; ?>
+                                <?php endforeach; ?>
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
@@ -169,14 +157,11 @@ get_header();
                             <?php endif; ?>
                             </ul>
 
-                            <?php ts_render_pagination(); ?>
-
                         </div>
                     </div>
 
                 </div>
             </div>
-
 
         </div>
     </div>
