@@ -144,7 +144,8 @@ function muashi_register_media_post_type() {
         'labels'             => $labels,
         'public'             => true,
         'has_archive'        => true,
-        'rewrite'            => array( 'slug' => 'media' ),
+        // NOTE: /media/ はWordPressの予約語のため使用不可
+        'rewrite'            => array( 'slug' => 'media-page' ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
