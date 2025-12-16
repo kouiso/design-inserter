@@ -22,7 +22,7 @@ define('URL_HISTORY', home_url('/history/'));
 define('URL_HISTORY_FOUNDING', home_url('/history-founding/'));
 define('URL_HISTORY_INNOVATION', home_url('/history-innovation/'));
 define('URL_HISTORY_GLOBAL', home_url('/history-global/'));
-define('URL_INTERVIEW', home_url('/interview/'));
+define('URL_INTERVIEW', home_url('/career/interview/'));
 define('URL_PRIVACY_POLICY', home_url('/privacy-policy/'));
 define('URL_TERMS', home_url('/terms/'));
 define('URL_FAQ', home_url('/faq/'));
