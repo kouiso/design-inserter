@@ -1,7 +1,18 @@
 <?php
+/**
+ * Template Name: グローバルネットワーク
+ */
 global $description;
 $description = '';
 get_header();
+
+// グローバルネットワーク投稿一覧を取得
+$globalnetwork_posts = get_posts( array(
+    'post_type'      => 'globalnetwork',
+    'posts_per_page' => -1,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
 ?>
 
 <section class="page">
@@ -26,12 +37,12 @@ get_header();
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_SUSTAINABILITY; ?>" class="navigation__item-title">
-                    顧客志向のカスタマイズ
+                    サステナブルなビジネス展開
                     </a>
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_CUSTOMIZATION; ?>" class="navigation__item-title">
-                    お客様の声
+                    顧客志向のカスタマイズ
                     </a>
                 </li>
             </ul>
@@ -58,17 +69,64 @@ get_header();
             </div>
 
             <div class="page__content">
+                <?php if ( have_posts() ) : ?>
+                    <?php while( have_posts() ) : the_post(); ?>
+                <h1 class="page__title js-page-title">
+                <?php the_title(); ?>
+                </h1>
+                <div class="page__inner" style="padding-bottom: 40px;">
+                <?php the_content(); ?>
+                </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
 
-            <?php if ( have_posts() ) : ?>
-                <?php while( have_posts() ) : the_post(); ?>
-                    <h1 class="page__title js-page-title">
-                    <?php the_title(); ?>
-                    </h1>
-                    <div class="page__inner page__inner--narrow">
-                    <?php the_content(); ?>
+                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
+
+                    <div class="story">
+                        <div class="archive">
+
+                            <ul class="archive__list">
+                            <?php if ( $globalnetwork_posts ) : ?>
+                                <?php foreach ( $globalnetwork_posts as $gn_post ) : ?>
+                                <li class="archive__item">
+                                    <a href="<?php echo esc_url( get_permalink( $gn_post->ID ) ); ?>" class="archive__link">
+                                    <div class="archive__image-wrapper">
+                                        <?php if ( has_post_thumbnail( $gn_post->ID ) ) : ?>
+                                        <img
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $gn_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $gn_post->ID ) ); ?>"
+                                            class="archive__image">
+                                        <?php else : ?>
+                                        <img
+                                            src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg' ); ?>"
+                                            alt=""
+                                            class="archive__image">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="archive__text-wrapper">
+                                        <p class="archive__title">
+                                        <?php echo esc_html( get_the_title( $gn_post->ID ) ); ?>
+                                        </p>
+                                        <p class="archive__text">
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $gn_post->ID ) ); ?>
+                                        </p>
+                                    </div>
+                                    </a>
+                                </li>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <li class="archive__item">
+                                <div class="archive__text-wrapper">
+                                    <p class="archive__title">お知らせはまだありません。</p>
+                                </div>
+                                </li>
+                            <?php endif; ?>
+                            </ul>
+
+                        </div>
                     </div>
-                <?php endwhile;?>
-            <?php endif; ?>
+
+                </div>
             </div>
 
         </div>
@@ -81,4 +139,3 @@ get_header();
 <?php
 get_footer();
 ?>
-
