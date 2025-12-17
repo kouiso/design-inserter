@@ -116,7 +116,9 @@ get_header();
 
             <div class="page__kv">
                 <?php
-                muashi_render_kv_picture();
+                muashi_render_kv_picture( array(
+                    'fallback_pc' => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
+                ) );
                 ?>
 
                 <div class="page__kv-icon">
