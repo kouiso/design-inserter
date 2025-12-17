@@ -1603,6 +1603,7 @@ function muashi_register_sidebar_nav_menus() {
     register_nav_menus( array(
         'sidebar_contact'    => 'お問い合わせ・資料請求用サイドバー',
         'sidebar_news_media' => 'ニュース・メディア用サイドバー',
+        'sidebar_voice'      => 'お客様の声用サイドバー',
     ) );
 }
 add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
