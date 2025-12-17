@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: 製品情報
+ * Template Name: ニュース・お知らせ
  */
 global $description;
 $description = '';
@@ -9,16 +9,14 @@ get_header();
 // ページネーション用に現在のページ番号を取得
 $paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
-// 製品投稿一覧を取得（WP_Queryでページネーション対応）
-$product_query = new WP_Query( array(
-    'post_type'      => 'product',
+// ニュース投稿一覧を取得（WP_Queryでページネーション対応）
+$news_query = new WP_Query( array(
+    'post_type'      => 'post',
     'posts_per_page' => 12,
     'paged'          => $paged,
-    'orderby'        => array( 'date' => 'ASC', 'ID' => 'ASC' ),
+    'orderby'        => 'date',
+    'order'          => 'DESC',
 ) );
-
-// タクソノミーナビゲーション用
-$product_taxonomies = muashi_get_product_taxonomy_config();
 ?>
 
 <section class="page">
@@ -28,71 +26,7 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    製品情報
-                    </p>
-                    <ul class="navigation__sub-list">
-                        <?php
-                        foreach ( $product_taxonomies as $taxonomy => $settings ) :
-                            $terms = muashi_get_sorted_product_terms( $taxonomy, 0 );
-                            $has_terms = ! empty( $terms );
-                            ?>
-                            <?php
-                            $sub_link_classes = 'navigation__sub-link';
-                            if ( $has_terms ) {
-                                $sub_link_classes .= ' js-navigation-accordion has-accordion';
-                            }
-                            ?>
-                            <li class="navigation__sub-item">
-                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="false" data-taxonomy="' . esc_attr( $taxonomy ) . '"' : ''; ?>>
-                                <?php echo esc_html( $settings['label'] ); ?>
-                                </p>
-                                <?php if ( $has_terms ) : ?>
-                                    <ul class="navigation__sub-accordion-list" aria-hidden="true">
-                                        <?php foreach ( $terms as $term ) : ?>
-                                            <li class="navigation__sub-accordion-item">
-                                                <a href="<?php echo esc_url( get_term_link( $term ) ); ?>" class="navigation__sub-accordion-link">
-                                                <?php echo esc_html( $term->name ); ?>
-                                                </a>
-                                            </li>
-                                            <?php
-                                            $child_terms = muashi_get_sorted_product_terms( $taxonomy, $term->term_id );
-                                            if ( ! empty( $child_terms ) ) {
-                                                foreach ( $child_terms as $child ) {
-                                                    ?>
-                                                    <li class="navigation__sub-accordion-item navigation__sub-accordion-item--child">
-                                                        <a href="<?php echo esc_url( get_term_link( $child ) ); ?>" class="navigation__sub-accordion-link">
-                                                        <?php echo esc_html( $child->name ); ?>
-                                                        </a>
-                                                    </li>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                <?php endif; ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_FEATURED; ?>" class="navigation__item-title">
-                    注目製品
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_APPLICATIONS; ?>" class="navigation__item-title">
-                    製品用途紹介
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_news_media' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -100,6 +34,8 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
                     'include_source' => true,
                 ) );
                 ?>
@@ -112,17 +48,25 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
             </div>
 
             <div class="page__content">
+                <?php if ( have_posts() ) : ?>
+                    <?php while( have_posts() ) : the_post(); ?>
                 <h1 class="page__title js-page-title">
-                製品情報
+                <?php the_title(); ?>
                 </h1>
-                <div class="page__inner page__inner--narrow">
+                <div class="page__inner" style="padding-bottom: 40px;">
+                <?php the_content(); ?>
+                </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+
+                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
 
                     <div class="story">
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( $product_query->have_posts() ) : ?>
-                                <?php while ( $product_query->have_posts() ) : $product_query->the_post(); ?>
+                            <?php if ( $news_query->have_posts() ) : ?>
+                                <?php while ( $news_query->have_posts() ) : $news_query->the_post(); ?>
                                 <li class="archive__item">
                                     <a href="<?php the_permalink(); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
@@ -153,13 +97,13 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">投稿はまだありません。</p>
+                                    <p class="archive__title">お知らせはまだありません。</p>
                                 </div>
                                 </li>
                             <?php endif; ?>
                             </ul>
 
-                            <?php ts_render_pagination( $product_query ); ?>
+                            <?php ts_render_pagination( $news_query ); ?>
 
                         </div>
                     </div>
