@@ -1601,10 +1601,15 @@ function muashi_render_domestic_locations_block( $attributes, $content ) {
  */
 function muashi_register_sidebar_nav_menus() {
     register_nav_menus( array(
-        'sidebar_contact'    => 'お問い合わせ・資料請求用サイドバー',
-        'sidebar_news_media' => 'ニュース・メディア用サイドバー',
-        'sidebar_voice'      => 'お客様の声用サイドバー',
-        'sidebar_story'      => 'ストーリー用サイドバー',
+        'sidebar_contact'        => 'お問い合わせ・資料請求用サイドバー',
+        'sidebar_news_media'     => 'ニュース・メディア用サイドバー',
+        'sidebar_voice'          => 'お客様の声用サイドバー',
+        'sidebar_story'          => 'ストーリー用サイドバー',
+        'sidebar_sustainability' => 'サステナビリティ用サイドバー',
+        'sidebar_career'         => '採用情報用サイドバー',
+        'sidebar_history'        => 'ヒストリー用サイドバー',
+        'sidebar_company'        => '会社概要用サイドバー',
+        'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
     ) );
 }
 add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
