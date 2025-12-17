@@ -262,8 +262,8 @@ if (is_home()){
                                                         // 製品タクソノミー設定を取得
                                                         $sp_product_taxonomies = muashi_get_product_taxonomy_config();
                                                         foreach ($sp_product_taxonomies as $taxonomy => $settings) :
-                                                            // タクソノミーアーカイブのURLを取得
-                                                            $taxonomy_archive_url = home_url('/' . $settings['slug'] . '/');
+                                                            // 製品ページへリンク
+                                                            $taxonomy_archive_url = URL_PRODUCT;
                                                         ?>
                                                             <li class="hamburger__accordion-item">
                                                                 <a href="<?php echo esc_url($taxonomy_archive_url); ?>" class="hamburger__accordion-link">
