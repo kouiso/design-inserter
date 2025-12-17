@@ -1291,7 +1291,7 @@ add_action( 'pre_get_posts', function( $query ) {
         $query->set( 'post_type', array( 'product' ) );
         $query->set( 'posts_per_page', 12 );
         // 日付が同じ場合にIDで並び順を一意にする（ページネーション時の重複防止）
-        $query->set( 'orderby', array( 'date' => 'DESC', 'ID' => 'DESC' ) );
+        $query->set( 'orderby', array( 'date' => 'ASC', 'ID' => 'ASC' ) );
     }
 } );
 
@@ -1610,6 +1610,8 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_history'        => 'ヒストリー用サイドバー',
         'sidebar_company'        => '会社概要用サイドバー',
         'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
+        'sidebar_faq'            => 'よくある質問用サイドバー',
+        'sidebar_about_us'       => '私たちについて用サイドバー',
     ) );
 }
 add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );

@@ -1,5 +1,5 @@
 <?php
-/* Template Name: SCMページ */
+/* Template Name: ライブラリーページ */
 
 global $description;
 $description = '';
