@@ -55,8 +55,6 @@ $history_image_base = get_theme_file_uri( '/assets/img/history' );
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
-                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
                     'include_source' => true,
                 ) );
                 ?>

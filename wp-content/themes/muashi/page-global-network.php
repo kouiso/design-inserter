@@ -30,8 +30,6 @@ $globalnetwork_posts = get_posts( array(
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
-                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
                     'include_source' => true,
                 ) );
                 ?>
