@@ -109,16 +109,15 @@ function all_modified_date( $post_type = "post", $format = "Y-m-d H:i:s" ){
 }
 
 // 投稿のアーカイブページを作成する
-// NOTE: 固定ページ /news/ でニュース一覧を表示するため、通常投稿のアーカイブは無効化
-// function post_has_archive($args, $post_type)
-// {
-//     if ('post' == $post_type) {
-//         $args['rewrite'] = true; // リライトを有効にする
-//         $args['has_archive'] = 'news'; // 任意のスラッグ名
-//     }
-//     return $args;
-// }
-// add_filter('register_post_type_args', 'post_has_archive', 10, 2);
+function post_has_archive($args, $post_type)
+{
+    if ('post' == $post_type) {
+        $args['rewrite'] = true; // リライトを有効にする
+        $args['has_archive'] = 'news'; // 任意のスラッグ名
+    }
+    return $args;
+}
+add_filter('register_post_type_args', 'post_has_archive', 10, 2);
 
 
 /**
@@ -144,10 +143,9 @@ function muashi_register_media_post_type() {
     $args = array(
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => false, // 固定ページでアーカイブ表示するためfalse
+        'has_archive'        => true,
         // NOTE: /media/ はWordPressの予約語のため使用不可
-        // 個別投稿のスラッグはmedia-articleに変更
-        'rewrite'            => array( 'slug' => 'media-article' ),
+        'rewrite'            => array( 'slug' => 'media-page' ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -1290,8 +1288,8 @@ add_action( 'pre_get_posts', function( $query ) {
     if ( $query->is_tax( array( 'product_application', 'product_material', 'product_design', 'product_function', 'product_environment' ) ) ) {
         $query->set( 'post_type', array( 'product' ) );
         $query->set( 'posts_per_page', 12 );
-        // 日付が同じ場合にIDで並び順を一意にする（ページネーション時の重複防止）
-        $query->set( 'orderby', array( 'date' => 'ASC', 'ID' => 'ASC' ) );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
     }
 } );
 
