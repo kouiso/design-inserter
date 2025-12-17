@@ -1,14 +1,14 @@
 <?php
 /**
- * Template Name: メディア
+ * Template Name: ニュース・お知らせ
  */
 global $description;
 $description = '';
 get_header();
 
-// メディア投稿一覧を取得
-$media_posts = get_posts( array(
-    'post_type'      => 'media_post',
+// ニュース投稿一覧を取得
+$news_posts = get_posts( array(
+    'post_type'      => 'news',
     'posts_per_page' => -1,
     'orderby'        => 'date',
     'order'          => 'DESC',
@@ -44,24 +44,32 @@ $media_posts = get_posts( array(
             </div>
 
             <div class="page__content">
+                <?php if ( have_posts() ) : ?>
+                    <?php while( have_posts() ) : the_post(); ?>
                 <h1 class="page__title js-page-title">
-                メディア
+                <?php the_title(); ?>
                 </h1>
-                <div class="page__inner page__inner--narrow">
+                <div class="page__inner" style="padding-bottom: 40px;">
+                <?php the_content(); ?>
+                </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+
+                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
 
                     <div class="story">
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( $media_posts ) : ?>
-                                <?php foreach ( $media_posts as $media_post ) : ?>
+                            <?php if ( $news_posts ) : ?>
+                                <?php foreach ( $news_posts as $news_post ) : ?>
                                 <li class="archive__item">
-                                    <a href="<?php echo esc_url( get_permalink( $media_post->ID ) ); ?>" class="archive__link">
+                                    <a href="<?php echo esc_url( get_permalink( $news_post->ID ) ); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail( $media_post->ID ) ) : ?>
+                                        <?php if ( has_post_thumbnail( $news_post->ID ) ) : ?>
                                         <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $media_post->ID, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title( $media_post->ID ) ); ?>"
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $news_post->ID, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title( $news_post->ID ) ); ?>"
                                             class="archive__image">
                                         <?php else : ?>
                                         <img
@@ -72,10 +80,10 @@ $media_posts = get_posts( array(
                                     </div>
                                     <div class="archive__text-wrapper">
                                         <p class="archive__title">
-                                        <?php echo esc_html( get_the_title( $media_post->ID ) ); ?>
+                                        <?php echo esc_html( get_the_title( $news_post->ID ) ); ?>
                                         </p>
                                         <p class="archive__text">
-                                        <?php echo esc_html( get_the_date( 'Y.m.d', $media_post->ID ) ); ?>
+                                        <?php echo esc_html( get_the_date( 'Y.m.d', $news_post->ID ) ); ?>
                                         </p>
                                     </div>
                                     </a>
@@ -84,7 +92,7 @@ $media_posts = get_posts( array(
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">投稿はまだありません。</p>
+                                    <p class="archive__title">お知らせはまだありません。</p>
                                 </div>
                                 </li>
                             <?php endif; ?>
@@ -95,7 +103,6 @@ $media_posts = get_posts( array(
 
                 </div>
             </div>
-
 
         </div>
     </div>

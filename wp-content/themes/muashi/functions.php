@@ -109,15 +109,16 @@ function all_modified_date( $post_type = "post", $format = "Y-m-d H:i:s" ){
 }
 
 // 投稿のアーカイブページを作成する
-function post_has_archive($args, $post_type)
-{
-    if ('post' == $post_type) {
-        $args['rewrite'] = true; // リライトを有効にする
-        $args['has_archive'] = 'news'; // 任意のスラッグ名
-    }
-    return $args;
-}
-add_filter('register_post_type_args', 'post_has_archive', 10, 2);
+// NOTE: 固定ページ /news/ でニュース一覧を表示するため、通常投稿のアーカイブは無効化
+// function post_has_archive($args, $post_type)
+// {
+//     if ('post' == $post_type) {
+//         $args['rewrite'] = true; // リライトを有効にする
+//         $args['has_archive'] = 'news'; // 任意のスラッグ名
+//     }
+//     return $args;
+// }
+// add_filter('register_post_type_args', 'post_has_archive', 10, 2);
 
 
 /**
@@ -143,9 +144,10 @@ function muashi_register_media_post_type() {
     $args = array(
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => true,
+        'has_archive'        => false, // 固定ページでアーカイブ表示するためfalse
         // NOTE: /media/ はWordPressの予約語のため使用不可
-        'rewrite'            => array( 'slug' => 'media-page' ),
+        // 個別投稿のスラッグはmedia-articleに変更
+        'rewrite'            => array( 'slug' => 'media-article' ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -1288,8 +1290,8 @@ add_action( 'pre_get_posts', function( $query ) {
     if ( $query->is_tax( array( 'product_application', 'product_material', 'product_design', 'product_function', 'product_environment' ) ) ) {
         $query->set( 'post_type', array( 'product' ) );
         $query->set( 'posts_per_page', 12 );
-        $query->set( 'orderby', 'date' );
-        $query->set( 'order', 'DESC' );
+        // 日付が同じ場合にIDで並び順を一意にする（ページネーション時の重複防止）
+        $query->set( 'orderby', array( 'date' => 'DESC', 'ID' => 'DESC' ) );
     }
 } );
 
@@ -1592,4 +1594,114 @@ function muashi_render_domestic_locations_block( $attributes, $content ) {
     ob_start();
     include get_template_directory() . '/blocks/domestic-locations.php';
     return ob_get_clean();
+}
+
+/**
+ * サイドバーナビゲーション用メニューロケーション登録
+ */
+function muashi_register_sidebar_nav_menus() {
+    register_nav_menus( array(
+        'sidebar_contact'    => 'お問い合わせ・資料請求用サイドバー',
+        'sidebar_news_media' => 'ニュース・メディア用サイドバー',
+    ) );
+}
+add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
+
+/**
+ * サイドバーナビゲーション用カスタムウォーカー
+ * トップレベル項目と子メニュー項目を表示
+ * 子項目は行頭を下げて表示（常に展開状態）
+ */
+class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
+
+    /**
+     * メニュー項目の開始タグを出力
+     */
+    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+        $is_current   = $item->current || $item->current_item_ancestor || $item->current_item_parent;
+        $has_children = in_array( 'menu-item-has-children', $item->classes, true );
+
+        // depth 0: トップレベル項目
+        if ( $depth === 0 ) {
+            $classes = array( 'navigation__item' );
+            if ( $is_current ) {
+                $classes[] = 'is-active';
+            }
+            $class_attr = implode( ' ', array_filter( $classes ) );
+            $output .= '<li class="' . esc_attr( $class_attr ) . '">';
+
+            $url = $item->url;
+
+            // 現在のページはリンクなしのテキスト
+            if ( $item->current ) {
+                $output .= '<p class="navigation__item-title">';
+                $output .= esc_html( $item->title );
+                $output .= '</p>';
+            } else {
+                $target = '';
+                if ( $item->target === '_blank' ) {
+                    $target = ' target="_blank" rel="noopener noreferrer"';
+                }
+                $output .= '<a href="' . esc_url( $url ) . '" class="navigation__item-title"' . $target . '>';
+                $output .= esc_html( $item->title );
+                $output .= '</a>';
+            }
+        } else {
+            // depth > 0: 子項目（インデント付き）
+            $output .= '<li class="navigation__sub-item">';
+            $target = '';
+            if ( $item->target === '_blank' ) {
+                $target = ' target="_blank" rel="noopener noreferrer"';
+            }
+            $output .= '<a href="' . esc_url( $item->url ) . '" class="navigation__sub-link"' . $target . '>';
+            $output .= esc_html( $item->title );
+            $output .= '</a>';
+        }
+    }
+
+    /**
+     * メニュー項目の終了タグを出力
+     */
+    public function end_el( &$output, $item, $depth = 0, $args = null ) {
+        $output .= '</li>';
+    }
+
+    /**
+     * サブメニューの開始タグを出力（常に展開）
+     */
+    public function start_lvl( &$output, $depth = 0, $args = null ) {
+        $output .= '<ul class="navigation__sub-list">';
+    }
+
+    /**
+     * サブメニューの終了タグを出力
+     */
+    public function end_lvl( &$output, $depth = 0, $args = null ) {
+        $output .= '</ul>';
+    }
+}
+
+/**
+ * サイドバーナビゲーションを出力
+ *
+ * @param string $location メニューロケーション名
+ */
+function muashi_render_sidebar_navigation( $location ) {
+    if ( ! has_nav_menu( $location ) ) {
+        return;
+    }
+
+    echo '<div class="navigation">';
+    echo '<div class="navigation__inner">';
+
+    wp_nav_menu( array(
+        'theme_location' => $location,
+        'container'      => false,
+        'items_wrap'     => '<ul class="navigation__list">%3$s</ul>',
+        'walker'         => new Muashi_Sidebar_Nav_Walker(),
+        'depth'          => 2,
+    ) );
+
+    echo '</div>';
+    echo '</div>';
 }
