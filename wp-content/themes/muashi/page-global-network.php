@@ -22,32 +22,7 @@ $globalnetwork_posts = get_posts( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <a href="<?php echo URL_TECHNOLOGY; ?>" class="navigation__item-title">
-                    最先端の開発技術力
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    グローバルネットワーク
-                    </p>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_SUSTAINABILITY; ?>" class="navigation__item-title">
-                    サステナブルなビジネス展開
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_CUSTOMIZATION; ?>" class="navigation__item-title">
-                    顧客志向のカスタマイズ
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_global_network' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">

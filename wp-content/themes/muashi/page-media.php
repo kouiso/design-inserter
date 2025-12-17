@@ -22,17 +22,7 @@ $media_posts = get_posts( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    メディア
-                    </p>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_news_media' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -40,8 +30,8 @@ $media_posts = get_posts( array(
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/story/kv.jpg',
-                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/story/kv_sp.jpg',
+                    'fallback_pc'    => get_stylesheet_directory_uri() . '/assets/img/page/kv.jpg',
+                    'fallback_sp'    => get_stylesheet_directory_uri() . '/assets/img/page/kv_sp.jpg',
                     'include_source' => true,
                 ) );
                 ?>

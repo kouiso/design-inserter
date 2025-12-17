@@ -22,24 +22,7 @@ $career_posts = get_posts( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    採用情報
-                    </p>
-                </li>
-                <?php foreach ( $career_posts as $career_post ) : ?>
-                <li class="navigation__item">
-                    <a href="<?php echo esc_url( get_permalink( $career_post->ID ) ); ?>" class="navigation__item-title">
-                        <?php echo esc_html( get_the_title( $career_post->ID ) ); ?>
-                    </a>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_career' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">

@@ -11,59 +11,7 @@ get_header();
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    企業情報
-                    </p>
-                    <ul class="navigation__sub-list">
-                        <li class="navigation__sub-item">
-                            <a href="#about-01" class="navigation__sub-link">
-                            武蔵塗料グループについて
-                            </a>
-                        </li>
-                        <li class="navigation__sub-item">
-                            <a href="#about-02" class="navigation__sub-link">
-                            経営理念
-                            </a>
-                        </li>
-                        <li class="navigation__sub-item">
-                            <a href="#about-03" class="navigation__sub-link">
-                            色と機能で世界を豊かに
-                            </a>
-                        </li>
-                        <li class="navigation__sub-item">
-                            <a href="#about-04" class="navigation__sub-link">
-                            コーポレートアイデンティティ
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
-                    ヒストリー
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
-                    会社概要
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_STORY; ?>" class="navigation__item-title">
-                    ストーリー
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
-                    お客様の声
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_about_us' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">

@@ -22,37 +22,7 @@ $story_posts = get_posts( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <a href="<?php echo URL_ABOUT_US; ?>" class="navigation__item-title">
-                    企業情報
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_HISTORY; ?>" class="navigation__item-title">
-                    ヒストリー
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_COMPANY; ?>" class="navigation__item-title">
-                    会社概要
-                    </a>
-                </li>
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    ストーリー
-                    </p>
-                </li>
-                <li class="navigation__item">
-                    <a href="<?php echo URL_VOICE; ?>" class="navigation__item-title">
-                    お客様の声
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_story' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
