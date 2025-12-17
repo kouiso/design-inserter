@@ -186,15 +186,7 @@ if ( have_posts() ) {
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <span class="navigation__item-title is-current">資料ダウンロード</span>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_contact' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
