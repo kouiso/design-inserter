@@ -1593,6 +1593,7 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_story'          => 'ストーリー用サイドバー',
         'sidebar_sustainability' => 'サステナビリティ用サイドバー',
         'sidebar_career'         => '採用情報用サイドバー',
+        'sidebar_interview'      => 'インタビュー用サイドバー',
         'sidebar_history'        => 'ヒストリー用サイドバー',
         'sidebar_company'        => '会社概要用サイドバー',
         'sidebar_global_network' => 'グローバルネットワーク用サイドバー',

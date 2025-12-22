@@ -22,17 +22,7 @@ $interview_posts = get_posts( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    インタビュー
-                    </p>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_interview' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
