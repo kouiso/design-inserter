@@ -6,10 +6,14 @@ global $description;
 $description = '';
 get_header();
 
-// インタビュー投稿一覧を取得
-$interview_posts = get_posts( array(
+// ページネーション用に現在のページ番号を取得
+$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+
+// インタビュー投稿一覧を取得（WP_Queryでページネーション対応）
+$interview_query = new WP_Query( array(
     'post_type'      => 'interview',
-    'posts_per_page' => -1,
+    'posts_per_page' => 12,
+    'paged'          => $paged,
     'orderby'        => 'date',
     'order'          => 'DESC',
 ) );
@@ -61,15 +65,15 @@ $interview_posts = get_posts( array(
                         <div class="archive">
 
                             <ul class="archive__list">
-                            <?php if ( $interview_posts ) : ?>
-                                <?php foreach ( $interview_posts as $interview_post ) : ?>
+                            <?php if ( $interview_query->have_posts() ) : ?>
+                                <?php while ( $interview_query->have_posts() ) : $interview_query->the_post(); ?>
                                 <li class="archive__item">
-                                    <a href="<?php echo esc_url( get_permalink( $interview_post->ID ) ); ?>" class="archive__link">
+                                    <a href="<?php the_permalink(); ?>" class="archive__link">
                                     <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail( $interview_post->ID ) ) : ?>
+                                        <?php if ( has_post_thumbnail() ) : ?>
                                         <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( $interview_post->ID, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title( $interview_post->ID ) ); ?>"
+                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
+                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
                                             class="archive__image">
                                         <?php else : ?>
                                         <img
@@ -80,15 +84,16 @@ $interview_posts = get_posts( array(
                                     </div>
                                     <div class="archive__text-wrapper">
                                         <p class="archive__title">
-                                        <?php echo esc_html( get_the_title( $interview_post->ID ) ); ?>
+                                        <?php the_title(); ?>
                                         </p>
                                         <p class="archive__text">
-                                        <?php echo esc_html( get_the_date( 'Y.m.d', $interview_post->ID ) ); ?>
+                                        <?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?>
                                         </p>
                                     </div>
                                     </a>
                                 </li>
-                                <?php endforeach; ?>
+                                <?php endwhile; ?>
+                                <?php wp_reset_postdata(); ?>
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
@@ -97,6 +102,8 @@ $interview_posts = get_posts( array(
                                 </li>
                             <?php endif; ?>
                             </ul>
+
+                            <?php ts_render_pagination( $interview_query ); ?>
 
                         </div>
                     </div>
