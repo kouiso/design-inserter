@@ -15,35 +15,9 @@ get_header();
 
     <?php
     $interview_archive_url = defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : home_url( '/career/interview/' );
-    $current_post_id = get_the_ID();
-
-    // インタビュー投稿一覧を取得
-    $interview_posts = get_posts( array(
-        'post_type'      => 'interview',
-        'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
     ?>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    インタビュー
-                    </p>
-                </li>
-                <?php foreach ( $interview_posts as $interview_post ) : ?>
-                <li class="navigation__item<?php echo ( $interview_post->ID === $current_post_id ) ? ' is-current' : ''; ?>">
-                    <a href="<?php echo esc_url( get_permalink( $interview_post->ID ) ); ?>" class="navigation__item-title">
-                        <?php echo esc_html( get_the_title( $interview_post->ID ) ); ?>
-                    </a>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_interview' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
