@@ -78,10 +78,10 @@ get_header();
                 </a>
             </li>
             <li class="top-kv__nav-item">
-                <a href="" class="top-kv__nav-link top-kv__nav-link--lang">
-                    <span class="top-kv__nav-link-text top-kv__nav-link-text--lang">En</span>
-                    <span class="top-kv__nav-link-text top-kv__nav-link-text--lang">中文</span>
-                </a>
+                <div class="top-kv__nav-link top-kv__nav-link--lang">
+                    <a href="" class="top-kv__nav-link-text top-kv__nav-link-text--lang">En</a>
+                    <a href="https://www.musashipaintchina.com/" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                </div>
             </li>
         </ul>
     </nav>
