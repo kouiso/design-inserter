@@ -678,11 +678,11 @@ function create_post_type() {
                 'edit_item'     => '製品を編集',
             ),
             'public'        => true,
-            'has_archive'   => 'products',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'products'),
+            'rewrite'       => array('slug' => 'product'),
             'menu_icon'     => 'dashicons-cart',
         )
     );
@@ -719,11 +719,11 @@ function create_post_type() {
                 'edit_item'     => 'お客様の声を編集',
             ),
             'public'        => true,
-            'has_archive'   => 'voices',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
-            'rewrite'       => array('slug' => 'voices'),
+            'rewrite'       => array('slug' => 'voice'),
             'menu_icon'     => 'dashicons-testimonial',
         )
     );
@@ -739,11 +739,11 @@ function create_post_type() {
                 'edit_item'     => '採用情報を編集',
             ),
             'public'        => true,
-            'has_archive'   => 'careers',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'careers'),
+            'rewrite'       => array('slug' => 'career'),
             'menu_icon'     => 'dashicons-businessperson',
         )
     );
@@ -759,12 +759,12 @@ function create_post_type() {
                 'edit_item'     => 'インタビューを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'careers/interview',
+            'has_archive'   => 'career/interview',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
             'rewrite'       => array(
-                'slug'       => 'careers/interview',
+                'slug'       => 'career/interview',
                 'with_front' => false,
             ),
             'menu_icon'     => 'dashicons-format-chat',
