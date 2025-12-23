@@ -795,25 +795,6 @@ function create_post_type() {
 add_action('init', 'create_post_type');
 
 /**
- * /career/interview/ で固定ページを優先させるためのリライトルール調整
- * NOTE: interview CPTのrewriteスラッグがcareer/interviewのため、
- *       has_archive=falseでもpost_typeルールが生成される。
- *       固定ページを優先させるためにこのフィルターが必要。
- */
-function muashi_fix_interview_rewrite_rules($rules) {
-    $new_rules = array();
-    $new_rules['career/interview/?$'] = 'index.php?pagename=career/interview';
-    foreach ($rules as $pattern => $query) {
-        if ($pattern === '^career/interview/?$' && strpos($query, 'post_type=interview') !== false) {
-            continue;
-        }
-        $new_rules[$pattern] = $query;
-    }
-    return $new_rules;
-}
-add_filter('rewrite_rules_array', 'muashi_fix_interview_rewrite_rules', 999);
-
-/**
  * 製品情報タクソノミー設定 (固定値)
  */
 function muashi_get_product_taxonomy_base_config() {
