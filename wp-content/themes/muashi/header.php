@@ -121,7 +121,12 @@ if (is_home()){
                         <li class="header__nav-item"><a href="<?= URL_ABOUT_US ?>" class="header__nav-link">私たちについて</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CAREER ?>" class="header__nav-link">採用情報</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
-                        <li class="header__nav-item"><a href="" class="header__nav-link">En | 中文</a></li>
+                        <li class="header__nav-item header__nav-item--lang">
+                            <span class="header__nav-link">
+                                <a href="" class="header__nav-link--lang">En</a>
+                                <a href="https://www.musashipaintchina.com/" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                            </span>
+                        </li>
                     </ul>
                     <div class="header__nav-icon">
                         <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,7 +175,12 @@ if (is_home()){
                         <li class="header__nav-item"><a href="<?= URL_ABOUT_US ?>" class="header__nav-link">私たちについて</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CAREER ?>" class="header__nav-link">採用情報</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
-                        <li class="header__nav-item header__nav-item--lang"><a href="" class="header__nav-link header__nav-link--lang">En</a><a href="" class="header__nav-link header__nav-link--lang">中文</a></li>
+                        <li class="header__nav-item header__nav-item--lang">
+                            <span class="header__nav-link">
+                                <a href="" class="header__nav-link--lang">En</a>
+                                <a href="https://www.musashipaintchina.com/" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                            </span>
+                        </li>
                     </ul>
                     <div class="header__nav-icon">
                         <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
