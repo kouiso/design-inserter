@@ -14,7 +14,7 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <?php
-    $interview_archive_url = defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : home_url( '/career/interview/' );
+    $interview_archive_url = defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : home_url( '/careers/interview/' );
     ?>
 
     <?php muashi_render_sidebar_navigation( 'sidebar_interview' ); ?>
