@@ -795,6 +795,38 @@ function create_post_type() {
 add_action('init', 'create_post_type');
 
 /**
+ * interview固定ページ用のリライトルール修復
+ * NOTE: interview CPTのrewrite slugがcareer/interviewのため、古いDBキャッシュが残っていると
+ *       固定ページのルールが生成されない。DBのrewrite_rulesオプションを削除して再生成する。
+ */
+function muashi_fix_interview_rewrite() {
+    if ( get_option('muashi_interview_rewrite_fixed') ) {
+        return; // 1回だけ実行
+    }
+    
+    $rules = get_option('rewrite_rules');
+    $has_page_rule = false;
+    
+    // 固定ページ用ルールが存在するか確認
+    foreach ($rules as $pattern => $query) {
+        if (strpos($pattern, 'career/interview') !== false && strpos($query, 'pagename') !== false) {
+            $has_page_rule = true;
+            break;
+        }
+    }
+    
+    // なければDBをクリアして再生成
+    if (!$has_page_rule) {
+        delete_option('rewrite_rules');
+        global $wp_rewrite;
+        $wp_rewrite->flush_rules(true);
+    }
+    
+    update_option('muashi_interview_rewrite_fixed', 1);
+}
+add_action('init', 'muashi_fix_interview_rewrite', 20);
+
+/**
  * 製品情報タクソノミー設定 (固定値)
  */
 function muashi_get_product_taxonomy_base_config() {
