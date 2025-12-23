@@ -15,35 +15,9 @@ get_header();
 
     <?php
     $career_archive_url = defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' );
-    $current_post_id = get_the_ID();
-
-    // 採用投稿一覧を取得
-    $career_posts = get_posts( array(
-        'post_type'      => 'career',
-        'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
     ?>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                    採用情報
-                    </p>
-                </li>
-                <?php foreach ( $career_posts as $career_post ) : ?>
-                <li class="navigation__item<?php echo ( $career_post->ID === $current_post_id ) ? ' is-current' : ''; ?>">
-                    <a href="<?php echo esc_url( get_permalink( $career_post->ID ) ); ?>" class="navigation__item-title">
-                        <?php echo esc_html( get_the_title( $career_post->ID ) ); ?>
-                    </a>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_career' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">

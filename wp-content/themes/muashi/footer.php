@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="footer__item">
-                    <p class="footer__title">製品について</p>
+                    <a href="<?= URL_PRODUCT ?>" class="footer__title">製品について</a>
                     <ul class="footer__sub-list">
                         <li class="footer__sub-item">
                             <button class="footer__accordion js-accordion-button">
@@ -131,7 +131,7 @@
                     </ul>
                 </li>
                 <li class="footer__item">
-                    <p class="footer__title">私たちについて</p>
+                    <a href="<?= URL_ABOUT_US ?>" class="footer__title">私たちについて</a>
                     <ul class="footer__sub-list">
                         <li class="footer__sub-item">
                             <button class="footer__accordion js-accordion-button">
@@ -295,7 +295,7 @@
 
         <nav class="footer__nav footer__nav--pc">
             <div class="footer__nav-pc-section">
-                <p class="footer__nav-pc-title">製品について</p>
+                <a href="<?= URL_PRODUCT ?>" class="footer__nav-pc-title">製品について</a>
                 <div class="footer__nav-pc-contents">
                     <div class="footer__nav-pc-item">
                         <p class="footer__nav-pc-text">製品情報</p>
@@ -317,7 +317,7 @@
             </div>
 
             <div class="footer__nav-pc-section">
-                <p class="footer__nav-pc-title">私たちについて</p>
+                <a href="<?= URL_ABOUT_US ?>" class="footer__nav-pc-title">私たちについて</a>
                 <div class="footer__nav-pc-contents">
                     <div class="footer__nav-pc-item">
                         <p class="footer__nav-pc-text">武蔵塗料グループについて</p>
