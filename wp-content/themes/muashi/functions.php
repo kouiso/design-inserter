@@ -802,31 +802,31 @@ function muashi_get_product_taxonomy_base_config() {
         'product_application' => array(
             'label'        => '用途でえらぶ',
             'plural'       => '用途でえらぶ',
-            'slug'         => 'products/application',
+            'slug'         => 'product/application',
             'hierarchical' => true,
         ),
         'product_material'   => array(
             'label'        => '基材でえらぶ',
             'plural'       => '基材でえらぶ',
-            'slug'         => 'products/material',
+            'slug'         => 'product/material',
             'hierarchical' => true,
         ),
         'product_design'     => array(
             'label'        => '意匠性でえらぶ',
             'plural'       => '意匠性でえらぶ',
-            'slug'         => 'products/design',
+            'slug'         => 'product/design',
             'hierarchical' => true,
         ),
         'product_function'   => array(
             'label'        => '機能でえらぶ',
             'plural'       => '機能でえらぶ',
-            'slug'         => 'products/function',
+            'slug'         => 'product/function',
             'hierarchical' => true,
         ),
         'product_environment'=> array(
             'label'        => '環境キーワードでえらぶ',
             'plural'       => '環境キーワードでえらぶ',
-            'slug'         => 'products/environment',
+            'slug'         => 'product/environment',
             'hierarchical' => true,
         ),
     );
@@ -1237,8 +1237,8 @@ add_action( 'init', function() {
  * インタビュー用のリライトルールを追加
  */
 function register_interview_rewrite_rules() {
-    add_rewrite_rule('^careers/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
-    add_rewrite_rule('^careers/interview/?$', 'index.php?post_type=interview', 'top');
+    add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
+    add_rewrite_rule('^career/interview/?$', 'index.php?post_type=interview', 'top');
 }
 add_action('init', 'register_interview_rewrite_rules', 11);
 
@@ -1247,7 +1247,7 @@ add_action('init', 'register_interview_rewrite_rules', 11);
  */
 add_filter( 'post_type_link', function( $post_link, $post ) {
     if ( 'interview' === $post->post_type ) {
-        return home_url( user_trailingslashit( 'careers/interview/' . $post->post_name ) );
+        return home_url( user_trailingslashit( 'career/interview/' . $post->post_name ) );
     }
     return $post_link;
 }, 10, 2 );
