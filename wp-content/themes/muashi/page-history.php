@@ -42,27 +42,9 @@ get_header();
                     <?php the_title(); ?>
                     </h1>
                     <div class="page__inner page__inner--history">
-                        <section class="history">
-                            <div class="history__header">
-                                <p class="history__description">1958年の創業以来、半世紀にわたり武蔵塗料グループはお客様と共に歩んできました。<br>
-                                    創業からの主な出来事と当時の主力製品をご紹介します。
-                                </p>
-                            </div>
-                            <div class="history__navigation history__navigation--top">
-                                <p class="history__navigation-title">武蔵塗料グループ年表</p>
-                                <ul class="history__navigation-list">
-                                    <li class="history__navigation-item">
-                                        <a href="<?php echo URL_HISTORY_FOUNDING; ?>">創業期 1958年〜</a>
-                                    </li>
-                                    <li class="history__navigation-item">
-                                        <a href="<?php echo URL_HISTORY_INNOVATION; ?>">技術革新期 1980年〜</a>
-                                    </li>
-                                    <li class="history__navigation-item">
-                                        <a href="<?php echo URL_HISTORY_GLOBAL; ?>">グローバル展開期 2000年〜</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </section>
+                        <?php
+                        the_content();
+                        ?>
                     </div>
                 <?php endwhile; ?>
             <?php endif; ?>
