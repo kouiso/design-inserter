@@ -131,9 +131,9 @@ function muashi_register_media_post_type() {
     $args = array(
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => true,
+        'has_archive'        => false,  // 固定ページ(page-media.php)でアーカイブ表示するため無効化
         // NOTE: /media/ はWordPressの予約語のため使用不可
-        'rewrite'            => array( 'slug' => 'media-page' ),
+        'rewrite'            => false,  // リライトルールは register_media_post_rewrite_rules() で手動管理
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -1231,6 +1231,26 @@ add_action( 'init', function() {
 }, 12 );
 
 /**
+ * メディア投稿用のリライトルールを追加
+ */
+function register_media_post_rewrite_rules() {
+    // メディア投稿の個別ページのみを処理（media-page/[slug]の形式）
+    // media-page/ は固定ページで処理されるため、投稿の個別ページのルールのみ追加
+    add_rewrite_rule('^media-page/([^/]+)/?$', 'index.php?post_type=media_post&name=$matches[1]', 'top');
+}
+add_action('init', 'register_media_post_rewrite_rules', 11);
+
+/**
+ * メディア投稿のパーマリンクをmedia-page配下に固定
+ */
+add_filter( 'post_type_link', function( $post_link, $post ) {
+    if ( 'media_post' === $post->post_type ) {
+        return home_url( user_trailingslashit( 'media-page/' . $post->post_name ) );
+    }
+    return $post_link;
+}, 10, 2 );
+
+/**
  * インタビュー用のリライトルールを追加
  */
 function register_interview_rewrite_rules() {
@@ -1239,6 +1259,16 @@ function register_interview_rewrite_rules() {
     add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
 }
 add_action('init', 'register_interview_rewrite_rules', 11);
+
+/**
+ * インタビューのパーマリンクを採用配下に固定
+ */
+add_filter( 'post_type_link', function( $post_link, $post ) {
+    if ( 'interview' === $post->post_type ) {
+        return home_url( user_trailingslashit( 'career/interview/' . $post->post_name ) );
+    }
+    return $post_link;
+}, 10, 2 );
 
 /**
  * 製品タクソノミーのテンプレートを共通化
@@ -1285,6 +1315,7 @@ add_action( 'pre_get_posts', function( $query ) {
 
 /**
  * 共通KV画像の出力ヘルパー
+ * アイキャッチ画像を優先し、なければfallback画像を使用
  */
 function muashi_render_kv_picture( $args = array() ) {
     $args = wp_parse_args(
@@ -1299,16 +1330,13 @@ function muashi_render_kv_picture( $args = array() ) {
         )
     );
 
-    if ( $args['fallback_pc'] === '' ) {
-        return;
-    }
-
     $post_id        = $args['post_id'] ? (int) $args['post_id'] : 0;
     $include_source = ! empty( $args['include_source'] );
     $fallback_pc    = $args['fallback_pc'];
     $fallback_sp    = $args['fallback_sp'] !== '' ? $args['fallback_sp'] : $fallback_pc;
     $media_query    = $include_source ? $args['media_query'] : '';
 
+    // アイキャッチ画像がある場合は優先して表示
     if ( $post_id && has_post_thumbnail( $post_id ) ) {
         $thumbnail_id     = get_post_thumbnail_id( $post_id );
         $thumbnail_pc     = wp_get_attachment_image_url( $thumbnail_id, 'full' );
@@ -1328,6 +1356,11 @@ function muashi_render_kv_picture( $args = array() ) {
         $img_src = $thumbnail_sp ? $thumbnail_sp : $thumbnail_pc;
         echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $thumbnail_alt ) . '">';
         echo '</picture>';
+        return;
+    }
+
+    // アイキャッチがなくfallback_pcも指定されていない場合は何も出力しない
+    if ( $fallback_pc === '' ) {
         return;
     }
 
