@@ -1234,8 +1234,9 @@ add_action( 'init', function() {
  * インタビュー用のリライトルールを追加
  */
 function register_interview_rewrite_rules() {
-    // インタビュー投稿の個別ページのみを処理（career/interview/[slug]の形式）
-    // career/interview/ は固定ページで処理されるため、投稿の個別ページのルールのみ追加
+    // career/interview/ は固定ページ(page_id=3067)で処理
+    add_rewrite_rule('^career/interview/?$', 'index.php?pagename=career/interview', 'top');
+    // インタビュー投稿の個別ページ（career/interview/[slug]の形式）
     add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
 }
 add_action('init', 'register_interview_rewrite_rules', 11);
