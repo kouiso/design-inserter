@@ -133,7 +133,7 @@ function muashi_register_media_post_type() {
         'public'             => true,
         'has_archive'        => false,  // 固定ページ(page-media.php)でアーカイブ表示するため無効化
         // NOTE: /media/ はWordPressの予約語のため使用不可
-        'rewrite'            => false,  // リライトルールは register_media_post_rewrite_rules() で手動管理
+        'rewrite'            => array( 'slug' => 'media-page' ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -1229,26 +1229,6 @@ add_action( 'init', function() {
         add_rewrite_rule( '^' . $escaped_slug . '/' . $term_pattern . '/?$', 'index.php?' . $taxonomy . '=$matches[1]', 'top' );
     }
 }, 12 );
-
-/**
- * メディア投稿用のリライトルールを追加
- */
-function register_media_post_rewrite_rules() {
-    // メディア投稿の個別ページのみを処理（media-page/[slug]の形式）
-    // media-page/ は固定ページで処理されるため、投稿の個別ページのルールのみ追加
-    add_rewrite_rule('^media-page/([^/]+)/?$', 'index.php?post_type=media_post&name=$matches[1]', 'top');
-}
-add_action('init', 'register_media_post_rewrite_rules', 11);
-
-/**
- * メディア投稿のパーマリンクをmedia-page配下に固定
- */
-add_filter( 'post_type_link', function( $post_link, $post ) {
-    if ( 'media_post' === $post->post_type ) {
-        return home_url( user_trailingslashit( 'media-page/' . $post->post_name ) );
-    }
-    return $post_link;
-}, 10, 2 );
 
 /**
  * インタビュー用のリライトルールを追加
