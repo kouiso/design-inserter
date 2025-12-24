@@ -1,4 +1,7 @@
 <?php
+/**
+ * Template Name: カスタマイズ
+ */
 global $description;
 $description = '';
 get_header();

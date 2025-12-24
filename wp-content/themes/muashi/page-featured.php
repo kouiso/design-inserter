@@ -1,4 +1,7 @@
 <?php
+/**
+ * Template Name: 注目製品
+ */
 global $description;
 $description = '';
 get_header();
