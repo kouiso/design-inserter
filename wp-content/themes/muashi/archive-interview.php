@@ -41,7 +41,13 @@ $page_settings = muashi_get_archive_page_settings( 'interview' );
                 <h1 class="page__title js-page-title">
                 <?php echo esc_html( $page_settings['title'] ); ?>
                 </h1>
-                <div class="page__inner page__inner--narrow">
+                <?php if ( ! empty( $page_settings['content'] ) ) : ?>
+                <div class="page__inner" style="padding-bottom: 40px;">
+                <?php echo $page_settings['content']; ?>
+                </div>
+                <?php endif; ?>
+
+                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
 
                     <div class="story">
                         <div class="archive">
