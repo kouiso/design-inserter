@@ -1345,14 +1345,6 @@ add_action( 'pre_get_posts', function( $query ) {
         $query->set( 'orderby', 'date' );
         $query->set( 'order', 'DESC' );
     }
-
-    // post (news) アーカイブ: 12件/ページ, date DESC
-    // デフォルト投稿タイプは is_home() で判定
-    if ( $query->is_home() ) {
-        $query->set( 'posts_per_page', 12 );
-        $query->set( 'orderby', 'date' );
-        $query->set( 'order', 'DESC' );
-    }
 } );
 
 /**
@@ -1372,7 +1364,6 @@ function muashi_get_archive_page_settings( $post_type ) {
         'globalnetwork' => 'global-network',
         'media_post'    => 'media',
         'product'       => 'product',
-        'post'          => 'news',
     );
 
     $slug = isset( $page_slug_map[ $post_type ] ) ? $page_slug_map[ $post_type ] : '';
