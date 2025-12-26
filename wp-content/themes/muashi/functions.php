@@ -131,9 +131,12 @@ function muashi_register_media_post_type() {
     $args = array(
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => false,  // 固定ページ(page-media.php)でアーカイブ表示するため無効化
+        'has_archive'        => 'media-page',
         // NOTE: /media/ はWordPressの予約語のため使用不可
-        'rewrite'            => array( 'slug' => 'media-page' ),
+        'rewrite'            => array(
+            'slug'       => 'media-page',
+            'with_front' => false,
+        ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -678,17 +681,19 @@ function create_post_type() {
                 'edit_item'     => '製品を編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'product',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'product'),
+            'rewrite'       => array(
+                'slug'       => 'product',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-cart',
         )
     );
 
     // ストーリー
-    // NOTE: 固定ページ(page-story.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'story',
         array(
@@ -699,11 +704,14 @@ function create_post_type() {
                 'edit_item'     => 'ストーリーを編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'story',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'story'),
+            'rewrite'       => array(
+                'slug'       => 'story',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-book-alt',
         )
     );
@@ -719,11 +727,14 @@ function create_post_type() {
                 'edit_item'     => 'お客様の声を編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'voice',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
-            'rewrite'       => array('slug' => 'voice'),
+            'rewrite'       => array(
+                'slug'       => 'voice',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-testimonial',
         )
     );
@@ -759,17 +770,19 @@ function create_post_type() {
                 'edit_item'     => 'インタビューを編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'career/interview',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => false,  // リライトルールは register_interview_rewrite_rules() で手動管理
+            'rewrite'       => array(
+                'slug'       => 'career/interview',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-format-chat',
         )
     );
 
     // グローバルネットワーク
-    // NOTE: 固定ページ(page-global-network.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'globalnetwork',
         array(
@@ -780,11 +793,14 @@ function create_post_type() {
                 'edit_item'     => 'グローバルネットワークを編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'global-network',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'global-network'),
+            'rewrite'       => array(
+                'slug'       => 'global-network',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-admin-site-alt3',
         )
     );
@@ -1232,10 +1248,11 @@ add_action( 'init', function() {
 
 /**
  * インタビュー用のリライトルールを追加
+ * NOTE: has_archive => 'career/interview' を設定しているため、
+ * アーカイブとページネーションはWordPressネイティブで処理される
+ * 個別投稿のURLのみカスタムルールで対応
  */
 function register_interview_rewrite_rules() {
-    // career/interview/ は固定ページ(page_id=3067)で処理
-    add_rewrite_rule('^career/interview/?$', 'index.php?pagename=career/interview', 'top');
     // インタビュー投稿の個別ページ（career/interview/[slug]の形式）
     add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
 }
@@ -1281,18 +1298,110 @@ add_action( 'pre_get_posts', function( $query ) {
 } );
 
 /**
- * お客様の声アーカイブをmenu_order順で並び替え
+ * カスタム投稿タイプアーカイブの表示件数・ソート順を設定
  */
 add_action( 'pre_get_posts', function( $query ) {
     if ( is_admin() || ! $query->is_main_query() ) {
         return;
     }
 
+    // story アーカイブ: 12件/ページ, date DESC
+    if ( $query->is_post_type_archive( 'story' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // voice アーカイブ: 12件/ページ, menu_order ASC
     if ( $query->is_post_type_archive( 'voice' ) ) {
+        $query->set( 'posts_per_page', 12 );
         $query->set( 'orderby', 'menu_order' );
         $query->set( 'order', 'ASC' );
     }
+
+    // globalnetwork アーカイブ: 12件/ページ, date DESC
+    if ( $query->is_post_type_archive( 'globalnetwork' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // media_post アーカイブ: 全件表示, date DESC
+    if ( $query->is_post_type_archive( 'media_post' ) ) {
+        $query->set( 'posts_per_page', -1 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // product アーカイブ: 12件/ページ, date ASC, ID ASC
+    if ( $query->is_post_type_archive( 'product' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', array( 'date' => 'ASC', 'ID' => 'ASC' ) );
+    }
+
+    // interview アーカイブ: 12件/ページ, date DESC
+    if ( $query->is_post_type_archive( 'interview' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // post (news) アーカイブ: 12件/ページ, date DESC
+    // デフォルト投稿タイプは is_home() で判定
+    if ( $query->is_home() ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
 } );
+
+/**
+ * アーカイブページ用の固定ページ設定を取得するヘルパー関数
+ * 投稿タイプに対応する固定ページからKV画像、タイトル、本文を取得
+ *
+ * @param string $post_type 投稿タイプ名
+ * @return array page_id, title, content を含む配列
+ */
+function muashi_get_archive_page_settings( $post_type ) {
+    // 投稿タイプと固定ページスラッグのマッピング
+    $page_slug_map = array(
+        'interview'     => 'career/interview',
+        'story'         => 'story',
+        'voice'         => 'voice',
+        'career'        => 'career',
+        'globalnetwork' => 'global-network',
+        'media_post'    => 'media',
+        'product'       => 'product',
+        'post'          => 'news',
+    );
+
+    $slug = isset( $page_slug_map[ $post_type ] ) ? $page_slug_map[ $post_type ] : '';
+
+    if ( empty( $slug ) ) {
+        return array(
+            'page_id' => 0,
+            'title'   => '',
+            'content' => '',
+        );
+    }
+
+    // スラッグから固定ページを取得
+    $page = get_page_by_path( $slug );
+
+    if ( ! $page ) {
+        return array(
+            'page_id' => 0,
+            'title'   => '',
+            'content' => '',
+        );
+    }
+
+    return array(
+        'page_id' => $page->ID,
+        'title'   => $page->post_title,
+        'content' => apply_filters( 'the_content', $page->post_content ),
+    );
+}
 
 /**
  * 共通KV画像の出力ヘルパー
