@@ -283,11 +283,15 @@
     }
   }
 
-  &__card-links {
+  &__card-links,
+  &__links {
     margin-top: auto;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
+    width: 100%;
   }
 
   &__link {
@@ -297,10 +301,47 @@
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
+    white-space: nowrap;
 
     &--detail {
       color: inherit;
     }
+
+    &--request,
+    &--catalog {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 999px;
+      background: #0c3c78;
+      color: #fff !important;
+      font-size: 13px;
+      font-weight: 600;
+      font-style: normal !important;
+      text-decoration: none !important;
+      cursor: pointer;
+      transition: background .2s ease;
+      line-height: 1;
+
+      &:hover {
+        background: #082850;
+        color: #fff !important;
+        text-decoration: none !important;
+      }
+    }
+  }
+
+  // aタグ用の追加スタイル（詳細度を上げる）
+  a.download__link--catalog {
+    font-style: normal !important;
+    text-decoration: none !important;
+    color: #fff !important;
+  }
+
+  &__main--full {
+    width: 100%;
   }
 
   &__contact-note {

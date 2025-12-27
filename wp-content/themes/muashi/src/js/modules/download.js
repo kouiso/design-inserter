@@ -5,6 +5,8 @@ class DownloadPage {
   constructor(root, data) {
     this.root = root;
     this.data = data || {};
+    this.pageType = root.getAttribute('data-page-type') || 'document';
+    this.isDownloadPage = this.pageType === 'download';
     this.maxSelectable = Number.isFinite(this.data.maxSelectable) ? this.data.maxSelectable : DEFAULT_MAX;
     this.products = Array.isArray(this.data.products) ? this.data.products.slice() : [];
     this.taxonomies = this.data.taxonomies || {};
@@ -34,6 +36,22 @@ class DownloadPage {
     this.bootstrapSelection();
     this.renderAll();
     this.syncHiddenInputs();
+    this.scrollToInitialProduct();
+  }
+
+  scrollToInitialProduct() {
+    // downloadページで初期選択がある場合、その製品カードまでスクロール
+    if (!this.isDownloadPage || !this.sourceProductId) {
+      return;
+    }
+
+    // 少し遅延させてDOMが完全にレンダリングされてからスクロール
+    setTimeout(() => {
+      const targetCard = this.listEl ? this.listEl.querySelector(`[data-product-id="${this.sourceProductId}"]`) : null;
+      if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   }
 
   static normalizeSearchTerm(value) {
@@ -273,7 +291,7 @@ class DownloadPage {
     li.className = 'download__item';
     li.setAttribute('data-product-id', String(product.id));
 
-    if (this.state.selected.has(product.id)) {
+    if (this.isDownloadPage && this.state.selected.has(product.id)) {
       li.classList.add('is-selected');
     }
 
@@ -283,26 +301,36 @@ class DownloadPage {
     const head = document.createElement('div');
     head.className = 'download__card-head';
 
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.className = 'download__checkbox';
-    const checkboxId = `download-product-${product.id}`;
-    checkbox.id = checkboxId;
-    checkbox.value = String(product.id);
-    checkbox.checked = this.state.selected.has(product.id);
+    // downloadページではチェックボックスを表示、documentページでは非表示
+    if (this.isDownloadPage) {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'download__checkbox';
+      const checkboxId = `download-product-${product.id}`;
+      checkbox.id = checkboxId;
+      checkbox.value = String(product.id);
+      checkbox.checked = this.state.selected.has(product.id);
 
-    checkbox.addEventListener('change', (event) => {
-      const shouldSelect = event.target.checked;
-      this.handleSelect(product.id, shouldSelect);
-    });
+      checkbox.addEventListener('change', (event) => {
+        const shouldSelect = event.target.checked;
+        this.handleSelect(product.id, shouldSelect);
+      });
 
-    const label = document.createElement('label');
-    label.className = 'download__card-title';
-    label.setAttribute('for', checkboxId);
-    label.textContent = product.title;
+      const label = document.createElement('label');
+      label.className = 'download__card-title';
+      label.setAttribute('for', checkboxId);
+      label.textContent = product.title;
 
-    head.appendChild(checkbox);
-    head.appendChild(label);
+      head.appendChild(checkbox);
+      head.appendChild(label);
+    } else {
+      // documentページではタイトルのみ
+      const title = document.createElement('p');
+      title.className = 'download__card-title';
+      title.textContent = product.title;
+      head.appendChild(title);
+    }
+
     card.appendChild(head);
 
     const tags = this.buildTagList(product);
@@ -310,13 +338,53 @@ class DownloadPage {
       card.appendChild(tags);
     }
 
+    // リンクコンテナを作成
+    const linksContainer = document.createElement('div');
+    linksContainer.className = 'download__links';
+
     const detailLink = document.createElement('a');
     detailLink.className = 'download__link download__link--detail';
     detailLink.href = product.permalink;
     detailLink.target = '_blank';
     detailLink.rel = 'noopener noreferrer';
     detailLink.textContent = '製品ページ';
-    card.appendChild(detailLink);
+    linksContainer.appendChild(detailLink);
+
+    if (this.isDownloadPage) {
+      // downloadページ: カタログ請求ボタン（フォームへスクロール）
+      const requestButton = document.createElement('button');
+      requestButton.type = 'button';
+      requestButton.className = 'download__link download__link--request';
+      requestButton.textContent = 'カタログ請求';
+      
+      requestButton.addEventListener('click', () => {
+        const formSection = document.getElementById('contact-form');
+        if (formSection) {
+          const offset = 60; // 上部の余白（ピクセル）
+          const elementPosition = formSection.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - offset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+      
+      linksContainer.appendChild(requestButton);
+    } else if (product.pdfUrl) {
+      // documentページ: カタログダウンロードボタン（別タブでPDFを開くのみ）
+      const downloadLink = document.createElement('a');
+      downloadLink.className = 'download__link download__link--catalog';
+      downloadLink.href = product.pdfUrl;
+      downloadLink.target = '_blank';
+      downloadLink.rel = 'noopener noreferrer';
+      downloadLink.textContent = 'カタログダウンロード';
+      
+      linksContainer.appendChild(downloadLink);
+    }
+
+    card.appendChild(linksContainer);
     li.appendChild(card);
 
     return li;
@@ -423,11 +491,6 @@ class DownloadPage {
     }
 
     if (shouldSelect) {
-      if (!this.state.selected.has(productId) && this.state.selected.size >= this.maxSelectable) {
-        this.showFeedback((this.data.i18n && this.data.i18n.limitReached) || '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。', true);
-        this.updateRenderedSelectionState();
-        return;
-      }
       const timestamp = Date.now() + productId / 100000;
       this.state.selected.set(productId, timestamp);
     } else {
@@ -435,6 +498,7 @@ class DownloadPage {
     }
 
     this.renderSelected();
+    this.updateRenderedSelectionState();
     this.syncHiddenInputs();
   }
 

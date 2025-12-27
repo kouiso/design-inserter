@@ -10,8 +10,27 @@
     var frame;
     var $idInput = $('#muashi_product_pdf_attachment_id');
     var $urlInput = $('#muashi_product_pdf_url_display');
+    var $externalUrlInput = $('#muashi_product_pdf_external_url');
     var $selectButton = $container.find('.muashi-product-pdf-select');
     var $clearButton = $container.find('.muashi-product-pdf-clear');
+    var $mediaSection = $('#muashi-pdf-media-section');
+    var $externalSection = $('#muashi-pdf-external-section');
+    var $sourceTypeRadios = $('input[name="muashi_pdf_source_type"]');
+
+    // ラジオボタンの切り替え
+    $sourceTypeRadios.on('change', function(){
+      var sourceType = $(this).val();
+      if (sourceType === 'media') {
+        $mediaSection.show();
+        $externalSection.hide();
+        $externalUrlInput.val('');
+      } else {
+        $mediaSection.hide();
+        $externalSection.show();
+        $idInput.val('');
+        $urlInput.val('');
+      }
+    });
 
     $selectButton.on('click', function(event){
       event.preventDefault();

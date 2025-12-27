@@ -29,6 +29,16 @@ remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
 remove_action( 'wp_head', 'feed_links', 2);
 remove_action( 'wp_head', 'feed_links_extra', 3);
 
+/**
+ * /document/ページをnoindexに設定（検索エンジンに表示されない）
+ */
+function muashi_noindex_document_page() {
+    if ( is_page_template( 'page-document.php' ) ) {
+        echo '<meta name="robots" content="noindex, nofollow">' . "\n";
+    }
+}
+add_action( 'wp_head', 'muashi_noindex_document_page', 1 );
+
 //絵文字関連タグ
 remove_action( 'wp_head', 'print_emoji_detection_script', 7);
 remove_action( 'admin_print_scripts', 'print_emoji_detection_script');
@@ -278,14 +288,44 @@ function muashi_render_product_pdf_metabox( $post ) {
     wp_nonce_field('muashi_product_pdf_nonce', 'muashi_product_pdf_nonce');
 
     $attachment_id = (int) get_post_meta($post->ID, 'product_pdf_attachment_id', true);
-    $pdf_url       = $attachment_id ? wp_get_attachment_url($attachment_id) : '';
+    $external_url  = get_post_meta($post->ID, 'product_pdf_external_url', true);
+    $pdf_url       = '';
+    
+    if ( $external_url ) {
+        $pdf_url = $external_url;
+    } elseif ( $attachment_id ) {
+        $pdf_url = wp_get_attachment_url($attachment_id);
+    }
 
     echo '<div id="muashi-product-pdf-meta" class="muashi-product-pdf-meta">';
+    echo '<p><strong>PDF選択方法</strong></p>';
+    echo '<p style="margin: 10px 0;">';
+    echo '<label style="display: block; margin-bottom: 5px;">';
+    echo '<input type="radio" name="muashi_pdf_source_type" value="media" ' . checked( empty($external_url), true, false ) . ' />';
+    echo ' メディアライブラリから選択';
+    echo '</label>';
+    echo '<label style="display: block;">';
+    echo '<input type="radio" name="muashi_pdf_source_type" value="external" ' . checked( ! empty($external_url), true, false ) . ' />';
+    echo ' 外部URLを指定';
+    echo '</label>';
+    echo '</p>';
+    
+    // メディアライブラリ選択
+    echo '<div id="muashi-pdf-media-section" style="' . ( empty($external_url) ? '' : 'display:none;' ) . '">';
+    echo '<p><label for="muashi_product_pdf_url_display">PDFのURL:</label></p>';
     echo '<input type="hidden" id="muashi_product_pdf_attachment_id" name="muashi_product_pdf_attachment_id" value="' . esc_attr($attachment_id) . '">';
-    echo '<p><input type="text" id="muashi_product_pdf_url_display" class="widefat" value="' . esc_attr($pdf_url) . '" placeholder="PDFのURL" readonly></p>';
+    echo '<input type="text" id="muashi_product_pdf_url_display" class="widefat" value="' . esc_attr( empty($external_url) ? $pdf_url : '' ) . '" placeholder="PDFのURL" readonly>';
     echo '<p><button type="button" class="button muashi-product-pdf-select">PDFを選択</button> ';
     echo '<button type="button" class="button muashi-product-pdf-clear">クリア</button></p>';
-    echo '<p class="description">メディアライブラリからPDFファイルを選択してください。</p>';
+    echo '</div>';
+    
+    // 外部URL入力
+    echo '<div id="muashi-pdf-external-section" style="' . ( ! empty($external_url) ? '' : 'display:none;' ) . '">';
+    echo '<p><label for="muashi_product_pdf_external_url">外部URL:</label></p>';
+    echo '<input type="url" id="muashi_product_pdf_external_url" name="muashi_product_pdf_external_url" class="widefat" value="' . esc_attr($external_url) . '" placeholder="https://drive.google.com/...">';
+    echo '<p class="description">Google DriveなどのPDF直接リンクを入力してください。</p>';
+    echo '</div>';
+    
     echo '</div>';
 }
 
@@ -305,15 +345,26 @@ function muashi_save_product_pdf_meta( $post_id ) {
         return;
     }
 
-    if ( isset($_POST['muashi_product_pdf_attachment_id']) ) {
-        $raw_value = wp_unslash($_POST['muashi_product_pdf_attachment_id']);
-        $attachment_id = $raw_value !== '' ? (int) $raw_value : 0;
+    $source_type = isset( $_POST['muashi_pdf_source_type'] ) ? $_POST['muashi_pdf_source_type'] : 'media';
+    
+    if ( $source_type === 'external' ) {
+        // 外部URLを使用
+        $external_url = isset( $_POST['muashi_product_pdf_external_url'] ) ? esc_url_raw( $_POST['muashi_product_pdf_external_url'] ) : '';
+        update_post_meta( $post_id, 'product_pdf_external_url', $external_url );
+        delete_post_meta( $post_id, 'product_pdf_attachment_id' );
+    } else {
+        // メディアライブラリを使用
+        if ( isset($_POST['muashi_product_pdf_attachment_id']) ) {
+            $raw_value = wp_unslash($_POST['muashi_product_pdf_attachment_id']);
+            $attachment_id = $raw_value !== '' ? (int) $raw_value : 0;
 
-        if ( $attachment_id > 0 && 'attachment' === get_post_type($attachment_id) ) {
-            update_post_meta($post_id, 'product_pdf_attachment_id', $attachment_id);
-        } else {
-            delete_post_meta($post_id, 'product_pdf_attachment_id');
+            if ( $attachment_id > 0 && 'attachment' === get_post_type($attachment_id) ) {
+                update_post_meta($post_id, 'product_pdf_attachment_id', $attachment_id);
+            } else {
+                delete_post_meta($post_id, 'product_pdf_attachment_id');
+            }
         }
+        delete_post_meta( $post_id, 'product_pdf_external_url' );
     }
 }
 add_action('save_post_product', 'muashi_save_product_pdf_meta');
@@ -1703,4 +1754,3 @@ function muashi_render_sidebar_navigation( $location ) {
     echo '</div>';
     echo '</div>';
 }
-
