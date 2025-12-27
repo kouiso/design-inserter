@@ -14,58 +14,6 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <?php
-    // 本文を取得（ショートコードなども反映）
-    $raw_content = get_the_content();
-    $content     = apply_filters( 'the_content', $raw_content );
-
-    // h2見出しを収集し、idがなければ付与して本文を置換
-    $toc_items = [];
-    $used_ids  = [];
-
-    if ( preg_match_all( '/<h2([^>]*)>(.*?)<\/h2>/is', $content, $matches, PREG_SET_ORDER ) ) {
-        foreach ( $matches as $m ) {
-            $attrs = $m[1];           // 例: ' class="..."'
-            $inner = trim( wp_strip_all_tags( $m[2] ) );
-            if ( $inner === '' ) continue;
-
-            // 既存idの有無
-            $existing_id = '';
-            if ( preg_match( '/\sid=["\']([^"\']+)["\']/i', $attrs, $idmatch ) ) {
-                $existing_id = $idmatch[1];
-            }
-
-            // id生成（既存なければタイトルから生成・重複回避）
-            if ( $existing_id ) {
-                $id = $existing_id;
-            } else {
-                // sanitize_title_with_dashes は WP関数（日本語にも対応）
-                $base = sanitize_title_with_dashes( $inner );
-                $id   = $base !== '' ? $base : 'section';
-                $i    = 2;
-                while ( in_array( $id, $used_ids, true ) ) {
-                    $id = $base . '-' . $i;
-                    $i++;
-        }
-    }
-
-            $used_ids[] = $id;
-
-            // 本文側：idが無いh2にはidを付与して置換（最初の該当のみ）
-            if ( ! $existing_id ) {
-                $new_tag = '<h2' . $attrs . ' id="' . esc_attr( $id ) . '">' . $m[2] . '</h2>';
-                $content = preg_replace( '/' . preg_quote( $m[0], '/' ) . '/', addcslashes( $new_tag, '\\$' ), $content, 1 );
-            }
-
-            // 目次用に追加
-            $toc_items[] = [
-                'id'    => $id,
-                'title' => $inner,
-            ];
-        }
-    }
-    ?>
-
-    <?php
     $post_type = get_post_type();
     $back_link = '';
     if ( $post_type ) {
@@ -91,30 +39,7 @@ get_header();
     }
     ?>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                        <?php echo esc_html( get_the_title() ); ?>
-                    </p>
-                    <ul class="navigation__sub-list">
-                        <?php if ( ! empty( $toc_items ) ) : ?>
-                            <?php foreach ( $toc_items as $i => $toc ) : ?>
-                                <li class="navigation__sub-item">
-                                    <a href="#<?php echo esc_attr( $toc['id'] ); ?>" class="navigation__sub-link">
-                                        <?php echo esc_html( $toc['title'] ); ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <!-- h2が無い場合は目次を出さない/空で維持 -->
-                        <?php endif; ?>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_news_media' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -140,7 +65,7 @@ get_header();
 
                 <div class="page__inner page__inner--narrow">
                     <div class="single__contents">
-                        <?php echo $content; // id付与済みの本文を出力 ?>
+                        <?php the_content(); ?>
                     </div>
 
                     <?php if ( 'product' === get_post_type() ) : ?>
