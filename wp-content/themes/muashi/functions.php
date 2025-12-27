@@ -131,7 +131,7 @@ function muashi_register_media_post_type() {
     $args = array(
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => 'media-page',
+        'has_archive'        => false,
         // NOTE: /media/ はWordPressの予約語のため使用不可
         'rewrite'            => array(
             'slug'       => 'media-page',
@@ -554,7 +554,9 @@ function ts_render_pagination( $query = null ) {
     }
     if ( empty( $query ) || $query->max_num_pages <= 1 ) return;
 
-    $current = max( 1, (int) get_query_var('paged') );
+    // 固定ページの場合は 'page'、アーカイブの場合は 'paged' を使用
+    $paged_var = is_singular() ? 'page' : 'paged';
+    $current = max( 1, (int) get_query_var( $paged_var ) );
 
     // 共通レンダラー（mid/endのみ可変）
     $render_variant = function( $mid_size, $end_size, $variant_class ) use ( $query, $current ) {
@@ -681,7 +683,7 @@ function create_post_type() {
                 'edit_item'     => '製品を編集',
             ),
             'public'        => true,
-            'has_archive'   => 'product',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -704,7 +706,7 @@ function create_post_type() {
                 'edit_item'     => 'ストーリーを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'story',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -727,7 +729,7 @@ function create_post_type() {
                 'edit_item'     => 'お客様の声を編集',
             ),
             'public'        => true,
-            'has_archive'   => 'voice',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
@@ -770,7 +772,7 @@ function create_post_type() {
                 'edit_item'     => 'インタビューを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'career/interview',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -793,7 +795,7 @@ function create_post_type() {
                 'edit_item'     => 'グローバルネットワークを編集',
             ),
             'public'        => true,
-            'has_archive'   => 'global-network',
+            'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -1248,9 +1250,7 @@ add_action( 'init', function() {
 
 /**
  * インタビュー用のリライトルールを追加
- * NOTE: has_archive => 'career/interview' を設定しているため、
- * アーカイブとページネーションはWordPressネイティブで処理される
- * 個別投稿のURLのみカスタムルールで対応
+ * 個別投稿のURLを career/interview/[slug] 形式にするためのカスタムルール
  */
 function register_interview_rewrite_rules() {
     // インタビュー投稿の個別ページ（career/interview/[slug]の形式）
@@ -1362,7 +1362,7 @@ function muashi_get_archive_page_settings( $post_type ) {
         'voice'         => 'voice',
         'career'        => 'career',
         'globalnetwork' => 'global-network',
-        'media_post'    => 'media',
+        'media_post'    => 'media-page',
         'product'       => 'product',
     );
 
@@ -1701,6 +1701,7 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
         'sidebar_faq'            => 'よくある質問用サイドバー',
         'sidebar_about_us'       => '私たちについて用サイドバー',
+        'sidebar_product'        => '製品情報用サイドバー',
     ) );
 }
 add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );

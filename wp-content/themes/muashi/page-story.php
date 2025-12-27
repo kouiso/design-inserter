@@ -7,7 +7,7 @@ $description = '';
 get_header();
 
 // ページネーション用に現在のページ番号を取得
-$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+$paged = get_query_var( 'page' ) ? get_query_var( 'page' ) : 1;
 
 // ストーリー投稿一覧を取得（WP_Queryでページネーション対応）
 $story_query = new WP_Query( array(

@@ -1,16 +1,10 @@
 <?php
 /**
- * 製品情報アーカイブテンプレート
+ * 製品詳細ページテンプレート
  */
 global $description;
 $description = '';
 get_header();
-
-// 対応する固定ページから設定を取得
-$page_settings = muashi_get_archive_page_settings( 'product' );
-
-// タクソノミーナビゲーション用
-$product_taxonomies = muashi_get_product_taxonomy_config();
 ?>
 
 <section class="page">
@@ -19,6 +13,13 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
         <div class="page__bg-main"></div>
         <div class="page__bg-sub"></div>
     </div>
+
+    <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+    <?php
+    $product_archive_url = defined( 'URL_PRODUCT' ) ? URL_PRODUCT : get_post_type_archive_link( 'product' );
+    $product_taxonomies = muashi_get_product_taxonomy_config();
+    ?>
 
     <div class="navigation">
         <div class="navigation__inner">
@@ -92,7 +93,6 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
             <div class="page__kv">
                 <?php
                 muashi_render_kv_picture( array(
-                    'post_id'        => $page_settings['page_id'],
                     'include_source' => true,
                 ) );
                 ?>
@@ -105,64 +105,36 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
             </div>
 
             <div class="page__content">
-                <h1 class="page__title js-page-title">
-                <?php echo esc_html( $page_settings['title'] ); ?>
-                </h1>
+                <h1 class="page__title"><?php the_title(); ?></h1>
+
                 <div class="page__inner page__inner--narrow">
-
-                    <div class="story">
-                        <div class="archive">
-
-                            <ul class="archive__list">
-                            <?php if ( have_posts() ) : ?>
-                                <?php while ( have_posts() ) : the_post(); ?>
-                                <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
-                                    <div class="archive__image-wrapper">
-                                        <?php if ( has_post_thumbnail() ) : ?>
-                                        <img
-                                            src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                            alt="<?php echo esc_attr( get_the_title() ); ?>"
-                                            class="archive__image">
-                                        <?php else : ?>
-                                        <img
-                                            src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg' ); ?>"
-                                            alt=""
-                                            class="archive__image">
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="archive__text-wrapper">
-                                        <p class="archive__title">
-                                        <?php the_title(); ?>
-                                        </p>
-                                    </div>
-                                    </a>
-                                </li>
-                                <?php endwhile; ?>
-                            <?php else : ?>
-                                <li class="archive__item">
-                                <div class="archive__text-wrapper">
-                                    <p class="archive__title">投稿はまだありません。</p>
-                                </div>
-                                </li>
-                            <?php endif; ?>
-                            </ul>
-
-                            <?php ts_render_pagination(); ?>
-
-                        </div>
+                    <div class="single__contents">
+                        <?php the_content(); ?>
                     </div>
 
+                    <?php
+                    $product_slug     = get_post_field( 'post_name', get_the_ID() );
+                    $download_args    = array(
+                        'dl_product'         => $product_slug,
+                        'source_product_id'  => get_the_ID(),
+                    );
+                    $download_permalink = add_query_arg( $download_args, home_url( '/download/' ) );
+                    ?>
+                    <div class="single__cta">
+                        <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">資料ダウンロード</a>
+                    </div>
+
+                    <div class="single__back">
+                        <a class="single__back-button" href="<?php echo esc_url( $product_archive_url ); ?>">一覧へ戻る</a>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 
-
+    <?php endwhile; endif; ?>
 
 </section>
 
-<?php
-get_footer();
-?>
+<?php get_footer(); ?>
