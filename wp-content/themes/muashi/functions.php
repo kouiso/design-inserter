@@ -345,7 +345,8 @@ function muashi_save_product_pdf_meta( $post_id ) {
         return;
     }
 
-    $source_type = isset( $_POST['muashi_pdf_source_type'] ) ? $_POST['muashi_pdf_source_type'] : 'media';
+    // サニタイズ：期待される値('media' または 'external')のみ許可
+    $source_type = isset( $_POST['muashi_pdf_source_type'] ) && in_array( $_POST['muashi_pdf_source_type'], array( 'media', 'external' ), true ) ? $_POST['muashi_pdf_source_type'] : 'media';
     
     if ( $source_type === 'external' ) {
         // 外部URLを使用

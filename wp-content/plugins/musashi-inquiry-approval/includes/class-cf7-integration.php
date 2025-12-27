@@ -110,17 +110,6 @@ class Musashi_CF7_Integration {
             }
         }
 
-        // 必須フィールドのデフォルト値
-        if ( empty( $inquiry_data['email'] ) ) {
-            $inquiry_data['email'] = '';
-        }
-        if ( empty( $inquiry_data['name'] ) ) {
-            $inquiry_data['name'] = '';
-        }
-        if ( empty( $inquiry_data['message'] ) ) {
-            $inquiry_data['message'] = '';
-        }
-
         return $inquiry_data;
     }
 

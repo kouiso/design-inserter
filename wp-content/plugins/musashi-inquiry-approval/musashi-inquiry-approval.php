@@ -43,7 +43,7 @@ register_deactivation_hook( __FILE__, 'musashi_inquiry_deactivate' );
 function musashi_inquiry_template_redirect() {
     // 承認ページの表示（?musashi_review=1&token=xxx）
     if ( isset( $_GET['musashi_review'] ) && $_GET['musashi_review'] === '1' ) {
-        $token = isset( $_GET['token'] ) ? $_GET['token'] : '';
+        $token = isset( $_GET['token'] ) ? sanitize_text_field( $_GET['token'] ) : '';
         if ( $token ) {
             musashi_inquiry_display_review_page( $token );
             exit;
@@ -101,6 +101,42 @@ function musashi_inquiry_admin_menu() {
     );
 }
 add_action( 'admin_menu', 'musashi_inquiry_admin_menu' );
+
+/**
+ * 管理画面用スタイルとスクリプトの読み込み
+ */
+function musashi_inquiry_admin_enqueue_scripts( $hook ) {
+    // メールテンプレート編集ページでのみ読み込み
+    // すべての管理画面で一旦読み込んで確認（後で条件を追加）
+    $target_hooks = array(
+        'musashi-inquiry-settings_page_musashi-inquiry-email-templates',
+        'musashi_inquiry_approval_page_musashi-inquiry-email-templates',
+        'toplevel_page_musashi-inquiry-settings',
+    );
+    
+    // ページスラッグでも確認
+    $is_email_template_page = ( isset( $_GET['page'] ) && $_GET['page'] === 'musashi-inquiry-email-templates' );
+    
+    if ( ! in_array( $hook, $target_hooks, true ) && ! $is_email_template_page ) {
+        return;
+    }
+    
+    wp_enqueue_style(
+        'musashi-inquiry-email-templates-admin',
+        MUSASHI_INQUIRY_PLUGIN_URL . 'assets/css/email-templates-admin.css',
+        array(),
+        MUSASHI_INQUIRY_VERSION
+    );
+    
+    wp_enqueue_script(
+        'musashi-inquiry-email-templates-admin',
+        MUSASHI_INQUIRY_PLUGIN_URL . 'assets/js/email-templates-admin.js',
+        array(),
+        MUSASHI_INQUIRY_VERSION,
+        true
+    );
+}
+add_action( 'admin_enqueue_scripts', 'musashi_inquiry_admin_enqueue_scripts' );
 
 /**
  * メールテンプレート設定の登録
@@ -215,42 +251,6 @@ function musashi_inquiry_email_templates_page() {
         'admin_action' => array( 'title' => '管理者処理完了通知', 'desc' => '承認/お断りの処理が完了した際に管理者に送信される確認メールです（二重承認防止用）。' ),
     );
     ?>
-    <style>
-        .musashi-mail-tags { background: #f0f0f1; padding: 12px 15px; border-radius: 4px; margin-bottom: 20px; }
-        .musashi-mail-tags code { background: #fff; padding: 3px 6px; margin: 2px; display: inline-block; cursor: pointer; border: 1px solid #ddd; border-radius: 3px; }
-        .musashi-mail-tags code:hover { background: #0073aa; color: #fff; border-color: #0073aa; }
-        .musashi-email-form { background: #fff; border: 1px solid #ccd0d4; border-radius: 4px; padding: 20px; margin-top: 15px; }
-        .musashi-email-form table { width: 100%; }
-        .musashi-email-form th { width: 100px; padding: 12px 10px 12px 0; vertical-align: top; font-weight: 600; }
-        .musashi-email-form td { padding: 8px 0; }
-        .musashi-email-form input[type="text"], .musashi-email-form textarea { width: 100%; }
-        .musashi-email-form textarea { font-family: monospace; font-size: 13px; }
-        .musashi-button-note { background: #e7f3ff; border-left: 4px solid #0073aa; padding: 10px 15px; margin: 10px 0; font-size: 13px; }
-        
-        /* モード切り替えタブ */
-        .musashi-mode-tabs { display: inline-flex; background: #f0f0f1; border-radius: 4px; padding: 3px; margin-bottom: 10px; }
-        .musashi-mode-tab { padding: 6px 16px; cursor: pointer; border-radius: 3px; font-size: 13px; transition: all 0.2s; }
-        .musashi-mode-tab:hover { background: #e0e0e0; }
-        .musashi-mode-tab.active { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-weight: 600; }
-        .musashi-mode-tab.html-active { background: #d63638; color: #fff; }
-        
-        /* ボタン設定 */
-        .musashi-button-settings { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-top: 15px; }
-        .musashi-button-settings h4 { margin: 0 0 12px 0; font-size: 14px; color: #1d2327; }
-        .musashi-button-settings .setting-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .musashi-button-settings .setting-row:last-child { margin-bottom: 0; }
-        .musashi-button-settings label { width: 120px; font-weight: 500; font-size: 13px; }
-        .musashi-button-settings input[type="text"] { flex: 1; max-width: 300px; }
-        .musashi-button-settings input[type="color"] { width: 50px; height: 34px; padding: 2px; cursor: pointer; }
-        .musashi-button-preview { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
-        .musashi-button-preview-label { font-size: 12px; color: #666; margin-bottom: 8px; }
-        .musashi-preview-btn { display: inline-block; padding: 12px 30px; border-radius: 6px; font-weight: bold; font-size: 14px; color: #fff; text-decoration: none; }
-        
-        /* HTML警告 */
-        .musashi-html-warning { background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; padding: 10px 15px; margin-bottom: 10px; font-size: 13px; color: #856404; display: none; }
-        .musashi-html-warning.show { display: block; }
-    </style>
-    
     <div class="wrap">
         <h1>メールテンプレート設定</h1>
         
@@ -269,7 +269,7 @@ function musashi_inquiry_email_templates_page() {
             <code onclick="copyTag(this)">[download_url]</code>
             <code onclick="copyTag(this)">[action_type]</code>
             <code onclick="copyTag(this)">[action_date]</code>
-            <p style="margin: 8px 0 0 0; font-size: 12px; color: #666;">※ クリックでコピーできます</p>
+            <p>※ クリックでコピーできます</p>
         </div>
         
         <form method="post" action="options.php">
@@ -398,90 +398,6 @@ function musashi_inquiry_email_templates_page() {
             </button>
         </form>
     </div>
-    
-    <script>
-    function showTab(tabId, element) {
-        document.querySelectorAll('.email-tab-content').forEach(function(tab) {
-            tab.style.display = 'none';
-        });
-        document.querySelectorAll('.nav-tab').forEach(function(tab) {
-            tab.classList.remove('nav-tab-active');
-        });
-        document.getElementById(tabId).style.display = 'block';
-        element.classList.add('nav-tab-active');
-    }
-    
-    function copyTag(element) {
-        var text = element.textContent;
-        navigator.clipboard.writeText(text).then(function() {
-            var original = element.textContent;
-            element.textContent = 'コピーしました!';
-            element.style.background = '#0073aa';
-            element.style.color = '#fff';
-            setTimeout(function() {
-                element.textContent = original;
-                element.style.background = '';
-                element.style.color = '';
-            }, 1000);
-        });
-    }
-    
-    // モード切り替え
-    function setEditMode(key, mode) {
-        var container = document.getElementById(key + '-email');
-        var tabs = container.querySelectorAll('.musashi-mode-tab');
-        var hiddenInput = document.getElementById('musashi_email_' + key + '_html_mode');
-        var warning = document.getElementById('html-warning-' + key);
-        var buttonNote = document.getElementById('button-note-' + key);
-        var buttonSettings = document.getElementById('button-settings-' + key);
-        var textarea = document.getElementById('musashi_email_' + key + '_body');
-        
-        tabs.forEach(function(tab) {
-            tab.classList.remove('active', 'html-active');
-        });
-        
-        if (mode === 'html') {
-            tabs[1].classList.add('active', 'html-active');
-            hiddenInput.value = '1';
-            warning.classList.add('show');
-            if (buttonNote) buttonNote.style.display = 'none';
-            if (buttonSettings) buttonSettings.style.display = 'none';
-            textarea.style.minHeight = '300px';
-        } else {
-            tabs[0].classList.add('active');
-            hiddenInput.value = '';
-            warning.classList.remove('show');
-            if (buttonNote) buttonNote.style.display = 'block';
-            if (buttonSettings) buttonSettings.style.display = 'block';
-            textarea.style.minHeight = '';
-        }
-    }
-    
-    // ボタンプレビュー更新
-    function updateButtonPreview(key) {
-        var text = document.getElementById('musashi_email_' + key + '_button_text').value;
-        var color = document.getElementById('musashi_email_' + key + '_button_color').value;
-        var preview = document.getElementById('preview-btn-' + key);
-        var colorText = document.getElementById('musashi_email_' + key + '_button_color_text');
-        
-        preview.textContent = text || 'ボタン';
-        preview.style.backgroundColor = color;
-        colorText.value = color;
-    }
-    
-    // カラーピッカー同期
-    function syncColorPicker(key) {
-        var colorText = document.getElementById('musashi_email_' + key + '_button_color_text').value;
-        var colorPicker = document.getElementById('musashi_email_' + key + '_button_color');
-        var preview = document.getElementById('preview-btn-' + key);
-        
-        // 有効なカラーコードかチェック
-        if (/^#[0-9A-Fa-f]{6}$/.test(colorText)) {
-            colorPicker.value = colorText;
-            preview.style.backgroundColor = colorText;
-        }
-    }
-    </script>
     <?php
 }
 

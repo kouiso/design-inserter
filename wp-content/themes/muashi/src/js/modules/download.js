@@ -1,4 +1,3 @@
-const DEFAULT_MAX = 5;
 const FEEDBACK_HIDE_DELAY = 6000;
 
 class DownloadPage {
@@ -7,7 +6,6 @@ class DownloadPage {
     this.data = data || {};
     this.pageType = root.getAttribute('data-page-type') || 'document';
     this.isDownloadPage = this.pageType === 'download';
-    this.maxSelectable = Number.isFinite(this.data.maxSelectable) ? this.data.maxSelectable : DEFAULT_MAX;
     this.products = Array.isArray(this.data.products) ? this.data.products.slice() : [];
     this.taxonomies = this.data.taxonomies || {};
     this.sourceProductId = Number.isFinite(this.data.sourceProductId) ? this.data.sourceProductId : 0;
@@ -186,7 +184,7 @@ class DownloadPage {
   bootstrapSelection() {
     const initial = Array.isArray(this.data.initialSelection) ? this.data.initialSelection : [];
     const now = Date.now();
-    initial.slice(0, this.maxSelectable).forEach((value, index) => {
+    initial.forEach((value, index) => {
       const id = Number(value);
       if (!Number.isFinite(id) || !this.productsById.has(id)) {
         return;
