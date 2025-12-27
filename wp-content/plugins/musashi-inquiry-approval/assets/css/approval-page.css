@@ -1,0 +1,141 @@
+/**
+ * 問い合わせ確認ページ用スタイル
+ * 
+ * Note: メインのスタイルはテンプレートにインラインで記述されています。
+ * このファイルは追加のスタイルや印刷用スタイルを提供します。
+ */
+
+/* 印刷用スタイル */
+@media print {
+    body {
+        background-color: #ffffff !important;
+        padding: 0 !important;
+    }
+
+    .approval-container {
+        box-shadow: none !important;
+        border: 1px solid #dddddd;
+    }
+
+    .approval-header {
+        background-color: #7B7B00 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .action-buttons {
+        display: none !important;
+    }
+
+    .approval-warning {
+        background-color: #fff3cd !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .confirmation-overlay {
+        display: none !important;
+    }
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.approval-container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ボタンのフォーカス状態 */
+.action-btn:focus {
+    outline: 3px solid rgba(123, 123, 0, 0.5);
+    outline-offset: 2px;
+}
+
+.action-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.action-btn:focus-visible {
+    outline: 3px solid rgba(123, 123, 0, 0.5);
+    outline-offset: 2px;
+}
+
+/* 確認ダイアログのアニメーション */
+.confirmation-overlay {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.confirmation-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.confirmation-dialog {
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+}
+
+.confirmation-overlay.active .confirmation-dialog {
+    transform: scale(1);
+}
+
+/* ダークモード対応（オプション） */
+@media (prefers-color-scheme: dark) {
+    /* 
+     * 管理者ページのため、ダークモードは無効化
+     * 必要に応じて有効化してください
+     */
+}
+
+/* 高コントラストモード */
+@media (prefers-contrast: high) {
+    .approval-container {
+        border: 2px solid #000000;
+    }
+
+    .action-btn {
+        border: 2px solid currentColor;
+    }
+
+    .inquiry-table tr {
+        border-bottom: 2px solid #000000;
+    }
+}
+
+/* モーション削減 */
+@media (prefers-reduced-motion: reduce) {
+    .approval-container {
+        animation: none;
+    }
+
+    .action-btn {
+        transition: none;
+    }
+
+    .action-btn:hover {
+        transform: none;
+    }
+
+    .confirmation-overlay,
+    .confirmation-dialog {
+        transition: none;
+    }
+}
+
+
+
+
+
+
+
