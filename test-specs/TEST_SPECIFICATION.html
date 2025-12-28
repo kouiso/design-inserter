@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>武蔵塗料コーポレートサイト テスト仕様書</title>
+    <title>武蔵塗料 固定ページテスト仕様書</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
             line-height: 1.8;
@@ -35,6 +33,10 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        h4 {
+            color: #666;
+            margin-top: 25px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -51,14 +53,39 @@
             background: #c41e3a;
             color: #fff;
         }
-        tr:nth-child(even) {
-            background: #f9f9f9;
-        }
-        tr:hover {
+        tr:nth-child(even) { background: #f9f9f9; }
+        tr:hover { background: #fff3cd; }
+        .alert {
             background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
         }
-        
-        /* 折りたたみスタイル */
+        .alert h3 {
+            color: #856404;
+            margin-top: 0;
+            background: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        .alert ul { margin: 10px 0; padding-left: 20px; }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .checkbox { 
+            width: 60px; 
+            text-align: center; 
+        }
+        .status-ok { color: #28a745; font-weight: bold; }
+        .status-warn { color: #ffc107; font-weight: bold; }
         details {
             background: #fff;
             border-radius: 8px;
@@ -73,182 +100,108 @@
             border-radius: 8px;
             user-select: none;
         }
-        summary:hover {
-            background: #dee2e6;
+        summary:hover { background: #dee2e6; }
+        details[open] summary { border-radius: 8px 8px 0 0; }
+        .details-content { padding: 15px; }
+        .toc {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
-        details[open] summary {
-            border-radius: 8px 8px 0 0;
-        }
-        .screenshot-container {
+        .toc h3 { margin-top: 0; background: none; box-shadow: none; padding: 0; }
+        .toc ul { margin: 0; padding-left: 20px; }
+        .toc li { margin: 5px 0; }
+        .toc a { color: #c41e3a; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .meta-info {
+            background: #fff;
             padding: 15px;
-            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
-        
-        /* 画像コンテナ */
-        .image-viewer {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        .image-wrapper {
-            overflow: auto;
-            max-height: 600px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            background: #f0f0f0;
-            position: relative;
-        }
-        .image-wrapper:focus {
-            outline: 3px solid #c41e3a;
-            border-color: #c41e3a;
-        }
-        .image-wrapper img {
-            display: block;
-            transform-origin: top left;
-            transition: width 0.1s ease;
-        }
-        
-        /* インラインズームコントロール */
-        .inline-zoom-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            padding: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-            flex-wrap: wrap;
-        }
-        .inline-zoom-controls button {
-            font-size: 16px;
-            padding: 5px 12px;
-            cursor: pointer;
-            border: none;
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             background: #c41e3a;
             color: #fff;
-            border-radius: 4px;
-            min-width: 36px;
-        }
-        .inline-zoom-controls button:hover {
-            background: #a01830;
-        }
-        .inline-zoom-controls button:focus {
-            outline: 2px solid #333;
-        }
-        .zoom-slider {
-            width: 150px;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 16px;
         }
-        .zoom-display {
-            font-weight: bold;
-            min-width: 50px;
-            text-align: center;
-        }
-        .keyboard-hint {
-            font-size: 11px;
-            color: #666;
-            margin-left: auto;
-        }
-        .keyboard-hint kbd {
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            padding: 1px 5px;
-            font-family: monospace;
-        }
-        
-        /* サイドバーメニューリスト */
-        .sidebar-menu {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-        .sidebar-menu ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        .sidebar-menu li {
-            margin: 5px 0;
-        }
-        
-        /* チェックボックス */
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        /* 印刷スタイル */
+        .print-btn:hover { background: #a01830; }
         @media print {
-            .modal, .zoom-controls {
-                display: none !important;
-            }
-            details {
-                break-inside: avoid;
-            }
-            .thumbnail {
-                max-width: 100%;
-            }
+            .print-btn { display: none; }
+            details { break-inside: avoid; }
+            summary { background: #eee !important; }
         }
     </style>
 </head>
 <body>
 
-<h1>🎨 武蔵塗料コーポレートサイト テスト仕様書</h1>
+<h1>🎨 武蔵塗料 固定ページテスト仕様書</h1>
 
-<p><strong>作成日</strong>: 2025年12月28日<br>
-<strong>対象サイト</strong>: <a href="http://localhost:10010/" target="_blank">http://localhost:10010/</a><br>
-<strong>プロジェクト</strong>: MUSASHI PAINT コーポレートサイト</p>
-
-<div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 20px 0;">
-    <strong>📸 スクリーンショットの使い方</strong><br>
-    ・「スクリーンショットを表示」をクリックで画像が展開されます<br>
-    ・<strong>スライダー</strong>または<strong>+/-ボタン</strong>でその場で拡大縮小<br>
-    ・画像エリアをクリックしてフォーカス後、<strong>キーボード操作</strong>可能：<br>
-    &nbsp;&nbsp;&nbsp;→ <kbd>+</kbd> / <kbd>-</kbd> または <kbd>↑</kbd> / <kbd>↓</kbd> で拡大縮小<br>
-    &nbsp;&nbsp;&nbsp;→ <kbd>0</kbd> でリセット（100%）<br>
-    &nbsp;&nbsp;&nbsp;→ <kbd>F</kbd> でフィット表示
+<div class="meta-info">
+    <strong>作成日</strong>: 2025年12月28日<br>
+    <strong>ベースURL</strong>: http://localhost:10010/<br>
+    <strong>本番URL</strong>: https://musashi-paint.com/（推定）
 </div>
 
-<hr>
+<div class="toc">
+    <h3>📋 目次</h3>
+    <ul>
+        <li><a href="#bug-info">⚠️ 本番環境バグ情報</a></li>
+        <li><a href="#page-list">固定ページ一覧（全30ページ）</a></li>
+        <li><a href="#sidebar">サイドバー項目（タイプ別）</a></li>
+        <li><a href="#test-display">1. ページ表示テスト</a></li>
+        <li><a href="#test-sidebar">2. サイドバーテスト</a></li>
+        <li><a href="#test-pagination">3. ページネーションテスト</a></li>
+        <li><a href="#test-form">4. フォームテスト</a></li>
+        <li><a href="#test-common">5. 共通テスト</a></li>
+        <li><a href="#playwright">Playwright テストコード例</a></li>
+    </ul>
+</div>
 
-<h2>📋 目次</h2>
-<ol>
-    <li><a href="#overview">概要</a></li>
-    <li><a href="#environment">テスト環境</a></li>
-    <li><a href="#pages">固定ページ一覧</a></li>
-    <li><a href="#test-items">ページ別テスト項目</a></li>
-    <li><a href="#common-tests">共通テスト項目</a></li>
-    <li><a href="#sidebar-patterns">サイドバーパターン別テスト</a></li>
-</ol>
+<!-- 本番バグ情報 -->
+<div class="alert" id="bug-info">
+    <h3>⚠️ 重要：本番環境バグ情報</h3>
+    <p><strong>症状</strong>: 2ページ目以降（/product/2/, /career/interview/2/ など）にアクセスするとTOPページにリダイレクトされる</p>
+    
+    <p><strong>想定原因</strong>:</p>
+    <ul>
+        <li><strong>リライトルールがフラッシュされていない</strong> - 本番でパーマリンク設定を保存し直す必要がある</li>
+        <li><strong>.htaccess の設定不備</strong> - 本番サーバーのRewriteRule設定</li>
+        <li><strong>キャッシュプラグイン</strong> - ページキャッシュが悪さをしている可能性</li>
+        <li><strong>サーバー環境の違い</strong> - mod_rewrite や Apache/nginx の設定</li>
+    </ul>
+    
+    <p><strong>対処法</strong>:</p>
+    <ol>
+        <li>本番 WordPress管理画面 → 設定 → パーマリンク設定 → 何も変更せず「保存」を押す</li>
+        <li>.htaccess が正しく書き込まれているか確認</li>
+        <li>キャッシュをクリア</li>
+    </ol>
+</div>
 
-<hr>
-
-<h2 id="overview">📝 概要</h2>
-<p>本ドキュメントは、武蔵塗料コーポレートサイトの固定ページに対するテスト仕様書です。各ページの表示確認、サイドバーナビゲーション、リンク遷移などの機能テストを行います。</p>
-
-<hr>
-
-<h2 id="environment">🖥️ テスト環境</h2>
+<!-- 固定ページ一覧 -->
+<h2 id="page-list">📄 固定ページ一覧（全29ページ + TOP）</h2>
 <table>
-    <tr><th>項目</th><th>内容</th></tr>
-    <tr><td>ベースURL</td><td>http://localhost:10010/</td></tr>
-    <tr><td>CMS</td><td>WordPress</td></tr>
-    <tr><td>テスト実施日</td><td>2025年12月28日</td></tr>
-    <tr><td>ブラウザ</td><td>Chrome (最新版)</td></tr>
-</table>
-
-<hr>
-
-<h2 id="pages">📄 固定ページ一覧（全32ページ）</h2>
-<table>
-    <tr><th>No.</th><th>ページ名</th><th>URL</th><th>サイドバータイプ</th></tr>
+    <tr>
+        <th>No.</th>
+        <th>ページ名</th>
+        <th>URL</th>
+        <th>サイドバータイプ</th>
+    </tr>
     <tr><td>1</td><td>TOP</td><td>/</td><td>なし</td></tr>
     <tr><td>2</td><td>製品情報</td><td>/product/</td><td>製品情報型</td></tr>
     <tr><td>3</td><td>注目製品</td><td>/featured/</td><td>製品情報型</td></tr>
     <tr><td>4</td><td>製品用途紹介</td><td>/applications/</td><td>製品情報型</td></tr>
-    <tr><td>5</td><td>私たちについて</td><td>/about-us/</td><td>私たちについて型</td></tr>
+    <tr><td>5</td><td>企業情報</td><td>/about-us/</td><td>私たちについて型</td></tr>
     <tr><td>6</td><td>会社概要</td><td>/company/</td><td>私たちについて型</td></tr>
     <tr><td>7</td><td>グローバルネットワーク</td><td>/global-network/</td><td>私たちについて型</td></tr>
     <tr><td>8</td><td>ストーリー</td><td>/story/</td><td>私たちについて型</td></tr>
@@ -258,14 +211,14 @@
     <tr><td>12</td><td>創業期</td><td>/history-founding/</td><td>ヒストリー型</td></tr>
     <tr><td>13</td><td>技術革新期</td><td>/history-innovation/</td><td>ヒストリー型</td></tr>
     <tr><td>14</td><td>グローバル展開期</td><td>/history-global/</td><td>ヒストリー型</td></tr>
-    <tr><td>15</td><td>サステナビリティ</td><td>/sustainability/</td><td>サステナビリティ型</td></tr>
+    <tr><td>15</td><td>サステナブルなビジネス展開</td><td>/sustainability/</td><td>サステナビリティ型</td></tr>
     <tr><td>16</td><td>環境</td><td>/sustainability/environment/</td><td>サステナビリティ型</td></tr>
     <tr><td>17</td><td>社会</td><td>/sustainability/society/</td><td>サステナビリティ型</td></tr>
     <tr><td>18</td><td>ガバナンス</td><td>/sustainability/governance/</td><td>サステナビリティ型</td></tr>
     <tr><td>19</td><td>SCM</td><td>/sustainability/scm/</td><td>サステナビリティ型</td></tr>
     <tr><td>20</td><td>ライブラリー</td><td>/sustainability/value-creation-process/</td><td>サステナビリティ型</td></tr>
-    <tr><td>21</td><td>最先端の開発技術力</td><td>/technology/</td><td>強み紹介型</td></tr>
-    <tr><td>22</td><td>顧客志向のカスタマイズ</td><td>/customization/</td><td>強み紹介型</td></tr>
+    <tr><td>21</td><td>最先端の開発技術力</td><td>/technology/</td><td>強み紹介型（横タブ）</td></tr>
+    <tr><td>22</td><td>顧客志向のカスタマイズ</td><td>/customization/</td><td>強み紹介型（横タブ）</td></tr>
     <tr><td>23</td><td>採用情報</td><td>/career/</td><td>採用情報型</td></tr>
     <tr><td>24</td><td>インタビュー</td><td>/career/interview/</td><td>採用情報型</td></tr>
     <tr><td>25</td><td>ニュース</td><td>/news/</td><td>ニュース型</td></tr>
@@ -274,651 +227,330 @@
     <tr><td>28</td><td>資料ダウンロード</td><td>/download/</td><td>お問い合わせ型</td></tr>
     <tr><td>29</td><td>プライバシーポリシー</td><td>/privacy-policy/</td><td>法務型</td></tr>
     <tr><td>30</td><td>利用規約</td><td>/terms/</td><td>法務型</td></tr>
-    <tr><td>31</td><td>story/colors</td><td>/story/colors/</td><td>TOPレイアウト型</td></tr>
-    <tr><td>32</td><td>voice/customers</td><td>/voice/customers/</td><td>TOPレイアウト型</td></tr>
 </table>
 
-<hr>
-
-<h2 id="test-items">🧪 ページ別テスト項目</h2>
-
-<!-- 1. TOPページ -->
-<h3>1. TOPページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/" target="_blank">http://localhost:10010/</a></p>
+<!-- サイドバー項目 -->
+<h2 id="sidebar">🗂️ サイドバー項目（タイプ別）</h2>
 
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="top">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/01_top.png" alt="TOPページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('top', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('top', this.value)">
-                <button type="button" onclick="zoomImage('top', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('top', 100)">リセット</button>
-                <button type="button" onclick="fitImage('top')">フィット</button>
-                <span class="keyboard-hint">画像クリック後 <kbd>+</kbd><kbd>-</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>製品情報型（/product/, /featured/, /applications/）</summary>
+    <div class="details-content">
+        <table>
+            <tr><th>サイドバー項目</th><th>リンク先</th></tr>
+            <tr><td>製品情報</td><td>/product/</td></tr>
+            <tr><td>用途でえらぶ</td><td>/product/application/</td></tr>
+            <tr><td>基材でえらぶ</td><td>/product/material/</td></tr>
+            <tr><td>意匠性でえらぶ</td><td>/product/design/</td></tr>
+            <tr><td>機能でえらぶ</td><td>/product/function/</td></tr>
+            <tr><td>環境キーワードでえらぶ</td><td>/product/environment/</td></tr>
+            <tr><td>注目製品</td><td>/featured/</td></tr>
+            <tr><td>製品用途紹介</td><td>/applications/</td></tr>
+        </table>
     </div>
 </details>
 
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>1-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-2</td><td>ヘッダーナビゲーション</td><td>「製品について」「私たちについて」「採用情報」「お問い合わせ」が表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-3</td><td>言語切替リンク</td><td>「En」「中文」リンクが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-4</td><td>メインビジュアル</td><td>ヒーローセクションが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-5</td><td>強み紹介セクション</td><td>Technology/Global Network/Sustainability/Resolveの4つのリンクが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-6</td><td>お知らせセクション</td><td>最新ニュースが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-7</td><td>メディアセクション</td><td>最新メディア情報が表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-8</td><td>フッターナビゲーション</td><td>全メニューリンクが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>1-9</td><td>SNSリンク</td><td>LinkedIn/Instagram/Facebookリンクが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 2. 製品情報ページ -->
-<h3>2. 製品情報ページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/product/" target="_blank">http://localhost:10010/product/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="product">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/02_product.png" alt="製品情報ページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('product', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('product', this.value)">
-                <button type="button" onclick="zoomImage('product', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('product', 100)">リセット</button>
-                <button type="button" onclick="fitImage('product')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>私たちについて型（/about-us/, /company/, /global-network/, /story/, /voice/, /faq/）</summary>
+    <div class="details-content">
+        <table>
+            <tr><th>サイドバー項目</th><th>リンク先</th></tr>
+            <tr><td>武蔵塗料グループについて</td><td>/about-us/</td></tr>
+            <tr><td>会社概要</td><td>/company/</td></tr>
+            <tr><td>グローバルネットワーク</td><td>/global-network/</td></tr>
+            <tr><td>ヒストリー</td><td>/history/</td></tr>
+            <tr><td>サステナビリティ</td><td>/sustainability/</td></tr>
+            <tr><td>ストーリー</td><td>/story/</td></tr>
+            <tr><td>お客様の声</td><td>/voice/</td></tr>
+            <tr><td>よくある質問</td><td>/faq/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>製品情報</li>
-        <li>用途でえらぶ</li>
-        <li>基材でえらぶ</li>
-        <li>意匠性でえらぶ</li>
-        <li>機能でえらぶ</li>
-        <li>環境でえらぶ</li>
-        <li>注目製品</li>
-        <li>製品用途紹介</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>2-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>2-2</td><td>サイドバー表示</td><td>上記8項目のメニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>2-3</td><td>サイドバーリンク遷移</td><td>各メニューをクリックで該当ページへ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>2-4</td><td>製品カテゴリ表示</td><td>製品カテゴリが一覧表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>2-5</td><td>パンくずリスト</td><td>パンくずリストが正しく表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 3. 私たちについてページ -->
-<h3>3. 私たちについてページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/about-us/" target="_blank">http://localhost:10010/about-us/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="about">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/03_about-us.png" alt="私たちについてページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('about', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('about', this.value)">
-                <button type="button" onclick="zoomImage('about', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('about', 100)">リセット</button>
-                <button type="button" onclick="fitImage('about')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>ヒストリー型（/history/, /history-founding/, /history-innovation/, /history-global/）</summary>
+    <div class="details-content">
+        <p>私たちについて型と同じ + 以下の子メニュー展開</p>
+        <table>
+            <tr><th>子メニュー項目</th><th>リンク先</th></tr>
+            <tr><td>創業期 1958年〜</td><td>/history-founding/</td></tr>
+            <tr><td>技術革新期 1980年〜</td><td>/history-innovation/</td></tr>
+            <tr><td>グローバル展開期 2000年〜</td><td>/history-global/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>武蔵塗料グループについて</li>
-        <li>会社概要</li>
-        <li>グローバルネットワーク</li>
-        <li>ヒストリー</li>
-        <li>サステナビリティ</li>
-        <li>ストーリー</li>
-        <li>お客様の声</li>
-        <li>よくある質問</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>3-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>3-2</td><td>サイドバー表示</td><td>上記8項目のメニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>3-3</td><td>サイドバーリンク遷移</td><td>各メニューをクリックで該当ページへ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>3-4</td><td>メインコンテンツ</td><td>会社紹介コンテンツが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 4. 採用情報ページ -->
-<h3>4. 採用情報ページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/career/" target="_blank">http://localhost:10010/career/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="career">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/04_career.png" alt="採用情報ページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('career', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('career', this.value)">
-                <button type="button" onclick="zoomImage('career', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('career', 100)">リセット</button>
-                <button type="button" onclick="fitImage('career')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>サステナビリティ型（/sustainability/ 配下）</summary>
+    <div class="details-content">
+        <p>私たちについて型と同じ + 以下の子メニュー展開</p>
+        <table>
+            <tr><th>子メニュー項目</th><th>リンク先</th></tr>
+            <tr><td>環境</td><td>/sustainability/environment/</td></tr>
+            <tr><td>社会</td><td>/sustainability/society/</td></tr>
+            <tr><td>ガバナンス</td><td>/sustainability/governance/</td></tr>
+            <tr><td>SCM</td><td>/sustainability/scm/</td></tr>
+            <tr><td>ライブラリー</td><td>/sustainability/value-creation-process/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>採用情報</li>
-        <li>求人リスト</li>
-        <li>インタビュー</li>
-        <li>よくある質問</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>4-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>4-2</td><td>サイドバー表示</td><td>上記4項目のメニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>4-3</td><td>サイドバーリンク遷移</td><td>各メニューをクリックで該当ページへ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>4-4</td><td>採用情報コンテンツ</td><td>採用に関する情報が表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 5. サステナビリティページ -->
-<h3>5. サステナビリティページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/sustainability/" target="_blank">http://localhost:10010/sustainability/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="sustainability">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/05_sustainability.png" alt="サステナビリティページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('sustainability', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('sustainability', this.value)">
-                <button type="button" onclick="zoomImage('sustainability', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('sustainability', 100)">リセット</button>
-                <button type="button" onclick="fitImage('sustainability')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>強み紹介型（横タブ）（/technology/, /customization/）</summary>
+    <div class="details-content">
+        <table>
+            <tr><th>タブ項目</th><th>リンク先</th></tr>
+            <tr><td>最先端の開発技術力</td><td>/technology/</td></tr>
+            <tr><td>グローバルネットワーク</td><td>/global-network/</td></tr>
+            <tr><td>サステナブルなビジネス展開</td><td>/sustainability/</td></tr>
+            <tr><td>顧客志向のカスタマイズ</td><td>/customization/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>武蔵塗料グループについて</li>
-        <li>会社概要</li>
-        <li>グローバルネットワーク</li>
-        <li>ヒストリー</li>
-        <li><strong>サステナビリティ</strong>（展開時）
-            <ul>
-                <li>環境</li>
-                <li>社会</li>
-                <li>ガバナンス</li>
-                <li>SCM</li>
-                <li>ライブラリー</li>
-            </ul>
-        </li>
-        <li>ストーリー</li>
-        <li>お客様の声</li>
-        <li>よくある質問</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>5-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>5-2</td><td>サイドバー表示</td><td>サステナビリティ配下に5つの子メニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>5-3</td><td>子メニュー遷移</td><td>環境/社会/ガバナンス/SCM/ライブラリーへ正常に遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>5-4</td><td>ESGコンテンツ</td><td>ESGに関する情報が表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 6. ヒストリーページ -->
-<h3>6. ヒストリーページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/history/" target="_blank">http://localhost:10010/history/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="history">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/06_history.png" alt="ヒストリーページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('history', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('history', this.value)">
-                <button type="button" onclick="zoomImage('history', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('history', 100)">リセット</button>
-                <button type="button" onclick="fitImage('history')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>採用情報型（/career/, /career/interview/）</summary>
+    <div class="details-content">
+        <table>
+            <tr><th>サイドバー項目</th><th>リンク先</th></tr>
+            <tr><td>採用情報</td><td>/career/</td></tr>
+            <tr><td>インタビュー</td><td>/career/interview/</td></tr>
+            <tr><td>よくある質問</td><td>/faq/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>武蔵塗料グループについて</li>
-        <li>会社概要</li>
-        <li>グローバルネットワーク</li>
-        <li><strong>ヒストリー</strong>（展開時）
-            <ul>
-                <li>創業期 1958年〜</li>
-                <li>技術革新期 1980年〜</li>
-                <li>グローバル展開期 2000年〜</li>
-            </ul>
-        </li>
-        <li>サステナビリティ</li>
-        <li>ストーリー</li>
-        <li>お客様の声</li>
-        <li>よくある質問</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>6-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>6-2</td><td>サイドバー表示</td><td>ヒストリー配下に3つの子メニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>6-3</td><td>子メニュー遷移</td><td>創業期/技術革新期/グローバル展開期へ正常に遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>6-4</td><td>年表コンテンツ</td><td>会社の歴史が時系列で表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 7. お問い合わせページ -->
-<h3>7. お問い合わせページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/contact/" target="_blank">http://localhost:10010/contact/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="contact">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/07_contact.png" alt="お問い合わせページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('contact', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('contact', this.value)">
-                <button type="button" onclick="zoomImage('contact', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('contact', 100)">リセット</button>
-                <button type="button" onclick="fitImage('contact')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>ニュース型（/news/, /media-page/）</summary>
+    <div class="details-content">
+        <table>
+            <tr><th>サイドバー項目</th><th>リンク先</th></tr>
+            <tr><td>ニュース・お知らせ</td><td>/news/</td></tr>
+            <tr><td>メディア</td><td>/media-page/</td></tr>
+            <tr><td>LinkedIn</td><td>https://www.linkedin.com/company/musashi-paint-holdings/</td></tr>
+            <tr><td>Instagram</td><td>https://www.instagram.com/musashi_paint_official/</td></tr>
+            <tr><td>Facebook</td><td>https://www.facebook.com/musashipaintholdings/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>お問い合わせ</li>
-        <li>資料請求</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>7-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>7-2</td><td>サイドバー表示</td><td>上記2項目のメニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>7-3</td><td>フォーム表示</td><td>お問い合わせフォームが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>7-4</td><td>フォーム入力</td><td>各入力フィールドに入力可能</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>7-5</td><td>バリデーション</td><td>必須項目未入力時にエラー表示</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 8. ニュースページ -->
-<h3>8. ニュースページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/news/" target="_blank">http://localhost:10010/news/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="news">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/08_news.png" alt="ニュースページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('news', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('news', this.value)">
-                <button type="button" onclick="zoomImage('news', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('news', 100)">リセット</button>
-                <button type="button" onclick="fitImage('news')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>お問い合わせ型（/contact/, /download/）</summary>
+    <div class="details-content">
+        <table>
+            <tr><th>サイドバー項目</th><th>リンク先</th></tr>
+            <tr><td>お問い合わせ</td><td>/contact/</td></tr>
+            <tr><td>資料ダウンロード</td><td>/download/</td></tr>
+        </table>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>ニュース・お知らせ</li>
-        <li>メディア</li>
-        <li>SNS
-            <ul>
-                <li>LinkedIn</li>
-                <li>Instagram</li>
-                <li>Facebook</li>
-            </ul>
-        </li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>8-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>8-2</td><td>サイドバー表示</td><td>ニュース/メディア/SNSメニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>8-3</td><td>ニュース一覧</td><td>ニュース記事が一覧表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>8-4</td><td>ページネーション</td><td>ページネーションが機能する</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>8-5</td><td>記事詳細遷移</td><td>各記事をクリックで詳細ページへ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 9. 技術力ページ -->
-<h3>9. 強み紹介ページ（最先端の開発技術力）</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/technology/" target="_blank">http://localhost:10010/technology/</a></p>
-
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="technology">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/09_technology.png" alt="技術力ページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('technology', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('technology', this.value)">
-                <button type="button" onclick="zoomImage('technology', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('technology', 100)">リセット</button>
-                <button type="button" onclick="fitImage('technology')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>法務型（/privacy-policy/, /terms/）</summary>
+    <div class="details-content">
+        <p>サイドバーなし（本文のみ）</p>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー（横タブ型）:</strong>
-    <ul>
-        <li>最先端の開発技術力</li>
-        <li>グローバルネットワーク</li>
-        <li>サステナブルなビジネス展開</li>
-        <li>顧客志向のカスタマイズ</li>
-    </ul>
-</div>
-
+<!-- テスト項目 -->
+<h2 id="test-display">✅ 1. ページ表示テスト</h2>
 <table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>9-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>9-2</td><td>タブナビ表示</td><td>4つの横タブが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>9-3</td><td>タブ切替</td><td>各タブクリックで該当ページへ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>9-4</td><td>現在タブハイライト</td><td>現在ページのタブがアクティブ表示</td><td><input type="checkbox" class="checkbox"></td></tr>
+    <tr><th>No.</th><th>テスト内容</th><th class="checkbox">確認</th></tr>
+    <tr><td>1-1</td><td>全30ページが正常に表示される（200 OK）</td><td class="checkbox">□</td></tr>
+    <tr><td>1-2</td><td>ヘッダーが正常に表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>1-3</td><td>フッターが正常に表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>1-4</td><td>メインコンテンツが表示される</td><td class="checkbox">□</td></tr>
 </table>
 
-<!-- 10. インタビューページ -->
-<h3>10. インタビューページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/career/interview/" target="_blank">http://localhost:10010/career/interview/</a></p>
+<h2 id="test-sidebar">✅ 2. サイドバーテスト</h2>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th class="checkbox">確認</th></tr>
+    <tr><td>2-1</td><td>製品情報型：8項目のメニューが表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-2</td><td>製品情報型：各リンクが正しい遷移先へ遷移する</td><td class="checkbox">□</td></tr>
+    <tr><td>2-3</td><td>私たちについて型：8項目のメニューが表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-4</td><td>私たちについて型：各リンクが正しい遷移先へ遷移する</td><td class="checkbox">□</td></tr>
+    <tr><td>2-5</td><td>ヒストリー型：子メニュー3項目が展開表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-6</td><td>ヒストリー型：子メニューリンクが正しく遷移する</td><td class="checkbox">□</td></tr>
+    <tr><td>2-7</td><td>サステナビリティ型：子メニュー5項目が展開表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-8</td><td>サステナビリティ型：子メニューリンクが正しく遷移する</td><td class="checkbox">□</td></tr>
+    <tr><td>2-9</td><td>強み紹介型：4つの横タブが表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-10</td><td>強み紹介型：各タブクリックで正しいページへ遷移する</td><td class="checkbox">□</td></tr>
+    <tr><td>2-11</td><td>採用情報型：3項目のメニューが表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-12</td><td>採用情報型：各リンクが正しく遷移する</td><td class="checkbox">□</td></tr>
+    <tr><td>2-13</td><td>ニュース型：メニュー+SNSリンクが表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-14</td><td>ニュース型：SNSリンクが新規タブで開く</td><td class="checkbox">□</td></tr>
+    <tr><td>2-15</td><td>お問い合わせ型：2項目のメニューが表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>2-16</td><td>お問い合わせ型：各リンクが正しく遷移する</td><td class="checkbox">□</td></tr>
+</table>
 
+<h2 id="test-pagination">✅ 3. ページネーションテスト</h2>
+
+<h4>3-1. 製品情報ページ（/product/）</h4>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th>URL</th><th class="checkbox">確認</th></tr>
+    <tr><td>3-1-1</td><td>1ページ目が表示される</td><td>/product/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/product/2/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-3</td><td>ページ番号「3」クリックで3ページ目へ遷移</td><td>/product/3/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-4</td><td>ページ番号「4」クリックで4ページ目へ遷移</td><td>/product/4/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-5</td><td>ページ番号「5」クリックで5ページ目へ遷移</td><td>/product/5/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-6</td><td>「次のページ」矢印クリックで次ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-7</td><td>「前のページ」矢印クリックで前ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-8</td><td>各ページで製品一覧が正常に表示される</td><td></td><td class="checkbox">□</td></tr>
+</table>
+
+<h4>3-2. インタビューページ（/career/interview/）</h4>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th>URL</th><th class="checkbox">確認</th></tr>
+    <tr><td>3-2-1</td><td>1ページ目が表示される</td><td>/career/interview/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/career/interview/2/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-3</td><td>ページ番号「3」クリックで3ページ目へ遷移</td><td>/career/interview/3/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-4</td><td>「次のページ」矢印クリックで次ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-5</td><td>「前のページ」矢印クリックで前ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-6</td><td>各ページでインタビュー一覧が正常に表示される</td><td></td><td class="checkbox">□</td></tr>
+</table>
+
+<h4>3-3. ストーリーページ（/story/）</h4>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th>URL</th><th class="checkbox">確認</th></tr>
+    <tr><td>3-3-1</td><td>1ページ目が表示される</td><td>/story/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-3-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/story/2/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-3-3</td><td>「次のページ」矢印クリックで次ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
+    <tr><td>3-3-4</td><td>「前のページ」矢印クリックで前ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
+    <tr><td>3-3-5</td><td>各ページでストーリー一覧が正常に表示される</td><td></td><td class="checkbox">□</td></tr>
+</table>
+
+<h4>3-4〜3-7. その他ページネーション対象（件数次第で表示）</h4>
+<table>
+    <tr><th>ページ</th><th>URL</th><th>2ページ目URL</th><th>コード実装</th><th class="checkbox">確認</th></tr>
+    <tr><td>ニュース</td><td>/news/</td><td>/news/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>採用情報</td><td>/career/</td><td>/career/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>お客様の声</td><td>/voice/</td><td>/voice/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>グローバルネットワーク</td><td>/global-network/</td><td>/global-network/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+</table>
+<p>※ 1ページあたり12件表示。13件以上でページネーション表示</p>
+
+<h4>3-A. コード整合性チェック</h4>
+<table>
+    <tr><th>ページスラッグ</th><th>リライトルール</th><th>テンプレート</th><th>実装パターン</th></tr>
+    <tr><td>product</td><td class="status-ok">✅ 登録済</td><td>page-product.php</td><td class="status-ok">✅ 統一</td></tr>
+    <tr><td>news</td><td class="status-ok">✅ 登録済</td><td>page-news.php</td><td class="status-ok">✅ 統一</td></tr>
+    <tr><td>story</td><td class="status-ok">✅ 登録済</td><td>page-story.php</td><td class="status-ok">✅ 統一</td></tr>
+    <tr><td>voice</td><td class="status-ok">✅ 登録済</td><td>page-voice.php</td><td class="status-ok">✅ 統一</td></tr>
+    <tr><td>career</td><td class="status-ok">✅ 登録済</td><td>page-career.php</td><td class="status-ok">✅ 統一</td></tr>
+    <tr><td>career/interview</td><td class="status-ok">✅ 登録済</td><td>page-interview.php</td><td class="status-ok">✅ 統一</td></tr>
+    <tr><td>global-network</td><td class="status-ok">✅ 登録済</td><td>page-global-network.php</td><td class="status-ok">✅ 統一</td></tr>
+</table>
+
+<h4>3-B. 本番環境バグ調査チェックリスト</h4>
+<table>
+    <tr><th>No.</th><th>確認項目</th><th class="checkbox">確認</th></tr>
+    <tr><td>B-1</td><td>管理画面 → 設定 → パーマリンク → 保存（リライトルールフラッシュ）</td><td class="checkbox">□</td></tr>
+    <tr><td>B-2</td><td>.htaccessファイルの存在確認</td><td class="checkbox">□</td></tr>
+    <tr><td>B-3</td><td>.htaccessにRewriteRule記述があるか</td><td class="checkbox">□</td></tr>
+    <tr><td>B-4</td><td>mod_rewriteが有効か（Apache）/ try_filesの設定（nginx）</td><td class="checkbox">□</td></tr>
+    <tr><td>B-5</td><td>キャッシュプラグインのクリア</td><td class="checkbox">□</td></tr>
+    <tr><td>B-6</td><td>CDN/Cloudflareのキャッシュクリア</td><td class="checkbox">□</td></tr>
+    <tr><td>B-7</td><td>/product/2/ に直接アクセスしてHTTPステータス確認（301? 302? 200?）</td><td class="checkbox">□</td></tr>
+</table>
+
+<h2 id="test-form">✅ 4. フォームテスト</h2>
+
+<h4>4-1. お問い合わせフォーム（/contact/）</h4>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th class="checkbox">確認</th></tr>
+    <tr><td>4-1-1</td><td>フォームが正常に表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>4-1-2</td><td>必須項目が空の状態で送信→エラー表示</td><td class="checkbox">□</td></tr>
+    <tr><td>4-1-3</td><td>メールアドレス形式不正→エラー表示</td><td class="checkbox">□</td></tr>
+    <tr><td>4-1-4</td><td>確認用メールアドレス不一致→エラー表示</td><td class="checkbox">□</td></tr>
+    <tr><td>4-1-5</td><td>全項目正常入力→送信成功</td><td class="checkbox">□</td></tr>
+</table>
+
+<h4>4-2. 資料ダウンロードフォーム（/download/）</h4>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th class="checkbox">確認</th></tr>
+    <tr><td>4-2-1</td><td>フォームが正常に表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>4-2-2</td><td>資料未選択で送信→エラー表示</td><td class="checkbox">□</td></tr>
+    <tr><td>4-2-3</td><td>資料6件以上選択→エラー表示（最大5件）</td><td class="checkbox">□</td></tr>
+    <tr><td>4-2-4</td><td>正常入力→送信成功</td><td class="checkbox">□</td></tr>
+</table>
+
+<h2 id="test-common">✅ 5. 共通テスト</h2>
+<table>
+    <tr><th>No.</th><th>テスト内容</th><th class="checkbox">確認</th></tr>
+    <tr><td>5-1</td><td>レスポンシブ：SP表示でハンバーガーメニューに切替</td><td class="checkbox">□</td></tr>
+    <tr><td>5-2</td><td>ページトップボタン：スクロール時に表示</td><td class="checkbox">□</td></tr>
+    <tr><td>5-3</td><td>全リンク：404エラーなし</td><td class="checkbox">□</td></tr>
+    <tr><td>5-4</td><td>全画像：正常に表示される</td><td class="checkbox">□</td></tr>
+</table>
+
+<!-- Playwrightコード -->
+<h2 id="playwright">🎭 Playwright テストコード例</h2>
 <details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="interview">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/10_interview.png" alt="インタビューページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('interview', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('interview', this.value)">
-                <button type="button" onclick="zoomImage('interview', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('interview', 100)">リセット</button>
-                <button type="button" onclick="fitImage('interview')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
+    <summary>テストコードを表示</summary>
+    <div class="details-content">
+        <pre class="code-block">import { test, expect } from '@playwright/test';
+
+const BASE_URL = 'http://localhost:10010';
+
+// 固定ページ一覧
+const pages = [
+  { name: 'TOP', url: '/' },
+  { name: '製品情報', url: '/product/' },
+  { name: '注目製品', url: '/featured/' },
+  // ... 省略
+];
+
+// 1. ページ表示テスト
+test.describe('ページ表示テスト', () => {
+  for (const page of pages) {
+    test(`${page.name}ページが正常に表示される`, async ({ page: browserPage }) => {
+      const response = await browserPage.goto(`${BASE_URL}${page.url}`);
+      expect(response?.status()).toBe(200);
+      await expect(browserPage.locator('header')).toBeVisible();
+      await expect(browserPage.locator('footer')).toBeVisible();
+    });
+  }
+});
+
+// 3. ページネーションテスト
+test.describe('ページネーションテスト', () => {
+  
+  test('製品情報ページのページネーション', async ({ page }) => {
+    await page.goto(`${BASE_URL}/product/`);
+    
+    // ページ2へ遷移
+    await page.locator('.pagination a:has-text("2")').click();
+    await expect(page).toHaveURL(/\/product\/2\//);
+    
+    // ページ3へ遷移
+    await page.locator('.pagination a:has-text("3")').click();
+    await expect(page).toHaveURL(/\/product\/3\//);
+  });
+
+  test('インタビューページのページネーション', async ({ page }) => {
+    await page.goto(`${BASE_URL}/career/interview/`);
+    
+    await page.locator('.pagination a:has-text("2")').click();
+    await expect(page).toHaveURL(/\/career\/interview\/2\//);
+  });
+
+  test('ストーリーページのページネーション', async ({ page }) => {
+    await page.goto(`${BASE_URL}/story/`);
+    
+    await page.locator('.pagination a:has-text("2")').click();
+    await expect(page).toHaveURL(/\/story\/2\//);
+  });
+});</pre>
     </div>
 </details>
 
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>採用情報</li>
-        <li>インタビュー</li>
-        <li>よくある質問</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>10-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>10-2</td><td>サイドバー表示</td><td>採用情報系メニューが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>10-3</td><td>インタビュー一覧</td><td>社員インタビュー記事が一覧表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>10-4</td><td>ページネーション</td><td>ページネーションが機能する（1/2/3ページ）</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>10-5</td><td>記事詳細遷移</td><td>各記事をクリックで詳細ページへ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<!-- 11. プライバシーポリシーページ -->
-<h3>11. プライバシーポリシーページ</h3>
-<p><strong>URL</strong>: <a href="http://localhost:10010/privacy-policy/" target="_blank">http://localhost:10010/privacy-policy/</a></p>
-
-<details>
-    <summary>📸 スクリーンショットを表示（クリックで展開）</summary>
-    <div class="screenshot-container">
-        <div class="image-viewer" data-viewer="privacy">
-            <div class="image-wrapper" tabindex="0">
-                <img src="screenshots/11_privacy-policy.png" alt="プライバシーポリシーページ" style="width: 100%;">
-            </div>
-            <div class="inline-zoom-controls">
-                <button type="button" onclick="zoomImage('privacy', -25)">−</button>
-                <input type="range" class="zoom-slider" min="25" max="200" value="100" oninput="setZoom('privacy', this.value)">
-                <button type="button" onclick="zoomImage('privacy', 25)">+</button>
-                <span class="zoom-display">100%</span>
-                <button type="button" onclick="setZoom('privacy', 100)">リセット</button>
-                <button type="button" onclick="fitImage('privacy')">フィット</button>
-                <span class="keyboard-hint"><kbd>+</kbd><kbd>-</kbd><kbd>0</kbd><kbd>F</kbd></span>
-            </div>
-        </div>
-    </div>
-</details>
-
-<div class="sidebar-menu">
-    <strong>サイドバーメニュー:</strong>
-    <ul>
-        <li>プライバシーポリシー（現在ページ表示のみ）</li>
-    </ul>
-</div>
-
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>11-1</td><td>ページ表示</td><td>ページが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>11-2</td><td>コンテンツ表示</td><td>プライバシーポリシー本文が表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>11-3</td><td>アンカーリンク</td><td>目次からのアンカーリンクが機能する</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<hr>
-
-<h2 id="common-tests">✅ 共通テスト項目</h2>
-<p>全ページで確認すべき共通項目</p>
-<table>
-    <tr><th>No.</th><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>C-1</td><td>ヘッダー表示</td><td>ロゴ、メインナビが正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>C-2</td><td>フッター表示</td><td>フッターナビ、著作権表示が正常に表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>C-3</td><td>レスポンシブ対応</td><td>スマートフォン表示時にハンバーガーメニューに切り替わる</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>C-4</td><td>ページトップボタン</td><td>スクロール時にページトップボタンが表示される</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>C-5</td><td>リンク動作</td><td>全リンクが正常に遷移する（404エラーなし）</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>C-6</td><td>画像表示</td><td>全画像が正常に表示される（alt属性あり）</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>C-7</td><td>メタ情報</td><td>title、descriptionが適切に設定されている</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<hr>
-
-<h2 id="sidebar-patterns">📌 サイドバーパターン別テスト</h2>
-
-<h3>パターンA: 製品情報型</h3>
-<p><strong>対象ページ</strong>: /product/、/featured/、/applications/</p>
-<table>
-    <tr><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>メニュー項目数</td><td>8項目表示</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>製品情報リンク</td><td>/product/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>用途でえらぶリンク</td><td>/product/application/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>基材でえらぶリンク</td><td>/product/material/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>意匠性でえらぶリンク</td><td>/product/design/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>機能でえらぶリンク</td><td>/product/function/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>環境でえらぶリンク</td><td>/product/environment/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>注目製品リンク</td><td>/featured/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>製品用途紹介リンク</td><td>/applications/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<h3>パターンB: 私たちについて型</h3>
-<p><strong>対象ページ</strong>: /about-us/、/company/、/global-network/、/story/、/voice/、/faq/</p>
-<table>
-    <tr><th>テスト項目</th><th>期待結果</th><th>確認</th></tr>
-    <tr><td>メニュー項目数</td><td>8項目表示</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>武蔵塗料グループについてリンク</td><td>/about-us/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>会社概要リンク</td><td>/company/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>グローバルネットワークリンク</td><td>/global-network/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>ヒストリーリンク</td><td>/history/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>サステナビリティリンク</td><td>/sustainability/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>ストーリーリンク</td><td>/story/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>お客様の声リンク</td><td>/voice/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-    <tr><td>よくある質問リンク</td><td>/faq/ へ遷移</td><td><input type="checkbox" class="checkbox"></td></tr>
-</table>
-
-<h3>パターンC〜I</h3>
-<p>（その他のパターンは上記に準じてテストを実施）</p>
-
-<hr>
-
-<h2>📊 テスト結果記録欄</h2>
+<!-- テスト結果記録 -->
+<h2>📝 テスト結果記録</h2>
 <table>
     <tr><th>実施日</th><th>実施者</th><th>結果</th><th>備考</th></tr>
-    <tr><td><input type="date"></td><td><input type="text" placeholder="名前"></td><td><select><option>-</option><option>OK</option><option>NG</option></select></td><td><input type="text" placeholder="備考"></td></tr>
-    <tr><td><input type="date"></td><td><input type="text" placeholder="名前"></td><td><select><option>-</option><option>OK</option><option>NG</option></select></td><td><input type="text" placeholder="備考"></td></tr>
-    <tr><td><input type="date"></td><td><input type="text" placeholder="名前"></td><td><select><option>-</option><option>OK</option><option>NG</option></select></td><td><input type="text" placeholder="備考"></td></tr>
+    <tr><td></td><td></td><td>□ OK / □ NG</td><td></td></tr>
 </table>
 
-<hr>
-<p style="text-align: center; color: #666;">© 2025 武蔵塗料 テスト仕様書</p>
-
-<script>
-    // 各画像のズーム状態を管理
-    const zoomStates = {};
-
-    function getViewer(id) {
-        return document.querySelector(`[data-viewer="${id}"]`);
-    }
-
-    function setZoom(id, value) {
-        value = Math.max(25, Math.min(200, parseInt(value)));
-        zoomStates[id] = value;
-        
-        const viewer = getViewer(id);
-        if (!viewer) return;
-        
-        const img = viewer.querySelector('img');
-        const slider = viewer.querySelector('.zoom-slider');
-        const display = viewer.querySelector('.zoom-display');
-        
-        img.style.width = value + '%';
-        slider.value = value;
-        display.textContent = value + '%';
-    }
-
-    function zoomImage(id, delta) {
-        const current = zoomStates[id] || 100;
-        setZoom(id, current + delta);
-    }
-
-    function fitImage(id) {
-        setZoom(id, 100);
-        const viewer = getViewer(id);
-        if (viewer) {
-            const wrapper = viewer.querySelector('.image-wrapper');
-            wrapper.scrollTo(0, 0);
-        }
-    }
-
-    // 全ての画像を初期化
-    document.querySelectorAll('.image-viewer').forEach(viewer => {
-        const id = viewer.dataset.viewer;
-        zoomStates[id] = 100;
-        
-        const wrapper = viewer.querySelector('.image-wrapper');
-        
-        // キーボード操作
-        wrapper.addEventListener('keydown', function(e) {
-            // ブラウザのデフォルト動作を防止
-            if (['+', '-', '=', 'ArrowUp', 'ArrowDown', '0', 'f', 'F'].includes(e.key)) {
-                e.preventDefault();
-            }
-            
-            switch(e.key) {
-                case '+':
-                case '=':
-                case 'ArrowUp':
-                    zoomImage(id, 10);
-                    break;
-                case '-':
-                case 'ArrowDown':
-                    zoomImage(id, -10);
-                    break;
-                case '0':
-                    setZoom(id, 100);
-                    break;
-                case 'f':
-                case 'F':
-                    fitImage(id);
-                    break;
-            }
-        });
-
-        // マウスホイール操作（画像エリア内のみ）
-        wrapper.addEventListener('wheel', function(e) {
-            e.preventDefault(); // ブラウザのズームを防止
-            if (e.deltaY < 0) {
-                zoomImage(id, 10);
-            } else {
-                zoomImage(id, -10);
-            }
-        }, { passive: false });
-    });
-</script>
+<button class="print-btn" onclick="window.print()">🖨️ 印刷</button>
 
 </body>
 </html>
