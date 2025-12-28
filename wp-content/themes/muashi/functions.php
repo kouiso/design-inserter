@@ -423,19 +423,36 @@ function custom_excerpt_length( $length ) {
 add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
 
 // ページネーション
-function ts_render_pagination( $query = null ) {
+function ts_render_pagination( $query = null, $base_url_override = null, $current_page_override = null ) {
     if ( $query === null ) {
         global $wp_query;
         $query = $wp_query;
     }
     if ( empty( $query ) || $query->max_num_pages <= 1 ) return;
 
-    // 常に paged を使用（リライトルールで paged にマッピング済み）
+    // ベースURLと現在ページを決定
     $is_static_page = is_page() && ! is_front_page();
-    $current = max( 1, (int) get_query_var( 'paged' ) );
+    
+    // 引数で指定されていればそれを使用、なければ従来の方法で取得
+    if ( $current_page_override !== null ) {
+        $current = max( 1, (int) $current_page_override );
+    } else {
+        $current = max( 1, (int) get_query_var( 'paged' ) );
+    }
+    
+    // ベースURLが指定されていればそれを使用
+    $custom_base_url = $base_url_override ? trailingslashit( $base_url_override ) : null;
 
     // ページURL生成ヘルパー
-    $get_page_url = function( $page_num ) use ( $is_static_page ) {
+    $get_page_url = function( $page_num ) use ( $is_static_page, $custom_base_url ) {
+        // カスタムベースURLが指定されていればそれを使用
+        if ( $custom_base_url ) {
+            if ( $page_num <= 1 ) {
+                return $custom_base_url;
+            }
+            return $custom_base_url . 'page/' . $page_num . '/';
+        }
+        
         if ( $is_static_page ) {
             // get_page_uri() で確実に基本パスを取得（ページ番号を含まない）
             $page_id = get_queried_object_id();
@@ -444,22 +461,26 @@ function ts_render_pagination( $query = null ) {
             if ( $page_num <= 1 ) {
                 return $base_permalink;
             }
-            return $base_permalink . $page_num . '/';
+            // WordPress標準の /page/N/ 形式
+            return $base_permalink . 'page/' . $page_num . '/';
         }
         return get_pagenum_link( $page_num );
     };
 
     // 共通レンダラー（mid/endのみ可変）
-    $render_variant = function( $mid_size, $end_size, $variant_class ) use ( $query, $current, $is_static_page, $get_page_url ) {
+    $render_variant = function( $mid_size, $end_size, $variant_class ) use ( $query, $current, $is_static_page, $get_page_url, $custom_base_url ) {
 
         // paginate_links用のベースとフォーマット
-        if ( $is_static_page ) {
-            // 固定ページ: /career/interview/%#%/ 形式
-            // get_page_uri() で確実に基本パスを取得（ページ番号を含まない）
+        if ( $custom_base_url ) {
+            // カスタムベースURLが指定されている場合
+            $base_url = $custom_base_url . '%_%';
+            $format = 'page/%#%/';
+        } elseif ( $is_static_page ) {
+            // 固定ページ: WordPress標準の /page/N/ 形式
             $page_id = get_queried_object_id();
             $page_uri = get_page_uri( $page_id );
             $base_url = home_url( '/' . $page_uri . '/%_%' );
-            $format = '%#%/';
+            $format = 'page/%#%/';
         } else {
             // アーカイブ: 標準の方法
             $big = 999999999;
@@ -1158,10 +1179,12 @@ add_action( 'init', function() {
 /**
  * インタビュー用のリライトルールを追加
  * 個別投稿のURLを career/interview/[slug] 形式にするためのカスタムルール
+ * 数字のみのスラッグは除外（ページネーションと区別するため）
  */
 function register_interview_rewrite_rules() {
     // インタビュー投稿の個別ページ（career/interview/[slug]の形式）
-    add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
+    // 数字のみのスラッグを除外するため、少なくとも1つの非数字文字を含むスラッグのみマッチ
+    add_rewrite_rule('^career/interview/([^/]*[^0-9/]+[^/]*)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
 }
 add_action('init', 'register_interview_rewrite_rules', 11);
 
@@ -1177,28 +1200,13 @@ add_filter( 'post_type_link', function( $post_link, $post ) {
 
 /**
  * 固定ページのページネーション用リライトルール
- * /pagename/2/ 形式のURLを認識させる
+ * WordPress標準の /pagename/page/N/ 形式のURLを認識させる
+ * 
+ * 注意: 新しいルールを追加した場合はパーマリンク設定を再保存するか、
+ * flush_rewrite_rules() を実行する必要があります
  */
 function register_page_pagination_rewrite_rules() {
-    // ページネーションが必要な固定ページのスラッグ一覧
-    $paginated_pages = array(
-        'product',
-        'news',
-        'story',
-        'voice',
-        'career',
-        'global-network',
-    );
-
-    foreach ( $paginated_pages as $page_slug ) {
-        add_rewrite_rule(
-            '^' . preg_quote( $page_slug, '/' ) . '/([0-9]+)/?$',
-            'index.php?pagename=' . $page_slug . '&paged=$matches[1]',
-            'top'
-        );
-    }
-
-    // career/interview 固定ページ（ページネーションなし）
+    // career/interview 固定ページ（interview投稿タイプと競合するため明示的に登録）
     add_rewrite_rule(
         '^career/interview/?$',
         'index.php?pagename=career/interview',
@@ -1207,10 +1215,31 @@ function register_page_pagination_rewrite_rules() {
 
     // career/interview ページのページネーション
     add_rewrite_rule(
-        '^career/interview/([0-9]+)/?$',
+        '^career/interview/page/([0-9]+)/?$',
         'index.php?pagename=career/interview&paged=$matches[1]',
         'top'
     );
+
+    // 全ての公開固定ページを取得してリライトルールを自動生成
+    $pages = get_pages( array(
+        'post_status' => 'publish',
+    ) );
+
+    foreach ( $pages as $page ) {
+        $page_path = get_page_uri( $page->ID );
+        
+        // career/interview は上で既に登録済みなのでスキップ
+        if ( $page_path === 'career/interview' ) {
+            continue;
+        }
+        
+        // 親子ページ対応（例: career/interview）
+        add_rewrite_rule(
+            '^' . preg_quote( $page_path, '/' ) . '/page/([0-9]+)/?$',
+            'index.php?pagename=' . $page_path . '&paged=$matches[1]',
+            'top'
+        );
+    }
 
     // 製品ページのタブ切り替え用URL（/product/design/ など）
     // /product/ ページを表示し、タブ状態をクエリ変数で渡す
@@ -1231,7 +1260,7 @@ function register_page_pagination_rewrite_rules() {
         );
     }
 }
-add_action( 'init', 'register_page_pagination_rewrite_rules', 10 );
+add_action( 'init', 'register_page_pagination_rewrite_rules', 12 );
 
 /**
  * カスタムクエリ変数を登録
