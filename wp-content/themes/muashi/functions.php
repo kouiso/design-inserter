@@ -437,10 +437,14 @@ function ts_render_pagination( $query = null ) {
     // ページURL生成ヘルパー
     $get_page_url = function( $page_num ) use ( $is_static_page ) {
         if ( $is_static_page ) {
+            // get_page_uri() で確実に基本パスを取得（ページ番号を含まない）
+            $page_id = get_queried_object_id();
+            $page_uri = get_page_uri( $page_id );
+            $base_permalink = home_url( '/' . $page_uri . '/' );
             if ( $page_num <= 1 ) {
-                return get_permalink( get_queried_object_id() );
+                return $base_permalink;
             }
-            return trailingslashit( get_permalink( get_queried_object_id() ) ) . $page_num . '/';
+            return $base_permalink . $page_num . '/';
         }
         return get_pagenum_link( $page_num );
     };
@@ -450,8 +454,11 @@ function ts_render_pagination( $query = null ) {
 
         // paginate_links用のベースとフォーマット
         if ( $is_static_page ) {
-            // 固定ページ: /product/%#%/ 形式
-            $base_url = trailingslashit( get_permalink( get_queried_object_id() ) ) . '%_%';
+            // 固定ページ: /career/interview/%#%/ 形式
+            // get_page_uri() で確実に基本パスを取得（ページ番号を含まない）
+            $page_id = get_queried_object_id();
+            $page_uri = get_page_uri( $page_id );
+            $base_url = home_url( '/' . $page_uri . '/%_%' );
             $format = '%#%/';
         } else {
             // アーカイブ: 標準の方法
