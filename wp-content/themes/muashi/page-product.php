@@ -9,6 +9,9 @@ get_header();
 // ページネーション用に現在のページ番号を取得
 $paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
+// タブ切り替え用（/product/design/ などのURLからタブ状態を取得）
+$active_tab = get_query_var( 'product_tab' ) ? get_query_var( 'product_tab' ) : '';
+
 // 製品投稿一覧を取得（WP_Queryでページネーション対応）
 $product_query = new WP_Query( array(
     'post_type'      => 'product',
@@ -20,6 +23,11 @@ $product_query = new WP_Query( array(
 // タクソノミーナビゲーション用
 $product_taxonomies = muashi_get_product_taxonomy_config();
 ?>
+
+<!-- タブ状態をJavaScriptに渡す -->
+<script>
+window.productActiveTab = '<?php echo esc_js( $active_tab ); ?>';
+</script>
 
 <section class="page">
 
@@ -40,19 +48,26 @@ $product_taxonomies = muashi_get_product_taxonomy_config();
                         foreach ( $product_taxonomies as $taxonomy => $settings ) :
                             $terms = muashi_get_sorted_product_terms( $taxonomy, 0 );
                             $has_terms = ! empty( $terms );
+                            
+                            // タブスラッグとタクソノミー名のマッチング（product_design → design）
+                            $taxonomy_slug = str_replace( 'product_', '', $taxonomy );
+                            $is_active_tab = ( $active_tab === $taxonomy_slug );
                             ?>
                             <?php
                             $sub_link_classes = 'navigation__sub-link';
                             if ( $has_terms ) {
                                 $sub_link_classes .= ' js-navigation-accordion has-accordion';
                             }
+                            if ( $is_active_tab ) {
+                                $sub_link_classes .= ' is-active';
+                            }
                             ?>
                             <li class="navigation__sub-item">
-                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="false" data-taxonomy="' . esc_attr( $taxonomy ) . '"' : ''; ?>>
+                                <p class="<?php echo esc_attr( $sub_link_classes ); ?>"<?php echo $has_terms ? ' role="button" tabindex="0" aria-expanded="' . ( $is_active_tab ? 'true' : 'false' ) . '" data-taxonomy="' . esc_attr( $taxonomy ) . '"' : ''; ?>>
                                 <?php echo esc_html( $settings['label'] ); ?>
                                 </p>
                                 <?php if ( $has_terms ) : ?>
-                                    <ul class="navigation__sub-accordion-list" aria-hidden="true">
+                                    <ul class="navigation__sub-accordion-list<?php echo $is_active_tab ? ' is-active' : ''; ?>" aria-hidden="<?php echo $is_active_tab ? 'false' : 'true'; ?>">
                                         <?php foreach ( $terms as $term ) : ?>
                                             <li class="navigation__sub-accordion-item">
                                                 <a href="<?php echo esc_url( get_term_link( $term ) ); ?>" class="navigation__sub-accordion-link">

@@ -1191,14 +1191,48 @@ function register_page_pagination_rewrite_rules() {
         );
     }
 
+    // career/interview 固定ページ（ページネーションなし）
+    add_rewrite_rule(
+        '^career/interview/?$',
+        'index.php?pagename=career/interview',
+        'top'
+    );
+
     // career/interview ページのページネーション
     add_rewrite_rule(
         '^career/interview/([0-9]+)/?$',
         'index.php?pagename=career/interview&paged=$matches[1]',
         'top'
     );
+
+    // 製品ページのタブ切り替え用URL（/product/design/ など）
+    // /product/ ページを表示し、タブ状態をクエリ変数で渡す
+    $product_taxonomy_slugs = array(
+        'application',
+        'material',
+        'design',
+        'function',
+        'environment',
+    );
+
+    foreach ( $product_taxonomy_slugs as $slug ) {
+        // /product/design/ → /product/ ページを表示（タブ状態を渡す）
+        add_rewrite_rule(
+            '^product/' . $slug . '/?$',
+            'index.php?pagename=product&product_tab=' . $slug,
+            'top'
+        );
+    }
 }
 add_action( 'init', 'register_page_pagination_rewrite_rules', 10 );
+
+/**
+ * カスタムクエリ変数を登録
+ */
+add_filter( 'query_vars', function( $vars ) {
+    $vars[] = 'product_tab';
+    return $vars;
+});
 
 /**
  * 固定ページでも paged クエリ変数を保持する
