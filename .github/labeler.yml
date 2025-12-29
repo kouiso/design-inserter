@@ -1,0 +1,60 @@
+# Pull Request Labeler Configuration
+# ファイルパスのパターンに基づいて自動的にラベルを付与
+
+# WordPress コアファイル
+wordpress-core:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'wp-admin/**'
+      - 'wp-includes/**'
+      - 'wp-*.php'
+
+# テーマ関連
+theme:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'wp-content/themes/**'
+
+# プラグイン関連
+plugin:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'wp-content/plugins/**'
+
+# GitHub Actions / CI/CD
+ci-cd:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**'
+
+# ドキュメント
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'readme.html'
+      - 'license.txt'
+
+# テスト関連
+test:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'test-specs/**'
+      - '**/*test*.php'
+      - '**/*spec*.php'
+
+# ツール
+tools:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'tools/**'
+      - 'gulpfile.js'
+      - 'package.json'
+
+# 設定ファイル
+config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'wp-config*.php'
+      - '.gitignore'
+      - '.editorconfig'
