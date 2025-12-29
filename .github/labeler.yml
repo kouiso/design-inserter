@@ -7,7 +7,7 @@ wordpress-core:
     - any-glob-to-any-file:
       - 'wp-admin/**'
       - 'wp-includes/**'
-      - 'wp-*.php'
+      - '{wp-*.php,index.php}'
 
 # テーマ関連
 theme:
@@ -34,6 +34,7 @@ documentation:
       - '**/*.md'
       - 'readme.html'
       - 'license.txt'
+  - 'test-specs/**/*.html'
 
 # テスト関連
 test:
@@ -58,3 +59,4 @@ config:
       - 'wp-config*.php'
       - '.gitignore'
       - '.editorconfig'
+  - '.github/**/*.yml'
