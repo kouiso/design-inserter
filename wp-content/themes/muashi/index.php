@@ -410,7 +410,7 @@ get_header();
             <div class="top-section__title-wrapper u-hidden-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
                     <svg width="63" height="15" viewBox="0 0 63 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="0" y="12" fill="white" font-size="12" font-weight="700">PICK UP</text>
+                        <text x="31.5" y="7.5" text-anchor="middle" dominant-baseline="central" fill="white" font-size="15" font-weight="700">PICK UP</text>
                     </svg>
                 </p>
                 <div class="top-section__title-bg" data-inview>
@@ -422,7 +422,7 @@ get_header();
             <div class="top-section__title-wrapper u-visible-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
                     <svg width="126" height="29" viewBox="0 0 126 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="0" y="22" fill="white" font-size="22" font-weight="700">PICK UP</text>
+                        <text x="63" y="14.5" text-anchor="middle" dominant-baseline="central" fill="white" font-size="29" font-weight="700">PICK UP</text>
                     </svg>
                 </p>
                 <div class="top-section__title-bg" data-inview>
