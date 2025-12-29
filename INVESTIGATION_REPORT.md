@@ -8,6 +8,28 @@
 
 ## 削除候補ファイル一覧
 
+### 0. **page-0x.php テンプレート（5ファイル）** ✓ 削除済み（未使用）
+
+```
+wp-content/themes/muashi/page-01.php
+wp-content/themes/muashi/page-02.php
+wp-content/themes/muashi/page-03.php  (Template Name: Custom Template)
+wp-content/themes/muashi/page-04.php  (Template Name: Custom Template 04)
+wp-content/themes/muashi/page-05.php
+```
+
+**調査結果:**
+- テーマ内 grep で参照なし（`page-0x.php` が呼ばれていない）
+- DB 側: `_wp_page_template` が `page-01.php`〜`page-05.php` の割り当ては 0 件（local DB 127.0.0.1:10011 / root:root で実行）
+- issue 記載の `investigate_unused_files.php` はリポジトリ内に未検出
+- ナビゲーションの言語表示は全ファイルともプレーンテキスト `En | 中文` のまま
+
+**対応:**
+- 未使用と判断し 5 ファイルすべて削除（feature-85 作業ツリーで削除済み）
+
+**補足:**
+- DB 確認済み（ヒット 0 件）。追加確認不要。
+
 ### 1. **デバッグ・チェックスクリプト（12ファイル）** ✓ 削除推奨
 
 すべて開発用スクリプトで、メインファイルからの参照なし
