@@ -168,24 +168,10 @@
 </div>
 
 <!-- 本番バグ情報 -->
-<div class="alert" id="bug-info">
-    <h3>⚠️ 重要：本番環境バグ情報</h3>
-    <p><strong>症状</strong>: 2ページ目以降（/product/2/, /career/interview/2/ など）にアクセスするとTOPページにリダイレクトされる</p>
-    
-    <p><strong>想定原因</strong>:</p>
-    <ul>
-        <li><strong>リライトルールがフラッシュされていない</strong> - 本番でパーマリンク設定を保存し直す必要がある</li>
-        <li><strong>.htaccess の設定不備</strong> - 本番サーバーのRewriteRule設定</li>
-        <li><strong>キャッシュプラグイン</strong> - ページキャッシュが悪さをしている可能性</li>
-        <li><strong>サーバー環境の違い</strong> - mod_rewrite や Apache/nginx の設定</li>
-    </ul>
-    
-    <p><strong>対処法</strong>:</p>
-    <ol>
-        <li>本番 WordPress管理画面 → 設定 → パーマリンク設定 → 何も変更せず「保存」を押す</li>
-        <li>.htaccess が正しく書き込まれているか確認</li>
-        <li>キャッシュをクリア</li>
-    </ol>
+<div class="alert" id="bug-info" style="background: #d4edda; border-color: #28a745;">
+    <h3 style="color: #155724;">✅ 本番環境バグ情報（解消済み）</h3>
+    <p><strong>過去の症状</strong>: 2ページ目以降（/product/page/2/, /career/interview/page/2/ など）にアクセスするとTOPページにリダイレクトされていた</p>
+    <p><strong>ステータス</strong>: <span style="color: #28a745; font-weight: bold;">2025年12月29日 解消確認済み</span></p>
 </div>
 
 <!-- 固定ページ一覧 -->
@@ -388,10 +374,10 @@
 <table>
     <tr><th>No.</th><th>テスト内容</th><th>URL</th><th class="checkbox">確認</th></tr>
     <tr><td>3-1-1</td><td>1ページ目が表示される</td><td>/product/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-1-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/product/2/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-1-3</td><td>ページ番号「3」クリックで3ページ目へ遷移</td><td>/product/3/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-1-4</td><td>ページ番号「4」クリックで4ページ目へ遷移</td><td>/product/4/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-1-5</td><td>ページ番号「5」クリックで5ページ目へ遷移</td><td>/product/5/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/product/page/2/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-3</td><td>ページ番号「3」クリックで3ページ目へ遷移</td><td>/product/page/3/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-4</td><td>ページ番号「4」クリックで4ページ目へ遷移</td><td>/product/page/4/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-1-5</td><td>ページ番号「5」クリックで5ページ目へ遷移</td><td>/product/page/5/</td><td class="checkbox">□</td></tr>
     <tr><td>3-1-6</td><td>「次のページ」矢印クリックで次ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
     <tr><td>3-1-7</td><td>「前のページ」矢印クリックで前ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
     <tr><td>3-1-8</td><td>各ページで製品一覧が正常に表示される</td><td></td><td class="checkbox">□</td></tr>
@@ -401,8 +387,8 @@
 <table>
     <tr><th>No.</th><th>テスト内容</th><th>URL</th><th class="checkbox">確認</th></tr>
     <tr><td>3-2-1</td><td>1ページ目が表示される</td><td>/career/interview/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-2-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/career/interview/2/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-2-3</td><td>ページ番号「3」クリックで3ページ目へ遷移</td><td>/career/interview/3/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/career/interview/page/2/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-2-3</td><td>ページ番号「3」クリックで3ページ目へ遷移</td><td>/career/interview/page/3/</td><td class="checkbox">□</td></tr>
     <tr><td>3-2-4</td><td>「次のページ」矢印クリックで次ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
     <tr><td>3-2-5</td><td>「前のページ」矢印クリックで前ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
     <tr><td>3-2-6</td><td>各ページでインタビュー一覧が正常に表示される</td><td></td><td class="checkbox">□</td></tr>
@@ -412,7 +398,7 @@
 <table>
     <tr><th>No.</th><th>テスト内容</th><th>URL</th><th class="checkbox">確認</th></tr>
     <tr><td>3-3-1</td><td>1ページ目が表示される</td><td>/story/</td><td class="checkbox">□</td></tr>
-    <tr><td>3-3-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/story/2/</td><td class="checkbox">□</td></tr>
+    <tr><td>3-3-2</td><td>ページ番号「2」クリックで2ページ目へ遷移</td><td>/story/page/2/</td><td class="checkbox">□</td></tr>
     <tr><td>3-3-3</td><td>「次のページ」矢印クリックで次ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
     <tr><td>3-3-4</td><td>「前のページ」矢印クリックで前ページへ遷移</td><td></td><td class="checkbox">□</td></tr>
     <tr><td>3-3-5</td><td>各ページでストーリー一覧が正常に表示される</td><td></td><td class="checkbox">□</td></tr>
@@ -421,10 +407,10 @@
 <h4>3-4〜3-7. その他ページネーション対象（件数次第で表示）</h4>
 <table>
     <tr><th>ページ</th><th>URL</th><th>2ページ目URL</th><th>コード実装</th><th class="checkbox">確認</th></tr>
-    <tr><td>ニュース</td><td>/news/</td><td>/news/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
-    <tr><td>採用情報</td><td>/career/</td><td>/career/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
-    <tr><td>お客様の声</td><td>/voice/</td><td>/voice/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
-    <tr><td>グローバルネットワーク</td><td>/global-network/</td><td>/global-network/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>ニュース</td><td>/news/</td><td>/news/page/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>採用情報</td><td>/career/</td><td>/career/page/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>お客様の声</td><td>/voice/</td><td>/voice/page/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
+    <tr><td>グローバルネットワーク</td><td>/global-network/</td><td>/global-network/page/2/</td><td class="status-ok">✅ 統一パターン</td><td class="checkbox">□</td></tr>
 </table>
 <p>※ 1ページあたり12件表示。13件以上でページネーション表示</p>
 
@@ -477,9 +463,8 @@
 <table>
     <tr><th>No.</th><th>テスト内容</th><th class="checkbox">確認</th></tr>
     <tr><td>5-1</td><td>レスポンシブ：SP表示でハンバーガーメニューに切替</td><td class="checkbox">□</td></tr>
-    <tr><td>5-2</td><td>ページトップボタン：スクロール時に表示</td><td class="checkbox">□</td></tr>
-    <tr><td>5-3</td><td>全リンク：404エラーなし</td><td class="checkbox">□</td></tr>
-    <tr><td>5-4</td><td>全画像：正常に表示される</td><td class="checkbox">□</td></tr>
+    <tr><td>5-2</td><td>全リンク：404エラーなし</td><td class="checkbox">□</td></tr>
+    <tr><td>5-3</td><td>全画像：正常に表示される</td><td class="checkbox">□</td></tr>
 </table>
 
 <!-- Playwrightコード -->
@@ -513,31 +498,31 @@ test.describe('ページ表示テスト', () => {
 
 // 3. ページネーションテスト
 test.describe('ページネーションテスト', () => {
-  
+
   test('製品情報ページのページネーション', async ({ page }) => {
     await page.goto(`${BASE_URL}/product/`);
-    
+
     // ページ2へ遷移
     await page.locator('.pagination a:has-text("2")').click();
-    await expect(page).toHaveURL(/\/product\/2\//);
-    
+    await expect(page).toHaveURL(/\/product\/page\/2\//);
+
     // ページ3へ遷移
     await page.locator('.pagination a:has-text("3")').click();
-    await expect(page).toHaveURL(/\/product\/3\//);
+    await expect(page).toHaveURL(/\/product\/page\/3\//);
   });
 
   test('インタビューページのページネーション', async ({ page }) => {
     await page.goto(`${BASE_URL}/career/interview/`);
-    
+
     await page.locator('.pagination a:has-text("2")').click();
-    await expect(page).toHaveURL(/\/career\/interview\/2\//);
+    await expect(page).toHaveURL(/\/career\/interview\/page\/2\//);
   });
 
   test('ストーリーページのページネーション', async ({ page }) => {
     await page.goto(`${BASE_URL}/story/`);
-    
+
     await page.locator('.pagination a:has-text("2")').click();
-    await expect(page).toHaveURL(/\/story\/2\//);
+    await expect(page).toHaveURL(/\/story\/page\/2\//);
   });
 });</pre>
     </div>
