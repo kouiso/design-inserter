@@ -79,8 +79,8 @@ get_header();
             </li>
             <li class="top-kv__nav-item">
                 <div class="top-kv__nav-link top-kv__nav-link--lang">
-                    <a href="https://en.musashipaint.com" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">En</a>
-                    <a href="https://www.musashipaintchina.com/" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                    <a href="<?= URL_LANG_EN ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">En</a>
+                    <a href="<?= URL_LANG_ZH ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">中文</a>
                 </div>
             </li>
         </ul>
