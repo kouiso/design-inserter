@@ -123,8 +123,8 @@ if (is_home()){
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
-                                <a href="" class="header__nav-link--lang">En</a>
-                                <a href="https://www.musashipaintchina.com/" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                                <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">En</a>
+                                <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
                             </span>
                         </li>
                     </ul>
@@ -177,8 +177,8 @@ if (is_home()){
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
-                                <a href="" class="header__nav-link--lang">En</a>
-                                <a href="https://www.musashipaintchina.com/" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                                <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">En</a>
+                                <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
                             </span>
                         </li>
                     </ul>

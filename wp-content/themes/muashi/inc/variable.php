@@ -26,3 +26,7 @@ define('URL_INTERVIEW', home_url('/career/interview/'));
 define('URL_PRIVACY_POLICY', home_url('/privacy-policy/'));
 define('URL_TERMS', home_url('/terms/'));
 define('URL_FAQ', home_url('/faq/'));
+
+// External language sites
+define('URL_LANG_EN', 'https://en.musashipaint.com');
+define('URL_LANG_ZH', 'https://www.musashipaintchina.com/');
