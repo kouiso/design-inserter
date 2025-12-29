@@ -15,6 +15,7 @@
   --color-bg-gray: #F5F5F5;
   --color-nav-black: #2E2E2E;
   --color-footer-gray: #F2F2F2;
+  --header-scroll-offset: 300px;
 }
 
 /*
@@ -71,7 +72,7 @@ body {
 }
 
 [id] {
-  scroll-margin-top: 300px;
+  scroll-margin-top: var(--header-scroll-offset);
 }
 
 *::-webkit-scrollbar {
@@ -109,14 +110,6 @@ h6 {
   font-size: inherit;
   font-weight: inherit;
   margin: 0;
-}
-h1[id],
-h2[id],
-h3[id],
-h4[id],
-h5[id],
-h6[id] {
-  scroll-margin-top: 300px;
 }
 
 button {

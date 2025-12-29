@@ -23,7 +23,7 @@ body {
 
 // アンカーリンクのスクロール位置調整（全てのID要素に適用）
 [id] {
-  scroll-margin-top: 300px;
+  scroll-margin-top: var(--header-scroll-offset);
 }
 
 *::-webkit-scrollbar {
@@ -62,11 +62,6 @@ h6 {
   font-size: inherit;
   font-weight: inherit;
   margin: 0;
-  
-  // アンカーリンクのスクロール位置調整（WordPress HTML Anchor対応）
-  &[id] {
-    scroll-margin-top: 300px;
-  }
 }
 
 button {
