@@ -51,13 +51,13 @@ $media_query = new WP_Query( array(
                 <h1 class="page__title js-page-title">
                 <?php the_title(); ?>
                 </h1>
-                <div class="page__inner" style="padding-bottom: 40px;">
+                <div class="page__inner page__inner--intro">
                 <?php the_content(); ?>
                 </div>
                     <?php endwhile; ?>
                 <?php endif; ?>
 
-                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
+                <div class="page__inner page__inner--narrow page__inner--no-top-margin">
 
                     <div class="story">
                         <div class="archive">
@@ -95,7 +95,7 @@ $media_query = new WP_Query( array(
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">お知らせはまだありません。</p>
+                                    <p class="archive__title">Pickupはまだありません。</p>
                                 </div>
                                 </li>
                             <?php endif; ?>
