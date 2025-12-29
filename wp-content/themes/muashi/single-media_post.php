@@ -77,7 +77,7 @@ get_header();
             'career'        => defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ),
             'interview'     => defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : get_post_type_archive_link( 'interview' ),
             'globalnetwork' => defined( 'URL_GLOBAL_NETWORK' ) ? URL_GLOBAL_NETWORK : get_post_type_archive_link( 'globalnetwork' ),
-            'media_post'    => get_post_type_archive_link( 'media_post' ),
+            'media_post'    => defined( 'URL_MEDIA' ) ? URL_MEDIA : get_post_type_archive_link( 'media_post' ),
         );
 
         if ( isset( $custom_back_links[ $post_type ] ) && $custom_back_links[ $post_type ] ) {
@@ -91,30 +91,7 @@ get_header();
     }
     ?>
 
-    <div class="navigation">
-        <div class="navigation__inner">
-            <ul class="navigation__list">
-                <li class="navigation__item">
-                    <p class="navigation__item-title">
-                        <?php echo esc_html( get_the_title() ); ?>
-                    </p>
-                    <ul class="navigation__sub-list">
-                        <?php if ( ! empty( $toc_items ) ) : ?>
-                            <?php foreach ( $toc_items as $i => $toc ) : ?>
-                                <li class="navigation__sub-item">
-                                    <a href="#<?php echo esc_attr( $toc['id'] ); ?>" class="navigation__sub-link">
-                                        <?php echo esc_html( $toc['title'] ); ?>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <!-- h2が無い場合は目次を出さない/空で維持 -->
-                        <?php endif; ?>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <?php muashi_render_sidebar_navigation( 'sidebar_news_media' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">

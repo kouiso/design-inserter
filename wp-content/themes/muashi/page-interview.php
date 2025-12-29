@@ -6,8 +6,8 @@ global $description;
 $description = '';
 get_header();
 
-// ページネーション用に現在のページ番号を取得
-$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+// ページネーション用に現在のページ番号を取得（WordPress標準の方法）
+$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 // インタビュー投稿一覧を取得（WP_Queryでページネーション対応）
 $interview_query = new WP_Query( array(
@@ -17,6 +17,7 @@ $interview_query = new WP_Query( array(
     'orderby'        => 'date',
     'order'          => 'DESC',
 ) );
+
 ?>
 
 <section class="page">

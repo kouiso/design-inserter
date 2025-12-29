@@ -56,7 +56,7 @@
                             <div class="footer__accordion-list-wrapper js-accordion-list">
                                 <ul class="footer__accordion-list">
                                     <li class="footer__accordion-item">
-                                        <a href="<?= URL_PRODUCT ?>#product_application" class="footer__accordion-link">
+                                        <a href="<?= URL_PRODUCT ?>application/" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">用途でえらぶ</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +66,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="<?= URL_PRODUCT ?>#product_material" class="footer__accordion-link">
+                                        <a href="<?= URL_PRODUCT ?>material/" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">基材でえらぶ</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +76,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="<?= URL_PRODUCT ?>#product_design" class="footer__accordion-link">
+                                        <a href="<?= URL_PRODUCT ?>design/" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">意匠性でえらぶ</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +86,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="<?= URL_PRODUCT ?>#product_function" class="footer__accordion-link">
+                                        <a href="<?= URL_PRODUCT ?>function/" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">機能でえらぶ</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +96,7 @@
                                         </a>
                                     </li>
                                     <li class="footer__accordion-item">
-                                        <a href="<?= URL_PRODUCT ?>#product_environment" class="footer__accordion-link">
+                                        <a href="<?= URL_PRODUCT ?>environment/" class="footer__accordion-link">
                                             <span class="footer__accordion-link-text">環境キーワードでえらぶ</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -300,11 +300,11 @@
                     <div class="footer__nav-pc-item">
                         <p class="footer__nav-pc-text">製品情報</p>
                         <div class="footer__nav-pc-link-wrapper">
-                            <a href="<?= URL_PRODUCT ?>#product_application" class="footer__nav-pc-link">用途でえらぶ</a>
-                            <a href="<?= URL_PRODUCT ?>#product_material" class="footer__nav-pc-link">基材でえらぶ</a>
-                            <a href="<?= URL_PRODUCT ?>#product_design" class="footer__nav-pc-link">意匠性でえらぶ</a>
-                            <a href="<?= URL_PRODUCT ?>#product_function" class="footer__nav-pc-link">機能でえらぶ</a>
-                            <a href="<?= URL_PRODUCT ?>#product_environment" class="footer__nav-pc-link">環境キーワードでえらぶ</a>
+                            <a href="<?= URL_PRODUCT ?>application/" class="footer__nav-pc-link">用途でえらぶ</a>
+                            <a href="<?= URL_PRODUCT ?>material/" class="footer__nav-pc-link">基材でえらぶ</a>
+                            <a href="<?= URL_PRODUCT ?>design/" class="footer__nav-pc-link">意匠性でえらぶ</a>
+                            <a href="<?= URL_PRODUCT ?>function/" class="footer__nav-pc-link">機能でえらぶ</a>
+                            <a href="<?= URL_PRODUCT ?>environment/" class="footer__nav-pc-link">環境キーワードでえらぶ</a>
                         </div>
                     </div>
                     <div class="footer__nav-pc-item">

@@ -4,59 +4,8 @@
  * 変数ファイルの読み込み
  */
 require_once(get_theme_file_path('/inc/variable.php'));
-
-/**
- * PHPのメモリー上限の書き換え
- */
-ini_set('memory_limit', '256M');
-
-/**
- * wp_head　不要タグの削除
- */
-remove_action( 'wp_head', 'wp_generator' ); //WordPressのバージョン情報
-remove_action( 'wp_head', 'rsd_link' ); //外部アプリケーションから情報を取得するタグ
-remove_action( 'wp_head', 'wlwmanifest_link' ); //Windows Live Writer用のタグ
-remove_action( 'wp_head', 'index_rel_link' ); //現在の文書に対する「索引」であることを示すタグ
-remove_action( 'wp_head', 'wp_shortlink_wp_head', 10, 0 ); //「?p=投稿ID」形式のデフォルトパーマリンクタグ
-remove_action( 'wp_head', 'name_viewport' ); //「?p=投稿ID」形式のデフォルトパーマリンクタグ
-
-//「link rel=next」等のタグ
-remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 );
-remove_action( 'wp_head', 'start_post_rel_link', 10, 0 );
-remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
-
-//フィード関連のタグ
-remove_action( 'wp_head', 'feed_links', 2);
-remove_action( 'wp_head', 'feed_links_extra', 3);
-
-//絵文字関連タグ
-remove_action( 'wp_head', 'print_emoji_detection_script', 7);
-remove_action( 'admin_print_scripts', 'print_emoji_detection_script');
-remove_action( 'wp_print_styles', 'print_emoji_styles' );
-remove_action( 'admin_print_styles', 'print_emoji_styles');
-add_filter( 'emoji_svg_url', '__return_false' );
-
-/**
- * add_theme_support
- */
-add_action( 'after_setup_theme', function(){
-    // add_theme_support( 'title-tag' ); // tiltleタグの追加
-    add_theme_support( 'post-thumbnails' ); //サムネイル機能の追加
-    add_theme_support('menus'); // カスタムメニューの追加
-    add_theme_support('widgets'); // ウィジェットの追加
-});
-
-/**
- * session_start
- */
-add_action('init', function(){
-    session_start();
-});
-
-/**
- * ツールバー非表示
- */
-add_filter('show_admin_bar', '__return_false');
+require_once(get_theme_file_path('/inc/post-types.php'));
+require_once(get_theme_file_path('/inc/setup.php'));
 
 /**
  * css、js読み込み
@@ -107,76 +56,6 @@ function all_modified_date( $post_type = "post", $format = "Y-m-d H:i:s" ){
 
     return $all_modified_date;
 }
-
-/**
- * メディア投稿タイプ
- */
-function muashi_register_media_post_type() {
-    $labels = array(
-        'name'               => 'メディア',
-        'singular_name'      => 'メディア',
-        'menu_name'          => 'メディア',
-        'name_admin_bar'     => 'メディア',
-        'add_new'            => '新規追加',
-        'add_new_item'       => 'メディアを追加',
-        'edit_item'          => 'メディアを編集',
-        'new_item'           => '新しいメディア',
-        'view_item'          => 'メディアを表示',
-        'search_items'       => 'メディアを検索',
-        'not_found'          => 'メディアが見つかりませんでした',
-        'not_found_in_trash' => 'ゴミ箱にメディアはありません',
-        'all_items'          => 'すべてのメディア',
-    );
-
-    $args = array(
-        'labels'             => $labels,
-        'public'             => true,
-        'has_archive'        => false,  // 固定ページ(page-media.php)でアーカイブ表示するため無効化
-        // NOTE: /media/ はWordPressの予約語のため使用不可
-        'rewrite'            => array( 'slug' => 'media-page' ),
-        'menu_icon'          => 'dashicons-megaphone',
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
-        'taxonomies'         => array( 'media_category', 'category' ),
-        'show_in_rest'       => true,
-    );
-
-    register_post_type( 'media_post', $args );
-}
-add_action( 'init', 'muashi_register_media_post_type' );
-
-/**
- * メディアカテゴリ
- */
-function muashi_register_media_category_taxonomy() {
-    $labels = array(
-        'name'              => 'メディアカテゴリー',
-        'singular_name'     => 'メディアカテゴリー',
-        'search_items'      => 'カテゴリーを検索',
-        'all_items'         => 'すべてのカテゴリー',
-        'parent_item'       => '親カテゴリー',
-        'parent_item_colon' => '親カテゴリー:',
-        'edit_item'         => 'カテゴリーを編集',
-        'update_item'       => 'カテゴリーを更新',
-        'add_new_item'      => '新規カテゴリーを追加',
-        'new_item_name'     => '新しいカテゴリー名',
-        'menu_name'         => 'メディアカテゴリー',
-    );
-
-    $args = array(
-        'labels'            => $labels,
-        'hierarchical'      => true,
-        'public'            => true,
-        'show_ui'           => true,
-        'show_admin_column' => true,
-        'show_in_rest'      => true,
-        'rewrite'           => array( 'slug' => 'media-category' ),
-    );
-
-    register_taxonomy( 'media_category', array( 'media_post' ), $args );
-
-    register_taxonomy_for_object_type( 'media_category', 'media_post' );
-}
-add_action( 'init', 'muashi_register_media_category_taxonomy' );
 
 
 if ( ! function_exists( 'muashi_get_primary_category_name' ) ) {
@@ -544,38 +423,92 @@ function custom_excerpt_length( $length ) {
 add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
 
 // ページネーション
-function ts_render_pagination( $query = null ) {
+function ts_render_pagination( $query = null, $base_url_override = null, $current_page_override = null ) {
     if ( $query === null ) {
         global $wp_query;
         $query = $wp_query;
     }
     if ( empty( $query ) || $query->max_num_pages <= 1 ) return;
 
-    $current = max( 1, (int) get_query_var('paged') );
+    // ベースURLと現在ページを決定
+    $is_static_page = is_page() && ! is_front_page();
+    
+    // 引数で指定されていればそれを使用、なければ従来の方法で取得
+    if ( $current_page_override !== null ) {
+        $current = max( 1, (int) $current_page_override );
+    } else {
+        $current = max( 1, (int) get_query_var( 'paged' ) );
+    }
+    
+    // ベースURLが指定されていればそれを使用
+    $custom_base_url = $base_url_override ? trailingslashit( $base_url_override ) : null;
+
+    // ページURL生成ヘルパー
+    $get_page_url = function( $page_num ) use ( $is_static_page, $custom_base_url ) {
+        // カスタムベースURLが指定されていればそれを使用
+        if ( $custom_base_url ) {
+            if ( $page_num <= 1 ) {
+                return $custom_base_url;
+            }
+            return $custom_base_url . 'page/' . $page_num . '/';
+        }
+        
+        if ( $is_static_page ) {
+            // get_page_uri() で確実に基本パスを取得（ページ番号を含まない）
+            $page_id = get_queried_object_id();
+            $page_uri = get_page_uri( $page_id );
+            $base_permalink = home_url( '/' . $page_uri . '/' );
+            if ( $page_num <= 1 ) {
+                return $base_permalink;
+            }
+            // WordPress標準の /page/N/ 形式
+            return $base_permalink . 'page/' . $page_num . '/';
+        }
+        return get_pagenum_link( $page_num );
+    };
 
     // 共通レンダラー（mid/endのみ可変）
-    $render_variant = function( $mid_size, $end_size, $variant_class ) use ( $query, $current ) {
+    $render_variant = function( $mid_size, $end_size, $variant_class ) use ( $query, $current, $is_static_page, $get_page_url, $custom_base_url ) {
+
+        // paginate_links用のベースとフォーマット
+        if ( $custom_base_url ) {
+            // カスタムベースURLが指定されている場合
+            $base_url = $custom_base_url . '%_%';
+            $format = 'page/%#%/';
+        } elseif ( $is_static_page ) {
+            // 固定ページ: WordPress標準の /page/N/ 形式
+            $page_id = get_queried_object_id();
+            $page_uri = get_page_uri( $page_id );
+            $base_url = home_url( '/' . $page_uri . '/%_%' );
+            $format = 'page/%#%/';
+        } else {
+            // アーカイブ: 標準の方法
+            $big = 999999999;
+            $base_url = str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) );
+            $format = '';
+        }
 
         // 数字リンクのみ（前後リンクは自前で出す）
-        $links = paginate_links([
+        $paginate_args = array(
             'total'               => (int) $query->max_num_pages,
             'current'             => $current,
-            'mid_size'            => $mid_size, // 可変
-            'end_size'            => $end_size, // 可変
+            'mid_size'            => $mid_size,
+            'end_size'            => $end_size,
             'type'                => 'array',
             'prev_next'           => false,
             'before_page_number'  => '<span class="pagination__text">',
             'after_page_number'   => '</span>',
-            'base'                => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-            'format'              => 'page/%#%/',
-        ]);
+            'base'                => $base_url,
+            'format'              => $format,
+        );
+        $links = paginate_links( $paginate_args );
 
         echo '<div class="pagination ' . esc_attr( $variant_class ) . '" role="navigation" aria-label="Pagination">';
 
         // ← 前（矢印のみ）
         echo '<div class="pagination__arrow-wrapper">';
         if ( $current > 1 ) {
-            $prev_url = get_pagenum_link( $current - 1 );
+            $prev_url = $get_page_url( $current - 1 );
             echo '<a class="pagination__link pagination__link--prev" href="' . esc_url( $prev_url ) . '" rel="prev" aria-label="前のページ">
                     <span class="pagination__icon" aria-hidden="true">
                       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -622,7 +555,7 @@ function ts_render_pagination( $query = null ) {
         // → 次（矢印のみ）
         echo '<div class="pagination__arrow-wrapper">';
         if ( $current < (int) $query->max_num_pages ) {
-            $next_url = get_pagenum_link( $current + 1 );
+            $next_url = $get_page_url( $current + 1 );
             echo '<a class="pagination__link pagination__link--next" href="' . esc_url( $next_url ) . '" rel="next" aria-label="次のページ">
                     <span class="pagination__icon" aria-hidden="true">
                       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -682,13 +615,15 @@ function create_post_type() {
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'product'),
+            'rewrite'       => array(
+                'slug'       => 'product',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-cart',
         )
     );
 
     // ストーリー
-    // NOTE: 固定ページ(page-story.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'story',
         array(
@@ -703,7 +638,10 @@ function create_post_type() {
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'story'),
+            'rewrite'       => array(
+                'slug'       => 'story',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-book-alt',
         )
     );
@@ -723,7 +661,10 @@ function create_post_type() {
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
-            'rewrite'       => array('slug' => 'voice'),
+            'rewrite'       => array(
+                'slug'       => 'voice',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-testimonial',
         )
     );
@@ -763,13 +704,15 @@ function create_post_type() {
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => false,  // リライトルールは register_interview_rewrite_rules() で手動管理
+            'rewrite'       => array(
+                'slug'       => 'career/interview',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-format-chat',
         )
     );
 
     // グローバルネットワーク
-    // NOTE: 固定ページ(page-global-network.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'globalnetwork',
         array(
@@ -784,7 +727,10 @@ function create_post_type() {
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'global-network'),
+            'rewrite'       => array(
+                'slug'       => 'global-network',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-admin-site-alt3',
         )
     );
@@ -1232,12 +1178,13 @@ add_action( 'init', function() {
 
 /**
  * インタビュー用のリライトルールを追加
+ * 個別投稿のURLを career/interview/[slug] 形式にするためのカスタムルール
+ * 数字のみのスラッグは除外（ページネーションと区別するため）
  */
 function register_interview_rewrite_rules() {
-    // career/interview/ は固定ページ(page_id=3067)で処理
-    add_rewrite_rule('^career/interview/?$', 'index.php?pagename=career/interview', 'top');
     // インタビュー投稿の個別ページ（career/interview/[slug]の形式）
-    add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
+    // 数字のみのスラッグを除外するため、少なくとも1つの非数字文字を含むスラッグのみマッチ
+    add_rewrite_rule('^career/interview/([^/]*[^0-9/]+[^/]*)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
 }
 add_action('init', 'register_interview_rewrite_rules', 11);
 
@@ -1250,6 +1197,90 @@ add_filter( 'post_type_link', function( $post_link, $post ) {
     }
     return $post_link;
 }, 10, 2 );
+
+/**
+ * 固定ページのページネーション用リライトルール
+ * WordPress標準の /pagename/page/N/ 形式のURLを認識させる
+ * 
+ * 注意: 新しいルールを追加した場合はパーマリンク設定を再保存するか、
+ * flush_rewrite_rules() を実行する必要があります
+ */
+function register_page_pagination_rewrite_rules() {
+    // career/interview 固定ページ（interview投稿タイプと競合するため明示的に登録）
+    add_rewrite_rule(
+        '^career/interview/?$',
+        'index.php?pagename=career/interview',
+        'top'
+    );
+
+    // career/interview ページのページネーション
+    add_rewrite_rule(
+        '^career/interview/page/([0-9]+)/?$',
+        'index.php?pagename=career/interview&paged=$matches[1]',
+        'top'
+    );
+
+    // 全ての公開固定ページを取得してリライトルールを自動生成
+    $pages = get_pages( array(
+        'post_status' => 'publish',
+    ) );
+
+    foreach ( $pages as $page ) {
+        $page_path = get_page_uri( $page->ID );
+        
+        // career/interview は上で既に登録済みなのでスキップ
+        if ( $page_path === 'career/interview' ) {
+            continue;
+        }
+        
+        // 親子ページ対応（例: career/interview）
+        add_rewrite_rule(
+            '^' . preg_quote( $page_path, '/' ) . '/page/([0-9]+)/?$',
+            'index.php?pagename=' . $page_path . '&paged=$matches[1]',
+            'top'
+        );
+    }
+
+    // 製品ページのタブ切り替え用URL（/product/design/ など）
+    // /product/ ページを表示し、タブ状態をクエリ変数で渡す
+    $product_taxonomy_slugs = array(
+        'application',
+        'material',
+        'design',
+        'function',
+        'environment',
+    );
+
+    foreach ( $product_taxonomy_slugs as $slug ) {
+        // /product/design/ → /product/ ページを表示（タブ状態を渡す）
+        add_rewrite_rule(
+            '^product/' . $slug . '/?$',
+            'index.php?pagename=product&product_tab=' . $slug,
+            'top'
+        );
+    }
+}
+add_action( 'init', 'register_page_pagination_rewrite_rules', 12 );
+
+/**
+ * カスタムクエリ変数を登録
+ */
+add_filter( 'query_vars', function( $vars ) {
+    $vars[] = 'product_tab';
+    return $vars;
+});
+
+/**
+ * 固定ページでも paged クエリ変数を保持する
+ */
+add_action( 'pre_get_posts', function( $query ) {
+    if ( $query->is_main_query() && ! is_admin() && $query->is_page() ) {
+        // リライトルールで設定した paged を保持
+        if ( get_query_var( 'paged' ) ) {
+            $query->set( 'paged', get_query_var( 'paged' ) );
+        }
+    }
+});
 
 /**
  * 製品タクソノミーのテンプレートを共通化
@@ -1281,18 +1312,101 @@ add_action( 'pre_get_posts', function( $query ) {
 } );
 
 /**
- * お客様の声アーカイブをmenu_order順で並び替え
+ * カスタム投稿タイプアーカイブの表示件数・ソート順を設定
  */
 add_action( 'pre_get_posts', function( $query ) {
     if ( is_admin() || ! $query->is_main_query() ) {
         return;
     }
 
+    // story アーカイブ: 12件/ページ, date DESC
+    if ( $query->is_post_type_archive( 'story' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // voice アーカイブ: 12件/ページ, menu_order ASC
     if ( $query->is_post_type_archive( 'voice' ) ) {
+        $query->set( 'posts_per_page', 12 );
         $query->set( 'orderby', 'menu_order' );
         $query->set( 'order', 'ASC' );
     }
+
+    // globalnetwork アーカイブ: 12件/ページ, date DESC
+    if ( $query->is_post_type_archive( 'globalnetwork' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // media_post アーカイブ: 全件表示, date DESC
+    if ( $query->is_post_type_archive( 'media_post' ) ) {
+        $query->set( 'posts_per_page', -1 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
+
+    // product アーカイブ: 12件/ページ, date ASC, ID ASC
+    if ( $query->is_post_type_archive( 'product' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', array( 'date' => 'ASC', 'ID' => 'ASC' ) );
+    }
+
+    // interview アーカイブ: 12件/ページ, date DESC
+    if ( $query->is_post_type_archive( 'interview' ) ) {
+        $query->set( 'posts_per_page', 12 );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
+    }
 } );
+
+/**
+ * アーカイブページ用の固定ページ設定を取得するヘルパー関数
+ * 投稿タイプに対応する固定ページからKV画像、タイトル、本文を取得
+ *
+ * @param string $post_type 投稿タイプ名
+ * @return array page_id, title, content を含む配列
+ */
+function muashi_get_archive_page_settings( $post_type ) {
+    // 投稿タイプと固定ページスラッグのマッピング
+    $page_slug_map = array(
+        'interview'     => 'career/interview',
+        'story'         => 'story',
+        'voice'         => 'voice',
+        'career'        => 'career',
+        'globalnetwork' => 'global-network',
+        'media_post'    => 'media-page',
+        'product'       => 'product',
+    );
+
+    $slug = isset( $page_slug_map[ $post_type ] ) ? $page_slug_map[ $post_type ] : '';
+
+    if ( empty( $slug ) ) {
+        return array(
+            'page_id' => 0,
+            'title'   => '',
+            'content' => '',
+        );
+    }
+
+    // スラッグから固定ページを取得
+    $page = get_page_by_path( $slug );
+
+    if ( ! $page ) {
+        return array(
+            'page_id' => 0,
+            'title'   => '',
+            'content' => '',
+        );
+    }
+
+    return array(
+        'page_id' => $page->ID,
+        'title'   => $page->post_title,
+        'content' => apply_filters( 'the_content', $page->post_content ),
+    );
+}
 
 /**
  * 共通KV画像の出力ヘルパー
@@ -1601,6 +1715,7 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
         'sidebar_faq'            => 'よくある質問用サイドバー',
         'sidebar_about_us'       => '私たちについて用サイドバー',
+        'sidebar_product'        => '製品情報用サイドバー',
     ) );
 }
 add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
