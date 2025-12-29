@@ -435,7 +435,7 @@ get_header();
 
         <div class="top-news__contents-wrapper">
             <p class="top-news__contents-title" data-inview data-fade-in data-delay="0.4">
-                メディア
+                Pick up
             </p>
 
             <?php
@@ -500,7 +500,7 @@ get_header();
             <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
                 <a href="<?php echo esc_url( home_url( '/media-page/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
-                    メディア一覧はこちら
+                    Pick up一覧はこちら
                     </span>
                     <div class="top-news__more-icon-wrapper">
                         <div class="top-news__more-icon u-hidden-md-up">
