@@ -15,6 +15,7 @@
   --color-bg-gray: #F5F5F5;
   --color-nav-black: #2E2E2E;
   --color-footer-gray: #F2F2F2;
+  --header-scroll-offset: 300px;
 }
 
 /*
@@ -68,6 +69,10 @@ body {
   font-size: 16px;
   color: var(--color-black);
   overflow-x: clip;
+}
+
+[id] {
+  scroll-margin-top: var(--header-scroll-offset);
 }
 
 *::-webkit-scrollbar {

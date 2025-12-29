@@ -20,6 +20,12 @@ body {
   color: var(--color-black);
   overflow-x: clip;
 }
+
+// アンカーリンクのスクロール位置調整（全てのID要素に適用）
+[id] {
+  scroll-margin-top: var(--header-scroll-offset);
+}
+
 *::-webkit-scrollbar {
   display: none;
 }
