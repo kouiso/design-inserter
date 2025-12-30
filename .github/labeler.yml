@@ -1,0 +1,59 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'doc/**/*'
+          - '*.md'
+          - 'README.md'
+
+ci/cd:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**/*'
+          - 'gulpfile.js'
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'wp-config.php'
+          - 'wp-config-sample.php'
+          - '*.json'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'package-lock.json'
+
+wordpress-core:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'wp-admin/**/*'
+          - 'wp-includes/**/*'
+          - 'wp-*.php'
+
+theme:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'wp-content/themes/**/*'
+
+plugin:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'wp-content/plugins/**/*'
+
+uploads:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'wp-content/uploads/**/*'
+
+tools:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tools/**/*'
+
+test:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'test-specs/**/*'
+          - '**/*.spec.php'
+          - '**/*.test.php'
