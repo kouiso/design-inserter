@@ -1652,12 +1652,6 @@ a {
     display: block;
   }
 }
-.page__inner--intro {
-  padding-bottom: 40px;
-}
-.page__inner--no-top-margin {
-  margin-top: 0;
-}
 .page__inner .wp-block-group:not(.is-style-expandable) {
   margin-bottom: 24px;
   display: flex;
@@ -4391,11 +4385,14 @@ a {
   background: rgba(217, 48, 37, 0.12);
   color: #7a1313;
 }
-.download__card-links {
+.download__card-links, .download__links {
   margin-top: auto;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  width: 100%;
 }
 .download__link {
   font-size: 13px;
@@ -4404,9 +4401,40 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+  white-space: nowrap;
 }
 .download__link--detail {
   color: inherit;
+}
+.download__link--request, .download__link--catalog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #0c3c78;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: normal !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  line-height: 1;
+}
+.download__link--request:hover, .download__link--catalog:hover {
+  background: #082850;
+  color: #fff !important;
+  text-decoration: none !important;
+}
+.download a.download__link--catalog {
+  font-style: normal !important;
+  text-decoration: none !important;
+  color: #fff !important;
+}
+.download__main--full {
+  width: 100%;
 }
 .download__contact-note {
   margin: 8px 0 0;
