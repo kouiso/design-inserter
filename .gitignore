@@ -48,7 +48,7 @@ npm-debug.log*
 
 # Editor
 .idea/
-.vscode/
+.vscode/mcp.json
 *.code-workspace
 
 # Build artifacts
