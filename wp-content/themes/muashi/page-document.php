@@ -3,6 +3,13 @@
 Template Name: Document
 */
 
+// このページを検索エンジンにインデックスさせない
+add_filter( 'wp_robots', function( $robots ) {
+    $robots['noindex'] = true;
+    $robots['nofollow'] = true;
+    return $robots;
+} );
+
 global $description;
 $description = '';
 
