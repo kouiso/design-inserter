@@ -684,7 +684,10 @@ function create_post_type() {
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'career'),
+            'rewrite'       => array(
+                'slug'       => 'career',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-businessperson',
         )
     );
