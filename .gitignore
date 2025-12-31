@@ -16,6 +16,8 @@ wp-content/upgrade/
 wp-content/cache/
 wp-content/backups/
 wp-content/ai1wm-backups/
+wp-content/wpvividbackups/
+wp-content/wpvivid_staging/
 wp-content/siteguard/
 wp-content/plugins/
 wp-content/plugins/all-in-one-wp-migration/storage/
