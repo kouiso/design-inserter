@@ -20,6 +20,9 @@
   --color-bg-gray: #F5F5F5;
   --color-nav-black: #2E2E2E;
   --color-footer-gray: #F2F2F2;
+  
+  // スクロール調整（JavaScriptで動的に計算されるが、フォールバックとして初期値を設定）
+  --header-scroll-offset: 300px;
 }
 
 // フォント

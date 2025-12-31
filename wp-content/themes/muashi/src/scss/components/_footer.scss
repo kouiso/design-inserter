@@ -4,7 +4,7 @@
   margin-top: -80px;
   padding-bottom: 24px;
   position: relative;
-  z-index: 1;
+  z-index: 0;
 
   @include mq(md){
     margin-top: -160px;
