@@ -17,22 +17,20 @@
     var $externalSection = $('#muashi-pdf-external-section');
     var $sourceTypeRadios = $('input[name="muashi_pdf_source_type"]');
 
-    // ラジオボタンの切り替え
-    $sourceTypeRadios.on('change', function(){
-      var sourceType = $(this).val();
-      if (sourceType === 'media') {
-        $mediaSection.show();
-        $externalSection.hide();
-        $externalUrlInput.val('');
-      } else {
+    function toggleSections() {
+      if ($sourceTypeRadios.filter(':checked').val() === 'external') {
         $mediaSection.hide();
         $externalSection.show();
-        $idInput.val('');
-        $urlInput.val('');
+      } else {
+        $mediaSection.show();
+        $externalSection.hide();
       }
-    });
+    }
 
-    $selectButton.on('click', function(event){
+    $sourceTypeRadios.on('change', toggleSections);
+    toggleSections(); // 初期状態
+
+    $selectButton.on('click', function (event) {
       event.preventDefault();
 
       if (frame) {
@@ -59,6 +57,9 @@
         var data = attachment.toJSON();
         $idInput.val(data.id || '');
         $urlInput.val(data.url || '');
+        $externalUrlInput.val(''); // 外部URLをクリア
+        $sourceTypeRadios.filter('[value="media"]').prop('checked', true);
+        toggleSections();
       });
 
       frame.open();
@@ -68,6 +69,7 @@
       event.preventDefault();
       $idInput.val('');
       $urlInput.val('');
+      $externalUrlInput.val('');
     });
   });
 })(jQuery);

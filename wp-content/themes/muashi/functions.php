@@ -54,6 +54,14 @@ add_action( 'after_setup_theme', function(){
     add_theme_support( 'post-thumbnails' ); //サムネイル機能の追加
     add_theme_support('menus'); // カスタムメニューの追加
     add_theme_support('widgets'); // ウィジェットの追加
+    
+    // ナビゲーションメニューのロケーションを登録
+    register_nav_menus( array(
+        'sidebar_contact'    => 'お問い合わせ用サイドバー',
+        'sidebar_story'      => 'ストーリー用サイドバー',
+        'sidebar_interview'  => 'インタビュー用サイドバー',
+        'sidebar_voice'      => 'お客様の声用サイドバー',
+    ) );
 });
 
 /**
@@ -118,6 +126,18 @@ function all_modified_date( $post_type = "post", $format = "Y-m-d H:i:s" ){
     return $all_modified_date;
 }
 
+// 投稿のアーカイブページを作成する
+function post_has_archive($args, $post_type)
+{
+    if ('post' == $post_type) {
+        $args['rewrite'] = true; // リライトを有効にする
+        $args['has_archive'] = 'news'; // 任意のスラッグ名
+    }
+    return $args;
+}
+add_filter('register_post_type_args', 'post_has_archive', 10, 2);
+
+
 /**
  * メディア投稿タイプ
  */
@@ -141,9 +161,8 @@ function muashi_register_media_post_type() {
     $args = array(
         'labels'             => $labels,
         'public'             => true,
-        'has_archive'        => false,  // 固定ページ(page-media.php)でアーカイブ表示するため無効化
-        // NOTE: /media/ はWordPressの予約語のため使用不可
-        'rewrite'            => array( 'slug' => 'media-page' ),
+        'has_archive'        => true,
+        'rewrite'            => array( 'slug' => 'media' ),
         'menu_icon'          => 'dashicons-megaphone',
         'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         'taxonomies'         => array( 'media_category', 'category' ),
@@ -289,44 +308,42 @@ function muashi_render_product_pdf_metabox( $post ) {
 
     $attachment_id = (int) get_post_meta($post->ID, 'product_pdf_attachment_id', true);
     $external_url  = get_post_meta($post->ID, 'product_pdf_external_url', true);
-    $pdf_url       = '';
-    
-    if ( $external_url ) {
-        $pdf_url = $external_url;
-    } elseif ( $attachment_id ) {
-        $pdf_url = wp_get_attachment_url($attachment_id);
-    }
+    $pdf_url_display = '';
 
-    echo '<div id="muashi-product-pdf-meta" class="muashi-product-pdf-meta">';
-    echo '<p><strong>PDF選択方法</strong></p>';
-    echo '<p style="margin: 10px 0;">';
-    echo '<label style="display: block; margin-bottom: 5px;">';
-    echo '<input type="radio" name="muashi_pdf_source_type" value="media" ' . checked( empty($external_url), true, false ) . ' />';
-    echo ' メディアライブラリから選択';
-    echo '</label>';
-    echo '<label style="display: block;">';
-    echo '<input type="radio" name="muashi_pdf_source_type" value="external" ' . checked( ! empty($external_url), true, false ) . ' />';
-    echo ' 外部URLを指定';
-    echo '</label>';
-    echo '</p>';
-    
-    // メディアライブラリ選択
-    echo '<div id="muashi-pdf-media-section" style="' . ( empty($external_url) ? '' : 'display:none;' ) . '">';
-    echo '<p><label for="muashi_product_pdf_url_display">PDFのURL:</label></p>';
-    echo '<input type="hidden" id="muashi_product_pdf_attachment_id" name="muashi_product_pdf_attachment_id" value="' . esc_attr($attachment_id) . '">';
-    echo '<input type="text" id="muashi_product_pdf_url_display" class="widefat" value="' . esc_attr( empty($external_url) ? $pdf_url : '' ) . '" placeholder="PDFのURL" readonly>';
-    echo '<p><button type="button" class="button muashi-product-pdf-select">PDFを選択</button> ';
-    echo '<button type="button" class="button muashi-product-pdf-clear">クリア</button></p>';
-    echo '</div>';
-    
-    // 外部URL入力
-    echo '<div id="muashi-pdf-external-section" style="' . ( ! empty($external_url) ? '' : 'display:none;' ) . '">';
-    echo '<p><label for="muashi_product_pdf_external_url">外部URL:</label></p>';
-    echo '<input type="url" id="muashi_product_pdf_external_url" name="muashi_product_pdf_external_url" class="widefat" value="' . esc_attr($external_url) . '" placeholder="https://drive.google.com/...">';
-    echo '<p class="description">Google DriveなどのPDF直接リンクを入力してください。</p>';
-    echo '</div>';
-    
-    echo '</div>';
+    if ( $external_url ) {
+        $pdf_url_display = $external_url;
+    } elseif ( $attachment_id ) {
+        $pdf_url_display = wp_get_attachment_url($attachment_id);
+    }
+    ?>
+    <div id="muashi-product-pdf-meta" class="muashi-product-pdf-meta">
+        <p><strong>PDF選択方法</strong></p>
+        <p style="margin: 10px 0;">
+            <label style="display: block; margin-bottom: 5px;">
+                <input type="radio" name="muashi_pdf_source_type" value="media" <?php checked( empty( $external_url ) ); ?> />
+                メディアライブラリから選択
+            </label>
+            <label style="display: block;">
+                <input type="radio" name="muashi_pdf_source_type" value="external" <?php checked( ! empty( $external_url ) ); ?> />
+                外部URLを指定
+            </label>
+        </p>
+
+        <div id="muashi-pdf-media-section" style="<?php echo empty( $external_url ) ? '' : 'display:none;'; ?>">
+            <input type="hidden" id="muashi_product_pdf_attachment_id" name="muashi_product_pdf_attachment_id" value="<?php echo esc_attr($attachment_id); ?>">
+            <p><input type="text" id="muashi_product_pdf_url_display" class="widefat" value="<?php echo esc_attr( empty( $external_url ) ? $pdf_url_display : '' ); ?>" placeholder="PDFのURL" readonly></p>
+            <p><button type="button" class="button muashi-product-pdf-select">PDFを選択</button>
+            <button type="button" class="button muashi-product-pdf-clear">クリア</button></p>
+            <p class="description">メディアライブラリからPDFファイルを選択してください。</p>
+        </div>
+
+        <div id="muashi-pdf-external-section" style="<?php echo ! empty( $external_url ) ? '' : 'display:none;'; ?>">
+            <p><label for="muashi_product_pdf_external_url">外部URL:</label></p>
+            <input type="url" id="muashi_product_pdf_external_url" name="muashi_product_pdf_external_url" value="<?php echo esc_attr($external_url); ?>" placeholder="https://drive.google.com/..." style="width: 100%;" />
+            <p class="description">Google DriveなどのPDF直接リンクを入力してください。</p>
+        </div>
+    </div>
+    <?php
 }
 
 /**
@@ -345,16 +362,24 @@ function muashi_save_product_pdf_meta( $post_id ) {
         return;
     }
 
-    // サニタイズ：期待される値('media' または 'external')のみ許可
-    $source_type = isset( $_POST['muashi_pdf_source_type'] ) && in_array( $_POST['muashi_pdf_source_type'], array( 'media', 'external' ), true ) ? $_POST['muashi_pdf_source_type'] : 'media';
-    
+    // 選択されたソースタイプを取得
+    $source_type = isset($_POST['muashi_pdf_source_type']) ? $_POST['muashi_pdf_source_type'] : 'media';
+
     if ( $source_type === 'external' ) {
-        // 外部URLを使用
-        $external_url = isset( $_POST['muashi_product_pdf_external_url'] ) ? esc_url_raw( $_POST['muashi_product_pdf_external_url'] ) : '';
-        update_post_meta( $post_id, 'product_pdf_external_url', $external_url );
-        delete_post_meta( $post_id, 'product_pdf_attachment_id' );
+        // 外部URLが選択された場合
+        if ( isset($_POST['muashi_product_pdf_external_url']) ) {
+            $external_url = esc_url_raw( wp_unslash($_POST['muashi_product_pdf_external_url']) );
+            
+            if ( ! empty($external_url) ) {
+                update_post_meta($post_id, 'product_pdf_external_url', $external_url);
+            } else {
+                delete_post_meta($post_id, 'product_pdf_external_url');
+            }
+        }
+        // メディアライブラリの情報をクリア
+        delete_post_meta($post_id, 'product_pdf_attachment_id');
     } else {
-        // メディアライブラリを使用
+        // メディアライブラリが選択された場合
         if ( isset($_POST['muashi_product_pdf_attachment_id']) ) {
             $raw_value = wp_unslash($_POST['muashi_product_pdf_attachment_id']);
             $attachment_id = $raw_value !== '' ? (int) $raw_value : 0;
@@ -365,7 +390,8 @@ function muashi_save_product_pdf_meta( $post_id ) {
                 delete_post_meta($post_id, 'product_pdf_attachment_id');
             }
         }
-        delete_post_meta( $post_id, 'product_pdf_external_url' );
+        // 外部URLをクリア
+        delete_post_meta($post_id, 'product_pdf_external_url');
     }
 }
 add_action('save_post_product', 'muashi_save_product_pdf_meta');
@@ -730,17 +756,16 @@ function create_post_type() {
                 'edit_item'     => '製品を編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'products',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'product'),
+            'rewrite'       => array('slug' => 'products'),
             'menu_icon'     => 'dashicons-cart',
         )
     );
 
     // ストーリー
-    // NOTE: 固定ページ(page-story.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'story',
         array(
@@ -751,7 +776,7 @@ function create_post_type() {
                 'edit_item'     => 'ストーリーを編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'story',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -771,11 +796,11 @@ function create_post_type() {
                 'edit_item'     => 'お客様の声を編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'voices',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
-            'rewrite'       => array('slug' => 'voice'),
+            'rewrite'       => array('slug' => 'voices'),
             'menu_icon'     => 'dashicons-testimonial',
         )
     );
@@ -791,11 +816,11 @@ function create_post_type() {
                 'edit_item'     => '採用情報を編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'careers',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => array('slug' => 'career'),
+            'rewrite'       => array('slug' => 'careers'),
             'menu_icon'     => 'dashicons-businessperson',
         )
     );
@@ -811,17 +836,19 @@ function create_post_type() {
                 'edit_item'     => 'インタビューを編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'careers/interview',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
-            'rewrite'       => false,  // リライトルールは register_interview_rewrite_rules() で手動管理
+            'rewrite'       => array(
+                'slug'       => 'careers/interview',
+                'with_front' => false,
+            ),
             'menu_icon'     => 'dashicons-format-chat',
         )
     );
 
     // グローバルネットワーク
-    // NOTE: 固定ページ(page-global-network.php)でアーカイブ表示するため has_archive は false
     register_post_type(
         'globalnetwork',
         array(
@@ -832,7 +859,7 @@ function create_post_type() {
                 'edit_item'     => 'グローバルネットワークを編集',
             ),
             'public'        => true,
-            'has_archive'   => false,
+            'has_archive'   => 'global-network',
             'menu_position' => 5,
             'show_in_rest'  => true,
             'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
@@ -851,31 +878,31 @@ function muashi_get_product_taxonomy_base_config() {
         'product_application' => array(
             'label'        => '用途でえらぶ',
             'plural'       => '用途でえらぶ',
-            'slug'         => 'product/application',
+            'slug'         => 'products/application',
             'hierarchical' => true,
         ),
         'product_material'   => array(
             'label'        => '基材でえらぶ',
             'plural'       => '基材でえらぶ',
-            'slug'         => 'product/material',
+            'slug'         => 'products/material',
             'hierarchical' => true,
         ),
         'product_design'     => array(
             'label'        => '意匠性でえらぶ',
             'plural'       => '意匠性でえらぶ',
-            'slug'         => 'product/design',
+            'slug'         => 'products/design',
             'hierarchical' => true,
         ),
         'product_function'   => array(
             'label'        => '機能でえらぶ',
             'plural'       => '機能でえらぶ',
-            'slug'         => 'product/function',
+            'slug'         => 'products/function',
             'hierarchical' => true,
         ),
         'product_environment'=> array(
             'label'        => '環境キーワードでえらぶ',
             'plural'       => '環境キーワードでえらぶ',
-            'slug'         => 'product/environment',
+            'slug'         => 'products/environment',
             'hierarchical' => true,
         ),
     );
@@ -1286,10 +1313,8 @@ add_action( 'init', function() {
  * インタビュー用のリライトルールを追加
  */
 function register_interview_rewrite_rules() {
-    // career/interview/ は固定ページ(page_id=3067)で処理
-    add_rewrite_rule('^career/interview/?$', 'index.php?pagename=career/interview', 'top');
-    // インタビュー投稿の個別ページ（career/interview/[slug]の形式）
-    add_rewrite_rule('^career/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
+    add_rewrite_rule('^careers/interview/([^/]+)/?$', 'index.php?post_type=interview&name=$matches[1]', 'top');
+    add_rewrite_rule('^careers/interview/?$', 'index.php?post_type=interview', 'top');
 }
 add_action('init', 'register_interview_rewrite_rules', 11);
 
@@ -1298,7 +1323,7 @@ add_action('init', 'register_interview_rewrite_rules', 11);
  */
 add_filter( 'post_type_link', function( $post_link, $post ) {
     if ( 'interview' === $post->post_type ) {
-        return home_url( user_trailingslashit( 'career/interview/' . $post->post_name ) );
+        return home_url( user_trailingslashit( 'careers/interview/' . $post->post_name ) );
     }
     return $post_link;
 }, 10, 2 );
@@ -1348,7 +1373,6 @@ add_action( 'pre_get_posts', function( $query ) {
 
 /**
  * 共通KV画像の出力ヘルパー
- * アイキャッチ画像を優先し、なければfallback画像を使用
  */
 function muashi_render_kv_picture( $args = array() ) {
     $args = wp_parse_args(
@@ -1363,13 +1387,16 @@ function muashi_render_kv_picture( $args = array() ) {
         )
     );
 
+    if ( $args['fallback_pc'] === '' ) {
+        return;
+    }
+
     $post_id        = $args['post_id'] ? (int) $args['post_id'] : 0;
     $include_source = ! empty( $args['include_source'] );
     $fallback_pc    = $args['fallback_pc'];
     $fallback_sp    = $args['fallback_sp'] !== '' ? $args['fallback_sp'] : $fallback_pc;
     $media_query    = $include_source ? $args['media_query'] : '';
 
-    // アイキャッチ画像がある場合は優先して表示
     if ( $post_id && has_post_thumbnail( $post_id ) ) {
         $thumbnail_id     = get_post_thumbnail_id( $post_id );
         $thumbnail_pc     = wp_get_attachment_image_url( $thumbnail_id, 'full' );
@@ -1389,11 +1416,6 @@ function muashi_render_kv_picture( $args = array() ) {
         $img_src = $thumbnail_sp ? $thumbnail_sp : $thumbnail_pc;
         echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $thumbnail_alt ) . '">';
         echo '</picture>';
-        return;
-    }
-
-    // アイキャッチがなくfallback_pcも指定されていない場合は何も出力しない
-    if ( $fallback_pc === '' ) {
         return;
     }
 
@@ -1637,121 +1659,22 @@ function muashi_render_domestic_locations_block( $attributes, $content ) {
 }
 
 /**
- * サイドバーナビゲーション用メニューロケーション登録
+ * サイドバーナビゲーションをレンダリング
+ * 
+ * @param string $menu_location メニューロケーション名
  */
-function muashi_register_sidebar_nav_menus() {
-    register_nav_menus( array(
-        'sidebar_contact'        => 'お問い合わせ・資料請求用サイドバー',
-        'sidebar_news_media'     => 'ニュース・メディア用サイドバー',
-        'sidebar_voice'          => 'お客様の声用サイドバー',
-        'sidebar_story'          => 'ストーリー用サイドバー',
-        'sidebar_sustainability' => 'サステナビリティ用サイドバー',
-        'sidebar_career'         => '採用情報用サイドバー',
-        'sidebar_interview'      => 'インタビュー用サイドバー',
-        'sidebar_history'        => 'ヒストリー用サイドバー',
-        'sidebar_company'        => '会社概要用サイドバー',
-        'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
-        'sidebar_faq'            => 'よくある質問用サイドバー',
-        'sidebar_about_us'       => '私たちについて用サイドバー',
-    ) );
-}
-add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
-
-/**
- * サイドバーナビゲーション用カスタムウォーカー
- * トップレベル項目と子メニュー項目を表示
- * 子項目は行頭を下げて表示（常に展開状態）
- */
-class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
-
-    /**
-     * メニュー項目の開始タグを出力
-     */
-    public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-        $is_current   = $item->current || $item->current_item_ancestor || $item->current_item_parent;
-        $has_children = in_array( 'menu-item-has-children', $item->classes, true );
-
-        // depth 0: トップレベル項目
-        if ( $depth === 0 ) {
-            $classes = array( 'navigation__item' );
-            if ( $is_current ) {
-                $classes[] = 'is-active';
-            }
-            $class_attr = implode( ' ', array_filter( $classes ) );
-            $output .= '<li class="' . esc_attr( $class_attr ) . '">';
-
-            $url = $item->url;
-
-            // 現在のページはリンクなしのテキスト
-            if ( $item->current ) {
-                $output .= '<p class="navigation__item-title">';
-                $output .= esc_html( $item->title );
-                $output .= '</p>';
-            } else {
-                $target = '';
-                if ( $item->target === '_blank' ) {
-                    $target = ' target="_blank" rel="noopener noreferrer"';
-                }
-                $output .= '<a href="' . esc_url( $url ) . '" class="navigation__item-title"' . $target . '>';
-                $output .= esc_html( $item->title );
-                $output .= '</a>';
-            }
-        } else {
-            // depth > 0: 子項目（インデント付き）
-            $output .= '<li class="navigation__sub-item">';
-            $target = '';
-            if ( $item->target === '_blank' ) {
-                $target = ' target="_blank" rel="noopener noreferrer"';
-            }
-            $output .= '<a href="' . esc_url( $item->url ) . '" class="navigation__sub-link"' . $target . '>';
-            $output .= esc_html( $item->title );
-            $output .= '</a>';
-        }
-    }
-
-    /**
-     * メニュー項目の終了タグを出力
-     */
-    public function end_el( &$output, $item, $depth = 0, $args = null ) {
-        $output .= '</li>';
-    }
-
-    /**
-     * サブメニューの開始タグを出力（常に展開）
-     */
-    public function start_lvl( &$output, $depth = 0, $args = null ) {
-        $output .= '<ul class="navigation__sub-list">';
-    }
-
-    /**
-     * サブメニューの終了タグを出力
-     */
-    public function end_lvl( &$output, $depth = 0, $args = null ) {
-        $output .= '</ul>';
-    }
-}
-
-/**
- * サイドバーナビゲーションを出力
- *
- * @param string $location メニューロケーション名
- */
-function muashi_render_sidebar_navigation( $location ) {
-    if ( ! has_nav_menu( $location ) ) {
+function muashi_render_sidebar_navigation( $menu_location ) {
+    // メニューロケーションが登録されているか確認
+    if ( ! has_nav_menu( $menu_location ) ) {
         return;
     }
-
-    echo '<div class="navigation">';
-    echo '<div class="navigation__inner">';
-
+    
+    // ナビゲーションメニューを表示
     wp_nav_menu( array(
-        'theme_location' => $location,
-        'container'      => false,
-        'items_wrap'     => '<ul class="navigation__list">%3$s</ul>',
-        'walker'         => new Muashi_Sidebar_Nav_Walker(),
-        'depth'          => 2,
+        'theme_location'  => $menu_location,
+        'container'       => 'nav',
+        'container_class' => 'page__sidebar-nav',
+        'menu_class'      => 'page__sidebar-menu',
+        'fallback_cb'     => false,
     ) );
-
-    echo '</div>';
-    echo '</div>';
 }
