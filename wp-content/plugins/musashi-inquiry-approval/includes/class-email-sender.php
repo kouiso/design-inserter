@@ -208,7 +208,7 @@ class Musashi_Email_Sender {
         $to = get_option( 'musashi_email_admin_to', '[_site_admin_email]' );
         $from = get_option( 'musashi_email_admin_from', '' );
         $subject = get_option( 'musashi_email_admin_subject', $defaults['admin']['subject'] );
-        $headers = get_option( 'musashi_email_admin_headers', 'Reply-To: [your-email]' );
+        $headers = get_option( 'musashi_email_admin_headers', '' );
         $body_template = get_option( 'musashi_email_admin_body', $defaults['admin']['body'] );
         $button_text = get_option( 'musashi_email_admin_button_text', '確認ページを開く' );
         $button_color = get_option( 'musashi_email_admin_button_color', '#7B7B00' );
