@@ -230,48 +230,91 @@ function musashi_inquiry_email_templates_page() {
     );
     
     $tab_labels = array(
-        'user' => array( 'title' => 'ユーザー自動返信', 'desc' => '問い合わせ送信時にユーザーに送信されるメールです。' ),
-        'admin' => array( 'title' => '管理者通知', 'desc' => '問い合わせ送信時に管理者に送信されるメールです。確認ページへのボタンが含まれます。' ),
-        'approval' => array( 'title' => '承認メール', 'desc' => '管理者が承認した際にユーザーに送信されるメールです。ダウンロードボタンが含まれます。' ),
-        'rejection' => array( 'title' => 'お断りメール', 'desc' => '管理者がお断りした際にユーザーに送信されるメールです。' ),
-        'admin_action' => array( 'title' => '管理者処理完了通知', 'desc' => '承認/お断りの処理が完了した際に管理者に送信される確認メールです（二重承認防止用）。' ),
+        'user' => array(
+            'label' => '👤 ユーザー宛',
+            'class' => 'user-group',
+            'items' => array(
+                'user'      => array( 'title' => '1. ユーザー自動返信', 'desc' => '問い合わせ送信時にユーザーに送信されるメールです。' ),
+                'approval'  => array( 'title' => '2. 承認メール', 'desc' => '管理者が承認した際にユーザーに送信されるメールです。ダウンロードボタンが含まれます。' ),
+                'rejection' => array( 'title' => '3. お断りメール', 'desc' => '管理者がお断りした際にユーザーに送信されるメールです。' ),
+            )
+        ),
+        'admin' => array(
+            'label' => '⚙️ 管理者宛',
+            'class' => 'admin-group',
+            'items' => array(
+                'admin'        => array( 'title' => '1. 管理者通知', 'desc' => '問い合わせ送信時に管理者に送信されるメールです。確認ページへのボタンが含まれます。' ),
+                'admin_action' => array( 'title' => '2. 管理者処理完了通知', 'desc' => '承認/お断りの処理が完了した際に管理者に送信される確認メールです（二重承認防止用）。' ),
+            )
+        )
     );
+
+    // フラットなアイテムリストも作成（後続のループ用）
+    $flat_tab_labels = array();
+    foreach ( $tab_labels as $group ) {
+        foreach ( $group['items'] as $key => $item ) {
+            $flat_tab_labels[$key] = $item;
+        }
+    }
     ?>
     <div class="wrap">
         <h1>メールテンプレート設定</h1>
         
         <div class="musashi-mail-tags">
-            <strong>使用可能なメールタグ:</strong><br>
-            <code onclick="copyTag(this)">[your-name]</code>
-            <code onclick="copyTag(this)">[your-company]</code>
-            <code onclick="copyTag(this)">[your-email]</code>
-            <code onclick="copyTag(this)">[your-tel]</code>
-            <code onclick="copyTag(this)">[your-subject]</code>
-            <code onclick="copyTag(this)">[your-message]</code>
-            <code onclick="copyTag(this)">[_site_title]</code>
-            <code onclick="copyTag(this)">[_site_url]</code>
-            <code onclick="copyTag(this)">[_site_admin_email]</code>
-            <code onclick="copyTag(this)">[review_url]</code>
-            <code onclick="copyTag(this)">[download_url]</code>
-            <code onclick="copyTag(this)">[action_type]</code>
-            <code onclick="copyTag(this)">[action_date]</code>
-            <p>※ クリックでコピーできます</p>
+            <div class="musashi-tag-group">
+                <span>👤 顧客情報:</span>
+                <code onclick="copyTag(this)">[your-name]</code>
+                <code onclick="copyTag(this)">[your-company]</code>
+                <code onclick="copyTag(this)">[your-email]</code>
+                <code onclick="copyTag(this)">[your-tel]</code>
+            </div>
+            <div class="musashi-tag-group">
+                <span>📝 問い合わせ内容:</span>
+                <code onclick="copyTag(this)">[your-subject]</code>
+                <code onclick="copyTag(this)">[your-message]</code>
+            </div>
+            <div class="musashi-tag-group">
+                <span>🌐 サイト情報:</span>
+                <code onclick="copyTag(this)">[_site_title]</code>
+                <code onclick="copyTag(this)">[_site_url]</code>
+                <code onclick="copyTag(this)">[_site_admin_email]</code>
+            </div>
+            <div class="musashi-tag-group">
+                <span>🔗 システム・リンク:</span>
+                <code onclick="copyTag(this)">[review_url]</code>
+                <code onclick="copyTag(this)">[download_url]</code>
+                <code onclick="copyTag(this)">[action_type]</code>
+                <code onclick="copyTag(this)">[action_date]</code>
+            </div>
+            <p>※ クリックでコピーできます。本文や題名に使用してください。</p>
         </div>
         
         <form method="post" action="options.php">
             <?php settings_fields( 'musashi_inquiry_email_settings' ); ?>
             
-            <div class="nav-tab-wrapper">
-                <?php $first = true; foreach ( $tab_labels as $key => $label ) : ?>
-                <a href="#<?php echo $key; ?>-email" class="nav-tab <?php echo $first ? 'nav-tab-active' : ''; ?>" 
-                   onclick="showTab('<?php echo $key; ?>-email', this); return false;"><?php echo esc_html( $label['title'] ); ?></a>
-                <?php $first = false; endforeach; ?>
+            <div class="musashi-tabs-container">
+                <?php $is_first_tab = true; foreach ( $tab_labels as $group_key => $group ) : ?>
+                <div class="musashi-tab-group <?php echo esc_attr( $group['class'] ); ?>">
+                    <div class="musashi-tab-group-label"><?php echo esc_html( $group['label'] ); ?></div>
+                    <div class="nav-tab-wrapper">
+                        <?php foreach ( $group['items'] as $key => $item ) : ?>
+                        <a href="#<?php echo $key; ?>-email" class="nav-tab <?php echo $is_first_tab ? 'nav-tab-active' : ''; ?> <?php echo esc_attr( $group['class'] ); ?>-tab" 
+                           onclick="showTab('<?php echo $key; ?>-email', this); return false;"><?php echo esc_html( $item['title'] ); ?></a>
+                        <?php $is_first_tab = false; endforeach; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
             
             <?php $first = true; foreach ( $templates as $key => $template ) : ?>
             <div id="<?php echo $key; ?>-email" class="email-tab-content musashi-email-form" <?php echo ! $first ? 'style="display:none;"' : ''; ?>>
-                <h2><?php echo esc_html( $tab_labels[$key]['title'] ); ?></h2>
-                <p class="description"><?php echo esc_html( $tab_labels[$key]['desc'] ); ?></p>
+                <div class="musashi-email-header">
+                    <h2><?php echo esc_html( $flat_tab_labels[$key]['title'] ); ?></h2>
+                    <span class="musashi-recipient-badge <?php echo ( strpos($flat_tab_labels[$key]['title'], '管理者') !== false || $key === 'admin' || $key === 'admin_action' ) ? 'admin' : 'user'; ?>">
+                        <?php echo ( strpos($flat_tab_labels[$key]['title'], '管理者') !== false || $key === 'admin' || $key === 'admin_action' ) ? '管理者宛' : 'ユーザー宛'; ?>
+                    </span>
+                </div>
+                <p class="description"><?php echo esc_html( $flat_tab_labels[$key]['desc'] ); ?></p>
                 
                 <table>
                     <tr>

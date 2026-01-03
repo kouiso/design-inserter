@@ -4,10 +4,31 @@
  */
 
 .musashi-mail-tags {
-    background: #f0f0f1;
-    padding: 12px 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.musashi-tag-group {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.musashi-tag-group:last-child {
+    margin-bottom: 0;
+}
+
+.musashi-tag-group span {
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+    min-width: 130px;
 }
 
 .musashi-mail-tags code {
@@ -36,8 +57,104 @@
     background: #fff;
     border: 1px solid #ccd0d4;
     border-radius: 4px;
-    padding: 20px;
+    padding: 24px;
     margin-top: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* タブコンテナ */
+.musashi-tabs-container {
+    display: flex;
+    gap: 30px;
+    margin: 25px 0 10px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e4e7;
+}
+
+.musashi-tab-group {
+    flex: 0 0 auto;
+}
+
+.musashi-tab-group-label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.user-group .musashi-tab-group-label {
+    color: #0073aa;
+}
+
+.admin-group .musashi-tab-group-label {
+    color: #46b450;
+}
+
+.musashi-tab-group .nav-tab-wrapper {
+    padding-top: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.musashi-tab-group .nav-tab {
+    margin-bottom: 0;
+    margin-right: 4px;
+    border-bottom: 1px solid #ccd0d4;
+    transition: all 0.2s ease;
+}
+
+/* ユーザー宛タブの色 */
+.user-group-tab.nav-tab-active {
+    border-bottom: 1px solid #fff;
+    background: #fff;
+    color: #0073aa;
+    border-top: 3px solid #0073aa;
+}
+
+/* 管理者宛タブの色 */
+.admin-group-tab.nav-tab-active {
+    border-bottom: 1px solid #fff;
+    background: #fff;
+    color: #46b450;
+    border-top: 3px solid #46b450;
+}
+
+/* メールヘッダーとバッジ */
+.musashi-email-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.musashi-email-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.musashi-recipient-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.musashi-recipient-badge.user {
+    background: #e3f2fd;
+    color: #0073aa;
+}
+
+.musashi-recipient-badge.admin {
+    background: #f1f8e9;
+    color: #46b450;
 }
 
 .musashi-email-form table {
