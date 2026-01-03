@@ -40,23 +40,17 @@ if ( ! function_exists( 'muashi_get_product_download_data' ) ) {
             }
 
             $thumbnail   = get_the_post_thumbnail_url( $product_post, 'medium' );
+            
+            // PDFのURL取得
+            // 保存処理でメディアライブラリか外部URLのどちらか一方のみが保存されるため、
+            // メディアライブラリから取得を試み、なければ外部URLを使用する
             $pdf_id      = (int) get_post_meta( $product_id, 'product_pdf_attachment_id', true );
             $pdf_url     = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
             
-            // 外部URLのチェック（page-download.phpのロジックを採用）
-            $source_type = get_post_meta( $product_id, 'product_pdf_source_type', true );
-            $external_url = get_post_meta( $product_id, 'product_pdf_external_url', true );
-
-            if ( 'external' === $source_type ) {
+            if ( ! $pdf_url ) {
+                $external_url = get_post_meta( $product_id, 'product_pdf_external_url', true );
                 if ( $external_url ) {
                     $pdf_url = $external_url;
-                }
-            } else {
-                // source_type未設定時のfallback
-                if ( ! $source_type ) {
-                     if ( $external_url ) {
-                         $pdf_url = $external_url;
-                     }
                 }
             }
 
