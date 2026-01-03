@@ -49,9 +49,8 @@ function muashi_save_product_custom_url_meta( $post_id ) {
     }
 
     if ( isset($_POST['muashi_product_custom_url']) ) {
-        // 入力値を保存（サニタイズは esc_url_raw ではなく、内部リンクも許容するため sanitize_text_field を使用し、出力時にエスケープする運用とするか、あるいは esc_url してしまうか。
-        // esc_url は相対パスも許容するので esc_url_raw で保存して問題ないはず。
-        update_post_meta($post_id, 'product_custom_url', trim($_POST['muashi_product_custom_url']));
+        // URLをサニタイズして保存
+        update_post_meta($post_id, 'product_custom_url', esc_url_raw($_POST['muashi_product_custom_url']));
     }
 }
 add_action('save_post_product', 'muashi_save_product_custom_url_meta');
