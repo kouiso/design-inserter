@@ -140,6 +140,8 @@ function save_custom_fields( $post_id ) {
  */
 require_once(get_theme_file_path('/inc/product-pdf-meta.php'));
 require_once(get_theme_file_path('/inc/product-custom-url-meta.php'));
+require_once(get_theme_file_path('/inc/product-data.php'));
+
 
 
 add_filter( 'wpcf7_validate_email', 'wpcf7_validate_email_filter_extend', 11, 2 );
