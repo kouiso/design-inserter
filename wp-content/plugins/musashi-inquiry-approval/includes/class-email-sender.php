@@ -131,30 +131,6 @@ class Musashi_Email_Sender {
     }
 
     /**
-     * HTMLモードの場合はラッパーを追加
-     *
-     * @param string $html HTML本文
-     * @return string
-     */
-    private static function wrap_html( $html ) {
-        // 既に<!DOCTYPE>があればそのまま返す
-        if ( stripos( $html, '<!DOCTYPE' ) !== false || stripos( $html, '<html' ) !== false ) {
-            return $html;
-        }
-        
-        return '<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="font-family: \'Helvetica Neue\', Arial, \'Hiragino Kaku Gothic ProN\', \'Hiragino Sans\', Meiryo, sans-serif; line-height: 1.8; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
-    ' . $html . '
-</body>
-</html>';
-    }
-
-    /**
      * メールを送信
      *
      * @param string $to      宛先
@@ -202,8 +178,6 @@ class Musashi_Email_Sender {
         $subject = get_option( 'musashi_email_user_subject', $defaults['user']['subject'] );
         $headers = get_option( 'musashi_email_user_headers', '' );
         $body_template = get_option( 'musashi_email_user_body', $defaults['user']['body'] );
-        $html_mode = get_option( 'musashi_email_user_html_mode', '' );
-        
         // タグを置換
         $to = self::replace_mail_tags( $to, $inquiry );
         $from = self::replace_mail_tags( $from, $inquiry );
@@ -211,12 +185,8 @@ class Musashi_Email_Sender {
         $headers = self::replace_mail_tags( $headers, $inquiry );
         $body = self::replace_mail_tags( $body_template, $inquiry );
         
-        // HTMLモードの場合はそのまま、テキストモードの場合はHTMLに変換
-        if ( ! empty( $html_mode ) ) {
-            $html_body = self::wrap_html( $body );
-        } else {
-            $html_body = self::text_to_html( $body );
-        }
+        // テキストをHTMLに変換
+        $html_body = self::text_to_html( $body );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
     }
@@ -240,7 +210,6 @@ class Musashi_Email_Sender {
         $subject = get_option( 'musashi_email_admin_subject', $defaults['admin']['subject'] );
         $headers = get_option( 'musashi_email_admin_headers', 'Reply-To: [your-email]' );
         $body_template = get_option( 'musashi_email_admin_body', $defaults['admin']['body'] );
-        $html_mode = get_option( 'musashi_email_admin_html_mode', '' );
         $button_text = get_option( 'musashi_email_admin_button_text', '確認ページを開く' );
         $button_color = get_option( 'musashi_email_admin_button_color', '#7B7B00' );
         
@@ -257,20 +226,16 @@ class Musashi_Email_Sender {
         $headers = self::replace_mail_tags( $headers, $inquiry, $extra );
         $body = self::replace_mail_tags( $body_template, $inquiry, $extra );
         
-        // HTMLモードの場合はそのまま、テキストモードの場合はボタン付きHTMLに変換
-        if ( ! empty( $html_mode ) ) {
-            $html_body = self::wrap_html( $body );
-        } else {
-            $buttons = array(
-                array(
-                    'url'   => $review_url,
-                    'text'  => $button_text,
-                    'color' => $button_color,
-                    'tag'   => '[review_url]',
-                ),
-            );
-            $html_body = self::text_to_html( $body, $buttons );
-        }
+        // テキストをボタン付きHTMLに変換
+        $buttons = array(
+            array(
+                'url'   => $review_url,
+                'text'  => $button_text,
+                'color' => $button_color,
+                'tag'   => '[review_url]',
+            ),
+        );
+        $html_body = self::text_to_html( $body, $buttons );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
     }
@@ -297,7 +262,6 @@ class Musashi_Email_Sender {
         $subject = get_option( 'musashi_email_approval_subject', $defaults['approval']['subject'] );
         $headers = get_option( 'musashi_email_approval_headers', '' );
         $body_template = get_option( 'musashi_email_approval_body', $defaults['approval']['body'] );
-        $html_mode = get_option( 'musashi_email_approval_html_mode', '' );
         $button_text = get_option( 'musashi_email_approval_button_text', '📥 資料ダウンロードページへ' );
         $button_color = get_option( 'musashi_email_approval_button_color', '#7B7B00' );
         
@@ -314,20 +278,16 @@ class Musashi_Email_Sender {
         $headers = self::replace_mail_tags( $headers, $inquiry, $extra );
         $body = self::replace_mail_tags( $body_template, $inquiry, $extra );
         
-        // HTMLモードの場合はそのまま、テキストモードの場合はボタン付きHTMLに変換
-        if ( ! empty( $html_mode ) ) {
-            $html_body = self::wrap_html( $body );
-        } else {
-            $buttons = array(
-                array(
-                    'url'   => $download_url,
-                    'text'  => $button_text,
-                    'color' => $button_color,
-                    'tag'   => '[download_url]',
-                ),
-            );
-            $html_body = self::text_to_html( $body, $buttons );
-        }
+        // テキストをボタン付きHTMLに変換
+        $buttons = array(
+            array(
+                'url'   => $download_url,
+                'text'  => $button_text,
+                'color' => $button_color,
+                'tag'   => '[download_url]',
+            ),
+        );
+        $html_body = self::text_to_html( $body, $buttons );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
     }
@@ -348,7 +308,6 @@ class Musashi_Email_Sender {
         $subject = get_option( 'musashi_email_rejection_subject', $defaults['rejection']['subject'] );
         $headers = get_option( 'musashi_email_rejection_headers', '' );
         $body_template = get_option( 'musashi_email_rejection_body', $defaults['rejection']['body'] );
-        $html_mode = get_option( 'musashi_email_rejection_html_mode', '' );
         
         // タグを置換
         $to = self::replace_mail_tags( $to, $inquiry );
@@ -357,12 +316,8 @@ class Musashi_Email_Sender {
         $headers = self::replace_mail_tags( $headers, $inquiry );
         $body = self::replace_mail_tags( $body_template, $inquiry );
         
-        // HTMLモードの場合はそのまま、テキストモードの場合はHTMLに変換
-        if ( ! empty( $html_mode ) ) {
-            $html_body = self::wrap_html( $body );
-        } else {
-            $html_body = self::text_to_html( $body );
-        }
+        // テキストをHTMLに変換
+        $html_body = self::text_to_html( $body );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
     }
@@ -384,7 +339,6 @@ class Musashi_Email_Sender {
         $subject = get_option( 'musashi_email_admin_action_subject', $defaults['admin_action']['subject'] );
         $headers = get_option( 'musashi_email_admin_action_headers', '' );
         $body_template = get_option( 'musashi_email_admin_action_body', $defaults['admin_action']['body'] );
-        $html_mode = get_option( 'musashi_email_admin_action_html_mode', '' );
         
         // アクションタイプの日本語
         $action_label = ( $action_type === 'approved' ) ? '承認' : 'お断り';
@@ -404,12 +358,8 @@ class Musashi_Email_Sender {
         $headers = self::replace_mail_tags( $headers, $inquiry, $extra );
         $body = self::replace_mail_tags( $body_template, $inquiry, $extra );
         
-        // HTMLモードの場合はそのまま、テキストモードの場合はHTMLに変換
-        if ( ! empty( $html_mode ) ) {
-            $html_body = self::wrap_html( $body );
-        } else {
-            $html_body = self::text_to_html( $body );
-        }
+        // テキストをHTMLに変換
+        $html_body = self::text_to_html( $body );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
     }

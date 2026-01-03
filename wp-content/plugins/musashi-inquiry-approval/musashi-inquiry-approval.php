@@ -138,7 +138,7 @@ function musashi_inquiry_register_settings() {
     
     // メールテンプレート設定
     $mail_types = array( 'user', 'admin', 'approval', 'rejection', 'admin_action' );
-    $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'html_mode', 'button_text', 'button_color' );
+    $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'button_text', 'button_color' );
     
     foreach ( $mail_types as $type ) {
         foreach ( $fields as $field ) {
@@ -159,7 +159,7 @@ function musashi_inquiry_email_templates_page() {
     // デフォルトに戻す処理
     if ( isset( $_POST['musashi_reset_templates'] ) && check_admin_referer( 'musashi_reset_templates' ) ) {
         $mail_types = array( 'user', 'admin', 'approval', 'rejection', 'admin_action' );
-        $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'html_mode', 'button_text', 'button_color' );
+        $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'button_text', 'button_color' );
         foreach ( $mail_types as $type ) {
             foreach ( $fields as $field ) {
                 delete_option( "musashi_email_{$type}_{$field}" );
@@ -181,7 +181,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_user_subject', $defaults['user']['subject'] ),
             'headers'      => get_option( 'musashi_email_user_headers', '' ),
             'body'         => get_option( 'musashi_email_user_body', $defaults['user']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_user_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_user_button_text', '' ),
             'button_color' => get_option( 'musashi_email_user_button_color', '#7B7B00' ),
             'has_button'   => false,
@@ -192,7 +191,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_admin_subject', $defaults['admin']['subject'] ),
             'headers'      => get_option( 'musashi_email_admin_headers', 'Reply-To: [your-email]' ),
             'body'         => get_option( 'musashi_email_admin_body', $defaults['admin']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_admin_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_admin_button_text', '確認ページを開く' ),
             'button_color' => get_option( 'musashi_email_admin_button_color', '#7B7B00' ),
             'has_button'   => true,
@@ -204,7 +202,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_approval_subject', $defaults['approval']['subject'] ),
             'headers'      => get_option( 'musashi_email_approval_headers', '' ),
             'body'         => get_option( 'musashi_email_approval_body', $defaults['approval']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_approval_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_approval_button_text', '📥 資料ダウンロードページへ' ),
             'button_color' => get_option( 'musashi_email_approval_button_color', '#7B7B00' ),
             'has_button'   => true,
@@ -216,7 +213,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_rejection_subject', $defaults['rejection']['subject'] ),
             'headers'      => get_option( 'musashi_email_rejection_headers', '' ),
             'body'         => get_option( 'musashi_email_rejection_body', $defaults['rejection']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_rejection_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_rejection_button_text', '' ),
             'button_color' => get_option( 'musashi_email_rejection_button_color', '#7B7B00' ),
             'has_button'   => false,
@@ -227,7 +223,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_admin_action_subject', $defaults['admin_action']['subject'] ),
             'headers'      => get_option( 'musashi_email_admin_action_headers', '' ),
             'body'         => get_option( 'musashi_email_admin_action_body', $defaults['admin_action']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_admin_action_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_admin_action_button_text', '' ),
             'button_color' => get_option( 'musashi_email_admin_action_button_color', '#7B7B00' ),
             'has_button'   => false,
@@ -273,9 +268,7 @@ function musashi_inquiry_email_templates_page() {
                 <?php $first = false; endforeach; ?>
             </div>
             
-            <?php $first = true; foreach ( $templates as $key => $template ) : 
-                $is_html_mode = ! empty( $template['html_mode'] );
-            ?>
+            <?php $first = true; foreach ( $templates as $key => $template ) : ?>
             <div id="<?php echo $key; ?>-email" class="email-tab-content musashi-email-form" <?php echo ! $first ? 'style="display:none;"' : ''; ?>>
                 <h2><?php echo esc_html( $tab_labels[$key]['title'] ); ?></h2>
                 <p class="description"><?php echo esc_html( $tab_labels[$key]['desc'] ); ?></p>
@@ -311,24 +304,8 @@ function musashi_inquiry_email_templates_page() {
                     <tr>
                         <th>メッセージ本文</th>
                         <td>
-                            <!-- モード切り替えタブ -->
-                            <div class="musashi-mode-tabs">
-                                <span class="musashi-mode-tab <?php echo ! $is_html_mode ? 'active' : ''; ?>" 
-                                      onclick="setEditMode('<?php echo $key; ?>', 'text')">テキスト</span>
-                                <span class="musashi-mode-tab <?php echo $is_html_mode ? 'active html-active' : ''; ?>" 
-                                      onclick="setEditMode('<?php echo $key; ?>', 'html')">HTML</span>
-                            </div>
-                            <input type="hidden" name="musashi_email_<?php echo $key; ?>_html_mode" 
-                                   id="musashi_email_<?php echo $key; ?>_html_mode"
-                                   value="<?php echo $is_html_mode ? '1' : ''; ?>">
-                            
-                            <!-- HTML警告 -->
-                            <div class="musashi-html-warning <?php echo $is_html_mode ? 'show' : ''; ?>" id="html-warning-<?php echo $key; ?>">
-                                ⚠️ <strong>HTMLモード:</strong> HTMLを直接編集できます。誤ったHTMLはメール表示が崩れる原因になります。
-                            </div>
-                            
                             <?php if ( $template['has_button'] ) : ?>
-                            <div class="musashi-button-note" id="button-note-<?php echo $key; ?>" <?php echo $is_html_mode ? 'style="display:none;"' : ''; ?>>
+                            <div class="musashi-button-note" id="button-note-<?php echo $key; ?>">
                                 <strong>🔘 ボタン表示:</strong> 本文に <code><?php echo esc_html( $template['button_tag'] ); ?></code> を記載すると、下で設定したボタンとして表示されます。
                             </div>
                             <?php endif; ?>
@@ -342,7 +319,7 @@ function musashi_inquiry_email_templates_page() {
                 
                 <?php if ( $template['has_button'] ) : ?>
                 <!-- ボタン設定 -->
-                <div class="musashi-button-settings" id="button-settings-<?php echo $key; ?>" <?php echo $is_html_mode ? 'style="display:none;"' : ''; ?>>
+                <div class="musashi-button-settings" id="button-settings-<?php echo $key; ?>">
                     <h4>🔘 ボタン設定</h4>
                     <div class="setting-row">
                         <label for="musashi_email_<?php echo $key; ?>_button_text">ボタンテキスト</label>

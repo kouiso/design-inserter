@@ -73,37 +73,7 @@
     font-size: 13px;
 }
 
-/* モード切り替えタブ */
-.musashi-mode-tabs {
-    display: inline-flex;
-    background: #f0f0f1;
-    border-radius: 4px;
-    padding: 3px;
-    margin-bottom: 10px;
-}
 
-.musashi-mode-tab {
-    padding: 6px 16px;
-    cursor: pointer;
-    border-radius: 3px;
-    font-size: 13px;
-    transition: all 0.2s;
-}
-
-.musashi-mode-tab:hover {
-    background: #e0e0e0;
-}
-
-.musashi-mode-tab.active {
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    font-weight: 600;
-}
-
-.musashi-mode-tab.html-active {
-    background: #d63638;
-    color: #fff;
-}
 
 /* ボタン設定 */
 .musashi-button-settings {
@@ -170,20 +140,3 @@
     color: #fff;
     text-decoration: none;
 }
-
-/* HTML警告 */
-.musashi-html-warning {
-    background: #fff3cd;
-    border: 1px solid #ffc107;
-    border-radius: 4px;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    color: #856404;
-    display: none;
-}
-
-.musashi-html-warning.show {
-    display: block;
-}
-
