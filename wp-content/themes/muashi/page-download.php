@@ -32,6 +32,24 @@ foreach ( $product_posts as $product_post ) {
     $thumbnail   = get_the_post_thumbnail_url( $product_post, 'medium' );
     $pdf_id      = (int) get_post_meta( $product_id, 'product_pdf_attachment_id', true );
     $pdf_url     = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
+    
+    // 外部URLのチェック
+    $source_type = get_post_meta( $product_id, 'product_pdf_source_type', true );
+    if ( 'external' === $source_type ) {
+        $external_url = get_post_meta( $product_id, 'product_pdf_external_url', true );
+        if ( $external_url ) {
+            $pdf_url = $external_url;
+        }
+    } else {
+        // 保存側でMedia選択時にExternalを消すようにしたので、source_typeチェックだけで十分安全。
+        // 万が一のために、source_type未設定時のfallbackとしてexternalチェックを入れておく
+        if ( ! $source_type ) {
+             $external_url = get_post_meta( $product_id, 'product_pdf_external_url', true );
+             if ( $external_url ) {
+                 $pdf_url = $external_url;
+             }
+        }
+    }
 
     $slug_to_id[ $product_post->post_name ] = $product_id;
     $all_product_ids[]                      = $product_id;
