@@ -117,11 +117,7 @@ if (is_home()){
                         </svg>
                     </div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="<?= URL_PRODUCT ?>" class="header__nav-link">製品について</a></li>
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="<?= URL_ABOUT_US ?>" class="header__nav-link">私たちについて</a></li>
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="<?= URL_CAREER ?>" class="header__nav-link">採用情報</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="" class="header__nav-link">En | 中文</a></li>
                     </ul>
                     <div class="header__nav-icon">
                         <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -166,11 +162,7 @@ if (is_home()){
                         </svg>
                     </div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="<?= URL_PRODUCT ?>" class="header__nav-link">製品について</a></li>
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="<?= URL_ABOUT_US ?>" class="header__nav-link">私たちについて</a></li>
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="<?= URL_CAREER ?>" class="header__nav-link">採用情報</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
-                        <li class="header__nav-item" style="visibility: hidden;"><a href="" class="header__nav-link">En | 中文</a></li>
                     </ul>
                     <div class="header__nav-icon">
                         <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">

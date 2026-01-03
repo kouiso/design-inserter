@@ -107,17 +107,8 @@ add_action( 'admin_menu', 'musashi_inquiry_admin_menu' );
  */
 function musashi_inquiry_admin_enqueue_scripts( $hook ) {
     // メールテンプレート編集ページでのみ読み込み
-    // すべての管理画面で一旦読み込んで確認（後で条件を追加）
-    $target_hooks = array(
-        'musashi-inquiry-settings_page_musashi-inquiry-email-templates',
-        'musashi_inquiry_approval_page_musashi-inquiry-email-templates',
-        'toplevel_page_musashi-inquiry-settings',
-    );
-    
-    // ページスラッグでも確認
-    $is_email_template_page = ( isset( $_GET['page'] ) && $_GET['page'] === 'musashi-inquiry-email-templates' );
-    
-    if ( ! in_array( $hook, $target_hooks, true ) && ! $is_email_template_page ) {
+    // フック名にページスラッグが含まれているか検索（prefixの差異を吸収）
+    if ( strpos( $hook, 'musashi-inquiry-email-templates' ) === false ) {
         return;
     }
     
@@ -727,6 +718,28 @@ function musashi_inquiry_enqueue_styles() {
             array(),
             MUSASHI_INQUIRY_VERSION
         );
+
+        wp_enqueue_script(
+            'musashi-inquiry-approval-js',
+            MUSASHI_INQUIRY_PLUGIN_URL . 'assets/js/approval-page.js',
+            array(),
+            MUSASHI_INQUIRY_VERSION,
+            true
+        );
+    }
+
+    if ( isset( $_POST['musashi_inquiry_action'] ) ) {
+        wp_enqueue_script(
+            'musashi-action-complete',
+            MUSASHI_INQUIRY_PLUGIN_URL . 'assets/js/action-complete.js',
+            array(),
+            MUSASHI_INQUIRY_VERSION,
+            true
+        );
+
+        wp_localize_script( 'musashi-action-complete', 'musashiVars', array(
+            'homeUrl' => home_url( '/' )
+        ));
     }
 }
 add_action( 'wp_enqueue_scripts', 'musashi_inquiry_enqueue_styles' );
