@@ -36,6 +36,13 @@ $all_product_slugs = array();
 foreach ( $product_posts as $product_post ) {
     $product_id  = (int) $product_post->ID;
     $product_url = get_permalink( $product_post );
+    
+    // カスタムURL設定の確認
+    $custom_url = get_post_meta( $product_id, 'product_custom_url', true );
+    if ( $custom_url ) {
+        $product_url = $custom_url;
+    }
+
     $thumbnail   = get_the_post_thumbnail_url( $product_post, 'medium' );
     
     // PDF URLの取得（外部URL優先、なければメディアライブラリから取得）
