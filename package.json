@@ -6,9 +6,9 @@
   "scripts": {
     "gulp": "gulp",
     "test": "playwright test",
-    "test:smoke": "playwright test tests/e2e/smoke.spec.ts",
-    "test:pagination": "playwright test tests/e2e/pagination.spec.ts",
-    "test:regression": "playwright test tests/e2e/regression.spec.ts",
+    "test:smoke": "playwright test test/e2e/smoke.spec.ts",
+    "test:pagination": "playwright test test/e2e/pagination.spec.ts",
+    "test:regression": "playwright test test/e2e/regression.spec.ts",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed"
   },

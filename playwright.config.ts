@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  * ベースURL: http://localhost:10010 (Local by Flywheelの設定に合わせる)
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: './test',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

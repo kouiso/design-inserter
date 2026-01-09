@@ -63,8 +63,8 @@ npm run test:headed
 ### 特定のテストファイルを実行
 
 ```powershell
-npx playwright test tests/e2e/smoke.spec.ts
-npx playwright test tests/e2e/regression.spec.ts
+npx playwright test test/e2e/smoke.spec.ts
+npx playwright test test/e2e/regression.spec.ts
 ```
 
 ### 特定のブラウザのみで実行
@@ -88,7 +88,7 @@ npx playwright show-report
 ## 🗂️ テストファイル構成
 
 ```
-tests/
+test/
 └── e2e/                         # E2Eテスト
     ├── smoke.spec.ts            # スモークテスト（主要ページ表示確認）
     ├── pagination.spec.ts       # ページネーションテスト
