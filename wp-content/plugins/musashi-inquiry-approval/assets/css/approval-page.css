@@ -1,0 +1,248 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    line-height: 1.8;
+    color: #333333;
+    background-color: #e9ecef;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.approval-container {
+    max-width: 500px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+.approval-header {
+    background-color: #7B7B00;
+    color: #ffffff;
+    padding: 30px;
+}
+
+.approval-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.approval-header p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.approval-content {
+    padding: 40px 30px;
+}
+
+.approval-message {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.action-form {
+    width: 100%;
+}
+
+.action-btn {
+    width: 100%;
+    padding: 18px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-approve {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.btn-approve:hover {
+    background-color: #1e7e34;
+}
+
+.btn-reject {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-reject:hover {
+    background-color: #bd2130;
+}
+
+.btn-icon {
+    font-size: 20px;
+}
+
+.approval-footer {
+    padding: 15px 30px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dddddd;
+    font-size: 12px;
+    color: #999;
+}
+
+/* 確認ダイアログ */
+.confirmation-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirmation-overlay.active {
+    display: flex;
+}
+
+.confirmation-dialog {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.confirmation-dialog h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.confirmation-dialog p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.confirmation-btn {
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.confirmation-btn.cancel {
+    background-color: #dddddd;
+    color: #333333;
+}
+
+.confirmation-btn.confirm {
+    color: #ffffff;
+}
+
+/* 完了ページ用スタイル */
+.complete-container {
+    max-width: 400px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+}
+
+.complete-header {
+    /* background-color is set inline */
+    color: #ffffff;
+    padding: 40px 30px;
+}
+
+.complete-icon {
+    font-size: 64px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.complete-title {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.complete-content {
+    padding: 30px;
+}
+
+.complete-message {
+    font-size: 15px;
+    color: #666666;
+    margin-bottom: 25px;
+}
+
+.close-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.close-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.close-button:active {
+    transform: translateY(0);
+}
+
+.complete-footer {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dddddd;
+    font-size: 11px;
+    color: #999999;
+}
