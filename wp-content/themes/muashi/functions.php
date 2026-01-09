@@ -1625,6 +1625,10 @@ add_filter( 'render_block_core/image', function( $block_content, $block ) {
     // 既存のstyle属性をチェック
     if ( preg_match( '/style="([^"]*)"/', $block_content, $matches ) ) {
         $existing_style = $matches[1];
+        
+        // width: XXXpx を width: 100% に置き換え（レスポンシブ対応）
+        $existing_style = preg_replace( '/width:\s*\d+px/i', 'width:100%', $existing_style );
+        
         // 既にmax-widthが設定されている場合は置換、なければ追加
         if ( preg_match( '/max-width:[^;]+;?/', $existing_style ) ) {
             $new_style = preg_replace( '/max-width:[^;]+;?/', $style_value . ';', $existing_style );
@@ -1819,6 +1823,3 @@ function muashi_render_sidebar_navigation( $location ) {
     ) );
 
     echo '</div>';
-    echo '</div>';
-}
-
