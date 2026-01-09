@@ -12,7 +12,14 @@ $tests = [
     'test-career-permalink.php',
     'test-image-responsive.php',
     'test-pagination.php',
-    'test-template-integrity.php'
+    'test-template-integrity.php',
+    'test-inquiry-approval-plugin.php',
+    'test-top-section-order.php',
+    'test-interview-post-type.php',
+    'test-language-links.php',
+    'test-media-page.php',
+    'test-faq-page.php',
+    'test-news-page.php',
 ];
 
 $passed_count = 0;

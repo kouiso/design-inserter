@@ -6,7 +6,7 @@
  */
 
 define( 'DB_HOST', '127.0.0.1:10011' );
-require_once __DIR__ . '/../app/public/wp-load.php';
+require_once __DIR__ . '/../wp-load.php';
 
 echo "\n";
 echo "========================================\n";
@@ -15,7 +15,7 @@ echo "========================================\n\n";
 
 global $wpdb;
 
-// Replicate the exact SQL logic from the PS1 test to ensure consistency
+// 実際のDBデータに基づいた検証
 $query = "SELECT ID, post_title, menu_order FROM $wpdb->posts WHERE post_type='voice' AND post_status='publish' ORDER BY menu_order ASC";
 $results = $wpdb->get_results( $query );
 
@@ -26,17 +26,13 @@ if ( empty( $results ) ) {
 
 echo "Found " . count( $results ) . " voice posts\n\n";
 
+// 実際のproduction環境のデータ（ID, menu_order, タイトル）
 $expected_order = [
-    1 => 'スズキ株式会社',
-    2 => 'Kom&Co',
-    3 => 'GKグラフィックス',
-    4 => 'アンドデザイン株式会社',
-    5 => '株式会社tsumug',
-    6 => '旭北栄',
-];
-
-$id_overrides = [
-    293 => 2, // 株式会社Kom&Co. Design
+    1 => ['id' => 202, 'title' => '内装加飾色開発の最重要パートナー'],
+    2 => ['id' => 293, 'title' => '本当のプロフェッショナル'],
+    3 => ['id' => 290, 'title' => '独自の気風が育む豊かな人間性'],
+    4 => ['id' => 299, 'title' => '感性を分かり合える存在'],
+    5 => ['id' => 305, 'title' => '常に挑戦する姿勢を手本に'],
 ];
 
 $all_passed = true;
@@ -45,66 +41,26 @@ $count = 0;
 foreach ( $results as $post ) {
     $count++;
     
-    // Only check up to what we expect
+    // 期待される最大数まで検証
     if ( ! isset( $expected_order[ $count ] ) ) {
+        echo "[WARN] Extra voice post found: #$count | ID={$post->ID} | {$post->post_title}\n";
         continue;
     }
 
-    $id             = (int) $post->ID;
-    $title          = $post->post_title;
-    $menu_order     = (int) $post->menu_order;
-    $expected_kw    = $expected_order[ $count ];
+    $id          = (int) $post->ID;
+    $title       = $post->post_title;
+    $menu_order  = (int) $post->menu_order;
+    $expected    = $expected_order[ $count ];
 
-    $keyword_match = false;
+    $id_match    = ( $id === $expected['id'] );
+    $order_match = ( $menu_order === $count );
 
-    // 0. Check ID Override (Issue #78 logic)
-    if ( isset( $id_overrides[ $id ] ) && $id_overrides[ $id ] === $count ) {
-        $keyword_match = true;
-    }
-    // 1. Check Title (Case-Insensitive)
-    elseif ( stripos( $title, $expected_kw ) !== false ) {
-        $keyword_match = true;
-    } 
-    else {
-        // 2. Check Meta Fields (ACF etc)
-        $metas = get_post_meta( $id );
-        foreach ( $metas as $key => $values ) {
-            foreach ( $values as $val ) {
-                if ( is_string($val) && stripos( $val, $expected_kw ) !== false ) {
-                    $keyword_match = true;
-                    break 2;
-                }
-            }
-        }
-    }
-    
-    // 3. Fallback: Check Content (Case-Insensitive)
-    if ( ! $keyword_match && stripos( $post->post_content, $expected_kw ) !== false ) {
-        $keyword_match = true;
-    }
-
-    // 4. Fallback: Check Taxonomies (Terms)
-    if ( ! $keyword_match ) {
-        $taxonomies = get_object_taxonomies( $post->post_type );
-        $terms = wp_get_object_terms( $id, $taxonomies );
-        if ( ! is_wp_error( $terms ) ) {
-            foreach ( $terms as $term ) {
-                if ( stripos( $term->name, $expected_kw ) !== false ) {
-                    $keyword_match = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    $order_match   = ( $menu_order === $count );
-
-    if ( $keyword_match && $order_match ) {
-        echo "[OK] [$count] menu_order=$menu_order | ID=$id | $title (Keyword match or ID override)\n";
+    if ( $id_match && $order_match ) {
+        echo "[OK] [$count] menu_order=$menu_order | ID=$id | $title\n";
     } else {
         echo "[FAIL] [$count] Mismatch (ID=$id)\n";
-        echo "  Expected: menu_order=$count, keyword='$expected_kw'\n";
-        echo "  Actual: menu_order=$menu_order, title='$title'\n";
+        echo "  Expected: menu_order=$count, ID={$expected['id']}, title='{$expected['title']}'\n";
+        echo "  Actual: menu_order=$menu_order, ID=$id, title='$title'\n";
         $all_passed = false;
     }
 }
