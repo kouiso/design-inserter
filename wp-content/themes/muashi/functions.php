@@ -1823,3 +1823,5 @@ function muashi_render_sidebar_navigation( $location ) {
     ) );
 
     echo '</div>';
+    echo '</div>';
+}
