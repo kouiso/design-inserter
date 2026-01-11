@@ -64,7 +64,6 @@ class Musashi_Email_Sender {
             '{site_url}'          => home_url(),
         );
         
-        // 追加の変数をマージ
         $tags = array_merge( $tags, $extra );
         
         return str_replace( array_keys( $tags ), array_values( $tags ), $template );
@@ -92,26 +91,22 @@ class Musashi_Email_Sender {
      * @return string
      */
     private static function text_to_html( $text, $buttons = array() ) {
-        // ボタン置換のためにURLタグを一時的にプレースホルダーに
         $placeholders = array();
         foreach ( $buttons as $i => $button ) {
             $placeholder = "___BUTTON_PLACEHOLDER_{$i}___";
             $button_html = self::generate_button_html( $button['url'], $button['text'], $button['color'] ?? '#7B7B00' );
             $placeholders[$placeholder] = $button_html;
             
-            // URLタグを置換（[review_url]や[download_url]など）
             if ( isset( $button['tag'] ) ) {
                 $text = str_replace( $button['tag'], $placeholder, $text );
             }
-            // URL自体も置換
+
             $text = str_replace( $button['url'], $placeholder, $text );
         }
         
-        // テキストをエスケープしてHTMLに変換
         $text = esc_html( $text );
         $text = nl2br( $text );
         
-        // プレースホルダーをボタンHTMLに置換
         foreach ( $placeholders as $placeholder => $button_html ) {
             $text = str_replace( esc_html( $placeholder ), $button_html, $text );
         }
@@ -137,7 +132,7 @@ class Musashi_Email_Sender {
      * @param string $subject 件名
      * @param string $body    本文
      * @param string $from    送信元
-     * @param string $headers 追加ヘッダー
+     * @param string $headers_extra 追加ヘッダー
      * @return bool
      */
     private static function send_mail( $to, $subject, $body, $from = '', $headers_extra = '' ) {
@@ -178,14 +173,13 @@ class Musashi_Email_Sender {
         $subject = get_option( 'musashi_email_user_subject', $defaults['user']['subject'] );
         $headers = get_option( 'musashi_email_user_headers', '' );
         $body_template = get_option( 'musashi_email_user_body', $defaults['user']['body'] );
-        // タグを置換
+
         $to = self::replace_mail_tags( $to, $inquiry );
         $from = self::replace_mail_tags( $from, $inquiry );
         $subject = self::replace_mail_tags( $subject, $inquiry );
         $headers = self::replace_mail_tags( $headers, $inquiry );
         $body = self::replace_mail_tags( $body_template, $inquiry );
         
-        // テキストをHTMLに変換
         $html_body = self::text_to_html( $body );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
@@ -202,7 +196,6 @@ class Musashi_Email_Sender {
             ? musashi_inquiry_get_default_email_templates() 
             : array( 'admin' => array( 'subject' => '', 'body' => '' ) );
         
-        // 確認ページURL
         $review_url = Musashi_Inquiry_Handler::get_review_url( $inquiry->token );
         
         $to = get_option( 'musashi_email_admin_to', '[_site_admin_email]' );
@@ -213,20 +206,17 @@ class Musashi_Email_Sender {
         $button_text = get_option( 'musashi_email_admin_button_text', '確認ページを開く' );
         $button_color = get_option( 'musashi_email_admin_button_color', '#7B7B00' );
         
-        // 追加タグ
         $extra = array(
             '[review_url]' => $review_url,
             '{review_url}' => $review_url,
         );
         
-        // タグを置換
         $to = self::replace_mail_tags( $to, $inquiry, $extra );
         $from = self::replace_mail_tags( $from, $inquiry, $extra );
         $subject = self::replace_mail_tags( $subject, $inquiry, $extra );
         $headers = self::replace_mail_tags( $headers, $inquiry, $extra );
         $body = self::replace_mail_tags( $body_template, $inquiry, $extra );
         
-        // テキストをボタン付きHTMLに変換
         $buttons = array(
             array(
                 'url'   => $review_url,
@@ -251,7 +241,6 @@ class Musashi_Email_Sender {
             ? musashi_inquiry_get_default_email_templates() 
             : array( 'approval' => array( 'subject' => '', 'body' => '' ) );
         
-        // ダウンロードURL
         $download_url = home_url( '/document/' );
         if ( ! empty( $inquiry->selected_products ) ) {
             $download_url = add_query_arg( 'dl_product_id', $inquiry->selected_products, $download_url );
@@ -265,20 +254,17 @@ class Musashi_Email_Sender {
         $button_text = get_option( 'musashi_email_approval_button_text', '📥 資料ダウンロードページへ' );
         $button_color = get_option( 'musashi_email_approval_button_color', '#7B7B00' );
         
-        // 追加タグ
         $extra = array(
             '[download_url]' => $download_url,
             '{download_url}' => $download_url,
         );
         
-        // タグを置換
         $to = self::replace_mail_tags( $to, $inquiry, $extra );
         $from = self::replace_mail_tags( $from, $inquiry, $extra );
         $subject = self::replace_mail_tags( $subject, $inquiry, $extra );
         $headers = self::replace_mail_tags( $headers, $inquiry, $extra );
         $body = self::replace_mail_tags( $body_template, $inquiry, $extra );
         
-        // テキストをボタン付きHTMLに変換
         $buttons = array(
             array(
                 'url'   => $download_url,
@@ -309,14 +295,12 @@ class Musashi_Email_Sender {
         $headers = get_option( 'musashi_email_rejection_headers', '' );
         $body_template = get_option( 'musashi_email_rejection_body', $defaults['rejection']['body'] );
         
-        // タグを置換
         $to = self::replace_mail_tags( $to, $inquiry );
         $from = self::replace_mail_tags( $from, $inquiry );
         $subject = self::replace_mail_tags( $subject, $inquiry );
         $headers = self::replace_mail_tags( $headers, $inquiry );
         $body = self::replace_mail_tags( $body_template, $inquiry );
         
-        // テキストをHTMLに変換
         $html_body = self::text_to_html( $body );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );
@@ -340,10 +324,8 @@ class Musashi_Email_Sender {
         $headers = get_option( 'musashi_email_admin_action_headers', '' );
         $body_template = get_option( 'musashi_email_admin_action_body', $defaults['admin_action']['body'] );
         
-        // アクションタイプの日本語
         $action_label = ( $action_type === 'approved' ) ? '承認' : 'お断り';
         
-        // 追加タグ
         $extra = array(
             '[action_type]'  => $action_label,
             '{action_type}'  => $action_label,
@@ -351,14 +333,12 @@ class Musashi_Email_Sender {
             '{action_date}'  => current_time( 'Y年n月j日 H:i' ),
         );
         
-        // タグを置換
         $to = self::replace_mail_tags( $to, $inquiry, $extra );
         $from = self::replace_mail_tags( $from, $inquiry, $extra );
         $subject = self::replace_mail_tags( $subject, $inquiry, $extra );
         $headers = self::replace_mail_tags( $headers, $inquiry, $extra );
         $body = self::replace_mail_tags( $body_template, $inquiry, $extra );
         
-        // テキストをHTMLに変換
         $html_body = self::text_to_html( $body );
         
         return self::send_mail( $to, $subject, $html_body, $from, $headers );

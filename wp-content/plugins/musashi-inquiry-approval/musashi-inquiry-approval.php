@@ -16,10 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// プラグイン定数
+
 define( 'MUSASHI_INQUIRY_VERSION', '1.1.0' );
 define( 'MUSASHI_INQUIRY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MUSASHI_INQUIRY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 
 /**
  * プラグイン有効化時の処理
@@ -28,6 +29,7 @@ function musashi_inquiry_activate() {
     flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'musashi_inquiry_activate' );
+
 
 /**
  * プラグイン無効化時の処理
@@ -41,7 +43,6 @@ register_deactivation_hook( __FILE__, 'musashi_inquiry_deactivate' );
  * テンプレートリダイレクト（クエリパラメータ方式）
  */
 function musashi_inquiry_template_redirect() {
-    // 承認ページの表示（?musashi_review=1&token=xxx）
     if ( isset( $_GET['musashi_review'] ) && $_GET['musashi_review'] === '1' ) {
         $token = isset( $_GET['token'] ) ? sanitize_text_field( $_GET['token'] ) : '';
         if ( $token ) {
@@ -50,7 +51,6 @@ function musashi_inquiry_template_redirect() {
         }
     }
     
-    // アクション処理（承認/お断り）
     if ( isset( $_POST['musashi_inquiry_action'] ) && $_POST['musashi_inquiry_action'] === '1' ) {
         musashi_inquiry_handle_action();
         exit;
@@ -104,6 +104,8 @@ add_action( 'admin_menu', 'musashi_inquiry_admin_menu' );
 
 /**
  * 管理画面用スタイルとスクリプトの読み込み
+ *
+ * @param string $hook 現在のページフック
  */
 function musashi_inquiry_admin_enqueue_scripts( $hook ) {
     // メールテンプレート編集ページでのみ読み込み
@@ -133,10 +135,8 @@ add_action( 'admin_enqueue_scripts', 'musashi_inquiry_admin_enqueue_scripts' );
  * メールテンプレート設定の登録
  */
 function musashi_inquiry_register_settings() {
-    // 対象フォーム設定
     register_setting( 'musashi_inquiry_general_settings', 'musashi_target_form_id' );
     
-    // メールテンプレート設定
     $mail_types = array( 'user', 'admin', 'approval', 'rejection', 'admin_action' );
     $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'button_text', 'button_color' );
     
@@ -156,7 +156,6 @@ function musashi_inquiry_email_templates_page() {
         return;
     }
     
-    // デフォルトに戻す処理
     if ( isset( $_POST['musashi_reset_templates'] ) && check_admin_referer( 'musashi_reset_templates' ) ) {
         $mail_types = array( 'user', 'admin', 'approval', 'rejection', 'admin_action' );
         $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'button_text', 'button_color' );
@@ -168,12 +167,10 @@ function musashi_inquiry_email_templates_page() {
         echo '<div class="notice notice-success is-dismissible"><p>テンプレートをデフォルトに戻しました。</p></div>';
     }
     
-    // デフォルト値
     $defaults = musashi_inquiry_get_default_email_templates();
     $admin_email = get_option( 'admin_email' );
     $site_name = get_bloginfo( 'name' );
     
-    // 保存済みの値を取得
     $templates = array(
         'user' => array(
             'to'           => get_option( 'musashi_email_user_to', '[your-email]' ),
@@ -249,7 +246,6 @@ function musashi_inquiry_email_templates_page() {
         )
     );
 
-    // フラットなアイテムリストも作成（後続のループ用）
     $flat_tab_labels = array();
     foreach ( $tab_labels as $group ) {
         foreach ( $group['items'] as $key => $item ) {
@@ -414,6 +410,8 @@ function musashi_inquiry_email_templates_page() {
 
 /**
  * デフォルトのメールテンプレートを取得
+ *
+ * @return array
  */
 function musashi_inquiry_get_default_email_templates() {
     $site_name = get_bloginfo( 'name' );
@@ -543,10 +541,8 @@ function musashi_inquiry_settings_page() {
         return;
     }
 
-    // WP Mail SMTPが有効かチェック
     $wp_mail_smtp_active = class_exists( 'WPMailSMTP\WPMailSMTP' ) || function_exists( 'wp_mail_smtp' );
     
-    // Contact Form 7のフォーム一覧を取得
     $cf7_forms = array();
     if ( class_exists( 'WPCF7_ContactForm' ) ) {
         $forms = WPCF7_ContactForm::find();
@@ -558,7 +554,6 @@ function musashi_inquiry_settings_page() {
         }
     }
     
-    // 保存済みの対象フォームID
     $target_form_id = get_option( 'musashi_target_form_id', '' );
     ?>
     <div class="wrap">
@@ -665,12 +660,11 @@ add_action( 'admin_init', 'musashi_inquiry_check_cf7' );
 
 /**
  * 確認ページの表示
+ *
+ * @param string $token 問い合わせトークン
  */
 function musashi_inquiry_display_review_page( $token ) {
-    // URLデコード
     $token = rawurldecode( $token );
-    
-    // トークンを復号化
     $inquiry = Musashi_Inquiry_Handler::decode_token( $token );
     
     if ( ! $inquiry ) {
@@ -681,7 +675,6 @@ function musashi_inquiry_display_review_page( $token ) {
         );
     }
     
-    // テンプレートを読み込み
     include MUSASHI_INQUIRY_PLUGIN_DIR . 'templates/approval-page.php';
 }
 
@@ -689,7 +682,6 @@ function musashi_inquiry_display_review_page( $token ) {
  * 承認/お断りアクションの処理
  */
 function musashi_inquiry_handle_action() {
-    // nonce検証
     if ( ! isset( $_POST['musashi_inquiry_nonce'] ) || 
          ! wp_verify_nonce( $_POST['musashi_inquiry_nonce'], 'musashi_inquiry_action' ) ) {
         wp_die( '不正なリクエストです。', 'エラー', array( 'response' => 403 ) );
@@ -702,14 +694,12 @@ function musashi_inquiry_handle_action() {
         wp_die( '無効なリクエストです。', 'エラー', array( 'response' => 400 ) );
     }
     
-    // トークンを復号化
     $inquiry = Musashi_Inquiry_Handler::decode_token( $token );
     
     if ( ! $inquiry ) {
         wp_die( '無効なトークンです。', 'エラー', array( 'response' => 400 ) );
     }
     
-    // メール送信
     $action_type = ( $action === 'approve' ) ? 'approved' : 'rejected';
     
     if ( $action === 'approve' ) {
@@ -720,10 +710,8 @@ function musashi_inquiry_handle_action() {
         $message = 'お断りメールをお客様に送信しました。';
     }
     
-    // 管理者への処理完了通知（二重承認防止）
     Musashi_Email_Sender::send_admin_action_notification( $inquiry, $action_type );
     
-    // 完了ページを表示
     include MUSASHI_INQUIRY_PLUGIN_DIR . 'templates/action-complete.php';
 }
 

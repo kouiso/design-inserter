@@ -58,7 +58,6 @@
         var data = attachment.toJSON();
         $idInput.val(data.id || '');
         $urlInput.val(data.url || '');
-        // 外部URLのクリア処理を削除し、保存まで値を保持する（UX統一）
         $sourceTypeRadios.filter('[value="media"]').prop('checked', true);
         toggleSections();
       });
@@ -73,22 +72,18 @@
       $externalUrlInput.val('');
     });
 
-    // Gutenberg（ブロックエディタ）での保存完了を検知して、未選択側の値をクリアする
     if (typeof wp !== 'undefined' && wp.data && wp.data.subscribe && wp.data.select('core/editor')) {
       var wasSaving = false;
       wp.data.subscribe(function () {
         var isSaving = wp.data.select('core/editor').isSavingPost();
         var isAutosaving = wp.data.select('core/editor').isAutosavingPost();
 
-        // 保存処理が完了したタイミング（保存中 -> 未保存 への遷移）かつ、自動保存ではない場合
         if (wasSaving && !isSaving && !isAutosaving) {
           var currentType = $sourceTypeRadios.filter(':checked').val();
           if (currentType === 'external') {
-            // 外部URL選択時：メディア情報をクリア
             $idInput.val('');
             $urlInput.val('');
           } else {
-            // メディア選択時：外部URLをクリア
             $externalUrlInput.val('');
           }
         }
