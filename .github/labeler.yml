@@ -59,4 +59,4 @@ config:
       - 'wp-config*.php'
       - '.gitignore'
       - '.editorconfig'
-  - '.github/**/*.yml'
+      - '.github/**/*.yml'
