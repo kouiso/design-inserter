@@ -349,24 +349,30 @@ class DownloadPage {
     linksContainer.appendChild(detailLink);
 
     if (this.isDownloadPage) {
-      // downloadページ: カタログ請求ボタン（フォームへスクロール）
+      // downloadページ: カタログ請求ボタン（/downloadへリダイレクト）
       const requestButton = document.createElement('button');
       requestButton.type = 'button';
       requestButton.className = 'download__link download__link--request';
       requestButton.textContent = 'カタログ請求';
       
       requestButton.addEventListener('click', () => {
-        const formSection = document.getElementById('contact-form');
-        if (formSection) {
-          const offset = 60; // 上部の余白（ピクセル）
-          const elementPosition = formSection.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - offset;
+        // Check if there's already selected products to pass along
+        const selectedIds = Array.from(this.state.selected.keys());
+        let downloadUrl = '/download/';
+        
+        if (selectedIds.length > 0) {
+          // Pass selected products to the download page
+          const productSlugs = selectedIds.map(id => {
+            const product = this.productsById.get(id);
+            return product ? product.slug : null;
+          }).filter(Boolean);
           
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+          if (productSlugs.length > 0) {
+            downloadUrl += '?dl_products=' + encodeURIComponent(productSlugs.join(','));
+          }
         }
+        
+        window.location.href = downloadUrl;
       });
       
       linksContainer.appendChild(requestButton);

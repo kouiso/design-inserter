@@ -57,11 +57,11 @@ get_header();
                                 'dl_product' => $product_slug,
                                 'source_product_id' => get_the_ID(),
                             );
-                            $download_permalink = add_query_arg($download_args, home_url('/download/'));
+                            $download_permalink = add_query_arg($download_args, home_url('/catalog/'));
                             ?>
                             <div class="single__cta">
                                 <a class="single__download-button"
-                                    href="<?php echo esc_url($download_permalink); ?>">資料ダウンロード</a>
+                                    href="<?php echo esc_url($download_permalink); ?>">カタログダウンロード</a>
                             </div>
 
                             <div class="single__back">
