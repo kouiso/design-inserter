@@ -6,6 +6,7 @@ class DownloadPage {
     this.data = data || {};
     this.pageType = root.getAttribute('data-page-type') || 'document';
     this.isDownloadPage = this.pageType === 'download';
+    this.isFormOnly = this.pageType === 'form-only';
     this.products = Array.isArray(this.data.products) ? this.data.products.slice() : [];
     this.taxonomies = this.data.taxonomies || {};
     this.sourceProductId = Number.isFinite(this.data.sourceProductId) ? this.data.sourceProductId : 0;
@@ -30,6 +31,14 @@ class DownloadPage {
     };
 
     this.cacheElements();
+    
+    // For form-only pages, skip rendering and event binding, just populate hidden fields
+    if (this.isFormOnly) {
+      this.bootstrapSelection();
+      this.syncHiddenInputs();
+      return;
+    }
+    
     this.bindEvents();
     this.bootstrapSelection();
     this.renderAll();
