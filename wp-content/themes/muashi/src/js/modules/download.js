@@ -358,7 +358,7 @@ class DownloadPage {
     linksContainer.appendChild(detailLink);
 
     if (this.isDownloadPage) {
-      // downloadページ: カタログ請求ボタン（/downloadへリダイレクト）
+      // catalogページ: カタログ請求ボタン（/downloadへリダイレクト）
       const requestButton = document.createElement('button');
       requestButton.type = 'button';
       requestButton.className = 'download__link download__link--request';

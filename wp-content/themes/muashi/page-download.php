@@ -14,6 +14,8 @@ $product_posts = get_posts(
         'post_type'      => 'product',
         'post_status'    => 'publish',
         'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
     )
 );
 
