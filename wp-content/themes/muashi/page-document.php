@@ -201,7 +201,7 @@ if ( have_posts() ) {
         <div class="navigation__inner">
             <ul class="navigation__list">
                 <li class="navigation__item is-current">
-                    <a href="<?php echo esc_url( home_url( '/document/' ) ); ?>" class="navigation__link">資料ダウンロード</a>
+                    <a href="<?php echo esc_url( home_url( '/document/' ) ); ?>" class="navigation__link">カタログダウンロード</a>
                 </li>
             </ul>
         </div>
@@ -221,7 +221,7 @@ if ( have_posts() ) {
           <div class="page__content page__content--no-image">
 
             <h1 id="01" class="page__title js-page-title">
-            資料ダウンロード
+            カタログダウンロード
             </h1>
 
             <div class="page__inner page__inner--narrow">
