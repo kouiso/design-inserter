@@ -365,6 +365,7 @@ if (is_home()){
                                                                 </span>
                                                             </a>
                                                         </li>
+                                                        <?php /* ストーリーページを非表示
                                                         <li class="hamburger__accordion-item">
                                                             <a href="<?= URL_STORY ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">ストーリー</span>
@@ -375,6 +376,7 @@ if (is_home()){
                                                                 </span>
                                                             </a>
                                                         </li>
+                                                        */ ?>
                                                         <li class="hamburger__accordion-item">
                                                             <a href="<?= URL_VOICE ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">お客様の声</span>

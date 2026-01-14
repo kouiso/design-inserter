@@ -6,7 +6,7 @@ define('URL_FEATURED', home_url('/featured/'));
 define('URL_APPLICATIONS', home_url('/applications/'));
 define('URL_ABOUT_US', home_url('/about-us/'));
 define('URL_COMPANY', home_url('/company/'));
-define('URL_STORY', home_url('/story/'));
+// define('URL_STORY', home_url('/story/')); // ストーリーページを非表示
 define('URL_VOICE', home_url('/voice/'));
 define('URL_CAREER', home_url('/career/'));
 define('URL_CONTACT', home_url('/contact/'));

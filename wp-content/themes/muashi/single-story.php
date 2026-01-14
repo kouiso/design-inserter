@@ -14,7 +14,8 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <?php
-    $story_archive_url = defined( 'URL_STORY' ) ? URL_STORY : get_post_type_archive_link( 'story' );
+    // $story_archive_url = defined( 'URL_STORY' ) ? URL_STORY : get_post_type_archive_link( 'story' ); // ストーリーページを非表示
+    $story_archive_url = get_post_type_archive_link( 'story' ); // Fallback for existing story posts
     ?>
 
     <?php muashi_render_sidebar_navigation( 'sidebar_story' ); ?>

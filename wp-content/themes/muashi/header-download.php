@@ -367,6 +367,7 @@ if (is_home()){
                                                     </ul>
                                                 </div>
                                             </li>
+                                            <?php /* ストーリーページを非表示
                                             <li class="hamburger__sub-item">
                                                 <a href="<?= URL_STORY ?>" class="hamburger__accordion">
                                                     <span class="hamburger__accordion-text">ストーリー</span>
@@ -377,6 +378,7 @@ if (is_home()){
                                                     </span>
                                                 </a>
                                             </li>
+                                            */ ?>
                                 </ul>
                                 <?php endif; ?>
 

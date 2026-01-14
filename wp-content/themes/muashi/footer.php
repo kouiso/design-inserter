@@ -187,6 +187,7 @@
                                 </span>
                             </a>
                         </li>
+                        <?php /* ストーリーページを非表示
                         <li class="footer__sub-item">
                             <a href="<?= URL_STORY ?>" class="footer__accordion">
                                 <span class="footer__accordion-text">ストーリー</span>
@@ -197,6 +198,7 @@
                                 </span>
                             </a>
                         </li>
+                        */ ?>
                         <li class="footer__sub-item">
                             <a href="<?= URL_VOICE ?>" class="footer__accordion">
                                 <span class="footer__accordion-text">お客の声</span>
@@ -328,9 +330,11 @@
                             <a href="<?= URL_SUSTAINABILITY ?>" class="footer__nav-pc-link">サステナビリティ</a>
                         </div>
                     </div>
+                    <?php /* ストーリーページを非表示
                     <div class="footer__nav-pc-item">
                         <a href="<?= URL_STORY ?>" class="footer__nav-pc-link">ストーリー</a>
                     </div>
+                    */ ?>
                     <div class="footer__nav-pc-item">
                         <a href="<?= URL_VOICE ?>" class="footer__nav-pc-link">お客の声</a>
                     </div>
