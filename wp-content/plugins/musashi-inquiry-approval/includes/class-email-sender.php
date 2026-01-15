@@ -100,8 +100,6 @@ class Musashi_Email_Sender {
             if ( isset( $button['tag'] ) ) {
                 $text = str_replace( $button['tag'], $placeholder, $text );
             }
-
-            $text = str_replace( $button['url'], $placeholder, $text );
         }
         
         $text = esc_html( $text );
