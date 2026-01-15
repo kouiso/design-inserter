@@ -342,8 +342,8 @@
 
             <div class="footer__nav-pc-other-section">
                 <div class="footer__nav-pc-other-link-top">
+                    <a href="<?= URL_MEDIA ?>" class="footer__nav-pc-link">Pick up</a>
                     <a href="<?= URL_NEWS ?>" class="footer__nav-pc-link">ニュース</a>
-                    <a href="<?= URL_MEDIA ?>" class="footer__nav-pc-link">メディア</a>
                     <a href="<?= URL_CAREER ?>" class="footer__nav-pc-link">採用情報</a>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
