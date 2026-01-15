@@ -72,6 +72,7 @@ get_header();
         $custom_back_links = array(
             'post'          => defined( 'URL_NEWS' ) ? URL_NEWS : get_post_type_archive_link( 'post' ),
             'product'       => defined( 'URL_PRODUCT' ) ? URL_PRODUCT : get_post_type_archive_link( 'product' ),
+            'story'         => defined( 'URL_STORY' ) ? URL_STORY : get_post_type_archive_link( 'story' ),
             'voice'         => defined( 'URL_VOICE' ) ? URL_VOICE : get_post_type_archive_link( 'voice' ),
             'career'        => defined( 'URL_CAREER' ) ? URL_CAREER : get_post_type_archive_link( 'career' ),
             'interview'     => defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : get_post_type_archive_link( 'interview' ),
