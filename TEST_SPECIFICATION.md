@@ -765,11 +765,57 @@
 - **自動テスト実行:** `npm test` でPlaywright自動テストを実行可能
 - **GitHub リポジトリ:** https://github.com/ritmo-inc/musashipaint
 - **テストコード参照先:** 
-  - [tests/e2e/smoke.spec.ts](tests/e2e/smoke.spec.ts) - TC-S-001 ~ TC-S-010
-  - [tests/e2e/pagination.spec.ts](tests/e2e/pagination.spec.ts) - TC-P-001 ~ TC-P-006
-  - [tests/e2e/forms.spec.ts](tests/e2e/forms.spec.ts) - TC-F-001 ~ TC-F-010
-  - [tests/e2e/taxonomy.spec.ts](tests/e2e/taxonomy.spec.ts) - TC-T-001 ~ TC-T-009
-  - [tests/e2e/regression.spec.ts](tests/e2e/regression.spec.ts) - TC-R-001 ~ TC-R-022
+  - [test/e2e/smoke.spec.ts](test/e2e/smoke.spec.ts) - TC-S-001 ~ TC-S-010
+  - [test/e2e/pagination.spec.ts](test/e2e/pagination.spec.ts) - TC-P-001 ~ TC-P-006
+  - [test/e2e/forms.spec.ts](test/e2e/forms.spec.ts) - TC-F-001 ~ TC-F-010
+  - [test/e2e/taxonomy.spec.ts](test/e2e/taxonomy.spec.ts) - TC-T-001 ~ TC-T-009
+  - [test/e2e/regression.spec.ts](test/e2e/regression.spec.ts) - TC-R-001 ~ TC-R-022
+
+---
+
+## 🛠 テスト実行コマンド（Windows）
+
+### Playwright（E2E）
+
+1. 依存関係のインストール（初回または更新時）
+
+```powershell
+cd "c:\Users\suker\Local Sites\musashipaint\app\public"
+npm ci
+npx playwright install
+```
+
+2. 全テスト実行（ヘッドレス）
+
+```powershell
+npm test
+```
+
+3. 例：Chromiumでスモークのみ（ヘッデッド）
+
+```powershell
+npx playwright test test/e2e/smoke.spec.ts --project=chromium --headed
+```
+
+### PHP コンテンツ検証テスト（HTTPベース）
+
+ブラウザで次にアクセス：
+
+- http://localhost:10010/tests/run-all-tests.php
+
+PowerShellから実行して結果を表示：
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost:10010/tests/run-all-tests.php" | Select-Object -ExpandProperty Content
+```
+
+### Git 操作（任意）
+
+```powershell
+git add -A
+git commit -m "docs(test): update test specification"
+git push origin main
+```
 
 ---
 

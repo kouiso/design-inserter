@@ -67,3 +67,4 @@ test-*.html
 
 # Claude
 .claude/
+tmpclaude-*/
