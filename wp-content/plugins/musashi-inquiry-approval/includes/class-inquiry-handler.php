@@ -27,24 +27,18 @@ class Musashi_Inquiry_Handler {
      * @return string
      */
     private static function get_encryption_key() {
-        // WP_CACHE_KEY_SALTを優先使用（影響範囲が限定的）
         if ( defined( 'WP_CACHE_KEY_SALT' ) && WP_CACHE_KEY_SALT ) {
             return WP_CACHE_KEY_SALT;
         }
-        // フォールバック: AUTH_KEY
         if ( defined( 'AUTH_KEY' ) && AUTH_KEY ) {
             return AUTH_KEY;
         }
-        // フォールバック: SECURE_AUTH_KEY
         if ( defined( 'SECURE_AUTH_KEY' ) && SECURE_AUTH_KEY ) {
             return SECURE_AUTH_KEY;
         }
-        // フォールバック: NONCE_KEY
         if ( defined( 'NONCE_KEY' ) && NONCE_KEY ) {
             return NONCE_KEY;
         }
-        // 最終フォールバック: wp_salt()でサイト固有の値を生成
-        // wp_salt()は複数のWordPress saltキーを組み合わせて生成するため、サイトごとにユニーク
         return wp_salt( 'auth' );
     }
 
@@ -55,7 +49,6 @@ class Musashi_Inquiry_Handler {
      */
     private static function get_formatted_key() {
         $key = self::get_encryption_key();
-        // SHA-256でハッシュ化して、常に32バイト（256ビット）のキーを生成
         return hash( 'sha256', $key, true );
     }
 
@@ -76,14 +69,12 @@ class Musashi_Inquiry_Handler {
             'selected_products'=> sanitize_text_field( $data['selected_products'] ?? '' ),
         );
         
-        // JSONエンコード
         $json = wp_json_encode( $inquiry_data, JSON_UNESCAPED_UNICODE );
         if ( $json === false ) {
             error_log( 'Musashi Inquiry: Failed to encode data to JSON' );
             return false;
         }
         
-        // 初期化ベクトル（IV）を生成
         $iv_length = openssl_cipher_iv_length( self::CIPHER_METHOD );
         if ( $iv_length === false ) {
             error_log( 'Musashi Inquiry: Invalid cipher method' );
@@ -96,7 +87,6 @@ class Musashi_Inquiry_Handler {
             return false;
         }
         
-        // データを暗号化（AES-256-CBC）
         $encrypted = openssl_encrypt(
             $json,
             self::CIPHER_METHOD,
@@ -110,17 +100,13 @@ class Musashi_Inquiry_Handler {
             return false;
         }
         
-        // IV + 暗号化データを結合してBase64エンコード
         $encrypted_with_iv = $iv . $encrypted;
         $encoded = base64_encode( $encrypted_with_iv );
         
-        // 署名を生成（改ざん防止）
         $signature = hash_hmac( 'sha256', $encoded, self::get_encryption_key() );
         
-        // トークン = エンコードデータ.署名
         $token = $encoded . '.' . $signature;
         
-        // URL-safeにする
         $token = strtr( $token, '+/', '-_' );
         
         return $token;
@@ -137,10 +123,8 @@ class Musashi_Inquiry_Handler {
             return null;
         }
         
-        // URL-safeから戻す
         $token = strtr( $token, '-_', '+/' );
         
-        // トークンを分割
         $parts = explode( '.', $token );
         if ( count( $parts ) !== 2 ) {
             error_log( 'Musashi Inquiry: Invalid token format' );
@@ -149,38 +133,32 @@ class Musashi_Inquiry_Handler {
         
         list( $encoded, $signature ) = $parts;
         
-        // 署名を検証（改ざん検知）
         $expected_signature = hash_hmac( 'sha256', $encoded, self::get_encryption_key() );
         if ( ! hash_equals( $expected_signature, $signature ) ) {
             error_log( 'Musashi Inquiry: Invalid token signature' );
             return null;
         }
         
-        // Base64デコード
         $encrypted_with_iv = base64_decode( $encoded, true );
         if ( $encrypted_with_iv === false ) {
             error_log( 'Musashi Inquiry: Failed to decode base64 token' );
             return null;
         }
         
-        // IVの長さを取得
         $iv_length = openssl_cipher_iv_length( self::CIPHER_METHOD );
         if ( $iv_length === false ) {
             error_log( 'Musashi Inquiry: Invalid cipher method' );
             return null;
         }
         
-        // データが最低限IVの長さを持っているか確認
         if ( strlen( $encrypted_with_iv ) < $iv_length ) {
             error_log( 'Musashi Inquiry: Token data too short' );
             return null;
         }
         
-        // IVと暗号化データを分離
         $iv = substr( $encrypted_with_iv, 0, $iv_length );
         $encrypted = substr( $encrypted_with_iv, $iv_length );
         
-        // データを復号化
         $json = openssl_decrypt(
             $encrypted,
             self::CIPHER_METHOD,
@@ -194,14 +172,12 @@ class Musashi_Inquiry_Handler {
             return null;
         }
         
-        // JSONデコード
         $data = json_decode( $json );
         if ( $data === null ) {
             error_log( 'Musashi Inquiry: Failed to parse decrypted JSON' );
             return null;
         }
         
-        // トークン自体も保持（メール送信時に使用）
         $data->token = strtr( $token, '+/', '-_' );
         
         return $data;

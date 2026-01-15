@@ -38,7 +38,6 @@ class DownloadPage {
   }
 
   scrollToInitialProduct() {
-    // downloadページで初期選択がある場合、その製品カードまでスクロール
     if (!this.isDownloadPage || !this.sourceProductId) {
       return;
     }
@@ -299,7 +298,6 @@ class DownloadPage {
     const head = document.createElement('div');
     head.className = 'download__card-head';
 
-    // downloadページではチェックボックスを表示、documentページでは非表示
     if (this.isDownloadPage) {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
@@ -322,7 +320,6 @@ class DownloadPage {
       head.appendChild(checkbox);
       head.appendChild(label);
     } else {
-      // documentページではタイトルのみ
       const title = document.createElement('p');
       title.className = 'download__card-title';
       title.textContent = product.title;
@@ -336,7 +333,6 @@ class DownloadPage {
       card.appendChild(tags);
     }
 
-    // リンクコンテナを作成
     const linksContainer = document.createElement('div');
     linksContainer.className = 'download__links';
 
@@ -349,36 +345,32 @@ class DownloadPage {
     linksContainer.appendChild(detailLink);
 
     if (this.isDownloadPage) {
-      // downloadページ: カタログ請求ボタン（フォームへスクロール）
       const requestButton = document.createElement('button');
       requestButton.type = 'button';
       requestButton.className = 'download__link download__link--request';
       requestButton.textContent = 'カタログ請求';
-      
+
       requestButton.addEventListener('click', () => {
         const formSection = document.getElementById('contact-form');
         if (formSection) {
-          const offset = 60; // 上部の余白（ピクセル）
+          const offset = 60;
           const elementPosition = formSection.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - offset;
-          
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
           });
         }
       });
-      
+
       linksContainer.appendChild(requestButton);
     } else if (product.pdfUrl) {
-      // documentページ: カタログダウンロードボタン（別タブでPDFを開くのみ）
       const downloadLink = document.createElement('a');
       downloadLink.className = 'download__link download__link--catalog';
       downloadLink.href = product.pdfUrl;
       downloadLink.target = '_blank';
       downloadLink.rel = 'noopener noreferrer';
       downloadLink.textContent = 'カタログダウンロード';
-      
       linksContainer.appendChild(downloadLink);
     }
 

@@ -1,7 +1,7 @@
-(function($){
+(function ($) {
   'use strict';
 
-  $(function(){
+  $(function () {
     var $container = $('#muashi-product-pdf-meta');
     if (!$container.length || typeof wp === 'undefined' || !wp.media) {
       return;
@@ -28,6 +28,7 @@
     }
 
     $sourceTypeRadios.on('change', toggleSections);
+
     toggleSections(); // 初期状態
 
     $selectButton.on('click', function (event) {
@@ -49,7 +50,7 @@
         multiple: false
       });
 
-      frame.on('select', function(){
+      frame.on('select', function () {
         var attachment = frame.state().get('selection').first();
         if (!attachment) {
           return;
@@ -57,7 +58,6 @@
         var data = attachment.toJSON();
         $idInput.val(data.id || '');
         $urlInput.val(data.url || '');
-        $externalUrlInput.val(''); // 外部URLをクリア
         $sourceTypeRadios.filter('[value="media"]').prop('checked', true);
         toggleSections();
       });
@@ -65,11 +65,30 @@
       frame.open();
     });
 
-    $clearButton.on('click', function(event){
+    $clearButton.on('click', function (event) {
       event.preventDefault();
       $idInput.val('');
       $urlInput.val('');
       $externalUrlInput.val('');
     });
+
+    if (typeof wp !== 'undefined' && wp.data && wp.data.subscribe && wp.data.select('core/editor')) {
+      var wasSaving = false;
+      wp.data.subscribe(function () {
+        var isSaving = wp.data.select('core/editor').isSavingPost();
+        var isAutosaving = wp.data.select('core/editor').isAutosavingPost();
+
+        if (wasSaving && !isSaving && !isAutosaving) {
+          var currentType = $sourceTypeRadios.filter(':checked').val();
+          if (currentType === 'external') {
+            $idInput.val('');
+            $urlInput.val('');
+          } else {
+            $externalUrlInput.val('');
+          }
+        }
+        wasSaving = isSaving;
+      });
+    }
   });
 })(jQuery);
