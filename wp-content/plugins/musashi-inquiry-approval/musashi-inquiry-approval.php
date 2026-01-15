@@ -16,10 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// プラグイン定数
+
 define( 'MUSASHI_INQUIRY_VERSION', '1.1.0' );
 define( 'MUSASHI_INQUIRY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MUSASHI_INQUIRY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 
 /**
  * プラグイン有効化時の処理
@@ -28,6 +29,7 @@ function musashi_inquiry_activate() {
     flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'musashi_inquiry_activate' );
+
 
 /**
  * プラグイン無効化時の処理
@@ -41,7 +43,6 @@ register_deactivation_hook( __FILE__, 'musashi_inquiry_deactivate' );
  * テンプレートリダイレクト（クエリパラメータ方式）
  */
 function musashi_inquiry_template_redirect() {
-    // 承認ページの表示（?musashi_review=1&token=xxx）
     if ( isset( $_GET['musashi_review'] ) && $_GET['musashi_review'] === '1' ) {
         $token = isset( $_GET['token'] ) ? sanitize_text_field( $_GET['token'] ) : '';
         if ( $token ) {
@@ -50,7 +51,6 @@ function musashi_inquiry_template_redirect() {
         }
     }
     
-    // アクション処理（承認/お断り）
     if ( isset( $_POST['musashi_inquiry_action'] ) && $_POST['musashi_inquiry_action'] === '1' ) {
         musashi_inquiry_handle_action();
         exit;
@@ -104,6 +104,8 @@ add_action( 'admin_menu', 'musashi_inquiry_admin_menu' );
 
 /**
  * 管理画面用スタイルとスクリプトの読み込み
+ *
+ * @param string $hook 現在のページフック
  */
 function musashi_inquiry_admin_enqueue_scripts( $hook ) {
     // メールテンプレート編集ページでのみ読み込み
@@ -133,12 +135,10 @@ add_action( 'admin_enqueue_scripts', 'musashi_inquiry_admin_enqueue_scripts' );
  * メールテンプレート設定の登録
  */
 function musashi_inquiry_register_settings() {
-    // 対象フォーム設定
     register_setting( 'musashi_inquiry_general_settings', 'musashi_target_form_id' );
     
-    // メールテンプレート設定
     $mail_types = array( 'user', 'admin', 'approval', 'rejection', 'admin_action' );
-    $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'html_mode', 'button_text', 'button_color' );
+    $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'button_text', 'button_color' );
     
     foreach ( $mail_types as $type ) {
         foreach ( $fields as $field ) {
@@ -156,10 +156,9 @@ function musashi_inquiry_email_templates_page() {
         return;
     }
     
-    // デフォルトに戻す処理
     if ( isset( $_POST['musashi_reset_templates'] ) && check_admin_referer( 'musashi_reset_templates' ) ) {
         $mail_types = array( 'user', 'admin', 'approval', 'rejection', 'admin_action' );
-        $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'html_mode', 'button_text', 'button_color' );
+        $fields = array( 'to', 'from', 'subject', 'headers', 'body', 'button_text', 'button_color' );
         foreach ( $mail_types as $type ) {
             foreach ( $fields as $field ) {
                 delete_option( "musashi_email_{$type}_{$field}" );
@@ -168,12 +167,10 @@ function musashi_inquiry_email_templates_page() {
         echo '<div class="notice notice-success is-dismissible"><p>テンプレートをデフォルトに戻しました。</p></div>';
     }
     
-    // デフォルト値
     $defaults = musashi_inquiry_get_default_email_templates();
     $admin_email = get_option( 'admin_email' );
     $site_name = get_bloginfo( 'name' );
     
-    // 保存済みの値を取得
     $templates = array(
         'user' => array(
             'to'           => get_option( 'musashi_email_user_to', '[your-email]' ),
@@ -181,7 +178,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_user_subject', $defaults['user']['subject'] ),
             'headers'      => get_option( 'musashi_email_user_headers', '' ),
             'body'         => get_option( 'musashi_email_user_body', $defaults['user']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_user_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_user_button_text', '' ),
             'button_color' => get_option( 'musashi_email_user_button_color', '#7B7B00' ),
             'has_button'   => false,
@@ -190,9 +186,8 @@ function musashi_inquiry_email_templates_page() {
             'to'           => get_option( 'musashi_email_admin_to', '[_site_admin_email]' ),
             'from'         => get_option( 'musashi_email_admin_from', "{$site_name} <{$admin_email}>" ),
             'subject'      => get_option( 'musashi_email_admin_subject', $defaults['admin']['subject'] ),
-            'headers'      => get_option( 'musashi_email_admin_headers', 'Reply-To: [your-email]' ),
+            'headers'      => get_option( 'musashi_email_admin_headers', '' ),
             'body'         => get_option( 'musashi_email_admin_body', $defaults['admin']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_admin_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_admin_button_text', '確認ページを開く' ),
             'button_color' => get_option( 'musashi_email_admin_button_color', '#7B7B00' ),
             'has_button'   => true,
@@ -204,7 +199,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_approval_subject', $defaults['approval']['subject'] ),
             'headers'      => get_option( 'musashi_email_approval_headers', '' ),
             'body'         => get_option( 'musashi_email_approval_body', $defaults['approval']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_approval_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_approval_button_text', '📥 資料ダウンロードページへ' ),
             'button_color' => get_option( 'musashi_email_approval_button_color', '#7B7B00' ),
             'has_button'   => true,
@@ -216,7 +210,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_rejection_subject', $defaults['rejection']['subject'] ),
             'headers'      => get_option( 'musashi_email_rejection_headers', '' ),
             'body'         => get_option( 'musashi_email_rejection_body', $defaults['rejection']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_rejection_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_rejection_button_text', '' ),
             'button_color' => get_option( 'musashi_email_rejection_button_color', '#7B7B00' ),
             'has_button'   => false,
@@ -227,7 +220,6 @@ function musashi_inquiry_email_templates_page() {
             'subject'      => get_option( 'musashi_email_admin_action_subject', $defaults['admin_action']['subject'] ),
             'headers'      => get_option( 'musashi_email_admin_action_headers', '' ),
             'body'         => get_option( 'musashi_email_admin_action_body', $defaults['admin_action']['body'] ),
-            'html_mode'    => get_option( 'musashi_email_admin_action_html_mode', '' ),
             'button_text'  => get_option( 'musashi_email_admin_action_button_text', '' ),
             'button_color' => get_option( 'musashi_email_admin_action_button_color', '#7B7B00' ),
             'has_button'   => false,
@@ -235,50 +227,90 @@ function musashi_inquiry_email_templates_page() {
     );
     
     $tab_labels = array(
-        'user' => array( 'title' => 'ユーザー自動返信', 'desc' => '問い合わせ送信時にユーザーに送信されるメールです。' ),
-        'admin' => array( 'title' => '管理者通知', 'desc' => '問い合わせ送信時に管理者に送信されるメールです。確認ページへのボタンが含まれます。' ),
-        'approval' => array( 'title' => '承認メール', 'desc' => '管理者が承認した際にユーザーに送信されるメールです。ダウンロードボタンが含まれます。' ),
-        'rejection' => array( 'title' => 'お断りメール', 'desc' => '管理者がお断りした際にユーザーに送信されるメールです。' ),
-        'admin_action' => array( 'title' => '管理者処理完了通知', 'desc' => '承認/お断りの処理が完了した際に管理者に送信される確認メールです（二重承認防止用）。' ),
+        'user' => array(
+            'label' => '👤 ユーザー宛',
+            'class' => 'user-group',
+            'items' => array(
+                'user'      => array( 'title' => '1. ユーザー自動返信', 'desc' => '問い合わせ送信時にユーザーに送信されるメールです。' ),
+                'approval'  => array( 'title' => '2. 承認メール', 'desc' => '管理者が承認した際にユーザーに送信されるメールです。ダウンロードボタンが含まれます。' ),
+                'rejection' => array( 'title' => '3. お断りメール', 'desc' => '管理者がお断りした際にユーザーに送信されるメールです。' ),
+            )
+        ),
+        'admin' => array(
+            'label' => '⚙️ 管理者宛',
+            'class' => 'admin-group',
+            'items' => array(
+                'admin'        => array( 'title' => '1. 管理者通知', 'desc' => '問い合わせ送信時に管理者に送信されるメールです。確認ページへのボタンが含まれます。' ),
+                'admin_action' => array( 'title' => '2. 管理者処理完了通知', 'desc' => '承認/お断りの処理が完了した際に管理者に送信される確認メールです（二重承認防止用）。' ),
+            )
+        )
     );
+
+    $flat_tab_labels = array();
+    foreach ( $tab_labels as $group ) {
+        foreach ( $group['items'] as $key => $item ) {
+            $flat_tab_labels[$key] = $item;
+        }
+    }
     ?>
     <div class="wrap">
         <h1>メールテンプレート設定</h1>
         
         <div class="musashi-mail-tags">
-            <strong>使用可能なメールタグ:</strong><br>
-            <code onclick="copyTag(this)">[your-name]</code>
-            <code onclick="copyTag(this)">[your-company]</code>
-            <code onclick="copyTag(this)">[your-email]</code>
-            <code onclick="copyTag(this)">[your-tel]</code>
-            <code onclick="copyTag(this)">[your-subject]</code>
-            <code onclick="copyTag(this)">[your-message]</code>
-            <code onclick="copyTag(this)">[_site_title]</code>
-            <code onclick="copyTag(this)">[_site_url]</code>
-            <code onclick="copyTag(this)">[_site_admin_email]</code>
-            <code onclick="copyTag(this)">[review_url]</code>
-            <code onclick="copyTag(this)">[download_url]</code>
-            <code onclick="copyTag(this)">[action_type]</code>
-            <code onclick="copyTag(this)">[action_date]</code>
-            <p>※ クリックでコピーできます</p>
+            <div class="musashi-tag-group">
+                <span>👤 顧客情報:</span>
+                <code onclick="copyTag(this)">[your-name]</code>
+                <code onclick="copyTag(this)">[your-company]</code>
+                <code onclick="copyTag(this)">[your-email]</code>
+                <code onclick="copyTag(this)">[your-tel]</code>
+            </div>
+            <div class="musashi-tag-group">
+                <span>📝 問い合わせ内容:</span>
+                <code onclick="copyTag(this)">[your-subject]</code>
+                <code onclick="copyTag(this)">[your-message]</code>
+            </div>
+            <div class="musashi-tag-group">
+                <span>🌐 サイト情報:</span>
+                <code onclick="copyTag(this)">[_site_title]</code>
+                <code onclick="copyTag(this)">[_site_url]</code>
+                <code onclick="copyTag(this)">[_site_admin_email]</code>
+            </div>
+            <div class="musashi-tag-group">
+                <span>🔗 システム・リンク:</span>
+                <code onclick="copyTag(this)">[review_url]</code>
+                <code onclick="copyTag(this)">[download_url]</code>
+                <code onclick="copyTag(this)">[action_type]</code>
+                <code onclick="copyTag(this)">[action_date]</code>
+            </div>
+            <p>※ クリックでコピーできます。本文や題名に使用してください。</p>
         </div>
         
         <form method="post" action="options.php">
             <?php settings_fields( 'musashi_inquiry_email_settings' ); ?>
             
-            <div class="nav-tab-wrapper">
-                <?php $first = true; foreach ( $tab_labels as $key => $label ) : ?>
-                <a href="#<?php echo $key; ?>-email" class="nav-tab <?php echo $first ? 'nav-tab-active' : ''; ?>" 
-                   onclick="showTab('<?php echo $key; ?>-email', this); return false;"><?php echo esc_html( $label['title'] ); ?></a>
-                <?php $first = false; endforeach; ?>
+            <div class="musashi-tabs-container">
+                <?php $is_first_tab = true; foreach ( $tab_labels as $group_key => $group ) : ?>
+                <div class="musashi-tab-group <?php echo esc_attr( $group['class'] ); ?>">
+                    <div class="musashi-tab-group-label"><?php echo esc_html( $group['label'] ); ?></div>
+                    <div class="nav-tab-wrapper">
+                        <?php foreach ( $group['items'] as $key => $item ) : ?>
+                        <a href="#<?php echo $key; ?>-email" class="nav-tab <?php echo $is_first_tab ? 'nav-tab-active' : ''; ?> <?php echo esc_attr( $group['class'] ); ?>-tab" 
+                           onclick="showTab('<?php echo $key; ?>-email', this); return false;"><?php echo esc_html( $item['title'] ); ?></a>
+                        <?php $is_first_tab = false; endforeach; ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
             
-            <?php $first = true; foreach ( $templates as $key => $template ) : 
-                $is_html_mode = ! empty( $template['html_mode'] );
-            ?>
+            <?php $first = true; foreach ( $templates as $key => $template ) : ?>
             <div id="<?php echo $key; ?>-email" class="email-tab-content musashi-email-form" <?php echo ! $first ? 'style="display:none;"' : ''; ?>>
-                <h2><?php echo esc_html( $tab_labels[$key]['title'] ); ?></h2>
-                <p class="description"><?php echo esc_html( $tab_labels[$key]['desc'] ); ?></p>
+                <div class="musashi-email-header">
+                    <h2><?php echo esc_html( $flat_tab_labels[$key]['title'] ); ?></h2>
+                    <span class="musashi-recipient-badge <?php echo ( strpos($flat_tab_labels[$key]['title'], '管理者') !== false || $key === 'admin' || $key === 'admin_action' ) ? 'admin' : 'user'; ?>">
+                        <?php echo ( strpos($flat_tab_labels[$key]['title'], '管理者') !== false || $key === 'admin' || $key === 'admin_action' ) ? '管理者宛' : 'ユーザー宛'; ?>
+                    </span>
+                </div>
+                <p class="description"><?php echo esc_html( $flat_tab_labels[$key]['desc'] ); ?></p>
                 
                 <table>
                     <tr>
@@ -311,24 +343,8 @@ function musashi_inquiry_email_templates_page() {
                     <tr>
                         <th>メッセージ本文</th>
                         <td>
-                            <!-- モード切り替えタブ -->
-                            <div class="musashi-mode-tabs">
-                                <span class="musashi-mode-tab <?php echo ! $is_html_mode ? 'active' : ''; ?>" 
-                                      onclick="setEditMode('<?php echo $key; ?>', 'text')">テキスト</span>
-                                <span class="musashi-mode-tab <?php echo $is_html_mode ? 'active html-active' : ''; ?>" 
-                                      onclick="setEditMode('<?php echo $key; ?>', 'html')">HTML</span>
-                            </div>
-                            <input type="hidden" name="musashi_email_<?php echo $key; ?>_html_mode" 
-                                   id="musashi_email_<?php echo $key; ?>_html_mode"
-                                   value="<?php echo $is_html_mode ? '1' : ''; ?>">
-                            
-                            <!-- HTML警告 -->
-                            <div class="musashi-html-warning <?php echo $is_html_mode ? 'show' : ''; ?>" id="html-warning-<?php echo $key; ?>">
-                                ⚠️ <strong>HTMLモード:</strong> HTMLを直接編集できます。誤ったHTMLはメール表示が崩れる原因になります。
-                            </div>
-                            
                             <?php if ( $template['has_button'] ) : ?>
-                            <div class="musashi-button-note" id="button-note-<?php echo $key; ?>" <?php echo $is_html_mode ? 'style="display:none;"' : ''; ?>>
+                            <div class="musashi-button-note" id="button-note-<?php echo $key; ?>">
                                 <strong>🔘 ボタン表示:</strong> 本文に <code><?php echo esc_html( $template['button_tag'] ); ?></code> を記載すると、下で設定したボタンとして表示されます。
                             </div>
                             <?php endif; ?>
@@ -342,7 +358,7 @@ function musashi_inquiry_email_templates_page() {
                 
                 <?php if ( $template['has_button'] ) : ?>
                 <!-- ボタン設定 -->
-                <div class="musashi-button-settings" id="button-settings-<?php echo $key; ?>" <?php echo $is_html_mode ? 'style="display:none;"' : ''; ?>>
+                <div class="musashi-button-settings" id="button-settings-<?php echo $key; ?>">
                     <h4>🔘 ボタン設定</h4>
                     <div class="setting-row">
                         <label for="musashi_email_<?php echo $key; ?>_button_text">ボタンテキスト</label>
@@ -394,6 +410,8 @@ function musashi_inquiry_email_templates_page() {
 
 /**
  * デフォルトのメールテンプレートを取得
+ *
+ * @return array
  */
 function musashi_inquiry_get_default_email_templates() {
     $site_name = get_bloginfo( 'name' );
@@ -523,10 +541,8 @@ function musashi_inquiry_settings_page() {
         return;
     }
 
-    // WP Mail SMTPが有効かチェック
     $wp_mail_smtp_active = class_exists( 'WPMailSMTP\WPMailSMTP' ) || function_exists( 'wp_mail_smtp' );
     
-    // Contact Form 7のフォーム一覧を取得
     $cf7_forms = array();
     if ( class_exists( 'WPCF7_ContactForm' ) ) {
         $forms = WPCF7_ContactForm::find();
@@ -538,7 +554,6 @@ function musashi_inquiry_settings_page() {
         }
     }
     
-    // 保存済みの対象フォームID
     $target_form_id = get_option( 'musashi_target_form_id', '' );
     ?>
     <div class="wrap">
@@ -645,12 +660,11 @@ add_action( 'admin_init', 'musashi_inquiry_check_cf7' );
 
 /**
  * 確認ページの表示
+ *
+ * @param string $token 問い合わせトークン
  */
 function musashi_inquiry_display_review_page( $token ) {
-    // URLデコード
     $token = rawurldecode( $token );
-    
-    // トークンを復号化
     $inquiry = Musashi_Inquiry_Handler::decode_token( $token );
     
     if ( ! $inquiry ) {
@@ -661,7 +675,6 @@ function musashi_inquiry_display_review_page( $token ) {
         );
     }
     
-    // テンプレートを読み込み
     include MUSASHI_INQUIRY_PLUGIN_DIR . 'templates/approval-page.php';
 }
 
@@ -669,7 +682,6 @@ function musashi_inquiry_display_review_page( $token ) {
  * 承認/お断りアクションの処理
  */
 function musashi_inquiry_handle_action() {
-    // nonce検証
     if ( ! isset( $_POST['musashi_inquiry_nonce'] ) || 
          ! wp_verify_nonce( $_POST['musashi_inquiry_nonce'], 'musashi_inquiry_action' ) ) {
         wp_die( '不正なリクエストです。', 'エラー', array( 'response' => 403 ) );
@@ -682,14 +694,12 @@ function musashi_inquiry_handle_action() {
         wp_die( '無効なリクエストです。', 'エラー', array( 'response' => 400 ) );
     }
     
-    // トークンを復号化
     $inquiry = Musashi_Inquiry_Handler::decode_token( $token );
     
     if ( ! $inquiry ) {
         wp_die( '無効なトークンです。', 'エラー', array( 'response' => 400 ) );
     }
     
-    // メール送信
     $action_type = ( $action === 'approve' ) ? 'approved' : 'rejected';
     
     if ( $action === 'approve' ) {
@@ -700,10 +710,8 @@ function musashi_inquiry_handle_action() {
         $message = 'お断りメールをお客様に送信しました。';
     }
     
-    // 管理者への処理完了通知（二重承認防止）
     Musashi_Email_Sender::send_admin_action_notification( $inquiry, $action_type );
     
-    // 完了ページを表示
     include MUSASHI_INQUIRY_PLUGIN_DIR . 'templates/action-complete.php';
 }
 

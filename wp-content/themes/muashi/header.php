@@ -492,7 +492,7 @@ if (is_home()){
                                                 </svg>
                                             </icon>
                                             <span class="hamburger__other-text">
-                                            資料をダウンロードする
+                                                カタログをダウンロードする
                                             </span>
                                         </a>
                                     </li>

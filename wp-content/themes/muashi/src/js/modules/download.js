@@ -47,7 +47,6 @@ class DownloadPage {
   }
 
   scrollToInitialProduct() {
-    // downloadページで初期選択がある場合、その製品カードまでスクロール
     if (!this.isDownloadPage || !this.sourceProductId) {
       return;
     }
@@ -308,7 +307,6 @@ class DownloadPage {
     const head = document.createElement('div');
     head.className = 'download__card-head';
 
-    // downloadページではチェックボックスを表示、documentページでは非表示
     if (this.isDownloadPage) {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
@@ -331,7 +329,6 @@ class DownloadPage {
       head.appendChild(checkbox);
       head.appendChild(label);
     } else {
-      // documentページではタイトルのみ
       const title = document.createElement('p');
       title.className = 'download__card-title';
       title.textContent = product.title;
@@ -345,7 +342,6 @@ class DownloadPage {
       card.appendChild(tags);
     }
 
-    // リンクコンテナを作成
     const linksContainer = document.createElement('div');
     linksContainer.className = 'download__links';
 
@@ -363,37 +359,35 @@ class DownloadPage {
       requestButton.type = 'button';
       requestButton.className = 'download__link download__link--request';
       requestButton.textContent = 'カタログ請求';
-      
+
       requestButton.addEventListener('click', () => {
         // Check if there's already selected products to pass along
         const selectedIds = Array.from(this.state.selected.keys());
         let downloadUrl = '/download/';
-        
+
         if (selectedIds.length > 0) {
           // Pass selected products to the download page
           const productSlugs = selectedIds.map(id => {
-            const product = this.productsById.get(id);
-            return product ? product.slug : null;
+            const prod = this.productsById.get(id);
+            return prod ? prod.slug : null;
           }).filter(Boolean);
-          
+
           if (productSlugs.length > 0) {
             downloadUrl += '?dl_products=' + encodeURIComponent(productSlugs.join(','));
           }
         }
-        
+
         window.location.href = downloadUrl;
       });
-      
+
       linksContainer.appendChild(requestButton);
     } else if (product.pdfUrl) {
-      // documentページ: カタログダウンロードボタン（別タブでPDFを開くのみ）
       const downloadLink = document.createElement('a');
       downloadLink.className = 'download__link download__link--catalog';
       downloadLink.href = product.pdfUrl;
       downloadLink.target = '_blank';
       downloadLink.rel = 'noopener noreferrer';
       downloadLink.textContent = 'カタログダウンロード';
-      
       linksContainer.appendChild(downloadLink);
     }
 

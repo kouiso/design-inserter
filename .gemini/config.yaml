@@ -8,4 +8,4 @@ code_review:
     enabled: true
 
 styleguide:
-  path: .github/gemini/styleguide.md
+  path: .gemini/styleguide.md
