@@ -5,6 +5,8 @@ on:
     branches: [main, develop]
   push:
     branches: [main, develop]
+  schedule:
+    - cron: '0 9 * * 1'
 
 permissions:
   contents: read
@@ -15,13 +17,13 @@ jobs:
   security-scan:
     name: Security Vulnerability Scan
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -29,13 +31,13 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
           ignore-unfixed: true
-      
+
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
-      
+
       - name: Check for WordPress version
         run: |
           if [ -f "wp-includes/version.php" ]; then
@@ -47,11 +49,11 @@ jobs:
     name: Dependency Review
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Dependency Review
         uses: actions/dependency-review-action@v4
         with:
@@ -60,43 +62,45 @@ jobs:
   code-quality:
     name: Code Quality Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           tools: phpcs
-      
+
       - name: Check PHP syntax
         run: |
-          find . -name "*.php" -not -path "./wp-admin/*" -not -path "./wp-includes/*" -not -path "./wp-content/plugins/*" -not -path "./wp-content/themes/twenty*" -exec php -l {} \; | grep -v "No syntax errors"
-        continue-on-error: true
-      
-      - name: WordPress Coding Standards (if available)
+          find . -name "*.php" -not -path "./wp-admin/*" -not -path "./wp-includes/*" -not -path "./wp-content/plugins/*" -not -path "./wp-content/themes/twenty*" -exec php -l {} \;
+
+      - name: Install WordPress Coding Standards
+        if: hashFiles('phpcs.xml') != '' || hashFiles('phpcs.xml.dist') != ''
         run: |
-          if [ -f "phpcs.xml" ] || [ -f "phpcs.xml.dist" ]; then
-            phpcs --standard=WordPress --extensions=php wp-content/themes/ wp-content/plugins/ || true
-          else
-            echo "No phpcs.xml found, skipping WordPress Coding Standards check"
-          fi
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --dev wp-coding-standards/wpcs:"^3.0"
+
+      - name: WordPress Coding Standards (if available)
+        if: hashFiles('phpcs.xml') != '' || hashFiles('phpcs.xml.dist') != ''
+        run: |
+          phpcs --standard=WordPress --extensions=php wp-content/themes/ wp-content/plugins/
         continue-on-error: true
 
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: TruffleHog OSS
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@v3
         with:
           path: ./
           base: ${{ github.event.repository.default_branch }}
