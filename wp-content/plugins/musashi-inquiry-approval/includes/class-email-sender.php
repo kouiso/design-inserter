@@ -100,8 +100,11 @@ class Musashi_Email_Sender {
             if ( isset( $button['tag'] ) ) {
                 $text = str_replace( $button['tag'], $placeholder, $text );
             }
+
+            // タグが既にURLに置換済みの場合にも対応
+            $text = str_replace( $button['url'], $placeholder, $text );
         }
-        
+
         $text = esc_html( $text );
         $text = nl2br( $text );
         
