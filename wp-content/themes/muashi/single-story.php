@@ -15,7 +15,8 @@ get_header();
 
     <?php
     // $story_archive_url = defined( 'URL_STORY' ) ? URL_STORY : get_post_type_archive_link( 'story' ); // ストーリーページを非表示
-    $story_archive_url = get_post_type_archive_link( 'story' ); // Fallback for existing story posts
+    // ストーリーアーカイブページが非表示のため、ホームへ戻る
+    $story_archive_url = URL_HOME;
     ?>
 
     <?php muashi_render_sidebar_navigation( 'sidebar_story' ); ?>
