@@ -153,7 +153,7 @@ get_header();
                         $download_permalink = add_query_arg( $download_args, home_url( '/download/' ) );
                         ?>
                         <div class="single__cta">
-                            <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">資料ダウンロード</a>
+                            <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">カタログダウンロード</a>
                         </div>
                     <?php endif; ?>
 

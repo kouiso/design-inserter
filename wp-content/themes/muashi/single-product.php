@@ -61,7 +61,7 @@ get_header();
                             ?>
                             <div class="single__cta">
                                 <a class="single__download-button"
-                                    href="<?php echo esc_url($download_permalink); ?>">資料ダウンロード</a>
+                                    href="<?php echo esc_url($download_permalink); ?>">カタログダウンロード</a>
                             </div>
 
                             <div class="single__back">
