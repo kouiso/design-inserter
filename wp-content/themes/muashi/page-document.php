@@ -221,7 +221,7 @@ if ( have_posts() ) {
           <div class="page__content page__content--no-image">
 
             <h1 id="01" class="page__title js-page-title">
-            カタログダウンロード
+              カタログダウンロード
             </h1>
 
             <div class="page__inner page__inner--narrow">
