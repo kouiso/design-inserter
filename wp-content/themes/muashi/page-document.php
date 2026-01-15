@@ -1,12 +1,19 @@
 <?php
 /*
-Template Name: Download
+Template Name: Document
 */
+
+// このページを検索エンジンにインデックスさせない
+add_filter( 'wp_robots', function( $robots ) {
+    $robots['noindex'] = true;
+    $robots['nofollow'] = true;
+    return $robots;
+} );
 
 global $description;
 $description = '';
 
-get_header();
+get_header('download');
 
 $max_selectable = 5;
 $taxonomy_config = function_exists('muashi_get_product_taxonomy_config') ? muashi_get_product_taxonomy_config() : array();
@@ -30,8 +37,12 @@ foreach ( $product_posts as $product_post ) {
     $product_id  = (int) $product_post->ID;
     $product_url = get_permalink( $product_post );
     $thumbnail   = get_the_post_thumbnail_url( $product_post, 'medium' );
-    $pdf_id      = (int) get_post_meta( $product_id, 'product_pdf_attachment_id', true );
-    $pdf_url     = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
+    
+    // PDF URLの取得（外部URL優先、なければメディアライブラリから取得）
+    $external_url = get_post_meta( $product_id, 'product_pdf_external_url', true );
+    $pdf_id       = (int) get_post_meta( $product_id, 'product_pdf_attachment_id', true );
+    $media_url    = $pdf_id ? wp_get_attachment_url( $pdf_id ) : '';
+    $pdf_url      = $external_url ? $external_url : $media_url;
 
     $slug_to_id[ $product_post->post_name ] = $product_id;
     $all_product_ids[]                      = $product_id;
@@ -186,7 +197,15 @@ if ( have_posts() ) {
         <div class="page__bg-sub"></div>
     </div>
 
-    <?php muashi_render_sidebar_navigation( 'sidebar_contact' ); ?>
+    <div class="navigation">
+        <div class="navigation__inner">
+            <ul class="navigation__list">
+                <li class="navigation__item is-current">
+                    <a href="<?php echo esc_url( home_url( '/document/' ) ); ?>" class="navigation__link">資料ダウンロード</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -207,7 +226,7 @@ if ( have_posts() ) {
 
             <div class="page__inner page__inner--narrow">
 
-              <section class="download" data-download-page data-page-type="download">
+              <section class="download" data-download-page data-download-max="<?php echo esc_attr( $max_selectable ); ?>">
                 <div class="contact__content">
                   <div class="contact__inner">
                     <div class="download__layout">
@@ -249,7 +268,6 @@ if ( have_posts() ) {
 
                         <ul class="download__list" data-download-list></ul>
 
-                        <!-- <p class="download__contact-note">5件を超える資料をご希望の場合は <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">お問い合わせフォーム</a> からご連絡ください。</p> -->
                       </div>
                     </div>
                   </div>
@@ -258,7 +276,7 @@ if ( have_posts() ) {
               </section>
 
               <?php if ( ! empty( $page_content ) ) : ?>
-              <section id="contact-form" class="contact">
+              <section class="contact">
                 <div class="contact__content">
                   <div class="contact__inner">
                     <?php echo $page_content; ?>
@@ -275,4 +293,4 @@ if ( have_posts() ) {
 
 </section>
 
-<?php get_footer(); ?>
+

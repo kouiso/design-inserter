@@ -16,6 +16,8 @@ wp-content/upgrade/
 wp-content/cache/
 wp-content/backups/
 wp-content/ai1wm-backups/
+wp-content/wpvividbackups/
+wp-content/wpvivid_staging/
 wp-content/siteguard/
 wp-content/plugins/
 wp-content/plugins/all-in-one-wp-migration/storage/
@@ -48,7 +50,7 @@ npm-debug.log*
 
 # Editor
 .idea/
-.vscode/
+.vscode/mcp.json
 *.code-workspace
 
 # Build artifacts
@@ -57,5 +59,12 @@ npm-debug.log*
 # Test files
 test-*.html
 
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/.playwright-mcp/
+
 # Claude
 .claude/
+tmpclaude-*/
