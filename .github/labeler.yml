@@ -34,7 +34,7 @@ documentation:
       - '**/*.md'
       - 'readme.html'
       - 'license.txt'
-  - 'test-specs/**/*.html'
+      - 'test-specs/**/*.html'
 
 # テスト関連
 test:
@@ -59,4 +59,4 @@ config:
       - 'wp-config*.php'
       - '.gitignore'
       - '.editorconfig'
-  - '.github/**/*.yml'
+      - '.github/**/*.yml'
