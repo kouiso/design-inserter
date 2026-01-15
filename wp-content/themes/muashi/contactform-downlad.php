@@ -40,7 +40,7 @@
     <label class="form__label" for="contact-subject">
       件名 <span class="form__required">必須</span>
     </label>
-    [text* your-subject id:contact-subject class:form__input placeholder "資料ダウンロードのご依頼"]
+    [text* your-subject id:contact-subject class:form__input placeholder "カタログダウンロードのご依頼"]
   </div>
 
   <div class="form__field form__field--full">
