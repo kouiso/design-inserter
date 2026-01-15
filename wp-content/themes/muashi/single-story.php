@@ -14,8 +14,6 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <?php
-    // $story_archive_url = defined( 'URL_STORY' ) ? URL_STORY : get_post_type_archive_link( 'story' ); // ストーリーページを非表示
-    // ストーリーアーカイブページが非表示のため、ホームへ戻る
     $story_archive_url = URL_HOME;
     ?>
 
