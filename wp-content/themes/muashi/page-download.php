@@ -78,7 +78,7 @@ if ( have_posts() ) {
             <div class="page__inner page__inner--narrow">
 
               <!-- Hidden data for form population -->
-              <div style="display: none;">
+              <div hidden>
                 <div data-download-page data-page-type="form-only">
                   <script type="application/json" id="download-page-data"><?php echo $download_data_json ? $download_data_json : '{}'; ?></script>
                 </div>
