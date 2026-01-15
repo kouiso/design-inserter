@@ -6,6 +6,7 @@ class DownloadPage {
     this.data = data || {};
     this.pageType = root.getAttribute('data-page-type') || 'document';
     this.isDownloadPage = this.pageType === 'download';
+    this.isFormOnly = this.pageType === 'form-only';
     this.products = Array.isArray(this.data.products) ? this.data.products.slice() : [];
     this.taxonomies = this.data.taxonomies || {};
     this.sourceProductId = Number.isFinite(this.data.sourceProductId) ? this.data.sourceProductId : 0;
@@ -30,6 +31,14 @@ class DownloadPage {
     };
 
     this.cacheElements();
+    
+    // For form-only pages, skip rendering and event binding, just populate hidden fields
+    if (this.isFormOnly) {
+      this.bootstrapSelection();
+      this.syncHiddenInputs();
+      return;
+    }
+    
     this.bindEvents();
     this.bootstrapSelection();
     this.renderAll();
@@ -345,22 +354,30 @@ class DownloadPage {
     linksContainer.appendChild(detailLink);
 
     if (this.isDownloadPage) {
+      // catalogページ: カタログ請求ボタン（/downloadへリダイレクト）
       const requestButton = document.createElement('button');
       requestButton.type = 'button';
       requestButton.className = 'download__link download__link--request';
       requestButton.textContent = 'カタログ請求';
 
       requestButton.addEventListener('click', () => {
-        const formSection = document.getElementById('contact-form');
-        if (formSection) {
-          const offset = 60;
-          const elementPosition = formSection.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - offset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+        // Check if there's already selected products to pass along
+        const selectedIds = Array.from(this.state.selected.keys());
+        let downloadUrl = '/download/';
+
+        if (selectedIds.length > 0) {
+          // Pass selected products to the download page
+          const productSlugs = selectedIds.map(id => {
+            const prod = this.productsById.get(id);
+            return prod ? prod.slug : null;
+          }).filter(Boolean);
+
+          if (productSlugs.length > 0) {
+            downloadUrl += '?dl_products=' + encodeURIComponent(productSlugs.join(','));
+          }
         }
+
+        window.location.href = downloadUrl;
       });
 
       linksContainer.appendChild(requestButton);

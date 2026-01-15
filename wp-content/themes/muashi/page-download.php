@@ -8,10 +8,36 @@ $description = '';
 
 get_header();
 
-$download_data = muashi_get_product_download_data();
-$max_selectable = $download_data['maxSelectable'];
-$taxonomy_terms = $download_data['taxonomies'];
+// Minimal product data for form population when coming from catalog page
+$product_posts = get_posts(
+    array(
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    )
+);
 
+$slug_to_id = array();
+foreach ( $product_posts as $product_post ) {
+    $slug_to_id[ $product_post->post_name ] = (int) $product_post->ID;
+}
+
+$requested_ids = array();
+$raw_products_slug = isset( $_GET['dl_products'] ) ? sanitize_text_field( wp_unslash( $_GET['dl_products'] ) ) : '';
+if ( $raw_products_slug !== '' ) {
+    $slugs = array_filter( array_map( 'sanitize_title', explode( ',', $raw_products_slug ) ) );
+    foreach ( $slugs as $slug ) {
+        if ( isset( $slug_to_id[ $slug ] ) ) {
+            $requested_ids[] = $slug_to_id[ $slug ];
+        }
+    }
+}
+
+$download_data = array(
+    'initialSelection' => $requested_ids,
+);
 
 $download_data_json = wp_json_encode( $download_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 
@@ -51,55 +77,12 @@ if ( have_posts() ) {
 
             <div class="page__inner page__inner--narrow">
 
-              <section class="download" data-download-page data-page-type="download">
-                <div class="contact__content">
-                  <div class="contact__inner">
-                    <div class="download__layout">
-                      <div class="download__main download__main--full">
-                        <div class="download__controls">
-                          <label class="download__search">
-                            <span class="download__search-label">キーワード</span>
-                            <input type="search" class="download__search-input" data-download-search placeholder="製品名やキーワードで検索">
-                          </label>
-
-                          <?php foreach ( $taxonomy_terms as $taxonomy => $info ) : ?>
-                            <label class="download__filter">
-                              <span class="download__filter-label"><?php echo esc_html( $info['label'] ); ?></span>
-                              <select class="download__filter-select" data-download-filter="<?php echo esc_attr( $taxonomy ); ?>">
-                                <option value=""><?php echo esc_html( $download_data['i18n']['allOption'] ); ?></option>
-                                <?php foreach ( $info['terms'] as $term ) : ?>
-                                  <option value="<?php echo esc_attr( $term['id'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                            </label>
-                          <?php endforeach; ?>
-
-                          <label class="download__sort">
-                            <span class="download__sort-label">並べ替え</span>
-                            <select class="download__sort-select" data-download-sort>
-                              <option value="title-asc">名前（あ-わ順）</option>
-                              <option value="title-desc">名前（わ-あ順）</option>
-                              <option value="date-desc">新しい順</option>
-                              <option value="date-asc">古い順</option>
-                            </select>
-                          </label>
-
-                          <button type="button" class="download__reset" data-download-reset><?php echo esc_html( $download_data['i18n']['resetFilters'] ); ?></button>
-                        </div>
-
-                        <div class="download__feedback" data-download-feedback hidden></div>
-
-                        <p class="download__result-count" data-download-result-count></p>
-
-                        <ul class="download__list" data-download-list></ul>
-
-                        <!-- <p class="download__contact-note">5件を超える資料をご希望の場合は <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">お問い合わせフォーム</a> からご連絡ください。</p> -->
-                      </div>
-                    </div>
-                  </div>
+              <!-- Hidden data for form population -->
+              <div hidden>
+                <div data-download-page data-page-type="form-only">
+                  <script type="application/json" id="download-page-data"><?php echo $download_data_json ? $download_data_json : '{}'; ?></script>
                 </div>
-                <script type="application/json" id="download-page-data"><?php echo $download_data_json ? $download_data_json : '{}'; ?></script>
-              </section>
+              </div>
 
               <?php if ( ! empty( $page_content ) ) : ?>
               <section id="contact-form" class="contact">
