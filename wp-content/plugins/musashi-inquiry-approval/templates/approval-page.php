@@ -62,7 +62,6 @@ if ( ! defined( 'ABSPATH' ) ) {
         </div>
     </div>
 
-    <!-- 確認ダイアログ -->
     <div class="confirmation-overlay" id="confirmation-overlay">
         <div class="confirmation-dialog">
             <h3 id="confirmation-title">確認</h3>
