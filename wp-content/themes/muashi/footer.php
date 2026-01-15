@@ -250,7 +250,7 @@
                             </svg>
                         </icon>
                         <span class="footer__other-text">
-                        お問い合わせ
+                            お問い合わせ
                         </span>
                     </a>
                 </li>
@@ -262,7 +262,7 @@
                             </svg>
                         </icon>
                         <span class="footer__other-text">
-                        カタログをダウンロードする
+                            カタログをダウンロードする
                         </span>
                     </a>
                 </li>
@@ -354,7 +354,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                        お問い合わせ
+                            お問い合わせ
                         </span>
                     </a>
                     <a href="<?= URL_DOWNLOAD ?>" class="footer__nav-pc-other-link">
@@ -364,7 +364,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                        カタログダウンロード依頼
+                            カタログダウンロード依頼
                         </span>
                     </a>
                 </div>
