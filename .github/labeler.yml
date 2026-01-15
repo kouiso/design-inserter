@@ -3,7 +3,6 @@ documentation:
       - any-glob-to-any-file:
           - 'doc/**/*'
           - '*.md'
-          - 'README.md'
 
 ci/cd:
   - changed-files:
@@ -16,7 +15,10 @@ config:
       - any-glob-to-any-file:
           - 'wp-config.php'
           - 'wp-config-sample.php'
-          - '*.json'
+          - 'composer.json'
+          - 'tsconfig.json'
+          - '.eslintrc.json'
+          - '.prettierrc.json'
 
 dependencies:
   - changed-files:
