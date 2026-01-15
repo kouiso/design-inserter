@@ -64,10 +64,12 @@ function muashi_setup_voice_sidebar_menu() {
                 'title' => 'サステナビリティ',
                 'url'   => home_url( '/about-us/sustainability/' ),
             ),
+            /* Temporarily hidden - story page navigation
             array(
                 'title' => 'ストーリー',
                 'url'   => home_url( '/story/' ),
             ),
+            */
             array(
                 'title' => 'お客様の声',
                 'url'   => home_url( '/voice/' ),
