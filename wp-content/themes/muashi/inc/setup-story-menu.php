@@ -64,12 +64,6 @@ function muashi_setup_story_sidebar_menu() {
                 'title' => 'サステナビリティ',
                 'url'   => home_url( '/about-us/sustainability/' ),
             ),
-            /* ストーリーページを非表示
-            array(
-                'title' => 'ストーリー',
-                'url'   => home_url( '/story/' ),
-            ),
-            */
             array(
                 'title' => 'お客様の声',
                 'url'   => home_url( '/voice/' ),
