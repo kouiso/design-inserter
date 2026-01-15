@@ -382,7 +382,7 @@ get_header();
             <div class="top-customer__contents">
                 <div class="top-section__text-wrapper top-section__text-wrapper--white">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.4">
-                    サステナブルなビジネス展開
+                    顧客志向のカスタマイズ
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="0.6">
                     完全オーダーメイドで、常にお客様に寄り添い、多様なニーズに対応します。
