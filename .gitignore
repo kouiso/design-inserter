@@ -59,5 +59,12 @@ npm-debug.log*
 # Test files
 test-*.html
 
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/.playwright-mcp/
+
 # Claude
 .claude/
+tmpclaude-*/
