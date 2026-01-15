@@ -65,6 +65,10 @@ get_header();
                                 <a class="single__download-button"
                                     href="<?php echo esc_url($product_archive_url); ?>">製品情報トップへ戻る</a>
                             </div>
+
+                            <div class="single__back">
+                                <a class="single__back-button" href="<?php echo esc_url($product_archive_url); ?>">一覧へ戻る</a>
+                            </div>
                         </div>
                     </div>
 
