@@ -159,7 +159,7 @@ get_header();
                     最先端の開発技術力
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
-                    60年以上の実績を基に、市場と顧客のニーズを捉え、独自のアイデアで、高品質で革新的な製品を生み出します。
+                    60年以上にわたる実績と知見をもとに、市場ニーズを的確に捉え、独自のアイデアと技術で革新的な商品を生み出し続けています
                     </p>
                     <a href="<?= URL_TECHNOLOGY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
@@ -225,7 +225,7 @@ get_header();
                     グローバルネットワーク
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
-                    20年前からグローバル。アジアを中心に、欧州、北米に広がる生産拠点と販売網で世界中の市場と顧客に対応します。世界で高品質かつ同一品質の塗料を提供します。
+                    20年以上前からグローバル展開を進め、アジアを起点に欧州・北米へと生産・販売体制を拡充グループ全体の強固な連携により、世界中のお客様へ同一で、高品質な塗料を安定的に供給しています
                     </p>
                     <a href="<?= URL_GLOBAL_NETWORK; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
@@ -315,10 +315,10 @@ get_header();
             <div class="top-sustainability__contents">
                 <div class="top-section__text-wrapper">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.8">
-                    サステナビリティ
+                    サステナブルなビジネス展開
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
-                    環境に配慮した製品開発と社会貢献に本気で取り組み、サステナブルな社会の実現を目指しています。
+                    確固たる経営理念のもと、環境に配慮した商品開発と環境負荷の低減に真摯に取り組み、社会貢献を通じて持続可能な社会の実現をめざしています
                     </p>
                     <a href="<?= URL_SUSTAINABILITY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
@@ -382,10 +382,10 @@ get_header();
             <div class="top-customer__contents">
                 <div class="top-section__text-wrapper top-section__text-wrapper--white">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.4">
-                    顧客志向のカスタマイズ
+                    顧客志向のカスタマイズと課題解決力
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="0.6">
-                    完全オーダーメイドで、常にお客様に寄り添い、多様なニーズに対応します。
+                    完全オーダーメイドのアプローチでお客様に寄り添い、多様なニーズに柔軟かつ的確に対応豊富な経験と専門性を生かし、課題の本質を見極めた最適なソリューションを提供しています
                     </p>
                     <a href="<?= URL_CUSTOMIZATION; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
                         <span class="top-section__contents-link-text">
