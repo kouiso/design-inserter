@@ -65,10 +65,6 @@ function muashi_setup_voice_sidebar_menu() {
                 'url'   => home_url( '/about-us/sustainability/' ),
             ),
             array(
-                'title' => 'ストーリー',
-                'url'   => home_url( '/story/' ),
-            ),
-            array(
                 'title' => 'お客様の声',
                 'url'   => home_url( '/voice/' ),
             ),
