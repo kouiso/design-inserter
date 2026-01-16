@@ -315,7 +315,7 @@ get_header();
             <div class="top-sustainability__contents">
                 <div class="top-section__text-wrapper">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.8">
-                    サステナブルなビジネス展開
+                    サステナビリティ
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     環境に配慮した製品開発と社会貢献に本気で取り組み、サステナブルな社会の実現を目指しています。
