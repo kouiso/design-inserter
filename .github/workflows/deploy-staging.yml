@@ -1,0 +1,55 @@
+name: Deploy to Staging (Xserver ritmo)
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'wp-content/themes/muashi/**'
+      - 'wp-content/plugins/musashi-inquiry-approval/**'
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy Theme via rsync
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --delete
+          path: ./wp-content/themes/muashi/
+          remote_path: ${{ secrets.XSERVER_PATH }}/wp-content/themes/muashi/
+          remote_host: ${{ secrets.XSERVER_HOST }}
+          remote_port: ${{ secrets.XSERVER_PORT }}
+          remote_user: ${{ secrets.XSERVER_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy Plugin via rsync
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avz --delete
+          path: ./wp-content/plugins/musashi-inquiry-approval/
+          remote_path: ${{ secrets.XSERVER_PATH }}/wp-content/plugins/musashi-inquiry-approval/
+          remote_host: ${{ secrets.XSERVER_HOST }}
+          remote_port: ${{ secrets.XSERVER_PORT }}
+          remote_user: ${{ secrets.XSERVER_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "::notice::Staging deployment completed successfully!"
+          echo "Theme and Plugin have been deployed to ritmo server."
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "::error::Staging deployment failed!"

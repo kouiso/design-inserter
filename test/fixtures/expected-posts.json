@@ -1,0 +1,138 @@
+{
+  "description": "DBから抽出した公開記事の期待値データ（2025-12-29 SQLダンプ時点）",
+  "lastUpdated": "2025-01-19",
+  "archives": {
+    "career": {
+      "path": "/career/",
+      "title": "採用情報",
+      "expectedCount": 7,
+      "posts": [
+        { "id": 370, "title": "エンジニアリングの募集" },
+        { "id": 374, "title": "研究開発・製品開発技術・新卒の募集" },
+        { "id": 378, "title": "研究開発・製品開発技術" },
+        { "id": 513, "title": "27年卒向け　武蔵塗料2Day仕事体験" },
+        { "id": 2636, "title": "【東京/人事】人事経験者歓迎★グローバル環境/制度設計/教育体系構築/採用まで" },
+        { "id": 2638, "title": "【池袋】CSR推進業務★業界・職種未経験から携われる！" },
+        { "id": 2645, "title": "【入間市/人事】製造業での人事経験者歓迎★課長候補/教育体系構築/労務全般" }
+      ]
+    },
+    "interview": {
+      "path": "/career/interview/",
+      "title": "インタビュー",
+      "expectedCount": 28,
+      "posts": [
+        { "id": 206, "title": "財務部、課長の三好 恵美さん" },
+        { "id": 607, "title": "生産部・調色課の石村 太一さん" },
+        { "id": 613, "title": "ホーチミン拠点・営業の山崎 洋輔さん" },
+        { "id": 621, "title": "調達物流本部の島田 慧花さん" },
+        { "id": 627, "title": "Global Marketing ＆ Corporate Communications 部長の西口 昌宏さん" },
+        { "id": 633, "title": "取締役の山田 純也さん" },
+        { "id": 649, "title": "武蔵塗料重慶・生産部部長（生産/品質保証/調達部門）の田中 靖博さん" },
+        { "id": 657, "title": "武蔵塗料タイの拠点長、浅田 哲也さん" },
+        { "id": 665, "title": "生産部・調色課、早川 裕さんの一日に密着" },
+        { "id": 671, "title": "営業部の岡田 光正さんの一日に密着" },
+        { "id": 679, "title": "開発技術部の金田 公介さん" },
+        { "id": 686, "title": "財務経理部の宮本 真由子さん" },
+        { "id": 692, "title": "生産部・配送課の大花 美和さん" },
+        { "id": 697, "title": "執行役員・品質保証本部本部長を兼任の稲垣 大さん" },
+        { "id": 703, "title": "生産部生産課の茂木 一樹さん" },
+        { "id": 710, "title": "調達物流本部の井関 香理さん" },
+        { "id": 717, "title": "生産部・調色課の金澤 崇さん" },
+        { "id": 723, "title": "CSR推進室の満尾 朋美さん" },
+        { "id": 729, "title": "生産部・生産技術課の伊東 訓さん" },
+        { "id": 742, "title": "品質保証部の山﨑 迪代さん" },
+        { "id": 749, "title": "人事総務本部の岩崎 さん" },
+        { "id": 756, "title": "営業本部・営業部の小沼 駿さん" },
+        { "id": 762, "title": "開発技術部の本庄 良美さん" },
+        { "id": 768, "title": "営業本部・営業部の加藤 健太さん" },
+        { "id": 774, "title": "開発技術部の富田 彩乃さん" },
+        { "id": 780, "title": "品質保証部の田中 郁弥さん" },
+        { "id": 786, "title": "品質保証部・安全衛生環境課の斎藤 仁さん" },
+        { "id": 792, "title": "開発技術部の高橋 尚史さん" }
+      ]
+    },
+    "story": {
+      "path": "/story/",
+      "title": "ストーリー",
+      "expectedCount": 19,
+      "posts": [
+        { "id": 242, "title": "SDGs時代の『今』環境戦略とブランドストーリーをカタチにする新しい塗料" },
+        { "id": 246, "title": "植物由来「バイオペイント」の製品化に成功" },
+        { "id": 390, "title": "「Matcha（抹茶） color」をカラーコレクションに追加！" },
+        { "id": 411, "title": "革新的なバイオペイント「PAINTOMO」誕生" },
+        { "id": 885, "title": "環境配慮型プライマー「VITA PANUCO PP EA-NVP81-」" },
+        { "id": 888, "title": "欧州・国内企業と連携し、OCEAnアライアンス～共創プロジェクト" },
+        { "id": 891, "title": "手に触れるアイテムに関わる特殊塗料、バイオマス含有塗料で未来を描く" },
+        { "id": 900, "title": "環境負荷や健康リスクを低減、良好な密着性を可能にする特殊塗料" },
+        { "id": 903, "title": "和の風合いを楽しむ～陶器の表面を演出する釉薬溜まりを表現" },
+        { "id": 908, "title": "五感に響く自然な風合いを追求した和の美を表現" },
+        { "id": 912, "title": "五感に響く自然な風合い、枯山水からインスピレーションした「sand color」" },
+        { "id": 917, "title": "幅広い素材に適応した、環境配慮型バイオペイント【VITA UREX EA-NVB62-】" },
+        { "id": 920, "title": "長期美観維持が可能、環境配慮型塗料バイオペイント" },
+        { "id": 923, "title": "新たな領域、バイオペイントのバリエーション！PET・PBT" },
+        { "id": 926, "title": "環境に配慮した\"蒸着アンダー向けUV塗料\"が仲間入り！" },
+        { "id": 929, "title": "\"五感にうったえる心地よさ\" 触れて感じる滑らかなバイオペイント" },
+        { "id": 932, "title": "環境配慮とマグネシウム合金素材への密着性を両立させた新開発プライマー" },
+        { "id": 935, "title": "塗装工程のCO₂削減を目指す塗料を設計" },
+        { "id": 938, "title": "高光沢な黒色の意匠「バイオ・ピアノブラック」" }
+      ]
+    },
+    "globalnetwork": {
+      "path": "/global-network/",
+      "title": "グローバルネットワーク",
+      "expectedCount": 11,
+      "posts": [
+        { "id": 326, "title": "武蔵塗料　ハンガリー" },
+        { "id": 491, "title": "武蔵塗料　ベトナム" },
+        { "id": 492, "title": "韓国武蔵塗料" },
+        { "id": 493, "title": "武蔵塗料　タイランド" },
+        { "id": 525, "title": "蘇州武蔵塗料有限公司" },
+        { "id": 549, "title": "天津武蔵塗料有限公司" },
+        { "id": 564, "title": "中山武蔵塗料有限公司" },
+        { "id": 576, "title": "武蔵塗料インド" },
+        { "id": 587, "title": "重慶武蔵塗料有限公司" },
+        { "id": 593, "title": "インドネシア武蔵塗料" },
+        { "id": 600, "title": "武蔵塗料ハノイ" }
+      ]
+    },
+    "product": {
+      "path": "/product/",
+      "title": "製品情報",
+      "expectedCount": 60,
+      "description": "製品数が多いため、最初の20件のみチェック",
+      "posts": [
+        { "id": 3182, "title": "AQUACO SUNSHINE" },
+        { "id": 3183, "title": "AQUACO HAIUREX P" },
+        { "id": 3184, "title": "ECO PANUCO MG" },
+        { "id": 3185, "title": "VITA SUNSHINE" },
+        { "id": 3186, "title": "ECO PANUCO MG" },
+        { "id": 3187, "title": "VITA ULTRA VIN" },
+        { "id": 3188, "title": "ECO PANACO PA" },
+        { "id": 3189, "title": "VITA UREX" },
+        { "id": 3190, "title": "ECO MIRROR 49" },
+        { "id": 3191, "title": "ECO MIRROR 49" },
+        { "id": 3192, "title": "ECO MIRROR 49" },
+        { "id": 3193, "title": "PUROCLEAR" },
+        { "id": 3194, "title": "VITA RABASAN" },
+        { "id": 3195, "title": "VITA PANUCO" },
+        { "id": 3196, "title": "VITA PANUCO PP" },
+        { "id": 3197, "title": "VITA UREX" },
+        { "id": 3198, "title": "ECO ULTRA VIN CAR IP" },
+        { "id": 3199, "title": "ECO HAIUREX KL" },
+        { "id": 3200, "title": "ECO METALD" },
+        { "id": 3201, "title": "ECO MIRROR 49" }
+      ]
+    },
+    "news": {
+      "path": "/news/",
+      "title": "ニュース",
+      "expectedCount": 4,
+      "posts": [
+        { "id": 232, "title": "【受賞】武蔵塗料本社ビル　「東京バーティカルレインボー」は「Top 10 Commercial Posts of 2024」に選ばれました。" },
+        { "id": 234, "title": "【受賞】武蔵塗料は「WORLD CLEANUP DAY 2024 の企業部門でグローバルネットワー ク賞」に選出されました。" },
+        { "id": 236, "title": "【受賞】武蔵塗料の本社ビルは、2 0 2 4年のAsia Architecture Design Awardsで受賞しました。" },
+        { "id": 239, "title": "LGBTフレンドリー宣言" }
+      ]
+    }
+  }
+}

@@ -4,6 +4,7 @@ wp-includes/
 wp-config.php
 *.php
 !wp-content/themes/muashi/**/*.php
+!wp-content/plugins/musashi-inquiry-approval/**/*.php
 
 # WordPress default files
 license.txt
@@ -19,7 +20,8 @@ wp-content/ai1wm-backups/
 wp-content/wpvividbackups/
 wp-content/wpvivid_staging/
 wp-content/siteguard/
-wp-content/plugins/
+wp-content/plugins/*
+!wp-content/plugins/musashi-inquiry-approval/
 wp-content/plugins/all-in-one-wp-migration/storage/
 wp-content/index.php
 wp-content/themes/index.php
