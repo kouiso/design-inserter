@@ -4624,6 +4624,34 @@ a {
   visibility: visible;
 }
 
+@media screen and (min-width: 768px) {
+  .page--history .wp-block-buttons {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .page--history .wp-block-button {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+}
+@media screen and (min-width: 768px) {
+  .page--history .page__inner .wp-block-button .wp-block-button__link {
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+    padding: 8px 14px;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+@media screen and (min-width: 992px) {
+  .page--history .page__inner .wp-block-button .wp-block-button__link {
+    padding: 10px 18px;
+    font-size: 16px;
+  }
+}
 .page__inner--history {
   margin-top: 32px;
 }
