@@ -17,6 +17,7 @@ import './modules/expandable.js';
 import './modules/imageViewer.js';
 import './modules/productDownloadButton.js';
 import './modules/download.js';
+import './modules/search.js';
 import { initializeScrollHint } from './modules/scrollHint.js';
 import { initializeHistoryImages } from './modules/historyImages.js';
 

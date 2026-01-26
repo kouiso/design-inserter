@@ -393,6 +393,14 @@
     </div>
 </footer>
 
+<!-- 検索オーバーレイ -->
+<div class="search-overlay js-search-overlay">
+    <button type="button" class="search-overlay__close js-search-close" aria-label="閉じる"></button>
+    <div class="search-overlay__inner">
+        <?php get_search_form(); ?>
+    </div>
+</div>
+
 </div>
 <?php wp_footer(); ?>
 
