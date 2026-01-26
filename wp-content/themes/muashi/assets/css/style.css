@@ -1830,6 +1830,7 @@ a {
 .page__inner .wp-block-buttons {
   margin: 24px 0;
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
 }
 .page__inner .wp-block-button .wp-block-button__link {
@@ -2477,6 +2478,7 @@ a {
 .single__contents .wp-block-buttons {
   margin: 24px 0;
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
 }
 .single__contents .wp-block-button .wp-block-button__link {
@@ -4821,4 +4823,15 @@ a {
     transform: translateX(-50%);
   }
 }
+
+/* 装飾用ボタン（クリック不可） */
+.decorative-button,
+.decorative-button .wp-block-button__link,
+.decorative-button a {
+  pointer-events: none !important;
+  cursor: default !important;
+  border: none !important;
+  outline: none !important;
+}
+
 /*# sourceMappingURL=style.css.map */
