@@ -651,7 +651,7 @@ function create_post_type() {
             'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
-            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
             'rewrite'       => array(
                 'slug'       => 'global-network',
                 'with_front' => false,
@@ -1258,11 +1258,11 @@ add_action( 'pre_get_posts', function( $query ) {
         $query->set( 'order', 'ASC' );
     }
 
-    // globalnetwork アーカイブ: 12件/ページ, date DESC
+    // globalnetwork アーカイブ: 12件/ページ, menu_order ASC
     if ( $query->is_post_type_archive( 'globalnetwork' ) ) {
         $query->set( 'posts_per_page', 12 );
-        $query->set( 'orderby', 'date' );
-        $query->set( 'order', 'DESC' );
+        $query->set( 'orderby', 'menu_order' );
+        $query->set( 'order', 'ASC' );
     }
 
     // media_post アーカイブ: 全件表示, date DESC

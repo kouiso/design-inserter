@@ -50,6 +50,14 @@
     [textarea* your-message id:contact-message class:form__textarea placeholder "お問い合わせ内容をご記入ください"]
   </div>
 
+  <div class="form__field form__field--full">
+    <label class="form__label" for="contact-file">
+      添付ファイル
+      <span class="form__required">任意</span>
+    </label>
+    [file your-file id:contact-file class:form__input limit:10mb filetypes:pdf|doc|docx|xls|xlsx|ppt|pptx|jpg|png|zip]
+  </div>
+
   <!-- 資料選択情報（JSが書き込み） -->
   [hidden selected_products id:download-selected-products]
   [hidden source_product id:download-source-product]
