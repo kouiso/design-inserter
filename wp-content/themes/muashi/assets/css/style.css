@@ -1830,7 +1830,6 @@ a {
 .page__inner .wp-block-buttons {
   margin: 24px 0;
   display: flex;
-  flex-wrap: wrap;
   gap: 16px;
 }
 .page__inner .wp-block-button .wp-block-button__link {
@@ -1974,6 +1973,55 @@ a {
   display: block;
   padding: 16px 0;
   font-size: 14px;
+}
+.navigation__sub-link.has-accordion {
+  position: relative;
+  cursor: pointer;
+}
+.navigation__sub-link.has-accordion::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 0.3s ease;
+}
+.navigation__sub-link.has-accordion.is-active::after {
+  transform: translateY(-50%) rotate(-135deg);
+}
+.navigation__sub-accordion-list {
+  display: none;
+  margin: 8px 0 16px;
+  padding-left: 20px;
+  list-style: none;
+}
+.navigation__sub-accordion-list.is-active {
+  display: block;
+}
+.navigation__sub-accordion-item {
+  margin: 0;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.navigation__sub-accordion-item:last-child {
+  border-bottom: none;
+}
+.navigation__sub-accordion-link {
+  display: block;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 8px 0;
+  color: inherit;
+  text-decoration: none;
+}
+@media (hover: hover) {
+  .navigation__sub-accordion-link:hover {
+    opacity: 0.7;
+  }
 }
 
 @media screen and (min-width: 992px) {
@@ -2176,35 +2224,17 @@ a {
   }
 }
 .navigation__sub-accordion-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: block;
   font-size: 14px;
   line-height: 1.6;
   padding: 4px 0;
   color: inherit;
   text-decoration: none;
-  transition: color 0.3s ease;
 }
 @media (hover: hover) {
   .navigation__sub-accordion-link:hover {
-    color: #ff4d88;
+    opacity: 0.7;
   }
-}
-.navigation__sub-accordion-link::before {
-  content: "";
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: currentColor;
-  opacity: 0.4;
-  margin-right: 4px;
-}
-.navigation__sub-accordion-link.is-current {
-  color: #ff4d88;
-}
-.navigation__sub-accordion-link.is-current::before {
-  opacity: 1;
 }
 
 .single__meta {
@@ -2478,7 +2508,6 @@ a {
 .single__contents .wp-block-buttons {
   margin: 24px 0;
   display: flex;
-  flex-wrap: wrap;
   gap: 16px;
 }
 .single__contents .wp-block-button .wp-block-button__link {
@@ -4823,15 +4852,4 @@ a {
     transform: translateX(-50%);
   }
 }
-
-/* 装飾用ボタン（クリック不可） */
-.decorative-button,
-.decorative-button .wp-block-button__link,
-.decorative-button a {
-  pointer-events: none !important;
-  cursor: default !important;
-  border: none !important;
-  outline: none !important;
-}
-
 /*# sourceMappingURL=style.css.map */

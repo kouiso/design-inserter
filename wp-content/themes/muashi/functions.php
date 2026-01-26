@@ -1658,12 +1658,20 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
     /**
      * メニュー項目の開始タグを出力
+     *
+     * デザイン/挙動要件:
+     * - depth 0 (第1階層): 変更なし（常に表示、通常のリンク/テキスト）
+     * - depth 1 (第2階層):
+     *   - 子がある場合: アコーディオントリガーになる。クリックで第3階層を開閉。
+     *   - 子がない場合: 通常のリンク。
+     *   - クラス: 既存の navigation__sub-item を維持しつつアコーディオン機能を追加
+     * - depth 2 (第3階層): アコーディオンの中身（通常のリンク）
      */
     public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
         $is_current   = $item->current || $item->current_item_ancestor || $item->current_item_parent;
         $has_children = in_array( 'menu-item-has-children', $item->classes, true );
 
-        // depth 0: トップレベル項目
+        // depth 0: トップレベル（変更なし）
         if ( $depth === 0 ) {
             $classes = array( 'navigation__item' );
             if ( $is_current ) {
@@ -1673,6 +1681,10 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             $output .= '<li class="' . esc_attr( $class_attr ) . '">';
 
             $url = $item->url;
+            $target = '';
+            if ( $item->target === '_blank' ) {
+                $target = ' target="_blank" rel="noopener noreferrer"';
+            }
 
             // 現在のページはリンクなしのテキスト
             if ( $item->current ) {
@@ -1680,22 +1692,68 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 $output .= esc_html( $item->title );
                 $output .= '</p>';
             } else {
-                $target = '';
-                if ( $item->target === '_blank' ) {
-                    $target = ' target="_blank" rel="noopener noreferrer"';
-                }
                 $output .= '<a href="' . esc_url( $url ) . '" class="navigation__item-title"' . $target . '>';
                 $output .= esc_html( $item->title );
                 $output .= '</a>';
             }
-        } else {
-            // depth > 0: 子項目（インデント付き）
-            $output .= '<li class="navigation__sub-item">';
+
+        } elseif ( $depth === 1 ) {
+            // depth 1: 第2階層
+            $classes = array( 'navigation__sub-item' );
+            // 親メニュー項目（展開中）の場合もアクティブ扱いにする
+            if ( $item->current || $item->current_item_ancestor ) {
+                $classes[] = 'is-active';
+            }
+            $output .= '<li class="' . esc_attr( implode(' ', $classes) ) . '">';
+
             $target = '';
             if ( $item->target === '_blank' ) {
                 $target = ' target="_blank" rel="noopener noreferrer"';
             }
-            $output .= '<a href="' . esc_url( $item->url ) . '" class="navigation__sub-link"' . $target . '>';
+
+            // 子がある場合はアコーディオントリガー
+            if ( $has_children ) {
+                // アコーディオンJSが反応するクラスと属性を追加
+                $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
+                if ( $item->current || $item->current_item_ancestor ) {
+                    $link_classes .= ' is-active';
+                }
+                
+                // role="button" でクリッカブルであることを示す
+                $aria_expanded = ( $item->current || $item->current_item_ancestor ) ? 'true' : 'false';
+                $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
+                $output .= esc_html( $item->title );
+                $output .= '</p>';
+            } else {
+                // 子がない場合は通常のリンク
+                $link_classes = 'navigation__sub-link';
+                if ( $item->current ) {
+                    $link_classes .= ' is-active';
+                }
+                $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_classes ) . '"' . $target . '>';
+                $output .= esc_html( $item->title );
+                $output .= '</a>';
+            }
+
+        } else {
+            // depth 2+: 第3階層以降（アコーディオンの中身）
+            // 親のデザインを踏襲（navigation__sub-item はマージンのため、孫要素としてアコーディオン用クラスを使う）
+            $sub_classes = 'navigation__sub-accordion-item';
+            if ( $item->current ) {
+                $sub_classes .= ' navigation__sub-accordion-item--active';
+            }
+            $output .= '<li class="' . esc_attr( $sub_classes ) . '">';
+
+            $target = '';
+            if ( $item->target === '_blank' ) {
+                $target = ' target="_blank" rel="noopener noreferrer"';
+            }
+
+            $link_class = 'navigation__sub-accordion-link';
+            if ( $item->current ) {
+                $link_class .= ' is-current';
+            }
+            $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_class ) . '"' . $target . '>';
             $output .= esc_html( $item->title );
             $output .= '</a>';
         }
@@ -1709,10 +1767,18 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
     }
 
     /**
-     * サブメニューの開始タグを出力（常に展開）
+     * サブメニューの開始タグを出力
      */
     public function start_lvl( &$output, $depth = 0, $args = null ) {
-        $output .= '<ul class="navigation__sub-list">';
+        if ( $depth === 0 ) {
+            // 第2階層を囲むリスト（常に表示）
+            $output .= '<ul class="navigation__sub-list">';
+        } else {
+            // 第3階層を囲むリスト（アコーディオン開閉対象）
+            // 製品情報ページに合わせて navigation__sub-list は付けず、
+            // navigation__sub-accordion-list のみにする
+            $output .= '<ul class="navigation__sub-accordion-list" aria-hidden="true">';
+        }
     }
 
     /**
@@ -1741,7 +1807,7 @@ function muashi_render_sidebar_navigation( $location ) {
         'container'      => false,
         'items_wrap'     => '<ul class="navigation__list">%3$s</ul>',
         'walker'         => new Muashi_Sidebar_Nav_Walker(),
-        'depth'          => 2,
+        'depth'          => 3,
     ) );
 
     echo '</div>';
