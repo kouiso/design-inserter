@@ -85,9 +85,12 @@
     flex-direction: column;
     gap: 8px;
     min-width: 0; // Grid内での幅あふれ防止
+    word-break: break-all; // 長い単語の折り返し
 
     @include mq(lg) {
       gap: 12px;
+      word-break: break-word; // PCでは単語の区切りで折り返し
+      overflow-wrap: break-word;
     }
   }
 
