@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "gulp": "gulp",
+    "build:css": "sass wp-content/themes/muashi/src/scss/style.scss:wp-content/themes/muashi/assets/css/style.css --style=expanded",
+    "build": "npm run build:css && gulp js",
     "test": "playwright test",
     "test:smoke": "playwright test test/e2e/smoke.spec.ts",
     "test:pagination": "playwright test test/e2e/pagination.spec.ts",
