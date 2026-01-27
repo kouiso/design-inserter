@@ -183,3 +183,20 @@
 <!-- 異常系・エラーハンドリング確認 -->
 5. Complete execution of tests
 <!-- テストの完全実行 -->
+
+## 11. 画像・スクリーンショット分析の原則
+<!-- Principles for Image/Screenshot Analysis -->
+
+**When users provide screenshots or images**, follow these principles:
+<!-- ユーザーがスクリーンショット・画像を提供した場合、以下の原則に従う -->
+
+1. **Accurate visual comprehension**: Understand user intent precisely from visual information
+<!-- 視覚的情報の正確な理解: 視覚情報からユーザー意図を正確に把握 -->
+2. **Swift implementation**: Identify relevant files immediately, implement changes without delay
+<!-- 迅速な実装: 該当ファイルを即座に特定、遅延なく変更実施 -->
+3. **Minimal changes**: Only implement necessary changes, avoid unnecessary code additions
+<!-- 最小限の変更: 必要な変更のみ実施、不要なコード追加回避 -->
+4. **Complete execution**: Automatically execute commit & push after implementation
+<!-- 完全実行: 実装後のコミット＆プッシュを自動実行 -->
+5. **Structure understanding**: Understand existing code structure (e.g., PC vs mobile differences), implement appropriate changes
+<!-- 構造理解: 既存コード構造（例: PC・スマホの違い）を理解、適切な変更実施 -->
