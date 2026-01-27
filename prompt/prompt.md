@@ -1,8 +1,8 @@
 ---
-description: MusashiPaint WordPress サイト AI開発アシスタント Ver. 2.0
+description: MusashiPaint WordPress サイト AI開発アシスタント Ver. 3.0
 ---
 
-# ⚡ MusashiPaint AI開発アシスタント Ver. 2.0
+# ⚡ MusashiPaint AI開発アシスタント Ver. 3.0
 
 # 🔴 Critical Checklist (絶対遵守)
 
@@ -46,12 +46,14 @@ description: MusashiPaint WordPress サイト AI開発アシスタント Ver. 2.
 
 | ルール | ソース | 説明 |
 |--------|--------|------|
-| Persona | `prompt/instructions/persona.md` | 内田祐貴の人格設定、コミュニケーションスタイル |
-| Core Mission | `prompt/instructions/core.md` | 最重要任務、作業量原則、影響範囲調査 |
-| Autonomous Execution | `prompt/instructions/autonomous-execution.md` | 自律実行、エージェント委任 |
+| Persona | `prompt/instructions/persona.md` | 内田祐貴の人格設定、コミュニケーションスタイル、脱・AIアシスタント宣言 |
+| Core Mission | `prompt/instructions/core.md` | 最重要任務、作業量原則、影響範囲調査、制約の再交渉プロトコル |
+| Autonomous Execution | `prompt/instructions/autonomous-execution.md` | 自律実行、エージェント委任、MCP積極活用 |
+| Auto Agent Trigger | `prompt/instructions/auto-agent-trigger.md` | **NEW** キーワード検出で自動エージェント起動 |
 | Quality & Implementation | `prompt/instructions/quality-implementation.md` | 実装ルール、品質基準、動作検証 |
-| Performance & Context | `prompt/instructions/performance.md` | コンテキスト効率、エージェント最適化 |
-| Prohibitions | `prompt/instructions/prohibitions.md` | 全禁止事項一元管理 |
+| Performance & Context | `prompt/instructions/performance.md` | コンテキスト効率、エージェント最適化、モデル選択戦略 |
+| OpenSpec Integration | `prompt/instructions/openspec-integration.md` | **NEW** スペック駆動開発、仕様書一元管理 |
+| Prohibitions | `prompt/instructions/prohibitions.md` | 全禁止事項一元管理（8セクション構成） |
 | WordPress | `prompt/instructions/wordpress.md` | WordPress固有ルール、セキュリティ |
 | Testing | `prompt/instructions/testing.md` | Playwright E2Eテスト規約 |
 | Git & GitHub | `prompt/instructions/git.md` | ブランチ戦略、PRルール |
@@ -74,8 +76,21 @@ description: MusashiPaint WordPress サイト AI開発アシスタント Ver. 2.
 | `/spec` | 仕様書作成・更新 | - |
 | `/cmt` | コード意図説明コメント追加 | - |
 | `/research` | 情報収集・調査 | - |
+| `/openspec:proposal` | OpenSpec変更提案作成 | - |
+| `/openspec:apply` | OpenSpec提案を確定し実装開始 | - |
+| `/openspec:archive` | 完了した変更をスペックに統合 | - |
 | `good` | 良い振る舞いをルール化 | - |
 | `bad` | 悪い振る舞いを禁止事項に追加 | - |
+
+### Skills（ドメイン知識・必要時参照）
+
+| スキル | 説明 | パス |
+|--------|------|------|
+| WordPress Security Compliance | **NEW** OWASP Top 10対応、Nonce検証、エスケープパターン | `prompt/skills/wordpress-security-compliance.md` |
+| WordPress Hook Pattern Compliance | **NEW** フック実行順序、優先度設定、カスタムフック命名規則 | `prompt/skills/wordpress-hook-pattern-compliance.md` |
+| WordPress Performance Optimization | **NEW** WP_Query最適化、キャッシング戦略、条件付きアセット読み込み | `prompt/skills/wordpress-performance-optimization.md` |
+| WordPress Theme Pattern Compliance | **NEW** muashiテーマパターン踏襲、テンプレート階層、BEM命名規則 | `prompt/skills/wordpress-theme-pattern-compliance.md` |
+| Playwright E2E Pattern Compliance | **NEW** data-testid優先、待機戦略、テスト整理パターン | `prompt/skills/playwright-e2e-pattern-compliance.md` |
 
 ### Agents（特化エージェント）
 <!-- Specialized Agents -->
@@ -83,13 +98,16 @@ description: MusashiPaint WordPress サイト AI開発アシスタント Ver. 2.
 **Agent-First Design**: Delegate complex tasks to specialized agents using the Task tool. Each agent is optimized with minimal necessary tools.
 <!-- エージェントファースト設計: 複雑なタスクは専門エージェントにTask toolで委任。各エージェントは必要最小限のツールで最適化。 -->
 
+**Auto Agent Trigger**: Agents are automatically launched based on keywords (see `auto-agent-trigger.md`)
+<!-- 自動エージェント起動: キーワードに基づいて自動的にエージェントが起動（`auto-agent-trigger.md`参照） -->
+
 | Agent | Description | Path |
 |-------|-------------|------|
 | `planner` | Implementation planning & task decomposition <!-- 実装計画・タスク分解 --> | `prompt/agents/planner.md` |
 | `architect` | Architecture design & decisions <!-- アーキテクチャ設計・設計判断 --> | `prompt/agents/architect.md` |
 | `code-reviewer` | Code quality & maintainability review <!-- コード品質・保守性レビュー --> | `prompt/agents/code-reviewer.md` |
-| `security-reviewer` | Security audit & OWASP compliance <!-- セキュリティ監査・OWASP準拠 --> | `prompt/agents/security-reviewer.md` |
-| `tdd-guide` | TDD implementation & test coverage <!-- TDD実施・テストカバレッジ --> | `prompt/agents/tdd-guide.md` |
+| `security-reviewer` | WordPress Security audit & OWASP compliance <!-- WordPressセキュリティ監査・OWASP準拠 --> | `prompt/agents/security-reviewer.md` |
+| `tdd-guide` | TDD implementation & Playwright E2E test coverage <!-- TDD実施・Playwright E2Eテストカバレッジ --> | `prompt/agents/tdd-guide.md` |
 | `build-error-resolver` | Build error resolution & root cause analysis <!-- ビルドエラー解決・根本原因分析 --> | `prompt/agents/build-error-resolver.md` |
 | `refactor-cleaner` | Dead code removal & refactoring <!-- 不要コード削除・リファクタリング --> | `prompt/agents/refactor-cleaner.md` |
 
@@ -105,9 +123,19 @@ description: MusashiPaint WordPress サイト AI開発アシスタント Ver. 2.
 - `/debug`: バグ根本原因分析
 - `/tdd`: テスト駆動開発フロー
 - `/multi-review`: マルチエージェント協調レビュー
+- `/security-check`: WordPressセキュリティ監査
+- `/refactor-clean`: 不要コード削除・リファクタリング
 - `/research`: 情報収集・調査
 - `/test`: Playwright E2Eテスト実行
 - `/test:smoke`: スモークテスト実行
+- `/commit-fix`: コミット履歴整理・強制プッシュ
+- `/review-pr`: PRレビューチェックリスト
+- `/issue`: 改善提案・Issue起票
+- `/spec`: 仕様書作成・更新
+- `/cmt`: コード意図説明コメント追加
+- `/openspec:proposal`: OpenSpec変更提案作成
+- `/openspec:apply`: OpenSpec提案を確定し実装開始
+- `/openspec:archive`: 完了した変更をスペックに統合
 
 ### エージェント活用
 <!-- Agent Utilization -->

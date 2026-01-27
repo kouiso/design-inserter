@@ -48,6 +48,273 @@ Recommended:
 <!-- コンテキスト監視 -->
 
 Periodically check context usage to avoid excessive consumption.
+
+Target: **Maintain 140k+ tokens available** (allow up to 30% reduction)
+<!-- 目標：140k tokens以上の利用可能を維持（30%削減まで許容） -->
+
+---
+
+## 2. Agent Design Principles
+<!-- エージェント設計原則 -->
+
+### Minimize Tools
+<!-- ツール最小化 -->
+
+**Give each agent only the minimal necessary tools.**
+<!-- 各エージェントには必要最小限のツールだけを与える。 -->
+
+```yaml
+# ❌ Bad: Agent with many unnecessary tools
+<!-- 不要なツールを多数持つエージェント -->
+tools: [Read, Write, Edit, Grep, Glob, Bash, WebSearch, WebFetch, ...]
+
+# ✅ Good: Only necessary tools
+<!-- 必要なツールのみ -->
+tools: [Read, Grep, Glob]
+```
+
+**Reasons:**
+<!-- 理由 -->
+- Fewer tools = faster execution
+<!-- ツール数が少ない = 実行が高速 -->
+- Maintains focus
+<!-- フォーカスが維持される -->
+- Saves context window
+<!-- コンテキストウィンドウ節約 -->
+
+### Efficient Agent Delegation
+<!-- エージェント委任の効率化 -->
+
+```typescript
+// ✅ Good: Delegate to specialized agent
+<!-- 専門エージェントに委任 -->
+runSubagent({
+  agent: 'security-reviewer',
+  tools: ['Read', 'Grep'],  // Minimal
+  <!-- 最小限 -->
+  task: 'Review for WordPress security (OWASP, Nonce, Escaping)'
+});
+
+// ❌ Bad: Main agent does everything (slow)
+<!-- メインエージェントで全部実行（遅い） -->
+// Execute review yourself using all tools
+<!-- すべてのツールを使って自分でレビュー -->
+```
+
+---
+
+## 3. Performance Optimization
+<!-- パフォーマンス最適化 -->
+
+### Agent Execution Time
+<!-- エージェント実行時間 -->
+
+**Targets:**
+<!-- 目標 -->
+- Agent startup: **< 2 seconds**
+<!-- エージェント起動 -->
+- Command execution: **< 30 seconds**
+<!-- コマンド実行 -->
+- Test execution: **< 10 seconds**
+<!-- テスト実行 -->
+
+### Parallel Execution
+<!-- 並列実行 -->
+
+**Execute independent tasks in parallel.**
+<!-- 独立したタスクは並列実行すること。 -->
+
+```typescript
+// ✅ Good: Parallel execution
+<!-- 並列実行 -->
+const [securityReview, perfReview, a11yReview] = await Promise.all([
+  runSubagent({ agent: 'security-reviewer', ... }),
+  runSubagent({ agent: 'performance-reviewer', ... }),
+  runSubagent({ agent: 'accessibility-reviewer', ... }),
+]);
+
+// ❌ Bad: Sequential execution (3x slower)
+<!-- 逐次実行（3倍遅い） -->
+const securityReview = await runSubagent({ agent: 'security-reviewer', ... });
+const perfReview = await runSubagent({ agent: 'performance-reviewer', ... });
+const a11yReview = await runSubagent({ agent: 'accessibility-reviewer', ... });
+```
+
+### Cache Utilization
+<!-- キャッシング活用 -->
+
+**Avoid re-reading the same information.**
+<!-- 同じ情報の再読み込みを避ける。 -->
+
+```typescript
+// ✅ Good: Read once and cache in memory
+<!-- 一度読んでメモリにキャッシュ -->
+const functions_php = await read('wp-content/themes/muashi/functions.php');
+// Use same content for multiple analyses
+<!-- 複数の分析で同じcontent使用 -->
+
+// ❌ Bad: Read multiple times
+<!-- 何度も読み込み -->
+const code1 = await read('wp-content/themes/muashi/functions.php');  // Analysis 1
+const code2 = await read('wp-content/themes/muashi/functions.php');  // Analysis 2 (wasteful)
+```
+
+---
+
+## 4. Resource Efficiency
+<!-- リソース効率化 -->
+
+### File Reading Strategy
+<!-- ファイル読み込み戦略 -->
+
+```typescript
+// ✅ Good: Read only necessary range
+<!-- 必要な範囲のみ -->
+read('wp-content/themes/muashi/functions.php', { startLine: 10, endLine: 50 });
+
+// ❌ Bad: Read entire file when only need small part
+<!-- 一部だけ必要なのにファイル全体を読む -->
+read('wp-content/themes/muashi/functions.php');
+```
+
+### Efficient Searching
+<!-- 検索効率化 -->
+
+```typescript
+// ✅ Good: Specific pattern with file type filter
+<!-- 具体的なパターン、ファイルタイプフィルター付き -->
+grep('function muashi_', { includePattern: 'wp-content/themes/muashi/**/*.php' });
+
+// ❌ Bad: Ambiguous search (too many results)
+<!-- 曖昧な検索（結果が多すぎる） -->
+grep('muashi');
+```
+
+### Bash Execution
+<!-- Bash実行 -->
+
+```typescript
+// ✅ Good: Narrow down results
+<!-- 結果を絞る -->
+bash('npm test -- --testNamePattern="ProductPage" --silent');
+
+// ❌ Bad: Full output (context pressure)
+<!-- 全出力（コンテキスト圧迫） -->
+bash('npm test');
+```
+
+---
+
+## 5. Model Selection Strategy
+<!-- モデル選択戦略 -->
+
+### Model Selection by Task (WordPress-specific)
+<!-- タスク別モデル選択（WordPress特化） -->
+
+| Task | Model | Reason |
+<!-- 理由 -->
+|--------|--------|------|
+| WordPress architecture design | opus | Complex decisions required |
+<!-- WordPress設計 / 複雑な判断が必要 -->
+| Security review (OWASP) | opus | Strict analysis required |
+<!-- セキュリティレビュー（OWASP） / 厳密な分析が必要 -->
+| Theme development | sonnet | Good balance |
+<!-- テーマ開発 / バランスが良い -->
+| E2E test implementation | sonnet | Fast, sufficient quality |
+<!-- E2Eテスト実装 / 高速・十分な品質 -->
+| Plugin development | sonnet | Fast, sufficient quality |
+<!-- プラグイン開発 / 高速・十分な品質 -->
+| Code cleanup | sonnet | Fast, sufficient quality |
+<!-- コードクリーンアップ / 高速・十分な品質 -->
+
+### Cost Optimization
+<!-- コスト最適化 -->
+
+```
+Low complexity (template edits, simple functions) → sonnet (fast, low cost)
+<!-- 複雑度低（テンプレート編集、単純関数） / 高速・低コスト -->
+
+High complexity (custom post type architecture, security audit) → opus (high quality)
+<!-- 複雑度高（カスタム投稿タイプ設計、セキュリティ監査） / 高品質 -->
+
+Basic policy: Use sonnet when sufficient
+<!-- 基本方針：sonnetで十分な場合はsonnetを使う -->
+```
+
+---
+
+## 6. Performance Metrics
+<!-- パフォーマンスメトリクス -->
+
+### Metrics to Measure
+<!-- 測定項目 -->
+
+| Metric | Target | Measurement Method |
+<!-- 目標値 / 測定方法 -->
+|-----------|--------|---------|
+| Context efficiency | ≥ 140k tokens available | Context usage log |
+<!-- コンテキスト効率 / コンテキスト使用量ログ -->
+| Agent startup time | < 2 sec | Tool execution log |
+<!-- エージェント起動時間 / ツール実行ログ -->
+| Command execution time | < 30 sec | Session log |
+<!-- コマンド実行時間 / セッションログ -->
+| Test execution time | < 10 sec | `npm test` output |
+<!-- テスト実行時間 -->
+| Page load time (WordPress) | < 2 sec | WebPageTest, GTmetrix |
+<!-- ページ読み込み時間（WordPress） -->
+
+### Regular Monitoring
+<!-- 定期監視 -->
+
+```bash
+# Weekly check
+<!-- 週次チェック -->
+- [ ] Context window usage
+<!-- コンテキストウィンドウ使用量 -->
+- [ ] Agent execution time
+<!-- エージェント実行時間 -->
+- [ ] Test execution speed
+<!-- テスト実行速度 -->
+- [ ] WordPress page load time
+<!-- WordPressページ読み込み時間 -->
+```
+
+When improvement is needed:
+<!-- 改善が必要な場合 -->
+1. Reduce file reading (use Grep→Read strategy)
+<!-- ファイル読み込みを削減（Grep→Read戦略） -->
+2. Optimize agent tool sets
+<!-- エージェントツールセットを最適化 -->
+3. Enable parallel test execution
+<!-- テスト並列実行を有効化 -->
+4. Optimize WordPress queries (use WordPress Performance Optimization skills)
+<!-- WordPressクエリを最適化（WordPress Performance Optimization skillsを使用） -->
+
+---
+
+## Best Practices
+<!-- ベストプラクティス -->
+
+- **Measure First**: Measure current state before optimization
+<!-- 最適化前に現状を測定 -->
+- **Optimize Bottlenecks**: Improve bottlenecks first
+<!-- ボトルネックから優先的に改善 -->
+- **Keep It Simple**: Avoid excessive optimization
+<!-- 過度な最適化は避ける -->
+- **Monitor Continuously**: Regularly check metrics
+<!-- 定期的にメトリクスを確認 -->
+- **Balance Quality & Speed**: Optimize within limits that don't sacrifice quality
+<!-- 品質を犠牲にしない範囲で高速化 -->
+
+---
+
+## Related
+<!-- 関連 -->
+
+- `prompt/instructions/autonomous-execution.md` - Agent delegation rules
+<!-- エージェント委任ルール -->
+- `prompt/skills/wordpress-performance-optimization.md` - WordPress-specific performance optimization
+<!-- WordPress特化パフォーマンス最適化 -->
 <!-- 定期的にコンテキスト使用量を確認し、過度な消費を避ける。 -->
 
 Target: **Maintain 140k+ tokens available** (allow up to 30% reduction)
