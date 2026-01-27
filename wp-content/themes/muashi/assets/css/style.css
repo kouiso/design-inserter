@@ -3220,6 +3220,279 @@ a {
   }
 }
 
+.is-style-hanging-indent {
+  padding-left: 2em;
+  text-indent: -2em;
+}
+
+.is-style-two-column-responsive {
+  width: 100%;
+}
+.is-style-two-column-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+}
+@media (max-width: 767px) {
+  .is-style-two-column-responsive table, .is-style-two-column-responsive {
+    display: block;
+  }
+  .is-style-two-column-responsive thead {
+    display: none;
+  }
+  .is-style-two-column-responsive tbody {
+    display: block;
+  }
+  .is-style-two-column-responsive tr {
+    display: block;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  .is-style-two-column-responsive tr:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  .is-style-two-column-responsive td,
+  .is-style-two-column-responsive th {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    text-align: left !important;
+    border: none !important;
+  }
+  .is-style-two-column-responsive td:first-child,
+  .is-style-two-column-responsive th:first-child {
+    font-weight: 600;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd !important;
+  }
+  .is-style-two-column-responsive td:last-child,
+  .is-style-two-column-responsive th:last-child {
+    padding-bottom: 12px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .is-style-two-column-responsive td,
+  .is-style-two-column-responsive th {
+    padding: 16px;
+    vertical-align: top;
+    border: 1px solid #ddd;
+  }
+  .is-style-two-column-responsive td:first-child,
+  .is-style-two-column-responsive th:first-child {
+    width: 140px;
+    font-weight: 600;
+    background-color: #f5f5f5;
+  }
+}
+
+.hierarchy-chart {
+  padding: 2rem 0;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.hierarchy-chart__header {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__header {
+    display: none;
+  }
+}
+.hierarchy-chart__header-box {
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #4a5568;
+  color: white;
+  text-align: center;
+}
+.hierarchy-chart__header-box:first-child {
+  flex: 0 0 200px;
+}
+.hierarchy-chart__header-box:last-child {
+  padding-left: 2rem;
+  flex: 1;
+  text-align: left;
+}
+.hierarchy-chart__header-arrow {
+  display: none;
+}
+.hierarchy-chart__category {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+.hierarchy-chart__category:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__category {
+    display: block;
+    margin-bottom: 2rem;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 2rem;
+  }
+  .hierarchy-chart__category:last-child {
+    border-bottom: none;
+  }
+}
+.hierarchy-chart__category-title {
+  flex: 0 0 200px;
+  margin-right: 2rem;
+  padding: 1rem 1.2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__category-title {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+    display: block;
+  }
+}
+.hierarchy-chart__category-title--sustainability {
+  background: #FFE8D1;
+  color: #744210;
+}
+.hierarchy-chart__category-title--csr {
+  background: #fff;
+  border: 2px solid #cbd5e0;
+  color: #2d3748;
+}
+.hierarchy-chart__category-title--environment {
+  background: #C6F6D5;
+  color: #22543d;
+}
+.hierarchy-chart__category-title--social {
+  background: #FED7E2;
+  color: #702459;
+}
+.hierarchy-chart__category-title--governance {
+  background: #BEE3F8;
+  color: #1e3a8a;
+}
+.hierarchy-chart__items {
+  flex: 1;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__items {
+    padding-left: 0.5rem;
+  }
+}
+.hierarchy-chart__item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.hierarchy-chart__item::before {
+  content: "▶";
+  margin-right: 0.5rem;
+  font-size: 0.7rem;
+  color: #718096;
+}
+.hierarchy-chart__item-box {
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+  display: inline-block;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__item-box {
+    white-space: normal;
+  }
+}
+.hierarchy-chart__item-box--sustainability {
+  background: #FFE8D1;
+  color: #744210;
+}
+.hierarchy-chart__item-box--csr {
+  background: #fff;
+  border: 2px solid #cbd5e0;
+  color: #2d3748;
+}
+.hierarchy-chart__item-box--environment {
+  background: #C6F6D5;
+  color: #22543d;
+}
+.hierarchy-chart__item-box--social {
+  background: #FED7E2;
+  color: #702459;
+}
+.hierarchy-chart__item-box--governance {
+  background: #BEE3F8;
+  color: #1e3a8a;
+}
+.hierarchy-chart__item-box--empty {
+  background: transparent;
+  border: 1px dashed #cbd5e0;
+  color: #a0aec0;
+  min-width: 30px;
+  text-align: center;
+}
+.hierarchy-chart__subitems {
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__subitems {
+    padding-left: 1.5rem;
+  }
+}
+.hierarchy-chart__subitem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.hierarchy-chart__subitem::before {
+  content: "▶";
+  margin-right: 0.5rem;
+  font-size: 0.7rem;
+  color: #718096;
+}
+.hierarchy-chart__subsubitems {
+  padding-left: 2rem;
+}
+@media (max-width: 768px) {
+  .hierarchy-chart__subsubitems {
+    padding-left: 1.5rem;
+  }
+}
+.hierarchy-chart__subsubitem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.hierarchy-chart__subsubitem::before {
+  content: "▶";
+  margin-right: 0.5rem;
+  font-size: 0.7rem;
+  color: #718096;
+}
+
 .top-kv {
   position: relative;
   padding: 0 20px 38px;
@@ -5055,4 +5328,5 @@ a {
     transform: translateX(-50%);
   }
 }
+
 /*# sourceMappingURL=style.css.map */

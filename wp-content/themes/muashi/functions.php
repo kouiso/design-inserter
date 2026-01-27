@@ -6,6 +6,7 @@
 require_once(get_theme_file_path('/inc/variable.php'));
 require_once(get_theme_file_path('/inc/post-types.php'));
 require_once(get_theme_file_path('/inc/setup.php'));
+require_once(get_theme_file_path('/inc/block-patterns.php'));
 
 /**
  * css、js読み込み
@@ -1467,6 +1468,24 @@ add_action( 'init', function() {
 
     // 画像ブロック
     register_block_style( 'core/image', $image_viewer_style );
+
+    // ぶら下げインデントスタイル
+    $hanging_indent_style = array(
+        'name'  => 'hanging-indent',
+        'label' => 'ぶら下げインデント',
+    );
+
+    // 段落ブロック
+    register_block_style( 'core/paragraph', $hanging_indent_style );
+
+    // 2列縦並びレスポンシブスタイル（モバイルで縦表示）
+    $two_column_responsive_style = array(
+        'name'  => 'two-column-responsive',
+        'label' => '2列表（モバイル縦並び）',
+    );
+
+    // テーブルブロックに適用
+    register_block_style( 'core/table', $two_column_responsive_style );
 } );
 
 /**
