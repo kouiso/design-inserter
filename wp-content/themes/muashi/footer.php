@@ -402,11 +402,6 @@
                     <div class="footer__nav-pc-item">
                         <a href="<?= URL_VOICE ?>" class="footer__nav-pc-link">お客様の声</a>
                     </div>
-
-                    <!-- よくあるご質問 -->
-                    <div class="footer__nav-pc-item">
-                        <a href="<?= URL_FAQ ?>" class="footer__nav-pc-link">よくあるご質問</a>
-                    </div>
                 </div>
             </div>
 
@@ -418,6 +413,7 @@
                     <div class="footer__nav-pc-link-wrapper">
                         <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">インタビュー</a>
                         <a href="<?= URL_CAREER_FAQ ?>" class="footer__nav-pc-link">採用に関するQ&A</a>
+                        <a href="<?= URL_FAQ ?>" class="footer__nav-pc-link">よくあるご質問</a>
                     </div>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
