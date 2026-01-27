@@ -227,7 +227,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     20年以上前からグローバル展開を進め、アジアを起点に欧州・北米へと生産・販売体制を拡充グループ全体の強固な連携により、世界中のお客様へ同一で、高品質な塗料を安定的に供給しています
                     </p>
-                    <a href="<?= URL_GLOBAL_NETWORK; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_GLOBAL_NETWORK; ?>#海外拠点" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         Global Network
                         </span>
@@ -320,7 +320,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     確固たる経営理念のもと、環境に配慮した商品開発と環境負荷の低減に真摯に取り組み、社会貢献を通じて持続可能な社会の実現をめざしています
                     </p>
-                    <a href="<?= URL_SUSTAINABILITY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_SUSTAINABLE_BUSINESS; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         Sustainability
                         </span>

@@ -26,6 +26,15 @@ define('URL_INTERVIEW', home_url('/career/interview/'));
 define('URL_PRIVACY_POLICY', home_url('/privacy-policy/'));
 define('URL_TERMS', home_url('/terms/'));
 define('URL_FAQ', home_url('/faq/'));
+define('URL_SUSTAINABLE_BUSINESS', home_url('/sustainable-business/'));
+define('URL_CAREER_FAQ', home_url('/career-faq/'));
+
+// Sustainability related pages
+define('URL_ENVIRONMENT', home_url('/environment/'));
+define('URL_SOCIETY', home_url('/society/'));
+define('URL_GOVERNANCE', home_url('/governance/'));
+define('URL_SCM', home_url('/scm/'));
+define('URL_LIBRARY', home_url('/library/'));
 
 // External language sites
 define('URL_LANG_EN', 'https://en.musashipaint.com');
