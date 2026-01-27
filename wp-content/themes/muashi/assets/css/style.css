@@ -3378,7 +3378,7 @@ a {
 .hierarchy-chart__headers {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
+  margin-bottom: 0.2rem;
   position: relative;
 }
 @media (max-width: 768px) {

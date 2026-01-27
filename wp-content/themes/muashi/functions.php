@@ -6,7 +6,7 @@
 require_once(get_theme_file_path('/inc/variable.php'));
 require_once(get_theme_file_path('/inc/post-types.php'));
 require_once(get_theme_file_path('/inc/setup.php'));
-require_once(get_theme_file_path('/inc/block-patterns.php'));
+require_once(get_theme_file_path('/inc/hierarchy-chart-pattern.php'));
 
 /**
  * css、js読み込み
