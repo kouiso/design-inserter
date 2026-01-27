@@ -14,7 +14,7 @@ const themeDir = "./wp-content/themes/muashi";
 
 let path = {
   src: {
-    scss: `${themeDir}/src/scss/**/*.scss`,
+    scss: `${themeDir}/src/scss/style.scss`,
     js: `${themeDir}/src/js/main.js`,
   },
   dist: {
@@ -49,13 +49,17 @@ const webpackConfig = {
   },
 };
 
+// splide CSSコピータスク
+const copySplide = () => {
+  return gulp
+    .src("./node_modules/@splidejs/splide/dist/css/splide.min.css")
+    .pipe(gulp.dest(path.dist.css));
+};
+
 // sassのコンパイル
-const scss = (done) => {
-  gulp
-    .src([
-      "./node_modules/@splidejs/splide/dist/css/splide.min.css",
-      path.src.scss,
-    ])
+const compileSass = () => {
+  return gulp
+    .src(path.src.scss)
     .pipe(
       plumber({
         errorHandler: notify.onError("Error: <%= error.message %>"),
@@ -74,8 +78,10 @@ const scss = (done) => {
         title: "scss dest:",
       })
     );
-  done();
 };
+
+// SCSSタスク統合
+const scss = gulp.parallel(copySplide, compileSass);
 
 // JSのコンパイル
 const js = (done) => {

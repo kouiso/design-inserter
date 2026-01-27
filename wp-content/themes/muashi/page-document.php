@@ -66,46 +66,12 @@ if ( have_posts() ) {
 
             <div class="page__inner page__inner--narrow">
 
-              <section class="download" data-download-page data-download-max="<?php echo esc_attr( $max_selectable ); ?>">
+              <section class="download" data-download-page data-page-type="document">
                 <div class="contact__content">
                   <div class="contact__inner">
                     <div class="download__layout">
                       <div class="download__main download__main--full">
-                        <div class="download__controls">
-                          <label class="download__search">
-                            <span class="download__search-label">キーワード</span>
-                            <input type="search" class="download__search-input" data-download-search placeholder="製品名やキーワードで検索">
-                          </label>
-
-                          <?php foreach ( $taxonomy_terms as $taxonomy => $info ) : ?>
-                            <label class="download__filter">
-                              <span class="download__filter-label"><?php echo esc_html( $info['label'] ); ?></span>
-                              <select class="download__filter-select" data-download-filter="<?php echo esc_attr( $taxonomy ); ?>">
-                                <option value=""><?php echo esc_html( $download_data['i18n']['allOption'] ); ?></option>
-                                <?php foreach ( $info['terms'] as $term ) : ?>
-                                  <option value="<?php echo esc_attr( $term['id'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                            </label>
-                          <?php endforeach; ?>
-
-                          <label class="download__sort">
-                            <span class="download__sort-label">並べ替え</span>
-                            <select class="download__sort-select" data-download-sort>
-                              <option value="title-asc">名前（あ-わ順）</option>
-                              <option value="title-desc">名前（わ-あ順）</option>
-                              <option value="date-desc">新しい順</option>
-                              <option value="date-asc">古い順</option>
-                            </select>
-                          </label>
-
-                          <button type="button" class="download__reset" data-download-reset><?php echo esc_html( $download_data['i18n']['resetFilters'] ); ?></button>
-                        </div>
-
                         <div class="download__feedback" data-download-feedback hidden></div>
-
-                        <p class="download__result-count" data-download-result-count></p>
-
                         <ul class="download__list" data-download-list></ul>
 
                       </div>

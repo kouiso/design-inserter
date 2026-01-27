@@ -86,20 +86,6 @@ test.describe('Form Tests - フォーム機能確認', () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test('検索機能が動作する', async ({ page }) => {
-      await page.goto('/download/');
-      
-      // 検索フィールドに入力
-      const searchInput = page.locator('#download-search');
-      await searchInput.fill('塗料');
-      
-      await page.waitForTimeout(500); // 検索結果の更新待機
-      
-      // 結果が絞り込まれることを確認（少なくとも表示が更新される）
-      const productItems = page.locator('.download__item:visible');
-      await expect(productItems.first()).toBeVisible();
-    });
-
     test('製品の選択と選択解除が機能する', async ({ page }) => {
       await page.goto('/download/');
       
@@ -176,66 +162,6 @@ test.describe('Form Tests - フォーム機能確認', () => {
       
       if (isVisible) {
         await expect(errorMessage.first()).toBeVisible();
-      }
-    });
-  });
-
-  test.describe('フィルター機能', () => {
-    
-    test('タクソノミーフィルターが動作する', async ({ page }) => {
-      await page.goto('/download/');
-      
-      // フィルタードロップダウンが存在する場合
-      const filterSelects = page.locator('select[name^="filter-"]');
-      const count = await filterSelects.count();
-      
-      if (count > 0) {
-        // 最初のフィルターを選択
-        const firstFilter = filterSelects.first();
-        const options = await firstFilter.locator('option').count();
-        
-        if (options > 1) {
-          await firstFilter.selectOption({ index: 1 });
-          await page.waitForTimeout(500);
-          
-          // 結果が更新されることを確認
-          const productItems = page.locator('.download__item:visible');
-          await expect(productItems.first()).toBeVisible();
-        }
-      } else {
-        test.skip();
-      }
-    });
-
-    test('フィルターのリセット機能が動作する', async ({ page }) => {
-      await page.goto('/download/');
-      
-      // リセットボタンが存在する場合
-      const resetButton = page.locator('button[type="reset"], .download__reset-button');
-      const isVisible = await resetButton.isVisible().catch(() => false);
-      
-      if (isVisible) {
-        // フィルターを選択
-        const filterSelect = page.locator('select[name^="filter-"]').first();
-        const selectVisible = await filterSelect.isVisible().catch(() => false);
-        
-        if (selectVisible) {
-          const options = await filterSelect.locator('option').count();
-          if (options > 1) {
-            await filterSelect.selectOption({ index: 1 });
-            await page.waitForTimeout(500);
-            
-            // リセットボタンをクリック
-            await resetButton.click();
-            await page.waitForTimeout(500);
-            
-            // フィルターがリセットされることを確認
-            const selectedValue = await filterSelect.inputValue();
-            expect(selectedValue).toBe('');
-          }
-        }
-      } else {
-        test.skip();
       }
     });
   });

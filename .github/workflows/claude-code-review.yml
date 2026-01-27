@@ -17,11 +17,11 @@ jobs:
     # PRに対するレビュー、またはPRコメントで @claude-code と呼び出された場合に実行
     if: |
       ((github.event_name == 'pull_request') ||
-       (github.event_name == 'issue_comment' && 
-        github.event.issue.pull_request && 
+       (github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
         contains(github.event.comment.body, '@claude-code'))) &&
       (github.event_name != 'issue_comment' ||
-       github.event.comment.author_association == 'OWNER' || 
+       github.event.comment.author_association == 'OWNER' ||
        github.event.comment.author_association == 'MEMBER' ||
        github.event.comment.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
@@ -34,22 +34,133 @@ jobs:
       - name: Run Claude Code Review
         uses: anthropics/claude-code-action@v1.0.0
         with:
-          # Claude Code サブスクリプションを使用（APIキー不要）
           use_bedrock: false
           use_vertex: false
-          
-          # PRレビューの場合は自動的にdiffをレビュー
-          # コメントで呼び出された場合はそのコメントに対応
+
           direct_prompt: |
-            このPull Requestをレビューしてください。以下の観点でフィードバックをお願いします：
-            
-            1. **概要**: 変更内容の簡潔な要約
-            2. **良い点**: コードの良い点
-            3. **改善提案**: 改善が必要な箇所と具体的な提案
-            4. **セキュリティ**: セキュリティ上の懸念があれば指摘
-            5. **総合評価**: 全体的な評価
-            
+            このPull Requestをレビューしてください。以下のフォーマットで回答してください：
+
+            ## Walkthrough
+
+            このPRの変更内容を**1つの段落**で要約してください。CodeRabbitスタイルで：
+            - 主要な変更点を技術的に正確に記述
+            - 「〜を追加」「〜を変更」「〜を削除」など具体的な動詞を使用
+            - 影響範囲や目的を明確に
+            - ポエム的・抽象的な表現は禁止（「改善」「最適化」「リファクタリング」だけでは不可。何をどう変えたか書く）
+
+            ## Changes
+
+            | ファイル | 変更内容 |
+            |---------|---------|
+            | `path/to/file.php` | 具体的な変更内容を1行で |
+            | `path/to/file2.php` | 具体的な変更内容を1行で |
+
+            ※ 全ての変更ファイルをテーブル形式で列挙
+
+            ## Sequence Diagram (該当する場合のみ)
+
+            処理フローに大きな変更がある場合、mermaidでシーケンス図を記述：
+            ```mermaid
+            sequenceDiagram
+                participant User
+                participant Server
+                User->>Server: Request
+                Server-->>User: Response
+            ```
+
+            ## Issue要件の達成状況
+
+            関連Issueがある場合、要件を**すべて**チェック：
+            | 要件 | 状態 | 詳細 |
+            |-----|------|------|
+            | 要件1の内容 | :white_check_mark: 達成 / :x: 未達成 | 理由 |
+            | 要件2の内容 | :white_check_mark: 達成 / :x: 未達成 | 理由 |
+
+            **本来の目的を達成できているか？** → Yes/No と理由
+
+            ## Assessment
+
+            | カテゴリ | 評価 | コメント |
+            |---------|------|---------|
+            | コード品質 | :star::star::star::star::star: | 評価理由 |
+            | セキュリティ | :star::star::star::star::star: | 評価理由 |
+            | テスト | :star::star::star::star::star: | 評価理由 |
+
+            ## Actionable Comments
+
+            改善が必要な箇所があれば、以下の形式で：
+
+            <details>
+            <summary>📝 path/to/file.php (行番号)</summary>
+
+            **問題**: 問題の説明
+            **提案**:
+            ```php
+            // 修正後のコード例
+            ```
+            </details>
+
+            ## Test Requirements
+
+            このPRの変更に対して、テストコードが必要かどうかを判定してください。
+
+            **テストが書けるか判定**:
+            - [ ] ビジネスロジックの変更がある → **単体テスト必須**
+            - [ ] API/エンドポイントの変更がある → **結合テスト必須**
+            - [ ] UIの変更がある → **E2Eテスト推奨**
+            - [ ] 設定ファイルのみの変更 → テスト不要
+
+            **テストコードの有無**:
+            - このPRにテストコードが含まれているか: Yes / No
+            - テストが必要なのに含まれていない場合: :warning: **テストコードの追加を強く推奨**
+
+            **推奨テストケース** (テストが必要な場合):
+
+            以下のテストケースを実装してください：
+
+            ```
+            テスト対象: [関数名/クラス名]
+
+            1. 正常系テスト
+               - [具体的なテストケース1]
+               - [具体的なテストケース2]
+
+            2. 異常系テスト
+               - [エッジケース1]
+               - [エラーハンドリング1]
+
+            3. 境界値テスト (該当する場合)
+               - [境界値ケース1]
+            ```
+
+            **テストコード例** (可能な場合):
+            ```php
+            // または適切な言語で
+            class ExampleTest extends TestCase
+            {
+                public function test_example(): void
+                {
+                    // テストコードの例
+                }
+            }
+            ```
+
+            ## 本番デプロイ前チェックリスト
+
+            > :warning: **重要**: mainブランチへのマージで**本番環境(musashi)に自動デプロイ**されます
+
+            レビュアーは以下を確認してください：
+            - [ ] ステージング環境(develop→ritmo)で動作確認済み
+            - [ ] 本番環境固有の設定に問題なし
+            - [ ] DBへの影響確認済み
+            - [ ] キャッシュクリアの要否確認済み
+            - [ ] ロールバック手順把握済み
+
+            ## Summary
+
+            **マージ判定**: :green_circle: Approve / :yellow_circle: 軽微な修正後Approve / :red_circle: 要修正
+
+            ---
             日本語で回答してください。
-          
-          # タイムアウト設定（大きなPRやサービス負荷時を考慮して20分に設定）
+
           timeout_minutes: 20

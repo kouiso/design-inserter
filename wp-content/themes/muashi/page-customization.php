@@ -28,7 +28,7 @@ get_header();
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="<?php echo URL_SUSTAINABILITY; ?>" class="navigation__item-title">
+                    <a href="<?php echo URL_SUSTAINABLE_BUSINESS; ?>" class="navigation__item-title">
                     サステナブルなビジネス展開
                     </a>
                 </li>

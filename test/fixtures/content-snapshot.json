@@ -1,0 +1,1036 @@
+{
+  "capturedAt": "2026-01-20T09:56:33.689Z",
+  "environment": "local",
+  "baseURL": "http://localhost:10010",
+  "archives": {
+    "career": {
+      "path": "/career/",
+      "title": "採用情報",
+      "totalCount": 6,
+      "posts": [
+        {
+          "title": "【池袋】CSR推進業務★業界・職種未経験から携われる！",
+          "url": "http://localhost:10010/career/%e3%80%90%e6%b1%a0%e8%a2%8b%e3%80%91csr%e6%8e%a8%e9%80%b2%e6%a5%ad%e5%8b%99%e2%98%85%e6%a5%ad%e7%95%8c%e3%83%bb%e8%81%b7%e7%a8%ae%e6%9c%aa%e7%b5%8c%e9%a8%93%e3%81%8b%e3%82%89%e6%90%ba%e3%82%8f/",
+          "order": 1
+        },
+        {
+          "title": "【東京/人事】人事経験者歓迎★グローバル環境/制度設計/教育体系構築/採用まで",
+          "url": "http://localhost:10010/career/%e3%80%90%e6%9d%b1%e4%ba%ac-%e4%ba%ba%e4%ba%8b%e3%80%91%e4%ba%ba%e4%ba%8b%e7%b5%8c%e9%a8%93%e8%80%85%e6%ad%93%e8%bf%8e%e2%98%85%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e7%92%b0%e5%a2%83-%e5%88%b6/",
+          "order": 2
+        },
+        {
+          "title": "27年卒向け　武蔵塗料2Day仕事体験",
+          "url": "http://localhost:10010/career/27%e5%b9%b4%e5%8d%92%e5%90%91%e3%81%91%e3%80%80%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%992day%e4%bb%95%e4%ba%8b%e4%bd%93%e9%a8%93%e3%80%80/",
+          "order": 3
+        },
+        {
+          "title": "研究開発・製品開発技術",
+          "url": "http://localhost:10010/career/%e7%a0%94%e7%a9%b6%e9%96%8b%e7%99%ba%e3%83%bb%e8%a3%bd%e5%93%81%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e3%81%ae%e5%8b%9f%e9%9b%86-2/",
+          "order": 4
+        },
+        {
+          "title": "研究開発・製品開発技術・新卒の募集",
+          "url": "http://localhost:10010/career/%e7%a0%94%e7%a9%b6%e9%96%8b%e7%99%ba%e3%83%bb%e8%a3%bd%e5%93%81%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e3%81%ae%e5%8b%9f%e9%9b%86/",
+          "order": 5
+        },
+        {
+          "title": "エンジニアリングの募集",
+          "url": "http://localhost:10010/career/%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%8b%e3%82%a2%e3%83%aa%e3%83%b3%e3%82%b0%e3%81%ae%e5%8b%9f%e9%9b%86/",
+          "order": 6
+        }
+      ],
+      "status": 200
+    },
+    "interview": {
+      "path": "/career/interview/",
+      "title": "インタビュー",
+      "totalCount": 28,
+      "posts": [
+        {
+          "title": "海外営業部・部長、菊池 ペーテルさん",
+          "url": "http://localhost:10010/career/interview/%e6%b5%b7%e5%a4%96%e5%96%b6%e6%a5%ad%e9%83%a8%e3%83%bb%e9%83%a8%e9%95%b7%e3%80%81%e8%8f%8a%e6%b1%a0-%e3%83%9a%e3%83%bc%e3%83%86%e3%83%ab%e3%81%95%e3%82%93/",
+          "order": 1
+        },
+        {
+          "title": "代表取締役（社長）の福井 裕美子さん",
+          "url": "http://localhost:10010/career/interview/%e4%bb%a3%e8%a1%a8%e5%8f%96%e7%b7%a0%e5%bd%b9%e3%81%ae%e7%a6%8f%e4%ba%95-%e8%a3%95%e7%be%8e%e5%ad%90%e3%81%95%e3%82%93/",
+          "order": 2
+        },
+        {
+          "title": "営業部の宮原 李歩さん",
+          "url": "http://localhost:10010/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%ae%ae%e5%8e%9f-%e6%9d%8e%e6%ad%a9%e3%81%95%e3%82%93/",
+          "order": 3
+        },
+        {
+          "title": "営業部の前井 翔さん",
+          "url": "http://localhost:10010/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%89%8d%e4%ba%95-%e7%bf%94%e3%81%95%e3%82%93/",
+          "order": 4
+        },
+        {
+          "title": "開発技術本部の清水 里帆さん",
+          "url": "http://localhost:10010/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e6%9c%ac%e9%83%a8%e3%81%ae%e6%b8%85%e6%b0%b4-%e9%87%8c%e5%b8%86%e3%81%95%e3%82%93/",
+          "order": 5
+        },
+        {
+          "title": "開発技術部の橋北 幸多朗さん",
+          "url": "http://localhost:10010/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e6%a9%8b%e5%8c%97-%e5%b9%b8%e5%a4%9a%e6%9c%97%e3%81%95%e3%82%93/",
+          "order": 6
+        },
+        {
+          "title": "開発技術部の瀬戸 智行さん",
+          "url": "http://localhost:10010/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e7%80%ac%e6%88%b8-%e6%99%ba%e8%a1%8c%e3%81%95%e3%82%93/",
+          "order": 7
+        },
+        {
+          "title": "品質保証部の山﨑 迪代さん",
+          "url": "http://localhost:10010/career/interview/%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc%e9%83%a8%e3%81%ae%e5%b1%b1%ef%a8%91-%e8%bf%aa%e4%bb%a3%e3%81%95%e3%82%93/",
+          "order": 8
+        },
+        {
+          "title": "人事総務本部、部長の長澤 俊太郎さん",
+          "url": "http://localhost:10010/career/interview/%e4%ba%ba%e4%ba%8b%e7%b7%8f%e5%8b%99%e6%9c%ac%e9%83%a8%e3%80%81%e9%83%a8%e9%95%b7%e3%81%ae%e9%95%b7%e6%be%a4-%e4%bf%8a%e5%a4%aa%e9%83%8e%e3%81%95%e3%82%93/",
+          "order": 9
+        },
+        {
+          "title": "生産部・生産技術課の伊東 訓さん",
+          "url": "http://localhost:10010/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e7%94%9f%e7%94%a3%e6%8a%80%e8%a1%93%e8%aa%b2%e3%81%ae%e4%bc%8a%e6%9d%b1-%e8%a8%93%e3%81%95%e3%82%93/",
+          "order": 10
+        },
+        {
+          "title": "CSR推進室の満尾 朋美さん",
+          "url": "http://localhost:10010/career/interview/csr%e6%8e%a8%e9%80%b2%e5%ae%a4%e3%81%ae%e6%ba%80%e5%b0%be-%e6%9c%8b%e7%be%8e%e3%81%95%e3%82%93/",
+          "order": 11
+        },
+        {
+          "title": "生産部・調色課の金澤 崇さん",
+          "url": "http://localhost:10010/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%81%ae%e9%87%91%e6%be%a4-%e5%b4%87%e3%81%95%e3%82%93/",
+          "order": 12
+        },
+        {
+          "title": "調達物流本部の井関 香理さん",
+          "url": "http://localhost:10010/career/interview/%e8%aa%bf%e9%81%94%e7%89%a9%e6%b5%81%e6%9c%ac%e9%83%a8%e3%81%ae%e4%ba%95%e9%96%a2-%e9%a6%99%e7%90%86%e3%81%95%e3%82%93/",
+          "order": 13
+        },
+        {
+          "title": "生産部生産課の茂木 一樹さん",
+          "url": "http://localhost:10010/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e7%94%9f%e7%94%a3%e8%aa%b2%e3%81%ae%e8%8c%82%e6%9c%a8-%e4%b8%80%e6%a8%b9%e3%81%95%e3%82%93/",
+          "order": 14
+        },
+        {
+          "title": "執行役員・品質保証本部本部長を兼任の稲垣 大さん",
+          "url": "http://localhost:10010/career/interview/%e5%9f%b7%e8%a1%8c%e5%bd%b9%e5%93%a1%e3%83%bb%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc%e6%9c%ac%e9%83%a8%e6%9c%ac%e9%83%a8%e9%95%b7%e3%82%92%e5%85%bc%e4%bb%bb%e3%81%ae%e7%a8%b2%e5%9e%a3-%e5%a4%a7%e3%81%95/",
+          "order": 15
+        },
+        {
+          "title": "生産部・配送課の大花 美和さん",
+          "url": "http://localhost:10010/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e9%85%8d%e9%80%81%e8%aa%b2%e3%81%ae%e5%a4%a7%e8%8a%b1-%e7%be%8e%e5%92%8c%e3%81%95%e3%82%93/",
+          "order": 16
+        },
+        {
+          "title": "財務経理部の宮本 真由子さん",
+          "url": "http://localhost:10010/career/interview/%e8%b2%a1%e5%8b%99%e7%b5%8c%e7%90%86%e9%83%a8%e3%81%ae%e5%ae%ae%e6%9c%ac-%e7%9c%9f%e7%94%b1%e5%ad%90%e3%81%95%e3%82%93/",
+          "order": 17
+        },
+        {
+          "title": "開発技術部の金田 公介さん",
+          "url": "http://localhost:10010/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e9%87%91%e7%94%b0-%e5%85%ac%e4%bb%8b%e3%81%95%e3%82%93/",
+          "order": 18
+        },
+        {
+          "title": "営業部の岡田 光正さんの一日に密着",
+          "url": "http://localhost:10010/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%b2%a1%e7%94%b0-%e5%85%89%e6%ad%a3%e3%81%95%e3%82%93%e3%81%ae%e4%b8%80%e6%97%a5%e3%81%ab%e5%af%86%e7%9d%80/",
+          "order": 19
+        },
+        {
+          "title": "生産部・調色課、早川 裕さんの一日に密着",
+          "url": "http://localhost:10010/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%80%81%e6%97%a9%e5%b7%9d-%e8%a3%95%e3%81%95%e3%82%93%e3%81%ae%e4%b8%80%e6%97%a5%e3%81%ab%e5%af%86%e7%9d%80/",
+          "order": 20
+        },
+        {
+          "title": "武蔵塗料タイの拠点長、浅田 哲也さん",
+          "url": "http://localhost:10010/career/interview/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%bf%e3%82%a4%e3%81%ae%e6%8b%a0%e7%82%b9%e9%95%b7%e3%80%81%e6%b5%85%e7%94%b0-%e5%93%b2%e4%b9%9f%e3%81%95%e3%82%93/",
+          "order": 21
+        },
+        {
+          "title": "武蔵塗料重慶・生産部部長（生産/品質保証/調達部門）の田中 靖博さん",
+          "url": "http://localhost:10010/career/interview/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e9%87%8d%e6%85%b6%e3%83%bb%e7%94%9f%e7%94%a3%e9%83%a8%e9%83%a8%e9%95%b7%ef%bc%88%e7%94%9f%e7%94%a3-%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc-%e8%aa%bf%e9%81%94%e9%83%a8/",
+          "order": 22
+        },
+        {
+          "title": "取締役の山田 純也さん",
+          "url": "http://localhost:10010/career/interview/%e6%b5%b7%e5%a4%96%e5%96%b6%e6%a5%ad%e9%83%a8%e3%83%bb%e9%83%a8%e9%95%b7%e3%81%ae%e8%8f%8a%e6%b1%a0%e3%83%9a%e3%83%bc%e3%83%86%e3%83%ab%e3%81%95%e3%82%93/",
+          "order": 23
+        },
+        {
+          "title": "Global Marketing ＆ Corporate Communications 部長の西口 昌宏さん",
+          "url": "http://localhost:10010/career/interview/global-marketing-%ef%bc%86-corporate-communications%e9%83%a8%e9%95%b7%e3%80%81%e8%a5%bf%e5%8f%a3%e6%98%8c%e5%ae%8f%e3%81%95%e3%82%93/",
+          "order": 24
+        },
+        {
+          "title": "調達物流本部の島田 慧花さん",
+          "url": "http://localhost:10010/career/interview/%e8%aa%bf%e9%81%94%e7%89%a9%e6%b5%81%e6%9c%ac%e9%83%a8%e3%81%a7%e6%b4%bb%e8%ba%8d%e3%81%ae%e5%b3%b6%e7%94%b0%e6%85%a7%e8%8a%b1%e3%81%95%e3%82%93/",
+          "order": 25
+        },
+        {
+          "title": "ホーチミン拠点・営業の山崎 洋輔さん",
+          "url": "http://localhost:10010/career/interview/%e3%83%9b%e3%83%bc%e3%83%81%e3%83%9f%e3%83%b3%e6%8b%a0%e7%82%b9%e3%83%bb%e5%96%b6%e6%a5%ad%e3%81%ae%e5%b1%b1%e5%b4%8e-%e6%b4%8b%e8%bc%94%e3%81%95%e3%82%93/",
+          "order": 26
+        },
+        {
+          "title": "生産部・調色課の石村 太一さん",
+          "url": "http://localhost:10010/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%81%a7%e6%b4%bb%e8%ba%8d%e3%81%ae%e7%9f%b3%e6%9d%91-%e5%a4%aa%e4%b8%80%e3%81%95%e3%82%93/",
+          "order": 27
+        },
+        {
+          "title": "財務部、課長の三好 恵美さん",
+          "url": "http://localhost:10010/career/interview/%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc-%e8%a8%98%e4%ba%8b/",
+          "order": 28
+        }
+      ],
+      "status": 200
+    },
+    "globalnetwork": {
+      "path": "/global-network/",
+      "title": "グローバルネットワーク",
+      "totalCount": 11,
+      "posts": [
+        {
+          "title": "マレーシア武蔵",
+          "url": "http://localhost:10010/global-network/%e3%83%9e%e3%83%ac%e3%83%bc%e3%82%b7%e3%82%a2%e6%ad%a6%e8%94%b5/",
+          "order": 1
+        },
+        {
+          "title": "インドネシア武蔵塗料",
+          "url": "http://localhost:10010/global-network/%e3%82%a4%e3%83%b3%e3%83%89%e3%83%8d%e3%82%b7%e3%82%a2%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/",
+          "order": 2
+        },
+        {
+          "title": "重慶武蔵塗料有限公司",
+          "url": "http://localhost:10010/global-network/%e9%87%8d%e6%85%b6%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 3
+        },
+        {
+          "title": "武蔵塗料インド",
+          "url": "http://localhost:10010/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%a4%e3%83%b3%e3%83%89/",
+          "order": 4
+        },
+        {
+          "title": "中山武蔵塗料有限公司",
+          "url": "http://localhost:10010/global-network/%e4%b8%ad%e5%b1%b1%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 5
+        },
+        {
+          "title": "天津武蔵塗料有限公司",
+          "url": "http://localhost:10010/global-network/%e5%a4%a9%e6%b4%a5%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 6
+        },
+        {
+          "title": "蘇州武蔵塗料有限公司",
+          "url": "http://localhost:10010/global-network/%e8%98%87%e5%b7%9e%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 7
+        },
+        {
+          "title": "韓国武蔵塗料",
+          "url": "http://localhost:10010/global-network/%e9%9f%93%e5%9b%bd%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/",
+          "order": 8
+        },
+        {
+          "title": "武蔵塗料　ベトナム",
+          "url": "http://localhost:10010/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%83%99%e3%83%88%e3%83%8a%e3%83%a0/",
+          "order": 9
+        },
+        {
+          "title": "武蔵塗料　タイランド",
+          "url": "http://localhost:10010/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%82%bf%e3%82%a4%e3%83%a9%e3%83%b3%e3%83%89/",
+          "order": 10
+        },
+        {
+          "title": "武蔵塗料　ハンガリー",
+          "url": "http://localhost:10010/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%83%8f%e3%83%b3%e3%82%ac%e3%83%aa%e3%83%bc/",
+          "order": 11
+        }
+      ],
+      "status": 200
+    },
+    "product": {
+      "path": "/product/",
+      "title": "製品情報",
+      "totalCount": 60,
+      "posts": [
+        {
+          "title": "AQUACO SUNSHINE",
+          "url": "http://localhost:10010/product/aquaco-sunshine-aq-chg62/",
+          "order": 1
+        },
+        {
+          "title": "AQUACO HAIUREX P",
+          "url": "http://localhost:10010/product/aquaco-haiurex-p-aq-con62/",
+          "order": 2
+        },
+        {
+          "title": "ECO PANUCO MG",
+          "url": "http://localhost:10010/product/eco-panuco-mg-ec-nmp84/",
+          "order": 3
+        },
+        {
+          "title": "VITA SUNSHINE",
+          "url": "http://localhost:10010/product/vita-sunshine-ea-nvh62/",
+          "order": 4
+        },
+        {
+          "title": "ECO PANUCO MG",
+          "url": "http://localhost:10010/product/eco-panuco-mg-ec-nmp83/",
+          "order": 5
+        },
+        {
+          "title": "VITA ULTRA VIN",
+          "url": "http://localhost:10010/product/vita-ultra-vin-ea-nuv80/",
+          "order": 6
+        },
+        {
+          "title": "ECO PANACO PA",
+          "url": "http://localhost:10010/product/eco-panaco-pa-ec-nnb86/",
+          "order": 7
+        },
+        {
+          "title": "VITA UREX",
+          "url": "http://localhost:10010/product/vita-urex-ea-nvb62-m/",
+          "order": 8
+        },
+        {
+          "title": "ECO MIRROR 49",
+          "url": "http://localhost:10010/product/eco-mirror-49-ec-ntm59/",
+          "order": 9
+        },
+        {
+          "title": "ECO MIRROR 49",
+          "url": "http://localhost:10010/product/eco-mirror-49-ec-ntm62/",
+          "order": 10
+        },
+        {
+          "title": "ECO MIRROR 49",
+          "url": "http://localhost:10010/product/eco-mirror-49-ec-ntm82/",
+          "order": 11
+        },
+        {
+          "title": "PUROCLEAR",
+          "url": "http://localhost:10010/product/puroclear-ed-naa64/",
+          "order": 12
+        },
+        {
+          "title": "VITA RABASAN",
+          "url": "http://localhost:10010/product/vita-rabasan-ea-nvr64/",
+          "order": 13
+        },
+        {
+          "title": "VITA PANUCO",
+          "url": "http://localhost:10010/product/vita-panuco-ea-nva86/",
+          "order": 14
+        },
+        {
+          "title": "VITA PANUCO PP",
+          "url": "http://localhost:10010/product/vita-panuco-pp-ea-nvp81/",
+          "order": 15
+        },
+        {
+          "title": "VITA UREX",
+          "url": "http://localhost:10010/product/vita-urex-ea-nvb62/",
+          "order": 16
+        },
+        {
+          "title": "ECO ULTRA VIN CAR IP",
+          "url": "http://localhost:10010/product/eco-ultra-vin-car-ip-ec-nuv10/",
+          "order": 17
+        },
+        {
+          "title": "ECO HAIUREX KL",
+          "url": "http://localhost:10010/product/eco-haiurex-kl-ec-kl62/",
+          "order": 18
+        },
+        {
+          "title": "ECO METALD",
+          "url": "http://localhost:10010/product/eco-metald-ec-gb31-k/",
+          "order": 19
+        },
+        {
+          "title": "ULTRA VIN BV",
+          "url": "http://localhost:10010/product/ultra-vin-bv-uv25-bv/",
+          "order": 20
+        },
+        {
+          "title": "ULTRA VIN BV MATT",
+          "url": "http://localhost:10010/product/ultra-vin-bv-matt-uv26-bv/",
+          "order": 21
+        },
+        {
+          "title": "ECO PANUCO PP",
+          "url": "http://localhost:10010/product/eco-panuco-pp-ec-sd81/",
+          "order": 22
+        },
+        {
+          "title": "ECO METALD",
+          "url": "http://localhost:10010/product/eco-metald-ec-gm62-dr/",
+          "order": 23
+        },
+        {
+          "title": "NEORABASAN",
+          "url": "http://localhost:10010/product/neorabasan-ta64-dr/",
+          "order": 24
+        },
+        {
+          "title": "ECO HAIUREX P GRANDE BONUL",
+          "url": "http://localhost:10010/product/eco-haiurex-p-grande-bonul-ec-gpx79-bf/",
+          "order": 25
+        },
+        {
+          "title": "ECO HAIUREX P",
+          "url": "http://localhost:10010/product/eco-haiurex-p-ec-p79-f/",
+          "order": 26
+        },
+        {
+          "title": "ECO HAIUREX P",
+          "url": "http://localhost:10010/product/eco-haiurex-p-ec-p79-bf/",
+          "order": 27
+        },
+        {
+          "title": "ECO HAIUREX P",
+          "url": "http://localhost:10010/product/eco-haiurex-p-ec-p79-f-2/",
+          "order": 28
+        },
+        {
+          "title": "AQUACO ULTRA VIN",
+          "url": "http://localhost:10010/product/aquaco-ultra-vin-aq-uv11/",
+          "order": 29
+        },
+        {
+          "title": "ECO PLA-ACE PP",
+          "url": "http://localhost:10010/product/eco-pla-ace-pp-ec-tk52/",
+          "order": 30
+        },
+        {
+          "title": "ECO HAIUREX SR",
+          "url": "http://localhost:10010/product/eco-haiurex-sr-ec-sr62/",
+          "order": 31
+        },
+        {
+          "title": "ECO PLA-ACE",
+          "url": "http://localhost:10010/product/eco-pla-ace-ec-fg50/",
+          "order": 32
+        },
+        {
+          "title": "ECO METALD",
+          "url": "http://localhost:10010/product/eco-metald-ec-gm62/",
+          "order": 33
+        },
+        {
+          "title": "ECO METALD",
+          "url": "http://localhost:10010/product/eco-metald-ec-gm62-m/",
+          "order": 34
+        },
+        {
+          "title": "ECO METALD",
+          "url": "http://localhost:10010/product/eco-metald-ec-gb31/",
+          "order": 35
+        },
+        {
+          "title": "AQUACO PANUCO",
+          "url": "http://localhost:10010/product/aquaco-panuco-aq-pb80/",
+          "order": 36
+        },
+        {
+          "title": "ECO NEO MECKYANTEX",
+          "url": "http://localhost:10010/product/eco-neo-meckyantex-ec-ne62/",
+          "order": 37
+        },
+        {
+          "title": "METALD",
+          "url": "http://localhost:10010/product/metald-gr33/",
+          "order": 38
+        },
+        {
+          "title": "ECO ABAS UREX MATT",
+          "url": "http://localhost:10010/product/eco-abas-urex-matt-ec-am62/",
+          "order": 39
+        },
+        {
+          "title": "ECO ABAS UREX",
+          "url": "http://localhost:10010/product/eco-abas-urex-ec-ax62/",
+          "order": 40
+        },
+        {
+          "title": "ECO SUNSHINE SUPER MH",
+          "url": "http://localhost:10010/product/eco-sunshine-super-mh-ec-mh62-t/",
+          "order": 41
+        },
+        {
+          "title": "ECO HAIUREX P BRIGHTONE",
+          "url": "http://localhost:10010/product/eco-haiurex-p-brightone-ec-sw62/",
+          "order": 42
+        },
+        {
+          "title": "ECO HAIUREX P",
+          "url": "http://localhost:10010/product/eco-haiurex-p-ec-yp62-as/",
+          "order": 43
+        },
+        {
+          "title": "ECO PANUCO PP",
+          "url": "http://localhost:10010/product/eco-panuco-pp-ec-sg81/",
+          "order": 44
+        },
+        {
+          "title": "ARTONE",
+          "url": "http://localhost:10010/product/artone-lh33/",
+          "order": 45
+        },
+        {
+          "title": "AQUACO HAIUREX P",
+          "url": "http://localhost:10010/product/aquaco-haiurex-p-aq-pb11-a/",
+          "order": 46
+        },
+        {
+          "title": "NEORABASAN",
+          "url": "http://localhost:10010/product/neorabasan-ta64/",
+          "order": 47
+        },
+        {
+          "title": "AQUACO HAIUREX P",
+          "url": "http://localhost:10010/product/aquaco-haiurex-p-aq-pb11/",
+          "order": 48
+        },
+        {
+          "title": "AQUACO PLA-ACE",
+          "url": "http://localhost:10010/product/aquaco-pla-ace-aq-pa13/",
+          "order": 49
+        },
+        {
+          "title": "ULTRA VIN",
+          "url": "http://localhost:10010/product/ultra-vin-uva72/",
+          "order": 50
+        },
+        {
+          "title": "ECO HAIUREX P GRANDE BONUL",
+          "url": "http://localhost:10010/product/eco-haiurex-p-grande-bonul-ec-gpx79/",
+          "order": 51
+        },
+        {
+          "title": "NEORABASAN SOFT",
+          "url": "http://localhost:10010/product/neorabasan-soft-ns781/",
+          "order": 52
+        },
+        {
+          "title": "ECO HAIUREX P LASER ETCHING",
+          "url": "http://localhost:10010/product/eco-haiurex-p-laser-etching-ec-lp79/",
+          "order": 53
+        },
+        {
+          "title": "ECO HAIUREX P",
+          "url": "http://localhost:10010/product/eco-haiurex-p-ec-p79/",
+          "order": 54
+        },
+        {
+          "title": "NEORABASAN",
+          "url": "http://localhost:10010/product/neorabasan-n781/",
+          "order": 55
+        },
+        {
+          "title": "ULTRA VIN",
+          "url": "http://localhost:10010/product/ultra-vin-uv82/",
+          "order": 56
+        },
+        {
+          "title": "NEOPEACHSKIN",
+          "url": "http://localhost:10010/product/neopeachskin-n783/",
+          "order": 57
+        },
+        {
+          "title": "PANUCO PA",
+          "url": "http://localhost:10010/product/panuco-pa-n894/",
+          "order": 58
+        },
+        {
+          "title": "ARMOR TOP",
+          "url": "http://localhost:10010/product/armor-top-at20/",
+          "order": 59
+        },
+        {
+          "title": "PLA-ACE",
+          "url": "http://localhost:10010/product/pla-ace-k716/",
+          "order": 60
+        }
+      ],
+      "status": 200
+    },
+    "news": {
+      "path": "/news/",
+      "title": "ニュース",
+      "totalCount": 4,
+      "posts": [
+        {
+          "title": "LGBTフレンドリー宣言",
+          "url": "http://localhost:10010/news/lgbt%e3%83%95%e3%83%ac%e3%83%b3%e3%83%89%e3%83%aa%e3%83%bc%e5%ae%a3%e8%a8%80/",
+          "order": 1
+        },
+        {
+          "title": "【受賞】武蔵塗料の本社ビルは、2 0 2 4年のAsia Architecture Design Awardsで受賞しました。",
+          "url": "http://localhost:10010/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%ae%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%81%af%e3%80%812-0-2-4%e5%b9%b4%e3%81%aeasia-architecture-design-awards%e3%81%a7%e5%8f%97%e8%b3%9e%e3%81%97%e3%81%be/",
+          "order": 2
+        },
+        {
+          "title": "【受賞】武蔵塗料は「WORLD CLEANUP DAY 2024 の企業部門でグローバルネットワー ク賞」に選出されました。",
+          "url": "http://localhost:10010/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%af%e3%80%8cworld-cleanup-day-2024-%e3%81%ae%e4%bc%81%e6%a5%ad%e9%83%a8%e9%96%80%e3%81%a7%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e3%83%8d%e3%83%83/",
+          "order": 3
+        },
+        {
+          "title": "【受賞】武蔵塗料本社ビル　「東京バーティカルレインボー」は「Top 10 Commercial Posts of 2024」に選ばれました。",
+          "url": "http://localhost:10010/news/%e3%80%90%e5%8f%97%e8%b3%9e%e3%80%91w1-%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%80%80%e3%80%8c%e6%9d%b1%e4%ba%ac%e3%83%90%e3%83%bc%e3%83%86%e3%82%a3%e3%82%ab/",
+          "order": 4
+        }
+      ],
+      "status": 200
+    },
+    "media": {
+      "path": "/media-page/",
+      "title": "Pick up",
+      "totalCount": 3,
+      "posts": [
+        {
+          "title": "「カラーウォーズ～華麗なる色の仕掛け人たち～」 (2007年5月8日放送)ＴＶ番組『ガイアの夜明け』",
+          "url": "http://localhost:10010/media-page/%e3%80%8c%e3%82%ab%e3%83%a9%e3%83%bc%e3%82%a6%e3%82%a9%e3%83%bc%e3%82%ba%ef%bd%9e%e8%8f%af%e9%ba%97%e3%81%aa%e3%82%8b%e8%89%b2%e3%81%ae%e4%bb%95%e6%8e%9b%e3%81%91%e4%ba%ba%e3%81%9f%e3%81%a1%ef%bd%9e/",
+          "order": 1
+        },
+        {
+          "title": "2025年 日本国際博覧会（大阪・関西万博）」の日本館において、「PAINTOMO」を公開しました。",
+          "url": "http://localhost:10010/media-page/2025%e5%b9%b4-%e6%97%a5%e6%9c%ac%e5%9b%bd%e9%9a%9b%e5%8d%9a%e8%a6%a7%e4%bc%9a%ef%bc%88%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%ef%bc%89%e3%80%8d%e3%81%ae%e6%97%a5%e6%9c%ac/",
+          "order": 2
+        },
+        {
+          "title": "福井社長、レノボ（Lenovo）のインタビューを受けました。",
+          "url": "http://localhost:10010/media-page/%e7%a6%8f%e4%ba%95%e7%a4%be%e9%95%b7%e3%80%81%e3%83%ac%e3%83%8e%e3%83%9c%ef%bc%88lenovo%ef%bc%89%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc%e3%82%92%e5%8f%97%e3%81%91%e3%81%be/",
+          "order": 3
+        }
+      ],
+      "status": 200
+    },
+    "featured": {
+      "path": "/featured/",
+      "title": "注目製品",
+      "totalCount": 0,
+      "posts": [],
+      "status": 200
+    },
+    "voice": {
+      "path": "/voice/",
+      "title": "お客様の声",
+      "totalCount": 6,
+      "posts": [
+        {
+          "title": "内装加飾色開発の最重要パートナー",
+          "url": "http://localhost:10010/voice/%e3%81%8a%e5%ae%a2%e6%a7%98%e3%81%ae%e5%a3%b0-%e8%a8%98%e4%ba%8b/",
+          "order": 1
+        },
+        {
+          "title": "本当のプロフェッショナル",
+          "url": "http://localhost:10010/voice/iot%e3%81%a7%e6%9c%aa%e6%9d%a5%e3%82%92%e5%a4%89%e3%81%88%e3%82%8b/",
+          "order": 2
+        },
+        {
+          "title": "独自の気風が育む豊かな人間性",
+          "url": "http://localhost:10010/voice/%e6%a0%b9%e6%80%a7%e3%81%a7%e3%81%ad%e3%81%98%e4%bc%8f%e3%81%9b%e3%82%8b%e3%82%88%e3%81%86%e3%81%aa%e4%bb%95%e4%ba%8b%e3%81%b6%e3%82%8a/",
+          "order": 3
+        },
+        {
+          "title": "感性を分かり合える存在",
+          "url": "http://localhost:10010/voice/%e6%84%9f%e6%80%a7%e3%82%92%e5%88%86%e3%81%8b%e3%82%8a%e5%90%88%e3%81%88%e3%82%8b%e5%ad%98%e5%9c%a8/",
+          "order": 4
+        },
+        {
+          "title": "常に挑戦する姿勢を手本に",
+          "url": "http://localhost:10010/voice/%e5%b8%b8%e3%81%ab%e6%8c%91%e6%88%a6%e3%81%99%e3%82%8b%e5%a7%bf%e5%8b%a2%e3%82%92%e6%89%8b%e6%9c%ac%e3%81%ab/",
+          "order": 5
+        },
+        {
+          "title": "ものづくりに、真摯な企業姿勢",
+          "url": "http://localhost:10010/voice/%e7%8b%ac%e8%87%aa%e3%81%ae%e6%b0%97%e9%a2%a8%e3%81%8c%e8%82%b2%e3%82%80%e8%b1%8a%e3%81%8b%e3%81%aa%e4%ba%ba%e9%96%93%e6%80%a7/",
+          "order": 6
+        }
+      ],
+      "status": 200
+    },
+    "faq": {
+      "path": "/faq/",
+      "title": "よくある質問",
+      "totalCount": 0,
+      "posts": [],
+      "status": 200
+    }
+  },
+  "topPage": {
+    "pickup": [
+      {
+        "title": "2025.12.28",
+        "url": "http://localhost:10010/media-page/%e3%80%8c%e3%82%ab%e3%83%a9%e3%83%bc%e3%82%a6%e3%82%a9%e3%83%bc%e3%82%ba%ef%bd%9e%e8%8f%af%e9%ba%97%e3%81%aa%e3%82%8b%e8%89%b2%e3%81%ae%e4%bb%95%e6%8e%9b%e3%81%91%e4%ba%ba%e3%81%9f%e3%81%a1%ef%bd%9e/"
+      },
+      {
+        "title": "2025.12.28",
+        "url": "http://localhost:10010/media-page/2025%e5%b9%b4-%e6%97%a5%e6%9c%ac%e5%9b%bd%e9%9a%9b%e5%8d%9a%e8%a6%a7%e4%bc%9a%ef%bc%88%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%ef%bc%89%e3%80%8d%e3%81%ae%e6%97%a5%e6%9c%ac/"
+      },
+      {
+        "title": "2025.12.28",
+        "url": "http://localhost:10010/media-page/%e7%a6%8f%e4%ba%95%e7%a4%be%e9%95%b7%e3%80%81%e3%83%ac%e3%83%8e%e3%83%9c%ef%bc%88lenovo%ef%bc%89%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc%e3%82%92%e5%8f%97%e3%81%91%e3%81%be/"
+      }
+    ],
+    "news": [
+      {
+        "title": "2025.10.06",
+        "url": "http://localhost:10010/news/lgbt%e3%83%95%e3%83%ac%e3%83%b3%e3%83%89%e3%83%aa%e3%83%bc%e5%ae%a3%e8%a8%80/"
+      },
+      {
+        "title": "2025.10.06",
+        "url": "http://localhost:10010/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%ae%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%81%af%e3%80%812-0-2-4%e5%b9%b4%e3%81%aeasia-architecture-design-awards%e3%81%a7%e5%8f%97%e8%b3%9e%e3%81%97%e3%81%be/"
+      },
+      {
+        "title": "2025.10.06",
+        "url": "http://localhost:10010/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%af%e3%80%8cworld-cleanup-day-2024-%e3%81%ae%e4%bc%81%e6%a5%ad%e9%83%a8%e9%96%80%e3%81%a7%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e3%83%8d%e3%83%83/"
+      }
+    ]
+  },
+  "navigation": {
+    "header": [
+      {
+        "title": "ホーム",
+        "url": "http://localhost:10010/"
+      },
+      {
+        "title": "環境キーワードでえらぶ",
+        "url": "http://localhost:10010/product/"
+      },
+      {
+        "title": "私たちについて",
+        "url": "http://localhost:10010/about-us/"
+      },
+      {
+        "title": "採用情報",
+        "url": "http://localhost:10010/career/"
+      },
+      {
+        "title": "お問い合わせ",
+        "url": "http://localhost:10010/contact/"
+      },
+      {
+        "title": "En",
+        "url": "https://en.musashipaint.com"
+      },
+      {
+        "title": "中文",
+        "url": "https://www.musashipaintchina.com/"
+      },
+      {
+        "title": "注目製品",
+        "url": "http://localhost:10010/featured/"
+      },
+      {
+        "title": "製品用途紹介",
+        "url": "http://localhost:10010/applications/"
+      },
+      {
+        "title": "会社概要",
+        "url": "http://localhost:10010/company/"
+      },
+      {
+        "title": "グローバルネットワーク",
+        "url": "http://localhost:10010/global-network/"
+      },
+      {
+        "title": "ヒストリー",
+        "url": "http://localhost:10010/history/"
+      },
+      {
+        "title": "サステナビリティ",
+        "url": "http://localhost:10010/sustainability/"
+      },
+      {
+        "title": "お客様の声",
+        "url": "http://localhost:10010/voice/"
+      },
+      {
+        "title": "よくある質問",
+        "url": "http://localhost:10010/faq/"
+      },
+      {
+        "title": "ニュース・お知らせ",
+        "url": "http://localhost:10010/news/"
+      },
+      {
+        "title": "メディア",
+        "url": "http://localhost:10010/media-page/"
+      },
+      {
+        "title": "Linkedin",
+        "url": "https://www.linkedin.com/company/musashi-paint-holdings/"
+      },
+      {
+        "title": "Instagram",
+        "url": "https://www.instagram.com/musashi_paint_official/"
+      },
+      {
+        "title": "Facebook",
+        "url": "https://www.facebook.com/musashipaintholdings/"
+      },
+      {
+        "title": "カタログをダウンロードする",
+        "url": "http://localhost:10010/download/"
+      }
+    ],
+    "footer": [
+      {
+        "title": "ホーム",
+        "url": "http://localhost:10010/"
+      },
+      {
+        "title": "製品について",
+        "url": "http://localhost:10010/product/"
+      },
+      {
+        "title": "用途でえらぶ",
+        "url": "http://localhost:10010/product/application/"
+      },
+      {
+        "title": "基材でえらぶ",
+        "url": "http://localhost:10010/product/material/"
+      },
+      {
+        "title": "意匠性でえらぶ",
+        "url": "http://localhost:10010/product/design/"
+      },
+      {
+        "title": "機能でえらぶ",
+        "url": "http://localhost:10010/product/function/"
+      },
+      {
+        "title": "環境キーワードでえらぶ",
+        "url": "http://localhost:10010/product/environment/"
+      },
+      {
+        "title": "注目製品",
+        "url": "http://localhost:10010/featured/"
+      },
+      {
+        "title": "製品用途紹介",
+        "url": "http://localhost:10010/applications/"
+      },
+      {
+        "title": "私たちについて",
+        "url": "http://localhost:10010/about-us/"
+      },
+      {
+        "title": "会社概要",
+        "url": "http://localhost:10010/company/"
+      },
+      {
+        "title": "グローバルネットワーク",
+        "url": "http://localhost:10010/global-network/"
+      },
+      {
+        "title": "ヒストリー",
+        "url": "http://localhost:10010/history/"
+      },
+      {
+        "title": "サステナビリティ",
+        "url": "http://localhost:10010/sustainability/"
+      },
+      {
+        "title": "お客様の声",
+        "url": "http://localhost:10010/voice/"
+      },
+      {
+        "title": "よくある質問",
+        "url": "http://localhost:10010/faq/"
+      },
+      {
+        "title": "ニュース",
+        "url": "http://localhost:10010/news/"
+      },
+      {
+        "title": "採用情報",
+        "url": "http://localhost:10010/career/"
+      },
+      {
+        "title": "お問い合わせ",
+        "url": "http://localhost:10010/contact/"
+      },
+      {
+        "title": "カタログダウンロード依頼",
+        "url": "http://localhost:10010/download/"
+      },
+      {
+        "title": "",
+        "url": "https://www.linkedin.com/company/musashi-paint-holdings/"
+      },
+      {
+        "title": "",
+        "url": "https://www.instagram.com/musashi_paint_official/"
+      },
+      {
+        "title": "",
+        "url": "https://www.facebook.com/musashipaintholdings/"
+      },
+      {
+        "title": "Pick up",
+        "url": "http://localhost:10010/media-page/"
+      },
+      {
+        "title": "プライバシーポリシー",
+        "url": "http://localhost:10010/privacy-policy/"
+      },
+      {
+        "title": "利用規約",
+        "url": "http://localhost:10010/terms/"
+      }
+    ]
+  },
+  "staticPages": [
+    {
+      "path": "/",
+      "title": "トップページ",
+      "status": 200
+    },
+    {
+      "path": "/about-us/",
+      "title": "私たちについて",
+      "status": 200
+    },
+    {
+      "path": "/company/",
+      "title": "会社概要",
+      "status": 200
+    },
+    {
+      "path": "/history/",
+      "title": "ヒストリー",
+      "status": 200
+    },
+    {
+      "path": "/sustainability/",
+      "title": "サステナビリティ",
+      "status": 200
+    },
+    {
+      "path": "/technology/",
+      "title": "テクノロジー",
+      "status": 200
+    },
+    {
+      "path": "/customization/",
+      "title": "カスタマイズ",
+      "status": 200
+    },
+    {
+      "path": "/contact/",
+      "title": "お問い合わせ",
+      "status": 200
+    },
+    {
+      "path": "/download/",
+      "title": "カタログダウンロード",
+      "status": 200
+    },
+    {
+      "path": "/privacy-policy/",
+      "title": "プライバシーポリシー",
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "title": "利用規約",
+      "status": 200
+    }
+  ],
+  "productCategories": [
+    {
+      "path": "/product/application/",
+      "title": "用途でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/material/",
+      "title": "基材でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/design/",
+      "title": "意匠性でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/function/",
+      "title": "機能でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/environment/",
+      "title": "環境キーワードでえらぶ",
+      "status": 200,
+      "itemCount": 12
+    }
+  ],
+  "seo": [
+    {
+      "path": "/",
+      "pageTitle": "トップページ",
+      "title": "MUSASHI PAINT",
+      "description": null,
+      "ogTitle": "武蔵塗料",
+      "ogImage": null
+    },
+    {
+      "path": "/product/",
+      "pageTitle": "製品情報",
+      "title": "| MUSASHI PAINT",
+      "description": null,
+      "ogTitle": "製品情報 - 武蔵塗料",
+      "ogImage": "http://localhost:10010/wp-content/uploads/2025/12/120308sbpantoneA.jpg"
+    },
+    {
+      "path": "/career/",
+      "pageTitle": "採用情報",
+      "title": "| MUSASHI PAINT",
+      "description": null,
+      "ogTitle": "採用情報 - 武蔵塗料",
+      "ogImage": "http://localhost:10010/wp-content/uploads/2025/11/zcqSMtb.jpg"
+    },
+    {
+      "path": "/contact/",
+      "pageTitle": "お問い合わせ",
+      "title": "| MUSASHI PAINT",
+      "description": null,
+      "ogTitle": "お問い合わせ - 武蔵塗料",
+      "ogImage": "http://localhost:10010/wp-content/uploads/2025/12/gettyimages-618280468-2048x2048-1.jpg"
+    }
+  ],
+  "externalLinks": [
+    {
+      "url": "https://en.musashipaint.com/",
+      "title": "英語サイト"
+    },
+    {
+      "url": "https://www.musashipaintchina.com/",
+      "title": "中国語サイト"
+    },
+    {
+      "url": "https://www.linkedin.com/company/musashi-paint-holdings/",
+      "title": "LinkedIn"
+    },
+    {
+      "url": "https://www.instagram.com/musashi_paint_official/",
+      "title": "Instagram"
+    },
+    {
+      "url": "https://www.facebook.com/musashipaintholdings/",
+      "title": "Facebook"
+    }
+  ]
+}

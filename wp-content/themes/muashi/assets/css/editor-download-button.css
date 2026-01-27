@@ -21,3 +21,12 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+/* 階層図修正 (キャッシュ対策) */
+.hierarchy-chart__box.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white { 
+  display: none !important; 
+}
+/* 空のボックスが入っているラッパーも非表示 */
+.hierarchy-chart__l3-wrapper:has(.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white) {
+  display: none !important;
+}

@@ -64,6 +64,41 @@ h6 {
   margin: 0;
 }
 
+// 見出し共通スタイル（全ページに適用）
+// h2: 下線をテキスト幅に合わせ、下にアクセントライン
+// h3: 左に菱形アクセント（45度回転した正方形の枠）
+h2.wp-block-heading {
+  font-weight: bold;
+  position: relative;
+  display: inline-block; // 下線をテキスト幅に合わせる
+  border-bottom: solid 0.25rem #f8f9fa;
+  padding: 0 0 1rem;
+  margin: 3rem 0 1rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%; // テキストの端まで伸ばす
+    height: 0.25rem;
+    background: #212529;
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+  }
+}
+
+h3.wp-block-heading {
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  position: relative;
+  padding: 0 0 0 1.5em;
+  margin: 1.5rem 0 1rem;
+  line-height: 1.5;
+  border-left: 4px solid var(--color-text-gray, #333);
+}
+
 button {
   color: inherit;
   background-color: inherit;

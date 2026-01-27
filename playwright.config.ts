@@ -2,8 +2,27 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright設定ファイル
- * ベースURL: http://localhost:10010 (Local by Flywheelの設定に合わせる)
+ *
+ * 環境切り替え:
+ *   - ローカル: npx playwright test (デフォルト)
+ *   - 本番: TEST_ENV=production npx playwright test
+ *   - ステージング: TEST_ENV=staging npx playwright test
  */
+
+// 環境別のベースURL設定
+const environments = {
+  local: 'http://localhost:10010',
+  staging: 'https://musashipaint.xsrv.jp',
+  production: 'https://musashipaint.xsrv.jp', // 本番も同じ（必要に応じて変更）
+};
+
+// 環境変数からベースURLを決定
+const testEnv = (process.env.TEST_ENV || 'local') as keyof typeof environments;
+const baseURL = environments[testEnv] || environments.local;
+
+console.log(`\n🌐 Test Environment: ${testEnv}`);
+console.log(`📍 Base URL: ${baseURL}\n`);
+
 export default defineConfig({
   testDir: './test',
   fullyParallel: true,
@@ -15,7 +34,7 @@ export default defineConfig({
     ['list'],
   ],
   use: {
-    baseURL: 'http://localhost:10010',
+    baseURL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

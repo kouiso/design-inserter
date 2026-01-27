@@ -121,6 +121,14 @@ if (is_home()){
                         <li class="header__nav-item"><a href="<?= URL_ABOUT_US ?>" class="header__nav-link">私たちについて</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CAREER ?>" class="header__nav-link">採用情報</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
+                        <li class="header__nav-item header__nav-item--search">
+                            <button type="button" class="header__nav-link header__nav-link--search js-search-toggle" aria-label="検索">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8.5" cy="8.5" r="6.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="M13 13L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
                                 <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">En</a>
@@ -175,6 +183,14 @@ if (is_home()){
                         <li class="header__nav-item"><a href="<?= URL_ABOUT_US ?>" class="header__nav-link">私たちについて</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CAREER ?>" class="header__nav-link">採用情報</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
+                        <li class="header__nav-item header__nav-item--search">
+                            <button type="button" class="header__nav-link header__nav-link--search js-search-toggle" aria-label="検索">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="8.5" cy="8.5" r="6.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="M13 13L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
                                 <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">En</a>

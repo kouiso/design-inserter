@@ -5,12 +5,21 @@
   "main": "index.js",
   "scripts": {
     "gulp": "gulp",
+    "build:css": "sass wp-content/themes/muashi/src/scss/style.scss:wp-content/themes/muashi/assets/css/style.css --style=expanded",
+    "build": "npm run build:css && gulp js",
     "test": "playwright test",
     "test:smoke": "playwright test test/e2e/smoke.spec.ts",
     "test:pagination": "playwright test test/e2e/pagination.spec.ts",
     "test:regression": "playwright test test/e2e/regression.spec.ts",
+    "test:content": "playwright test test/e2e/content-integrity.spec.ts",
+    "test:snapshot": "playwright test test/e2e/content-snapshot.spec.ts",
+    "test:snapshot:prod": "cross-env TEST_ENV=production playwright test test/e2e/content-snapshot.spec.ts",
+    "snapshot:update": "node scripts/capture-snapshot.js",
+    "snapshot:update:prod": "node scripts/capture-snapshot.js --env=production",
     "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "test:prod": "cross-env TEST_ENV=production playwright test",
+    "test:content:prod": "cross-env TEST_ENV=production playwright test test/e2e/content-integrity.spec.ts"
   },
   "keywords": [],
   "author": "",
