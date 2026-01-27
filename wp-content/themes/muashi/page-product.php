@@ -17,7 +17,8 @@ $product_query = new WP_Query(array(
     'post_type' => 'product',
     'posts_per_page' => 12,
     'paged' => $paged,
-    'orderby' => array('date' => 'ASC', 'ID' => 'ASC'),
+    'orderby' => 'menu_order',
+    'order' => 'ASC',
 ));
 ?>
 

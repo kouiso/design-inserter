@@ -4,8 +4,9 @@ class DownloadPage {
   constructor(root, data) {
     this.root = root;
     this.data = data || {};
-    this.pageType = root.getAttribute('data-page-type') || 'document';
+    this.pageType = root.getAttribute('data-page-type') || 'catalog';
     this.isDownloadPage = this.pageType === 'download';
+    this.isDocumentPage = this.pageType === 'document';
     this.isFormOnly = this.pageType === 'form-only';
     this.products = Array.isArray(this.data.products) ? this.data.products.slice() : [];
     this.taxonomies = this.data.taxonomies || {};
@@ -113,19 +114,29 @@ class DownloadPage {
 
   cacheElements() {
     this.listEl = this.root.querySelector('[data-download-list]');
-    this.selectedListEl = this.root.querySelector('[data-download-selected-list]');
-    this.selectedEmptyEl = this.root.querySelector('[data-download-selected-empty]');
-    this.selectedCountEl = this.root.querySelector('[data-download-selected-count]');
-    this.resultCountEl = this.root.querySelector('[data-download-result-count]');
     this.feedbackEl = this.root.querySelector('[data-download-feedback]');
-    this.searchInput = this.root.querySelector('[data-download-search]');
-    this.sortSelect = this.root.querySelector('[data-download-sort]');
-    this.resetButton = this.root.querySelector('[data-download-reset]');
-    this.filterSelects = Array.from(this.root.querySelectorAll('[data-download-filter]'));
+
+    // documentページでは検索UI要素を取得しない
+    if (!this.isDocumentPage) {
+      this.selectedListEl = this.root.querySelector('[data-download-selected-list]');
+      this.selectedEmptyEl = this.root.querySelector('[data-download-selected-empty]');
+      this.selectedCountEl = this.root.querySelector('[data-download-selected-count]');
+      this.resultCountEl = this.root.querySelector('[data-download-result-count]');
+      this.searchInput = this.root.querySelector('[data-download-search]');
+      this.sortSelect = this.root.querySelector('[data-download-sort]');
+      this.resetButton = this.root.querySelector('[data-download-reset]');
+      this.filterSelects = Array.from(this.root.querySelectorAll('[data-download-filter]'));
+    }
+
     this.form = document.querySelector('.contact .wpcf7 form');
   }
 
   bindEvents() {
+    // documentページでは検索イベントをバインドしない
+    if (this.isDocumentPage) {
+      return;
+    }
+
     if (this.searchInput) {
       this.searchInput.addEventListener('input', (event) => {
         const raw = event.target.value || '';
@@ -212,6 +223,14 @@ class DownloadPage {
   }
 
   getFilteredProducts() {
+    // documentページではフィルタリングせずに全製品を返す
+    if (this.isDocumentPage) {
+      const products = this.products.map((product) => this.productsById.get(product.id)).filter(Boolean);
+      // ソートはデフォルト（タイトル昇順）のみ
+      const collator = new Intl.Collator('ja');
+      return products.sort((a, b) => collator.compare(a.title, b.title));
+    }
+
     const search = this.state.search;
     const filters = this.state.filters;
     const filterKeys = Object.keys(filters).filter((key) => filters[key]);
@@ -259,9 +278,12 @@ class DownloadPage {
   renderAll() {
     const filtered = this.getFilteredProducts();
     this.renderList(filtered);
-    this.renderSelected();
-    this.updateResultCount(filtered.length);
-    this.syncHiddenInputs();
+
+    if (!this.isDocumentPage) {
+      this.renderSelected();
+      this.updateResultCount(filtered.length);
+      this.syncHiddenInputs();
+    }
   }
 
   renderList(products) {
@@ -328,7 +350,14 @@ class DownloadPage {
 
       head.appendChild(checkbox);
       head.appendChild(label);
+    } else if (this.isDocumentPage) {
+      // documentページ: シンプル表示
+      const title = document.createElement('p');
+      title.className = 'download__card-title';
+      title.textContent = product.title;
+      head.appendChild(title);
     } else {
+      // catalogページ: シンプル表示
       const title = document.createElement('p');
       title.className = 'download__card-title';
       title.textContent = product.title;
@@ -381,7 +410,17 @@ class DownloadPage {
       });
 
       linksContainer.appendChild(requestButton);
+    } else if (this.isDocumentPage && product.pdfUrl) {
+      // documentページ: カタログダウンロードリンク
+      const downloadLink = document.createElement('a');
+      downloadLink.className = 'download__link download__link--catalog';
+      downloadLink.href = product.pdfUrl;
+      downloadLink.target = '_blank';
+      downloadLink.rel = 'noopener noreferrer';
+      downloadLink.textContent = 'カタログダウンロード';
+      linksContainer.appendChild(downloadLink);
     } else if (product.pdfUrl) {
+      // catalogページ: カタログダウンロードリンク
       const downloadLink = document.createElement('a');
       downloadLink.className = 'download__link download__link--catalog';
       downloadLink.href = product.pdfUrl;

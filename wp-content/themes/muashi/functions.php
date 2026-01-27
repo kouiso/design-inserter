@@ -537,7 +537,7 @@ function create_post_type() {
             'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
-            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
             'rewrite'       => array(
                 'slug'       => 'product',
                 'with_front' => false,
@@ -1273,10 +1273,11 @@ add_action( 'pre_get_posts', function( $query ) {
         $query->set( 'order', 'DESC' );
     }
 
-    // product アーカイブ: 12件/ページ, date ASC, ID ASC
+    // product アーカイブ: 12件/ページ, menu_order ASC
     if ( $query->is_post_type_archive( 'product' ) ) {
         $query->set( 'posts_per_page', 12 );
-        $query->set( 'orderby', array( 'date' => 'ASC', 'ID' => 'ASC' ) );
+        $query->set( 'orderby', 'menu_order' );
+        $query->set( 'order', 'ASC' );
     }
 
     // interview アーカイブ: 12件/ページ, date DESC
