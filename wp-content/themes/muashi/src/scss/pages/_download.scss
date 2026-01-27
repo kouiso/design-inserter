@@ -1,5 +1,58 @@
 @use '../setting' as *;
 
+.catalog__header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  margin: 24px 0;
+
+  @include mq(lg) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 32px 0;
+  }
+}
+
+.catalog__header-text {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+
+  @include mq(lg) {
+    font-size: 18px;
+  }
+}
+
+.catalog__back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 999px;
+  background: #0c3c78;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #082850;
+    color: #fff !important;
+  }
+
+  @include mq(lg) {
+    font-size: 15px;
+    padding: 12px 24px;
+  }
+}
+
 .download {
   margin-bottom: 48px;
 
