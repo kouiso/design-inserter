@@ -57,6 +57,13 @@ npm-debug.log*
 
 # Build artifacts
 .sass-cache/
+build-css.js
+compile-direct.js
+compile-log.txt
+compile-output.txt
+compile-scss-gulp.js
+compile-scss.js
+final-compile.js
 
 # Test files
 test-*.html
