@@ -322,7 +322,7 @@ get_header();
                     </p>
                     <a href="<?= URL_SUSTAINABLE_BUSINESS; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
-                        Sustainability
+                        Value Creation
                         </span>
                         <div class="top-section__contents-link-icon-wrapper">
                             <div class="top-section__contents-link-icon top-section__contents-link-icon--sp">
