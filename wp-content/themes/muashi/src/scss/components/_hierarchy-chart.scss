@@ -10,8 +10,8 @@
   
   // Dimensions (Fit within ~550px narrow container)
   // Total width = step-3-indent + box-width
-  // Current target: 320px + 200px = 520px < 557px
-  --box-width: 200px;
+  // Current target: 320px + 265px = 585px (Exceeds 557px slightly, scroll needed or responsive)
+  --box-width: 265px;
   --box-height: auto; 
   --step-1-indent: 0px;
   --step-2-indent: 160px;
