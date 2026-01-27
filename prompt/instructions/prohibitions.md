@@ -302,3 +302,271 @@
 <!-- ✅ エラー時は自分の入力・パラメータを再確認してからリトライ -->
 ✅ Never execute destructive operations until user explicitly permits
 <!-- ✅ 破壊的操作はユーザーが明示的に許可するまで絶対に実行しない -->
+
+---
+
+## 8. WordPress特有の禁止事項
+<!-- WordPress-Specific Prohibitions -->
+
+### 8.1. フックの誤用禁止
+
+**Wrong Hook Selection (誤ったフック選択)**:
+<!-- 誤ったフック選択 -->
+
+❌ Using `init` for processing that should be in `wp_loaded`
+<!-- ❌ `wp_loaded`で完結すべき処理を`init`で実行 -->
+❌ Registering custom post types/taxonomies in hooks other than `init`
+<!-- ❌ カスタム投稿タイプ・タクソノミーを`init`以外のフックで登録 -->
+❌ Enqueuing scripts/styles in hooks other than `wp_enqueue_scripts` (frontend) or `admin_enqueue_scripts` (admin)
+<!-- ❌ スクリプト・スタイルを`wp_enqueue_scripts`（フロントエンド）や`admin_enqueue_scripts`（管理画面）以外で読み込む -->
+
+✅ Use correct hooks at appropriate timing
+<!-- ✅ 適切なタイミングで正しいフックを使用 -->
+✅ Reference WordPress Hook Execution Order: `init` → `wp_loaded` → `template_redirect` → `wp_enqueue_scripts`
+<!-- ✅ WordPressフック実行順序を参照: `init` → `wp_loaded` → `template_redirect` → `wp_enqueue_scripts` -->
+
+**Hook Priority Misuse (フック優先度の誤用)**:
+<!-- フック優先度の誤用 -->
+
+❌ Using extremely high priority (e.g., 999) without reason
+<!-- ❌ 理由なく極端に高い優先度（例: 999）を使用 -->
+❌ Using priority 10 (default) when order matters
+<!-- ❌ 順序が重要なのにデフォルト優先度10を使用 -->
+
+✅ Use priority 10 (default) when order doesn't matter
+<!-- ✅ 順序が重要でない場合はデフォルト優先度10を使用 -->
+✅ Adjust priority only when you need to run before/after specific other functions
+<!-- ✅ 特定の他の関数の前後で実行する必要がある場合のみ優先度を調整 -->
+
+**Duplicate Hook Registration (フックの重複登録)**:
+<!-- フックの重複登録 -->
+
+❌ Registering the same `add_action`/`add_filter` multiple times
+<!-- ❌ 同じ`add_action`/`add_filter`を複数回登録 -->
+
+✅ Check if hook is already registered before adding
+<!-- ✅ フック登録前に既に登録されているか確認 -->
+✅ Use `has_action()` or `has_filter()` to check
+<!-- ✅ `has_action()`や`has_filter()`で確認 -->
+
+---
+
+### 8.2. グローバル変数の直接操作禁止
+
+❌ Directly manipulating `$wpdb` without WordPress functions
+<!-- ❌ WordPress関数を使わずに`$wpdb`を直接操作 -->
+❌ Directly manipulating `$post` without using `get_post()`, etc.
+<!-- ❌ `get_post()`等を使わずに`$post`を直接操作 -->
+❌ Modifying WordPress core global variables
+<!-- ❌ WordPressコアのグローバル変数を変更 -->
+
+✅ Use WordPress wrapper functions (`get_post()`, `wp_update_post()`, etc.)
+<!-- ✅ WordPressラッパー関数（`get_post()`, `wp_update_post()`等）を使用 -->
+✅ Use `$wpdb->prepare()` for SQL queries
+<!-- ✅ SQLクエリには`$wpdb->prepare()`を使用 -->
+
+**Example - Wrong**:
+```php
+// ❌ Direct global variable manipulation
+global $post;
+$post->post_title = 'New Title';
+
+// ❌ Direct SQL without prepare()
+global $wpdb;
+$wpdb->query("UPDATE wp_posts SET post_title = '{$_POST['title']}' WHERE ID = {$_POST['id']}");
+```
+
+**Example - Correct**:
+```php
+// ✅ Use WordPress functions
+$post_id = get_the_ID();
+wp_update_post([
+	'ID' => $post_id,
+	'post_title' => sanitize_text_field($_POST['title'])
+]);
+
+// ✅ Use $wpdb->prepare()
+global $wpdb;
+$wpdb->query($wpdb->prepare(
+	"UPDATE {$wpdb->posts} SET post_title = %s WHERE ID = %d",
+	sanitize_text_field($_POST['title']),
+	intval($_POST['id'])
+));
+```
+
+---
+
+### 8.3. パフォーマンス阻害禁止
+
+**Loop Inefficiency (ループ内の非効率な処理)**:
+<!-- ループ内の非効率な処理 -->
+
+❌ Calling `get_post_meta()` inside a loop for each post
+<!-- ❌ ループ内で各投稿に対して`get_post_meta()`を呼び出す -->
+❌ Running separate SQL query for each item in a loop
+<!-- ❌ ループ内で各アイテムに対して個別のSQLクエリを実行 -->
+
+✅ Use `update_meta_cache()` before loop to batch-load metadata
+<!-- ✅ ループ前に`update_meta_cache()`で一括メタデータ読み込み -->
+✅ Use `WP_Query` with proper arguments to minimize queries
+<!-- ✅ `WP_Query`を適切な引数で使用してクエリを最小化 -->
+
+**Unnecessary Global Loading (不要なグローバル読み込み)**:
+<!-- 不要なグローバル読み込み -->
+
+❌ Enqueuing scripts/styles on all pages when only needed on specific pages
+<!-- ❌ 特定ページでのみ必要なスクリプト・スタイルを全ページで読み込む -->
+
+✅ Conditionally enqueue scripts/styles only where needed
+<!-- ✅ 必要な場所でのみスクリプト・スタイルを条件付き読み込み -->
+
+**Example - Wrong**:
+```php
+// ❌ Unconditional global loading
+function my_enqueue_scripts() {
+	wp_enqueue_script('my-admin-script', get_template_directory_uri() . '/js/admin.js');
+}
+add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
+```
+
+**Example - Correct**:
+```php
+// ✅ Conditional loading
+function my_enqueue_scripts() {
+	// Only load on product pages
+	if (is_singular('product')) {
+		wp_enqueue_script('product-script', get_template_directory_uri() . '/js/product.js');
+	}
+}
+add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
+```
+
+**Inefficient WP_Query (非効率なWP_Query)**:
+<!-- 非効率なWP_Query -->
+
+❌ Using `posts_per_page => -1` to get all posts
+<!-- ❌ `posts_per_page => -1`で全投稿を取得 -->
+❌ Not specifying `fields => 'ids'` when only IDs are needed
+<!-- ❌ IDのみ必要なのに`fields => 'ids'`を指定しない -->
+
+✅ Limit `posts_per_page` to necessary amount
+<!-- ✅ `posts_per_page`を必要な数に制限 -->
+✅ Use `fields => 'ids'` when only IDs are needed
+<!-- ✅ IDのみ必要な場合は`fields => 'ids'`を使用 -->
+
+---
+
+### 8.4. テーマ/プラグインの境界侵犯禁止
+
+**Theme Overreach (テーマの越権行為)**:
+<!-- テーマの越権行為 -->
+
+❌ Creating custom database tables from theme
+<!-- ❌ テーマからカスタムデータベーステーブルを作成 -->
+❌ Implementing business logic in theme that should be in plugin
+<!-- ❌ プラグインに実装すべきビジネスロジックをテーマに実装 -->
+❌ Modifying `wp_options` table from theme
+<!-- ❌ テーマから`wp_options`テーブルを変更 -->
+
+✅ Themes handle presentation only (templates, styles, scripts)
+<!-- ✅ テーマはプレゼンテーションのみ担当（テンプレート、スタイル、スクリプト） -->
+✅ Plugins handle functionality and business logic
+<!-- ✅ プラグインが機能・ビジネスロジックを担当 -->
+
+**Plugin Overreach (プラグインの越権行為)**:
+<!-- プラグインの越権行為 -->
+
+❌ Directly modifying theme files from plugin
+<!-- ❌ プラグインからテーマファイルを直接変更 -->
+❌ Hard-coding theme-specific markup in plugin
+<!-- ❌ プラグインでテーマ固有のマークアップをハードコード -->
+
+✅ Provide hooks/filters for theme customization
+<!-- ✅ テーマカスタマイズ用のフック・フィルターを提供 -->
+✅ Use template loading pattern for markup (`locate_template()`)
+<!-- ✅ マークアップにはテンプレート読み込みパターン（`locate_template()`）を使用 -->
+
+---
+
+### 8.5. データベース直接変更禁止（テーマから）
+
+❌ Creating custom tables from theme (use plugin instead)
+<!-- ❌ テーマからカスタムテーブルを作成（プラグインを使用すること） -->
+❌ Running `ALTER TABLE` from theme
+<!-- ❌ テーマから`ALTER TABLE`を実行 -->
+❌ Modifying core WordPress tables' structure
+<!-- ❌ WordPressコアテーブルの構造を変更 -->
+
+✅ Use WordPress post meta, user meta, or term meta for custom data
+<!-- ✅ カスタムデータにはWordPressのpost meta、user meta、term metaを使用 -->
+✅ If custom tables are needed, implement in plugin
+<!-- ✅ カスタムテーブルが必要な場合はプラグインで実装 -->
+
+---
+
+### 8.6. WordPress Coding Standards違反禁止
+
+❌ Using `camelCase` for function names (use `snake_case`)
+<!-- ❌ 関数名に`camelCase`を使用（`snake_case`を使用すること） -->
+❌ Not prefixing custom functions with theme/plugin name
+<!-- ❌ カスタム関数にテーマ・プラグイン名のプレフィックスを付けない -->
+❌ Using `UPPERCASE` for constants that aren't truly constant
+<!-- ❌ 真に定数でないものに`UPPERCASE`を使用 -->
+
+✅ Follow WordPress PHP Coding Standards
+<!-- ✅ WordPress PHP Coding Standardsに従う -->
+✅ Prefix all custom functions: `muashi_function_name()`, `musashi_inquiry_function()`
+<!-- ✅ 全てのカスタム関数にプレフィックスを付ける: `muashi_function_name()`, `musashi_inquiry_function()` -->
+✅ Use `snake_case` for functions and variables
+<!-- ✅ 関数と変数には`snake_case`を使用 -->
+
+**Example - Wrong**:
+```php
+// ❌ No prefix, camelCase
+function getProductData() {
+	// ...
+}
+```
+
+**Example - Correct**:
+```php
+// ✅ Prefixed, snake_case
+function muashi_get_product_data() {
+	// ...
+}
+```
+
+---
+
+### 8.7. セキュリティ機能のバイパス禁止
+
+❌ Using `ALLOW_UNFILTERED_UPLOADS` constant
+<!-- ❌ `ALLOW_UNFILTERED_UPLOADS`定数の使用 -->
+❌ Using `DISALLOW_FILE_EDIT` to disable file editing, then editing files via FTP
+<!-- ❌ `DISALLOW_FILE_EDIT`でファイル編集を無効化しておきながら、FTP経由でファイルを編集 -->
+❌ Bypassing `wp_safe_redirect()` with direct header redirects
+<!-- ❌ `wp_safe_redirect()`をバイパスして直接headerリダイレクト -->
+
+✅ Use WordPress security functions as intended
+<!-- ✅ WordPressセキュリティ関数を意図通りに使用 -->
+✅ Follow WordPress security best practices
+<!-- ✅ WordPressセキュリティベストプラクティスに従う -->
+
+---
+
+### 8.8. ショートコード・ブロック命名規則違反禁止
+
+❌ Creating shortcodes without prefix: `[gallery]` (conflicts with core)
+<!-- ❌ プレフィックスなしでショートコード作成: `[gallery]`（コアと競合） -->
+❌ Creating Gutenberg blocks without namespace: `core/heading` (conflicts with core)
+<!-- ❌ 名前空間なしでGutenbergブロック作成: `core/heading`（コアと競合） -->
+
+✅ Prefix all shortcodes: `[muashi_gallery]`, `[musashi_product]`
+<!-- ✅ 全てのショートコードにプレフィックスを付ける: `[muashi_gallery]`, `[musashi_product]` -->
+✅ Namespace all Gutenberg blocks: `muashi/product-card`, `musashi-inquiry/approval-form`
+<!-- ✅ 全てのGutenbergブロックに名前空間を付ける: `muashi/product-card`, `musashi-inquiry/approval-form` -->
+
+---
+
+**These WordPress-specific prohibitions are in addition to general prohibitions in sections 1-7.**
+<!-- これらのWordPress特有の禁止事項は、セクション1-7の一般的な禁止事項に追加されるものです。 -->

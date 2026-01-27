@@ -17,11 +17,27 @@
     }
   }
 
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   &__link{
     padding: 20px 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     display: grid;
     gap: 16px;
+    text-decoration: none !important;
+    color: inherit;
+
+    &:hover,
+    &:visited,
+    &:active,
+    &:focus {
+      text-decoration: none !important;
+      color: inherit;
+    }
 
     @include mq(lg){
       padding: 24px 0;
@@ -86,6 +102,8 @@
     gap: 8px;
     min-width: 0; // Grid内での幅あふれ防止
     word-break: break-all; // 長い単語の折り返し
+    overflow: hidden; // はみ出し防止を強化
+    width: 100%;
 
     @include mq(lg) {
       gap: 12px;

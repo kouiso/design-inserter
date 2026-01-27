@@ -404,9 +404,6 @@
   cursor: pointer;
   color: inherit;
   transition: opacity 0.3s ease;
-  overflow: hidden;
-  box-sizing: border-box;
-  flex-shrink: 0;
 
   &::after {
     display: none;
@@ -419,7 +416,6 @@
   svg {
     width: 100%;
     height: 100%;
-    display: block;
   }
 }
 

@@ -46,7 +46,7 @@ function muashi_setup_about_us_sidebar_menu() {
 				'url'   => URL_GLOBAL_NETWORK,
 				'parent' => 0,
 				'children' => array(
-					array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#海外拠点'),
+					array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
 				),
 			),
 			// 第1階層: サステナブルなビジネス展開

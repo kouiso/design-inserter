@@ -60,17 +60,18 @@ get_header();
 
                         <?php elseif ( have_posts() ) : ?>
                             <!-- 検索結果がある場合 -->
-                            <p class="search-results__count">
-                                <?php
-                                global $wp_query;
-                                printf(
-                                    esc_html( '%s件の結果が見つかりました' ),
-                                    '<strong>' . esc_html( $wp_query->found_posts ) . '</strong>'
-                                );
-                                ?>
-                            </p>
+                            <div class="archive">
+                                <p class="search-results__count">
+                                    <?php
+                                    global $wp_query;
+                                    printf(
+                                        esc_html( '%s件の結果が見つかりました' ),
+                                        '<strong>' . esc_html( $wp_query->found_posts ) . '</strong>'
+                                    );
+                                    ?>
+                                </p>
 
-                            <ul class="archive__list">
+                                <ul class="archive__list">
                                 <?php while ( have_posts() ) : the_post(); ?>
                                 <li class="archive__item">
                                     <a href="<?php the_permalink(); ?>" class="archive__link">
@@ -114,6 +115,7 @@ get_header();
                             // ページネーション
                             ts_render_pagination();
                             ?>
+                            </div>
 
                         <?php else : ?>
                             <!-- 検索結果がない場合 -->
