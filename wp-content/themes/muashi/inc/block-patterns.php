@@ -85,9 +85,6 @@ function muashi_register_block_patterns() {
         <div class="hierarchy-chart__l2-wrapper">
             <div class="hierarchy-chart__l2 hierarchy-chart__box hierarchy-chart__box--environment">化学物質管理方針</div>
         </div>
-        <div class="hierarchy-chart__l3-wrapper">
-             <div class="hierarchy-chart__l3 hierarchy-chart__box hierarchy-chart__box--environment hierarchy-chart__box--empty-white">-</div>
-        </div>
     </div>
   </div>
 
@@ -100,16 +97,13 @@ function muashi_register_block_patterns() {
             <div class="hierarchy-chart__l2 hierarchy-chart__box hierarchy-chart__box--social">人権方針</div>
         </div>
         <div class="hierarchy-chart__l3-wrapper">
-             <div class="hierarchy-chart__l3 hierarchy-chart__box hierarchy-chart__box--social">紛争鉱物管理運用手順<br><small>（コンフリクトミネラル）</small></div>
+             <div class="hierarchy-chart__l3 hierarchy-chart__box hierarchy-chart__box--social">紛争鉱物管理運用手順<small>（コンフリクトミネラル）</small></div>
         </div>
     </div>
     <!-- Group 2 -->
     <div class="hierarchy-chart__group">
         <div class="hierarchy-chart__l2-wrapper">
             <div class="hierarchy-chart__l2 hierarchy-chart__box hierarchy-chart__box--social">労働安全衛生方針</div>
-        </div>
-        <div class="hierarchy-chart__l3-wrapper">
-             <div class="hierarchy-chart__l3 hierarchy-chart__box hierarchy-chart__box--social hierarchy-chart__box--empty-white">-</div>
         </div>
     </div>
     <!-- Group 3 -->
@@ -132,7 +126,7 @@ function muashi_register_block_patterns() {
             <div class="hierarchy-chart__l2 hierarchy-chart__box hierarchy-chart__box--governance">コンプライアンス方針</div>
         </div>
         <div class="hierarchy-chart__l3-wrapper">
-             <div class="hierarchy-chart__l3 hierarchy-chart__box hierarchy-chart__box--governance">公正取引運用ガイドライン<br>内部通報制度運用ガイドライン<br>知的財産教育文書<br>反社禁止条項</div>
+             <div class="hierarchy-chart__l3 hierarchy-chart__box hierarchy-chart__box--governance">公正取引運用ガイドライン<br>内部通報制度運用ガイドライン<br>知的財産教育文書</div>
         </div>
     </div>
     <!-- Group 2 -->

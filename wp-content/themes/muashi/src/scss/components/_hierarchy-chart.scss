@@ -70,9 +70,10 @@
     padding: 0.6rem 1rem; // Reduce padding
     border-radius: 50px;
     font-weight: 700;
-    font-size: 0.85rem; // Slightly smaller font
+    font-size: 0.95rem; // Slightly larger
     line-height: 1.3;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.25); // Stronger shadow
+    border: 1px solid rgba(0,0,0,0.2); // Add border
     background: #fff;
     width: var(--box-width);
     min-height: 3rem;
@@ -91,25 +92,35 @@
     }
 
     // Color Variations
-    &--sustainability { background: #FCE8E1; color: #333; }
-    &--csr            { background: #ffffff; color: #333; border: 1px solid #ddd; }
-    &--environment    { background: #E6F3E6; color: #333; }
-    &--social         { background: #FDF2F7; color: #333; }
-    &--governance     { background: #EBF7FB; color: #333; }
+    &--sustainability { background: #FCE8E1; color: #111; }
+    &--csr            { background: #ffffff; color: #111; border: 1px solid #ddd; }
+    &--environment    { background: #E6F3E6; color: #111; }
+    &--social         { background: #FFE0EB; color: #111; }
+    &--governance     { background: #EBF7FB; color: #111; }
     
+    // Level 3 items should stack vertically (for small text annotations)
+    &.hierarchy-chart__l3 {
+      flex-direction: column;
+    }
+
     // Empty State style
     &--empty-white {
-       opacity: 0.6;
-       box-shadow: none;
-       background-color: transparent; // Allow parent specific color or fallback
-       border: 1px dashed rgba(0,0,0,0.1) !important; // Force dashed border
+       opacity: 1;
+       // box-shadow: none;
+       // background-color: transparent; // Allow parent specific color or fallback
+       border: 2px dashed #ccc !important; // Force dashed border
     }
     // Ensure background colors persist for empty boxes
     &.hierarchy-chart__box--sustainability.hierarchy-chart__box--empty-white { background: #FCE8E1; }
     &.hierarchy-chart__box--csr.hierarchy-chart__box--empty-white            { background: #fff; }
-    &.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white    { background: #E6F3E6; }
-    &.hierarchy-chart__box--social.hierarchy-chart__box--empty-white         { background: #FDF2F7; }
+    &.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white    { display: none !important; }
+    &.hierarchy-chart__box--social.hierarchy-chart__box--empty-white         { background: #FFE0EB; }
     &.hierarchy-chart__box--governance.hierarchy-chart__box--empty-white     { background: #EBF7FB; }
+  }
+  
+  // Wrapper fix for hidden empty boxes
+  &__l3-wrapper:has(.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white) {
+    display: none !important;
   }
 
   // ------------------------------------------------------------------------
@@ -117,7 +128,7 @@
   // ------------------------------------------------------------------------
   &__section {
     position: relative;
-    margin-bottom: 2rem; 
+    margin-bottom: 0.2rem; 
 
     @media (max-width: 768px) {
       margin-bottom: 2rem;
@@ -130,7 +141,17 @@
   // Level 1: Category
   &__l1 {
     margin-left: var(--step-1-indent);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+
+  // Level 2: Policy (Add Triangle Icon)
+  &__l2 {
+    &::before {
+      content: "▶";
+      font-size: 0.6em;
+      margin-right: 0.4em;
+      opacity: 0.8;
+    }
   }
 
   // ------------------------------------------------------------------------
@@ -138,8 +159,8 @@
   // ------------------------------------------------------------------------
   &__l2-wrapper {
     margin-left: var(--step-2-indent);
-    margin-top: 0.5rem; 
-    margin-bottom: 0.5rem;
+    margin-top: 0.2rem; 
+    margin-bottom: 0.2rem;
     position: relative;
   }
   
@@ -148,17 +169,17 @@
   // ------------------------------------------------------------------------
   &__l3-wrapper {
     margin-left: var(--step-3-indent);
-    margin-top: 0.5rem;
+    margin-top: 0.2rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.2rem;
   }
   
   // Specific tweaks
   &__stack {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.2rem;
   }
 
   small {
