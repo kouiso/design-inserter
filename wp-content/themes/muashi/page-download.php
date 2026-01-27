@@ -75,12 +75,12 @@ if ( have_posts() ) {
               カタログダウンロード
             </h1>
 
-            <div class="catalog__header">
-              <p class="catalog__header-text">カタログ請求＋全カタログを閲覧できます</p>
-              <a href="<?php echo esc_url( home_url( '/product/' ) ); ?>" class="catalog__back-button">製品ページへ戻る</a>
-            </div>
-
             <div class="page__inner page__inner--narrow">
+
+              <div class="catalog__header">
+                <p class="catalog__header-text">カタログ請求＋全カタログを閲覧できます</p>
+                <a href="<?php echo esc_url( home_url( '/product/' ) ); ?>" class="catalog__back-button">製品ページへ戻る</a>
+              </div>
 
               <!-- Hidden data for form population -->
               <div hidden>

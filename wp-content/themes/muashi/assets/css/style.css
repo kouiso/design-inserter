@@ -3378,7 +3378,7 @@ a {
 .hierarchy-chart__headers {
   display: flex;
   flex-direction: column;
-  margin-bottom: 0.2rem;
+  margin-bottom: 2rem;
   position: relative;
 }
 @media (max-width: 768px) {
@@ -4667,18 +4667,17 @@ a {
 
 .catalog__header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   gap: 16px;
   margin: 24px 0;
-  padding: 16px 20px;
-  background: rgba(255, 182, 193, 0.3);
-  border-radius: 8px;
 }
 @media screen and (min-width: 992px) {
   .catalog__header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     margin: 32px 0;
-    padding: 20px 24px;
   }
 }
 
@@ -4701,7 +4700,7 @@ a {
   padding: 10px 20px;
   border: none;
   border-radius: 999px;
-  background: #4a2c2a;
+  background: #0c3c78;
   color: #fff !important;
   font-size: 14px;
   font-weight: 600;
@@ -4711,7 +4710,7 @@ a {
   transition: background 0.2s ease;
 }
 .catalog__back-button:hover {
-  background: #3a1c1a;
+  background: #082850;
   color: #fff !important;
 }
 @media screen and (min-width: 992px) {
@@ -4821,6 +4820,43 @@ a {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+.download__controls {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  align-items: end;
+}
+.download__search, .download__filter, .download__sort {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.download__search-label, .download__filter-label, .download__sort-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.download__search-input, .download__filter-select, .download__sort-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.download__reset {
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.download__reset:hover {
+  background: rgba(0, 0, 0, 0.08);
 }
 .download__feedback {
   padding: 12px 16px;

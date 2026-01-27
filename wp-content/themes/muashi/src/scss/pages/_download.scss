@@ -2,12 +2,15 @@
 
 .catalog__header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   gap: 16px;
   margin: 24px 0;
 
   @include mq(lg) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     margin: 32px 0;
   }
 }
@@ -30,7 +33,7 @@
   padding: 10px 20px;
   border: none;
   border-radius: 999px;
-  background: #4a2c2a;
+  background: #0c3c78;
   color: #fff !important;
   font-size: 14px;
   font-weight: 600;
@@ -40,7 +43,7 @@
   transition: background 0.2s ease;
 
   &:hover {
-    background: #3a1c1a;
+    background: #082850;
     color: #fff !important;
   }
 
