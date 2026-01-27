@@ -414,11 +414,11 @@
                 <div class="footer__nav-pc-other-link-top">
                     <a href="<?= URL_MEDIA ?>" class="footer__nav-pc-link">ピックアップ</a>
                     <a href="<?= URL_NEWS ?>" class="footer__nav-pc-link">ニュース</a>
-                </div>
-                <div class="footer__nav-pc-other-link-top">
                     <a href="<?= URL_CAREER ?>" class="footer__nav-pc-link">採用情報</a>
-                    <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">インタビュー</a>
-                    <a href="<?= URL_CAREER_FAQ ?>" class="footer__nav-pc-link">採用に関するQ&A</a>
+                    <div class="footer__nav-pc-link-wrapper">
+                        <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">インタビュー</a>
+                        <a href="<?= URL_CAREER_FAQ ?>" class="footer__nav-pc-link">採用に関するQ&A</a>
+                    </div>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
                     <a href="<?= URL_CONTACT ?>" class="footer__nav-pc-other-link">

@@ -1297,7 +1297,10 @@ a {
 .footer__nav-pc-other-link-top {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 12px;
+}
+.footer__nav-pc-other-link-top .footer__nav-pc-link-wrapper {
+  margin-top: 0;
 }
 .footer__nav-pc-other-link-bottom {
   margin-top: 76px;

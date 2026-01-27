@@ -210,7 +210,11 @@
   &__nav-pc-other-link-top{
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 12px;
+
+    .footer__nav-pc-link-wrapper {
+      margin-top: 0;
+    }
   }
 
   &__nav-pc-other-link-bottom{
