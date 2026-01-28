@@ -1,7 +1,6 @@
 </main>
 
-<a href="#" class="p-pageTop">
-    <!-- <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/common/page_top.png" alt=""> -->
+<a href="#" class="p-pageTop js-page-top" aria-label="ページトップに戻る" data-testid="page-top-button">
 </a>
 
 <footer class="footer">

@@ -84,8 +84,8 @@ const compileSass = () => {
 const scss = gulp.parallel(copySplide, compileSass);
 
 // JSのコンパイル
-const js = (done) => {
-  gulp
+const js = () => {
+  return gulp
     .src(path.src.js)
     .pipe(
       plumber({
@@ -99,7 +99,6 @@ const js = (done) => {
         title: "js dest:",
       })
     );
-  done();
 }
 
 //ブラウザの設定

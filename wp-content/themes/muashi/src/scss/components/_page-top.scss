@@ -1,0 +1,102 @@
+// ==========================================================================
+// Page Top Button
+// ==========================================================================
+
+@use '../setting' as *;
+
+/**
+ * ページトップに戻るボタン
+ *
+ * デザイン:
+ * - 円形ボタン、背景色var(--color-primary)、白色アイコン
+ * - 右下固定配置
+ * - hover時に上に少し移動（transform: translateY(-4px)）
+ * - 影付き（box-shadow）でボタンが浮いている印象
+ */
+
+.p-pageTop {
+  // 基本スタイル
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  z-index: 100; // ヘッダー（z-index: 101）より下、他のコンテンツより上
+
+  // ボタンデザイン
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary); // muashiテーマのプライマリカラー
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  text-decoration: none;
+
+  // トランジション設定
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+
+  // 初期状態（非表示）
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+
+  // デスクトップ表示
+  @include mq(md) {
+    bottom: 40px;
+    right: 40px;
+    width: 56px;
+    height: 56px;
+  }
+
+  // 表示状態（.is-visibleクラスが付与された時）
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  // hover効果
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  // focus状態（キーボード操作時のアクセシビリティ）
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  // focus-visible対応（マウスクリック時はoutline非表示）
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  // アイコン（疑似要素で上向き矢印を描画）
+  &::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid var(--color-white);
+    border-right: 2px solid var(--color-white);
+    transform: rotate(-45deg);
+    margin-top: 4px; // 視覚的な中央配置調整
+
+    @include mq(md) {
+      width: 14px;
+      height: 14px;
+      border-top: 3px solid var(--color-white);
+      border-right: 3px solid var(--color-white);
+    }
+  }
+
+  // アクティブ状態（クリック時）
+  &:active {
+    transform: translateY(-2px);
+  }
+}

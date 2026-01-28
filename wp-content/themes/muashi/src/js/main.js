@@ -11,6 +11,7 @@ if (window.crypto && !window.crypto.randomUUID) {
 import './modules/hamburger.js';
 import './modules/slideTopBanner.js';
 import './modules/smoothScroll.js';
+import './modules/pageTop.js';
 import './modules/gsap.js';
 import './modules/accordion.js';
 import './modules/expandable.js';
