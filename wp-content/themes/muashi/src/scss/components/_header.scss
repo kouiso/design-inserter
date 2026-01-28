@@ -76,6 +76,20 @@
     }
   }
 
+  &__top-search {
+    display: none; // モバイルでは非表示
+
+    @include mq(md) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 40px;
+      right: vw-max(80, 1200); // 右端から80px
+      z-index: 10;
+    }
+  }
+
   &__nav{
     position: fixed;
     top: 0;
@@ -410,7 +424,7 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  color: inherit;
+  color: var(--color-white);
   transition: color 0.4s ease-in-out, opacity 0.3s ease;
 
   &::after {

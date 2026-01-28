@@ -235,6 +235,62 @@ test.describe('ヘッダー - 検索オーバーレイ機能', () => {
   });
 });
 
+test.describe('ヘッダー - 検索アイコン色の同期（実際のページ）', () => {
+
+  test('お問い合わせページで検索アイコンと他のナビリンクの色が一致する', async ({ page }) => {
+    await page.goto('/contact/');
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    // ヘッダーが表示されるまで待機
+    await page.waitForSelector('.js-header', { state: 'visible' });
+
+    // 検索アイコンと他のナビリンクの色を取得
+    const searchIconColor = await page.$eval(
+      '.header__nav-link--search',
+      el => getComputedStyle(el).color
+    );
+    const otherLinkColor = await page.$eval(
+      '.header__nav-link',
+      el => getComputedStyle(el).color
+    );
+
+    // 色が一致することを検証
+    expect(searchIconColor).toBe(otherLinkColor);
+  });
+
+  test('初期状態（ページロード直後）で検索アイコンが白色である', async ({ page }) => {
+    await page.goto('/contact/');
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    // 検索アイコンの色を取得
+    const searchIconColor = await page.$eval(
+      '.header__nav-link--search',
+      el => getComputedStyle(el).color
+    );
+
+    // 白色（rgb(255, 255, 255)）であることを確認
+    expect(searchIconColor).toMatch(/rgb\(255,\s*255,\s*255\)|#fff|white/i);
+  });
+
+  test('初期状態で検索アイコンと他のナビリンクの色が一致する', async ({ page }) => {
+    await page.goto('/company/');
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    // 初期状態の色を取得
+    const initialSearchColor = await page.$eval(
+      '.header__nav-link--search',
+      el => getComputedStyle(el).color
+    );
+    const initialLinkColor = await page.$eval(
+      '.header__nav-link',
+      el => getComputedStyle(el).color
+    );
+
+    // 初期状態で色が一致することを確認
+    expect(initialSearchColor).toBe(initialLinkColor);
+  });
+});
+
 test.describe('ヘッダー - モバイル表示', () => {
 
   test('モバイルビューで検索アイコンが適切に表示される', async ({ page }) => {
