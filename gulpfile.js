@@ -130,3 +130,5 @@ const watch_files = (done) => {
 //タスク実行
 exports.default = gulp.series(browser_init, watch_files, gulp.parallel(scss, js));
 exports.build = gulp.parallel(scss, js);
+exports.js = js;
+exports.scss = scss;
