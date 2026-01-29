@@ -1,9 +1,9 @@
 <?php
 /**
- * 「私たちについて」用サイドバーメニューセットアップ
+ * 「グローバルネットワーク」用サイドバーメニューセットアップ
  *
  * 実行方法: php で直接実行
- * php wp-content/themes/muashi/inc/setup-about-us-menu.php
+ * php wp-content/themes/muashi/inc/setup-global-network-menu.php
  */
 
 // WordPress環境外から実行された場合は終了
@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 }
 
-function muashi_setup_about_us_sidebar_menu() {
-	$menu_name = '私たちについて用サイドバー';
-	$menu_location = 'sidebar_about_us';
+function muashi_setup_global_network_sidebar_menu() {
+	$menu_name = 'グローバルネットワーク用サイドバー';
+	$menu_location = 'sidebar_global_network';
 
 	// 既存メニューを確認
 	$menu = wp_get_nav_menu_object($menu_name);
@@ -30,7 +30,7 @@ function muashi_setup_about_us_sidebar_menu() {
 		$menu_id = wp_create_nav_menu($menu_name);
 		error_log("Menu created: $menu_name (ID: $menu_id)");
 
-		// メニュー項目定義（4階層構造）
+		// メニュー項目定義
 		$menu_items = array(
 			// 第1階層: 武蔵塗料グループについて
 			array(
@@ -38,45 +38,47 @@ function muashi_setup_about_us_sidebar_menu() {
 				'url'   => URL_ABOUT_US,
 				'parent' => 0,
 				'children' => array(
-					// 第2階層: 企業概要
 					array('title' => '企業概要', 'url' => URL_COMPANY),
-					// 第2階層: ヒストリー
 					array('title' => 'ヒストリー', 'url' => URL_HISTORY),
-					// 第2階層: 選ばれる理由
+				),
+			),
+			// 第1階層: 選ばれる理由（配下展開）
+			array(
+				'title' => '選ばれる理由',
+				'url'   => URL_TECHNOLOGY,
+				'parent' => 0,
+				'children' => array(
+					array('title' => '最先端の技術開発力', 'url' => URL_TECHNOLOGY),
 					array(
-						'title' => '選ばれる理由',
-						'url'   => URL_TECHNOLOGY,
+						'title' => 'グローバルネットワーク',
+						'url'   => URL_GLOBAL_NETWORK,
 						'children' => array(
-							// 第3階層: 最先端の技術開発力
-							array('title' => '最先端の技術開発力', 'url' => URL_TECHNOLOGY),
-							// 第3階層: グローバルネットワーク
-							array(
-								'title' => 'グローバルネットワーク',
-								'url'   => URL_GLOBAL_NETWORK,
-								'children' => array(
-									// 第4階層: 海外拠点
-									array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
-								),
-							),
-							// 第3階層: サステナブルなビジネス展開
-							array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),
-							// 第3階層: 顧客志向のカスタマイズ
-							array('title' => '顧客志向のカスタマイズ', 'url' => URL_CUSTOMIZATION),
+							array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
 						),
 					),
-					// 第2階層: サステナビリティ
-					array('title' => 'サステナビリティ', 'url' => URL_SUSTAINABILITY),
-					// 第2階層: お客様の声
-					array('title' => 'お客様の声', 'url' => URL_VOICE),
+					array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),
+					array('title' => '顧客志向のカスタマイズ', 'url' => URL_CUSTOMIZATION),
 				),
+			),
+			// 第1階層: サステナビリティ
+			array(
+				'title' => 'サステナビリティ',
+				'url'   => URL_SUSTAINABILITY,
+				'parent' => 0,
+			),
+			// 第1階層: お客様の声
+			array(
+				'title' => 'お客様の声',
+				'url'   => URL_VOICE,
+				'parent' => 0,
 			),
 		);
 
-		// メニュー項目を追加（4階層対応）
+		// メニュー項目を追加
 		$position = 1;
 
 		foreach ($menu_items as $item) {
-			// 親アイテムを追加（第1階層）
+			// 親アイテムを追加
 			$parent_id = wp_update_nav_menu_item($menu_id, 0, array(
 				'menu-item-title'    => $item['title'],
 				'menu-item-url'      => $item['url'],
@@ -87,7 +89,7 @@ function muashi_setup_about_us_sidebar_menu() {
 
 			error_log("Added menu item: {$item['title']} (ID: $parent_id)");
 
-			// 子アイテムがある場合（第2階層）
+			// 子アイテムがある場合
 			if (isset($item['children'])) {
 				foreach ($item['children'] as $child) {
 					$child_id = wp_update_nav_menu_item($menu_id, 0, array(
@@ -112,21 +114,6 @@ function muashi_setup_about_us_sidebar_menu() {
 								'menu-item-parent-id' => $child_id,
 							));
 							error_log("    Added grandchild: {$grandchild['title']} (ID: $grandchild_id)");
-
-							// ひ孫アイテムがある場合（第4階層）
-							if (isset($grandchild['children'])) {
-								foreach ($grandchild['children'] as $great_grandchild) {
-									$great_grandchild_id = wp_update_nav_menu_item($menu_id, 0, array(
-										'menu-item-title'     => $great_grandchild['title'],
-										'menu-item-url'       => $great_grandchild['url'],
-										'menu-item-status'    => 'publish',
-										'menu-item-type'      => 'custom',
-										'menu-item-position'  => $position++,
-										'menu-item-parent-id' => $grandchild_id,
-									));
-									error_log("      Added great-grandchild: {$great_grandchild['title']} (ID: $great_grandchild_id)");
-								}
-							}
 						}
 					}
 				}
@@ -146,6 +133,6 @@ function muashi_setup_about_us_sidebar_menu() {
 
 // スクリプト直接実行
 if ( ! defined( 'WP_CLI' ) ) {
-	muashi_setup_about_us_sidebar_menu();
+	muashi_setup_global_network_sidebar_menu();
 	echo "Setup complete!\n";
 }

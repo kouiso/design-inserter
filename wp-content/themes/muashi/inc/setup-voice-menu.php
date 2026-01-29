@@ -42,40 +42,52 @@ function muashi_setup_voice_sidebar_menu() {
 
         echo "Created menu '{$menu_name}' (ID: {$menu_id})\n";
 
-        // メニュー項目を追加
+        // メニュー項目を追加（選ばれる理由配下展開）
         $menu_items = array(
+            // 第1階層: 武蔵塗料グループについて（子要素非表示）
             array(
                 'title' => '武蔵塗料グループについて',
-                'url'   => home_url( '/about-us/' ),
+                'url'   => URL_ABOUT_US,
             ),
+            // 第1階層: 選ばれる理由（配下展開）
             array(
-                'title' => '会社概要',
-                'url'   => home_url( '/about-us/profile/' ),
+                'title' => '選ばれる理由',
+                'url'   => URL_TECHNOLOGY,
+                'children' => array(
+                    // 第2階層: 最先端の技術開発力
+                    array('title' => '最先端の技術開発力', 'url' => URL_TECHNOLOGY),
+                    // 第2階層: グローバルネットワーク
+                    array(
+                        'title' => 'グローバルネットワーク',
+                        'url'   => URL_GLOBAL_NETWORK,
+                        'children' => array(
+                            // 第3階層: 海外拠点
+                            array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
+                        ),
+                    ),
+                    // 第2階層: サステナブルなビジネス展開
+                    array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),
+                    // 第2階層: 顧客志向のカスタマイズ
+                    array('title' => '顧客志向のカスタマイズ', 'url' => URL_CUSTOMIZATION),
+                ),
             ),
-            array(
-                'title' => 'グローバルネットワーク',
-                'url'   => home_url( '/about-us/global/' ),
-            ),
-            array(
-                'title' => 'ヒストリー',
-                'url'   => home_url( '/about-us/history/' ),
-            ),
+            // 第1階層: サステナビリティ（子要素非表示）
             array(
                 'title' => 'サステナビリティ',
-                'url'   => home_url( '/about-us/sustainability/' ),
+                'url'   => URL_SUSTAINABILITY,
             ),
+            // 第1階層: お客様の声
             array(
                 'title' => 'お客様の声',
-                'url'   => home_url( '/voice/' ),
-            ),
-            array(
-                'title' => 'よくある質問',
-                'url'   => home_url( '/faq/' ),
+                'url'   => URL_VOICE,
             ),
         );
 
-        foreach ( $menu_items as $index => $item ) {
-            $item_id = wp_update_nav_menu_item(
+        $position = 1;
+
+        foreach ( $menu_items as $item ) {
+            // 親アイテムを追加（第1階層）
+            $parent_id = wp_update_nav_menu_item(
                 $menu_id,
                 0,
                 array(
@@ -83,14 +95,62 @@ function muashi_setup_voice_sidebar_menu() {
                     'menu-item-url'       => $item['url'],
                     'menu-item-status'    => 'publish',
                     'menu-item-type'      => 'custom',
-                    'menu-item-position'  => $index + 1,
+                    'menu-item-position'  => $position++,
                 )
             );
 
-            if ( is_wp_error( $item_id ) ) {
-                echo "Error adding menu item '{$item['title']}': " . $item_id->get_error_message() . "\n";
+            if ( is_wp_error( $parent_id ) ) {
+                echo "Error adding menu item '{$item['title']}': " . $parent_id->get_error_message() . "\n";
             } else {
-                echo "Added menu item '{$item['title']}' (ID: {$item_id})\n";
+                echo "Added menu item '{$item['title']}' (ID: {$parent_id})\n";
+            }
+
+            // 子アイテムがある場合（第2階層）
+            if ( isset( $item['children'] ) ) {
+                foreach ( $item['children'] as $child ) {
+                    $child_id = wp_update_nav_menu_item(
+                        $menu_id,
+                        0,
+                        array(
+                            'menu-item-title'     => $child['title'],
+                            'menu-item-url'       => $child['url'],
+                            'menu-item-status'    => 'publish',
+                            'menu-item-type'      => 'custom',
+                            'menu-item-position'  => $position++,
+                            'menu-item-parent-id' => $parent_id,
+                        )
+                    );
+
+                    if ( is_wp_error( $child_id ) ) {
+                        echo "Error adding child item '{$child['title']}': " . $child_id->get_error_message() . "\n";
+                    } else {
+                        echo "  Added child item '{$child['title']}' (ID: {$child_id})\n";
+                    }
+
+                    // 孫アイテムがある場合（第3階層）
+                    if ( isset( $child['children'] ) ) {
+                        foreach ( $child['children'] as $grandchild ) {
+                            $grandchild_id = wp_update_nav_menu_item(
+                                $menu_id,
+                                0,
+                                array(
+                                    'menu-item-title'     => $grandchild['title'],
+                                    'menu-item-url'       => $grandchild['url'],
+                                    'menu-item-status'    => 'publish',
+                                    'menu-item-type'      => 'custom',
+                                    'menu-item-position'  => $position++,
+                                    'menu-item-parent-id' => $child_id,
+                                )
+                            );
+
+                            if ( is_wp_error( $grandchild_id ) ) {
+                                echo "Error adding grandchild item '{$grandchild['title']}': " . $grandchild_id->get_error_message() . "\n";
+                            } else {
+                                echo "    Added grandchild item '{$grandchild['title']}' (ID: {$grandchild_id})\n";
+                            }
+                        }
+                    }
+                }
             }
         }
     }

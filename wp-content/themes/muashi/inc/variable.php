@@ -15,6 +15,7 @@ define('URL_GLOBAL_NETWORK', home_url('/global-network/'));
 define('URL_SUSTAINABILITY', home_url('/sustainability/'));
 define('URL_CUSTOMIZATION', home_url('/customization/'));
 define('URL_NEWS', home_url('/news/'));
+define('URL_PICKUP', home_url('/pickup/'));
 // NOTE: /media/ はWordPressの予約語のため使用不可。固定ページのスラッグは media-page を使用すること。
 define('URL_MEDIA', home_url('/media-page/'));
 define('URL_DOWNLOAD', home_url('/download/'));
