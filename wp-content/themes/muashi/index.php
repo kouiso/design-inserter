@@ -77,6 +77,14 @@ get_header();
                     <span class="top-kv__nav-link-text">お問い合わせ</span>
                 </a>
             </li>
+            <li class="top-kv__nav-item top-kv__nav-item--search">
+                <button type="button" class="top-kv__nav-link top-kv__nav-link--search js-search-toggle" aria-label="検索">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8.5" cy="8.5" r="6.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M13 13L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </li>
             <li class="top-kv__nav-item">
                 <div class="top-kv__nav-link top-kv__nav-link--lang">
                     <a href="<?= URL_LANG_EN ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">En</a>
