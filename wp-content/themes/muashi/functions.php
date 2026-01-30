@@ -1743,9 +1743,9 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 子がある場合はアコーディオントリガー
             if ( $has_children ) {
-                // sidebar_voiceロケーションの場合は常に展開
+                // sidebar_voiceまたはsidebar_about_usロケーションの場合は常に展開
                 $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-                $always_expand = ( $theme_location === 'sidebar_voice' );
+                $always_expand = ( $theme_location === 'sidebar_voice' || $theme_location === 'sidebar_about_us' );
 
                 // アコーディオンJSが反応するクラスと属性を追加
                 $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
@@ -1813,9 +1813,9 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             $classes = array( 'navigation__sub-accordion-list' );
             $aria_hidden = 'true';
 
-            // sidebar_voiceロケーションの場合は常に展開
+            // sidebar_voiceまたはsidebar_about_usロケーションの場合は常に展開
             $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-            $always_expand = ( $theme_location === 'sidebar_voice' );
+            $always_expand = ( $theme_location === 'sidebar_voice' || $theme_location === 'sidebar_about_us' );
 
             if ( $this->parent_is_ancestor || $always_expand ) {
                 $classes[] = 'is-active';
