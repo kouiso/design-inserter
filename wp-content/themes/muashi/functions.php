@@ -1743,14 +1743,24 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 子がある場合はアコーディオントリガー
             if ( $has_children ) {
+                // 特定のメニューロケーションではアコーディオンを無効化
+                $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
+                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice', 'sidebar_global_network' );
+                $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
+
                 // アコーディオンJSが反応するクラスと属性を追加
-                $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
-                if ( $item->current || $item->current_item_ancestor ) {
-                    $link_classes .= ' is-active';
+                if ( $disable_accordion ) {
+                    // アコーディオン無効: has-accordionクラスも出力しない
+                    $link_classes = 'navigation__sub-link is-active';
+                } else {
+                    $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
+                    if ( $item->current || $item->current_item_ancestor ) {
+                        $link_classes .= ' is-active';
+                    }
                 }
 
                 // role="button" でクリッカブルであることを示す
-                $aria_expanded = ( $item->current || $item->current_item_ancestor ) ? 'true' : 'false';
+                $aria_expanded = ( $item->current || $item->current_item_ancestor || $disable_accordion ) ? 'true' : 'false';
                 $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
                 $output .= esc_html( $item->title );
                 $output .= '</p>';
@@ -1804,12 +1814,16 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             // 第2階層を囲むリスト（常に表示）
             $output .= '<ul class="navigation__sub-list">';
         } else {
-            // 第3階層を囲むリスト（アコーディオン開閉対象）
-            // 親が祖先の場合は is-active クラスを付与して自動展開
+            // 第3階層を囲むリスト
             $classes = array( 'navigation__sub-accordion-list' );
             $aria_hidden = 'true';
 
-            if ( $this->parent_is_ancestor ) {
+            // 特定のメニューロケーションでは常に展開
+            $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
+            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice', 'sidebar_global_network' );
+            $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
+
+            if ( $this->parent_is_ancestor || $disable_accordion ) {
                 $classes[] = 'is-active';
                 $aria_hidden = 'false';
             }

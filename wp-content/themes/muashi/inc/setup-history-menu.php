@@ -39,10 +39,15 @@ function muashi_setup_history_sidebar_menu() {
 				'parent' => 0,
 				'children' => array(
 					array('title' => '企業概要', 'url' => URL_COMPANY),
-					array('title' => 'ヒストリー', 'url' => URL_HISTORY),
-					array('title' => '創業期 1958年～', 'url' => URL_HISTORY . '#foundation'),
-					array('title' => '技術革新期 1980年～', 'url' => URL_HISTORY . '#innovation'),
-					array('title' => 'グローバル展開期 2000年～', 'url' => URL_HISTORY . '#global'),
+					array(
+						'title' => 'ヒストリー',
+						'url'   => URL_HISTORY,
+						'children' => array(
+							array('title' => '創業期 1958年～', 'url' => '/history-founding'),
+							array('title' => '技術革新期 1980年～', 'url' => '/history-innovation'),
+							array('title' => 'グローバル展開期 2000年～', 'url' => '/history-global'),
+						),
+					),
 				),
 			),
 			// 第1階層: 選ばれる理由（子要素非表示）
