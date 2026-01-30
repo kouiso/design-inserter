@@ -1748,9 +1748,14 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 $always_expand = ( $theme_location === 'sidebar_voice' || $theme_location === 'sidebar_about_us' );
 
                 // アコーディオンJSが反応するクラスと属性を追加
-                $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
-                if ( $item->current || $item->current_item_ancestor || $always_expand ) {
-                    $link_classes .= ' is-active';
+                // 常に展開する場合はjs-navigation-accordionクラスを出力しない（アコーディオン機能を無効化）
+                if ( $always_expand ) {
+                    $link_classes = 'navigation__sub-link has-accordion is-active';
+                } else {
+                    $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
+                    if ( $item->current || $item->current_item_ancestor ) {
+                        $link_classes .= ' is-active';
+                    }
                 }
 
                 // role="button" でクリッカブルであることを示す

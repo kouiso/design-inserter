@@ -35,7 +35,7 @@ function muashi_setup_faq_sidebar_menu() {
 			// 第1階層: Pick up ピックアップ
 			array(
 				'title' => 'Pick up ピックアップ',
-				'url'   => URL_PICKUP,
+				'url'   => URL_MEDIA,
 				'parent' => 0,
 			),
 			// 第1階層: News ニュース
@@ -50,9 +50,9 @@ function muashi_setup_faq_sidebar_menu() {
 				'url'   => '#',
 				'parent' => 0,
 				'children' => array(
-					array('title' => 'LinkedIn', 'url' => 'https://www.linkedin.com/company/musashi-paint/'),
-					array('title' => 'Instagram', 'url' => 'https://www.instagram.com/musashipaint/'),
-					array('title' => 'Facebook', 'url' => 'https://www.facebook.com/musashipaint/'),
+					array('title' => 'LinkedIn', 'url' => 'https://www.linkedin.com/company/musashi-paint-holdings/'),
+					array('title' => 'Instagram', 'url' => 'https://www.instagram.com/musashi_paint_official/'),
+					array('title' => 'Facebook', 'url' => 'https://www.facebook.com/musashipaintholdings/'),
 				),
 			),
 			// 第1階層: よくあるご質問
