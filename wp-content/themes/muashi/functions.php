@@ -606,7 +606,7 @@ function create_post_type() {
             'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
-            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
             'rewrite'       => array(
                 'slug'       => 'career',
                 'with_front' => false,

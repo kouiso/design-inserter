@@ -14,8 +14,8 @@ $career_query = new WP_Query( array(
     'post_type'      => 'career',
     'posts_per_page' => 12,
     'paged'          => $paged,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
+    'orderby'        => 'menu_order',
+    'order'          => 'ASC',
 ) );
 ?>
 
