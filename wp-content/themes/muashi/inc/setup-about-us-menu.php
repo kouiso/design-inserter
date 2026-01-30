@@ -30,22 +30,18 @@ function muashi_setup_about_us_sidebar_menu() {
 		$menu_id = wp_create_nav_menu($menu_name);
 		error_log("Menu created: $menu_name (ID: $menu_id)");
 
-		// メニュー項目定義（フラット構造 - 全て第1階層、選ばれる理由のみ子を持つ）
+		// メニュー項目定義（武蔵塗料グループについての下に企業概要・ヒストリー）
 		$menu_items = array(
 			// 第1階層: 武蔵塗料グループについて
 			array(
 				'title' => '武蔵塗料グループについて',
 				'url'   => URL_ABOUT_US,
-			),
-			// 第1階層: 企業概要
-			array(
-				'title' => '企業概要',
-				'url'   => URL_COMPANY,
-			),
-			// 第1階層: ヒストリー
-			array(
-				'title' => 'ヒストリー',
-				'url'   => URL_HISTORY,
+				'children' => array(
+					// 第2階層: 企業概要
+					array('title' => '企業概要', 'url' => URL_COMPANY),
+					// 第2階層: ヒストリー
+					array('title' => 'ヒストリー', 'url' => URL_HISTORY),
+				),
 			),
 			// 第1階層: 選ばれる理由
 			array(
