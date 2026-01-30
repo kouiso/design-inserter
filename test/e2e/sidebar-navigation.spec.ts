@@ -21,9 +21,8 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await expect(page.locator('.navigation__sub-link:has-text("サステナビリティ")')).toBeVisible();
     await expect(page.locator('.navigation__sub-link:has-text("お客様の声")')).toBeVisible();
 
-    // 「選ばれる理由」配下（第3階層）は閉じている（DOMには存在するが非表示）
-    const accordion = page.locator('.navigation__sub-accordion-list');
-    await expect(accordion).toBeAttached();
+    // 「選ばれる理由」配下の第3階層（海外拠点）は常に展開表示されている
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("海外拠点")')).toBeVisible();
   });
 
   test('パターン2: history - 簡易メニュー + 第3階層展開', async ({ page }) => {
@@ -77,9 +76,8 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await expect(page.locator('.navigation__sub-item:has-text("サステナブルなビジネス展開")')).toBeVisible();
     await expect(page.locator('.navigation__sub-item:has-text("顧客志向のカスタマイズ")')).toBeVisible();
 
-    // 第3階層（海外拠点）はDOMに存在するが閉じている
-    const accordion = page.locator('.navigation__sub-accordion-item:has-text("海外拠点")');
-    await expect(accordion).toBeAttached();
+    // 第3階層（海外拠点）は常に展開表示されている
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("海外拠点")')).toBeVisible();
   });
 
   test('パターン5: global-network - 海外拠点表示', async ({ page }) => {
@@ -133,6 +131,36 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
 
     // URLが変わることを確認
     await expect(page).toHaveURL(/\/company\//);
+  });
+
+  test('ヒストリー第3階層リンク遷移確認 - 創業期', async ({ page }) => {
+    await page.goto('/history/');
+
+    // 創業期リンクをクリック
+    await page.locator('.navigation__sub-accordion-link:has-text("創業期 1958年～")').click();
+
+    // 別ページ（/history-founding）に遷移することを確認
+    await expect(page).toHaveURL(/\/history-founding/);
+  });
+
+  test('ヒストリー第3階層リンク遷移確認 - 技術革新期', async ({ page }) => {
+    await page.goto('/history/');
+
+    // 技術革新期リンクをクリック
+    await page.locator('.navigation__sub-accordion-link:has-text("技術革新期 1980年～")').click();
+
+    // 別ページ（/history-innovation）に遷移することを確認
+    await expect(page).toHaveURL(/\/history-innovation/);
+  });
+
+  test('ヒストリー第3階層リンク遷移確認 - グローバル展開期', async ({ page }) => {
+    await page.goto('/history/');
+
+    // グローバル展開期リンクをクリック
+    await page.locator('.navigation__sub-accordion-link:has-text("グローバル展開期 2000年～")').click();
+
+    // 別ページ（/history-global）に遷移することを確認
+    await expect(page).toHaveURL(/\/history-global/);
   });
 
   test('外部リンク確認 - SNS LinkedIn', async ({ page }) => {
