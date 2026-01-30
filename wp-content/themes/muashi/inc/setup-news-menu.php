@@ -55,6 +55,16 @@ function muashi_setup_news_sidebar_menu() {
 					array('title' => 'Facebook', 'url' => 'https://www.facebook.com/musashipaintholdings/'),
 				),
 			),
+			// 第1階層: よくあるご質問
+			array(
+				'title' => 'よくあるご質問',
+				'url'   => URL_FAQ,
+				'parent' => 0,
+				'children' => array(
+					// 第2階層: 武蔵塗料グループについて
+					array('title' => '武蔵塗料グループについて', 'url' => URL_ABOUT_US),
+				),
+			),
 		);
 
 		// メニュー項目を追加
