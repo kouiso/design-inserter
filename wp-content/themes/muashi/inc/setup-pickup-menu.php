@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function muashi_setup_pickup_sidebar_menu() {
-	$menu_name = 'ピックアップ用サイドバー';
-	$menu_location = 'sidebar_pickup';
+	$menu_name = 'ニュース・ピックアップ用サイドバー';
+	$menu_location = 'sidebar_news_media';
 
 	// 既存メニューを確認
 	$menu = wp_get_nav_menu_object($menu_name);

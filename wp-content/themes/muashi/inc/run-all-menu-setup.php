@@ -39,6 +39,7 @@ $menus_to_delete = array(
 	'よくある質問用サイドバー',
 	'ピックアップ用サイドバー',
 	'ニュース用サイドバー',
+	'ニュース・ピックアップ用サイドバー',
 );
 
 echo "=== 既存メニュー削除 ===\n\n";
@@ -61,8 +62,7 @@ echo "\n=== 新規メニュー作成 ===\n\n";
 
 // 各セットアップスクリプトを実行
 $setup_scripts = array(
-	'setup-pickup-menu.php' => 'ピックアップ用サイドバー',
-	'setup-news-menu.php' => 'ニュース用サイドバー',
+	'setup-pickup-menu.php' => 'ニュース・ピックアップ用サイドバー',
 	'setup-history-menu.php' => 'ヒストリー用サイドバー',
 	'setup-sustainability-menu.php' => 'サステナビリティ用サイドバー',
 	'setup-global-network-menu.php' => 'グローバルネットワーク用サイドバー',
