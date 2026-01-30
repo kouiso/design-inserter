@@ -51,14 +51,9 @@ function muashi_setup_about_us_sidebar_menu() {
 					// 第2階層: 最先端の技術開発力
 					array('title' => '最先端の技術開発力', 'url' => URL_TECHNOLOGY),
 					// 第2階層: グローバルネットワーク
-					array(
-						'title' => 'グローバルネットワーク',
-						'url'   => URL_GLOBAL_NETWORK,
-						'children' => array(
-							// 第3階層: 海外拠点
-							array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
-						),
-					),
+					array('title' => 'グローバルネットワーク', 'url' => URL_GLOBAL_NETWORK),
+					// 第2階層: 海外拠点
+					array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
 					// 第2階層: サステナブルなビジネス展開
 					array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),
 					// 第2階層: 顧客志向のカスタマイズ
