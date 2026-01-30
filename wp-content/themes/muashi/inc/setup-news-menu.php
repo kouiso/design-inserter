@@ -1,9 +1,9 @@
 <?php
 /**
- * 「よくある質問」用サイドバーメニューセットアップ
+ * 「ニュース」用サイドバーメニューセットアップ
  *
  * 実行方法: php で直接実行
- * php wp-content/themes/muashi/inc/setup-faq-menu.php
+ * php wp-content/themes/muashi/inc/setup-news-menu.php
  */
 
 // WordPress環境外から実行された場合は終了
@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 }
 
-function muashi_setup_faq_sidebar_menu() {
-	$menu_name = 'よくある質問用サイドバー';
-	$menu_location = 'sidebar_faq';
+function muashi_setup_news_sidebar_menu() {
+	$menu_name = 'ニュース用サイドバー';
+	$menu_location = 'sidebar_news';
 
 	// 既存メニューを確認
 	$menu = wp_get_nav_menu_object($menu_name);
@@ -53,16 +53,6 @@ function muashi_setup_faq_sidebar_menu() {
 					array('title' => 'LinkedIn', 'url' => 'https://www.linkedin.com/company/musashi-paint/'),
 					array('title' => 'Instagram', 'url' => 'https://www.instagram.com/musashipaint/'),
 					array('title' => 'Facebook', 'url' => 'https://www.facebook.com/musashipaint/'),
-				),
-			),
-			// 第1階層: よくあるご質問
-			array(
-				'title' => 'よくあるご質問',
-				'url'   => URL_FAQ,
-				'parent' => 0,
-				'children' => array(
-					// 第2階層: 武蔵塗料グループについて
-					array('title' => '武蔵塗料グループについて', 'url' => URL_ABOUT_US),
 				),
 			),
 		);
@@ -121,6 +111,6 @@ function muashi_setup_faq_sidebar_menu() {
 
 // スクリプト直接実行
 if ( ! defined( 'WP_CLI' ) ) {
-	muashi_setup_faq_sidebar_menu();
+	muashi_setup_news_sidebar_menu();
 	echo "Setup complete!\n";
 }

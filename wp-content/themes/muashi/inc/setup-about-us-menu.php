@@ -30,45 +30,54 @@ function muashi_setup_about_us_sidebar_menu() {
 		$menu_id = wp_create_nav_menu($menu_name);
 		error_log("Menu created: $menu_name (ID: $menu_id)");
 
-		// メニュー項目定義（4階層構造）
+		// メニュー項目定義（フラット構造 - 全て第1階層、選ばれる理由のみ子を持つ）
 		$menu_items = array(
 			// 第1階層: 武蔵塗料グループについて
 			array(
 				'title' => '武蔵塗料グループについて',
 				'url'   => URL_ABOUT_US,
-				'parent' => 0,
+			),
+			// 第1階層: 企業概要
+			array(
+				'title' => '企業概要',
+				'url'   => URL_COMPANY,
+			),
+			// 第1階層: ヒストリー
+			array(
+				'title' => 'ヒストリー',
+				'url'   => URL_HISTORY,
+			),
+			// 第1階層: 選ばれる理由
+			array(
+				'title' => '選ばれる理由',
+				'url'   => URL_TECHNOLOGY,
 				'children' => array(
-					// 第2階層: 企業概要
-					array('title' => '企業概要', 'url' => URL_COMPANY),
-					// 第2階層: ヒストリー
-					array('title' => 'ヒストリー', 'url' => URL_HISTORY),
-					// 第2階層: 選ばれる理由
+					// 第2階層: 最先端の技術開発力
+					array('title' => '最先端の技術開発力', 'url' => URL_TECHNOLOGY),
+					// 第2階層: グローバルネットワーク
 					array(
-						'title' => '選ばれる理由',
-						'url'   => URL_TECHNOLOGY,
+						'title' => 'グローバルネットワーク',
+						'url'   => URL_GLOBAL_NETWORK,
 						'children' => array(
-							// 第3階層: 最先端の技術開発力
-							array('title' => '最先端の技術開発力', 'url' => URL_TECHNOLOGY),
-							// 第3階層: グローバルネットワーク
-							array(
-								'title' => 'グローバルネットワーク',
-								'url'   => URL_GLOBAL_NETWORK,
-								'children' => array(
-									// 第4階層: 海外拠点
-									array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
-								),
-							),
-							// 第3階層: サステナブルなビジネス展開
-							array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),
-							// 第3階層: 顧客志向のカスタマイズ
-							array('title' => '顧客志向のカスタマイズ', 'url' => URL_CUSTOMIZATION),
+							// 第3階層: 海外拠点
+							array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
 						),
 					),
-					// 第2階層: サステナビリティ
-					array('title' => 'サステナビリティ', 'url' => URL_SUSTAINABILITY),
-					// 第2階層: お客様の声
-					array('title' => 'お客様の声', 'url' => URL_VOICE),
+					// 第2階層: サステナブルなビジネス展開
+					array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),
+					// 第2階層: 顧客志向のカスタマイズ
+					array('title' => '顧客志向のカスタマイズ', 'url' => URL_CUSTOMIZATION),
 				),
+			),
+			// 第1階層: サステナビリティ
+			array(
+				'title' => 'サステナビリティ',
+				'url'   => URL_SUSTAINABILITY,
+			),
+			// 第1階層: お客様の声
+			array(
+				'title' => 'お客様の声',
+				'url'   => URL_VOICE,
 			),
 		);
 
