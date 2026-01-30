@@ -87,14 +87,24 @@ function muashi_setup_faq_sidebar_menu() {
 			// 子アイテムがある場合
 			if (isset($item['children'])) {
 				foreach ($item['children'] as $child) {
-					$child_id = wp_update_nav_menu_item($menu_id, 0, array(
+					$child_args = array(
 						'menu-item-title'     => $child['title'],
 						'menu-item-url'       => $child['url'],
 						'menu-item-status'    => 'publish',
 						'menu-item-type'      => 'custom',
 						'menu-item-position'  => $position++,
 						'menu-item-parent-id' => $parent_id,
-					));
+					);
+
+					// 外部リンク（https://で始まるURL）は新しいタブで開く
+					if (strpos($child['url'], 'https://') === 0 || strpos($child['url'], 'http://') === 0) {
+						// localhost以外の外部リンク
+						if (strpos($child['url'], 'localhost') === false) {
+							$child_args['menu-item-target'] = '_blank';
+						}
+					}
+
+					$child_id = wp_update_nav_menu_item($menu_id, 0, $child_args);
 					error_log("  Added child: {$child['title']} (ID: $child_id)");
 				}
 			}

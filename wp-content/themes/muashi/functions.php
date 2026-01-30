@@ -1677,6 +1677,11 @@ add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
 class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
     /**
+     * 現在の親メニュー項目が祖先かどうかを追跡
+     */
+    private $parent_is_ancestor = false;
+
+    /**
      * メニュー項目の開始タグを出力
      *
      * デザイン/挙動要件:
@@ -1690,6 +1695,11 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
     public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
         $is_current   = $item->current || $item->current_item_ancestor || $item->current_item_parent;
         $has_children = in_array( 'menu-item-has-children', $item->classes, true );
+
+        // depth 1で子がある場合、祖先フラグを保持
+        if ( $depth === 1 && $has_children ) {
+            $this->parent_is_ancestor = $item->current_item_ancestor || $item->current;
+        }
 
         // depth 0: トップレベル（変更なし）
         if ( $depth === 0 ) {
@@ -1795,9 +1805,20 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             $output .= '<ul class="navigation__sub-list">';
         } else {
             // 第3階層を囲むリスト（アコーディオン開閉対象）
-            // 製品情報ページに合わせて navigation__sub-list は付けず、
-            // navigation__sub-accordion-list のみにする
-            $output .= '<ul class="navigation__sub-accordion-list" aria-hidden="true">';
+            // 親が祖先の場合は is-active クラスを付与して自動展開
+            $classes = array( 'navigation__sub-accordion-list' );
+            $aria_hidden = 'true';
+
+            if ( $this->parent_is_ancestor ) {
+                $classes[] = 'is-active';
+                $aria_hidden = 'false';
+            }
+
+            $class_attr = implode( ' ', $classes );
+            $output .= '<ul class="' . esc_attr( $class_attr ) . '" aria-hidden="' . $aria_hidden . '">';
+
+            // フラグをリセット
+            $this->parent_is_ancestor = false;
         }
     }
 
