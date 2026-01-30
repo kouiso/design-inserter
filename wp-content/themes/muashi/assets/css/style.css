@@ -3742,6 +3742,33 @@ a {
 .top-kv__nav-link--lang {
   display: flex;
 }
+.top-kv__nav-link--search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-white);
+  transition: color 0.4s ease-in-out, opacity 0.3s ease;
+}
+.top-kv__nav-link--search::after {
+  display: none;
+}
+.top-kv__nav-link--search:hover {
+  opacity: 0.7;
+}
+.top-kv__nav-link--search svg {
+  width: 20px;
+  height: 20px;
+}
+.top-kv__nav-item--search {
+  display: flex;
+  align-items: center;
+}
 .top-kv__nav-link-text {
   font-size: 14px;
   color: var(--color-white);
