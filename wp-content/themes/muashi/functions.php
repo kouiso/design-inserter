@@ -1743,23 +1743,14 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 子がある場合はアコーディオントリガー
             if ( $has_children ) {
-                // sidebar_voiceまたはsidebar_about_usロケーションの場合は常に展開
-                $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-                $always_expand = ( $theme_location === 'sidebar_voice' || $theme_location === 'sidebar_about_us' );
-
                 // アコーディオンJSが反応するクラスと属性を追加
-                // 常に展開する場合はjs-navigation-accordionクラスを出力しない（アコーディオン機能を無効化）
-                if ( $always_expand ) {
-                    $link_classes = 'navigation__sub-link has-accordion is-active';
-                } else {
-                    $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
-                    if ( $item->current || $item->current_item_ancestor ) {
-                        $link_classes .= ' is-active';
-                    }
+                $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
+                if ( $item->current || $item->current_item_ancestor ) {
+                    $link_classes .= ' is-active';
                 }
 
                 // role="button" でクリッカブルであることを示す
-                $aria_expanded = ( $item->current || $item->current_item_ancestor || $always_expand ) ? 'true' : 'false';
+                $aria_expanded = ( $item->current || $item->current_item_ancestor ) ? 'true' : 'false';
                 $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
                 $output .= esc_html( $item->title );
                 $output .= '</p>';
@@ -1818,11 +1809,7 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             $classes = array( 'navigation__sub-accordion-list' );
             $aria_hidden = 'true';
 
-            // sidebar_voiceまたはsidebar_about_usロケーションの場合は常に展開
-            $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-            $always_expand = ( $theme_location === 'sidebar_voice' || $theme_location === 'sidebar_about_us' );
-
-            if ( $this->parent_is_ancestor || $always_expand ) {
+            if ( $this->parent_is_ancestor ) {
                 $classes[] = 'is-active';
                 $aria_hidden = 'false';
             }
