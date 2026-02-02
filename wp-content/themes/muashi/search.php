@@ -96,9 +96,6 @@ get_header();
                                             <?php if ( $post_type_label ) : ?>
                                             <span class="archive__category"><?php echo esc_html( $post_type_label ); ?></span>
                                             <?php endif; ?>
-                                            <time class="archive__date" datetime="<?php echo esc_attr( get_the_date( 'Y-m-d' ) ); ?>">
-                                                <?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?>
-                                            </time>
                                             <h2 class="archive__title"><?php the_title(); ?></h2>
                                             <?php if ( has_excerpt() || get_the_content() ) : ?>
                                             <p class="archive__excerpt">
