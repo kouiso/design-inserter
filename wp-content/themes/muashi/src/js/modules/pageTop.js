@@ -7,6 +7,8 @@
  * - smoothScroll.jsのページトップスクロール機能を活用
  */
 
+console.log('DEBUG: pageTop.js module loaded');
+
 document.addEventListener('DOMContentLoaded', () => {
   const pageTopButton = document.querySelector('.js-page-top');
 
