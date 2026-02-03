@@ -80,7 +80,7 @@
     "globalnetwork": {
       "path": "/global-network/",
       "title": "グローバルネットワーク",
-      "expectedCount": 11,
+      "expectedCount": 14,
       "posts": [
         { "id": 326, "title": "武蔵塗料　ハンガリー" },
         { "id": 491, "title": "武蔵塗料　ベトナム" },
