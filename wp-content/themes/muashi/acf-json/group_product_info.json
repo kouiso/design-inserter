@@ -1,0 +1,120 @@
+{
+    "key": "group_product_info",
+    "title": "製品情報",
+    "fields": [
+        {
+            "key": "field_product_name_trademark_en",
+            "label": "英語品名（商標）",
+            "name": "product_name_trademark_en",
+            "type": "text",
+            "instructions": "例: VITA SUNSHINE",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_product_line_number",
+            "label": "ライン番号",
+            "name": "product_line_number",
+            "type": "text",
+            "instructions": "例: EA-NVH62-",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_product_solvent_type",
+            "label": "溶剤・水系・無溶剤系分類",
+            "name": "product_solvent_type",
+            "type": "text",
+            "instructions": "例: 溶剤系 / solvent type",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_product_paint_type",
+            "label": "塗料別分類",
+            "name": "product_paint_type",
+            "type": "text",
+            "instructions": "例: 低温2液塗料 / Low-TEMP 2K",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_product_resin_type",
+            "label": "樹脂別分類",
+            "name": "product_resin_type",
+            "type": "text",
+            "instructions": "例: アクリルウレタン系 / Acrylic urethane type",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "product"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "製品詳細情報（CSVマスターデータに対応）",
+    "show_in_rest": 0,
+    "modified": 1738648800
+}

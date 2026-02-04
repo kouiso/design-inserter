@@ -1,15 +1,15 @@
 <?php
 
 /**
- * 【一時コード】不要メニュー削除 - 管理画面アクセス時に1回だけ実行
+ * 【一時コード】不要メニュー削除 + FAQメニュー再作成 - 管理画面アクセス時に1回だけ実行
  * 実行確認後、このブロックは削除してOK
  */
-add_action( 'admin_init', function() {
-    if ( get_option( 'muashi_menus_cleaned_v4' ) ) {
+add_action( 'init', function() {
+    if ( get_option( 'muashi_menus_cleaned_v5' ) ) {
         return;
     }
 
-    // 削除対象メニュー（重複・未使用）
+    // 削除対象メニュー（重複・未使用 + FAQ再作成のため）
     $menus_to_delete = array(
         'サステナビリティサイドバー',
         'ニュース・メディアサイドバー',
@@ -18,6 +18,7 @@ add_action( 'admin_init', function() {
         'インタビュー用サイドバー',
         '会社概要用サイドバー',
         'ニュース・ピックアップ用サイドバー',
+        'よくある質問用サイドバー', // 再作成のため削除
     );
 
     foreach ( $menus_to_delete as $menu_name ) {
@@ -34,8 +35,15 @@ add_action( 'admin_init', function() {
     unset( $locations['sidebar_company'] );
     set_theme_mod( 'nav_menu_locations', $locations );
 
-    update_option( 'muashi_menus_cleaned_v4', true );
-    error_log( 'Muashi: Unused menus cleaned up (v4)' );
+    // FAQメニュー再作成
+    if ( function_exists( 'muashi_setup_faq_sidebar_menu' ) ) {
+        muashi_setup_faq_sidebar_menu();
+    } else {
+        require_once get_theme_file_path( '/inc/setup-faq-menu.php' );
+    }
+
+    update_option( 'muashi_menus_cleaned_v5', true );
+    error_log( 'Muashi: Unused menus cleaned up + FAQ recreated (v5)' );
 });
 
 /**
@@ -175,10 +183,18 @@ function save_custom_fields( $post_id ) {
 }
 
 /**
- * インタビュー投稿タイプ用メタボックス（会社名・部署役職・氏名）
+ * インタビュー投稿タイプ用カスタムフィールド
+ *
+ * ACFがアクティブな場合: ACFフィールドグループを使用
+ * ACFがない場合: 標準メタボックスをフォールバックとして使用
  */
-add_action( 'add_meta_boxes', 'add_interview_meta_box' );
-add_action( 'save_post_interview', 'save_interview_meta' );
+require_once( get_theme_file_path( '/inc/interview-acf-fields.php' ) );
+
+// ACFがアクティブでない場合のみ標準メタボックスを登録
+if ( ! class_exists( 'ACF' ) ) {
+    add_action( 'add_meta_boxes', 'add_interview_meta_box' );
+    add_action( 'save_post_interview', 'save_interview_meta' );
+}
 
 function add_interview_meta_box() {
     add_meta_box(
@@ -1969,3 +1985,20 @@ function muashi_render_sidebar_navigation( $location ) {
     echo '</div>';
     echo '</div>';
 }
+
+/**
+ * ACF Local JSON 設定
+ * JSONファイルでフィールドグループを管理し、Gitでバージョン管理可能にする
+ */
+
+// ACF JSON 保存先ディレクトリ
+add_filter('acf/settings/save_json', function($path) {
+    return get_stylesheet_directory() . '/acf-json';
+});
+
+// ACF JSON 読み込み元ディレクトリ
+add_filter('acf/settings/load_json', function($paths) {
+    unset($paths[0]); // デフォルトパスを削除
+    $paths[] = get_stylesheet_directory() . '/acf-json';
+    return $paths;
+});
