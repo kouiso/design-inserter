@@ -131,4 +131,33 @@
       font-size: 14px;
     }
   }
+
+  // インタビュー一覧用メタ情報（会社名・部署役職・氏名）
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #666;
+
+    @include mq(lg) {
+      font-size: 12px;
+      margin-top: 12px;
+    }
+  }
+
+  &__company {
+    font-weight: bold;
+    color: #333;
+  }
+
+  &__position {
+    color: #666;
+  }
+
+  &__person {
+    color: #333;
+  }
 }
