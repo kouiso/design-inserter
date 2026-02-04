@@ -17,7 +17,7 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <?php
-    $globalnetwork_archive_url = defined( 'URL_GLOBAL_NETWORK' ) ? URL_GLOBAL_NETWORK : get_post_type_archive_link( 'globalnetwork' );
+    $globalnetwork_archive_url = defined( 'URL_GLOBAL_NETWORK' ) ? URL_GLOBAL_NETWORK . '#overseas-bases' : get_post_type_archive_link( 'globalnetwork' );
     ?>
 
     <?php muashi_render_sidebar_navigation( 'sidebar_global_network' ); ?>

@@ -76,9 +76,6 @@ $career_query = new WP_Query( array(
                                         <p class="archive__title">
                                         <?php the_title(); ?>
                                         </p>
-                                        <p class="archive__text">
-                                        <?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?>
-                                        </p>
                                     </div>
                                     </a>
                                 </li>

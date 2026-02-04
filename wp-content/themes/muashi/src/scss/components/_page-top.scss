@@ -27,9 +27,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-primary); // muashiテーマのプライマリカラー
+  background-color: #0c3c78; // サイト統一のボタンカラー
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   text-decoration: none;
 
@@ -67,7 +67,7 @@
 
   // focus状態（キーボード操作時のアクセシビリティ）
   &:focus {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid #0c3c78;
     outline-offset: 4px;
   }
 

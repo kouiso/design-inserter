@@ -17,7 +17,7 @@ get_header();
     $interview_archive_url = defined( 'URL_INTERVIEW' ) ? URL_INTERVIEW : home_url( '/career/interview/' );
     ?>
 
-    <?php muashi_render_sidebar_navigation( 'sidebar_interview' ); ?>
+    <?php muashi_render_sidebar_navigation( 'sidebar_career' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -38,6 +38,24 @@ get_header();
 
             <div class="page__content">
                 <h1 class="page__title"><?php the_title(); ?></h1>
+
+                <?php
+                $company     = get_post_meta( get_the_ID(), 'interview_company', true );
+                $position    = get_post_meta( get_the_ID(), 'interview_position', true );
+                $person_name = get_post_meta( get_the_ID(), 'interview_person_name', true );
+                if ( $company || $position || $person_name ) : ?>
+                <div class="interview-meta">
+                    <?php if ( $company ) : ?>
+                    <p class="interview-meta__company"><?php echo esc_html( $company ); ?></p>
+                    <?php endif; ?>
+                    <?php if ( $position ) : ?>
+                    <p class="interview-meta__position"><?php echo esc_html( $position ); ?></p>
+                    <?php endif; ?>
+                    <?php if ( $person_name ) : ?>
+                    <p class="interview-meta__person"><?php echo esc_html( $person_name ); ?></p>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
 
                 <div class="page__inner page__inner--narrow">
                     <div class="single__contents">

@@ -14,8 +14,8 @@ $interview_query = new WP_Query( array(
     'post_type'      => 'interview',
     'posts_per_page' => 12,
     'paged'          => $paged,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
+    'orderby'        => 'menu_order',
+    'order'          => 'ASC',
 ) );
 
 ?>
@@ -27,7 +27,7 @@ $interview_query = new WP_Query( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <?php muashi_render_sidebar_navigation( 'sidebar_interview' ); ?>
+    <?php muashi_render_sidebar_navigation( 'sidebar_career' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -77,9 +77,23 @@ $interview_query = new WP_Query( array(
                                         <p class="archive__title">
                                         <?php the_title(); ?>
                                         </p>
-                                        <p class="archive__text">
-                                        <?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?>
-                                        </p>
+                                        <?php
+                                        $company     = get_post_meta( get_the_ID(), 'interview_company', true );
+                                        $position    = get_post_meta( get_the_ID(), 'interview_position', true );
+                                        $person_name = get_post_meta( get_the_ID(), 'interview_person_name', true );
+                                        if ( $company || $position || $person_name ) : ?>
+                                        <div class="archive__meta">
+                                            <?php if ( $company ) : ?>
+                                            <span class="archive__company"><?php echo esc_html( $company ); ?></span>
+                                            <?php endif; ?>
+                                            <?php if ( $position ) : ?>
+                                            <span class="archive__position"><?php echo esc_html( $position ); ?></span>
+                                            <?php endif; ?>
+                                            <?php if ( $person_name ) : ?>
+                                            <span class="archive__person"><?php echo esc_html( $person_name ); ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                     </a>
                                 </li>

@@ -6,14 +6,10 @@ global $description;
 $description = '';
 get_header();
 
-// ページネーション用に現在のページ番号を取得
-$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-
-// グローバルネットワーク投稿一覧を取得（WP_Queryでページネーション対応）
+// グローバルネットワーク投稿一覧を取得（全件表示）
 $globalnetwork_query = new WP_Query( array(
     'post_type'      => 'globalnetwork',
-    'posts_per_page' => 12,
-    'paged'          => $paged,
+    'posts_per_page' => -1,
     'orderby'        => 'menu_order',
     'order'          => 'ASC',
 ) );
@@ -26,7 +22,7 @@ $globalnetwork_query = new WP_Query( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <?php muashi_render_sidebar_navigation( 'sidebar_global_network' ); ?>
+    <?php muashi_render_sidebar_navigation( 'sidebar_about_us' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -59,7 +55,7 @@ $globalnetwork_query = new WP_Query( array(
 
                 <div class="page__inner page__inner--narrow" style="margin-top: 0;">
 
-                    <div class="story">
+                    <div class="story" id="overseas-bases">
                         <div class="archive">
 
                             <ul class="archive__list">
@@ -84,9 +80,6 @@ $globalnetwork_query = new WP_Query( array(
                                         <p class="archive__title">
                                         <?php the_title(); ?>
                                         </p>
-                                        <p class="archive__text">
-                                        <?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?>
-                                        </p>
                                     </div>
                                     </a>
                                 </li>
@@ -101,7 +94,6 @@ $globalnetwork_query = new WP_Query( array(
                             <?php endif; ?>
                             </ul>
 
-                            <?php ts_render_pagination( $globalnetwork_query ); ?>
 
                         </div>
                     </div>

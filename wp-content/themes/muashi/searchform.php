@@ -32,3 +32,12 @@ $search_query = get_search_query();
         </svg>
     </button>
 </form>
+
+<!-- クイックリンク -->
+<div class="search-quick-links">
+    <ul class="search-quick-links__list">
+        <li><a href="<?php echo esc_url(URL_PRODUCT); ?>">製品情報</a></li>
+        <li><a href="<?php echo esc_url(URL_FEATURED); ?>">注目製品</a></li>
+        <li><a href="<?php echo esc_url(URL_APPLICATIONS); ?>">製品用途紹介</a></li>
+    </ul>
+</div>

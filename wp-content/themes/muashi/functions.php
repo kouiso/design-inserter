@@ -1,6 +1,89 @@
 <?php
 
 /**
+ * 【一時コード】不要メニュー削除 + FAQメニュー再作成 - 管理画面アクセス時に1回だけ実行
+ * 実行確認後、このブロックは削除してOK
+ */
+add_action( 'init', function() {
+    if ( get_option( 'muashi_menus_cleaned_v7' ) ) {
+        return;
+    }
+
+    // 削除対象メニュー（重複・未使用 + FAQ再作成のため）
+    $menus_to_delete = array(
+        'サステナビリティサイドバー',
+        'ニュース・メディアサイドバー',
+        'よくある質問サイドバー',
+        '私たちについてサイドバー',
+        'インタビュー用サイドバー',
+        '会社概要用サイドバー',
+        'ニュース・ピックアップ用サイドバー',
+        'グローバルネットワーク用サイドバー',
+        'よくある質問用サイドバー', // 再作成のため削除（SNS子項目追加版）
+    );
+
+    foreach ( $menus_to_delete as $menu_name ) {
+        $menu = wp_get_nav_menu_object( $menu_name );
+        if ( $menu ) {
+            wp_delete_nav_menu( $menu->term_id );
+            error_log( "Deleted menu: $menu_name" );
+        }
+    }
+
+    // 不要ロケーション割り当てを解除
+    $locations = get_theme_mod( 'nav_menu_locations', array() );
+    unset( $locations['sidebar_interview'] );
+    unset( $locations['sidebar_company'] );
+    unset( $locations['sidebar_global_network'] );
+    set_theme_mod( 'nav_menu_locations', $locations );
+
+    // FAQメニュー再作成（SNS子項目あり版）
+    if ( function_exists( 'muashi_setup_faq_sidebar_menu' ) ) {
+        muashi_setup_faq_sidebar_menu();
+    } else {
+        require_once get_theme_file_path( '/inc/setup-faq-menu.php' );
+    }
+
+    // ニュース・ピックアップ用サイドバー再作成
+    require_once get_theme_file_path( '/inc/setup-pickup-menu.php' );
+
+    update_option( 'muashi_menus_cleaned_v7', true );
+    error_log( 'Muashi: Unused menus cleaned up + FAQ/Pickup recreated (v7)' );
+});
+
+/**
+ * 【一時コード】全サイドバーメニュー再作成 - グループ会社・グローバル生産拠点追加
+ * 実行確認後、このブロックは削除してOK
+ */
+add_action( 'init', function() {
+    if ( get_option( 'muashi_sidebar_menus_v3' ) ) {
+        return;
+    }
+
+    // 対象メニューを削除
+    $menus_to_recreate = array(
+        'グローバルネットワーク用サイドバー',
+        '私たちについて用サイドバー',
+        'お客様の声用サイドバー',
+    );
+    foreach ( $menus_to_recreate as $menu_name ) {
+        $menu = wp_get_nav_menu_object( $menu_name );
+        if ( $menu ) {
+            wp_delete_nav_menu( $menu->term_id );
+            error_log( "Deleted menu for recreation: $menu_name" );
+        }
+    }
+
+    // メニュー再作成
+    require_once get_theme_file_path( '/inc/setup-global-network-menu.php' );
+    require_once get_theme_file_path( '/inc/setup-about-us-menu.php' );
+    require_once get_theme_file_path( '/inc/setup-voice-menu.php' );
+
+    update_option( 'muashi_sidebar_menus_v3', true );
+    error_log( 'Muashi: All sidebar menus recreated with グループ会社 and グローバル生産拠点 (v3)' );
+});
+
+/**
  * 変数ファイルの読み込み
  */
 require_once(get_theme_file_path('/inc/variable.php'));
@@ -134,6 +217,79 @@ function save_custom_fields( $post_id ) {
     if(!empty($_POST['description']))
         update_post_meta($post_id, 'description', $_POST['description'] );
     else delete_post_meta($post_id, 'description');
+}
+
+/**
+ * インタビュー投稿タイプ用カスタムフィールド
+ *
+ * ACFがアクティブな場合: ACFフィールドグループを使用
+ * ACFがない場合: 標準メタボックスをフォールバックとして使用
+ */
+require_once( get_theme_file_path( '/inc/interview-acf-fields.php' ) );
+
+// ACFがアクティブでない場合のみ標準メタボックスを登録
+if ( ! class_exists( 'ACF' ) ) {
+    add_action( 'add_meta_boxes', 'add_interview_meta_box' );
+    add_action( 'save_post_interview', 'save_interview_meta' );
+}
+
+function add_interview_meta_box() {
+    add_meta_box(
+        'interview_meta_box',
+        'インタビュー情報',
+        'render_interview_meta_box',
+        'interview',
+        'normal',
+        'high'
+    );
+}
+
+function render_interview_meta_box( $post ) {
+    wp_nonce_field( 'interview_meta_nonce_action', 'interview_meta_nonce' );
+
+    $company     = get_post_meta( $post->ID, 'interview_company', true );
+    $position    = get_post_meta( $post->ID, 'interview_position', true );
+    $person_name = get_post_meta( $post->ID, 'interview_person_name', true );
+    ?>
+    <p>
+        <label for="interview_company">会社名</label><br>
+        <input type="text" id="interview_company" name="interview_company"
+               value="<?php echo esc_attr( $company ); ?>" style="width: 100%;">
+    </p>
+    <p>
+        <label for="interview_position">部署・役職</label><br>
+        <input type="text" id="interview_position" name="interview_position"
+               value="<?php echo esc_attr( $position ); ?>" style="width: 100%;">
+    </p>
+    <p>
+        <label for="interview_person_name">氏名</label><br>
+        <input type="text" id="interview_person_name" name="interview_person_name"
+               value="<?php echo esc_attr( $person_name ); ?>" style="width: 100%;">
+    </p>
+    <?php
+}
+
+function save_interview_meta( $post_id ) {
+    if ( ! isset( $_POST['interview_meta_nonce'] ) ||
+         ! wp_verify_nonce( $_POST['interview_meta_nonce'], 'interview_meta_nonce_action' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    $fields = array( 'interview_company', 'interview_position', 'interview_person_name' );
+
+    foreach ( $fields as $field ) {
+        if ( isset( $_POST[ $field ] ) ) {
+            update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+        }
+    }
 }
 
 /**
@@ -629,7 +785,7 @@ function create_post_type() {
             'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
-            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
             'rewrite'       => array(
                 'slug'       => 'career/interview',
                 'with_front' => false,
@@ -1624,28 +1780,136 @@ add_filter( 'render_block_core/group', function( $block_content, $block ) {
 }, 10, 2 );
 
 /**
- * ダイナミックブロック: 国内拠点情報
- * PHPで動的にレンダリングするため、コード変更が即座に反映される
+ * 国内拠点情報ブロックパターン登録
  */
 add_action( 'init', function() {
-    register_block_type( 'muashi/domestic-locations', array(
-        'api_version'     => 2,
-        'title'           => '国内拠点情報',
-        'description'     => '日本国内の拠点一覧（会社概要ページ用）',
-        'category'        => 'widgets',
-        'icon'            => 'location',
-        'render_callback' => 'muashi_render_domestic_locations_block',
-    ) );
-} );
+    if ( ! function_exists( 'register_block_pattern' ) ) {
+        return;
+    }
 
-/**
- * 国内拠点情報ブロックのレンダリング関数
- */
-function muashi_render_domestic_locations_block( $attributes, $content ) {
-    ob_start();
-    include get_template_directory() . '/blocks/domestic-locations.php';
-    return ob_get_clean();
+    // パターンカテゴリ登録
+    if ( function_exists( 'register_block_pattern_category' ) ) {
+        register_block_pattern_category(
+            'muashi',
+            array( 'label' => 'Muashi' )
+        );
+    }
+
+    register_block_pattern(
+        'muashi/domestic-locations',
+        array(
+            'title'       => '国内拠点情報',
+            'description' => '日本国内の拠点一覧（Google Map iframe埋め込み）',
+            'categories'  => array( 'muashi' ),
+            'content'     => '<!-- wp:html -->
+<div id="office-locations-container" style="max-width: 1000px; margin: 0 auto;">
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料ホールディングス株式会社</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 03-3985-8118</p>
+                <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
+                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料ホールディングス株式会社 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 入間工場</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 04-2934-4131</p>
+                <p style="margin: 0 0 4px;">FAX: 04-2934-4134</p>
+                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 入間工場 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 営業部</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 04-2908-7634</p>
+                <p style="margin: 0 0 4px;">FAX: 04-2935-0273</p>
+                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 営業部 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 大阪事業所</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 072-963-1133</p>
+                <p style="margin: 0 0 4px;">FAX: 072-963-0606</p>
+                <p style="margin: 0;">住所: 〒578-0921</p>
+                <p style="margin: 0;">大阪府東大阪市水走1-17-13</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=大阪府東大阪市水走1-17-13&amp;output=embed" aria-label="武蔵塗料株式会社 大阪事業所 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 名古屋営業所</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 0568-54-2113</p>
+                <p style="margin: 0 0 4px;">FAX: 0568-54-2117</p>
+                <p style="margin: 0;">住所: 〒485-0029</p>
+                <p style="margin: 0;">愛知県小牧市中央1丁目267 小牧ガスビル 3F</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=愛知県小牧市中央1丁目267&amp;output=embed" aria-label="武蔵塗料株式会社 名古屋営業所 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料国際株式会社</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 03-3985-8118</p>
+                <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
+                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル 6F</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料国際株式会社 地図"></iframe>
+        </div>
+    </div>
+</div>
+<style>
+@media (max-width: 1600px) {
+    #office-locations-container .office-location-card {
+        flex-direction: column !important;
+    }
+    #office-locations-container .office-map-container {
+        width: 100% !important;
+        flex: auto !important;
+        border-left: none !important;
+        border-top: 1px solid #999;
+        height: 180px;
+        min-height: 180px !important;
+    }
+    #office-locations-container iframe {
+        min-height: 180px !important;
+    }
 }
+</style>
+<!-- /wp:html -->',
+        )
+    );
+} );
 
 /**
  * サイドバーナビゲーション用メニューロケーション登録
@@ -1658,10 +1922,7 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_story'          => 'ストーリー用サイドバー',
         'sidebar_sustainability' => 'サステナビリティ用サイドバー',
         'sidebar_career'         => '採用情報用サイドバー',
-        'sidebar_interview'      => 'インタビュー用サイドバー',
         'sidebar_history'        => 'ヒストリー用サイドバー',
-        'sidebar_company'        => '会社概要用サイドバー',
-        'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
         'sidebar_faq'            => 'よくある質問用サイドバー',
         'sidebar_about_us'       => '私たちについて用サイドバー',
         'sidebar_product'        => '製品情報用サイドバー',
@@ -1716,8 +1977,8 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 $target = ' target="_blank" rel="noopener noreferrer"';
             }
 
-            // 現在のページはリンクなしのテキスト
-            if ( $item->current ) {
+            // 現在のページまたはURL=#はリンクなしのテキスト（見た目は同じ）
+            if ( $item->current || $url === '#' ) {
                 $output .= '<p class="navigation__item-title">';
                 $output .= esc_html( $item->title );
                 $output .= '</p>';
@@ -1745,7 +2006,7 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             if ( $has_children ) {
                 // 特定のメニューロケーションではアコーディオンを無効化
                 $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice', 'sidebar_global_network' );
+                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
                 $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
 
                 // アコーディオンJSが反応するクラスと属性を追加
@@ -1820,7 +2081,7 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 特定のメニューロケーションでは常に展開
             $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice', 'sidebar_global_network' );
+            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
             $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
 
             if ( $this->parent_is_ancestor || $disable_accordion ) {
@@ -1868,3 +2129,20 @@ function muashi_render_sidebar_navigation( $location ) {
     echo '</div>';
     echo '</div>';
 }
+
+/**
+ * ACF Local JSON 設定
+ * JSONファイルでフィールドグループを管理し、Gitでバージョン管理可能にする
+ */
+
+// ACF JSON 保存先ディレクトリ
+add_filter('acf/settings/save_json', function($path) {
+    return get_stylesheet_directory() . '/acf-json';
+});
+
+// ACF JSON 読み込み元ディレクトリ
+add_filter('acf/settings/load_json', function($paths) {
+    unset($paths[0]); // デフォルトパスを削除
+    $paths[] = get_stylesheet_directory() . '/acf-json';
+    return $paths;
+});

@@ -61,8 +61,9 @@ function muashi_setup_voice_sidebar_menu() {
                         'title' => 'グローバルネットワーク',
                         'url'   => URL_GLOBAL_NETWORK,
                         'children' => array(
-                            // 第3階層: 海外拠点
-                            array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
+                            // 第3階層: グループ会社・グローバル生産拠点
+                            array('title' => 'グループ会社', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
+                            array('title' => 'グローバル生産拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
                         ),
                     ),
                     // 第2階層: サステナブルなビジネス展開

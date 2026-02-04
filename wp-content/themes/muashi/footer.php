@@ -412,8 +412,8 @@
                     <div class="footer__nav-pc-link-wrapper">
                         <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">インタビュー</a>
                         <a href="<?= URL_CAREER_FAQ ?>" class="footer__nav-pc-link">採用に関するQ&A</a>
-                        <a href="<?= URL_FAQ ?>" class="footer__nav-pc-link">よくあるご質問</a>
                     </div>
+                    <a href="<?= URL_FAQ ?>" class="footer__nav-pc-link">よくあるご質問</a>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
                     <a href="<?= URL_CONTACT ?>" class="footer__nav-pc-other-link">

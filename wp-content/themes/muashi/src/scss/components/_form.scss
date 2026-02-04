@@ -97,15 +97,15 @@
     font-size: 16px;
     font-weight: 700;
     text-align: center;
-    border: 1px solid rgba(0,0,0,.2);
+    border: none;
     border-radius: 32px;
-    background: #000;
+    background: #0c3c78;
     color: #fff;
     cursor: pointer;
-    transition: opacity .2s ease-in-out;
+    transition: background .2s ease;
 
     &:hover{
-      opacity: .85;
+      background: #082850;
     }
   }
 
