@@ -2192,7 +2192,7 @@ a {
 }
 .navigation__sub-accordion-list {
   display: none;
-  margin: 4px 0 4px;
+  margin: 8px 0 16px;
   padding-left: 20px;
   list-style: none;
 }
@@ -2436,7 +2436,7 @@ a {
 }
 .navigation__sub-accordion-list {
   display: none;
-  margin: 4px 0 4px;
+  margin: 12px 0 24px;
   padding-left: 16px;
   list-style: none;
 }
@@ -2898,15 +2898,16 @@ a {
   font-size: 16px;
   font-weight: 700;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: none;
   border-radius: 32px;
-  background: #000;
-  color: #fff;
+  background: #0c3c78;
+  color: #fff !important;
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  transition: background 0.2s ease;
 }
 .form__submit-button:hover {
-  opacity: 0.85;
+  background: #082850;
+  color: #fff !important;
 }
 .form__note {
   margin-top: 12px;
@@ -3713,6 +3714,11 @@ a {
   .top-kv__nav {
     display: block;
     margin-top: 40px;
+    transition: opacity 0.3s ease;
+  }
+  .top-kv__nav.is-hidden {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 .top-kv__nav-list {
@@ -3786,12 +3792,18 @@ a {
 .top-kv[data-text-color=white] .top-kv__nav-link::after {
   background-color: var(--color-white);
 }
+.top-kv[data-text-color=white] .top-kv__nav-link--search {
+  color: var(--color-white);
+}
 
 .top-kv[data-text-color=black] .top-kv__nav-link-text {
   color: var(--color-black);
 }
 .top-kv[data-text-color=black] .top-kv__nav-link::after {
   background-color: var(--color-black);
+}
+.top-kv[data-text-color=black] .top-kv__nav-link--search {
+  color: var(--color-black);
 }
 
 .top-kv__wave .js-color-fill {
@@ -4764,15 +4776,16 @@ a {
   font-size: 16px;
   font-weight: 700;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: none;
   border-radius: 32px;
-  background: #000;
-  color: #fff;
+  background: #0c3c78;
+  color: #fff !important;
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  transition: background 0.2s ease;
 }
 .contact__submit-button:hover {
-  opacity: 0.85;
+  background: #082850;
+  color: #fff !important;
 }
 .contact__note {
   margin-top: 12px;
