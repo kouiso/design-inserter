@@ -1,6 +1,44 @@
 <?php
 
 /**
+ * 【一時コード】不要メニュー削除 - 管理画面アクセス時に1回だけ実行
+ * 実行確認後、このブロックは削除してOK
+ */
+add_action( 'admin_init', function() {
+    if ( get_option( 'muashi_menus_cleaned_v4' ) ) {
+        return;
+    }
+
+    // 削除対象メニュー（重複・未使用）
+    $menus_to_delete = array(
+        'サステナビリティサイドバー',
+        'ニュース・メディアサイドバー',
+        'よくある質問サイドバー',
+        '私たちについてサイドバー',
+        'インタビュー用サイドバー',
+        '会社概要用サイドバー',
+        'ニュース・ピックアップ用サイドバー',
+    );
+
+    foreach ( $menus_to_delete as $menu_name ) {
+        $menu = wp_get_nav_menu_object( $menu_name );
+        if ( $menu ) {
+            wp_delete_nav_menu( $menu->term_id );
+            error_log( "Deleted menu: $menu_name" );
+        }
+    }
+
+    // sidebar_interview, sidebar_company のロケーション割り当てを解除
+    $locations = get_theme_mod( 'nav_menu_locations', array() );
+    unset( $locations['sidebar_interview'] );
+    unset( $locations['sidebar_company'] );
+    set_theme_mod( 'nav_menu_locations', $locations );
+
+    update_option( 'muashi_menus_cleaned_v4', true );
+    error_log( 'Muashi: Unused menus cleaned up (v4)' );
+});
+
+/**
  * 変数ファイルの読み込み
  */
 require_once(get_theme_file_path('/inc/variable.php'));
@@ -134,6 +172,71 @@ function save_custom_fields( $post_id ) {
     if(!empty($_POST['description']))
         update_post_meta($post_id, 'description', $_POST['description'] );
     else delete_post_meta($post_id, 'description');
+}
+
+/**
+ * インタビュー投稿タイプ用メタボックス（会社名・部署役職・氏名）
+ */
+add_action( 'add_meta_boxes', 'add_interview_meta_box' );
+add_action( 'save_post_interview', 'save_interview_meta' );
+
+function add_interview_meta_box() {
+    add_meta_box(
+        'interview_meta_box',
+        'インタビュー情報',
+        'render_interview_meta_box',
+        'interview',
+        'normal',
+        'high'
+    );
+}
+
+function render_interview_meta_box( $post ) {
+    wp_nonce_field( 'interview_meta_nonce_action', 'interview_meta_nonce' );
+
+    $company     = get_post_meta( $post->ID, 'interview_company', true );
+    $position    = get_post_meta( $post->ID, 'interview_position', true );
+    $person_name = get_post_meta( $post->ID, 'interview_person_name', true );
+    ?>
+    <p>
+        <label for="interview_company">会社名</label><br>
+        <input type="text" id="interview_company" name="interview_company"
+               value="<?php echo esc_attr( $company ); ?>" style="width: 100%;">
+    </p>
+    <p>
+        <label for="interview_position">部署・役職</label><br>
+        <input type="text" id="interview_position" name="interview_position"
+               value="<?php echo esc_attr( $position ); ?>" style="width: 100%;">
+    </p>
+    <p>
+        <label for="interview_person_name">氏名</label><br>
+        <input type="text" id="interview_person_name" name="interview_person_name"
+               value="<?php echo esc_attr( $person_name ); ?>" style="width: 100%;">
+    </p>
+    <?php
+}
+
+function save_interview_meta( $post_id ) {
+    if ( ! isset( $_POST['interview_meta_nonce'] ) ||
+         ! wp_verify_nonce( $_POST['interview_meta_nonce'], 'interview_meta_nonce_action' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    $fields = array( 'interview_company', 'interview_position', 'interview_person_name' );
+
+    foreach ( $fields as $field ) {
+        if ( isset( $_POST[ $field ] ) ) {
+            update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+        }
+    }
 }
 
 /**
@@ -629,7 +732,7 @@ function create_post_type() {
             'has_archive'   => false,
             'menu_position' => 5,
             'show_in_rest'  => true,
-            'supports'      => array('title', 'editor', 'thumbnail', 'revisions'),
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
             'rewrite'       => array(
                 'slug'       => 'career/interview',
                 'with_front' => false,
@@ -1658,9 +1761,7 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_story'          => 'ストーリー用サイドバー',
         'sidebar_sustainability' => 'サステナビリティ用サイドバー',
         'sidebar_career'         => '採用情報用サイドバー',
-        'sidebar_interview'      => 'インタビュー用サイドバー',
         'sidebar_history'        => 'ヒストリー用サイドバー',
-        'sidebar_company'        => '会社概要用サイドバー',
         'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
         'sidebar_faq'            => 'よくある質問用サイドバー',
         'sidebar_about_us'       => '私たちについて用サイドバー',
