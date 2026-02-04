@@ -2901,15 +2901,15 @@ a {
   font-size: 16px;
   font-weight: 700;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: none;
   border-radius: 32px;
-  background: #000;
+  background: #0c3c78;
   color: #fff;
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  transition: background 0.2s ease;
 }
 .form__submit-button:hover {
-  opacity: 0.85;
+  background: #082850;
 }
 .form__note {
   margin-top: 12px;
@@ -4836,15 +4836,15 @@ a {
   font-size: 16px;
   font-weight: 700;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: none;
   border-radius: 32px;
-  background: #000;
+  background: #0c3c78;
   color: #fff;
   cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
+  transition: background 0.2s ease;
 }
 .contact__submit-button:hover {
-  opacity: 0.85;
+  background: #082850;
 }
 .contact__note {
   margin-top: 12px;
