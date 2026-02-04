@@ -72,21 +72,10 @@ $product_query = new WP_Query(array(
                                 <?php if ($product_query->have_posts()): ?>
                                     <?php while ($product_query->have_posts()):
                                         $product_query->the_post(); ?>
-                                        <li class="archive__item">
+                                        <li class="archive__item" data-testid="product-list-item">
                                             <a href="<?php the_permalink(); ?>" class="archive__link">
-                                                <div class="archive__image-wrapper">
-                                                    <?php if (has_post_thumbnail()): ?>
-                                                        <img src="<?php echo esc_url(get_the_post_thumbnail_url(null, 'medium_large')); ?>"
-                                                            alt="<?php echo esc_attr(get_the_title()); ?>" class="archive__image">
-                                                    <?php else: ?>
-                                                        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/common/no_image.jpg'); ?>"
-                                                            alt="" class="archive__image">
-                                                    <?php endif; ?>
-                                                </div>
                                                 <div class="archive__text-wrapper">
-                                                    <p class="archive__title">
-                                                        <?php the_title(); ?>
-                                                    </p>
+                                                    <?php get_template_part('template-parts/product-info-display', null, array('product_id' => get_the_ID())); ?>
                                                 </div>
                                             </a>
                                         </li>

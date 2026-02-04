@@ -1,0 +1,71 @@
+@use '../setting' as *;
+
+// ==========================================================================
+// 製品情報表示
+// ==========================================================================
+
+.product-info {
+  width: 100%;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: 10px;
+    line-height: 1.4;
+    color: #666;
+    font-weight: 400;
+    margin: 0;
+
+    @include mq(lg) {
+      font-size: 11px;
+    }
+  }
+
+  &__value {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+    margin: 0;
+
+    @include mq(lg) {
+      font-size: 14px;
+    }
+  }
+}
+
+// 製品一覧ページ用調整
+.archive__item .product-info {
+  padding: 0;
+
+  &__list {
+    gap: 6px;
+  }
+
+  &__item {
+    gap: 1px;
+  }
+
+  // 日本語品名（最初のアイテム）を強調
+  &__item:first-child {
+    .product-info__value {
+      font-size: 14px;
+      font-weight: 500;
+
+      @include mq(lg) {
+        font-size: 16px;
+      }
+    }
+  }
+}
