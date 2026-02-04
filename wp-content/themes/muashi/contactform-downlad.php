@@ -5,8 +5,8 @@
   </p>
   <p class="contact__lead-tel">
     <span class="contact__lead-label">代表電話</span>
-    <a class="contact__lead-number" href="tel:00-0000-0000">00-0000-0000</a>
-    <span class="contact__lead-hours">（平日 9:00–18:00）</span>
+    <a class="contact__lead-number" href="tel:03-3985-8118">03-3985-8118</a>
+    <span class="contact__lead-hours">（平日9:00-17:00）</span>
   </p>
 </div>
 

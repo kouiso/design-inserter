@@ -21,6 +21,7 @@ class DownloadPage {
     });
 
     this.filterKeys = Object.keys(this.taxonomies);
+    this.perPage = Number.isFinite(this.data.perPage) && this.data.perPage > 0 ? this.data.perPage : 20;
     this.state = {
       search: '',
       filters: this.filterKeys.reduce((acc, key) => {
@@ -29,6 +30,7 @@ class DownloadPage {
       }, {}),
       sort: 'title-asc',
       selected: new Map(),
+      currentPage: 1,
     };
 
     this.cacheElements();
@@ -277,7 +279,23 @@ class DownloadPage {
 
   renderAll() {
     const filtered = this.getFilteredProducts();
-    this.renderList(filtered);
+    const totalPages = Math.ceil(filtered.length / this.perPage);
+    
+    // Ensure current page is within bounds
+    if (this.state.currentPage > totalPages && totalPages > 0) {
+      this.state.currentPage = totalPages;
+    }
+    if (this.state.currentPage < 1) {
+      this.state.currentPage = 1;
+    }
+    
+    // Calculate paginated products
+    const startIndex = (this.state.currentPage - 1) * this.perPage;
+    const endIndex = startIndex + this.perPage;
+    const paginatedProducts = filtered.slice(startIndex, endIndex);
+    
+    this.renderList(paginatedProducts);
+    this.renderPagination(filtered.length, totalPages);
 
     if (!this.isDocumentPage) {
       this.renderSelected();
@@ -312,6 +330,131 @@ class DownloadPage {
     });
 
     this.listEl.appendChild(fragment);
+  }
+
+  renderPagination(totalItems, totalPages) {
+    // Remove existing pagination
+    const existingPagination = this.root.querySelector('.download__pagination');
+    if (existingPagination) {
+      existingPagination.remove();
+    }
+
+    // Don't show pagination if only 1 page or no items
+    if (totalPages <= 1 || !this.listEl) {
+      return;
+    }
+
+    const paginationContainer = document.createElement('nav');
+    paginationContainer.className = 'download__pagination';
+    paginationContainer.setAttribute('aria-label', 'ページネーション');
+
+    const paginationList = document.createElement('ul');
+    paginationList.className = 'download__pagination-list';
+
+    // Previous button
+    const prevItem = document.createElement('li');
+    prevItem.className = 'download__pagination-item';
+    const prevButton = document.createElement('button');
+    prevButton.type = 'button';
+    prevButton.className = 'download__pagination-button download__pagination-button--prev';
+    prevButton.textContent = '前へ';
+    prevButton.disabled = this.state.currentPage === 1;
+    prevButton.addEventListener('click', () => this.goToPage(this.state.currentPage - 1));
+    prevItem.appendChild(prevButton);
+    paginationList.appendChild(prevItem);
+
+    // Page numbers
+    const pageRange = this.getPageRange(this.state.currentPage, totalPages);
+    pageRange.forEach((page) => {
+      const pageItem = document.createElement('li');
+      pageItem.className = 'download__pagination-item';
+
+      if (page === '...') {
+        const ellipsis = document.createElement('span');
+        ellipsis.className = 'download__pagination-ellipsis';
+        ellipsis.textContent = '...';
+        pageItem.appendChild(ellipsis);
+      } else {
+        const pageButton = document.createElement('button');
+        pageButton.type = 'button';
+        pageButton.className = 'download__pagination-button download__pagination-button--page';
+        if (page === this.state.currentPage) {
+          pageButton.classList.add('is-active');
+          pageButton.setAttribute('aria-current', 'page');
+        }
+        pageButton.textContent = String(page);
+        pageButton.addEventListener('click', () => this.goToPage(page));
+        pageItem.appendChild(pageButton);
+      }
+
+      paginationList.appendChild(pageItem);
+    });
+
+    // Next button
+    const nextItem = document.createElement('li');
+    nextItem.className = 'download__pagination-item';
+    const nextButton = document.createElement('button');
+    nextButton.type = 'button';
+    nextButton.className = 'download__pagination-button download__pagination-button--next';
+    nextButton.textContent = '次へ';
+    nextButton.disabled = this.state.currentPage === totalPages;
+    nextButton.addEventListener('click', () => this.goToPage(this.state.currentPage + 1));
+    nextItem.appendChild(nextButton);
+    paginationList.appendChild(nextItem);
+
+    paginationContainer.appendChild(paginationList);
+
+    // Insert after the list
+    this.listEl.parentNode.insertBefore(paginationContainer, this.listEl.nextSibling);
+  }
+
+  getPageRange(currentPage, totalPages) {
+    const range = [];
+    const delta = 2; // Pages to show on each side of current page
+
+    if (totalPages <= 7) {
+      // Show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        range.push(i);
+      }
+    } else {
+      // Always show first page
+      range.push(1);
+
+      if (currentPage > delta + 2) {
+        range.push('...');
+      }
+
+      // Pages around current
+      const start = Math.max(2, currentPage - delta);
+      const end = Math.min(totalPages - 1, currentPage + delta);
+
+      for (let i = start; i <= end; i++) {
+        range.push(i);
+      }
+
+      if (currentPage < totalPages - delta - 1) {
+        range.push('...');
+      }
+
+      // Always show last page
+      range.push(totalPages);
+    }
+
+    return range;
+  }
+
+  goToPage(page) {
+    if (page < 1 || !Number.isFinite(page)) {
+      return;
+    }
+    this.state.currentPage = page;
+    this.renderAll();
+    
+    // Scroll to top of list
+    if (this.listEl) {
+      this.listEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   buildProductItem(product) {
