@@ -460,9 +460,6 @@ get_header();
                         <li class="top-news__item">
                             <a href="<?php the_permalink(); ?>" class="top-news__link">
                                 <div class="top-news__date-wrapper">
-                                    <p class="top-news__date">
-                                        <?php echo get_the_date('Y.m.d'); ?>
-                                    </p>
                                     <p class="top-news__category">
                                         <?php
                                         $category_name = function_exists('muashi_get_primary_category_name') ? muashi_get_primary_category_name(get_the_ID()) : '';

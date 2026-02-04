@@ -22,7 +22,7 @@ $globalnetwork_query = new WP_Query( array(
         <div class="page__bg-sub"></div>
     </div>
 
-    <?php muashi_render_sidebar_navigation( 'sidebar_global_network' ); ?>
+    <?php muashi_render_sidebar_navigation( 'sidebar_about_us' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">
@@ -55,7 +55,7 @@ $globalnetwork_query = new WP_Query( array(
 
                 <div class="page__inner page__inner--narrow" style="margin-top: 0;">
 
-                    <div class="story">
+                    <div class="story" id="overseas-bases">
                         <div class="archive">
 
                             <ul class="archive__list">

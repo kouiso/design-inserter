@@ -5,7 +5,7 @@
  * 実行確認後、このブロックは削除してOK
  */
 add_action( 'init', function() {
-    if ( get_option( 'muashi_menus_cleaned_v5' ) ) {
+    if ( get_option( 'muashi_menus_cleaned_v6' ) ) {
         return;
     }
 
@@ -18,7 +18,8 @@ add_action( 'init', function() {
         'インタビュー用サイドバー',
         '会社概要用サイドバー',
         'ニュース・ピックアップ用サイドバー',
-        'よくある質問用サイドバー', // 再作成のため削除
+        'グローバルネットワーク用サイドバー',
+        'よくある質問用サイドバー', // 再作成のため削除（SNS子項目追加版）
     );
 
     foreach ( $menus_to_delete as $menu_name ) {
@@ -29,21 +30,54 @@ add_action( 'init', function() {
         }
     }
 
-    // sidebar_interview, sidebar_company のロケーション割り当てを解除
+    // 不要ロケーション割り当てを解除
     $locations = get_theme_mod( 'nav_menu_locations', array() );
     unset( $locations['sidebar_interview'] );
     unset( $locations['sidebar_company'] );
+    unset( $locations['sidebar_global_network'] );
     set_theme_mod( 'nav_menu_locations', $locations );
 
-    // FAQメニュー再作成
+    // FAQメニュー再作成（SNS子項目あり版）
     if ( function_exists( 'muashi_setup_faq_sidebar_menu' ) ) {
         muashi_setup_faq_sidebar_menu();
     } else {
         require_once get_theme_file_path( '/inc/setup-faq-menu.php' );
     }
 
-    update_option( 'muashi_menus_cleaned_v5', true );
-    error_log( 'Muashi: Unused menus cleaned up + FAQ recreated (v5)' );
+    update_option( 'muashi_menus_cleaned_v6', true );
+    error_log( 'Muashi: Unused menus cleaned up + FAQ recreated with SNS children (v6)' );
+});
+
+/**
+ * 【一時コード】全サイドバーメニュー再作成 - グループ会社・グローバル生産拠点追加
+ * 実行確認後、このブロックは削除してOK
+ */
+add_action( 'init', function() {
+    if ( get_option( 'muashi_sidebar_menus_v3' ) ) {
+        return;
+    }
+
+    // 対象メニューを削除
+    $menus_to_recreate = array(
+        'グローバルネットワーク用サイドバー',
+        '私たちについて用サイドバー',
+        'お客様の声用サイドバー',
+    );
+    foreach ( $menus_to_recreate as $menu_name ) {
+        $menu = wp_get_nav_menu_object( $menu_name );
+        if ( $menu ) {
+            wp_delete_nav_menu( $menu->term_id );
+            error_log( "Deleted menu for recreation: $menu_name" );
+        }
+    }
+
+    // メニュー再作成
+    require_once get_theme_file_path( '/inc/setup-global-network-menu.php' );
+    require_once get_theme_file_path( '/inc/setup-about-us-menu.php' );
+    require_once get_theme_file_path( '/inc/setup-voice-menu.php' );
+
+    update_option( 'muashi_sidebar_menus_v3', true );
+    error_log( 'Muashi: All sidebar menus recreated with グループ会社 and グローバル生産拠点 (v3)' );
 });
 
 /**
@@ -1743,28 +1777,121 @@ add_filter( 'render_block_core/group', function( $block_content, $block ) {
 }, 10, 2 );
 
 /**
- * ダイナミックブロック: 国内拠点情報
- * PHPで動的にレンダリングするため、コード変更が即座に反映される
+ * 国内拠点情報ブロックパターン登録
  */
 add_action( 'init', function() {
-    register_block_type( 'muashi/domestic-locations', array(
-        'api_version'     => 2,
-        'title'           => '国内拠点情報',
-        'description'     => '日本国内の拠点一覧（会社概要ページ用）',
-        'category'        => 'widgets',
-        'icon'            => 'location',
-        'render_callback' => 'muashi_render_domestic_locations_block',
-    ) );
-} );
+    if ( ! function_exists( 'register_block_pattern' ) ) {
+        return;
+    }
 
-/**
- * 国内拠点情報ブロックのレンダリング関数
- */
-function muashi_render_domestic_locations_block( $attributes, $content ) {
-    ob_start();
-    include get_template_directory() . '/blocks/domestic-locations.php';
-    return ob_get_clean();
-}
+    // パターンカテゴリ登録
+    if ( function_exists( 'register_block_pattern_category' ) ) {
+        register_block_pattern_category(
+            'muashi',
+            array( 'label' => 'Muashi' )
+        );
+    }
+
+    register_block_pattern(
+        'muashi/domestic-locations',
+        array(
+            'title'       => '国内拠点情報',
+            'description' => '日本国内の拠点一覧（Google Map iframe埋め込み）',
+            'categories'  => array( 'muashi' ),
+            'content'     => '<!-- wp:html -->
+<section class="location-section" id="03">
+    <h2 class="location-header">日本国内</h2>
+    <div class="location-cards">
+        <div class="location-card">
+            <div class="location-card__info">
+                <h3 class="location-card__name">武蔵塗料ホールディングス株式会社</h3>
+                <div class="location-card__contact">
+                    <p><span class="location-card__label">TEL:</span> 03-3985-8118</p>
+                    <p><span class="location-card__label">FAX:</span> 03-3985-0947</p>
+                    <p><span class="location-card__label">住所:</span> 〒171-0022</p>
+                    <p>東京都豊島区南池袋 2-30-16 グリックビル</p>
+                </div>
+            </div>
+            <div class="location-card__map">
+                <iframe src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E5%8D%97%E6%B1%A0%E8%A2%8B2-30-16&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料ホールディングス株式会社 地図"></iframe>
+            </div>
+        </div>
+        <div class="location-card">
+            <div class="location-card__info">
+                <h3 class="location-card__name">武蔵塗料株式会社 入間工場</h3>
+                <div class="location-card__contact">
+                    <p><span class="location-card__label">TEL:</span> 04-2934-4131</p>
+                    <p><span class="location-card__label">FAX:</span> 04-2934-4134</p>
+                    <p><span class="location-card__label">住所:</span> 〒358-0032</p>
+                    <p>埼玉県入間市狭山ヶ原11-2</p>
+                </div>
+            </div>
+            <div class="location-card__map">
+                <iframe src="https://maps.google.com/maps?q=%E5%9F%BC%E7%8E%89%E7%9C%8C%E5%85%A5%E9%96%93%E5%B8%82%E7%8B%AD%E5%B1%B1%E3%83%B6%E5%8E%9F11-2&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 入間工場 地図"></iframe>
+            </div>
+        </div>
+        <div class="location-card">
+            <div class="location-card__info">
+                <h3 class="location-card__name">武蔵塗料株式会社 営業部</h3>
+                <div class="location-card__contact">
+                    <p><span class="location-card__label">TEL:</span> 04-2908-7634</p>
+                    <p><span class="location-card__label">FAX:</span> 04-2935-0273</p>
+                    <p><span class="location-card__label">住所:</span> 〒358-0032</p>
+                    <p>埼玉県入間市狭山ヶ原11-2</p>
+                </div>
+            </div>
+            <div class="location-card__map">
+                <iframe src="https://maps.google.com/maps?q=%E5%9F%BC%E7%8E%89%E7%9C%8C%E5%85%A5%E9%96%93%E5%B8%82%E7%8B%AD%E5%B1%B1%E3%83%B6%E5%8E%9F11-2&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 営業部 地図"></iframe>
+            </div>
+        </div>
+        <div class="location-card">
+            <div class="location-card__info">
+                <h3 class="location-card__name">武蔵塗料株式会社 大阪事業所</h3>
+                <div class="location-card__contact">
+                    <p><span class="location-card__label">TEL:</span> 072-963-1133</p>
+                    <p><span class="location-card__label">FAX:</span> 072-963-0606</p>
+                    <p><span class="location-card__label">住所:</span> 〒578-0921</p>
+                    <p>大阪府東大阪市水走1-17-13</p>
+                </div>
+            </div>
+            <div class="location-card__map">
+                <iframe src="https://maps.google.com/maps?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E6%9D%B1%E5%A4%A7%E9%98%AA%E5%B8%82%E6%B0%B4%E8%B5%B01-17-13&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 大阪事業所 地図"></iframe>
+            </div>
+        </div>
+        <div class="location-card">
+            <div class="location-card__info">
+                <h3 class="location-card__name">武蔵塗料株式会社 名古屋営業所</h3>
+                <div class="location-card__contact">
+                    <p><span class="location-card__label">TEL:</span> 0568-54-2113</p>
+                    <p><span class="location-card__label">FAX:</span> 0568-54-2117</p>
+                    <p><span class="location-card__label">住所:</span> 〒485-0029</p>
+                    <p>愛知県小牧市中央1丁目267 小牧ガスビル 3F</p>
+                </div>
+            </div>
+            <div class="location-card__map">
+                <iframe src="https://maps.google.com/maps?q=%E6%84%9B%E7%9F%A5%E7%9C%8C%E5%B0%8F%E7%89%A7%E5%B8%82%E4%B8%AD%E5%A4%AE1%E4%B8%81%E7%9B%AE267&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 名古屋営業所 地図"></iframe>
+            </div>
+        </div>
+        <div class="location-card">
+            <div class="location-card__info">
+                <h3 class="location-card__name">武蔵塗料国際株式会社</h3>
+                <div class="location-card__contact">
+                    <p><span class="location-card__label">TEL:</span> 03-3985-8118</p>
+                    <p><span class="location-card__label">FAX:</span> 03-3985-0947</p>
+                    <p><span class="location-card__label">住所:</span> 〒171-0022</p>
+                    <p>東京都豊島区南池袋 2-30-16 グリックビル 6F</p>
+                </div>
+            </div>
+            <div class="location-card__map">
+                <iframe src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E5%8D%97%E6%B1%A0%E8%A2%8B2-30-16&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料国際株式会社 地図"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /wp:html -->',
+        )
+    );
+} );
 
 /**
  * サイドバーナビゲーション用メニューロケーション登録
@@ -1778,7 +1905,6 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_sustainability' => 'サステナビリティ用サイドバー',
         'sidebar_career'         => '採用情報用サイドバー',
         'sidebar_history'        => 'ヒストリー用サイドバー',
-        'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
         'sidebar_faq'            => 'よくある質問用サイドバー',
         'sidebar_about_us'       => '私たちについて用サイドバー',
         'sidebar_product'        => '製品情報用サイドバー',
@@ -1862,7 +1988,7 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             if ( $has_children ) {
                 // 特定のメニューロケーションではアコーディオンを無効化
                 $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice', 'sidebar_global_network' );
+                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
                 $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
 
                 // アコーディオンJSが反応するクラスと属性を追加
@@ -1937,7 +2063,7 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 特定のメニューロケーションでは常に展開
             $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice', 'sidebar_global_network' );
+            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
             $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
 
             if ( $this->parent_is_ancestor || $disable_accordion ) {

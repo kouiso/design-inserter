@@ -4409,6 +4409,12 @@ a {
     height: 24px;
   }
 }
+.top-news__date + .top-news__category {
+  padding-left: 0;
+}
+.top-news__date + .top-news__category::before {
+  display: none;
+}
 .top-news__article-wrapper {
   margin-top: 16px;
   display: grid;
@@ -4828,8 +4834,7 @@ a {
 }
 
 .location-cards {
-  max-width: 1000px;
-  margin: 24px auto 0;
+  margin: 24px 0 0;
 }
 @media screen and (min-width: 992px) {
   .location-cards {
