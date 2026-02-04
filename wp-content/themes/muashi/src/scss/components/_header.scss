@@ -444,25 +444,25 @@
   }
 }
 
-// 検索オーバーレイのスタイル
+// 検索オーバーレイのスタイル（Apple風ハーフオーバーレイ）
 .search-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  height: auto;
+  background-color: #fff;
   z-index: 200;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 80px 20px 40px;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
   &.is-active {
-    opacity: 1;
-    visibility: visible;
+    transform: translateY(0);
   }
 
   &__inner {
@@ -490,7 +490,7 @@
       position: absolute;
       width: 30px;
       height: 2px;
-      background-color: var(--color-white);
+      background-color: #333;
     }
 
     &::before {
@@ -507,7 +507,7 @@
 .search-form {
   display: flex;
   align-items: center;
-  border-bottom: 2px solid var(--color-white);
+  border-bottom: 2px solid #333;
 
   &__input {
     flex: 1;
@@ -515,11 +515,11 @@
     border: none;
     padding: 15px 10px;
     font-size: 18px;
-    color: var(--color-white);
+    color: #333;
     outline: none;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(0, 0, 0, 0.5);
     }
 
     @include mq(md) {
@@ -533,7 +533,7 @@
     border: none;
     padding: 15px;
     cursor: pointer;
-    color: var(--color-white);
+    color: #333;
     transition: opacity 0.3s ease;
 
     &:hover {
@@ -543,6 +543,7 @@
     svg {
       width: 24px;
       height: 24px;
+      fill: #333;
 
       @include mq(md) {
         width: 32px;
@@ -558,7 +559,7 @@
   text-align: center;
 
   &__title {
-    color: var(--color-white);
+    color: #333;
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 12px;
@@ -574,13 +575,13 @@
     }
 
     a {
-      color: var(--color-white);
+      color: #333;
       font-size: 14px;
       text-decoration: none;
       transition: opacity 0.3s ease;
 
       &::before {
-        content: "≫ ";
+        content: "→ ";
       }
 
       &:hover {

@@ -117,12 +117,12 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     // よくある質問専用メニューが表示されているか確認
     await expect(page.locator('a.navigation__item-title:has-text("Pick up ピックアップ")')).toBeVisible();
     await expect(page.locator('a.navigation__item-title:has-text("News ニュース")')).toBeVisible();
-    // SNSはラベルのみ表示（子項目なし）
+    // SNSはクリック不可ラベルとして表示（子項目あり）
     await expect(page.locator('.navigation__item-title:has-text("SNS")')).toBeVisible();
-    // SNS子項目は表示されない
-    await expect(page.locator('a.navigation__sub-link:has-text("LinkedIn")')).not.toBeVisible();
-    await expect(page.locator('a.navigation__sub-link:has-text("Instagram")')).not.toBeVisible();
-    await expect(page.locator('a.navigation__sub-link:has-text("Facebook")')).not.toBeVisible();
+    // SNS子項目が表示される
+    await expect(page.locator('a.navigation__sub-link:has-text("LinkedIn")')).toBeVisible();
+    await expect(page.locator('a.navigation__sub-link:has-text("Instagram")')).toBeVisible();
+    await expect(page.locator('a.navigation__sub-link:has-text("Facebook")')).toBeVisible();
     // よくあるご質問は表示、武蔵塗料グループについては非表示
     await expect(page.locator('p.navigation__item-title:has-text("よくあるご質問")')).toBeVisible();
     await expect(page.locator('.navigation__item-title:has-text("武蔵塗料グループについて")')).not.toBeVisible();

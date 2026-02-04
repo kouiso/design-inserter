@@ -233,6 +233,35 @@ test.describe('ヘッダー - 検索オーバーレイ機能', () => {
       expect(inputValue).toBe('テスト検索');
     }
   });
+
+  test('検索オーバーレイにクイックリンクが表示される', async ({ page }) => {
+    await page.goto('/');
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    const searchOverlay = page.locator('.search-overlay');
+    const overlayExists = await searchOverlay.count();
+
+    if (overlayExists > 0) {
+      // 検索オーバーレイを開く
+      const searchLink = page.locator('.header__nav-link--search');
+      await searchLink.click();
+      await expect(searchOverlay).toHaveClass(/is-active/);
+
+      // クイックリンクセクションが表示されることを確認
+      const quickLinks = page.locator('.search-overlay__quick-links');
+      await expect(quickLinks).toBeVisible();
+
+      // クイックリンクタイトルが表示されることを確認
+      const quickLinksTitle = page.locator('.search-overlay__quick-links-title');
+      await expect(quickLinksTitle).toBeVisible();
+      await expect(quickLinksTitle).toHaveText('クイックリンク');
+
+      // 各クイックリンクが表示されることを確認
+      await expect(page.locator('.search-overlay__quick-links-list a:has-text("製品情報")')).toBeVisible();
+      await expect(page.locator('.search-overlay__quick-links-list a:has-text("注目製品")')).toBeVisible();
+      await expect(page.locator('.search-overlay__quick-links-list a:has-text("製品用途紹介")')).toBeVisible();
+    }
+  });
 });
 
 test.describe('ヘッダー - 検索アイコン色の同期（実際のページ）', () => {

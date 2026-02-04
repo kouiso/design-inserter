@@ -44,26 +44,31 @@ function muashi_setup_faq_sidebar_menu() {
 				'url'   => URL_NEWS,
 				'parent' => 0,
 			),
-			// 第1階層: SNS
+			// 第1階層: SNS（クリック不可ラベル、子項目あり）
 			array(
 				'title' => 'SNS',
-				'url'   => '#',
+				'url'   => 'javascript:void(0);',
 				'parent' => 0,
 				'children' => array(
-					array('title' => 'LinkedIn', 'url' => 'https://www.linkedin.com/company/musashi-paint-holdings/'),
-					array('title' => 'Instagram', 'url' => 'https://www.instagram.com/musashi_paint_official/'),
-					array('title' => 'Facebook', 'url' => 'https://www.facebook.com/musashipaintholdings/'),
+					array(
+						'title' => 'LinkedIn',
+						'url'   => 'https://www.linkedin.com/company/musashi-paint/',
+					),
+					array(
+						'title' => 'Instagram',
+						'url'   => 'https://www.instagram.com/musashipaint_official/',
+					),
+					array(
+						'title' => 'Facebook',
+						'url'   => 'https://www.facebook.com/musashipaint/',
+					),
 				),
 			),
-			// 第1階層: よくあるご質問
+			// 第1階層: よくあるご質問（子項目なし）
 			array(
 				'title' => 'よくあるご質問',
 				'url'   => URL_FAQ,
 				'parent' => 0,
-				'children' => array(
-					// 第2階層: 武蔵塗料グループについて
-					array('title' => '武蔵塗料グループについて', 'url' => URL_ABOUT_US),
-				),
 			),
 		);
 
