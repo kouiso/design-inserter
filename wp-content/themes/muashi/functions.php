@@ -5,7 +5,7 @@
  * 実行確認後、このブロックは削除してOK
  */
 add_action( 'init', function() {
-    if ( get_option( 'muashi_menus_cleaned_v6' ) ) {
+    if ( get_option( 'muashi_menus_cleaned_v7' ) ) {
         return;
     }
 
@@ -44,8 +44,11 @@ add_action( 'init', function() {
         require_once get_theme_file_path( '/inc/setup-faq-menu.php' );
     }
 
-    update_option( 'muashi_menus_cleaned_v6', true );
-    error_log( 'Muashi: Unused menus cleaned up + FAQ recreated with SNS children (v6)' );
+    // ニュース・ピックアップ用サイドバー再作成
+    require_once get_theme_file_path( '/inc/setup-pickup-menu.php' );
+
+    update_option( 'muashi_menus_cleaned_v7', true );
+    error_log( 'Muashi: Unused menus cleaned up + FAQ/Pickup recreated (v7)' );
 });
 
 /**
@@ -1799,95 +1802,110 @@ add_action( 'init', function() {
             'description' => '日本国内の拠点一覧（Google Map iframe埋め込み）',
             'categories'  => array( 'muashi' ),
             'content'     => '<!-- wp:html -->
-<section class="location-section" id="03">
-    <h2 class="location-header">日本国内</h2>
-    <div class="location-cards">
-        <div class="location-card">
-            <div class="location-card__info">
-                <h3 class="location-card__name">武蔵塗料ホールディングス株式会社</h3>
-                <div class="location-card__contact">
-                    <p><span class="location-card__label">TEL:</span> 03-3985-8118</p>
-                    <p><span class="location-card__label">FAX:</span> 03-3985-0947</p>
-                    <p><span class="location-card__label">住所:</span> 〒171-0022</p>
-                    <p>東京都豊島区南池袋 2-30-16 グリックビル</p>
-                </div>
-            </div>
-            <div class="location-card__map">
-                <iframe src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E5%8D%97%E6%B1%A0%E8%A2%8B2-30-16&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料ホールディングス株式会社 地図"></iframe>
+<div id="office-locations-container" style="max-width: 1000px; margin: 0 auto;">
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料ホールディングス株式会社</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 03-3985-8118</p>
+                <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
+                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル</p>
             </div>
         </div>
-        <div class="location-card">
-            <div class="location-card__info">
-                <h3 class="location-card__name">武蔵塗料株式会社 入間工場</h3>
-                <div class="location-card__contact">
-                    <p><span class="location-card__label">TEL:</span> 04-2934-4131</p>
-                    <p><span class="location-card__label">FAX:</span> 04-2934-4134</p>
-                    <p><span class="location-card__label">住所:</span> 〒358-0032</p>
-                    <p>埼玉県入間市狭山ヶ原11-2</p>
-                </div>
-            </div>
-            <div class="location-card__map">
-                <iframe src="https://maps.google.com/maps?q=%E5%9F%BC%E7%8E%89%E7%9C%8C%E5%85%A5%E9%96%93%E5%B8%82%E7%8B%AD%E5%B1%B1%E3%83%B6%E5%8E%9F11-2&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 入間工場 地図"></iframe>
-            </div>
-        </div>
-        <div class="location-card">
-            <div class="location-card__info">
-                <h3 class="location-card__name">武蔵塗料株式会社 営業部</h3>
-                <div class="location-card__contact">
-                    <p><span class="location-card__label">TEL:</span> 04-2908-7634</p>
-                    <p><span class="location-card__label">FAX:</span> 04-2935-0273</p>
-                    <p><span class="location-card__label">住所:</span> 〒358-0032</p>
-                    <p>埼玉県入間市狭山ヶ原11-2</p>
-                </div>
-            </div>
-            <div class="location-card__map">
-                <iframe src="https://maps.google.com/maps?q=%E5%9F%BC%E7%8E%89%E7%9C%8C%E5%85%A5%E9%96%93%E5%B8%82%E7%8B%AD%E5%B1%B1%E3%83%B6%E5%8E%9F11-2&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 営業部 地図"></iframe>
-            </div>
-        </div>
-        <div class="location-card">
-            <div class="location-card__info">
-                <h3 class="location-card__name">武蔵塗料株式会社 大阪事業所</h3>
-                <div class="location-card__contact">
-                    <p><span class="location-card__label">TEL:</span> 072-963-1133</p>
-                    <p><span class="location-card__label">FAX:</span> 072-963-0606</p>
-                    <p><span class="location-card__label">住所:</span> 〒578-0921</p>
-                    <p>大阪府東大阪市水走1-17-13</p>
-                </div>
-            </div>
-            <div class="location-card__map">
-                <iframe src="https://maps.google.com/maps?q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E6%9D%B1%E5%A4%A7%E9%98%AA%E5%B8%82%E6%B0%B4%E8%B5%B01-17-13&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 大阪事業所 地図"></iframe>
-            </div>
-        </div>
-        <div class="location-card">
-            <div class="location-card__info">
-                <h3 class="location-card__name">武蔵塗料株式会社 名古屋営業所</h3>
-                <div class="location-card__contact">
-                    <p><span class="location-card__label">TEL:</span> 0568-54-2113</p>
-                    <p><span class="location-card__label">FAX:</span> 0568-54-2117</p>
-                    <p><span class="location-card__label">住所:</span> 〒485-0029</p>
-                    <p>愛知県小牧市中央1丁目267 小牧ガスビル 3F</p>
-                </div>
-            </div>
-            <div class="location-card__map">
-                <iframe src="https://maps.google.com/maps?q=%E6%84%9B%E7%9F%A5%E7%9C%8C%E5%B0%8F%E7%89%A7%E5%B8%82%E4%B8%AD%E5%A4%AE1%E4%B8%81%E7%9B%AE267&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料株式会社 名古屋営業所 地図"></iframe>
-            </div>
-        </div>
-        <div class="location-card">
-            <div class="location-card__info">
-                <h3 class="location-card__name">武蔵塗料国際株式会社</h3>
-                <div class="location-card__contact">
-                    <p><span class="location-card__label">TEL:</span> 03-3985-8118</p>
-                    <p><span class="location-card__label">FAX:</span> 03-3985-0947</p>
-                    <p><span class="location-card__label">住所:</span> 〒171-0022</p>
-                    <p>東京都豊島区南池袋 2-30-16 グリックビル 6F</p>
-                </div>
-            </div>
-            <div class="location-card__map">
-                <iframe src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B1%8A%E5%B3%B6%E5%8C%BA%E5%8D%97%E6%B1%A0%E8%A2%8B2-30-16&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" loading="lazy" aria-label="武蔵塗料国際株式会社 地図"></iframe>
-            </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料ホールディングス株式会社 地図"></iframe>
         </div>
     </div>
-</section>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 入間工場</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 04-2934-4131</p>
+                <p style="margin: 0 0 4px;">FAX: 04-2934-4134</p>
+                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 入間工場 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 営業部</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 04-2908-7634</p>
+                <p style="margin: 0 0 4px;">FAX: 04-2935-0273</p>
+                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 営業部 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 大阪事業所</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 072-963-1133</p>
+                <p style="margin: 0 0 4px;">FAX: 072-963-0606</p>
+                <p style="margin: 0;">住所: 〒578-0921</p>
+                <p style="margin: 0;">大阪府東大阪市水走1-17-13</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=大阪府東大阪市水走1-17-13&amp;output=embed" aria-label="武蔵塗料株式会社 大阪事業所 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料株式会社 名古屋営業所</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 0568-54-2113</p>
+                <p style="margin: 0 0 4px;">FAX: 0568-54-2117</p>
+                <p style="margin: 0;">住所: 〒485-0029</p>
+                <p style="margin: 0;">愛知県小牧市中央1丁目267 小牧ガスビル 3F</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=愛知県小牧市中央1丁目267&amp;output=embed" aria-label="武蔵塗料株式会社 名古屋営業所 地図"></iframe>
+        </div>
+    </div>
+    <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
+        <div style="flex: 1; padding: 14px 18px; min-width: 240px; box-sizing: border-box;">
+            <h3 style="margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; word-break: keep-all; overflow-wrap: break-word;">武蔵塗料国際株式会社</h3>
+            <div style="font-size: 14px; line-height: 1.5; color: #444;">
+                <p style="margin: 0;">TEL: 03-3985-8118</p>
+                <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
+                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル 6F</p>
+            </div>
+        </div>
+        <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料国際株式会社 地図"></iframe>
+        </div>
+    </div>
+</div>
+<style>
+@media (max-width: 1600px) {
+    #office-locations-container .office-location-card {
+        flex-direction: column !important;
+    }
+    #office-locations-container .office-map-container {
+        width: 100% !important;
+        flex: auto !important;
+        border-left: none !important;
+        border-top: 1px solid #999;
+        height: 180px;
+        min-height: 180px !important;
+    }
+    #office-locations-container iframe {
+        min-height: 180px !important;
+    }
+}
+</style>
 <!-- /wp:html -->',
         )
     );
@@ -1959,8 +1977,8 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 $target = ' target="_blank" rel="noopener noreferrer"';
             }
 
-            // 現在のページはリンクなしのテキスト
-            if ( $item->current ) {
+            // 現在のページまたはURL=#はリンクなしのテキスト（見た目は同じ）
+            if ( $item->current || $url === '#' ) {
                 $output .= '<p class="navigation__item-title">';
                 $output .= esc_html( $item->title );
                 $output .= '</p>';
