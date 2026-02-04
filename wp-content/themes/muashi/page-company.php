@@ -14,7 +14,7 @@ get_header();
         <div class="page__bg-sub"></div>
     </div>
 
-    <?php muashi_render_sidebar_navigation( 'sidebar_about_us' ); ?>
+    <?php muashi_render_sidebar_navigation( 'sidebar_company' ); ?>
 
     <div class="page__wrapper">
         <div class="page__container">

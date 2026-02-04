@@ -45,29 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Header Animation ---
     const mainHeader = document.querySelector('.js-header');
     const stickyNav = document.querySelector('.js-header-scroll-nav');
-    const subLogo = document.querySelector('.header__sub-logo'); // EST.1958
-    const topKvNav = document.querySelector('.top-kv__nav'); // KV下メニュー（ホームのみ）
-    const isHomePage = mainHeader && mainHeader.classList.contains('is-home');
-
-    // TOPページ以外ではスクロール制御をスキップ（ヘッダーは常に表示）
-    if (!isHomePage) {
-        return;
-    }
 
     if (mainHeader && stickyNav) {
         ScrollTrigger.matchMedia({
             "(min-width: 768px)": function() {
                 let activationPoint = 0;
+                let lastScrollY = 0;
 
                 const updateActivationPoint = () => {
-                    // EST.1958の下端を閾値にする
-                    if (subLogo) {
-                        activationPoint = subLogo.offsetTop + subLogo.offsetHeight;
-                    } else {
-                        activationPoint = mainHeader.offsetHeight;
-                    }
+                    activationPoint = mainHeader.offsetHeight;
                 };
-
+                
                 // Run initial calculation
                 updateActivationPoint();
 
@@ -77,18 +65,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     onUpdate: (self) => {
                         const currentScrollY = self.scroll();
 
-                        // EST.1958が見えなくなったかどうかで判定（スクロール方向は関係なし）
+                        // Determine if we are past the main header
                         if (currentScrollY > activationPoint) {
-                            // スティッキーナビ表示（出したまま固定）
-                            stickyNav.classList.add('is-visible');
-                            // KV下メニュー非表示
-                            if (topKvNav) topKvNav.classList.add('is-hidden');
+                            // We are below the main header, sticky nav can be shown
+                            if (self.direction === -1) { // Scrolling UP
+                                stickyNav.classList.add('is-visible');
+                            } else { // Scrolling DOWN
+                                // Only hide if we just passed the activation point going down
+                                if (lastScrollY <= activationPoint) {
+                                     stickyNav.classList.add('is-visible'); // Show it for a moment as we cross
+                                } else {
+                                     stickyNav.classList.remove('is-visible');
+                                }
+                            }
                         } else {
-                            // 一番上に戻ったら非表示
+                            // We are in or above the main header, sticky nav must be hidden
                             stickyNav.classList.remove('is-visible');
-                            // KV下メニュー表示
-                            if (topKvNav) topKvNav.classList.remove('is-hidden');
                         }
+                        lastScrollY = currentScrollY;
                     },
                     // Recalculate the height on resize/refresh
                     onRefresh: updateActivationPoint
@@ -97,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Return a cleanup function
                 return () => {
                     stickyNav.classList.remove('is-visible');
-                    if (topKvNav) topKvNav.classList.remove('is-hidden');
                 };
             }
         });

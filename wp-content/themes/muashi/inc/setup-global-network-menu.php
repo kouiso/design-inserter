@@ -53,8 +53,7 @@ function muashi_setup_global_network_sidebar_menu() {
 						'title' => 'グローバルネットワーク',
 						'url'   => URL_GLOBAL_NETWORK,
 						'children' => array(
-							array('title' => 'グループ会社', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
-							array('title' => 'グローバル生産拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
+							array('title' => '海外拠点', 'url' => URL_GLOBAL_NETWORK . '#overseas-bases'),
 						),
 					),
 					array('title' => 'サステナブルなビジネス展開', 'url' => URL_SUSTAINABLE_BUSINESS),

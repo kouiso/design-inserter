@@ -93,12 +93,6 @@
     @include mq(md){
       display: block;
       margin-top: 40px;
-      transition: opacity 0.3s ease;
-
-      &.is-hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
     }
   }
 
@@ -196,9 +190,6 @@
   .top-kv__nav-link::after {
     background-color: var(--color-white);
   }
-  .top-kv__nav-link--search {
-    color: var(--color-white);
-  }
 }
 .top-kv[data-text-color="black"] {
   .top-kv__nav-link-text {
@@ -206,9 +197,6 @@
   }
   .top-kv__nav-link::after {
     background-color: var(--color-black);
-  }
-  .top-kv__nav-link--search {
-    color: var(--color-black);
   }
 }
 

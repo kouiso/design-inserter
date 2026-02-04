@@ -128,37 +128,9 @@
     font-size: 10px;
     color: var(--color-white);
     transition: color 0.3s ease;
-    position: relative;
-    padding-left: 15px;
 
     @include mq(md){
       font-size: 12px;
-      padding-left: 30px;
-    }
-
-    &::before{
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 1px;
-      height: 12px;
-      background-color: var(--color-white);
-      transform: translateY(-50%);
-      transition: background-color 0.3s ease;
-
-      @include mq(md){
-        height: 24px;
-      }
-    }
-  }
-
-  // 日付がある場合（ニュースセクション）は、カテゴリの縦線を非表示
-  &__date + &__category{
-    padding-left: 0;
-
-    &::before{
-      display: none;
     }
   }
 
@@ -228,8 +200,7 @@
   }
 
   .top-news__date::after,
-  .top-news__more-link::after,
-  .top-news__category::before{
+  .top-news__more-link::after{
     background-color: var(--color-black);
   }
 
@@ -261,8 +232,7 @@
   }
 
   .top-news__date::after,
-  .top-news__more-link::after,
-  .top-news__category::before{
+  .top-news__more-link::after{
     background-color: var(--color-white);
   }
 
