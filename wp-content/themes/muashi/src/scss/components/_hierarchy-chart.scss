@@ -1,41 +1,38 @@
 // ==========================================================================
-// Hierarchy Chart Component - Stepped Layout (No Overlap)
+// Hierarchy Chart Component - Fluid Layout with Container Query Units
+//
+// Box width: 265px fixed at chart ≥ 354px (all desktops/tablets)
+// Below 354px: box = 75%, indent = 25% (proportional scaling)
+// Indents compress dynamically: indent = remaining space after box
+// Result: text never wraps at PC, hierarchy always visible at any width
 // ==========================================================================
 
 .hierarchy-chart {
   padding: 3rem 0;
-  max-width: 100%; // Fit container
-  margin: 0;       // Align left with text
+  max-width: 100%;
+  margin: 0;
   font-family: inherit;
-  
-  // Dimensions (Fit within ~550px narrow container)
-  // Total width = step-3-indent + box-width
-  // Current target: 320px + 265px = 585px (Exceeds 557px slightly, scroll needed or responsive)
-  --box-width: 265px;
-  --box-height: auto; 
-  --step-1-indent: 0px;
-  --step-2-indent: 160px;
-  --step-3-indent: 320px;
+  overflow-x: auto;
 
-  // Mobile adjustment variables
-  @media (max-width: 768px) {
-    --box-width: 100%;
-    --step-2-indent: 1rem;
-    --step-3-indent: 2rem;
-  }
+  // Enable container queries so cqi units reference this element's width
+  container-type: inline-size;
+
+  // Box: 265px when chart ≥ 354px, 75% when smaller
+  // Indents: fill remaining space (chart - box), capped at original values
+  // Math guarantee: indent + box ≤ 100cqi (no overflow at any width)
+  --box-width: min(265px, 75cqi);
+  --step-1-indent: 0px;
+  --step-2-indent: clamp(0px, calc((100cqi - var(--box-width)) / 2), 160px);
+  --step-3-indent: clamp(0px, calc(100cqi - var(--box-width)), 320px);
 
   // ------------------------------------------------------------------------
-  // Header Row
+  // Legend Row (大分類・方針・関連2次文書)
   // ------------------------------------------------------------------------
   &__headers {
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
+    margin-bottom: 0.2rem;
     position: relative;
-    
-    @media (max-width: 768px) {
-      display: none;
-    }
   }
 
   &__header-item {
@@ -45,14 +42,16 @@
     background: #717171;
     color: #fff;
     font-weight: 700;
-    font-size: 0.85rem; // Slightly smaller font
+    font-size: 0.85rem;
+    white-space: nowrap;
     width: var(--box-width);
-    padding: 0.6em 0.5em; // Reduce side padding
+    padding: 0.6em 0.5em;
     min-height: 2.8rem;
     border-radius: 50px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    box-sizing: border-box;
     position: relative;
-    margin-bottom: 0.5rem; 
+    margin-bottom: 0.2rem;
 
     // Step Positions
     &--l1 { margin-left: var(--step-1-indent); }
@@ -62,18 +61,20 @@
 
   // ------------------------------------------------------------------------
   // Content Items (Pills)
+  // All boxes are the same width via cqi units (relative to chart container)
   // ------------------------------------------------------------------------
   &__box {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.6rem 1rem; // Reduce padding
+    padding: 0.6rem 1rem;
     border-radius: 50px;
     font-weight: 700;
-    font-size: 0.95rem; // Slightly larger
+    font-size: 0.95rem;
     line-height: 1.3;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.25); // Stronger shadow
-    border: 1px solid rgba(0,0,0,0.2); // Add border
+    white-space: nowrap;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0.2);
     background: #fff;
     width: var(--box-width);
     min-height: 3rem;
@@ -81,34 +82,22 @@
     position: relative;
     box-sizing: border-box;
 
-    @media (max-width: 768px) {
-      width: 100%;
-      min-width: 0;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      justify-content: flex-start;
-      padding-left: 1rem;
-      text-align: left;
-    }
-
     // Color Variations
     &--sustainability { background: #FCE8E1; color: #111; }
     &--csr            { background: #ffffff; color: #111; border: 1px solid #ddd; }
     &--environment    { background: #E6F3E6; color: #111; }
     &--social         { background: #FFE0EB; color: #111; }
     &--governance     { background: #EBF7FB; color: #111; }
-    
+
     // Level 3 items should stack vertically (for small text annotations)
     &.hierarchy-chart__l3 {
       flex-direction: column;
     }
 
-    // Empty State style
+    // Empty State style - solid border (not dashed)
     &--empty-white {
        opacity: 1;
-       // box-shadow: none;
-       // background-color: transparent; // Allow parent specific color or fallback
-       border: 2px dashed #ccc !important; // Force dashed border
+       border: 2px solid #ccc !important;
     }
     // Ensure background colors persist for empty boxes
     &.hierarchy-chart__box--sustainability.hierarchy-chart__box--empty-white { background: #FCE8E1; }
@@ -117,7 +106,7 @@
     &.hierarchy-chart__box--social.hierarchy-chart__box--empty-white         { background: #FFE0EB; }
     &.hierarchy-chart__box--governance.hierarchy-chart__box--empty-white     { background: #EBF7FB; }
   }
-  
+
   // Wrapper fix for hidden empty boxes
   &__l3-wrapper:has(.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white) {
     display: none !important;
@@ -128,14 +117,7 @@
   // ------------------------------------------------------------------------
   &__section {
     position: relative;
-    margin-bottom: 0.2rem; 
-
-    @media (max-width: 768px) {
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px dashed #ccc;
-      &:last-child { border-bottom: none; }
-    }
+    margin-bottom: 0.2rem;
   }
 
   // Level 1: Category
@@ -144,14 +126,9 @@
     margin-bottom: 0.2rem;
   }
 
-  // Level 2: Policy (Add Triangle Icon)
+  // Level 2: Policy (triangle removed)
   &__l2 {
-    &::before {
-      content: "▶";
-      font-size: 0.6em;
-      margin-right: 0.4em;
-      opacity: 0.8;
-    }
+    // No ::before content
   }
 
   // ------------------------------------------------------------------------
@@ -159,11 +136,11 @@
   // ------------------------------------------------------------------------
   &__l2-wrapper {
     margin-left: var(--step-2-indent);
-    margin-top: 0.2rem; 
+    margin-top: 0.2rem;
     margin-bottom: 0.2rem;
     position: relative;
   }
-  
+
   // ------------------------------------------------------------------------
   // Level 3 Wrapper
   // ------------------------------------------------------------------------
@@ -174,7 +151,7 @@
     flex-direction: column;
     gap: 0.2rem;
   }
-  
+
   // Specific tweaks
   &__stack {
       display: flex;
