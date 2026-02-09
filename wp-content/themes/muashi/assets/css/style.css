@@ -2282,6 +2282,24 @@ a {
     opacity: 0.7;
   }
 }
+.navigation__sub-accordion-link.is-current {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.navigation__item.is-active > .navigation__item-title {
+  font-weight: 700;
+}
+.navigation a.navigation__sub-link.is-active {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.navigation__sub-link.is-ancestor {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 
 @media screen and (min-width: 992px) {
   .archive {
