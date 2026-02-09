@@ -1,0 +1,70 @@
+@use '../setting' as *;
+
+// ==========================================================================
+// Schema FAQ スタイル
+// カスタマイザー「追加CSS」から移植
+// ==========================================================================
+
+$faq-font-stack: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+  "Noto Sans", "Liberation Sans", Arial, sans-serif;
+
+.schema-faq {
+  counter-reset: faq;
+
+  .schema-faq-section {
+    margin: 1.5rem 0 0;
+
+    &:first-child {
+      margin: 0;
+      color: #333;
+    }
+
+    counter-increment: faq;
+
+    .schema-faq-question {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      margin: 1rem 0 0 3.5rem;
+
+      &::before {
+        color: inherit;
+        opacity: 0.5;
+        content: "Q " counter(faq);
+        font-family: $faq-font-stack;
+        display: inline-block;
+        width: 3rem;
+        margin: 0 0.5rem 0 -3.5rem;
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-align: center;
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 0.25rem;
+      }
+    }
+
+    .schema-faq-answer {
+      color: inherit;
+      display: block;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin: 1rem 0 0 3.5rem;
+
+      &::before {
+        opacity: 0.5;
+        content: "A " counter(faq);
+        font-family: $faq-font-stack;
+        display: inline-block;
+        width: 3rem;
+        margin: 0 0.5rem 0 -3.5rem;
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-align: center;
+        background: #dc3545;
+        color: #fff;
+        border-radius: 0.25rem;
+      }
+    }
+  }
+}

@@ -85,10 +85,21 @@
     }
   }
 
+  // コンテンツブロック全てにマージンを当てる（カスタマイザーから移植）
+  &__inner > *:not(.single__contents) {
+    margin-bottom: 1.5rem;
+  }
+
   &__inner{
     margin-top: 32px;
     padding: 40px 20px 160px;
     background-color: var(--color-white);
+    color: #2b2b2b;
+
+    // スペーサー非表示（カスタマイザーから移植）
+    .wp-block-spacer {
+      display: none;
+    }
 
     @include mq(lg){
       margin-top: 40px;
@@ -128,6 +139,7 @@
     h2.wp-block-heading {
       font-size: 20px;
       font-weight: bold;
+      color: #1a1a1a;
       position: relative;
       display: inline-block; // 下線をテキスト幅に合わせる
       border-bottom: solid 0.25rem #f8f9fa;
@@ -158,11 +170,17 @@
           margin-top: 3rem;
         }
       }
+
+      // 見出し内のリンク等も見出し色を継承
+      a {
+        color: inherit;
+      }
     }
 
     h3.wp-block-heading {
       font-size: 16px;
       font-weight: bold;
+      color: #1a1a1a;
       letter-spacing: 0.04em;
       position: relative;
       padding: 0 0 0 1.5em;
@@ -172,6 +190,11 @@
 
       @include mq(lg) {
         font-size: 20px;
+      }
+
+      // 見出し内のリンク等も見出し色を継承
+      a {
+        color: inherit;
       }
     }
 
@@ -195,7 +218,7 @@
     }
 
     strong {
-      font-weight: 600;
+      font-weight: bold;
     }
 
     em {

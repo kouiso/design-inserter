@@ -96,6 +96,25 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
+        },
+        {
+            "key": "field_product_remarks",
+            "label": "備考",
+            "name": "product_remarks",
+            "type": "text",
+            "instructions": "例: 高光沢バイオペイント / high gloss bio paint",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         }
     ],
     "location": [
