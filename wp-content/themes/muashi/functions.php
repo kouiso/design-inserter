@@ -8,6 +8,8 @@ require_once(get_theme_file_path('/inc/post-types.php'));
 require_once(get_theme_file_path('/inc/setup.php'));
 require_once(get_theme_file_path('/inc/hierarchy-chart-pattern.php'));
 require_once(get_theme_file_path('/inc/import-products-csv.php'));
+require_once(get_theme_file_path('/inc/export-voice-csv.php'));
+require_once(get_theme_file_path('/inc/import-voice-csv.php'));
 
 /**
  * [product_field] ショートコード

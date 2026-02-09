@@ -2284,8 +2284,6 @@ a {
 }
 .navigation__sub-accordion-link.is-current {
   font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 .navigation__item.is-active > .navigation__item-title {
   font-weight: 700;
