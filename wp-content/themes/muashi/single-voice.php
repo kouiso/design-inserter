@@ -49,7 +49,7 @@ get_header();
                                     <p class="page__author-company"><?php echo esc_html($voice_company); ?></p>
                                 <?php endif; ?>
                                 <?php if ($voice_position): ?>
-                                    <p class="page__author-position"><?php echo esc_html($voice_position); ?></p>
+                                    <p class="page__author-position"><?php echo nl2br( esc_html( $voice_position ) ); ?></p>
                                 <?php endif; ?>
                                 <?php if ($voice_person_name): ?>
                                     <p class="page__author-name"><?php echo esc_html($voice_person_name); ?></p>

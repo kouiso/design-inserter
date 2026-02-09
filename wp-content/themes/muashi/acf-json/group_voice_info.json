@@ -27,8 +27,8 @@
             "label": "部署・役職",
             "name": "voice_position",
             "aria-label": "",
-            "type": "text",
-            "instructions": "例: 四輪デザイン部 CMFデザイン課 主幹 ｜ フィールド名: voice_position",
+            "type": "textarea",
+            "instructions": "例: 四輪デザイン部 CMFデザイン課 主幹（改行可） ｜ フィールド名: voice_position",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,9 +38,9 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "部署・役職を入力",
-            "prepend": "",
-            "append": ""
+            "rows": 3,
+            "placeholder": "部署・役職を入力（改行可）",
+            "new_lines": "br"
         },
         {
             "key": "field_voice_person_name",

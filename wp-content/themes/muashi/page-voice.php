@@ -97,7 +97,7 @@ $voice_query = new WP_Query( array(
                                             <p class="archive__company"><?php echo esc_html( $voice_company ); ?></p>
                                             <?php endif; ?>
                                             <?php if ( $voice_position ) : ?>
-                                            <p class="archive__position"><?php echo esc_html( $voice_position ); ?></p>
+                                            <p class="archive__position"><?php echo nl2br( esc_html( $voice_position ) ); ?></p>
                                             <?php endif; ?>
                                             <?php if ( $voice_person_name ) : ?>
                                             <p class="archive__person"><?php echo esc_html( $voice_person_name ); ?></p>

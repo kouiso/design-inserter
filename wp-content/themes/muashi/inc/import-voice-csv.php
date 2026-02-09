@@ -127,6 +127,11 @@ function muashi_execute_voice_csv_import( $csv_path ) {
         $menu_order         = isset( $row[5] ) ? intval( $row[5] ) : 0;
         $content            = isset( $row[6] ) ? $row[6] : '';
 
+        // 全角スペース → 半角スペースに変換
+        $company     = str_replace( '　', ' ', $company );
+        $position    = str_replace( '　', ' ', $position );
+        $person_name = str_replace( '　', ' ', $person_name );
+
         if ( empty( $title ) ) {
             continue;
         }
