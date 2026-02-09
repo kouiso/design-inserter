@@ -138,11 +138,6 @@
     }
   }
 
-  // カレントページハイライト（第1階層）
-  &__item.is-active > .navigation__item-title {
-    font-weight: 700;
-  }
-
   // カレントページハイライト（第2階層・子なしリンク）
   // <a>要素のみ対象: アコーディオントリガー（<p>）の構造的is-activeを除外
   a#{&}__sub-link.is-active {

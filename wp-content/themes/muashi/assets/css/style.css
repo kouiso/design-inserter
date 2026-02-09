@@ -2285,9 +2285,6 @@ a {
 .navigation__sub-accordion-link.is-current {
   font-weight: 700;
 }
-.navigation__item.is-active > .navigation__item-title {
-  font-weight: 700;
-}
 .navigation a.navigation__sub-link.is-active {
   font-weight: 700;
   text-decoration: underline;
