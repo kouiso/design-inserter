@@ -71,7 +71,17 @@ if ( have_posts() ) {
                   <div class="contact__inner">
                     <div class="download__layout">
                       <div class="download__main download__main--full">
+                        <div class="download__controls">
+                          <label class="download__search">
+                            <span class="download__search-label">キーワード</span>
+                            <input type="search" class="download__search-input" data-download-search placeholder="製品名やキーワードで検索">
+                          </label>
+                        </div>
+
                         <div class="download__feedback" data-download-feedback hidden></div>
+
+                        <p class="download__result-count" data-download-result-count></p>
+
                         <ul class="download__list" data-download-list></ul>
 
                       </div>
