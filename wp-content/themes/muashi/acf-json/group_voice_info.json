@@ -8,7 +8,7 @@
             "name": "voice_company",
             "aria-label": "",
             "type": "text",
-            "instructions": "例: スズキ株式会社",
+            "instructions": "例: スズキ株式会社 ｜ フィールド名: voice_company",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -28,7 +28,7 @@
             "name": "voice_position",
             "aria-label": "",
             "type": "text",
-            "instructions": "例: 四輪デザイン部 CMFデザイン課 主幹",
+            "instructions": "例: 四輪デザイン部 CMFデザイン課 主幹 ｜ フィールド名: voice_position",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -48,7 +48,7 @@
             "name": "voice_person_name",
             "aria-label": "",
             "type": "text",
-            "instructions": "例: 日向 隆 様",
+            "instructions": "例: 日向 隆 様 ｜ フィールド名: voice_person_name",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

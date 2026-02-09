@@ -7,7 +7,7 @@
             "label": "英語品名（商標）",
             "name": "product_name_trademark_en",
             "type": "text",
-            "instructions": "例: VITA SUNSHINE",
+            "instructions": "例: VITA SUNSHINE ｜ フィールド名: product_name_trademark_en",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -26,7 +26,7 @@
             "label": "ライン番号",
             "name": "product_line_number",
             "type": "text",
-            "instructions": "例: EA-NVH62-",
+            "instructions": "例: EA-NVH62- ｜ フィールド名: product_line_number",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -45,7 +45,7 @@
             "label": "溶剤・水系・無溶剤系分類",
             "name": "product_solvent_type",
             "type": "text",
-            "instructions": "例: 溶剤系 / solvent type",
+            "instructions": "例: 溶剤系 / solvent type ｜ フィールド名: product_solvent_type",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -64,7 +64,7 @@
             "label": "塗料別分類",
             "name": "product_paint_type",
             "type": "text",
-            "instructions": "例: 低温2液塗料 / Low-TEMP 2K",
+            "instructions": "例: 低温2液塗料 / Low-TEMP 2K ｜ フィールド名: product_paint_type",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -83,7 +83,7 @@
             "label": "樹脂別分類",
             "name": "product_resin_type",
             "type": "text",
-            "instructions": "例: アクリルウレタン系 / Acrylic urethane type",
+            "instructions": "例: アクリルウレタン系 / Acrylic urethane type ｜ フィールド名: product_resin_type",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -102,7 +102,7 @@
             "label": "備考",
             "name": "product_remarks",
             "type": "text",
-            "instructions": "例: 高光沢バイオペイント / high gloss bio paint",
+            "instructions": "例: 高光沢バイオペイント / high gloss bio paint ｜ フィールド名: product_remarks",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

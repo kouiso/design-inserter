@@ -99,11 +99,21 @@ function muashi_get_voice_export_data() {
     foreach ( $voices as $v ) {
         $content = $v->post_content;
 
-        // 冒頭の wp:paragraph ブロックを抽出
-        $author_info = muashi_parse_voice_author_paragraph( $content );
+        // ACFフィールドから著者情報を取得（優先）
+        // ACFフィールドが空の場合のみ、冒頭パラグラフからパースを試みる
+        $company     = get_field( 'voice_company', $v->ID );
+        $position    = get_field( 'voice_position', $v->ID );
+        $person_name = get_field( 'voice_person_name', $v->ID );
 
-        // 冒頭パラグラフを除去した本文
-        $content_body = muashi_remove_first_paragraph_block( $content );
+        if ( empty( $company ) && empty( $person_name ) ) {
+            // ACFフィールドが空の場合: 冒頭パラグラフからパース（初回移行用）
+            $author_info = muashi_parse_voice_author_paragraph( $content );
+            $company     = $author_info['company'];
+            $position    = $author_info['position'];
+            $person_name = $author_info['person_name'];
+            // 冒頭パラグラフを除去した本文
+            $content = muashi_remove_first_paragraph_block( $content );
+        }
 
         // サムネイルファイル名
         $thumb_filename = '';
@@ -117,12 +127,12 @@ function muashi_get_voice_export_data() {
 
         $data[] = array(
             'title'              => $v->post_title,
-            'company'            => $author_info['company'],
-            'position'           => $author_info['position'],
-            'person_name'        => $author_info['person_name'],
+            'company'            => $company ?: '',
+            'position'           => $position ?: '',
+            'person_name'        => $person_name ?: '',
             'thumbnail_filename' => $thumb_filename,
             'menu_order'         => $v->menu_order,
-            'content_body'       => $content_body,
+            'content_body'       => $content,
         );
     }
 
