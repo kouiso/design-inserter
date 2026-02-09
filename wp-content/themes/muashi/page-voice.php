@@ -6,6 +6,14 @@ global $description;
 $description = '';
 get_header();
 
+// 固定ページ自体のコンテンツを取得
+$page_content = '';
+if ( have_posts() ) {
+    the_post();
+    $page_content = apply_filters( 'the_content', get_the_content() );
+    rewind_posts();
+}
+
 // ページネーション用に現在のページ番号を取得
 $paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
@@ -49,6 +57,11 @@ $voice_query = new WP_Query( array(
                 <h1 class="page__title js-page-title">
                 お客様の声
                 </h1>
+                <?php if ( ! empty( $page_content ) ) : ?>
+                <div class="page__inner page__inner--narrow">
+                    <?php echo $page_content; ?>
+                </div>
+                <?php endif; ?>
                 <div class="page__inner page__inner--narrow">
 
                     <div class="story">
@@ -76,6 +89,23 @@ $voice_query = new WP_Query( array(
                                         <p class="archive__title">
                                         <?php the_title(); ?>
                                         </p>
+                                        <?php
+                                        $voice_company = get_field( 'voice_company' );
+                                        $voice_position = get_field( 'voice_position' );
+                                        $voice_person_name = get_field( 'voice_person_name' );
+                                        if ( $voice_company || $voice_position || $voice_person_name ) : ?>
+                                        <div class="archive__meta">
+                                            <?php if ( $voice_company ) : ?>
+                                            <p class="archive__company"><?php echo esc_html( $voice_company ); ?></p>
+                                            <?php endif; ?>
+                                            <?php if ( $voice_position ) : ?>
+                                            <p class="archive__position"><?php echo esc_html( $voice_position ); ?></p>
+                                            <?php endif; ?>
+                                            <?php if ( $voice_person_name ) : ?>
+                                            <p class="archive__person"><?php echo esc_html( $voice_person_name ); ?></p>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                     </a>
                                 </li>
