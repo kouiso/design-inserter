@@ -1,95 +1,31 @@
 <?php
 
 /**
- * 【一時コード】不要メニュー削除 + FAQメニュー再作成 - 管理画面アクセス時に1回だけ実行
- * 実行確認後、このブロックは削除してOK
- */
-add_action( 'init', function() {
-    if ( get_option( 'muashi_menus_cleaned_v7' ) ) {
-        return;
-    }
-
-    // 削除対象メニュー（重複・未使用 + FAQ再作成のため）
-    $menus_to_delete = array(
-        'サステナビリティサイドバー',
-        'ニュース・メディアサイドバー',
-        'よくある質問サイドバー',
-        '私たちについてサイドバー',
-        'インタビュー用サイドバー',
-        '会社概要用サイドバー',
-        'ニュース・ピックアップ用サイドバー',
-        'グローバルネットワーク用サイドバー',
-        'よくある質問用サイドバー', // 再作成のため削除（SNS子項目追加版）
-    );
-
-    foreach ( $menus_to_delete as $menu_name ) {
-        $menu = wp_get_nav_menu_object( $menu_name );
-        if ( $menu ) {
-            wp_delete_nav_menu( $menu->term_id );
-            error_log( "Deleted menu: $menu_name" );
-        }
-    }
-
-    // 不要ロケーション割り当てを解除
-    $locations = get_theme_mod( 'nav_menu_locations', array() );
-    unset( $locations['sidebar_interview'] );
-    unset( $locations['sidebar_company'] );
-    unset( $locations['sidebar_global_network'] );
-    set_theme_mod( 'nav_menu_locations', $locations );
-
-    // FAQメニュー再作成（SNS子項目あり版）
-    if ( function_exists( 'muashi_setup_faq_sidebar_menu' ) ) {
-        muashi_setup_faq_sidebar_menu();
-    } else {
-        require_once get_theme_file_path( '/inc/setup-faq-menu.php' );
-    }
-
-    // ニュース・ピックアップ用サイドバー再作成
-    require_once get_theme_file_path( '/inc/setup-pickup-menu.php' );
-
-    update_option( 'muashi_menus_cleaned_v7', true );
-    error_log( 'Muashi: Unused menus cleaned up + FAQ/Pickup recreated (v7)' );
-});
-
-/**
- * 【一時コード】全サイドバーメニュー再作成 - グループ会社・グローバル生産拠点追加
- * 実行確認後、このブロックは削除してOK
- */
-add_action( 'init', function() {
-    if ( get_option( 'muashi_sidebar_menus_v3' ) ) {
-        return;
-    }
-
-    // 対象メニューを削除
-    $menus_to_recreate = array(
-        'グローバルネットワーク用サイドバー',
-        '私たちについて用サイドバー',
-        'お客様の声用サイドバー',
-    );
-    foreach ( $menus_to_recreate as $menu_name ) {
-        $menu = wp_get_nav_menu_object( $menu_name );
-        if ( $menu ) {
-            wp_delete_nav_menu( $menu->term_id );
-            error_log( "Deleted menu for recreation: $menu_name" );
-        }
-    }
-
-    // メニュー再作成
-    require_once get_theme_file_path( '/inc/setup-global-network-menu.php' );
-    require_once get_theme_file_path( '/inc/setup-about-us-menu.php' );
-    require_once get_theme_file_path( '/inc/setup-voice-menu.php' );
-
-    update_option( 'muashi_sidebar_menus_v3', true );
-    error_log( 'Muashi: All sidebar menus recreated with グループ会社 and グローバル生産拠点 (v3)' );
-});
-
-/**
  * 変数ファイルの読み込み
  */
 require_once(get_theme_file_path('/inc/variable.php'));
 require_once(get_theme_file_path('/inc/post-types.php'));
 require_once(get_theme_file_path('/inc/setup.php'));
 require_once(get_theme_file_path('/inc/hierarchy-chart-pattern.php'));
+require_once(get_theme_file_path('/inc/import-products-csv.php'));
+
+/**
+ * [product_field] ショートコード
+ * 投稿のACFカスタムフィールド値を表示する。
+ * 使用例: [product_field name="product_name_trademark_en"]
+ */
+function muashi_product_field_shortcode( $atts ) {
+    $atts = shortcode_atts( array( 'name' => '' ), $atts, 'product_field' );
+    if ( empty( $atts['name'] ) ) {
+        return '';
+    }
+    $value = get_field( $atts['name'] );
+    if ( empty( $value ) ) {
+        return '';
+    }
+    return esc_html( $value );
+}
+add_shortcode( 'product_field', 'muashi_product_field_shortcode' );
 
 /**
  * css、js読み込み
@@ -1682,17 +1618,9 @@ add_action( 'enqueue_block_editor_assets', function() {
 
 
 /**
- * 画像サイズ用エディタCSS・JS
+ * 画像サイズスライダーJS
  */
 add_action( 'enqueue_block_editor_assets', function() {
-    wp_enqueue_style(
-        'muashi-editor-image-sizes',
-        get_template_directory_uri() . '/assets/css/editor-image-sizes.css',
-        array(),
-        filemtime( get_template_directory() . '/assets/css/editor-image-sizes.css' )
-    );
-
-    // 画像サイズスライダー
     wp_enqueue_script(
         'muashi-image-size-slider',
         get_template_directory_uri() . '/admin/js/image-size-slider.js',

@@ -15,6 +15,7 @@ const themeDir = "./wp-content/themes/muashi";
 let path = {
   src: {
     scss: `${themeDir}/src/scss/style.scss`,
+    editorScss: `${themeDir}/src/scss/editor-download-button.scss`,
     js: `${themeDir}/src/js/main.js`,
   },
   dist: {
@@ -80,8 +81,27 @@ const compileSass = () => {
     );
 };
 
+// エディタ用SCSSのコンパイル
+const compileEditorSass = () => {
+  return gulp
+    .src(path.src.editorScss)
+    .pipe(
+      plumber({
+        errorHandler: notify.onError("Error: <%= error.message %>"),
+      })
+    )
+    .pipe(sourcemaps.init())
+    .pipe(
+      dartSass({
+        outputStyle: "expanded",
+      })
+    )
+    .pipe(sourcemaps.write("./"))
+    .pipe(gulp.dest(path.dist.css));
+};
+
 // SCSSタスク統合
-const scss = gulp.parallel(copySplide, compileSass);
+const scss = gulp.parallel(copySplide, compileSass, compileEditorSass);
 
 // JSのコンパイル
 const js = () => {
