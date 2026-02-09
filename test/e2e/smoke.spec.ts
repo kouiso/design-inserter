@@ -9,7 +9,7 @@ test.describe('Smoke Tests - 主要ページの表示確認', () => {
   
   test('TOP: トップページが正常に表示される', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/musashi paint/i);
+    await expect(page).toHaveTitle(/武蔵塗料|musashi paint/i);
     
     // ヘッダー・フッターの確認
     await expect(page.locator('header')).toBeVisible();
@@ -71,7 +71,7 @@ test.describe('Smoke Tests - 主要ページの表示確認', () => {
   });
 
   test('資料ダウンロード: 資料ダウンロードページが正常に表示される', async ({ page }) => {
-    await page.goto('/download/');
+    await page.goto('/document/');
     
     // ページタイトル確認
     await expect(page.locator('.page__title')).toBeVisible();

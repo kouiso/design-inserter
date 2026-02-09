@@ -42,7 +42,7 @@ test.describe('フッター - PCレイアウト', () => {
 
     // リンクのテキストを確認
     const linkText = await faqLink.textContent();
-    expect(linkText).toContain('よくある質問');
+    expect(linkText).toContain('よくあるご質問');
   });
 
   test('PCビューで「よくある質問」リンクをクリックできる', async ({ page }) => {
@@ -109,8 +109,8 @@ test.describe('フッター - PCレイアウト', () => {
     const newsLink = otherSection.locator('a[href*="/news"]');
     await expect(newsLink).toBeVisible();
 
-    // 採用情報リンク
-    const careerLink = otherSection.locator('a[href*="/career"]');
+    // 採用情報リンク（末尾一致で絞り込み、フルURL対応）
+    const careerLink = otherSection.locator('a[href$="/career/"]');
     await expect(careerLink).toBeVisible();
   });
 
@@ -200,7 +200,7 @@ test.describe('フッター - モバイルレイアウト', () => {
 
     // リンクのテキストを確認
     const linkText = await faqLink.textContent();
-    expect(linkText).toContain('よくある質問');
+    expect(linkText).toContain('よくあるご質問');
   });
 
   test('モバイルビューでフッターアコーディオンが機能する', async ({ page }) => {
@@ -217,7 +217,7 @@ test.describe('フッター - モバイルレイアウト', () => {
 
       // アコーディオンをクリック
       await accordionButton.click();
-      await page.waitForTimeout(300); // アニメーション待機
+      await page.waitForTimeout(600); // アニメーション待機（CSSトランジション0.5秒）
 
       // アコーディオンリストが表示されることを確認
       const accordionList = page.locator('.js-accordion-list').first();
@@ -316,9 +316,9 @@ test.describe('フッター - 共通要素', () => {
     const wave = page.locator('.footer__wave');
     await expect(wave).toBeVisible();
 
-    // SVG要素が含まれていることを確認
-    const waveSvg = wave.locator('svg');
-    await expect(waveSvg.first()).toBeVisible();
+    // SVG要素が含まれていることを確認（デフォルトビューポートはPC幅）
+    const waveSvg = wave.locator('.wave__pc svg');
+    await expect(waveSvg).toBeVisible();
   });
 
   test('ページトップボタンが表示される', async ({ page }) => {

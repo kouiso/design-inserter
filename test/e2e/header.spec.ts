@@ -29,8 +29,13 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.goto('/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    // body要素のdata-logo-color属性を確認
-    const logoColorAttr = await page.getAttribute('body', 'data-logo-color');
+    // colorBar.jsがdata-logo-colorをセットするまで待機
+    await page.waitForFunction(() => {
+      return document.querySelector('.js-header')?.getAttribute('data-logo-color') !== null;
+    }, { timeout: 5000 });
+
+    // .js-header要素のdata-logo-color属性を確認
+    const logoColorAttr = await page.getAttribute('.js-header', 'data-logo-color');
 
     // whiteまたはblackのいずれかであることを確認
     expect(['white', 'black']).toContain(logoColorAttr);
@@ -40,9 +45,9 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.goto('/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    // body要素にdata-logo-color="white"を設定
+    // .js-header要素にdata-logo-color="white"を設定（colorBar.jsと同じ対象）
     await page.evaluate(() => {
-      document.body.setAttribute('data-logo-color', 'white');
+      document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
 
     // 少し待機してスタイルが適用されるのを待つ
@@ -62,9 +67,9 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.goto('/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    // body要素にdata-logo-color="black"を設定
+    // .js-header要素にdata-logo-color="black"を設定（colorBar.jsと同じ対象）
     await page.evaluate(() => {
-      document.body.setAttribute('data-logo-color', 'black');
+      document.querySelector('.js-header')?.setAttribute('data-logo-color', 'black');
     });
 
     // 少し待機してスタイルが適用されるのを待つ
@@ -99,9 +104,9 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.goto('/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    // whiteテーマに設定
+    // whiteテーマに設定（colorBar.jsと同じ対象 .js-header）
     await page.evaluate(() => {
-      document.body.setAttribute('data-logo-color', 'white');
+      document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
     await page.waitForTimeout(100);
 
@@ -122,7 +127,7 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
 
     // blackテーマでも同様にテスト
     await page.evaluate(() => {
-      document.body.setAttribute('data-logo-color', 'black');
+      document.querySelector('.js-header')?.setAttribute('data-logo-color', 'black');
     });
     await page.waitForTimeout(100);
 
@@ -138,129 +143,139 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
   });
 });
 
-test.describe('ヘッダー - 検索オーバーレイ機能', () => {
+test.describe('ヘッダー - 検索オーバーレイ機能（下層ページ）', () => {
 
   test('検索アイコンをクリックすると検索オーバーレイが表示される', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/contact/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
     // 検索オーバーレイが初期状態で非表示であることを確認
     const searchOverlay = page.locator('.search-overlay');
+    await expect(searchOverlay).not.toHaveClass(/is-active/);
 
-    // オーバーレイ要素が存在するか確認（非表示でも存在はしている）
-    const overlayExists = await searchOverlay.count();
+    // 検索アイコンをクリック（下層ページではページナビ+スクロールナビに2つあるので.first()）
+    const searchLink = page.locator('.header__nav-link--search').first();
+    await searchLink.click();
 
-    if (overlayExists > 0) {
-      // 初期状態では非表示
-      await expect(searchOverlay).not.toHaveClass(/is-active/);
+    // オーバーレイがアクティブになることを確認
+    await expect(searchOverlay).toHaveClass(/is-active/);
+    await expect(searchOverlay).toBeVisible();
 
-      // 検索アイコンをクリック
-      const searchLink = page.locator('.header__nav-link--search');
-      await searchLink.click();
+    // 検索フォームが表示されることを確認
+    const searchForm = page.locator('.search-form');
+    await expect(searchForm).toBeVisible();
 
-      // オーバーレイがアクティブになることを確認
-      await expect(searchOverlay).toHaveClass(/is-active/);
-      await expect(searchOverlay).toBeVisible();
-
-      // 検索フォームが表示されることを確認
-      const searchForm = page.locator('.search-form');
-      await expect(searchForm).toBeVisible();
-
-      // 検索入力欄が表示されることを確認
-      const searchInput = page.locator('.search-form__input');
-      await expect(searchInput).toBeVisible();
-    }
+    // 検索入力欄が表示されることを確認
+    const searchInput = page.locator('.search-form__input');
+    await expect(searchInput).toBeVisible();
   });
 
   test('検索オーバーレイの閉じるボタンが機能する', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/contact/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
     const searchOverlay = page.locator('.search-overlay');
-    const overlayExists = await searchOverlay.count();
 
-    if (overlayExists > 0) {
-      // 検索オーバーレイを開く
-      const searchLink = page.locator('.header__nav-link--search');
-      await searchLink.click();
-      await expect(searchOverlay).toHaveClass(/is-active/);
+    // 検索オーバーレイを開く
+    const searchLink = page.locator('.header__nav-link--search').first();
+    await searchLink.click();
+    await expect(searchOverlay).toHaveClass(/is-active/);
 
-      // 閉じるボタンをクリック
-      const closeButton = page.locator('.search-overlay__close');
-      await closeButton.click();
+    // 閉じるボタンをクリック
+    const closeButton = page.locator('.search-overlay__close');
+    await closeButton.click();
 
-      // オーバーレイが非アクティブになることを確認
-      await expect(searchOverlay).not.toHaveClass(/is-active/);
-    }
+    // オーバーレイが非アクティブになることを確認
+    await expect(searchOverlay).not.toHaveClass(/is-active/);
   });
 
   test('検索オーバーレイにトランジション効果が適用されている', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/contact/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
     const searchOverlay = page.locator('.search-overlay');
-    const overlayExists = await searchOverlay.count();
 
-    if (overlayExists > 0) {
-      // transition プロパティの確認
-      const transition = await searchOverlay.evaluate((el) => {
-        return window.getComputedStyle(el).transition;
-      });
+    // transition プロパティの確認
+    const transition = await searchOverlay.evaluate((el) => {
+      return window.getComputedStyle(el).transition;
+    });
 
-      // 0.3秒のトランジションが設定されているか
-      expect(transition).toContain('0.3s');
-    }
+    // 0.3秒のトランジションが設定されているか
+    expect(transition).toContain('0.3s');
   });
 
   test('検索フォームに入力できる', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/contact/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    const searchOverlay = page.locator('.search-overlay');
-    const overlayExists = await searchOverlay.count();
+    // 検索オーバーレイを開く
+    const searchLink = page.locator('.header__nav-link--search').first();
+    await searchLink.click();
 
-    if (overlayExists > 0) {
-      // 検索オーバーレイを開く
-      const searchLink = page.locator('.header__nav-link--search');
-      await searchLink.click();
+    // 検索入力欄にテキストを入力
+    const searchInput = page.locator('.search-form__input');
+    await searchInput.fill('テスト検索');
 
-      // 検索入力欄にテキストを入力
-      const searchInput = page.locator('.search-form__input');
-      await searchInput.fill('テスト検索');
-
-      // 入力されたテキストを確認
-      const inputValue = await searchInput.inputValue();
-      expect(inputValue).toBe('テスト検索');
-    }
+    // 入力されたテキストを確認
+    const inputValue = await searchInput.inputValue();
+    expect(inputValue).toBe('テスト検索');
   });
 
   test('検索オーバーレイにクイックリンクが表示される', async ({ page }) => {
+    await page.goto('/contact/');
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    // 検索オーバーレイを開く
+    const searchLink = page.locator('.header__nav-link--search').first();
+    await searchLink.click();
+
+    const searchOverlay = page.locator('.search-overlay');
+    await expect(searchOverlay).toHaveClass(/is-active/);
+
+    // クイックリンクセクションが表示されることを確認
+    const quickLinks = page.locator('.search-quick-links');
+    await expect(quickLinks).toBeVisible();
+
+    // 各クイックリンクが表示されることを確認
+    await expect(page.locator('.search-quick-links__list a:has-text("製品情報")')).toBeVisible();
+    await expect(page.locator('.search-quick-links__list a:has-text("注目製品")')).toBeVisible();
+    await expect(page.locator('.search-quick-links__list a:has-text("製品用途紹介")')).toBeVisible();
+  });
+});
+
+test.describe('ヘッダー - 検索オーバーレイ機能（トップページ）', () => {
+
+  test('トップページでスクロール後に検索オーバーレイが開閉できる', async ({ page }) => {
     await page.goto('/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
+    // トップページではページナビが非表示のため、スクロールナビを表示させる
+    // GSAPのScrollTriggerが反応するよう十分にスクロール
+    await page.evaluate(() => window.scrollTo(0, 600));
+    // is-visibleクラスが付与されるまで待機（GSAPが検知→クラス付与）
+    await page.waitForSelector('.js-header-scroll-nav.is-visible', { timeout: 5000 });
+    // CSSトランジション（0.4s）の完了を待つ
+    await page.waitForTimeout(500);
+
+    // スクロールナビ内の検索ボタンをクリック
+    // fixed + transform transition中はPlaywrightがviewport外と判定するためevaluateで直接クリック
+    await page.evaluate(() => {
+      const btn = document.querySelector('.js-header-scroll-nav .js-search-toggle');
+      btn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+
+    // オーバーレイがアクティブになることを確認
     const searchOverlay = page.locator('.search-overlay');
-    const overlayExists = await searchOverlay.count();
+    await expect(searchOverlay).toHaveClass(/is-active/);
+    await expect(searchOverlay).toBeVisible();
 
-    if (overlayExists > 0) {
-      // 検索オーバーレイを開く
-      const searchLink = page.locator('.header__nav-link--search');
-      await searchLink.click();
-      await expect(searchOverlay).toHaveClass(/is-active/);
+    // 検索フォームが表示されることを確認
+    await expect(page.locator('.search-form')).toBeVisible();
 
-      // クイックリンクセクションが表示されることを確認
-      const quickLinks = page.locator('.search-overlay__quick-links');
-      await expect(quickLinks).toBeVisible();
-
-      // クイックリンクタイトルが表示されることを確認
-      const quickLinksTitle = page.locator('.search-overlay__quick-links-title');
-      await expect(quickLinksTitle).toBeVisible();
-      await expect(quickLinksTitle).toHaveText('クイックリンク');
-
-      // 各クイックリンクが表示されることを確認
-      await expect(page.locator('.search-overlay__quick-links-list a:has-text("製品情報")')).toBeVisible();
-      await expect(page.locator('.search-overlay__quick-links-list a:has-text("注目製品")')).toBeVisible();
-      await expect(page.locator('.search-overlay__quick-links-list a:has-text("製品用途紹介")')).toBeVisible();
-    }
+    // 閉じるボタンで閉じられることを確認
+    const closeButton = page.locator('.search-overlay__close');
+    await closeButton.click();
+    await expect(searchOverlay).not.toHaveClass(/is-active/);
   });
 });
 

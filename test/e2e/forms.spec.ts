@@ -75,7 +75,7 @@ test.describe('Form Tests - フォーム機能確認', () => {
   test.describe('資料ダウンロードフォーム', () => {
     
     test('ページが正常に表示され、製品リストが読み込まれる', async ({ page }) => {
-      await page.goto('/download/');
+      await page.goto('/document/');
       
       // ダウンロードリストが表示されることを確認
       await expect(page.locator('.download__list')).toBeVisible();
@@ -87,7 +87,7 @@ test.describe('Form Tests - フォーム機能確認', () => {
     });
 
     test('製品の選択と選択解除が機能する', async ({ page }) => {
-      await page.goto('/download/');
+      await page.goto('/document/');
       
       // 最初の製品を選択
       const firstCheckbox = page.locator('.download__checkbox').first();
@@ -104,7 +104,7 @@ test.describe('Form Tests - フォーム機能確認', () => {
     });
 
     test('選択上限（5件）を超えるとエラーが表示される', async ({ page }) => {
-      await page.goto('/download/');
+      await page.goto('/document/');
       
       // 6件の製品を選択
       const checkboxes = page.locator('.download__checkbox');
@@ -135,7 +135,7 @@ test.describe('Form Tests - フォーム機能確認', () => {
     });
 
     test('未選択で送信するとエラーが表示される', async ({ page }) => {
-      await page.goto('/download/');
+      await page.goto('/document/');
       
       // すべてのチェックを外す
       const checkboxes = page.locator('.download__checkbox:checked');

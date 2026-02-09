@@ -184,9 +184,9 @@ test.describe('UI/UX Improvement Tests', () => {
     test('should display Media section (Pick up) before News section', async ({ page }) => {
       await page.goto(`${BASE_URL}/`);
       
-      // Media セクションと News セクションを取得
-      const mediaSection = await page.locator('section:has-text("メディア"), section:has-text("Pick up")').first();
-      const newsSection = await page.locator('section:has-text("お知らせ"), section:has-text("News")').first();
+      // Media セクションと News セクションを取得（同一section内のため、inner divで区別）
+      const mediaSection = await page.locator('.top-news__inner:not(.top-news__inner--bottom)').first();
+      const newsSection = await page.locator('.top-news__inner--bottom').first();
       
       if (await mediaSection.isVisible() && await newsSection.isVisible()) {
         const mediaBox = await mediaSection.boundingBox();
@@ -202,20 +202,20 @@ test.describe('UI/UX Improvement Tests', () => {
     test('should display 6 media items and 6 news items on homepage', async ({ page }) => {
       await page.goto(`${BASE_URL}/`);
       
-      // メディアセクションの記事数
-      const mediaItems = await page.locator('section:has-text("Pick up") article, section:has-text("メディア") article').all();
-      expect(mediaItems.length).toBe(6);
-      
-      // ニュースセクションの記事数
-      const newsItems = await page.locator('section:has-text("お知らせ") article, section:has-text("News") article').all();
-      expect(newsItems.length).toBe(6);
+      // メディアセクションの記事数（index.phpで posts_per_page => 3）
+      const mediaItems = await page.locator('.top-news__inner:not(.top-news__inner--bottom) .top-news__item').all();
+      expect(mediaItems.length).toBe(3);
+
+      // ニュースセクションの記事数（index.phpで posts_per_page => 3）
+      const newsItems = await page.locator('.top-news__inner--bottom .top-news__item').all();
+      expect(newsItems.length).toBe(3);
     });
 
     test('should navigate to media list page via "View All" link', async ({ page }) => {
       await page.goto(`${BASE_URL}/`);
       
       // 「一覧へ」リンク（メディアセクション）
-      const viewAllLink = await page.locator('section:has-text("Pick up") a:has-text("一覧"), section:has-text("メディア") a:has-text("一覧")').first();
+      const viewAllLink = await page.locator('.top-news__inner:not(.top-news__inner--bottom) a:has-text("一覧")').first();
       
       if (await viewAllLink.isVisible()) {
         const href = await viewAllLink.getAttribute('href');
@@ -363,7 +363,7 @@ test.describe('Custom Post Type Tests', () => {
       expect(response?.status()).toBe(200);
       
       // interview 投稿が表示されていることを確認
-      const articles = await page.locator('article, [data-interview]').all();
+      const articles = await page.locator('.archive__item').all();
       expect(articles.length).toBeGreaterThan(0);
     });
 

@@ -27,7 +27,7 @@ test.describe('製品情報カスタムフィールド', () => {
     await expect(productInfo).toBeVisible();
 
     // 製品情報のリストが表示される
-    const productInfoList = productInfo.locator('.product-info__list');
+    const productInfoList = productInfo.locator('.product-info__details');
     await expect(productInfoList).toBeVisible();
 
     // 少なくとも1つのフィールドが表示される（日本語品名は必ず表示）
@@ -107,7 +107,7 @@ test.describe('製品情報カスタムフィールド', () => {
     await expect(productInfo).toBeVisible();
 
     // 製品情報のリストが表示される
-    const productInfoList = productInfo.locator('.product-info__list');
+    const productInfoList = productInfo.locator('.product-info__details');
     await expect(productInfoList).toBeVisible();
   });
 });

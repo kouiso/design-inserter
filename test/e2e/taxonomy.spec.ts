@@ -13,12 +13,13 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
     // サイドバーナビゲーション確認
     await expect(page.locator('.navigation')).toBeVisible();
     
-    // 5つのタクソノミーメニュー確認
-    await expect(page.getByText('用途でえらぶ')).toBeVisible();
-    await expect(page.getByText('基材でえらぶ')).toBeVisible();
-    await expect(page.getByText('意匠性でえらぶ')).toBeVisible();
-    await expect(page.getByText('機能でえらぶ')).toBeVisible();
-    await expect(page.getByText('環境キーワードでえらぶ')).toBeVisible();
+    // 5つのタクソノミーメニュー確認（サイドバー内に限定）
+    const nav = page.locator('.navigation');
+    await expect(nav.getByText('用途でえらぶ')).toBeVisible();
+    await expect(nav.getByText('基材でえらぶ')).toBeVisible();
+    await expect(nav.getByText('意匠性でえらぶ')).toBeVisible();
+    await expect(nav.getByText('機能でえらぶ')).toBeVisible();
+    await expect(nav.getByText('環境キーワードでえらぶ')).toBeVisible();
   });
 
   test('用途でえらぶ: アーカイブページが正常に表示される', async ({ page }) => {
@@ -28,9 +29,9 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
     // ページタイトル確認
     await expect(page.locator('.page__title')).toBeVisible();
     
-    // サイドバーで「用途でえらぶ」がアクティブになっていることを確認
-    const activeMenu = page.locator('.navigation__sub-accordion-item--active');
-    await expect(activeMenu).toBeVisible();
+    // サイドバーで「用途でえらぶ」のアコーディオンが展開されていることを確認
+    const activeList = page.locator('.navigation__sub-accordion-list.is-active');
+    await expect(activeList).toBeVisible();
   });
 
   test('基材でえらぶ: アーカイブページが正常に表示される', async ({ page }) => {
