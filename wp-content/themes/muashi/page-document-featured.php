@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Document
+Template Name: Document Featured
 */
 
 // このページを検索エンジンにインデックスさせない
@@ -12,10 +12,8 @@ add_filter( 'wp_robots', function( $robots ) {
 
 get_header('download');
 
-$download_data = muashi_get_product_download_data();
+$download_data = muashi_get_featured_product_download_data();
 $max_selectable = $download_data['maxSelectable'];
-$taxonomy_terms = $download_data['taxonomies'];
-
 
 $download_data_json = wp_json_encode( $download_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 
@@ -37,10 +35,10 @@ if ( have_posts() ) {
     <div class="navigation">
         <div class="navigation__inner">
             <ul class="navigation__list">
-                <li class="navigation__item is-current">
+                <li class="navigation__item">
                     <a href="<?php echo esc_url( home_url( '/document/' ) ); ?>" class="navigation__link">カタログダウンロード</a>
                 </li>
-                <li class="navigation__item">
+                <li class="navigation__item is-current">
                     <a href="<?php echo esc_url( home_url( '/document-featured/' ) ); ?>" class="navigation__link">製品詳細</a>
                 </li>
             </ul>
@@ -61,7 +59,7 @@ if ( have_posts() ) {
           <div class="page__content page__content--no-image">
 
             <h1 id="01" class="page__title js-page-title">
-              カタログダウンロード
+              製品詳細
             </h1>
 
             <div class="page__inner page__inner--narrow">
@@ -108,5 +106,4 @@ if ( have_posts() ) {
     </div>
 
 </section>
-
 

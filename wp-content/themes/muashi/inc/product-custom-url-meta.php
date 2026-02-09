@@ -7,14 +7,17 @@
  * 製品ページURLのメタボックス登録
  */
 function muashi_register_product_custom_url_metabox() {
-    add_meta_box(
-        'muashi-product-custom-url',
-        '製品ページURL設定',
-        'muashi_render_product_custom_url_metabox',
-        'product',
-        'side',
-        'default'
-    );
+    $post_types = array( 'product', 'featured_product' );
+    foreach ( $post_types as $post_type ) {
+        add_meta_box(
+            'muashi-product-custom-url',
+            '製品ページURL設定',
+            'muashi_render_product_custom_url_metabox',
+            $post_type,
+            'side',
+            'default'
+        );
+    }
 }
 add_action('add_meta_boxes', 'muashi_register_product_custom_url_metabox');
 
@@ -54,3 +57,4 @@ function muashi_save_product_custom_url_meta( $post_id ) {
     }
 }
 add_action('save_post_product', 'muashi_save_product_custom_url_meta');
+add_action('save_post_featured_product', 'muashi_save_product_custom_url_meta');

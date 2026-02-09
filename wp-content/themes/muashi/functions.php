@@ -205,6 +205,7 @@ function save_interview_meta( $post_id ) {
 require_once(get_theme_file_path('/inc/product-pdf-meta.php'));
 require_once(get_theme_file_path('/inc/product-custom-url-meta.php'));
 require_once(get_theme_file_path('/inc/product-data.php'));
+require_once(get_theme_file_path('/inc/featured-product-data.php'));
 
 
 
@@ -721,6 +722,29 @@ function create_post_type() {
                 'with_front' => false,
             ),
             'menu_icon'     => 'dashicons-admin-site-alt3',
+        )
+    );
+
+    // 注目製品
+    register_post_type(
+        'featured_product',
+        array(
+            'labels' => array(
+                'name'          => '注目製品',
+                'singular_name' => '注目製品',
+                'add_new_item'  => '新規注目製品を追加',
+                'edit_item'     => '注目製品を編集',
+            ),
+            'public'        => true,
+            'has_archive'   => false,
+            'menu_position' => 6,
+            'show_in_rest'  => true,
+            'supports'      => array('title', 'editor', 'thumbnail', 'revisions', 'page-attributes'),
+            'rewrite'       => array(
+                'slug'       => 'featured-product',
+                'with_front' => false,
+            ),
+            'menu_icon'     => 'dashicons-star-filled',
         )
     );
 }
