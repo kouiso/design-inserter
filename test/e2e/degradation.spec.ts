@@ -253,12 +253,13 @@ test.describe('UI/UX Improvement Tests', () => {
 
     test('should have scroll-margin-top applied to headings', async ({ page }) => {
       await page.goto(`${BASE_URL}/sustainability/environment/`);
-      
-      const heading = await page.locator('h2, h3').first();
-      const scrollMarginTop = await heading.evaluate((el: HTMLElement) => {
+
+      // CSSは [id] セレクタに scroll-margin-top を適用（全h2/h3ではない）
+      const idElement = await page.locator('[id]').first();
+      const scrollMarginTop = await idElement.evaluate((el: HTMLElement) => {
         return window.getComputedStyle(el).scrollMarginTop;
       });
-      
+
       // scroll-margin-top が設定されていることを確認
       expect(scrollMarginTop).not.toBe('0px');
       expect(scrollMarginTop).not.toBe('auto');
@@ -302,8 +303,8 @@ test.describe('UI/UX Improvement Tests', () => {
     test('should navigate to correct product taxonomy page when footer link is clicked', async ({ page }) => {
       await page.goto(`${BASE_URL}/`);
       
-      // footer「意匠性でえらぶ」をクリック
-      const designLink = await page.locator('footer a:has-text("意匠性")').first();
+      // footer PCナビ内の「意匠性でえらぶ」をクリック
+      const designLink = page.locator('.footer__nav--pc a:has-text("意匠性")');
       await designLink.click();
       
       // /product/design/ ページに遷移

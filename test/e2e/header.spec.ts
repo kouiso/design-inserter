@@ -50,8 +50,8 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
 
-    // 少し待機してスタイルが適用されるのを待つ
-    await page.waitForTimeout(100);
+    // CSSトランジション（0.4s）の完了を待つ
+    await page.waitForTimeout(500);
 
     // 検索リンクの色を確認
     const searchLink = page.locator('.header__nav-link--search');
@@ -72,8 +72,8 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'black');
     });
 
-    // 少し待機してスタイルが適用されるのを待つ
-    await page.waitForTimeout(100);
+    // CSSトランジション（0.4s）の完了を待つ
+    await page.waitForTimeout(500);
 
     // 検索リンクの色を確認
     const searchLink = page.locator('.header__nav-link--search');
