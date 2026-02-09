@@ -28,14 +28,14 @@
   // ------------------------------------------------------------------------
   // Legend Row (大分類・方針・関連2次文書)
   // ------------------------------------------------------------------------
-  &__headers {
+  &__legend {
     display: flex;
     flex-direction: column;
     margin-bottom: 0.2rem;
     position: relative;
   }
 
-  &__header-item {
+  &__legend-item {
     display: flex;
     align-items: center;
     justify-content: center;

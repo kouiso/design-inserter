@@ -3500,13 +3500,13 @@ a {
   --step-2-indent: clamp(0px, calc((100cqi - var(--box-width)) / 2), 160px);
   --step-3-indent: clamp(0px, calc(100cqi - var(--box-width)), 320px);
 }
-.hierarchy-chart__headers {
+.hierarchy-chart__legend {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.2rem;
   position: relative;
 }
-.hierarchy-chart__header-item {
+.hierarchy-chart__legend-item {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3524,13 +3524,13 @@ a {
   position: relative;
   margin-bottom: 0.2rem;
 }
-.hierarchy-chart__header-item--l1 {
+.hierarchy-chart__legend-item--l1 {
   margin-left: var(--step-1-indent);
 }
-.hierarchy-chart__header-item--l2 {
+.hierarchy-chart__legend-item--l2 {
   margin-left: var(--step-2-indent);
 }
-.hierarchy-chart__header-item--l3 {
+.hierarchy-chart__legend-item--l3 {
   margin-left: var(--step-3-indent);
   margin-bottom: 0;
 }
