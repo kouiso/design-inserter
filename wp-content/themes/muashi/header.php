@@ -1,20 +1,8 @@
-<?php
-global $title, $description;
-if (is_home()){
-    $title = 'MUSASHI PAINT';
-} else {
-    $title = $title . ' | MUSASHI PAINT';
-}
-
-?>
-
 <!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
     <meta charset="<?php bloginfo('charset'); ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title><?php echo $title; ?></title>
-    <meta name="description" content="<?php echo $description; ?>">
     <script>
         !(function () {
             const viewport = document.querySelector('meta[name="viewport"]');

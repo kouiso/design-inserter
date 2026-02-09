@@ -7,9 +7,7 @@
  * @package Muashi
  */
 
-global $description;
 $search_query = get_search_query();
-$description = $search_query ? sprintf( '「%s」の検索結果', $search_query ) : '検索結果';
 
 get_header();
 ?>

@@ -1,6 +1,4 @@
 <?php
-global $description;
-$description = '';
 get_header();
 ?>
 

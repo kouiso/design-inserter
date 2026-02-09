@@ -2,8 +2,6 @@
 /**
  * Template Name: ストーリー
  */
-global $description;
-$description = '';
 get_header();
 
 // 固定ページ自体のコンテンツを取得

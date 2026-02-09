@@ -10,9 +10,6 @@ add_filter( 'wp_robots', function( $robots ) {
     return $robots;
 } );
 
-global $description;
-$description = '';
-
 get_header('download');
 
 $download_data = muashi_get_product_download_data();

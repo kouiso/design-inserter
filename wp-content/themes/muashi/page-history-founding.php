@@ -3,8 +3,6 @@
  * Template Name: History Founding Page
  */
 
-global $description;
-$description = '';
 get_header();
 
 $history_image_base = get_theme_file_uri( '/assets/img/history' );

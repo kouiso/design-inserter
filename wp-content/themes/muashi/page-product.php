@@ -2,8 +2,6 @@
 /**
  * Template Name: 製品情報
  */
-global $description;
-$description = '';
 get_header();
 
 // 固定ページ自体のコンテンツを取得
@@ -86,7 +84,7 @@ $product_query = new WP_Query(array(
                                     <?php while ($product_query->have_posts()):
                                         $product_query->the_post(); ?>
                                         <li class="archive__item" data-testid="product-list-item">
-                                            <a href="<?php the_permalink(); ?>" class="archive__link">
+                                            <a href="<?php the_permalink(); ?>" class="archive__link archive__link--product">
                                                 <div class="archive__text-wrapper">
                                                     <?php get_template_part('template-parts/product-info-display', null, array('product_id' => get_the_ID())); ?>
                                                 </div>

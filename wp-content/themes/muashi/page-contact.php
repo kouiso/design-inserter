@@ -2,8 +2,6 @@
 /*
 Template Name: Contact
 */
-global $description;
-$description = '';
 get_header();
 ?>
 
