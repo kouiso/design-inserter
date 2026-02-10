@@ -136,10 +136,15 @@ function muashi_execute_voice_csv_import( $csv_path ) {
             continue;
         }
 
+        // post_content にショートコードヘッダーを付与（製品の import と同じパターン）
+        $shortcode_header  = "[voice_field name=\"voice_company\"]\n";
+        $shortcode_header .= "[voice_field name=\"voice_position\"]\n";
+        $shortcode_header .= "[voice_field name=\"voice_person_name\"]\n\n";
+
         // 投稿作成
         $post_data = array(
             'post_title'   => $title,
-            'post_content' => $content,
+            'post_content' => $shortcode_header . $content,
             'post_type'    => 'voice',
             'post_status'  => 'publish',
             'menu_order'   => $menu_order,

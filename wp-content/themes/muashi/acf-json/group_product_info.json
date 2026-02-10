@@ -6,6 +6,7 @@
             "key": "field_product_name_trademark_en",
             "label": "英語品名（商標）",
             "name": "product_name_trademark_en",
+            "aria-label": "",
             "type": "text",
             "instructions": "例: VITA SUNSHINE ｜ フィールド名: product_name_trademark_en",
             "required": 0,
@@ -25,6 +26,7 @@
             "key": "field_product_line_number",
             "label": "ライン番号",
             "name": "product_line_number",
+            "aria-label": "",
             "type": "text",
             "instructions": "例: EA-NVH62- ｜ フィールド名: product_line_number",
             "required": 0,
@@ -44,8 +46,9 @@
             "key": "field_product_solvent_type",
             "label": "溶剤・水系・無溶剤系分類",
             "name": "product_solvent_type",
+            "aria-label": "",
             "type": "text",
-            "instructions": "例: 溶剤系 / solvent type ｜ フィールド名: product_solvent_type",
+            "instructions": "例: 溶剤系 \/ solvent type ｜ フィールド名: product_solvent_type",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -63,8 +66,9 @@
             "key": "field_product_paint_type",
             "label": "塗料別分類",
             "name": "product_paint_type",
+            "aria-label": "",
             "type": "text",
-            "instructions": "例: 低温2液塗料 / Low-TEMP 2K ｜ フィールド名: product_paint_type",
+            "instructions": "例: 低温2液塗料 \/ Low-TEMP 2K ｜ フィールド名: product_paint_type",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -82,8 +86,9 @@
             "key": "field_product_resin_type",
             "label": "樹脂別分類",
             "name": "product_resin_type",
+            "aria-label": "",
             "type": "text",
-            "instructions": "例: アクリルウレタン系 / Acrylic urethane type ｜ フィールド名: product_resin_type",
+            "instructions": "例: アクリルウレタン系 \/ Acrylic urethane type ｜ フィールド名: product_resin_type",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -101,8 +106,9 @@
             "key": "field_product_remarks",
             "label": "備考",
             "name": "product_remarks",
+            "aria-label": "",
             "type": "text",
-            "instructions": "例: 高光沢バイオペイント / high gloss bio paint ｜ フィールド名: product_remarks",
+            "instructions": "例: 高光沢バイオペイント \/ high gloss bio paint ｜ フィールド名: product_remarks",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -135,5 +141,6 @@
     "active": true,
     "description": "製品詳細情報（CSVマスターデータに対応）",
     "show_in_rest": 0,
-    "modified": 1738648800
+    "display_title": "",
+    "modified": 1770643833
 }

@@ -39,24 +39,6 @@ get_header();
                     </div>
 
                     <div class="page__content">
-                        <?php
-                        $voice_company = get_field('voice_company');
-                        $voice_position = get_field('voice_position');
-                        $voice_person_name = get_field('voice_person_name');
-                        if ($voice_company || $voice_position || $voice_person_name): ?>
-                            <div class="page__author-info">
-                                <?php if ($voice_company): ?>
-                                    <p class="page__author-company"><?php echo esc_html($voice_company); ?></p>
-                                <?php endif; ?>
-                                <?php if ($voice_position): ?>
-                                    <p class="page__author-position"><?php echo nl2br( esc_html( $voice_position ) ); ?></p>
-                                <?php endif; ?>
-                                <?php if ($voice_person_name): ?>
-                                    <p class="page__author-name"><?php echo esc_html($voice_person_name); ?></p>
-                                <?php endif; ?>
-                            </div>
-                        <?php endif; ?>
-
                         <h1 class="page__title"><?php the_title(); ?></h1>
 
                         <div class="page__inner page__inner--narrow">

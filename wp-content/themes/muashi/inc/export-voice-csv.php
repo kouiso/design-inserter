@@ -4,8 +4,7 @@
  *
  * 管理画面「ツール > お客様の声エクスポート」から実行可能。
  * 既存の voice 投稿データをCSVファイルとしてダウンロードする。
- * post_content 冒頭の著者情報パラグラフを自動パースして
- * 会社名・部署/役職・氏名に分離する。
+ * ACFフィールドから著者情報を取得し、post_content のショートコード行を除去して本文を分離する。
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,7 +50,7 @@ function muashi_voice_csv_export_page() {
 
     echo '<form method="post">';
     wp_nonce_field( 'muashi_voice_csv_export_action', 'muashi_voice_csv_export_nonce' );
-    echo '<p class="description">post_content の冒頭パラグラフから著者情報（会社名・部署/役職・氏名）を自動抽出し、本文と分離してCSVに出力します。</p>';
+    echo '<p class="description">ACFフィールドから著者情報（会社名・部署/役職・氏名）を取得し、本文と分離してCSVに出力します。</p>';
     echo '<p class="submit">';
     echo '<input type="submit" name="muashi_preview_voice_csv" class="button button-secondary" value="プレビュー" /> ';
     echo '<input type="submit" name="muashi_export_voice_csv" class="button button-primary" value="CSVダウンロード" />';
@@ -99,21 +98,14 @@ function muashi_get_voice_export_data() {
     foreach ( $voices as $v ) {
         $content = $v->post_content;
 
-        // ACFフィールドから著者情報を取得（優先）
-        // ACFフィールドが空の場合のみ、冒頭パラグラフからパースを試みる
+        // ACFフィールドから著者情報を取得
         $company     = get_field( 'voice_company', $v->ID );
         $position    = get_field( 'voice_position', $v->ID );
         $person_name = get_field( 'voice_person_name', $v->ID );
 
-        if ( empty( $company ) && empty( $person_name ) ) {
-            // ACFフィールドが空の場合: 冒頭パラグラフからパース（初回移行用）
-            $author_info = muashi_parse_voice_author_paragraph( $content );
-            $company     = $author_info['company'];
-            $position    = $author_info['position'];
-            $person_name = $author_info['person_name'];
-            // 冒頭パラグラフを除去した本文
-            $content = muashi_remove_first_paragraph_block( $content );
-        }
+        // post_content 先頭の [voice_field ...] 行を除去して本文のみにする
+        $content = preg_replace( '/^\[voice_field [^\]]*\]\n/m', '', $content );
+        $content = ltrim( $content, "\n\r" );
 
         // サムネイルファイル名
         $thumb_filename = '';
@@ -137,74 +129,6 @@ function muashi_get_voice_export_data() {
     }
 
     return $data;
-}
-
-/**
- * post_content の冒頭パラグラフから著者情報をパース
- *
- * パターン: <p>会社名<br>部署・役職<br>氏名 様</p>
- * - 1行目 → 会社名
- * - 最終行 → 氏名
- * - 中間行 → 部署・役職（複数あればスペース結合）
- * - 2行の場合 → 会社名 + 氏名（部署なし）
- */
-function muashi_parse_voice_author_paragraph( $content ) {
-    $result = array(
-        'company'     => '',
-        'position'    => '',
-        'person_name' => '',
-    );
-
-    // 最初の wp:paragraph ブロック内の <p>...</p> を取得
-    if ( ! preg_match( '/<!-- wp:paragraph -->\s*<p>(.*?)<\/p>\s*<!-- \/wp:paragraph -->/s', $content, $match ) ) {
-        return $result;
-    }
-
-    $inner = $match[1];
-
-    // <br> / <br /> / <br/> で分割し、HTMLタグ除去・トリム
-    $lines = preg_split( '/<br\s*\/?>/i', $inner );
-    $lines = array_map( function( $line ) {
-        return trim( strip_tags( html_entity_decode( $line, ENT_QUOTES, 'UTF-8' ) ) );
-    }, $lines );
-    $lines = array_values( array_filter( $lines, function( $line ) {
-        return $line !== '';
-    } ) );
-
-    if ( count( $lines ) === 0 ) {
-        return $result;
-    }
-
-    // 1行目 = 会社名
-    $result['company'] = $lines[0];
-
-    if ( count( $lines ) >= 3 ) {
-        // 3行以上: 最終行 = 氏名, 中間 = 部署・役職
-        $result['person_name'] = $lines[ count( $lines ) - 1 ];
-        $middle = array_slice( $lines, 1, count( $lines ) - 2 );
-        $result['position'] = implode( ' ', $middle );
-    } elseif ( count( $lines ) === 2 ) {
-        // 2行: 会社名 + 氏名（部署なし）
-        $result['person_name'] = $lines[1];
-    } else {
-        // 1行のみ: 会社名のみ
-    }
-
-    return $result;
-}
-
-/**
- * post_content から冒頭の wp:paragraph ブロックを1つ除去
- */
-function muashi_remove_first_paragraph_block( $content ) {
-    // 最初の wp:paragraph ブロックを除去（改行含む）
-    $result = preg_replace(
-        '/^<!-- wp:paragraph -->\s*<p>.*?<\/p>\s*<!-- \/wp:paragraph -->\s*/s',
-        '',
-        $content,
-        1
-    );
-    return ltrim( $result, "\n\r" );
 }
 
 /**

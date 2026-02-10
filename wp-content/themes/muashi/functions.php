@@ -31,6 +31,24 @@ function muashi_product_field_shortcode( $atts ) {
 add_shortcode( 'product_field', 'muashi_product_field_shortcode' );
 
 /**
+ * [voice_field] ショートコード
+ * お客様の声のACFカスタムフィールド値を表示する。
+ * 使用例: [voice_field name="voice_company"]
+ */
+function muashi_voice_field_shortcode( $atts ) {
+    $atts = shortcode_atts( array( 'name' => '' ), $atts, 'voice_field' );
+    if ( empty( $atts['name'] ) ) {
+        return '';
+    }
+    $value = get_field( $atts['name'] );
+    if ( empty( $value ) ) {
+        return '';
+    }
+    return nl2br( esc_html( $value ) );
+}
+add_shortcode( 'voice_field', 'muashi_voice_field_shortcode' );
+
+/**
  * css、js読み込み
  */
 function my_styles() {

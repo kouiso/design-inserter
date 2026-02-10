@@ -197,7 +197,19 @@
 ✅ Execute all instructed tasks. AI has no fatigue.
 <!-- ✅ 指示されたタスクは全て実行。AIに疲労はない。 -->
 
-### 5.5. 明示的指示の無視禁止
+### 5.5. データ問題のコード回避禁止
+
+❌ 投稿コンテンツ（post_content）の問題をテンプレートの条件分岐で回避する
+<!-- ❌ Solving post_content issues by adding conditional logic to templates -->
+❌ データの重複・不備をコード側で吸収しようとする
+<!-- ❌ Absorbing data duplication/defects on the code side -->
+
+✅ データの問題はデータで直す（投稿内容の修正、ACFフィールドの更新等）
+<!-- ✅ Fix data problems with data (edit post content, update ACF fields, etc.) -->
+✅ テンプレートコードはデータが正しい前提で書く
+<!-- ✅ Write template code assuming data is correct -->
+
+### 5.6. 明示的指示の無視禁止
 
 ❌ Committing when told "Don't commit"
 <!-- ❌ 「コミットするな」と言われたのにコミットする -->
@@ -209,7 +221,7 @@
 ✅ Understand "why that instruction was given" - the true purpose - before acting.
 <!-- ✅ 「なぜその指示が出たのか」真の目的を理解してから行動。 -->
 
-### 5.6. 質問の小出し禁止
+### 5.7. 質問の小出し禁止
 
 ❌ Asking questions piecemeal with many back-and-forths
 <!-- ❌ 質問を小出しにして何往復もやり取りする -->
@@ -217,7 +229,7 @@
 ✅ Investigate → List all unknowns → Ask everything at once
 <!-- ✅ 調査→全ての不明点を洗い出す→まとめて1回で質問 -->
 
-### 5.7. 既出情報の再質問禁止
+### 5.8. 既出情報の再質問禁止
 
 ❌ Re-asking what user explained initially
 <!-- ❌ ユーザーが最初に説明した内容を再度質問する -->
