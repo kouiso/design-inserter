@@ -3,6 +3,8 @@
  * Template Name: History Page
  */
 
+global $description;
+$description = '';
 get_header();
 ?>
 

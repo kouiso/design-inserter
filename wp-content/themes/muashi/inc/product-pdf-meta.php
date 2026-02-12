@@ -7,17 +7,14 @@
  * 製品資料PDFのメタボックス登録
  */
 function muashi_register_product_pdf_metabox() {
-    $post_types = array( 'product', 'featured_product' );
-    foreach ( $post_types as $post_type ) {
-        add_meta_box(
-            'muashi-product-pdf',
-            '資料PDF',
-            'muashi_render_product_pdf_metabox',
-            $post_type,
-            'side',
-            'default'
-        );
-    }
+    add_meta_box(
+        'muashi-product-pdf',
+        '資料PDF',
+        'muashi_render_product_pdf_metabox',
+        'product',
+        'side',
+        'default'
+    );
 }
 add_action('add_meta_boxes', 'muashi_register_product_pdf_metabox');
 
@@ -109,7 +106,6 @@ function muashi_save_product_pdf_meta( $post_id ) {
     }
 }
 add_action('save_post_product', 'muashi_save_product_pdf_meta');
-add_action('save_post_featured_product', 'muashi_save_product_pdf_meta');
 
 /**
  * 製品資料PDFメタボックス用スクリプト
@@ -120,7 +116,7 @@ function muashi_enqueue_product_meta_admin_assets( $hook ) {
     }
 
     $screen = get_current_screen();
-    if ( ! $screen || ! in_array( $screen->post_type, array( 'product', 'featured_product' ), true ) ) {
+    if ( ! $screen || 'product' !== $screen->post_type ) {
         return;
     }
 

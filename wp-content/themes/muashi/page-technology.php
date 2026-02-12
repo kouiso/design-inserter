@@ -2,6 +2,8 @@
 /**
  * Template Name: テクノロジー
  */
+global $description;
+$description = '';
 get_header();
 ?>
 

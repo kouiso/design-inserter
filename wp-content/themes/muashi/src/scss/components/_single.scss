@@ -105,11 +105,6 @@
     }
   }
 
-  // コンテンツブロック全てにマージンを当てる（カスタマイザーから移植）
-  &__contents > * {
-    margin-bottom: 1.5rem;
-  }
-
   &__contents {
     .wp-block-group {
       margin-bottom: 24px;

@@ -1,11 +1,11 @@
-@use "../setting" as *;
+@use '../setting' as *;
 
 .header {
   width: 100%;
   position: relative;
   z-index: 100;
 
-  &__bg {
+  &__bg{
     position: absolute;
     top: 0;
     left: 0;
@@ -13,6 +13,7 @@
     height: 100%;
     background-color: var(--color-pink);
     z-index: 0;
+    
   }
 
   &__inner {
@@ -20,13 +21,13 @@
     position: relative;
     height: 110px;
 
-    @include mq(md) {
+    @include mq(md){
       height: 174px;
       padding: 25px vw-max(24, 1200) 0 0;
     }
 
-    &--page {
-      @include mq(md) {
+    &--page{
+      @include mq(md){
         padding: 0;
         padding: 0 vw-max(24, 1200) 0 0;
         height: 86px;
@@ -38,12 +39,12 @@
     display: grid;
     gap: 4px;
 
-    @include mq(md) {
+    @include mq(md){
       gap: 28px;
     }
 
-    &--page {
-      @include mq(md) {
+    &--page{
+      @include mq(md){
         display: none;
       }
     }
@@ -54,9 +55,8 @@
     margin: 0 auto;
     width: 231px;
     position: relative;
-
-    svg,
-    path {
+    
+    svg, path {
       transition: fill 0.4s ease-in-out;
     }
   }
@@ -66,13 +66,12 @@
   }
 
   &__sub-logo,
-  &__sub-logo-nav {
+  &__sub-logo-nav{
     margin: 0 auto;
     width: 50px;
     position: relative;
 
-    svg,
-    path {
+    svg, path {
       transition: fill 0.4s ease-in-out;
     }
   }
@@ -91,7 +90,7 @@
     }
   }
 
-  &__nav {
+  &__nav{
     position: fixed;
     top: 0;
     left: 0;
@@ -103,11 +102,9 @@
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
-    transition:
-      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.4s;
-
-    @include mq(md) {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+    
+    @include mq(md){
       padding: 0;
       height: 86px;
     }
@@ -118,8 +115,8 @@
       pointer-events: auto;
     }
 
-    &--page {
-      @include mq(md) {
+    &--page{
+      @include mq(md){
         position: fixed;
         top: 0;
         left: 0;
@@ -131,12 +128,12 @@
     }
   }
 
-  &__nav-inner {
+  &__nav-inner{
     position: relative;
     display: grid;
     gap: 4px;
 
-    @include mq(md) {
+    @include mq(md){
       padding: 0 40px;
       display: flex;
       align-items: center;
@@ -147,105 +144,101 @@
     }
   }
 
-  &__nav-logo {
+  &__nav-logo{
     margin: 0 auto;
     width: 231px;
 
-    @include mq(md) {
+    @include mq(md){
       margin: 0;
       width: vw-max(250, 1440);
     }
 
-    svg,
-    path {
+    svg, path {
       transition: fill 0.4s ease-in-out;
     }
   }
 
-  &__nav-sub-logo {
+  &__nav-sub-logo{
     margin: 0 auto;
     width: 50px;
 
-    @include mq(md) {
+    @include mq(md){
       display: none;
     }
 
-    svg,
-    path {
+    svg, path {
       transition: fill 0.4s ease-in-out;
     }
   }
 
-  &__nav-list {
+  &__nav-list{
     display: none;
 
-    @include mq(md) {
+    @include mq(md){
       display: flex;
       align-items: center;
       gap: vw-max(60, 1440);
     }
   }
 
-  &__nav-item {
-    &:last-of-type {
+  &__nav-item{
+    &:last-of-type{
       margin-left: 20px;
     }
 
-    &--lang {
+    &--lang{
       display: flex;
     }
   }
 
-  &__nav-link {
+  &__nav-link{
     font-size: 14px;
     font-weight: 700;
     color: var(--color-white);
     transition: color 0.4s ease-in-out;
     position: relative;
 
-    &::after {
-      content: "";
+    &::after{
+      content: '';
       position: absolute;
       bottom: -4px;
       left: 0;
       width: 100%;
       height: 2px;
       background-color: var(--color-white);
-      transition:
-        background-color 0.4s ease-in-out,
-        transform 0.2s ease-in-out;
+      transition: background-color 0.4s ease-in-out, transform 0.2s ease-in-out;
       transform: scaleX(0);
       transform-origin: right;
     }
 
-    @include hover {
-      &::after {
+    @include hover{
+      &::after{
         transform: scaleX(1);
         transform-origin: left;
       }
     }
 
-    &.is-active {
-      &::after {
+    &.is-active{
+      &::after{
         transform: scaleX(1);
         transform-origin: left;
       }
     }
 
-    &--lang {
-      &:not(:first-of-type) {
-        &::before {
-          content: "|";
+    &--lang{
+      &:not(:first-of-type){
+        &::before{
+          content: '|';
           margin: 0 0.3em;
         }
       }
     }
   }
 
-  &__nav-icon {
+  &__nav-icon{
     display: none;
 
-    @include mq(md) {
+    @include mq(md){
       display: block;
       position: absolute;
       top: 56px;
@@ -267,21 +260,21 @@
     background: transparent;
     z-index: 100;
 
-    @include mq(md) {
+    @include mq(md){
       display: none;
     }
 
-    &.is-active {
-      .header__hamburger-line {
+    &.is-active{
+      .header__hamburger-line{
         &:nth-child(1) {
           top: 50%;
           transform: translate(-50%, -50%) rotate(45deg);
         }
-
+  
         &:nth-child(2) {
           opacity: 0;
         }
-
+  
         &:nth-child(3) {
           width: 24px;
           top: 50%;
@@ -297,11 +290,7 @@
     left: 50%;
     height: 2px;
     background-color: var(--color-white);
-    transition:
-      transform 0.3s ease-in-out,
-      top 0.3s ease-in-out,
-      opacity 0.3s ease-in-out,
-      width 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out, opacity 0.3s ease-in-out, width 0.3s ease-in-out;
     &:nth-child(1) {
       width: 24px;
       top: 10px;
@@ -321,7 +310,7 @@
     }
   }
 
-  &__hamburger-nav {
+  &__hamburger-nav{
     position: fixed;
     top: 0;
     left: 0;
@@ -333,45 +322,43 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition:
-      opacity 0.4s,
-      visibility 0.4s;
+    transition: opacity 0.4s, visibility 0.4s;
 
-    @include mq(md) {
+    @include mq(md){
       display: none;
     }
 
-    &.is-active {
+    &.is-active{
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
     }
   }
 
-  &.is-home {
-    .header {
+  &.is-home{
+    .header{
       &__inner {
-        @include mq(md) {
+        @include mq(md){
           padding: 40px vw-max(24, 1200) 36px 0;
         }
       }
 
-      &__top {
-        @include mq(md) {
+      &__top{
+        @include mq(md){
           gap: 28px;
         }
       }
 
       &__logo,
-      &__logo-nav {
-        @include mq(md) {
+      &__logo-nav{
+        @include mq(md){
           width: 336px;
         }
       }
 
       &__sub-logo,
-      &__sub-logo-nav {
-        @include mq(md) {
+      &__sub-logo-nav{
+        @include mq(md){
           width: 80px;
         }
       }
@@ -380,21 +367,18 @@
 }
 
 [data-logo-color="white"] {
-  .header__logo,
-  .header__sub-logo,
-  .header__nav-logo,
-  .header__nav-sub-logo {
+  .header__logo, .header__sub-logo, .header__nav-logo, .header__nav-sub-logo {
     svg path {
       fill: var(--color-white);
     }
   }
   .header__logo-img {
-    mix-blend-mode: normal;
+      mix-blend-mode: normal;
   }
-  .header__nav-link {
+  .header__nav-link{
     color: var(--color-white);
 
-    &::after {
+    &::after{
       background-color: var(--color-white);
     }
   }
@@ -405,21 +389,18 @@
 }
 
 [data-logo-color="black"] {
-  .header__logo,
-  .header__sub-logo,
-  .header__nav-logo,
-  .header__nav-sub-logo {
+  .header__logo, .header__sub-logo, .header__nav-logo, .header__nav-sub-logo {
     svg path {
       fill: var(--color-black);
     }
   }
   .header__logo-img {
-    mix-blend-mode: normal;
+      mix-blend-mode: normal;
   }
-  .header__nav-link {
+  .header__nav-link{
     color: var(--color-black);
 
-    &::after {
+    &::after{
       background-color: var(--color-black);
     }
   }
@@ -447,9 +428,7 @@
   background: transparent;
   cursor: pointer;
   color: var(--color-white);
-  transition:
-    color 0.4s ease-in-out,
-    opacity 0.3s ease;
+  transition: color 0.4s ease-in-out, opacity 0.3s ease;
 
   &::after {
     display: none;
@@ -507,7 +486,7 @@
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       width: 30px;
       height: 2px;
@@ -577,7 +556,7 @@
 // 検索クイックリンク
 .search-quick-links {
   margin-top: 24px;
-  text-align: left;
+  text-align: center;
 
   &__title {
     color: #333;

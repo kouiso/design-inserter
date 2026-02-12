@@ -3,6 +3,8 @@
  * Template Name: Privacy Policy
  * プライバシーポリシーページ用テンプレート
  */
+global $description;
+$description = '';
 get_header();
 ?>
 

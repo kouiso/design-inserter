@@ -10,6 +10,9 @@ add_filter( 'wp_robots', function( $robots ) {
     return $robots;
 } );
 
+global $description;
+$description = '';
+
 get_header('download');
 
 $download_data = muashi_get_product_download_data();
@@ -40,9 +43,6 @@ if ( have_posts() ) {
                 <li class="navigation__item is-current">
                     <a href="<?php echo esc_url( home_url( '/document/' ) ); ?>" class="navigation__link">カタログダウンロード</a>
                 </li>
-                <li class="navigation__item">
-                    <a href="<?php echo esc_url( home_url( '/document-featured/' ) ); ?>" class="navigation__link">製品詳細</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -71,17 +71,7 @@ if ( have_posts() ) {
                   <div class="contact__inner">
                     <div class="download__layout">
                       <div class="download__main download__main--full">
-                        <div class="download__controls">
-                          <label class="download__search">
-                            <span class="download__search-label">キーワード</span>
-                            <input type="search" class="download__search-input" data-download-search placeholder="製品名やキーワードで検索">
-                          </label>
-                        </div>
-
                         <div class="download__feedback" data-download-feedback hidden></div>
-
-                        <p class="download__result-count" data-download-result-count></p>
-
                         <ul class="download__list" data-download-list></ul>
 
                       </div>

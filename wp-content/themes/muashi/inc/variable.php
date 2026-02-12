@@ -19,7 +19,6 @@ define('URL_PICKUP', home_url('/pickup/'));
 // NOTE: /media/ はWordPressの予約語のため使用不可。固定ページのスラッグは media-page を使用すること。
 define('URL_MEDIA', home_url('/media-page/'));
 define('URL_DOWNLOAD', home_url('/download/'));
-define('URL_DOCUMENT_FEATURED', home_url('/document-featured/'));
 define('URL_HISTORY', home_url('/history/'));
 define('URL_HISTORY_FOUNDING', home_url('/history-founding/'));
 define('URL_HISTORY_INNOVATION', home_url('/history-innovation/'));

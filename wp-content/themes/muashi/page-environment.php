@@ -1,6 +1,8 @@
 <?php
 /* Template Name: 環境ページ */
 
+global $description;
+$description = '';
 get_header();
 ?>
 

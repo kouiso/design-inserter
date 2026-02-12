@@ -2,6 +2,8 @@
 /**
  * Template Name: サステナビリティ
  */
+global $description;
+$description = '';
 get_header();
 ?>
 

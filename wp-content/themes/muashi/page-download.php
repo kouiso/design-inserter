@@ -3,6 +3,9 @@
 Template Name: Download
 */
 
+global $description;
+$description = '';
+
 get_header();
 
 // Minimal product data for form population when coming from catalog page

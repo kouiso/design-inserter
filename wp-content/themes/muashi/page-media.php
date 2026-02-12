@@ -2,6 +2,8 @@
 /**
  * Template Name: メディア
  */
+global $description;
+$description = '';
 get_header();
 
 // ページネーション用に現在のページ番号を取得

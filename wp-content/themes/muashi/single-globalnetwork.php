@@ -2,6 +2,8 @@
 /**
  * Template for single globalnetwork posts
  */
+global $description;
+$description = '';
 get_header();
 ?>
 

@@ -118,19 +118,27 @@ class DownloadPage {
     this.listEl = this.root.querySelector('[data-download-list]');
     this.feedbackEl = this.root.querySelector('[data-download-feedback]');
 
-    this.selectedListEl = this.root.querySelector('[data-download-selected-list]');
-    this.selectedEmptyEl = this.root.querySelector('[data-download-selected-empty]');
-    this.selectedCountEl = this.root.querySelector('[data-download-selected-count]');
-    this.resultCountEl = this.root.querySelector('[data-download-result-count]');
-    this.searchInput = this.root.querySelector('[data-download-search]');
-    this.sortSelect = this.root.querySelector('[data-download-sort]');
-    this.resetButton = this.root.querySelector('[data-download-reset]');
-    this.filterSelects = Array.from(this.root.querySelectorAll('[data-download-filter]'));
+    // documentページでは検索UI要素を取得しない
+    if (!this.isDocumentPage) {
+      this.selectedListEl = this.root.querySelector('[data-download-selected-list]');
+      this.selectedEmptyEl = this.root.querySelector('[data-download-selected-empty]');
+      this.selectedCountEl = this.root.querySelector('[data-download-selected-count]');
+      this.resultCountEl = this.root.querySelector('[data-download-result-count]');
+      this.searchInput = this.root.querySelector('[data-download-search]');
+      this.sortSelect = this.root.querySelector('[data-download-sort]');
+      this.resetButton = this.root.querySelector('[data-download-reset]');
+      this.filterSelects = Array.from(this.root.querySelectorAll('[data-download-filter]'));
+    }
 
     this.form = document.querySelector('.contact .wpcf7 form');
   }
 
   bindEvents() {
+    // documentページでは検索イベントをバインドしない
+    if (this.isDocumentPage) {
+      return;
+    }
+
     if (this.searchInput) {
       this.searchInput.addEventListener('input', (event) => {
         const raw = event.target.value || '';
@@ -217,6 +225,14 @@ class DownloadPage {
   }
 
   getFilteredProducts() {
+    // documentページではフィルタリングせずに全製品を返す
+    if (this.isDocumentPage) {
+      const products = this.products.map((product) => this.productsById.get(product.id)).filter(Boolean);
+      // ソートはデフォルト（タイトル昇順）のみ
+      const collator = new Intl.Collator('ja');
+      return products.sort((a, b) => collator.compare(a.title, b.title));
+    }
+
     const search = this.state.search;
     const filters = this.state.filters;
     const filterKeys = Object.keys(filters).filter((key) => filters[key]);
@@ -281,9 +297,9 @@ class DownloadPage {
     this.renderList(paginatedProducts);
     this.renderPagination(filtered.length, totalPages);
 
-    this.updateResultCount(filtered.length);
     if (!this.isDocumentPage) {
       this.renderSelected();
+      this.updateResultCount(filtered.length);
       this.syncHiddenInputs();
     }
   }

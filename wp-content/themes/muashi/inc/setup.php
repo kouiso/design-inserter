@@ -35,7 +35,7 @@ add_filter( 'emoji_svg_url', '__return_false' );
  * add_theme_support
  */
 add_action( 'after_setup_theme', function(){
-    add_theme_support( 'title-tag' );
+    // add_theme_support( 'title-tag' ); // tiltleタグの追加
     add_theme_support( 'post-thumbnails' ); //サムネイル機能の追加
     add_theme_support('menus'); // カスタムメニューの追加
     add_theme_support('widgets'); // ウィジェットの追加

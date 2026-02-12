@@ -1,6 +1,9 @@
 <?php
 // 製品情報タクソノミー共通テンプレート
 
+global $description;
+$description = '';
+
 $term      = get_queried_object();
 $taxonomy  = $term ? get_taxonomy( $term->taxonomy ) : null;
 $term_name = $term ? $term->name : '';

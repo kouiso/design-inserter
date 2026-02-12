@@ -2,6 +2,8 @@
 /**
  * Template Name: グローバルネットワーク
  */
+global $description;
+$description = '';
 get_header();
 
 // グローバルネットワーク投稿一覧を取得（全件表示）

@@ -3,6 +3,8 @@
  * Template Name: FAQ
  * よくある質問ページ用テンプレート
  */
+global $description;
+$description = '';
 get_header();
 ?>
 

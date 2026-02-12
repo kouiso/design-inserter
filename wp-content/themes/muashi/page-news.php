@@ -2,6 +2,8 @@
 /**
  * Template Name: ニュース・お知らせ
  */
+global $description;
+$description = '';
 get_header();
 
 // ページネーション用に現在のページ番号を取得

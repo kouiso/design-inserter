@@ -2,6 +2,8 @@
 /**
  * Template Name: グローバルネットワーク説明
  */
+global $description;
+$description = '';
 get_header();
 ?>
 

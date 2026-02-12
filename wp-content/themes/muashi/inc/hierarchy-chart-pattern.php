@@ -36,10 +36,10 @@ function muashi_register_block_patterns() {
             'content'     => '<!-- wp:html -->
 <div class="hierarchy-chart">
   <!-- Header Guide -->
-  <div class="hierarchy-chart__legend">
-    <div class="hierarchy-chart__legend-item hierarchy-chart__legend-item--l1">大分類</div>
-    <div class="hierarchy-chart__legend-item hierarchy-chart__legend-item--l2">方針</div>
-    <div class="hierarchy-chart__legend-item hierarchy-chart__legend-item--l3">関連2次文書</div>
+  <div class="hierarchy-chart__headers">
+    <div class="hierarchy-chart__header-item hierarchy-chart__header-item--l1">大分類</div>
+    <div class="hierarchy-chart__header-item hierarchy-chart__header-item--l2">方針</div>
+    <div class="hierarchy-chart__header-item hierarchy-chart__header-item--l3">関連2次文書</div>
   </div>
 
   <!-- サステナビリティ -->

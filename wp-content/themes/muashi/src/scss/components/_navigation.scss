@@ -131,26 +131,5 @@
     @include hover() {
       opacity: 0.7;
     }
-
-    // カレントページハイライト（第3階層）
-    &.is-current {
-      font-weight: 700;
-    }
-  }
-
-  // カレントページハイライト（第2階層・子なしリンク）
-  // <a>要素のみ対象: アコーディオントリガー（<p>）の構造的is-activeを除外
-  a#{&}__sub-link.is-active {
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-
-  // カレントページハイライト（第2階層・子ページ閲覧時の親トリガー）
-  // is-ancestor: 実際に現在のページの祖先であるときのみ付与（構造的is-activeとは独立）
-  &__sub-link.is-ancestor {
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 4px;
   }
 }

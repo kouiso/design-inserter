@@ -1,6 +1,8 @@
 <?php
 /* Template Name: SCMページ */
 
+global $description;
+$description = '';
 get_header();
 ?>
 

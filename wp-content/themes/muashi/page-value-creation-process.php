@@ -1,6 +1,8 @@
 <?php
 /* Template Name: 価値創造プロセスページ */
 
+global $description;
+$description = '';
 get_header();
 ?>
 

@@ -3,6 +3,9 @@
 Template Name: Catalog Request
 */
 
+global $description;
+$description = '';
+
 get_header();
 
 $max_selectable = 5;

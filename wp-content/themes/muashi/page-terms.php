@@ -3,6 +3,8 @@
  * Template Name: Terms of Use
  * 利用規約ページ用テンプレート
  */
+global $description;
+$description = '';
 get_header();
 ?>
 
