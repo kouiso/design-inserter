@@ -1,8 +1,6 @@
 <?php
 /* Template Name: ガバナンスページ */
 
-global $description;
-$description = '';
 get_header();
 ?>
 

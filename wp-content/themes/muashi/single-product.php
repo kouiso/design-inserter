@@ -2,8 +2,6 @@
 /**
  * 製品詳細ページテンプレート
  */
-global $description;
-$description = '';
 get_header();
 ?>
 

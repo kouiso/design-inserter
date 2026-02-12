@@ -2,9 +2,15 @@
 /**
  * Template Name: インタビュー
  */
-global $description;
-$description = '';
 get_header();
+
+// 固定ページ自体のコンテンツを取得
+$page_content = '';
+if ( have_posts() ) {
+    the_post();
+    $page_content = apply_filters( 'the_content', get_the_content() );
+    rewind_posts();
+}
 
 // ページネーション用に現在のページ番号を取得（WordPress標準の方法）
 $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
@@ -50,6 +56,11 @@ $interview_query = new WP_Query( array(
                 <h1 class="page__title js-page-title">
                 インタビュー
                 </h1>
+                <?php if ( ! empty( $page_content ) ) : ?>
+                <div class="page__inner page__inner--narrow">
+                    <?php echo $page_content; ?>
+                </div>
+                <?php endif; ?>
                 <div class="page__inner page__inner--narrow">
 
                     <div class="story">

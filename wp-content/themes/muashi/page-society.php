@@ -1,8 +1,6 @@
 <?php
 /* Template Name: 社会ページ */
 
-global $description;
-$description = '';
 get_header();
 ?>
 

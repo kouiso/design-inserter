@@ -21,6 +21,7 @@ if (function_exists('get_field')) {
         array('label' => '溶剤・水系・無溶剤系分類', 'value' => get_field('product_solvent_type', $product_id)),
         array('label' => '塗料別分類', 'value' => get_field('product_paint_type', $product_id)),
         array('label' => '樹脂別分類', 'value' => get_field('product_resin_type', $product_id)),
+        array('label' => '備考', 'value' => get_field('product_remarks', $product_id)),
     );
 } else {
     // ACF未インストール時のフォールバック
@@ -31,6 +32,7 @@ if (function_exists('get_field')) {
         array('label' => '溶剤・水系・無溶剤系分類', 'value' => get_post_meta($product_id, 'product_solvent_type', true)),
         array('label' => '塗料別分類', 'value' => get_post_meta($product_id, 'product_paint_type', true)),
         array('label' => '樹脂別分類', 'value' => get_post_meta($product_id, 'product_resin_type', true)),
+        array('label' => '備考', 'value' => get_post_meta($product_id, 'product_remarks', true)),
     );
 }
 
@@ -44,11 +46,17 @@ for ($i = 1; $i < count($fields); $i++) {
 }
 
 // タイトルのみの場合でも表示する（製品名は必ずある）
+// 詳細フィールド（タイトル以外）を分離
+$detail_fields = array_slice($fields, 1);
 ?>
 
 <div class="product-info" data-testid="product-info">
-    <dl class="product-info__list">
-        <?php foreach ($fields as $field): ?>
+    <div class="product-info__name">
+        <p class="product-info__name-value"><?php echo esc_html($product_title_ja); ?></p>
+    </div>
+    <?php if ($has_custom_fields): ?>
+    <dl class="product-info__details">
+        <?php foreach ($detail_fields as $field): ?>
             <?php if (!empty($field['value'])): ?>
             <div class="product-info__item">
                 <dt class="product-info__label"><?php echo esc_html($field['label']); ?></dt>
@@ -57,4 +65,5 @@ for ($i = 1; $i < count($fields); $i++) {
             <?php endif; ?>
         <?php endforeach; ?>
     </dl>
+    <?php endif; ?>
 </div>

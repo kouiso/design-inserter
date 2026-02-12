@@ -2,8 +2,6 @@
 /**
  * Template Name: 会社概要
  */
-global $description;
-$description = '';
 get_header();
 ?>
 

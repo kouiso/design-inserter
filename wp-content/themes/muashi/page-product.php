@@ -2,9 +2,15 @@
 /**
  * Template Name: 製品情報
  */
-global $description;
-$description = '';
 get_header();
+
+// 固定ページ自体のコンテンツを取得
+$page_content = '';
+if ( have_posts() ) {
+    the_post();
+    $page_content = apply_filters( 'the_content', get_the_content() );
+    rewind_posts();
+}
 
 // ページネーション用に現在のページ番号を取得
 $paged = get_query_var('paged') ? get_query_var('paged') : 1;
@@ -63,6 +69,11 @@ $product_query = new WP_Query(array(
                 <h1 class="page__title js-page-title">
                     製品情報
                 </h1>
+                <?php if ( ! empty( $page_content ) ) : ?>
+                <div class="page__inner page__inner--narrow">
+                    <?php echo $page_content; ?>
+                </div>
+                <?php endif; ?>
                 <div class="page__inner page__inner--narrow">
 
                     <div class="story">
@@ -73,7 +84,7 @@ $product_query = new WP_Query(array(
                                     <?php while ($product_query->have_posts()):
                                         $product_query->the_post(); ?>
                                         <li class="archive__item" data-testid="product-list-item">
-                                            <a href="<?php the_permalink(); ?>" class="archive__link">
+                                            <a href="<?php the_permalink(); ?>" class="archive__link archive__link--product">
                                                 <div class="archive__text-wrapper">
                                                     <?php get_template_part('template-parts/product-info-display', null, array('product_id' => get_the_ID())); ?>
                                                 </div>

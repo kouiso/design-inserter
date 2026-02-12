@@ -2,8 +2,6 @@
 /**
  * Template Name: 私たちについて
  */
-global $description;
-$description = '';
 get_header();
 ?>
 

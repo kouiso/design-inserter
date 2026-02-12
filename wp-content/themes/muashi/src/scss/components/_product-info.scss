@@ -1,16 +1,42 @@
 @use '../setting' as *;
 
 // ==========================================================================
-// 製品情報表示
+// 製品情報表示（左:品名 / 右:詳細）
 // ==========================================================================
 
 .product-info {
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
 
-  &__list {
+  @include mq(lg) {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  &__name {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__name-value {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+    margin: 0;
+
+    @include mq(lg) {
+      font-size: 16px;
+    }
+  }
+
+  &__details {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     margin: 0;
     padding: 0;
   }
@@ -18,7 +44,7 @@
   &__item {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   &__label {
@@ -45,27 +71,9 @@
   }
 }
 
-// 製品一覧ページ用調整
-.archive__item .product-info {
-  padding: 0;
-
-  &__list {
-    gap: 6px;
-  }
-
-  &__item {
-    gap: 1px;
-  }
-
-  // 日本語品名（最初のアイテム）を強調
-  &__item:first-child {
-    .product-info__value {
-      font-size: 14px;
-      font-weight: 500;
-
-      @include mq(lg) {
-        font-size: 16px;
-      }
-    }
+// 製品一覧: archive__link のグリッドを1カラムに上書き（画像なし）
+.archive__link--product {
+  @include mq(lg) {
+    grid-template-columns: 1fr;
   }
 }

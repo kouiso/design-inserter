@@ -2,8 +2,6 @@
 /**
  * Template Name: サステナブルなビジネス展開
  */
-global $description;
-$description = '';
 get_header();
 ?>
 

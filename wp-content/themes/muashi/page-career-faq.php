@@ -2,8 +2,6 @@
 /**
  * Template Name: 採用に関するQ&A
  */
-global $description;
-$description = '';
 get_header();
 ?>
 

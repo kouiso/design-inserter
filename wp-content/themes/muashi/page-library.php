@@ -1,8 +1,6 @@
 <?php
 /* Template Name: ライブラリーページ */
 
-global $description;
-$description = '';
 get_header();
 ?>
 
