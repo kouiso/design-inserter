@@ -130,11 +130,14 @@ function muashi_execute_product_csv_import( $csv_path ) {
             }
         }
 
-        // ターム作成
+        // ターム作成（muashi_term_order メタも設定して表示順を維持）
+        // CSVヘッダーの左→右 = サイドバーの上→下
         foreach ( $config['terms'] as $index => $term_name ) {
             $result = wp_insert_term( $term_name, $taxonomy );
             if ( is_wp_error( $result ) ) {
                 echo "警告: ターム作成失敗 [{$taxonomy}] {$term_name}: " . $result->get_error_message() . "\n";
+            } else {
+                update_term_meta( $result['term_id'], 'muashi_term_order', $index );
             }
         }
         echo "タクソノミー [{$taxonomy}]: " . count( $config['terms'] ) . "ターム作成\n";

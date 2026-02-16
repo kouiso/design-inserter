@@ -121,6 +121,7 @@
     // ピックアップページなど、page__innerが連続する場合の隙間を解消
     &--intro {
       padding-bottom: 0;
+      overflow: hidden; // 子要素のmargin-bottomが外にはみ出すのを防ぐ（BFC生成）
 
       @include mq(lg) {
         padding-bottom: 0;
