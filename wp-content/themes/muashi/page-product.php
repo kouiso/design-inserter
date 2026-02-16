@@ -70,11 +70,11 @@ $product_query = new WP_Query(array(
                     製品情報
                 </h1>
                 <?php if ( ! empty( $page_content ) ) : ?>
-                <div class="page__inner page__inner--narrow page__inner--intro">
+                <div class="page__inner page__inner--narrow">
                     <?php echo $page_content; ?>
                 </div>
                 <?php endif; ?>
-                <div class="page__inner page__inner--narrow page__inner--no-top-margin">
+                <div class="page__inner page__inner--narrow">
 
                     <div class="story">
                         <div class="archive">

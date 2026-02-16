@@ -118,20 +118,6 @@
       }
     }
 
-    // ピックアップページなど、page__innerが連続する場合の隙間を解消
-    &--intro {
-      padding-bottom: 0;
-      overflow: hidden; // 子要素のmargin-bottomが外にはみ出すのを防ぐ（BFC生成）
-
-      @include mq(lg) {
-        padding-bottom: 0;
-      }
-    }
-
-    &--no-top-margin {
-      margin-top: 0;
-    }
-
     .wp-block-group:not(.is-style-expandable) {
       margin-bottom: 24px;
       display: flex;

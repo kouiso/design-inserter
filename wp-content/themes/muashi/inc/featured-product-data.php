@@ -127,7 +127,7 @@ if ( ! function_exists( 'muashi_get_featured_product_download_data' ) ) {
                 'selectedHeading'   => '選択中',
                 'selectedEmpty'     => '資料が選択されていません。',
                 'remove'            => '削除',
-                'searchPlaceholder' => '製品詳細で検索',
+                'searchPlaceholder' => '製品名やキーワードで検索',
                 'resultCount'       => '該当件数: %d件',
                 'noResults'         => '該当する製品がありません。',
                 'limitReached'      => '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。',

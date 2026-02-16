@@ -46,18 +46,13 @@ for ($i = 1; $i < count($fields); $i++) {
 }
 
 // タイトルのみの場合でも表示する（製品名は必ずある）
-// 英語品名を左カラムに表示するため分離
-$product_name_en = !empty($fields[1]['value']) ? $fields[1]['value'] : '';
-// 詳細フィールド（タイトル・英語品名以外）を分離
-$detail_fields = array_slice($fields, 2);
+// 詳細フィールド（タイトル以外）を分離
+$detail_fields = array_slice($fields, 1);
 ?>
 
 <div class="product-info" data-testid="product-info">
     <div class="product-info__name">
         <p class="product-info__name-value"><?php echo esc_html($product_title_ja); ?></p>
-        <?php if ($product_name_en): ?>
-        <p class="product-info__name-en"><?php echo esc_html($product_name_en); ?></p>
-        <?php endif; ?>
     </div>
     <?php if ($has_custom_fields): ?>
     <dl class="product-info__details">

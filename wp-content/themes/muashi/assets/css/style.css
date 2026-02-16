@@ -1886,18 +1886,6 @@ a {
     display: block;
   }
 }
-.page__inner--intro {
-  padding-bottom: 0;
-  overflow: hidden;
-}
-@media screen and (min-width: 992px) {
-  .page__inner--intro {
-    padding-bottom: 0;
-  }
-}
-.page__inner--no-top-margin {
-  margin-top: 0;
-}
 .page__inner .wp-block-group:not(.is-style-expandable) {
   margin-bottom: 24px;
   display: flex;
@@ -2658,7 +2646,6 @@ a {
   margin: 24px 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 12px;
 }
 .single__download-button {
@@ -2970,50 +2957,6 @@ a {
 }
 @media screen and (min-width: 992px) {
   .interview-meta__person {
-    font-size: 16px;
-  }
-}
-
-.voice-meta {
-  margin-bottom: 24px;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-@media screen and (min-width: 992px) {
-  .voice-meta {
-    margin-bottom: 32px;
-    padding: 24px;
-  }
-}
-.voice-meta__company {
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-  margin: 0 0 8px;
-}
-@media screen and (min-width: 992px) {
-  .voice-meta__company {
-    font-size: 16px;
-  }
-}
-.voice-meta__position {
-  font-size: 12px;
-  color: #666;
-  margin: 0 0 4px;
-}
-@media screen and (min-width: 992px) {
-  .voice-meta__position {
-    font-size: 14px;
-  }
-}
-.voice-meta__person {
-  font-size: 14px;
-  color: #333;
-  margin: 0;
-}
-@media screen and (min-width: 992px) {
-  .voice-meta__person {
     font-size: 16px;
   }
 }
@@ -3834,20 +3777,7 @@ a {
 }
 .product-info__name {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
-}
-.product-info__name-en {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #666;
-  margin: 0;
-}
-@media screen and (min-width: 992px) {
-  .product-info__name-en {
-    font-size: 13px;
-  }
 }
 .product-info__name-value {
   font-size: 14px;
