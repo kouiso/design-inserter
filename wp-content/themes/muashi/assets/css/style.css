@@ -1888,6 +1888,7 @@ a {
 }
 .page__inner--intro {
   padding-bottom: 0;
+  overflow: hidden;
 }
 @media screen and (min-width: 992px) {
   .page__inner--intro {
@@ -2972,6 +2973,50 @@ a {
   }
 }
 
+.voice-meta {
+  margin-bottom: 24px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+@media screen and (min-width: 992px) {
+  .voice-meta {
+    margin-bottom: 32px;
+    padding: 24px;
+  }
+}
+.voice-meta__company {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 8px;
+}
+@media screen and (min-width: 992px) {
+  .voice-meta__company {
+    font-size: 16px;
+  }
+}
+.voice-meta__position {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 4px;
+}
+@media screen and (min-width: 992px) {
+  .voice-meta__position {
+    font-size: 14px;
+  }
+}
+.voice-meta__person {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+@media screen and (min-width: 992px) {
+  .voice-meta__person {
+    font-size: 16px;
+  }
+}
+
 /* Generic Form Block
    ================================================================== */
 .form__fields {
@@ -3788,7 +3833,20 @@ a {
 }
 .product-info__name {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
+}
+.product-info__name-en {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+}
+@media screen and (min-width: 992px) {
+  .product-info__name-en {
+    font-size: 13px;
+  }
 }
 .product-info__name-value {
   font-size: 14px;
