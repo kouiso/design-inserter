@@ -74,7 +74,7 @@ if ( have_posts() ) {
                         <div class="download__controls">
                           <label class="download__search">
                             <span class="download__search-label">製品タイトルで検索</span>
-                            <input type="search" class="download__search-input" data-download-search placeholder="製品名やキーワードで検索">
+                            <input type="search" class="download__search-input" data-download-search placeholder="製品詳細で検索">
                           </label>
                         </div>
 
