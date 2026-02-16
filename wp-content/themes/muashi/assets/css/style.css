@@ -1886,6 +1886,17 @@ a {
     display: block;
   }
 }
+.page__inner--intro {
+  padding-bottom: 0;
+}
+@media screen and (min-width: 992px) {
+  .page__inner--intro {
+    padding-bottom: 0;
+  }
+}
+.page__inner--no-top-margin {
+  margin-top: 0;
+}
 .page__inner .wp-block-group:not(.is-style-expandable) {
   margin-bottom: 24px;
   display: flex;
