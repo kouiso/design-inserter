@@ -80,11 +80,12 @@ test.describe('Bug Fix Tests', () => {
       expect(response?.status()).toBe(200);
       
       // Career 投稿リストから最初の投稿リンクを取得して移動
-      const firstCareerLink = await page.locator('a[href*="/career/"][href!="/career/"]').first();
+      const firstCareerLink = await page.locator('a[href*="/career/"]:not([href$="/career/"])').first();
       const href = await firstCareerLink.getAttribute('href');
       
       if (href) {
-        const response = await page.goto(`${BASE_URL}${href}`);
+        const url = href.startsWith('http') ? href : `${BASE_URL}${href}`;
+        const response = await page.goto(url);
         expect(response?.status()).toBe(200);
         
         // URL が /career/... 形式であることを確認
@@ -372,11 +373,12 @@ test.describe('Custom Post Type Tests', () => {
       // 最初に archive ページで最初の投稿リンクを取得
       await page.goto(`${BASE_URL}/career/interview/`);
       
-      const firstLink = await page.locator('a[href*="/career/interview/"][href!="/career/interview/"]').first();
+      const firstLink = await page.locator('a[href*="/career/interview/"]:not([href$="/career/interview/"])').first();
       const href = await firstLink.getAttribute('href');
       
       if (href) {
-        const response = await page.goto(`${BASE_URL}${href}`);
+        const url = href.startsWith('http') ? href : `${BASE_URL}${href}`;
+        const response = await page.goto(url);
         expect(response?.status()).toBe(200);
         
         // single-interview.php で表示されていることを確認
@@ -437,25 +439,29 @@ test.describe('Custom Post Type Tests', () => {
     
     test('should access product posts at /product/[slug]/', async ({ page }) => {
       await page.goto(`${BASE_URL}/product/`);
-      
-      const firstLink = await page.locator('a[href*="/product/"][href!="/product/"]').first();
+
+      // タクソノミーリンク（/product/application/ 等）を除外し、単一投稿リンクのみ取得
+      const firstLink = await page.locator(
+        'a[href*="/product/"]:not([href$="/product/"]):not([href*="/product/application/"]):not([href*="/product/material/"]):not([href*="/product/design/"]):not([href*="/product/function/"]):not([href*="/product/environment/"])'
+      ).first();
       const href = await firstLink.getAttribute('href');
-      
+
       if (href) {
-        const response = await page.goto(`${BASE_URL}${href}`);
+        const url = href.startsWith('http') ? href : `${BASE_URL}${href}`;
+        const response = await page.goto(url);
         expect(response?.status()).toBe(200);
         expect(page.url()).toMatch(/\/product\/[^/]+\/?$/);
       }
     });
 
-    test('should access story posts at /story/[slug]/', async ({ page }) => {
-      await page.goto(`${BASE_URL}/story/`);
-      
-      const firstLink = await page.locator('a[href*="/story/"][href!="/story/"]').first();
-      const href = await firstLink.getAttribute('href');
-      
-      if (href) {
-        const response = await page.goto(`${BASE_URL}${href}`);
+    test('should access story posts at /story/[slug]/', async ({ page, request }) => {
+      // story は has_archive: false のため、REST APIで投稿スラッグを取得
+      const apiResponse = await request.get(`${BASE_URL}/wp-json/wp/v2/story?per_page=1&_fields=slug`);
+      const posts = await apiResponse.json();
+
+      if (posts.length > 0) {
+        const slug = posts[0].slug;
+        const response = await page.goto(`${BASE_URL}/story/${slug}/`);
         expect(response?.status()).toBe(200);
         expect(page.url()).toMatch(/\/story\/[^/]+\/?$/);
       }
@@ -464,11 +470,12 @@ test.describe('Custom Post Type Tests', () => {
     test('should access career posts at /career/[slug]/', async ({ page }) => {
       await page.goto(`${BASE_URL}/career/`);
       
-      const firstLink = await page.locator('a[href*="/career/"][href!="/career/"]').first();
+      const firstLink = await page.locator('a[href*="/career/"]:not([href$="/career/"])').first();
       const href = await firstLink.getAttribute('href');
-      
+
       if (href) {
-        const response = await page.goto(`${BASE_URL}${href}`);
+        const url = href.startsWith('http') ? href : `${BASE_URL}${href}`;
+        const response = await page.goto(url);
         expect(response?.status()).toBe(200);
         expect(page.url()).toMatch(/\/career\/[^/]+\/?$/);
       }
