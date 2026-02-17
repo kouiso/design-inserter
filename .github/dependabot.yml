@@ -1,0 +1,40 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "Asia/Tokyo"
+    labels:
+      - "dependencies"
+      - "ci-cd"
+    commit-message:
+      prefix: "chore"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "Asia/Tokyo"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+    groups:
+      playwright:
+        patterns:
+          - "@playwright/*"
+      build-tools:
+        patterns:
+          - "gulp*"
+          - "webpack*"
+          - "babel*"
+          - "sass"
+      frontend:
+        patterns:
+          - "@splidejs/*"
+          - "gsap"
+          - "scroll-hint"
