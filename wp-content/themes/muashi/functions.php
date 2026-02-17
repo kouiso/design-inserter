@@ -11,6 +11,7 @@ require_once(get_theme_file_path('/inc/import-products-csv.php'));
 require_once(get_theme_file_path('/inc/export-voice-csv.php'));
 require_once(get_theme_file_path('/inc/import-voice-csv.php'));
 require_once(get_theme_file_path('/inc/cf7-form-templates.php'));
+require_once(get_theme_file_path('/inc/cf7-security.php'));
 
 /**
  * [product_field] ショートコード
