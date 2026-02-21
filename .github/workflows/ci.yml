@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build-check:
     name: SCSS/JS Build Check
-    runs-on: ${{ vars.RUNS_ON || 'ubuntu-latest' }}
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     timeout-minutes: 10
     steps:
       - name: Checkout repository
@@ -37,7 +37,7 @@ jobs:
 
   php-lint:
     name: PHP Syntax Check
-    runs-on: ${{ vars.RUNS_ON || 'ubuntu-latest' }}
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     timeout-minutes: 5
     steps:
       - name: Checkout repository

@@ -11,7 +11,7 @@ permissions:
 jobs:
   auto-setting:
     name: Auto assign & label
-    runs-on: ${{ vars.RUNS_ON || 'ubuntu-latest' }}
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     steps:
       - name: Assign author and add branch label
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
