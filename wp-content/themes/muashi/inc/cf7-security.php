@@ -32,19 +32,16 @@ function muashi_cf7_get_allowed_mime_types() {
 		'docx' => array(
 			'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 			'application/zip',
-			'application/octet-stream',
 		),
 		'xls'  => array( 'application/vnd.ms-excel', 'application/octet-stream' ),
 		'xlsx' => array(
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 			'application/zip',
-			'application/octet-stream',
 		),
 		'ppt'  => array( 'application/vnd.ms-powerpoint', 'application/octet-stream' ),
 		'pptx' => array(
 			'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 			'application/zip',
-			'application/octet-stream',
 		),
 		'jpg'  => array( 'image/jpeg' ),
 		'jpeg' => array( 'image/jpeg' ),
