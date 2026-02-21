@@ -24,8 +24,6 @@ on:
         required: true
       XSERVER_USER:
         required: true
-      XSERVER_PATH:
-        required: true
       SSH_PRIVATE_KEY:
         required: true
 
@@ -49,6 +47,13 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.XSERVER_PORT }} ${{ secrets.XSERVER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
+      - name: Validate deploy path
+        run: |
+          if [ -z "${{ vars.XSERVER_PATH }}" ]; then
+            echo "::error::XSERVER_PATH が設定されていません。GitHub Environment Variables を確認してください。"
+            exit 1
+          fi
+
       - name: Deploy Theme via rsync
         run: |
           rsync -avz --delete \
@@ -64,7 +69,7 @@ jobs:
             --exclude='node_modules/' \
             -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.XSERVER_PORT }}" \
             ./wp-content/themes/muashi/ \
-            ${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ secrets.XSERVER_PATH }}/wp-content/themes/muashi/
+            ${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ vars.XSERVER_PATH }}/wp-content/themes/muashi/
 
       - name: Deploy Plugin via rsync
         run: |
@@ -72,7 +77,7 @@ jobs:
             ${{ inputs.dry_run && '--dry-run' || '' }} \
             -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.XSERVER_PORT }}" \
             ./wp-content/plugins/musashi-inquiry-approval/ \
-            ${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ secrets.XSERVER_PATH }}/wp-content/plugins/musashi-inquiry-approval/
+            ${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ vars.XSERVER_PATH }}/wp-content/plugins/musashi-inquiry-approval/
 
       - name: Cleanup SSH key
         if: always()

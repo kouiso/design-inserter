@@ -29,5 +29,4 @@ jobs:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
       XSERVER_USER: ${{ secrets.XSERVER_USER }}
-      XSERVER_PATH: ${{ secrets.XSERVER_PATH }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
