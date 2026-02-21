@@ -11,7 +11,6 @@ require_once(get_theme_file_path('/inc/import-products-csv.php'));
 require_once(get_theme_file_path('/inc/export-voice-csv.php'));
 require_once(get_theme_file_path('/inc/import-voice-csv.php'));
 require_once(get_theme_file_path('/inc/cf7-form-templates.php'));
-require_once(get_theme_file_path('/inc/cf7-security.php'));
 
 /**
  * [product_field] ショートコード
@@ -35,13 +34,8 @@ add_shortcode( 'product_field', 'muashi_product_field_shortcode' );
  * [voice_field] ショートコード
  * お客様の声のACFカスタムフィールド値を表示する。
  * 使用例: [voice_field name="voice_company"]
- * ※ 詳細ページではテンプレート側で表示するため、ショートコードは空文字を返す
  */
 function muashi_voice_field_shortcode( $atts ) {
-    // 詳細ページではテンプレート（voice-meta）で表示するため重複を防止
-    if ( is_singular( 'voice' ) ) {
-        return '';
-    }
     $atts = shortcode_atts( array( 'name' => '' ), $atts, 'voice_field' );
     if ( empty( $atts['name'] ) ) {
         return '';
@@ -1343,8 +1337,8 @@ add_action( 'pre_get_posts', function( $query ) {
     if ( $query->is_tax( array( 'product_application', 'product_material', 'product_design', 'product_function', 'product_environment' ) ) ) {
         $query->set( 'post_type', array( 'product' ) );
         $query->set( 'posts_per_page', 12 );
-        $query->set( 'orderby', 'menu_order' );
-        $query->set( 'order', 'ASC' );
+        $query->set( 'orderby', 'date' );
+        $query->set( 'order', 'DESC' );
     }
 } );
 
