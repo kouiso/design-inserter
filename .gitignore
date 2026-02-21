@@ -74,6 +74,10 @@ test-*.html
 /playwright/.cache/
 /.playwright-mcp/
 
+# VRT（ビジュアルリグレッションテスト）
+test/vrt/screenshots/
+test/vrt/report.html
+
 # Claude
 .claude/
 tmpclaude-*/
