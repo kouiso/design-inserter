@@ -21,6 +21,20 @@ plugin:
     - any-glob-to-any-file:
       - 'wp-content/plugins/**'
 
+# スタイル（SCSS/CSS）
+styles:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'wp-content/themes/muashi/src/scss/**'
+      - 'wp-content/themes/muashi/assets/css/**'
+
+# JavaScript
+javascript:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'wp-content/themes/muashi/src/js/**'
+      - 'wp-content/themes/muashi/assets/js/**'
+
 # GitHub Actions / CI/CD
 ci-cd:
   - changed-files:
@@ -40,9 +54,18 @@ documentation:
 test:
   - changed-files:
     - any-glob-to-any-file:
+      - 'test/**'
       - 'test-specs/**'
+      - 'playwright.config.ts'
       - '**/*test*.php'
       - '**/*spec*.php'
+
+# E2Eテスト
+e2e-test:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'test/e2e/**'
+      - 'playwright.config.ts'
 
 # ツール
 tools:
@@ -60,3 +83,11 @@ config:
       - '.gitignore'
       - '.editorconfig'
       - '.github/**/*.yml'
+
+# AI設定
+ai-config:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'prompt/**'
+      - 'CLAUDE.md'
+      - '.github/copilot-instructions.md'

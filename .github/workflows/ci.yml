@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'wp-content/themes/muashi/**'
+      - 'wp-content/plugins/musashi-inquiry-approval/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'gulpfile.js'
+
+concurrency:
+  group: ci-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-check:
+    name: SCSS/JS Build Check
+    runs-on: ${{ vars.RUNS_ON || 'ubuntu-latest' }}
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build SCSS and JS
+        run: npm run build
+
+  php-lint:
+    name: PHP Syntax Check
+    runs-on: ${{ vars.RUNS_ON || 'ubuntu-latest' }}
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Check theme PHP syntax
+        run: find wp-content/themes/muashi -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Check plugin PHP syntax
+        run: find wp-content/plugins/musashi-inquiry-approval -name '*.php' -print0 | xargs -0 -n1 php -l
