@@ -28,8 +28,10 @@ jobs:
     steps:
       - name: developブランチからの実行を検証
         if: github.ref_name != 'develop'
+        env:
+          REF_NAME: ${{ github.ref_name }}
         run: |
-          echo "::error::このワークフローはdevelopブランチからのみ実行可能です（現在: ${{ github.ref_name }}）"
+          echo "::error::このワークフローはdevelopブランチからのみ実行可能です（現在: ${REF_NAME}）"
           exit 1
 
   merge-to-main:
@@ -54,6 +56,8 @@ jobs:
 
       - name: マージ結果サマリー
         if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
         run: |
           echo "## Merge Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -61,7 +65,11 @@ jobs:
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| **Source** | \`develop\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Target** | \`main\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Status** | ${{ job.status == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          if [ "$JOB_STATUS" = "success" ]; then
+            echo "| **Status** | ✅ Success |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Status** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "| **Actor** | @${GITHUB_ACTOR} |" >> $GITHUB_STEP_SUMMARY
 
   deploy-production:
