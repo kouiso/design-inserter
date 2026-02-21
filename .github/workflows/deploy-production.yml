@@ -1,11 +1,6 @@
 name: Deploy to Production
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'wp-content/themes/muashi/**'
-      - 'wp-content/plugins/musashi-inquiry-approval/**'
   workflow_dispatch:
     inputs:
       dry_run:

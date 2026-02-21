@@ -28,7 +28,7 @@ on:
 jobs:
   deploy:
     name: Deploy to ${{ inputs.server_label }}
-    runs-on: ${{ vars.RUNS_ON || 'ubuntu-latest' }}
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     environment: ${{ inputs.environment }}
     timeout-minutes: 10
     steps:
