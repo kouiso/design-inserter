@@ -1,0 +1,45 @@
+# muashi テーマ デプロイ ホワイトリスト（rsync filter rules）
+# 明示的に許可したもののみデプロイ、それ以外は全拒否
+# 書式: + = include, - = exclude（先にマッチしたルールが優先）
+
+# --- ルート直下のPHP・CSSファイル ---
++ *.php
++ style.css
+
+# --- コンパイル済みアセット ---
++ /assets/
++ /assets/css/
++ /assets/css/**
++ /assets/js/
++ /assets/js/**
++ /assets/fonts/
++ /assets/fonts/**
++ /assets/img/
++ /assets/img/**
+
+# --- PHPインクルード ---
++ /inc/
++ /inc/**
+
+# --- テンプレートパーツ ---
++ /template-parts/
++ /template-parts/**
+
+# --- ACFフィールド定義 ---
++ /acf-json/
++ /acf-json/**
+
+# --- CF7テンプレート ---
++ /cf7-templates/
++ /cf7-templates/**
+
+# --- 管理画面カスタマイズ ---
++ /admin/
++ /admin/**
+
+# --- Gutenbergブロック ---
++ /blocks/
++ /blocks/**
+
+# --- 上記以外は全て除外 ---
+- *
