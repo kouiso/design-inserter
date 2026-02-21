@@ -24,21 +24,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * contact.html の filetypes:pdf|doc|docx|xls|xlsx|ppt|pptx|jpg|png に対応。
  * OOXML（docx/xlsx/pptx）は内部的に ZIP なので application/zip も許可する。
+ * レガシー Office（doc/xls/ppt）で octet-stream が返る場合は OLE2 マジックバイトで二次検証する。
  */
 function muashi_cf7_get_allowed_mime_types() {
 	return array(
 		'pdf'  => array( 'application/pdf' ),
-		'doc'  => array( 'application/msword', 'application/octet-stream' ),
+		'doc'  => array( 'application/msword' ),
 		'docx' => array(
 			'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 			'application/zip',
 		),
-		'xls'  => array( 'application/vnd.ms-excel', 'application/octet-stream' ),
+		'xls'  => array( 'application/vnd.ms-excel' ),
 		'xlsx' => array(
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 			'application/zip',
 		),
-		'ppt'  => array( 'application/vnd.ms-powerpoint', 'application/octet-stream' ),
+		'ppt'  => array( 'application/vnd.ms-powerpoint' ),
 		'pptx' => array(
 			'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 			'application/zip',
@@ -110,6 +111,18 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 
 		$allowed_for_ext = $allowed_mime_types[ $extension ];
 
+		// レガシー Office（doc/xls/ppt）で octet-stream が返った場合、OLE2 マジックバイトで二次検証
+		if ( 'application/octet-stream' === $detected && in_array( $extension, array( 'doc', 'xls', 'ppt' ), true ) ) {
+			if ( muashi_cf7_has_ole2_signature( $file_path ) ) {
+				continue;
+			}
+			$result->invalidate(
+				$tag,
+				'ファイルの内容が拡張子と一致しません。正しいファイルを選択してください。'
+			);
+			return $result;
+		}
+
 		if ( ! in_array( $detected, $allowed_for_ext, true ) ) {
 			$result->invalidate(
 				$tag,
@@ -131,7 +144,7 @@ add_action( 'wpcf7_before_send_mail', 'muashi_cf7_rate_limit', 10, 3 );
 /**
  * IP ベースのレート制限
  *
- * 同一 IP から5分間に3回を超える送信をブロック。
+ * 同一 IP・同一フォームから5分間に3回を超える送信をブロック。
  *
  * @param WPCF7_ContactForm $contact_form
  * @param bool              &$abort true にすると送信中止
@@ -141,10 +154,13 @@ function muashi_cf7_rate_limit( $contact_form, &$abort, $submission ) {
 	$ip = muashi_cf7_get_client_ip();
 
 	if ( empty( $ip ) ) {
+		error_log( 'muashi_cf7_rate_limit: クライアント IP を取得できません。レート制限をスキップします。' );
 		return;
 	}
 
-	$transient_key = 'muashi_cf7_rl_' . md5( $ip );
+	// フォーム ID を含めてフォーム別にレート制限を分離
+	$form_id       = $contact_form->id();
+	$transient_key = 'muashi_cf7_rl_' . md5( $ip . '_' . $form_id );
 	$max_attempts  = 3;
 	$window        = 5 * MINUTE_IN_SECONDS;
 
@@ -159,6 +175,28 @@ function muashi_cf7_rate_limit( $contact_form, &$abort, $submission ) {
 	}
 
 	set_transient( $transient_key, $attempts + 1, $window );
+}
+
+/**
+ * OLE2 Compound Document のマジックバイト検証
+ *
+ * レガシー Office ファイル（doc/xls/ppt）は finfo_file() が
+ * application/octet-stream を返す場合がある。先頭4バイトが
+ * OLE2 シグネチャ（D0 CF 11 E0）であれば正当なファイルと判定する。
+ *
+ * @param string $file_path ファイルパス
+ * @return bool OLE2 シグネチャが一致すれば true
+ */
+function muashi_cf7_has_ole2_signature( $file_path ) {
+	$handle = @fopen( $file_path, 'rb' );
+	if ( ! $handle ) {
+		return false;
+	}
+	$bytes = fread( $handle, 4 );
+	fclose( $handle );
+
+	// OLE2 Compound Document Format マジックナンバー: D0 CF 11 E0
+	return "\xD0\xCF\x11\xE0" === $bytes;
 }
 
 /**
@@ -177,7 +215,8 @@ function muashi_cf7_get_client_ip() {
 	$flags = FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
 
 	// ローカル・開発環境ではプライベート IP を許可（予約済み IP は引き続き拒否）
-	if ( defined( 'WP_ENVIRONMENT_TYPE' ) && in_array( WP_ENVIRONMENT_TYPE, array( 'local', 'development' ), true ) ) {
+	// wp_get_environment_type() は定数だけでなくフィルターにも対応（WP 5.5+）
+	if ( function_exists( 'wp_get_environment_type' ) && in_array( wp_get_environment_type(), array( 'local', 'development' ), true ) ) {
 		$flags = FILTER_FLAG_NO_RES_RANGE;
 	}
 
