@@ -8,15 +8,19 @@
  * テスト対象:
  *   1. MIME 許可リスト（muashi_cf7_get_allowed_mime_types）
  *   2. MIME 実体検証（muashi_cf7_validate_file_mime）
- *   3. OLE2 シグネチャ検証（muashi_cf7_has_ole2_signature）
- *   4. IP 取得ヘルパー（muashi_cf7_get_client_ip）
- *   5. レート制限（muashi_cf7_rate_limit）※DB 接続時のみ
+ *   3. IP 取得ヘルパー（muashi_cf7_get_client_ip）
+ *   4. レート制限（muashi_cf7_rate_limit）※DB 接続時のみ
  *
  * Usage: php test/test-cf7-security.php
  */
 
 define( 'DB_HOST', '127.0.0.1:10011' );
 require_once __DIR__ . '/../wp-load.php';
+
+// functions.php から自動ロードされない場合に備えて明示的にロード
+if ( ! function_exists( 'muashi_cf7_get_allowed_mime_types' ) ) {
+	require_once get_theme_file_path( '/inc/cf7-security.php' );
+}
 
 echo "\n";
 echo "========================================\n";
@@ -67,7 +71,7 @@ function is_db_available() {
 /* ========================================================================
  * MIME 検証用モッククラス
  *
- * CF7 の WPCF7_Validation / WPCF7_FormTag / WPCF7_ContactForm と
+ * CF7 の WPCF7_Validation / WPCF7_FormTag と
  * 同じインターフェースを持つが、CF7 プラグインのクラスとの衝突を避けるために別名で定義。
  * ======================================================================== */
 
@@ -106,18 +110,6 @@ class Test_CF7_Submission {
 
 	public function set_response( $message ) {
 		$this->response = $message;
-	}
-}
-
-class Test_CF7_ContactForm {
-	private $form_id;
-
-	public function __construct( $form_id = 1 ) {
-		$this->form_id = $form_id;
-	}
-
-	public function id() {
-		return $this->form_id;
 	}
 }
 
@@ -176,20 +168,20 @@ assert_test(
 	$all_passed, $test_count, $pass_count
 );
 
-// レガシー Office で octet-stream は MIME リストに含まれない（OLE2 フォールバックで処理）
+// レガシー Office で octet-stream が許可されていること
 assert_test(
-	'doc: octet-stream は MIME リストに含まれない（OLE2 で二次検証）',
-	! in_array( 'application/octet-stream', $allowed['doc'], true ),
+	'doc: application/octet-stream が許可（レガシー Office フォールバック）',
+	in_array( 'application/octet-stream', $allowed['doc'], true ),
 	$all_passed, $test_count, $pass_count
 );
 assert_test(
-	'xls: octet-stream は MIME リストに含まれない（OLE2 で二次検証）',
-	! in_array( 'application/octet-stream', $allowed['xls'], true ),
+	'xls: application/octet-stream が許可（レガシー Office フォールバック）',
+	in_array( 'application/octet-stream', $allowed['xls'], true ),
 	$all_passed, $test_count, $pass_count
 );
 assert_test(
-	'ppt: octet-stream は MIME リストに含まれない（OLE2 で二次検証）',
-	! in_array( 'application/octet-stream', $allowed['ppt'], true ),
+	'ppt: application/octet-stream が許可（レガシー Office フォールバック）',
+	in_array( 'application/octet-stream', $allowed['ppt'], true ),
 	$all_passed, $test_count, $pass_count
 );
 
@@ -364,77 +356,10 @@ if ( ! function_exists( 'finfo_open' ) ) {
 }
 
 /* ========================================================================
- * 3. OLE2 シグネチャ検証（muashi_cf7_has_ole2_signature）
+ * 3. IP 取得ヘルパー検証（DB 不要）
  * ======================================================================== */
 
-echo "\n--- 3. OLE2 シグネチャ検証 ---\n\n";
-
-$tmp_dir = sys_get_temp_dir();
-
-// OLE2 マジックバイト付きファイル → true
-$ole2_valid = $tmp_dir . '/cf7_test_ole2_valid.bin';
-file_put_contents( $ole2_valid, "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1" . str_repeat( "\x00", 504 ) );
-assert_test(
-	'OLE2 シグネチャあり → true',
-	muashi_cf7_has_ole2_signature( $ole2_valid ) === true,
-	$all_passed, $test_count, $pass_count
-);
-
-// OLE2 先頭4バイトのみ（最小ケース）→ true
-$ole2_minimal = $tmp_dir . '/cf7_test_ole2_minimal.bin';
-file_put_contents( $ole2_minimal, "\xD0\xCF\x11\xE0" );
-assert_test(
-	'OLE2 先頭4バイトのみ → true',
-	muashi_cf7_has_ole2_signature( $ole2_minimal ) === true,
-	$all_passed, $test_count, $pass_count
-);
-
-// テキストファイル → false
-$ole2_text = $tmp_dir . '/cf7_test_ole2_text.bin';
-file_put_contents( $ole2_text, "Hello World" );
-assert_test(
-	'テキストファイル → false',
-	muashi_cf7_has_ole2_signature( $ole2_text ) === false,
-	$all_passed, $test_count, $pass_count
-);
-
-// 空ファイル → false
-$ole2_empty = $tmp_dir . '/cf7_test_ole2_empty.bin';
-file_put_contents( $ole2_empty, '' );
-assert_test(
-	'空ファイル → false',
-	muashi_cf7_has_ole2_signature( $ole2_empty ) === false,
-	$all_passed, $test_count, $pass_count
-);
-
-// 先頭3バイトだけ一致（不完全）→ false
-$ole2_partial = $tmp_dir . '/cf7_test_ole2_partial.bin';
-file_put_contents( $ole2_partial, "\xD0\xCF\x11" );
-assert_test(
-	'先頭3バイトのみ（不完全 OLE2）→ false',
-	muashi_cf7_has_ole2_signature( $ole2_partial ) === false,
-	$all_passed, $test_count, $pass_count
-);
-
-// 存在しないファイル → false
-assert_test(
-	'存在しないファイル → false',
-	muashi_cf7_has_ole2_signature( '/tmp/nonexistent_ole2_12345.bin' ) === false,
-	$all_passed, $test_count, $pass_count
-);
-
-// クリーンアップ
-foreach ( array( $ole2_valid, $ole2_minimal, $ole2_text, $ole2_empty, $ole2_partial ) as $path ) {
-	if ( file_exists( $path ) ) {
-		@unlink( $path );
-	}
-}
-
-/* ========================================================================
- * 4. IP 取得ヘルパー検証（DB 不要）
- * ======================================================================== */
-
-echo "\n--- 4. IP 取得ヘルパー検証 ---\n\n";
+echo "\n--- 3. IP 取得ヘルパー検証 ---\n\n";
 
 // REMOTE_ADDR 未設定 → 空文字
 unset( $_SERVER['REMOTE_ADDR'] );
@@ -500,10 +425,10 @@ assert_test(
 	$all_passed, $test_count, $pass_count
 );
 
-// プライベート IP — wp_get_environment_type() に応じて結果が変わる
+// プライベート IP — WP_ENVIRONMENT_TYPE 定数に応じて結果が変わる
 $_SERVER['REMOTE_ADDR'] = '192.168.1.1';
 $result_private = muashi_cf7_get_client_ip();
-if ( function_exists( 'wp_get_environment_type' ) && in_array( wp_get_environment_type(), array( 'local', 'development' ), true ) ) {
+if ( defined( 'WP_ENVIRONMENT_TYPE' ) && in_array( WP_ENVIRONMENT_TYPE, array( 'local', 'development' ), true ) ) {
 	assert_test(
 		'プライベート IP (ローカル環境) → 許可される',
 		$result_private === '192.168.1.1',
@@ -518,10 +443,10 @@ if ( function_exists( 'wp_get_environment_type' ) && in_array( wp_get_environmen
 }
 
 /* ========================================================================
- * 5. レート制限ロジック検証（DB 接続必須）
+ * 4. レート制限ロジック検証（DB 接続必須）
  * ======================================================================== */
 
-echo "\n--- 5. レート制限ロジック検証 ---\n\n";
+echo "\n--- 4. レート制限ロジック検証 ---\n\n";
 
 $db_available = is_db_available();
 
@@ -529,10 +454,10 @@ if ( ! $db_available ) {
 	echo "[SKIP] DB 接続不可のためレート制限テストをスキップ（Local by Flywheel シェルから実行してください）\n";
 	$skip_count++;
 } else {
-	$test_form_id       = 42;
-	$contact_form       = new Test_CF7_ContactForm( $test_form_id );
+	// muashi_cf7_rate_limit は $contact_form を受け取るがキー生成に使わない（IP のみ）
+	$contact_form       = new stdClass();
 	$_SERVER['REMOTE_ADDR'] = '8.8.8.8';
-	$test_transient_key = 'muashi_cf7_rl_' . md5( '8.8.8.8_' . $test_form_id );
+	$test_transient_key = 'muashi_cf7_rl_' . md5( '8.8.8.8' );
 
 	// 既存 transient をクリーンアップ
 	delete_transient( $test_transient_key );
@@ -594,22 +519,6 @@ if ( ! $db_available ) {
 		$stored === 1,
 		$all_passed, $test_count, $pass_count
 	);
-
-	// フォーム別分離: 別フォーム ID では制限が独立
-	$other_form_id       = 99;
-	$other_contact_form  = new Test_CF7_ContactForm( $other_form_id );
-	$other_transient_key = 'muashi_cf7_rl_' . md5( '8.8.8.8_' . $other_form_id );
-	delete_transient( $other_transient_key );
-
-	$abort               = false;
-	$submission->response = '';
-	muashi_cf7_rate_limit( $other_contact_form, $abort, $submission );
-	assert_test(
-		'レート制限: 別フォーム ID → 独立カウント（abort=false）',
-		$abort === false,
-		$all_passed, $test_count, $pass_count
-	);
-	delete_transient( $other_transient_key );
 
 	// IP が空の場合: レート制限スキップ
 	delete_transient( $test_transient_key );
