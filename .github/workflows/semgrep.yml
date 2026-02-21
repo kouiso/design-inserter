@@ -10,13 +10,13 @@ permissions:
 jobs:
   semgrep:
     name: Semgrep コード品質スキャン
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     container:
       image: semgrep/semgrep
     if: (github.actor != 'dependabot[bot]')
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Run Semgrep
         run: semgrep scan --config auto
