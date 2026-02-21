@@ -22,7 +22,7 @@
     "test:content:prod": "cross-env TEST_ENV=production playwright test test/e2e/content-integrity.spec.ts",
     "vrt:baseline": "cross-env VRT_DIR=expected TEST_ENV=production playwright test --config=playwright.vrt.config.ts",
     "vrt:capture": "cross-env VRT_DIR=actual playwright test --config=playwright.vrt.config.ts",
-    "vrt:report": "reg-cli test/vrt/screenshots/actual test/vrt/screenshots/expected test/vrt/screenshots/diff -R test/vrt/report.html --matchingThreshold 0.05",
+    "vrt:report": "reg-cli test/vrt/screenshots/actual test/vrt/screenshots/expected test/vrt/screenshots/diff -R test/vrt/report.html --matchingThreshold 0.01",
     "vrt": "npm run vrt:capture && npm run vrt:report"
   },
   "keywords": [],

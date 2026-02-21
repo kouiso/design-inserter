@@ -111,8 +111,8 @@ test.describe('VRT スクリーンショットキャプチャ', () => {
         window.scrollTo(0, 0);
       });
 
-      // スタイル適用・画像読み込み完了待ち
-      await page.waitForTimeout(500);
+      // スクロールで発生した画像・アセット読み込み完了待ち
+      await page.waitForLoadState('networkidle');
 
       await page.screenshot({
         path: path.join(screenshotDir, `${p.name}.png`),
