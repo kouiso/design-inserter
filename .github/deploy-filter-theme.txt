@@ -3,8 +3,12 @@
 # 書式: + = include, - = exclude（先にマッチしたルールが優先）
 
 # --- ルート直下のPHP・CSSファイル ---
-+ *.php
-+ style.css
++ /*.php
++ /style.css
+
+# --- ソースマップ等の除外（** より先に評価される） ---
+- *.map
+- *.LICENSE.txt
 
 # --- コンパイル済みアセット ---
 + /assets/
