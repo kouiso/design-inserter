@@ -47,6 +47,13 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.XSERVER_PORT }} ${{ secrets.XSERVER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
+      - name: Validate deploy path
+        run: |
+          if [ -z "${{ vars.XSERVER_PATH }}" ]; then
+            echo "::error::XSERVER_PATH が設定されていません。GitHub Environment Variables を確認してください。"
+            exit 1
+          fi
+
       - name: Deploy Theme via rsync
         run: |
           rsync -avz --delete \
