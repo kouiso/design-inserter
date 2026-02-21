@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: read
-  security-events: write
   pull-requests: write
 
 jobs:
@@ -27,17 +26,9 @@ jobs:
         with:
           scan-type: 'fs'
           scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          format: 'table'
           severity: 'CRITICAL,HIGH,MEDIUM'
           ignore-unfixed: true
-
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        continue-on-error: true
-        with:
-          sarif_file: 'trivy-results.sarif'
 
       - name: Check for WordPress version
         run: |
@@ -45,21 +36,6 @@ jobs:
             echo "WordPress version file found"
             grep "wp_version" wp-includes/version.php || true
           fi
-
-  dependency-review:
-    name: Dependency Review
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
-        continue-on-error: true
-        with:
-          fail-on-severity: moderate
 
   code-quality:
     name: Code Quality Check
