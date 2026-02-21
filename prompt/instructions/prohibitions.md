@@ -175,11 +175,17 @@
 <!-- ❌ 「コードを見る限り動くはずです」 -->
 ❌ Using IDs or paths by guessing without confirming existence
 <!-- ❌ 存在確認せずにIDやパスを推測して使う -->
+❌ Reusing previous query results after DB state has changed (e.g., after All-in-One Migration import). Always re-query.
+<!-- ❌ DB状態が変わった後（例: All-in-One Migration取り込み後）に以前のクエリ結果を流用する。必ず再クエリすること。 -->
+❌ Saying "probably correct by coincidence" without verifying actual data
+<!-- ❌ 実データを検証せずに「たまたま正しい」と推測で報告する -->
 
 ✅ Report only results confirmed by actual execution
 <!-- ✅ 実際に実行して確認した結果のみを報告 -->
 ✅ Always verify existence of IDs and paths beforehand (grep, find, etc.)
 <!-- ✅ IDやパスは必ず事前に存在確認（grep, find等） -->
+✅ After any DB-altering operation (migration, import, script execution), always re-query to confirm current state
+<!-- ✅ DB変更操作（マイグレーション、インポート、スクリプト実行）の後は、必ず再クエリして最新状態を確認 -->
 
 ### 5.4. 作業量を理由とした言い訳の完全禁止
 
