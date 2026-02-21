@@ -14,6 +14,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 concurrency:
   group: deploy-production
   cancel-in-progress: false
@@ -70,6 +73,7 @@ jobs:
       environment: production
       server_label: "musashipaint.xsrv.jp (Production)"
       dry_run: ${{ inputs.dry_run || false }}
+      ref: 'main'
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
