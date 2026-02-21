@@ -27,6 +27,9 @@ on:
       SSH_PRIVATE_KEY:
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     name: Deploy to ${{ inputs.server_label }}
@@ -37,40 +40,56 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          ref: ${{ inputs.ref || '' }}
+          ref: ${{ inputs.ref }}
 
       - name: Setup SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+          XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p ${{ secrets.XSERVER_PORT }} ${{ secrets.XSERVER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -p "$XSERVER_PORT" "$XSERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
       - name: Validate deploy path
+        env:
+          XSERVER_PATH: ${{ vars.XSERVER_PATH }}
         run: |
-          if [ -z "${{ vars.XSERVER_PATH }}" ]; then
+          if [ -z "$XSERVER_PATH" ]; then
             echo "::error::XSERVER_PATH が設定されていません。GitHub Environment Variables を確認してください。"
             exit 1
           fi
 
       - name: Deploy Theme via rsync
+        env:
+          XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+          XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
+          XSERVER_USER: ${{ secrets.XSERVER_USER }}
+          XSERVER_PATH: ${{ vars.XSERVER_PATH }}
         run: |
           rsync -avz --delete \
             ${{ inputs.dry_run && '--dry-run' || '' }} \
             --filter='merge .github/deploy-filter-theme.txt' \
-            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.XSERVER_PORT }}" \
+            -e "ssh -i ~/.ssh/deploy_key -p $XSERVER_PORT" \
             ./wp-content/themes/muashi/ \
-            ${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ vars.XSERVER_PATH }}/wp-content/themes/muashi/
+            "${XSERVER_USER}@${XSERVER_HOST}:${XSERVER_PATH}/wp-content/themes/muashi/"
 
       - name: Deploy Plugin via rsync
+        env:
+          XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+          XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
+          XSERVER_USER: ${{ secrets.XSERVER_USER }}
+          XSERVER_PATH: ${{ vars.XSERVER_PATH }}
         run: |
           rsync -avz --delete \
             ${{ inputs.dry_run && '--dry-run' || '' }} \
             --filter='merge .github/deploy-filter-plugin.txt' \
-            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.XSERVER_PORT }}" \
+            -e "ssh -i ~/.ssh/deploy_key -p $XSERVER_PORT" \
             ./wp-content/plugins/musashi-inquiry-approval/ \
-            ${{ secrets.XSERVER_USER }}@${{ secrets.XSERVER_HOST }}:${{ vars.XSERVER_PATH }}/wp-content/plugins/musashi-inquiry-approval/
+            "${XSERVER_USER}@${XSERVER_HOST}:${XSERVER_PATH}/wp-content/plugins/musashi-inquiry-approval/"
 
       - name: Cleanup SSH key
         if: always()
@@ -78,18 +97,27 @@ jobs:
 
       - name: Deployment summary
         if: always()
+        env:
+          DEPLOY_ENV: ${{ inputs.environment }}
+          SERVER_LABEL: ${{ inputs.server_label }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          JOB_STATUS: ${{ job.status }}
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
+          if [ "$DRY_RUN" = "true" ]; then
             echo "> **DRY RUN** - No files were actually deployed" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
           echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **Environment** | \`${{ inputs.environment }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Server** | ${{ inputs.server_label }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Status** | ${{ job.status == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | \`${DEPLOY_ENV}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Server** | ${SERVER_LABEL} |" >> $GITHUB_STEP_SUMMARY
+          if [ "$JOB_STATUS" = "success" ]; then
+            echo "| **Status** | ✅ Success |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Status** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
           echo "| **Commit** | [\`${GITHUB_SHA::7}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}) |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | \`${GITHUB_REF_NAME}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Actor** | @${GITHUB_ACTOR} |" >> $GITHUB_STEP_SUMMARY
