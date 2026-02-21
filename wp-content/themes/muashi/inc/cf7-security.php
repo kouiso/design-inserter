@@ -176,13 +176,15 @@ function muashi_cf7_get_client_ip() {
 
 	$ip = $_SERVER['REMOTE_ADDR'];
 
-	// IP アドレスとして妥当かバリデーション
-	$validated = filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE );
+	// 本番環境ではプライベート IP・予約済み IP を拒否
+	$flags = FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
 
-	// ローカル開発環境（Local by Flywheel）ではプライベート IP を許可
-	if ( false === $validated ) {
-		$validated = filter_var( $ip, FILTER_VALIDATE_IP );
+	// ローカル・開発環境ではプライベート IP を許可（予約済み IP は引き続き拒否）
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) && in_array( WP_ENVIRONMENT_TYPE, array( 'local', 'development' ), true ) ) {
+		$flags = FILTER_FLAG_NO_RES_RANGE;
 	}
+
+	$validated = filter_var( $ip, FILTER_VALIDATE_IP, $flags );
 
 	return $validated ? sanitize_text_field( $validated ) : '';
 }
