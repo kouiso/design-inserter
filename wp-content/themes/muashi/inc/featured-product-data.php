@@ -1,15 +1,15 @@
 <?php
 /**
- * Featured Product Data Helper Functions
+ * 注目製品データヘルパー関数
  *
- * Handles data retrieval and formatting for featured product download pages.
+ * 注目製品ダウンロードページ用のデータ取得・整形処理
  */
 
 if ( ! function_exists( 'muashi_get_featured_product_download_data' ) ) {
     /**
-     * Retrieves and formats featured product data for the download page application.
+     * 注目製品ダウンロードページ用のデータを取得・整形する
      *
-     * @return array The structured data for the download page frontend.
+     * @return array フロントエンド用の構造化データ
      */
     function muashi_get_featured_product_download_data() {
         $max_selectable = 5;
