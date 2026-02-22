@@ -9,7 +9,7 @@ test.describe('ダウンロードページ', () => {
 
       const searchLabel = page.locator('.download__search-label');
       await expect(searchLabel).toBeVisible();
-      await expect(searchLabel).toHaveText('製品名（カタカナ）で製品の絞り込みができます。');
+      await expect(searchLabel).toHaveText('製品名（カタカナ）');
     });
 
     test('検索プレースホルダーが正しいテキストで表示される', async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe('ダウンロードページ', () => {
 
       const searchLabel = page.locator('.download__search-label');
       await expect(searchLabel).toBeVisible();
-      await expect(searchLabel).toHaveText('製品名（カタカナ）で製品の絞り込みができます。');
+      await expect(searchLabel).toHaveText('製品名（カタカナ）');
     });
 
     test('検索プレースホルダーが正しいテキストで表示される', async ({ page }) => {
