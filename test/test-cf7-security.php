@@ -226,32 +226,40 @@ assert_test(
 echo "\n--- 2. MIME 実体検証（finfo テスト） ---\n\n";
 
 if ( ! function_exists( 'finfo_open' ) ) {
-	echo "[SKIP] finfo 拡張が利用不可\n";
-	$skip_count++;
+	echo "[SKIP] finfo 拡張が利用不可（このセクションの 10 テストをスキップ）\n";
+	$skip_count += 10;
 } else {
 	$tmp_dir    = sys_get_temp_dir();
 	$test_files = array();
+	$tmp_bases  = array(); // tempnam で生成したベースファイル（cleanup用）
 
-	// --- テスト用ファイル生成 ---
+	// --- テスト用ファイル生成
+	// tempnam でユニーク名を生成し、拡張子付きコピーを作成する
+	// （並行実行時の固定パス衝突を防ぐため）
 
 	// 正規 PDF（%PDF- マジックバイト）
-	$test_files['valid_pdf'] = $tmp_dir . '/cf7_test_valid.pdf';
+	$tmp_bases[] = $base = tempnam( $tmp_dir, 'cf7_' );
+	$test_files['valid_pdf'] = $base . '.pdf';
 	file_put_contents( $test_files['valid_pdf'], "%PDF-1.4 test content\n%%EOF" );
 
 	// 正規 JPEG（FFD8FF マジックバイト）
-	$test_files['valid_jpg'] = $tmp_dir . '/cf7_test_valid.jpg';
+	$tmp_bases[] = $base = tempnam( $tmp_dir, 'cf7_' );
+	$test_files['valid_jpg'] = $base . '.jpg';
 	file_put_contents( $test_files['valid_jpg'], "\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00" );
 
 	// 正規 PNG（89504E47 マジックバイト）
-	$test_files['valid_png'] = $tmp_dir . '/cf7_test_valid.png';
+	$tmp_bases[] = $base = tempnam( $tmp_dir, 'cf7_' );
+	$test_files['valid_png'] = $base . '.png';
 	file_put_contents( $test_files['valid_png'], "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01" );
 
 	// 偽装 PDF（テキスト内容を .pdf 拡張子で保存）
-	$test_files['spoofed_pdf'] = $tmp_dir . '/cf7_test_spoofed.pdf';
+	$tmp_bases[] = $base = tempnam( $tmp_dir, 'cf7_' );
+	$test_files['spoofed_pdf'] = $base . '.pdf';
 	file_put_contents( $test_files['spoofed_pdf'], "This is plain text, not a PDF file." );
 
 	// 未許可拡張子（.exe）
-	$test_files['exe_file'] = $tmp_dir . '/cf7_test_malware.exe';
+	$tmp_bases[] = $base = tempnam( $tmp_dir, 'cf7_' );
+	$test_files['exe_file'] = $base . '.exe';
 	file_put_contents( $test_files['exe_file'], "MZ\x90\x00\x03\x00\x00\x00\x04\x00\x00\x00\xFF\xFF" );
 
 
@@ -347,10 +355,15 @@ if ( ! function_exists( 'finfo_open' ) ) {
 		$all_passed, $test_count, $pass_count
 	);
 
-	// クリーンアップ
+	// クリーンアップ（拡張子付きファイルとtempnamベースファイルを両方削除）
 	foreach ( $test_files as $path ) {
 		if ( file_exists( $path ) ) {
 			@unlink( $path );
+		}
+	}
+	foreach ( $tmp_bases as $base ) {
+		if ( file_exists( $base ) ) {
+			@unlink( $base );
 		}
 	}
 }
@@ -452,7 +465,8 @@ $db_available = is_db_available();
 
 if ( ! $db_available ) {
 	echo "[SKIP] DB 接続不可のためレート制限テストをスキップ（Local by Flywheel シェルから実行してください）\n";
-	$skip_count++;
+	// このセクションには 9 テストが含まれる
+	$skip_count += 9;
 } else {
 	// muashi_cf7_rate_limit は $contact_form を受け取るがキー生成に使わない（IP のみ）
 	$contact_form       = new stdClass();
@@ -554,7 +568,7 @@ if ( $original_remote_addr !== null ) {
 echo "\n========================================\n";
 echo "SUMMARY: $pass_count / $test_count passed";
 if ( $skip_count > 0 ) {
-	echo " ($skip_count section(s) skipped)";
+	echo " ($skip_count test(s) skipped)";
 }
 echo "\n========================================\n";
 
