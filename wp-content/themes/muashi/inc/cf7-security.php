@@ -60,9 +60,9 @@ add_filter( 'wpcf7_validate_file*', 'muashi_cf7_validate_file_mime', 20, 3 );
  * finfo_file() でファイルのマジックバイトを検査し、
  * 拡張子に対応する MIME タイプと一致しない場合はバリデーションエラーにする。
  *
- * wpcf7_validate_file フィルターは ($result, $tag) の2引数のみ渡すため、
- * アップロードファイルパスは WPCF7_Submission から直接取得する。
- * テストコードからは後方互換のため $args['uploaded_files'] も受け付ける。
+ * CF7 v5.x では wpcf7_validate_file フィルターが3引数 ($result, $tag, $args) を渡す。
+ * $args['uploaded_files'] が渡された場合はそれを優先し、未渡しの場合は
+ * WPCF7_Submission::get_instance() からファイルパスを取得する（フォールバック）。
  *
  * @param WPCF7_Validation $result バリデーション結果
  * @param WPCF7_FormTag    $tag    フォームタグ

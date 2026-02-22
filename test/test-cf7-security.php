@@ -181,19 +181,19 @@ assert_test(
 );
 
 // レガシー Office の octet-stream は許可リストに含まず、OLE2 マジックバイト検証で別途処理する設計
-	assert_test(
-		'doc: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
-		! in_array( 'application/octet-stream', $allowed['doc'], true ),
-		$all_passed, $test_count, $pass_count
-	);
-	assert_test(
-		'xls: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
-		! in_array( 'application/octet-stream', $allowed['xls'], true ),
-		$all_passed, $test_count, $pass_count
-	);
-	assert_test(
-		'ppt: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
-		! in_array( 'application/octet-stream', $allowed['ppt'], true ),
+assert_test(
+	'doc: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
+	! in_array( 'application/octet-stream', $allowed['doc'], true ),
+	$all_passed, $test_count, $pass_count
+);
+assert_test(
+	'xls: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
+	! in_array( 'application/octet-stream', $allowed['xls'], true ),
+	$all_passed, $test_count, $pass_count
+);
+assert_test(
+	'ppt: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
+	! in_array( 'application/octet-stream', $allowed['ppt'], true ),
 	$all_passed, $test_count, $pass_count
 );
 
