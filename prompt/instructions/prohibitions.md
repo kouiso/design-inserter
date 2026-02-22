@@ -588,3 +588,39 @@ function muashi_get_product_data() {
 
 **These WordPress-specific prohibitions are in addition to general prohibitions in sections 1-7.**
 <!-- これらのWordPress特有の禁止事項は、セクション1-7の一般的な禁止事項に追加されるものです。 -->
+
+---
+
+## 9. GitHub レビュー返信の禁止事項
+<!-- GitHub Review Reply Prohibitions -->
+
+### 9.1. レビュースレッド返信時のメンション省略禁止
+
+- **Background**: Devin など「メンションがある場合のみ処理する」設定のボットが存在する（"Only respond to PR comments that mention Devin" がON）
+<!-- 背景: 「メンションがある場合のみ処理する」設定のボットが存在する -->
+- **Prohibition**: Replying to a review thread without @mentioning the bot that created the thread
+<!-- 禁止: スレッドを作成したボットへの @メンションなしに返信すること -->
+
+❌ Replying without mention (bot never gets notified)
+<!-- ❌ メンションなしで返信（ボットに通知が届かない） -->
+```
+# BAD: Devinには届かない
+gh api ".../replies" --method POST --field body="ご指摘の通りです。修正済みです。"
+```
+
+✅ Always include `@botname` at the start of the reply body
+<!-- ✅ 返信本文の冒頭に必ず `@ボット名` を含める -->
+```
+# GOOD: Devinに届く
+gh api ".../replies" --method POST --field body="@devin-ai-integration[bot] ご指摘の通りです。修正済みです。"
+```
+
+**Required procedure when replying to review threads:**
+<!-- レビュースレッドへの返信時の必須手順 -->
+
+1. **Check bot settings first**: Confirm whether the reviewer bot requires mentions (`Only respond to PR comments that mention ...` setting)
+<!-- 最初にボット設定を確認: レビューボットがメンション必須設定かどうかを確認 -->
+2. **Always include mention**: When replying to Devin / Gemini / other bots, always prefix with `@username`
+<!-- 常にメンションを含める: Devin / Gemini / その他ボットへの返信は必ず `@username` から始める -->
+3. **Use variable injection for `[bot]` suffix**: In PowerShell, `[bot]` is interpreted as a glob. Use `Invoke-RestMethod` or variable to pass the body safely
+<!-- `[bot]` サフィックスの変数注入: PowerShell では `[bot]` が glob として解釈されるため `Invoke-RestMethod` または変数経由で body を渡す -->
