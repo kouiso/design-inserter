@@ -73,7 +73,7 @@ if ( have_posts() ) {
                       <div class="download__main download__main--full">
                         <div class="download__controls">
                           <label class="download__search">
-                            <span class="download__search-label">製品名（カタカナ）で製品の絞り込みができます。</span>
+                            <span class="download__search-label">製品名（カタカナ）</span>
                             <input type="search" class="download__search-input" data-download-search placeholder="製品名・キーワードで検索">
                           </label>
                         </div>
