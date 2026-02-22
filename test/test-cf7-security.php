@@ -113,6 +113,18 @@ class Test_CF7_Submission {
 	}
 }
 
+class Test_CF7_ContactForm {
+	private $id;
+
+	public function __construct( $id = 999 ) {
+		$this->id = $id;
+	}
+
+	public function id() {
+		return $this->id;
+	}
+}
+
 /* ========================================================================
  * 1. MIME 許可リスト検証
  * ======================================================================== */
@@ -168,20 +180,20 @@ assert_test(
 	$all_passed, $test_count, $pass_count
 );
 
-// レガシー Office で octet-stream が許可されていること
-assert_test(
-	'doc: application/octet-stream が許可（レガシー Office フォールバック）',
-	in_array( 'application/octet-stream', $allowed['doc'], true ),
-	$all_passed, $test_count, $pass_count
-);
-assert_test(
-	'xls: application/octet-stream が許可（レガシー Office フォールバック）',
-	in_array( 'application/octet-stream', $allowed['xls'], true ),
-	$all_passed, $test_count, $pass_count
-);
-assert_test(
-	'ppt: application/octet-stream が許可（レガシー Office フォールバック）',
-	in_array( 'application/octet-stream', $allowed['ppt'], true ),
+// レガシー Office の octet-stream は許可リストに含まず、OLE2 マジックバイト検証で別途処理する設計
+	assert_test(
+		'doc: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
+		! in_array( 'application/octet-stream', $allowed['doc'], true ),
+		$all_passed, $test_count, $pass_count
+	);
+	assert_test(
+		'xls: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
+		! in_array( 'application/octet-stream', $allowed['xls'], true ),
+		$all_passed, $test_count, $pass_count
+	);
+	assert_test(
+		'ppt: application/octet-stream は許可リスト外（OLE2 マジックバイト検証で別途処理）',
+		! in_array( 'application/octet-stream', $allowed['ppt'], true ),
 	$all_passed, $test_count, $pass_count
 );
 
@@ -468,10 +480,11 @@ if ( ! $db_available ) {
 	// このセクションには 9 テストが含まれる
 	$skip_count += 9;
 } else {
-	// muashi_cf7_rate_limit は $contact_form を受け取るがキー生成に使わない（IP のみ）
-	$contact_form       = new stdClass();
+	// muashi_cf7_rate_limit は $contact_form->id() でフォーム別にレート制限を分離する
+	$test_form_id       = 999;
+	$contact_form       = new Test_CF7_ContactForm( $test_form_id );
 	$_SERVER['REMOTE_ADDR'] = '8.8.8.8';
-	$test_transient_key = 'muashi_cf7_rl_' . md5( '8.8.8.8' );
+	$test_transient_key = 'muashi_cf7_rl_' . md5( '8.8.8.8' . '_' . $test_form_id );
 
 	// 既存 transient をクリーンアップ
 	delete_transient( $test_transient_key );
