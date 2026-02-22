@@ -37,7 +37,7 @@ jobs:
           use_bedrock: false
           use_vertex: false
 
-          direct_prompt: |
+          prompt: |
             このPull Requestをレビューしてください。以下のフォーマットで回答してください：
 
             ## Walkthrough
@@ -162,5 +162,3 @@ jobs:
 
             ---
             日本語で回答してください。
-
-          timeout_minutes: 20

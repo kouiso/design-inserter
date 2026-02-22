@@ -61,9 +61,13 @@ add_filter( 'wpcf7_validate_file*', 'muashi_cf7_validate_file_mime', 20, 3 );
  * finfo_file() でファイルのマジックバイトを検査し、
  * 拡張子に対応する MIME タイプと一致しない場合はバリデーションエラーにする。
  *
+ * wpcf7_validate_file フィルターは ($result, $tag) の2引数のみ渡すため、
+ * アップロードファイルパスは WPCF7_Submission から直接取得する。
+ * テストコードからは後方互換のため $args['uploaded_files'] も受け付ける。
+ *
  * @param WPCF7_Validation $result バリデーション結果
  * @param WPCF7_FormTag    $tag    フォームタグ
- * @param array            $args   ['uploaded_files' => array of file paths]
+ * @param array            $args   テスト用: ['uploaded_files' => array of file paths]
  * @return WPCF7_Validation
  */
 function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
@@ -71,7 +75,18 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 		return $result;
 	}
 
-	$uploaded_files = isset( $args['uploaded_files'] ) ? $args['uploaded_files'] : array();
+	// テストコードから $args['uploaded_files'] を受け取った場合はそちらを優先する。
+	// 本番では wpcf7_validate_file フィルターが $args を渡さないため、
+	// WPCF7_Submission から直接ファイルパスを取得する。
+	if ( ! empty( $args['uploaded_files'] ) ) {
+		$uploaded_files = $args['uploaded_files'];
+	} elseif ( class_exists( 'WPCF7_Submission' ) ) {
+		$submission     = WPCF7_Submission::get_instance();
+		$all_files      = $submission ? $submission->uploaded_files() : array();
+		$uploaded_files = isset( $all_files[ $tag->name ] ) ? $all_files[ $tag->name ] : array();
+	} else {
+		$uploaded_files = array();
+	}
 
 	// WP_Error または空の場合はスキップ
 	if ( empty( $uploaded_files ) || is_wp_error( $uploaded_files ) ) {
