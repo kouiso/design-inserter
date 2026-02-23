@@ -142,7 +142,7 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await page.goto('/history/');
 
     // 創業と基盤形成リンクをクリック
-    await page.locator('.navigation__sub-accordion-link:has-text("創業と基盤形成 1958年～")').click();
+    await page.locator('.navigation__sub-accordion-link:has-text("創業と基盤形成 1958年-")').click();
 
     // 別ページ（/history-founding）に遷移することを確認
     await expect(page).toHaveURL(/\/history-founding/);
@@ -152,7 +152,7 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await page.goto('/history/');
 
     // プラスチック架装へリンクをクリック
-    await page.locator('.navigation__sub-accordion-link:has-text("プラスチック架装へ 1980年～")').click();
+    await page.locator('.navigation__sub-accordion-link:has-text("プラスチック架飾へ 1980年-")').click();
 
     // 別ページ（/history-innovation）に遷移することを確認
     await expect(page).toHaveURL(/\/history-innovation/);
@@ -162,7 +162,7 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await page.goto('/history/');
 
     // グローバル展開リンクをクリック
-    await page.locator('.navigation__sub-accordion-link:has-text("グローバル展開 2000年～")').click();
+    await page.locator('.navigation__sub-accordion-link:has-text("グローバル展開 2000年-")').click();
 
     // 別ページ（/history-global）に遷移することを確認
     await expect(page).toHaveURL(/\/history-global/);

@@ -132,8 +132,3 @@ function muashi_setup_product_sidebar_menu() {
 	echo "\n完了: 製品情報サイドバーメニュー ({$position} 項目)\n";
 }
 
-// プラグイン経由の場合は WP_CLI が定義済み → 関数のみエクスポート
-// 直接実行の場合はすぐにセットアップ
-if ( ! defined( 'WP_CLI' ) ) {
-	muashi_setup_product_sidebar_menu();
-}

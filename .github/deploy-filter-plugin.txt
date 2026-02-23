@@ -1,0 +1,28 @@
+# musashi-inquiry-approval プラグイン デプロイ ホワイトリスト
+# ここに記載されたファイル/ディレクトリのみデプロイされる
+
+# === PHPファイル（ルート直下） ===
++ /*.php
+
+# === ソースマップ・ライセンスファイル等の除外 ===
+- *.map
+- *.LICENSE.txt
+
+# === インクルード ===
++ /includes/
++ /includes/**
+
+# === テンプレート ===
++ /templates/
++ /templates/**
+
+# === アセット ===
++ /assets/
++ /assets/css/
++ /assets/css/**
++ /assets/js/
++ /assets/js/**
++ /assets/index.php
+
+# === それ以外は全て除外 ===
+- *

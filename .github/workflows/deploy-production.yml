@@ -1,11 +1,6 @@
 name: Deploy to Production
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'wp-content/themes/muashi/**'
-      - 'wp-content/plugins/musashi-inquiry-approval/**'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -29,5 +24,4 @@ jobs:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
       XSERVER_USER: ${{ secrets.XSERVER_USER }}
-      XSERVER_PATH: ${{ secrets.XSERVER_PATH }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

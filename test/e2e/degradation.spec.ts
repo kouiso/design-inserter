@@ -27,9 +27,9 @@ test.describe('Bug Fix Tests', () => {
     
     test('should render article images without overflow on /sustainability/environment/', async ({ page }) => {
       await page.goto(`${BASE_URL}/sustainability/environment/`);
-      
+
       // 記事内画像を取得
-      const images = await page.locator('article img').all();
+      const images = await page.locator('.page__inner img').all();
       expect(images.length).toBeGreaterThan(0);
       
       // 各画像の width スタイルを確認（px指定 → 100% 正規化）
@@ -44,9 +44,9 @@ test.describe('Bug Fix Tests', () => {
 
     test('should apply max-width correctly for responsive images', async ({ page }) => {
       await page.goto(`${BASE_URL}/sustainability/environment/`);
-      
+
       // images にボックスモデル情報取得
-      const images = await page.locator('article img').first();
+      const images = await page.locator('.page__inner img').first();
       const box = await images.boundingBox();
       
       // コンテナ幅（viewport width）を取得
@@ -61,8 +61,8 @@ test.describe('Bug Fix Tests', () => {
     test('should have correct max-width on narrow layouts (with sidebar)', async ({ page }) => {
       await page.setViewportSize({ width: 800, height: 600 });
       await page.goto(`${BASE_URL}/sustainability/environment/`);
-      
-      const images = await page.locator('article img').first();
+
+      const images = await page.locator('.page__inner img').first();
       const computedStyle = await images.evaluate((el: HTMLImageElement) => {
         return window.getComputedStyle(el).maxWidth;
       });

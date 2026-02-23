@@ -20,6 +20,7 @@ $tests = [
     'test-media-page.php',
     'test-faq-page.php',
     'test-news-page.php',
+    'test-cf7-security.php',
 ];
 
 $passed_count = 0;

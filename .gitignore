@@ -5,6 +5,7 @@ wp-config.php
 *.php
 !wp-content/themes/muashi/**/*.php
 !wp-content/plugins/musashi-inquiry-approval/**/*.php
+!test/**/*.php
 
 # WordPress default files
 license.txt
@@ -73,6 +74,7 @@ test-*.html
 /playwright-report/
 /playwright/.cache/
 /.playwright-mcp/
+test/screenshots/
 
 # Claude
 .claude/

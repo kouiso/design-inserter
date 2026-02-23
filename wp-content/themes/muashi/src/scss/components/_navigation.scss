@@ -41,13 +41,22 @@
 
   &__item{
     &:not(:first-of-type){
-      .navigation__item-title{
+      .navigation__item-title,
+      .navigation__link {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
     }
   }
 
   &__item-title{
+    display: block;
+    padding: 16px 0;
+    font-size: 16px;
+    font-weight: 500;
+    min-width: 200px;
+  }
+
+  &__link {
     display: block;
     padding: 16px 0;
     font-size: 16px;

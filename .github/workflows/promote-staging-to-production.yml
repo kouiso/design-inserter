@@ -1,0 +1,89 @@
+name: Promote Staging to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'ドライラン（実際にはデプロイしない）'
+        required: false
+        type: boolean
+        default: false
+      skip_merge:
+        description: 'マージをスキップ（既にmainに反映済みの場合）'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  branch-guard:
+    name: Branch Guard
+    runs-on: blacksmith-4vcpu-ubuntu-2204
+    steps:
+      - name: developブランチからの実行を検証
+        if: github.ref_name != 'develop'
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          echo "::error::このワークフローはdevelopブランチからのみ実行可能です（現在: ${REF_NAME}）"
+          exit 1
+
+  merge-to-main:
+    name: Merge develop → main
+    needs: branch-guard
+    if: ${{ !inputs.skip_merge }}
+    runs-on: blacksmith-4vcpu-ubuntu-2204
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: developをmainにマージ
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout main
+          git merge origin/develop --ff-only
+          git push origin main
+
+      - name: マージ結果サマリー
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          echo "## Merge Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Source** | \`develop\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Target** | \`main\` |" >> $GITHUB_STEP_SUMMARY
+          if [ "$JOB_STATUS" = "success" ]; then
+            echo "| **Status** | ✅ Success |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| **Status** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "| **Actor** | @${GITHUB_ACTOR} |" >> $GITHUB_STEP_SUMMARY
+
+  deploy-production:
+    name: Deploy to Production
+    needs: [branch-guard, merge-to-main]
+    if: ${{ always() && needs.branch-guard.result == 'success' && (needs.merge-to-main.result == 'success' || needs.merge-to-main.result == 'skipped') }}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: production
+      server_label: "musashipaint.xsrv.jp (Production)"
+      dry_run: ${{ inputs.dry_run || false }}
+      ref: 'main'
+    secrets:
+      XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
+      XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
+      XSERVER_USER: ${{ secrets.XSERVER_USER }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

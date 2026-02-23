@@ -2221,10 +2221,18 @@ a {
 .navigation__list {
   margin-top: 80px;
 }
-.navigation__item:not(:first-of-type) .navigation__item-title {
+.navigation__item:not(:first-of-type) .navigation__item-title,
+.navigation__item:not(:first-of-type) .navigation__link {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 .navigation__item-title {
+  display: block;
+  padding: 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 200px;
+}
+.navigation__link {
   display: block;
   padding: 16px 0;
   font-size: 16px;
@@ -3601,8 +3609,8 @@ a {
 
 .hierarchy-chart {
   padding: 3rem 0;
-  max-width: 100%;
-  margin: 0;
+  max-width: 600px;
+  margin: 0 auto;
   font-family: inherit;
   overflow-x: auto;
   container-type: inline-size;
@@ -3821,33 +3829,18 @@ a {
 
 .product-info {
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 @media screen and (min-width: 992px) {
   .product-info {
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: start;
+    gap: 12px;
   }
 }
 .product-info__name {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
-}
-.product-info__name-en {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #666;
-  margin: 0;
-}
-@media screen and (min-width: 992px) {
-  .product-info__name-en {
-    font-size: 13px;
-  }
 }
 .product-info__name-value {
   font-size: 14px;
@@ -3864,25 +3857,30 @@ a {
 .product-info__details {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0;
   margin: 0;
   padding: 0;
 }
 .product-info__item {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 16px;
+  padding: 6px 0;
 }
 .product-info__label {
   font-size: 10px;
-  line-height: 1.4;
+  line-height: 1.6;
   color: #666;
   font-weight: 400;
   margin: 0;
+  flex: 0 0 auto;
+  min-width: 140px;
 }
 @media screen and (min-width: 992px) {
   .product-info__label {
     font-size: 11px;
+    min-width: 180px;
   }
 }
 .product-info__value {
@@ -3890,6 +3888,7 @@ a {
   line-height: 1.6;
   color: var(--color-text-gray);
   margin: 0;
+  flex: 1 1 auto;
 }
 @media screen and (min-width: 992px) {
   .product-info__value {
@@ -6087,5 +6086,4 @@ a {
     transform: translateX(-50%);
   }
 }
-
 /*# sourceMappingURL=style.css.map */
