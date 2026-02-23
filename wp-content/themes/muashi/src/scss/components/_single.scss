@@ -434,14 +434,15 @@
 
 // お客様の声詳細ページ用メタ情報（会社名・部署役職・氏名）
 .voice-meta {
+  margin-top: 20px;
   margin-bottom: 24px;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  padding: 16px 20px;
+  border-left: 3px solid #7B7B00;
 
   @include mq(lg) {
+    margin-top: 24px;
     margin-bottom: 32px;
-    padding: 24px;
+    padding: 16px 24px;
   }
 
   &__company {
