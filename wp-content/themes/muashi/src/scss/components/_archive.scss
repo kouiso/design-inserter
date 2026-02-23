@@ -139,6 +139,13 @@
     }
   }
 
+  // お客様の声一覧: 画像とテキストの上端を揃える
+  &__link--voice {
+    @include mq(lg) {
+      align-items: start;
+    }
+  }
+
   // インタビュー一覧用メタ情報（会社名・部署役職・氏名）
   &__meta {
     display: flex;

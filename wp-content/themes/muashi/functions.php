@@ -1449,6 +1449,7 @@ function muashi_render_kv_picture( $args = array() ) {
     $args = wp_parse_args(
         $args,
         array(
+            'image_id'       => 0,
             'post_id'        => get_queried_object_id(),
             'class'          => 'page__kv-pic',
             'fallback_pc'    => '',
@@ -1458,36 +1459,49 @@ function muashi_render_kv_picture( $args = array() ) {
         )
     );
 
+    $image_id       = $args['image_id'] ? (int) $args['image_id'] : 0;
     $post_id        = $args['post_id'] ? (int) $args['post_id'] : 0;
     $include_source = ! empty( $args['include_source'] );
     $fallback_pc    = $args['fallback_pc'];
     $fallback_sp    = $args['fallback_sp'] !== '' ? $args['fallback_sp'] : $fallback_pc;
     $media_query    = $include_source ? $args['media_query'] : '';
 
-    // アイキャッチ画像がある場合は優先して表示
-    if ( $post_id && has_post_thumbnail( $post_id ) ) {
-        $thumbnail_id     = get_post_thumbnail_id( $post_id );
-        $thumbnail_pc     = wp_get_attachment_image_url( $thumbnail_id, 'full' );
-        $thumbnail_srcset = wp_get_attachment_image_srcset( $thumbnail_id, 'full' );
-        $thumbnail_sp     = wp_get_attachment_image_url( $thumbnail_id, 'medium_large' );
-        $thumbnail_alt    = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
+    // ヘルパー関数：画像ID から <picture> を出力
+    $render_image = function( $attachment_id, $title = '' ) use ( $args, $include_source, $media_query ) {
+        $pc_url   = wp_get_attachment_image_url( $attachment_id, 'full' );
+        $pc_srcset = wp_get_attachment_image_srcset( $attachment_id, 'full' );
+        $sp_url   = wp_get_attachment_image_url( $attachment_id, 'medium_large' );
+        $alt      = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 
-        if ( $thumbnail_alt === '' ) {
-            $thumbnail_alt = get_the_title( $post_id );
+        if ( $alt === '' && $title ) {
+            $alt = $title;
         }
 
         echo '<picture class="' . esc_attr( $args['class'] ) . '">';
         if ( $include_source && $media_query ) {
-            $source_srcset = $thumbnail_srcset ? $thumbnail_srcset : $thumbnail_pc;
-            echo '<source srcset="' . esc_attr( $source_srcset ) . '" media="' . esc_attr( $media_query ) . '">';
+            $srcset = $pc_srcset ? $pc_srcset : $pc_url;
+            echo '<source srcset="' . esc_attr( $srcset ) . '" media="' . esc_attr( $media_query ) . '">';
         }
-        $img_src = $thumbnail_sp ? $thumbnail_sp : $thumbnail_pc;
-        echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $thumbnail_alt ) . '">';
+        $img_src = $sp_url ? $sp_url : $pc_url;
+        echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $alt ) . '">';
         echo '</picture>';
+    };
+
+    // 優先度1: image_id が指定されている場合
+    if ( $image_id && wp_get_attachment_image_url( $image_id, 'full' ) ) {
+        $render_image( $image_id );
         return;
     }
 
-    // アイキャッチがなくfallback_pcも指定されていない場合は何も出力しない
+    // 優先度2: アイキャッチ画像がある場合
+    if ( $post_id && has_post_thumbnail( $post_id ) ) {
+        $thumbnail_id = get_post_thumbnail_id( $post_id );
+        $title        = get_the_title( $post_id );
+        $render_image( $thumbnail_id, $title );
+        return;
+    }
+
+    // 優先度3: fallback_pc が指定されている場合
     if ( $fallback_pc === '' ) {
         return;
     }

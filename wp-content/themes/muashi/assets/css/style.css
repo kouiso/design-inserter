@@ -2441,6 +2441,11 @@ a {
     align-items: start;
   }
 }
+@media screen and (min-width: 992px) {
+  .archive__link--voice {
+    align-items: start;
+  }
+}
 .archive__meta {
   display: flex;
   flex-direction: column;
@@ -2990,14 +2995,11 @@ a {
 .voice-meta {
   margin-top: 20px;
   margin-bottom: 24px;
-  padding: 16px 20px;
-  border-left: 3px solid #7B7B00;
 }
 @media screen and (min-width: 992px) {
   .voice-meta {
     margin-top: 24px;
     margin-bottom: 32px;
-    padding: 16px 24px;
   }
 }
 .voice-meta__company {

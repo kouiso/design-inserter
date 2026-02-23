@@ -22,7 +22,16 @@ get_header();
         <div class="page__container">
 
             <div class="page__kv">
-                <?php muashi_render_kv_picture( array( 'include_source' => true ) ); ?>
+                <?php
+                // タームのKV画像をACFから取得
+                $kv_image_id = $term ? (int) get_field( 'product_term_kv_image', 'term_' . $term->term_id ) : 0;
+                if ( $kv_image_id ) {
+                    muashi_render_kv_picture( array(
+                        'image_id'       => $kv_image_id,
+                        'include_source' => true,
+                    ) );
+                }
+                ?>
                 <div class="page__kv-icon"><!-- SVGアイコン --></div>
             </div>
 
