@@ -148,10 +148,10 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await expect(page).toHaveURL(/\/history-founding/);
   });
 
-  test('ヒストリー第3階層リンク遷移確認 - プラスチック架装へ', async ({ page }) => {
+  test('ヒストリー第3階層リンク遷移確認 - プラスチック架飾へ', async ({ page }) => {
     await page.goto('/history/');
 
-    // プラスチック架装へリンクをクリック
+    // プラスチック架飾へリンクをクリック
     await page.locator('.navigation__sub-accordion-link:has-text("プラスチック架飾へ 1980年-")').click();
 
     // 別ページ（/history-innovation）に遷移することを確認
