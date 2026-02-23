@@ -107,6 +107,13 @@
     }
   }
 
+  // アコーディオン無効時の第3階層ラッパー（depth 1 と同じデザインにするため余白なし）
+  &__nested-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   // アコーディオンで開閉するリスト（第3階層）
   &__sub-accordion-list {
     display: none;
