@@ -688,7 +688,7 @@ Access admin AJAX action without capability: Should fail
 
 ## Related Files (関連ファイル)
 
-- `prompt/instructions/prohibitions.md` - WordPress security prohibitions
-- `prompt/instructions/wordpress.md` - WordPress development rules
+- `.claude/rules/prohibitions.md` - WordPress security prohibitions
+- `.claude/rules/wordpress.md` - WordPress development rules
 - `prompt/agents/security-reviewer.md` - Security review agent
 - `prompt/commands/security-check.md` - Security check command

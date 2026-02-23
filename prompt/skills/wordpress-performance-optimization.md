@@ -343,5 +343,5 @@ wp_enqueue_script('muashi-product', ..., ['muashi-main'], ..., true);
 
 ## Related Files (関連ファイル)
 
-- `prompt/instructions/prohibitions.md` - Performance prohibitions
+- `.claude/rules/prohibitions.md` - Performance prohibitions
 - `prompt/skills/wordpress-hook-pattern-compliance.md` - Hook performance

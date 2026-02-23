@@ -597,6 +597,6 @@ remove_action('wp_head', 'rsd_link'); // Remove Really Simple Discovery link
 
 ## Related Files (関連ファイル)
 
-- `prompt/instructions/prohibitions.md` - Hook misuse prohibitions
-- `prompt/instructions/wordpress.md` - WordPress development rules
+- `.claude/rules/prohibitions.md` - Hook misuse prohibitions
+- `.claude/rules/wordpress.md` - WordPress development rules
 - `prompt/skills/wordpress-performance-optimization.md` - Performance optimization including hooks

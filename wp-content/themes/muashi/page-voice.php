@@ -69,7 +69,7 @@ $voice_query = new WP_Query( array(
                             <?php if ( $voice_query->have_posts() ) : ?>
                                 <?php while ( $voice_query->have_posts() ) : $voice_query->the_post(); ?>
                                 <li class="archive__item">
-                                    <a href="<?php the_permalink(); ?>" class="archive__link">
+                                    <a href="<?php the_permalink(); ?>" class="archive__link archive__link--voice">
                                     <div class="archive__image-wrapper">
                                         <?php if ( has_post_thumbnail() ) : ?>
                                         <img

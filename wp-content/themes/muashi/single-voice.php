@@ -41,27 +41,33 @@ get_header();
                     <div class="page__content">
                         <h1 class="page__title"><?php the_title(); ?></h1>
 
-                        <?php
-                        $voice_company     = get_field( 'voice_company' );
-                        $voice_position    = get_field( 'voice_position' );
-                        $voice_person_name = get_field( 'voice_person_name' );
-                        if ( $voice_company || $voice_position || $voice_person_name ) : ?>
-                        <div class="voice-meta">
-                            <?php if ( $voice_company ) : ?>
-                            <p class="voice-meta__company"><?php echo esc_html( $voice_company ); ?></p>
-                            <?php endif; ?>
-                            <?php if ( $voice_position ) : ?>
-                            <p class="voice-meta__position"><?php echo nl2br( esc_html( $voice_position ) ); ?></p>
-                            <?php endif; ?>
-                            <?php if ( $voice_person_name ) : ?>
-                            <p class="voice-meta__person"><?php echo esc_html( $voice_person_name ); ?></p>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>
-
                         <div class="page__inner page__inner--narrow">
+                            <?php
+                            $voice_company     = get_field( 'voice_company' );
+                            $voice_position    = get_field( 'voice_position' );
+                            $voice_person_name = get_field( 'voice_person_name' );
+                            if ( $voice_company || $voice_position || $voice_person_name ) : ?>
+                            <div class="voice-meta">
+                                <?php if ( $voice_company ) : ?>
+                                <p class="voice-meta__company"><?php echo esc_html( $voice_company ); ?></p>
+                                <?php endif; ?>
+                                <?php if ( $voice_position ) : ?>
+                                <p class="voice-meta__position"><?php echo nl2br( esc_html( $voice_position ) ); ?></p>
+                                <?php endif; ?>
+                                <?php if ( $voice_person_name ) : ?>
+                                <p class="voice-meta__person"><?php echo esc_html( $voice_person_name ); ?></p>
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
                             <div class="single__contents">
-                                <?php the_content(); ?>
+                                <?php
+                                // voice-metaブロックで既にACFフィールドを表示しているため、本文中のショートコード行を除去
+                                $voice_content = get_the_content();
+                                $voice_content = preg_replace( '/\[voice_field[^\]]*\]\s*/', '', $voice_content );
+                                $voice_content = apply_filters( 'the_content', $voice_content );
+                                $voice_content = str_replace( ']]>', ']]&gt;', $voice_content );
+                                echo $voice_content;
+                                ?>
                             </div>
 
                             <div class="single__back">

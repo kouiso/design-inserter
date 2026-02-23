@@ -44,6 +44,9 @@ $history_image_base = get_theme_file_uri( '/assets/img/history' );
                     <div class="page__inner page__inner--history">
                         <?php the_content(); ?>
                     </div>
+                    <div class="single__back">
+                        <a class="single__back-button" href="<?php echo esc_url( URL_HISTORY ); ?>">ヒストリーへ戻る</a>
+                    </div>
                 <?php endwhile; ?>
             <?php endif; ?>
             </div>

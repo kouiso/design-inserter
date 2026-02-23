@@ -1449,6 +1449,7 @@ function muashi_render_kv_picture( $args = array() ) {
     $args = wp_parse_args(
         $args,
         array(
+            'image_id'       => 0,
             'post_id'        => get_queried_object_id(),
             'class'          => 'page__kv-pic',
             'fallback_pc'    => '',
@@ -1458,36 +1459,49 @@ function muashi_render_kv_picture( $args = array() ) {
         )
     );
 
+    $image_id       = $args['image_id'] ? (int) $args['image_id'] : 0;
     $post_id        = $args['post_id'] ? (int) $args['post_id'] : 0;
     $include_source = ! empty( $args['include_source'] );
     $fallback_pc    = $args['fallback_pc'];
     $fallback_sp    = $args['fallback_sp'] !== '' ? $args['fallback_sp'] : $fallback_pc;
     $media_query    = $include_source ? $args['media_query'] : '';
 
-    // アイキャッチ画像がある場合は優先して表示
-    if ( $post_id && has_post_thumbnail( $post_id ) ) {
-        $thumbnail_id     = get_post_thumbnail_id( $post_id );
-        $thumbnail_pc     = wp_get_attachment_image_url( $thumbnail_id, 'full' );
-        $thumbnail_srcset = wp_get_attachment_image_srcset( $thumbnail_id, 'full' );
-        $thumbnail_sp     = wp_get_attachment_image_url( $thumbnail_id, 'medium_large' );
-        $thumbnail_alt    = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
+    // ヘルパー関数：画像ID から <picture> を出力
+    $render_image = function( $attachment_id, $title = '' ) use ( $args, $include_source, $media_query ) {
+        $pc_url   = wp_get_attachment_image_url( $attachment_id, 'full' );
+        $pc_srcset = wp_get_attachment_image_srcset( $attachment_id, 'full' );
+        $sp_url   = wp_get_attachment_image_url( $attachment_id, 'medium_large' );
+        $alt      = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 
-        if ( $thumbnail_alt === '' ) {
-            $thumbnail_alt = get_the_title( $post_id );
+        if ( $alt === '' && $title ) {
+            $alt = $title;
         }
 
         echo '<picture class="' . esc_attr( $args['class'] ) . '">';
         if ( $include_source && $media_query ) {
-            $source_srcset = $thumbnail_srcset ? $thumbnail_srcset : $thumbnail_pc;
-            echo '<source srcset="' . esc_attr( $source_srcset ) . '" media="' . esc_attr( $media_query ) . '">';
+            $srcset = $pc_srcset ? $pc_srcset : $pc_url;
+            echo '<source srcset="' . esc_attr( $srcset ) . '" media="' . esc_attr( $media_query ) . '">';
         }
-        $img_src = $thumbnail_sp ? $thumbnail_sp : $thumbnail_pc;
-        echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $thumbnail_alt ) . '">';
+        $img_src = $sp_url ? $sp_url : $pc_url;
+        echo '<img src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $alt ) . '">';
         echo '</picture>';
+    };
+
+    // 優先度1: image_id が指定されている場合
+    if ( $image_id && wp_get_attachment_image_url( $image_id, 'full' ) ) {
+        $render_image( $image_id );
         return;
     }
 
-    // アイキャッチがなくfallback_pcも指定されていない場合は何も出力しない
+    // 優先度2: アイキャッチ画像がある場合
+    if ( $post_id && has_post_thumbnail( $post_id ) ) {
+        $thumbnail_id = get_post_thumbnail_id( $post_id );
+        $title        = get_the_title( $post_id );
+        $render_image( $thumbnail_id, $title );
+        return;
+    }
+
+    // 優先度3: fallback_pc が指定されている場合
     if ( $fallback_pc === '' ) {
         return;
     }
@@ -1886,6 +1900,19 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
     private $parent_is_ancestor = false;
 
     /**
+     * アコーディオンを無効化するメニューロケーション一覧
+     */
+    private static $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
+
+    /**
+     * 指定メニューロケーションがアコーディオン無効かどうか判定
+     */
+    private function is_accordion_disabled( $args ) {
+        $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
+        return in_array( $theme_location, self::$disable_accordion_locations, true );
+    }
+
+    /**
      * メニュー項目の開始タグを出力
      *
      * デザイン/挙動要件:
@@ -1947,31 +1974,38 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 子がある場合はアコーディオントリガー
             if ( $has_children ) {
-                // 特定のメニューロケーションではアコーディオンを無効化
-                $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
-                $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
+                $disable_accordion = $this->is_accordion_disabled( $args );
 
                 // アコーディオンJSが反応するクラスと属性を追加
                 $is_ancestor = $item->current_item_ancestor || $item->current;
                 if ( $disable_accordion ) {
-                    // アコーディオン無効: has-accordionクラスも出力しない
-                    $link_classes = 'navigation__sub-link is-active';
+                    // アコーディオン無効かつURLが設定されている場合はリンクとして出力
+                    $url_for_link = $item->url;
+                    $link_classes = 'navigation__sub-link';
                     if ( $is_ancestor ) {
-                        $link_classes .= ' is-ancestor';
+                        $link_classes .= ' is-active is-ancestor';
+                    }
+                    if ( $url_for_link && $url_for_link !== '#' ) {
+                        $output .= '<a href="' . esc_url( $url_for_link ) . '" class="' . esc_attr( $link_classes ) . '"' . $target . '>';
+                        $output .= esc_html( $item->title );
+                        $output .= '</a>';
+                    } else {
+                        $output .= '<p class="' . esc_attr( $link_classes ) . '">';
+                        $output .= esc_html( $item->title );
+                        $output .= '</p>';
                     }
                 } else {
                     $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
                     if ( $is_ancestor ) {
                         $link_classes .= ' is-active is-ancestor';
                     }
-                }
 
-                // role="button" でクリッカブルであることを示す
-                $aria_expanded = ( $item->current || $item->current_item_ancestor || $disable_accordion ) ? 'true' : 'false';
-                $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
-                $output .= esc_html( $item->title );
-                $output .= '</p>';
+                    // role="button" でクリッカブルであることを示す
+                    $aria_expanded = ( $item->current || $item->current_item_ancestor ) ? 'true' : 'false';
+                    $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
+                    $output .= esc_html( $item->title );
+                    $output .= '</p>';
+                }
             } else {
                 // 子がない場合は通常のリンク
                 $link_classes = 'navigation__sub-link';
@@ -1984,26 +2018,45 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             }
 
         } else {
-            // depth 2+: 第3階層以降（アコーディオンの中身）
-            // 親のデザインを踏襲（navigation__sub-item はマージンのため、孫要素としてアコーディオン用クラスを使う）
-            $sub_classes = 'navigation__sub-accordion-item';
-            if ( $item->current ) {
-                $sub_classes .= ' navigation__sub-accordion-item--active';
-            }
-            $output .= '<li class="' . esc_attr( $sub_classes ) . '">';
+            // depth 2+: 第3階層以降
+            $disable_accordion = $this->is_accordion_disabled( $args );
 
             $target = '';
             if ( $item->target === '_blank' ) {
                 $target = ' target="_blank" rel="noopener noreferrer"';
             }
 
-            $link_class = 'navigation__sub-accordion-link';
-            if ( $item->current ) {
-                $link_class .= ' is-current';
+            if ( $disable_accordion ) {
+                // アコーディオン無効: depth 1 と同じクラスで出力（デザイン統一）
+                $classes = array( 'navigation__sub-item' );
+                if ( $item->current ) {
+                    $classes[] = 'is-active';
+                }
+                $output .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+
+                $link_classes = 'navigation__sub-link';
+                if ( $item->current ) {
+                    $link_classes .= ' is-active';
+                }
+                $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_classes ) . '"' . $target . '>';
+                $output .= esc_html( $item->title );
+                $output .= '</a>';
+            } else {
+                // アコーディオン有効: 従来通りのアコーディオン用クラス
+                $sub_classes = 'navigation__sub-accordion-item';
+                if ( $item->current ) {
+                    $sub_classes .= ' navigation__sub-accordion-item--active';
+                }
+                $output .= '<li class="' . esc_attr( $sub_classes ) . '">';
+
+                $link_class = 'navigation__sub-accordion-link';
+                if ( $item->current ) {
+                    $link_class .= ' is-current';
+                }
+                $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_class ) . '"' . $target . '>';
+                $output .= esc_html( $item->title );
+                $output .= '</a>';
             }
-            $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_class ) . '"' . $target . '>';
-            $output .= esc_html( $item->title );
-            $output .= '</a>';
         }
     }
 
@@ -2023,21 +2076,24 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             $output .= '<ul class="navigation__sub-list">';
         } else {
             // 第3階層を囲むリスト
-            $classes = array( 'navigation__sub-accordion-list' );
-            $aria_hidden = 'true';
+            $disable_accordion = $this->is_accordion_disabled( $args );
 
-            // 特定のメニューロケーションでは常に展開
-            $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
-            $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
+            if ( $disable_accordion ) {
+                // アコーディオン無効: 余白なしの透過的ラッパー（depth 1 と同じ見た目にする）
+                $output .= '<ul class="navigation__nested-list">';
+            } else {
+                // アコーディオン有効: 従来通りの開閉リスト
+                $classes = array( 'navigation__sub-accordion-list' );
+                $aria_hidden = 'true';
 
-            if ( $this->parent_is_ancestor || $disable_accordion ) {
-                $classes[] = 'is-active';
-                $aria_hidden = 'false';
+                if ( $this->parent_is_ancestor ) {
+                    $classes[] = 'is-active';
+                    $aria_hidden = 'false';
+                }
+
+                $class_attr = implode( ' ', $classes );
+                $output .= '<ul class="' . esc_attr( $class_attr ) . '" aria-hidden="' . $aria_hidden . '">';
             }
-
-            $class_attr = implode( ' ', $classes );
-            $output .= '<ul class="' . esc_attr( $class_attr ) . '" aria-hidden="' . $aria_hidden . '">';
 
             // フラグをリセット
             $this->parent_is_ancestor = false;
