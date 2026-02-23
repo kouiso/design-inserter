@@ -51,9 +51,19 @@ $product_query = new WP_Query(array(
 
             <div class="page__kv">
                 <?php
-                muashi_render_kv_picture(array(
-                    'include_source' => true,
-                ));
+                // アクティブタブに対応するKV画像をACFから取得
+                $kv_image_id = 0;
+                if ( $active_tab ) {
+                    $field_name = 'product_page_kv_' . $active_tab;
+                    $kv_image_id = (int) get_field( $field_name );
+                }
+                
+                if ( $kv_image_id ) {
+                    muashi_render_kv_picture(array(
+                        'image_id'       => $kv_image_id,
+                        'include_source' => true,
+                    ));
+                }
                 ?>
 
                 <div class="page__kv-icon">

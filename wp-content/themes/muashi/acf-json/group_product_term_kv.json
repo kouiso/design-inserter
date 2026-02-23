@@ -1,0 +1,78 @@
+{
+  "key": "group_product_term_kv",
+  "title": "製品タクソノミー KV画像",
+  "fields": [
+    {
+      "key": "field_product_term_kv_image",
+      "label": "KV画像",
+      "name": "product_term_kv_image",
+      "aria-label": "",
+      "type": "image",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "return_format": "id",
+      "preview_size": "medium",
+      "library": "all",
+      "min_width": "",
+      "min_height": "",
+      "min_size": "",
+      "max_width": "",
+      "max_height": "",
+      "max_size": "",
+      "mime_types": ""
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "product_application"
+      }
+    ],
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "product_material"
+      }
+    ],
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "product_design"
+      }
+    ],
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "product_function"
+      }
+    ],
+    [
+      {
+        "param": "taxonomy",
+        "operator": "==",
+        "value": "product_environment"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "",
+  "show_in_rest": 0,
+  "modified": 1740282000
+}
