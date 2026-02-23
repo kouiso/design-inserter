@@ -287,6 +287,6 @@ function get_product_price($product_id) {
 
 ## Related Files (関連ファイル)
 
-- `prompt/instructions/wordpress.md` - WordPress development rules
+- `.claude/rules/wordpress.md` - WordPress development rules
 - `prompt/skills/wordpress-hook-pattern-compliance.md` - Hook patterns
 - `prompt/skills/wordpress-performance-optimization.md` - Performance patterns

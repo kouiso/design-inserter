@@ -320,5 +320,5 @@ test('displays all test products', async ({ page }) => {
 ## Related Files (関連ファイル)
 
 - `playwright.config.ts` - Playwright configuration
-- `prompt/instructions/testing.md` - Testing protocols
+- `.claude/rules/testing.md` - Testing protocols
 - `prompt/commands/tdd.md` - TDD workflow
