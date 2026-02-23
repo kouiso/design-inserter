@@ -1955,23 +1955,33 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 // アコーディオンJSが反応するクラスと属性を追加
                 $is_ancestor = $item->current_item_ancestor || $item->current;
                 if ( $disable_accordion ) {
-                    // アコーディオン無効: has-accordionクラスも出力しない
-                    $link_classes = 'navigation__sub-link is-active';
+                    // アコーディオン無効かつURLが設定されている場合はリンクとして出力
+                    $url_for_link = $item->url;
+                    $link_classes = 'navigation__sub-link';
                     if ( $is_ancestor ) {
-                        $link_classes .= ' is-ancestor';
+                        $link_classes .= ' is-active is-ancestor';
+                    }
+                    if ( $url_for_link && $url_for_link !== '#' ) {
+                        $output .= '<a href="' . esc_url( $url_for_link ) . '" class="' . esc_attr( $link_classes ) . '"' . $target . '>';
+                        $output .= esc_html( $item->title );
+                        $output .= '</a>';
+                    } else {
+                        $output .= '<p class="' . esc_attr( $link_classes ) . '">';
+                        $output .= esc_html( $item->title );
+                        $output .= '</p>';
                     }
                 } else {
                     $link_classes = 'navigation__sub-link js-navigation-accordion has-accordion';
                     if ( $is_ancestor ) {
                         $link_classes .= ' is-active is-ancestor';
                     }
-                }
 
-                // role="button" でクリッカブルであることを示す
-                $aria_expanded = ( $item->current || $item->current_item_ancestor || $disable_accordion ) ? 'true' : 'false';
-                $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
-                $output .= esc_html( $item->title );
-                $output .= '</p>';
+                    // role="button" でクリッカブルであることを示す
+                    $aria_expanded = ( $item->current || $item->current_item_ancestor ) ? 'true' : 'false';
+                    $output .= '<p class="' . esc_attr( $link_classes ) . '" role="button" tabindex="0" aria-expanded="' . $aria_expanded . '">';
+                    $output .= esc_html( $item->title );
+                    $output .= '</p>';
+                }
             } else {
                 // 子がない場合は通常のリンク
                 $link_classes = 'navigation__sub-link';

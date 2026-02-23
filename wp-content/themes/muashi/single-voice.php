@@ -61,7 +61,14 @@ get_header();
 
                         <div class="page__inner page__inner--narrow">
                             <div class="single__contents">
-                                <?php the_content(); ?>
+                                <?php
+                                // voice-metaブロックで既にACFフィールドを表示しているため、本文中のショートコード行を除去
+                                $voice_content = get_the_content();
+                                $voice_content = preg_replace( '/\[voice_field[^\]]*\]\s*/', '', $voice_content );
+                                $voice_content = apply_filters( 'the_content', $voice_content );
+                                $voice_content = str_replace( ']]>', ']]&gt;', $voice_content );
+                                echo $voice_content;
+                                ?>
                             </div>
 
                             <div class="single__back">
