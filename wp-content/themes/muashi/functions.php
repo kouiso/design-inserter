@@ -2060,6 +2060,11 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 $aria_hidden = 'false';
             }
 
+            // depth 1とスタイルを統一するためのModifier
+            if ( $disable_accordion ) {
+                $classes[] = 'navigation__sub-accordion-list--flat';
+            }
+
             $class_attr = implode( ' ', $classes );
             $output .= '<ul class="' . esc_attr( $class_attr ) . '" aria-hidden="' . $aria_hidden . '">';
 

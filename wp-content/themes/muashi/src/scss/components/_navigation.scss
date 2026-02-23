@@ -117,6 +117,27 @@
     &.is-active {
       display: block;
     }
+
+    // アコーディオン無効メニュー用: depth 1とスタイルを統一（インデントは維持）
+    // _pagination.scssの後方定義(0,1,0)に勝つためspecificityを(0,2,0)に上げる
+    &#{&}--flat {
+      margin: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+      .navigation__sub-accordion-item {
+        border-bottom: none;
+        padding: 0;
+
+        &:not(:first-of-type) {
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      .navigation__sub-accordion-link {
+        padding: 16px 0;
+        line-height: normal;
+      }
+    }
   }
 
   &__sub-accordion-item {

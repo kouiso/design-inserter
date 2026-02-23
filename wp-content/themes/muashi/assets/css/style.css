@@ -2281,6 +2281,21 @@ a {
 .navigation__sub-accordion-list.is-active {
   display: block;
 }
+.navigation__sub-accordion-list.navigation__sub-accordion-list--flat {
+  margin: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.navigation__sub-accordion-list.navigation__sub-accordion-list--flat .navigation__sub-accordion-item {
+  border-bottom: none;
+  padding: 0;
+}
+.navigation__sub-accordion-list.navigation__sub-accordion-list--flat .navigation__sub-accordion-item:not(:first-of-type) {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.navigation__sub-accordion-list.navigation__sub-accordion-list--flat .navigation__sub-accordion-link {
+  padding: 16px 0;
+  line-height: normal;
+}
 .navigation__sub-accordion-item {
   margin: 0;
   padding: 0;
