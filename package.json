@@ -30,7 +30,7 @@
     "@playwright/test": "^1.49.1",
     "@types/node": "^25.3.0",
     "babel-loader": "^10.0.0",
-    "browser-sync": "^2.27.9",
+    "browser-sync": "^3.0.4",
     "gulp": "^5.0.1",
     "gulp-autoprefixer": "^10.0.0",
     "gulp-cached": "^1.1.1",
