@@ -134,10 +134,12 @@
 
   // お客様の声一覧: タイトルを写真上端、メタ情報を写真下端に揃える
   &__link--voice {
-    align-items: stretch;
+    @include mq(lg) {
+      align-items: stretch;
 
-    .archive__text-wrapper {
-      justify-content: space-between;
+      .archive__text-wrapper {
+        justify-content: space-between;
+      }
     }
   }
 
