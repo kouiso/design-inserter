@@ -1900,19 +1900,6 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
     private $parent_is_ancestor = false;
 
     /**
-     * アコーディオンを無効化するメニューロケーション一覧
-     */
-    private static $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
-
-    /**
-     * 指定メニューロケーションがアコーディオン無効かどうか判定
-     */
-    private function is_accordion_disabled( $args ) {
-        $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
-        return in_array( $theme_location, self::$disable_accordion_locations, true );
-    }
-
-    /**
      * メニュー項目の開始タグを出力
      *
      * デザイン/挙動要件:
@@ -1974,7 +1961,10 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
 
             // 子がある場合はアコーディオントリガー
             if ( $has_children ) {
-                $disable_accordion = $this->is_accordion_disabled( $args );
+                // 特定のメニューロケーションではアコーディオンを無効化
+                $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
+                $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
+                $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
 
                 // アコーディオンJSが反応するクラスと属性を追加
                 $is_ancestor = $item->current_item_ancestor || $item->current;
@@ -2018,45 +2008,26 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             }
 
         } else {
-            // depth 2+: 第3階層以降
-            $disable_accordion = $this->is_accordion_disabled( $args );
+            // depth 2+: 第3階層以降（アコーディオンの中身）
+            // 親のデザインを踏襲（navigation__sub-item はマージンのため、孫要素としてアコーディオン用クラスを使う）
+            $sub_classes = 'navigation__sub-accordion-item';
+            if ( $item->current ) {
+                $sub_classes .= ' navigation__sub-accordion-item--active';
+            }
+            $output .= '<li class="' . esc_attr( $sub_classes ) . '">';
 
             $target = '';
             if ( $item->target === '_blank' ) {
                 $target = ' target="_blank" rel="noopener noreferrer"';
             }
 
-            if ( $disable_accordion ) {
-                // アコーディオン無効: depth 1 と同じクラスで出力（デザイン統一）
-                $classes = array( 'navigation__sub-item' );
-                if ( $item->current ) {
-                    $classes[] = 'is-active';
-                }
-                $output .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-
-                $link_classes = 'navigation__sub-link';
-                if ( $item->current ) {
-                    $link_classes .= ' is-active';
-                }
-                $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_classes ) . '"' . $target . '>';
-                $output .= esc_html( $item->title );
-                $output .= '</a>';
-            } else {
-                // アコーディオン有効: 従来通りのアコーディオン用クラス
-                $sub_classes = 'navigation__sub-accordion-item';
-                if ( $item->current ) {
-                    $sub_classes .= ' navigation__sub-accordion-item--active';
-                }
-                $output .= '<li class="' . esc_attr( $sub_classes ) . '">';
-
-                $link_class = 'navigation__sub-accordion-link';
-                if ( $item->current ) {
-                    $link_class .= ' is-current';
-                }
-                $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_class ) . '"' . $target . '>';
-                $output .= esc_html( $item->title );
-                $output .= '</a>';
+            $link_class = 'navigation__sub-accordion-link';
+            if ( $item->current ) {
+                $link_class .= ' is-current';
             }
+            $output .= '<a href="' . esc_url( $item->url ) . '" class="' . esc_attr( $link_class ) . '"' . $target . '>';
+            $output .= esc_html( $item->title );
+            $output .= '</a>';
         }
     }
 
@@ -2076,24 +2047,26 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
             $output .= '<ul class="navigation__sub-list">';
         } else {
             // 第3階層を囲むリスト
-            $disable_accordion = $this->is_accordion_disabled( $args );
+            $classes = array( 'navigation__sub-accordion-list' );
+            $aria_hidden = 'true';
 
-            if ( $disable_accordion ) {
-                // アコーディオン無効: 余白なしの透過的ラッパー（depth 1 と同じ見た目にする）
-                $output .= '<ul class="navigation__nested-list">';
-            } else {
-                // アコーディオン有効: 従来通りの開閉リスト
-                $classes = array( 'navigation__sub-accordion-list' );
-                $aria_hidden = 'true';
+            // 特定のメニューロケーションでは常に展開
+            $theme_location = isset( $args->theme_location ) ? $args->theme_location : '';
+            $disable_accordion_locations = array( 'sidebar_history', 'sidebar_about_us', 'sidebar_voice' );
+            $disable_accordion = in_array( $theme_location, $disable_accordion_locations, true );
 
-                if ( $this->parent_is_ancestor ) {
-                    $classes[] = 'is-active';
-                    $aria_hidden = 'false';
-                }
-
-                $class_attr = implode( ' ', $classes );
-                $output .= '<ul class="' . esc_attr( $class_attr ) . '" aria-hidden="' . $aria_hidden . '">';
+            if ( $this->parent_is_ancestor || $disable_accordion ) {
+                $classes[] = 'is-active';
+                $aria_hidden = 'false';
             }
+
+            // depth 1とスタイルを統一するためのModifier
+            if ( $disable_accordion ) {
+                $classes[] = 'navigation__sub-accordion-list--flat';
+            }
+
+            $class_attr = implode( ' ', $classes );
+            $output .= '<ul class="' . esc_attr( $class_attr ) . '" aria-hidden="' . $aria_hidden . '">';
 
             // フラグをリセット
             $this->parent_is_ancestor = false;

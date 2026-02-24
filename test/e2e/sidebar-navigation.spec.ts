@@ -23,7 +23,7 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await expect(page.locator('.navigation__item-title:has-text("お客様の声")')).toBeVisible();
 
     // 「選ばれる理由」配下の第3階層（グローバル生産拠点）は常に展開表示されている
-    await expect(page.locator('.navigation__sub-link:has-text("グローバル生産拠点")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("グローバル生産拠点")')).toBeVisible();
   });
 
   test('パターン2: history - 簡易メニュー + 第3階層展開', async ({ page }) => {
@@ -34,9 +34,9 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await expect(historyItem).toBeVisible();
 
     // 第3階層が展開されているか確認（実際のメニュー項目名に合わせる）
-    await expect(page.locator('.navigation__sub-link:has-text("創業と基盤形成 1958年-")')).toBeVisible();
-    await expect(page.locator('.navigation__sub-link:has-text("プラスチック架飾へ 1980年-")')).toBeVisible();
-    await expect(page.locator('.navigation__sub-link:has-text("グローバル展開 2000年-")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("創業と基盤形成 1958年-")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("プラスチック架飾へ 1980年-")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("グローバル展開 2000年-")')).toBeVisible();
 
     // 限定メニュー項目のみ表示されているか確認
     await expect(page.locator('a.navigation__item-title:has-text("武蔵塗料グループについて")')).toBeVisible();
@@ -78,8 +78,8 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await expect(page.locator('.navigation__sub-item:has-text("顧客志向のカスタマイズ")')).toBeVisible();
 
     // 第3階層（グループ会社・グローバル生産拠点）は常に展開表示されている
-    await expect(page.locator('.navigation__sub-link:has-text("グループ会社")')).toBeVisible();
-    await expect(page.locator('.navigation__sub-link:has-text("グローバル生産拠点")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("グループ会社")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("グローバル生産拠点")')).toBeVisible();
   });
 
   test('パターン5: global-network - グローバル生産拠点表示', async ({ page }) => {
@@ -91,8 +91,8 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
 
     // 選ばれる理由配下が展開されているか確認
     await expect(page.locator('.navigation__sub-item:has-text("最先端の技術開発力")')).toBeVisible();
-    await expect(page.locator('a.navigation__sub-link:has-text("グローバルネットワーク")')).toBeVisible();
-    await expect(page.locator('.navigation__sub-link:has-text("グローバル生産拠点")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-link:has-text("グローバルネットワーク")')).toBeVisible();
+    await expect(page.locator('.navigation__sub-accordion-link:has-text("グローバル生産拠点")')).toBeVisible();
   });
 
   test('パターン6: career - 採用情報専用メニュー', async ({ page }) => {
@@ -142,17 +142,17 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await page.goto('/history/');
 
     // 創業と基盤形成リンクをクリック
-    await page.locator('.navigation__sub-link:has-text("創業と基盤形成 1958年-")').click();
+    await page.locator('.navigation__sub-accordion-link:has-text("創業と基盤形成 1958年-")').click();
 
     // 別ページ（/history-founding）に遷移することを確認
     await expect(page).toHaveURL(/\/history-founding/);
   });
 
-  test('ヒストリー第3階層リンク遷移確認 - プラスチック架装へ', async ({ page }) => {
+  test('ヒストリー第3階層リンク遷移確認 - プラスチック架飾へ', async ({ page }) => {
     await page.goto('/history/');
 
-    // プラスチック架装へリンクをクリック
-    await page.locator('.navigation__sub-link:has-text("プラスチック架飾へ 1980年-")').click();
+    // プラスチック架飾へリンクをクリック
+    await page.locator('.navigation__sub-accordion-link:has-text("プラスチック架飾へ 1980年-")').click();
 
     // 別ページ（/history-innovation）に遷移することを確認
     await expect(page).toHaveURL(/\/history-innovation/);
@@ -162,7 +162,7 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     await page.goto('/history/');
 
     // グローバル展開リンクをクリック
-    await page.locator('.navigation__sub-link:has-text("グローバル展開 2000年-")').click();
+    await page.locator('.navigation__sub-accordion-link:has-text("グローバル展開 2000年-")').click();
 
     // 別ページ（/history-global）に遷移することを確認
     await expect(page).toHaveURL(/\/history-global/);
