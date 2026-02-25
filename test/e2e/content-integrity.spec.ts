@@ -57,9 +57,8 @@ test.describe('Content Integrity Tests - コンテンツ整合性確認', () => 
         const hasTitle = await page.locator(`text=${titlePart}`).count() > 0 ||
                          await page.locator(`a:has-text("${titlePart}")`).count() > 0;
 
-        if (!hasTitle) {
-          console.warn(`⚠️ Career post not found: ID ${post.id} - ${post.title}`);
-        }
+        // 重要な記事が必ず表示されていることを確認（削除・ゴミ箱移動の検知）
+        expect(hasTitle).toBeTruthy();
       }
     });
 
@@ -156,9 +155,8 @@ test.describe('Content Integrity Tests - コンテンツ整合性確認', () => 
         const pageContent = await page.content();
         const hasPost = pageContent.includes(titlePart);
 
-        if (!hasPost) {
-          console.warn(`⚠️ Story post may be missing: ID ${post.id} - ${post.title}`);
-        }
+        // 主要なストーリー記事が必ず表示されていることを確認
+        expect(hasPost).toBeTruthy();
       }
     });
   });
@@ -186,17 +184,12 @@ test.describe('Content Integrity Tests - コンテンツ整合性確認', () => 
 
       // 主要拠点の存在確認
       const keyLocations = ['ハンガリー', 'ベトナム', 'タイ', 'インド', '中国'];
-      let foundCount = 0;
 
       for (const location of keyLocations) {
-        if (pageContent.includes(location)) {
-          foundCount++;
-        } else {
-          console.warn(`⚠️ Location may be missing: ${location}`);
-        }
+        const hasLocation = pageContent.includes(location);
+        // 各主要拠点が必ず表示されていることを確認
+        expect(hasLocation).toBeTruthy();
       }
-
-      expect(foundCount).toBeGreaterThanOrEqual(3); // 最低3つは見つかるはず
     });
   });
 

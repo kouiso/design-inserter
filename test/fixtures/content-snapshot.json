@@ -947,6 +947,11 @@
       "status": 200
     },
     {
+      "path": "/story/",
+      "title": "ストーリー",
+      "status": 200
+    },
+    {
       "path": "/customization/",
       "title": "カスタマイズ",
       "status": 200

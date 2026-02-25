@@ -18,12 +18,15 @@ test.describe('パーマリンク・リライトルールのリグレッショ�
     
     // career投稿のリンクを取得
     const careerLinks = page.locator('a[href*="/career/"]').first();
-    if (await careerLinks.count() > 0) {
-      const href = await careerLinks.getAttribute('href');
-      // URLが/news配下になっていないことを確認
-      expect(href).not.toContain('/news/');
-      expect(href).toContain('/career/');
-    }
+    const linkCount = await careerLinks.count();
+    
+    // career記事リンクが必ず存在することを確認
+    expect(linkCount).toBeGreaterThan(0);
+    
+    const href = await careerLinks.getAttribute('href');
+    // URLが/news配下になっていないことを確認
+    expect(href).not.toContain('/news/');
+    expect(href).toContain('/career/');
   });
 
   /**
@@ -70,8 +73,14 @@ test.describe('ページネーションのリグレッションテスト', () =>
       
       // ページネーションリンクが存在するか確認
       const nextLink = page.locator('a.next, a[rel="next"], .pagination a:has-text("2")').first();
+      const linkCount = await nextLink.count();
       
-      if (await nextLink.count() > 0) {
+      // newsとproductはデータが十分あるのでページネーションは必ず存在するはず
+      if (archive.path === '/news/' || archive.path === '/product/') {
+        expect(linkCount).toBeGreaterThan(0);
+      }
+      
+      if (linkCount > 0) {
         // 2ページ目に遷移
         await nextLink.click();
         await page.waitForLoadState('networkidle');
@@ -126,33 +135,37 @@ test.describe('レスポンシブ画像表示のリグレッションテスト',
     
     // 最初の記事リンクを取得（ハンバーガーメニューの外）
     const firstArticle = page.locator('a[href*="/news/"]:not(.hamburger__accordion)').first();
-    if (await firstArticle.count() > 0) {
-      await firstArticle.click();
-      await page.waitForLoadState('networkidle');
+    const articleCount = await firstArticle.count();
+    
+    // ニュース記事が必ず存在することを確認
+    expect(articleCount).toBeGreaterThan(0);
+    
+    await firstArticle.click();
+    await page.waitForLoadState('networkidle');
+    
+    // 記事内の画像を確認
+    const images = page.locator('.entry-content img, .wp-block-image img');
+    const imageCount = await images.count();
+    
+    // 記事内に画像が必ず存在することを確認
+    expect(imageCount).toBeGreaterThan(0);
+    
+    for (let i = 0; i < Math.min(imageCount, 5); i++) {
+      const img = images.nth(i);
+      const boundingBox = await img.boundingBox();
       
-      // 記事内の画像を確認
-      const images = page.locator('.entry-content img, .wp-block-image img');
-      const imageCount = await images.count();
-      
-      if (imageCount > 0) {
-        for (let i = 0; i < Math.min(imageCount, 5); i++) {
-          const img = images.nth(i);
-          const boundingBox = await img.boundingBox();
-          
-          if (boundingBox) {
-            // 画像がビューポートからはみ出していないことを確認
-            const viewport = page.viewportSize();
-            if (viewport) {
-              expect(boundingBox.width).toBeLessThanOrEqual(viewport.width);
-            }
-            
-            // max-width: 100%が適用されているか確認
-            const maxWidth = await img.evaluate((el) => {
-              return window.getComputedStyle(el).maxWidth;
-            });
-            expect(maxWidth).toMatch(/100%|calc\(/);
-          }
+      if (boundingBox) {
+        // 画像がビューポートからはみ出していないことを確認
+        const viewport = page.viewportSize();
+        if (viewport) {
+          expect(boundingBox.width).toBeLessThanOrEqual(viewport.width);
         }
+        
+        // max-width: 100%が適用されているか確認
+        const maxWidth = await img.evaluate((el) => {
+          return window.getComputedStyle(el).maxWidth;
+        });
+        expect(maxWidth).toMatch(/100%|calc\(/);
       }
     }
   });
@@ -163,23 +176,26 @@ test.describe('レスポンシブ画像表示のリグレッションテスト',
     
     await page.goto('/news/');
     const firstArticle = page.locator('a[href*="/news/"]:not(.hamburger__accordion)').first();
+    const articleCount = await firstArticle.count();
     
-    if (await firstArticle.count() > 0) {
-      await firstArticle.click();
-      await page.waitForLoadState('networkidle');
-      
-      const images = page.locator('.entry-content img, .wp-block-image img');
-      const imageCount = await images.count();
-      
-      if (imageCount > 0) {
-        const img = images.first();
-        const boundingBox = await img.boundingBox();
-        
-        if (boundingBox) {
-          // モバイルビューポート(375px)からはみ出していないことを確認
-          expect(boundingBox.width).toBeLessThanOrEqual(375);
-        }
-      }
+    // ニュース記事が必ず存在することを確認
+    expect(articleCount).toBeGreaterThan(0);
+    
+    await firstArticle.click();
+    await page.waitForLoadState('networkidle');
+    
+    const images = page.locator('.entry-content img, .wp-block-image img');
+    const imageCount = await images.count();
+    
+    // 記事内に画像が必ず存在することを確認
+    expect(imageCount).toBeGreaterThan(0);
+    
+    const img = images.first();
+    const boundingBox = await img.boundingBox();
+    
+    if (boundingBox) {
+      // モバイルビューポート(375px)からはみ出していないことを確認
+      expect(boundingBox.width).toBeLessThanOrEqual(375);
     }
   });
 });
@@ -209,27 +225,24 @@ test.describe('資料ダウンロード機能のリグレッションテスト',
     
     // フォーム要素の確認（いくつかのパターンに対応）
     const form = page.locator('form.wpcf7-form, form[action*="wpcf7"], form[method="post"]').first();
-    
-    // フォームが存在することを確認
     const formCount = await form.count();
-    if (formCount > 0) {
-      await expect(form).toBeVisible();
-      
-      // 必須フィールドの存在確認
-      const nameField = page.locator('input[name*="name"], input[type="text"]').first();
-      const emailField = page.locator('input[name*="email"], input[type="email"]').first();
-      
-      if (await nameField.count() > 0) {
-        await expect(nameField).toBeVisible();
-      }
-      if (await emailField.count() > 0) {
-        await expect(emailField).toBeVisible();
-      }
-    } else {
-      // フォームがなくても、ページが404でなければOK
-      const bodyText = await page.locator('body').textContent();
-      expect(bodyText).not.toContain('404');
-    }
+    
+    // /contact/にはフォームが必ず存在することを確認
+    expect(formCount).toBeGreaterThan(0);
+    await expect(form).toBeVisible();
+    
+    // 必須フィールドの存在確認
+    const nameField = page.locator('input[name*="name"], input[type="text"]').first();
+    const emailField = page.locator('input[name*="email"], input[type="email"]').first();
+    const nameCount = await nameField.count();
+    const emailCount = await emailField.count();
+    
+    // 名前とメールフィールドが必ず存在することを確認
+    expect(nameCount).toBeGreaterThan(0);
+    expect(emailCount).toBeGreaterThan(0);
+    
+    await expect(nameField).toBeVisible();
+    await expect(emailField).toBeVisible();
   });
 });
 
@@ -241,15 +254,22 @@ test.describe('画像ビューワー機能のリグレッションテスト', ()
     await page.goto('/news/');
     
     const firstArticle = page.locator('a[href*="/news/"]:not(.hamburger__accordion)').first();
-    if (await firstArticle.count() > 0) {
-      await firstArticle.click();
-      await page.waitForLoadState('networkidle');
-      
-      // 記事内の画像を探す
-      const contentImage = page.locator('.entry-content img, .wp-block-image img').first();
-      
-      if (await contentImage.count() > 0) {
-        // 画像がクリック可能か確認
+    const articleCount = await firstArticle.count();
+    
+    // ニュース記事が必ず存在することを確認
+    expect(articleCount).toBeGreaterThan(0);
+    
+    await firstArticle.click();
+    await page.waitForLoadState('networkidle');
+    
+    // 記事内の画像を探す
+    const contentImage = page.locator('.entry-content img, .wp-block-image img').first();
+    const imageCount = await contentImage.count();
+    
+    // 記事内に画像が必ずあることを確認
+    expect(imageCount).toBeGreaterThan(0);
+    
+    // 画像がクリック可能か確認
         const isClickable = await contentImage.evaluate((el) => {
           const parent = el.closest('a');
           return parent !== null || el.style.cursor === 'pointer';
@@ -268,8 +288,6 @@ test.describe('画像ビューワー機能のリグレッションテスト', ()
           // ビューワー機能が実装されていることを期待
           expect(hasViewer).toBeTruthy();
         }
-      }
-    }
   });
 });
 
@@ -282,15 +300,16 @@ test.describe('サイドバーナビゲーションのリグレッションテ�
     
     // サイドバー要素の確認
     const sidebar = page.locator('aside, .sidebar, #sidebar, [class*="sidebar"]').first();
+    const sidebarCount = await sidebar.count();
     
-    if (await sidebar.count() > 0) {
-      await expect(sidebar).toBeVisible();
-      
-      // サイドバー内のウィジェットが存在することを確認
-      const widgets = sidebar.locator('.widget, [class*="widget"]');
-      const widgetCount = await widgets.count();
-      expect(widgetCount).toBeGreaterThan(0);
-    }
+    // サイドバーが必ず存在することを確認
+    expect(sidebarCount).toBeGreaterThan(0);
+    await expect(sidebar).toBeVisible();
+    
+    // サイドバー内のウィジェットが存在することを確認
+    const widgets = sidebar.locator('.widget, [class*="widget"]');
+    const widgetCount = await widgets.count();
+    expect(widgetCount).toBeGreaterThan(0);
   });
 
   test('カテゴリーナビゲーションが機能する', async ({ page }) => {
@@ -321,14 +340,15 @@ test.describe('KV（キービジュアル）画像のリグレッションテス
     
     // KV画像エリアを探す
     const kvImage = page.locator('.kv img, .hero img, .mv img, [class*="keyvisual"] img, [class*="main-visual"] img').first();
+    const imageCount = await kvImage.count();
     
-    if (await kvImage.count() > 0) {
-      await expect(kvImage).toBeVisible();
-      
-      // 画像が正しく読み込まれているか確認
-      const naturalWidth = await kvImage.evaluate((img: HTMLImageElement) => img.naturalWidth);
-      expect(naturalWidth).toBeGreaterThan(0);
-    }
+    // KV画像が必ず存在することを確認
+    expect(imageCount).toBeGreaterThan(0);
+    await expect(kvImage).toBeVisible();
+    
+    // 画像が正しく読み込まれているか確認
+    const naturalWidth = await kvImage.evaluate((img: HTMLImageElement) => img.naturalWidth);
+    expect(naturalWidth).toBeGreaterThan(0);
   });
 
   test('各ページのヘッダー画像が正しく表示される', async ({ page }) => {
@@ -339,11 +359,13 @@ test.describe('KV（キービジュアル）画像のリグレッションテス
       
       // ヘッダーエリアの画像確認
       const headerImage = page.locator('header img, .page-header img, .hero img').first();
+      const imageCount = await headerImage.count();
       
-      if (await headerImage.count() > 0) {
-        const isVisible = await headerImage.isVisible();
-        expect(isVisible).toBeTruthy();
-      }
+      // ヘッダー画像が必ず存在することを確認
+      expect(imageCount).toBeGreaterThan(0);
+      
+      const isVisible = await headerImage.isVisible();
+      expect(isVisible).toBeTruthy();
     }
   });
 });
