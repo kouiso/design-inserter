@@ -19,7 +19,14 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:prod": "cross-env TEST_ENV=production playwright test",
-    "test:content:prod": "cross-env TEST_ENV=production playwright test test/e2e/content-integrity.spec.ts"
+    "test:content:prod": "cross-env TEST_ENV=production playwright test test/e2e/content-integrity.spec.ts",
+    "vrt:baseline": "cross-env VRT_DIR=expected TEST_ENV=production playwright test --config=playwright.vrt.config.ts",
+    "vrt:baseline:staging": "cross-env VRT_DIR=expected TEST_ENV=staging playwright test --config=playwright.vrt.config.ts",
+    "vrt:capture": "cross-env VRT_DIR=actual playwright test --config=playwright.vrt.config.ts",
+    "vrt:capture:staging": "cross-env VRT_DIR=actual TEST_ENV=staging playwright test --config=playwright.vrt.config.ts",
+    "vrt:capture:prod": "cross-env VRT_DIR=actual TEST_ENV=production playwright test --config=playwright.vrt.config.ts",
+    "vrt:report": "reg-cli test/vrt/screenshots/actual test/vrt/screenshots/expected test/vrt/screenshots/diff -R test/vrt/report.html --matchingThreshold 0.01",
+    "vrt": "npm run vrt:capture && npm run vrt:report"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +38,7 @@
     "@types/node": "^25.3.0",
     "babel-loader": "^10.0.0",
     "browser-sync": "^3.0.4",
+    "cross-env": "^10.1.0",
     "gulp": "^5.0.1",
     "gulp-autoprefixer": "^10.0.0",
     "gulp-cached": "^1.1.1",
@@ -42,6 +50,7 @@
     "gulp-progeny": "^0.4.1",
     "gulp-sass": "^6.0.1",
     "gulp-sourcemaps": "^3.0.0",
+    "reg-cli": "^0.18.14",
     "webpack": "^5.92.1",
     "webpack-stream": "^7.0.0"
   },

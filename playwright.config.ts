@@ -12,8 +12,8 @@ import { defineConfig, devices } from '@playwright/test';
 // 環境別のベースURL設定
 const environments = {
   local: 'http://localhost:10010',
-  staging: 'https://musashipaint.xsrv.jp',
-  production: 'https://musashipaint.xsrv.jp', // 本番も同じ（必要に応じて変更）
+  staging: 'https://musashipaint.xsrv.jp/staging',
+  production: 'https://musashipaint.xsrv.jp',
 };
 
 // 環境変数からベースURLを決定
@@ -25,6 +25,7 @@ console.log(`📍 Base URL: ${baseURL}\n`);
 
 export default defineConfig({
   testDir: './test',
+  testIgnore: ['**/vrt/**'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
