@@ -2453,12 +2453,10 @@ a {
 }
 @media screen and (min-width: 992px) {
   .archive__link--voice {
-    align-items: start;
+    align-items: stretch;
   }
-}
-@media screen and (min-width: 992px) {
-  .archive__link--voice {
-    align-items: start;
+  .archive__link--voice .archive__text-wrapper {
+    justify-content: space-between;
   }
 }
 .archive__meta {
@@ -6109,3 +6107,4 @@ a {
     transform: translateX(-50%);
   }
 }
+/*# sourceMappingURL=style.css.map */
