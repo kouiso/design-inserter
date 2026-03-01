@@ -6,9 +6,9 @@ get_header();
     <div class="top-kv__bg js-color-bg"></div>
 
     <div class="top-kv__inner">
-        <picture class="top-kv__pic"">
-            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv.jpg" media="(min-width: 768px)">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_sp.jpg" alt="">
+        <picture class="top-kv__pic">
+            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_dt_260225.jpg" media="(min-width: 768px)">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_sp_260225.jpg" alt="">
         </picture>
 
         <div class="top-kv__message-bg u-hidden-md-up">
@@ -195,7 +195,7 @@ get_header();
 
     <div class="top-about__inner">
         <picture class="top-about__pic" data-inview data-fade-in>
-            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/about.jpg" media="(min-width: 768px)">
+            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/about_260225.jpg" media="(min-width: 768px)">
             <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/about_sp.jpg" alt="">
         </picture>
         <div class="top-about__contents-wrapper">
@@ -286,7 +286,7 @@ get_header();
 
     <div class="top-sustainability__inner">
         <picture class="top-sustainability__pic" data-inview data-fade-in>
-            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/sustainability.jpg" media="(min-width: 768px)">
+            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/sustainability_260225.jpg" media="(min-width: 768px)">
             <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/sustainability_sp.jpg" alt="">
         </picture>
         <div class="top-sustainability__contents-wrapper">
@@ -351,7 +351,7 @@ get_header();
 
 <section class="top-customer" data-text-color="white" data-inview-area="50%">
     <picture class="top-customer__bg">
-        <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/customer.jpg" media="(min-width: 768px)">
+        <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/customer_260225.jpg" media="(min-width: 768px)">
         <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/customer_sp.jpg" alt="" class="top-customer__bg-img">
     </picture>
 
