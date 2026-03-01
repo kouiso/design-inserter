@@ -1,0 +1,1063 @@
+{
+  "capturedAt": "2026-02-25T06:16:44.982Z",
+  "environment": "staging",
+  "baseURL": "https://musashipaint.xsrv.jp/staging",
+  "archives": {
+    "career": {
+      "path": "/career/",
+      "title": "採用情報",
+      "totalCount": 4,
+      "posts": [
+        {
+          "title": "人事総務部　正社員募集",
+          "url": "https://musashipaint.xsrv.jp/staging/career/%e3%80%90%e6%9d%b1%e4%ba%ac-%e4%ba%ba%e4%ba%8b%e3%80%91%e4%ba%ba%e4%ba%8b%e7%b5%8c%e9%a8%93%e8%80%85%e6%ad%93%e8%bf%8e%e2%98%85%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e7%92%b0%e5%a2%83-%e5%88%b6/",
+          "order": 1
+        },
+        {
+          "title": "情報システム部　正社員募集",
+          "url": "https://musashipaint.xsrv.jp/staging/career/%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%8b%e3%82%a2%e3%83%aa%e3%83%b3%e3%82%b0%e3%81%ae%e5%8b%9f%e9%9b%86/",
+          "order": 2
+        },
+        {
+          "title": "CSR推進室　契約社員募集",
+          "url": "https://musashipaint.xsrv.jp/staging/career/%e3%80%90%e6%b1%a0%e8%a2%8b%e3%80%91csr%e6%8e%a8%e9%80%b2%e6%a5%ad%e5%8b%99%e2%98%85%e6%a5%ad%e7%95%8c%e3%83%bb%e8%81%b7%e7%a8%ae%e6%9c%aa%e7%b5%8c%e9%a8%93%e3%81%8b%e3%82%89%e6%90%ba%e3%82%8f/",
+          "order": 3
+        },
+        {
+          "title": "R&D Position  (Full-Time)",
+          "url": "https://musashipaint.xsrv.jp/staging/career/now-hiring-rd-talent/",
+          "order": 4
+        }
+      ],
+      "status": 200
+    },
+    "interview": {
+      "path": "/career/interview/",
+      "title": "インタビュー",
+      "totalCount": 28,
+      "posts": [
+        {
+          "title": "財務部、課長の三好 恵美さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc-%e8%a8%98%e4%ba%8b/",
+          "order": 1
+        },
+        {
+          "title": "ホーチミン拠点・営業の山崎 洋輔さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e3%83%9b%e3%83%bc%e3%83%81%e3%83%9f%e3%83%b3%e6%8b%a0%e7%82%b9%e3%83%bb%e5%96%b6%e6%a5%ad%e3%81%ae%e5%b1%b1%e5%b4%8e-%e6%b4%8b%e8%bc%94%e3%81%95%e3%82%93/",
+          "order": 2
+        },
+        {
+          "title": "調達物流本部の島田 慧花さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e8%aa%bf%e9%81%94%e7%89%a9%e6%b5%81%e6%9c%ac%e9%83%a8%e3%81%a7%e6%b4%bb%e8%ba%8d%e3%81%ae%e5%b3%b6%e7%94%b0%e6%85%a7%e8%8a%b1%e3%81%95%e3%82%93/",
+          "order": 3
+        },
+        {
+          "title": "Global Marketing ＆ Corporate Communications 部長の西口 昌宏さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/global-marketing-%ef%bc%86-corporate-communications%e9%83%a8%e9%95%b7%e3%80%81%e8%a5%bf%e5%8f%a3%e6%98%8c%e5%ae%8f%e3%81%95%e3%82%93/",
+          "order": 4
+        },
+        {
+          "title": "海外営業部・部長、菊池 ペーテルさん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e6%b5%b7%e5%a4%96%e5%96%b6%e6%a5%ad%e9%83%a8%e3%83%bb%e9%83%a8%e9%95%b7%e3%80%81%e8%8f%8a%e6%b1%a0-%e3%83%9a%e3%83%bc%e3%83%86%e3%83%ab%e3%81%95%e3%82%93/",
+          "order": 5
+        },
+        {
+          "title": "取締役の山田 純也さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e6%b5%b7%e5%a4%96%e5%96%b6%e6%a5%ad%e9%83%a8%e3%83%bb%e9%83%a8%e9%95%b7%e3%81%ae%e8%8f%8a%e6%b1%a0%e3%83%9a%e3%83%bc%e3%83%86%e3%83%ab%e3%81%95%e3%82%93/",
+          "order": 6
+        },
+        {
+          "title": "武蔵塗料重慶・生産部部長（生産/品質保証/調達部門）の田中 靖博さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e9%87%8d%e6%85%b6%e3%83%bb%e7%94%9f%e7%94%a3%e9%83%a8%e9%83%a8%e9%95%b7%ef%bc%88%e7%94%9f%e7%94%a3-%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc-%e8%aa%bf%e9%81%94%e9%83%a8/",
+          "order": 7
+        },
+        {
+          "title": "武蔵塗料タイの拠点長、浅田 哲也さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%bf%e3%82%a4%e3%81%ae%e6%8b%a0%e7%82%b9%e9%95%b7%e3%80%81%e6%b5%85%e7%94%b0-%e5%93%b2%e4%b9%9f%e3%81%95%e3%82%93/",
+          "order": 8
+        },
+        {
+          "title": "生産部・調色課、早川 裕さんの一日に密着",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%80%81%e6%97%a9%e5%b7%9d-%e8%a3%95%e3%81%95%e3%82%93%e3%81%ae%e4%b8%80%e6%97%a5%e3%81%ab%e5%af%86%e7%9d%80/",
+          "order": 9
+        },
+        {
+          "title": "営業部の岡田 光正さんの一日に密着",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%b2%a1%e7%94%b0-%e5%85%89%e6%ad%a3%e3%81%95%e3%82%93%e3%81%ae%e4%b8%80%e6%97%a5%e3%81%ab%e5%af%86%e7%9d%80/",
+          "order": 10
+        },
+        {
+          "title": "開発技術部の金田 公介さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e9%87%91%e7%94%b0-%e5%85%ac%e4%bb%8b%e3%81%95%e3%82%93/",
+          "order": 11
+        },
+        {
+          "title": "財務経理部の宮本 真由子さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e8%b2%a1%e5%8b%99%e7%b5%8c%e7%90%86%e9%83%a8%e3%81%ae%e5%ae%ae%e6%9c%ac-%e7%9c%9f%e7%94%b1%e5%ad%90%e3%81%95%e3%82%93/",
+          "order": 12
+        },
+        {
+          "title": "生産部・配送課の大花 美和さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e9%85%8d%e9%80%81%e8%aa%b2%e3%81%ae%e5%a4%a7%e8%8a%b1-%e7%be%8e%e5%92%8c%e3%81%95%e3%82%93/",
+          "order": 13
+        },
+        {
+          "title": "生産部・調色課の石村 太一さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%81%a7%e6%b4%bb%e8%ba%8d%e3%81%ae%e7%9f%b3%e6%9d%91-%e5%a4%aa%e4%b8%80%e3%81%95%e3%82%93/",
+          "order": 14
+        },
+        {
+          "title": "執行役員・品質保証本部本部長を兼任の稲垣 大さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e5%9f%b7%e8%a1%8c%e5%bd%b9%e5%93%a1%e3%83%bb%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc%e6%9c%ac%e9%83%a8%e6%9c%ac%e9%83%a8%e9%95%b7%e3%82%92%e5%85%bc%e4%bb%bb%e3%81%ae%e7%a8%b2%e5%9e%a3-%e5%a4%a7%e3%81%95/",
+          "order": 15
+        },
+        {
+          "title": "生産部生産課の茂木 一樹さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e7%94%9f%e7%94%a3%e8%aa%b2%e3%81%ae%e8%8c%82%e6%9c%a8-%e4%b8%80%e6%a8%b9%e3%81%95%e3%82%93/",
+          "order": 16
+        },
+        {
+          "title": "調達物流本部の井関 香理さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e8%aa%bf%e9%81%94%e7%89%a9%e6%b5%81%e6%9c%ac%e9%83%a8%e3%81%ae%e4%ba%95%e9%96%a2-%e9%a6%99%e7%90%86%e3%81%95%e3%82%93/",
+          "order": 17
+        },
+        {
+          "title": "生産部・調色課の金澤 崇さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%81%ae%e9%87%91%e6%be%a4-%e5%b4%87%e3%81%95%e3%82%93/",
+          "order": 18
+        },
+        {
+          "title": "CSR推進室の満尾 朋美さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/csr%e6%8e%a8%e9%80%b2%e5%ae%a4%e3%81%ae%e6%ba%80%e5%b0%be-%e6%9c%8b%e7%be%8e%e3%81%95%e3%82%93/",
+          "order": 19
+        },
+        {
+          "title": "生産部・生産技術課の伊東 訓さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e7%94%9f%e7%94%a3%e6%8a%80%e8%a1%93%e8%aa%b2%e3%81%ae%e4%bc%8a%e6%9d%b1-%e8%a8%93%e3%81%95%e3%82%93/",
+          "order": 20
+        },
+        {
+          "title": "人事総務本部、部長の長澤 俊太郎さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e4%ba%ba%e4%ba%8b%e7%b7%8f%e5%8b%99%e6%9c%ac%e9%83%a8%e3%80%81%e9%83%a8%e9%95%b7%e3%81%ae%e9%95%b7%e6%be%a4-%e4%bf%8a%e5%a4%aa%e9%83%8e%e3%81%95%e3%82%93/",
+          "order": 21
+        },
+        {
+          "title": "品質保証部の山﨑 迪代さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc%e9%83%a8%e3%81%ae%e5%b1%b1%ef%a8%91-%e8%bf%aa%e4%bb%a3%e3%81%95%e3%82%93/",
+          "order": 22
+        },
+        {
+          "title": "開発技術部の瀬戸 智行さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e7%80%ac%e6%88%b8-%e6%99%ba%e8%a1%8c%e3%81%95%e3%82%93/",
+          "order": 23
+        },
+        {
+          "title": "開発技術部の橋北 幸多朗さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e6%a9%8b%e5%8c%97-%e5%b9%b8%e5%a4%9a%e6%9c%97%e3%81%95%e3%82%93/",
+          "order": 24
+        },
+        {
+          "title": "開発技術本部の清水 里帆さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e6%9c%ac%e9%83%a8%e3%81%ae%e6%b8%85%e6%b0%b4-%e9%87%8c%e5%b8%86%e3%81%95%e3%82%93/",
+          "order": 25
+        },
+        {
+          "title": "営業部の前井 翔さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%89%8d%e4%ba%95-%e7%bf%94%e3%81%95%e3%82%93/",
+          "order": 26
+        },
+        {
+          "title": "営業部の宮原 李歩さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%ae%ae%e5%8e%9f-%e6%9d%8e%e6%ad%a9%e3%81%95%e3%82%93/",
+          "order": 27
+        },
+        {
+          "title": "代表取締役（社長）の福井 裕美子さん",
+          "url": "https://musashipaint.xsrv.jp/staging/career/interview/%e4%bb%a3%e8%a1%a8%e5%8f%96%e7%b7%a0%e5%bd%b9%e3%81%ae%e7%a6%8f%e4%ba%95-%e8%a3%95%e7%be%8e%e5%ad%90%e3%81%95%e3%82%93/",
+          "order": 28
+        }
+      ],
+      "status": 200
+    },
+    "globalnetwork": {
+      "path": "/global-network/",
+      "title": "グローバルネットワーク",
+      "totalCount": 14,
+      "posts": [
+        {
+          "title": "武蔵塗料株式会社（日本）入間工場",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%83%9b%e3%83%bc%e3%83%ab%e3%83%87%e3%82%a3%e3%83%b3%e3%82%b0%e3%82%b9%e6%a0%aa%e5%bc%8f%e4%bc%9a%e7%a4%be/",
+          "order": 1
+        },
+        {
+          "title": "韓国武蔵塗料株式会社（韓国）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e9%9f%93%e5%9b%bd%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/",
+          "order": 2
+        },
+        {
+          "title": "中山武蔵塗料有限公司（中国・中山）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e4%b8%ad%e5%b1%b1%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 3
+        },
+        {
+          "title": "蘇州武蔵塗料有限公司（中国・蘇州）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e8%98%87%e5%b7%9e%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 4
+        },
+        {
+          "title": "天津武蔵塗料有限公司（中国・天津）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e5%a4%a9%e6%b4%a5%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 5
+        },
+        {
+          "title": "重慶武蔵塗料有限公司（中国・重慶）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e9%87%8d%e6%85%b6%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 6
+        },
+        {
+          "title": "VIETNAM MUSASHI PAINT CO.,LTD.（ベトナム・ホーチミン）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%83%99%e3%83%88%e3%83%8a%e3%83%a0/",
+          "order": 7
+        },
+        {
+          "title": "VIETNAM MUSASHI PAINT CO.,LTD.（ベトナム・ハノイ）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%ef%bc%97%ef%bc%9avietnam-musashi-paint-co-ltd-%ef%bc%88%e3%83%99%e3%83%88%e3%83%8a%e3%83%a0%e3%83%bb%e3%83%8f%e3%83%8e%e3%82%a4%ef%bc%89/",
+          "order": 8
+        },
+        {
+          "title": "MUSASHI PAINT MANUFACTURING (THAILAND) CO.,LTD.（タイ）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%82%bf%e3%82%a4%e3%83%a9%e3%83%b3%e3%83%89/",
+          "order": 9
+        },
+        {
+          "title": "MUSASHI PAINT CORP.SDN.BHD.（マレーシア）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e3%83%9e%e3%83%ac%e3%83%bc%e3%82%b7%e3%82%a2%e6%ad%a6%e8%94%b5/",
+          "order": 10
+        },
+        {
+          "title": "PT MUSASHI PAINT INDONESIA（インドネシア）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e3%82%a4%e3%83%b3%e3%83%89%e3%83%8d%e3%82%b7%e3%82%a2%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/",
+          "order": 11
+        },
+        {
+          "title": "MUSASHI PAINT INDIA PRIVATE LTD.（インド）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%a4%e3%83%b3%e3%83%89/",
+          "order": 12
+        },
+        {
+          "title": "HUNGARY MUSASHI PAINT KFT.（ハンガリー）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%83%8f%e3%83%b3%e3%82%ac%e3%83%aa%e3%83%bc/",
+          "order": 13
+        },
+        {
+          "title": "U.S. Paint Corporation（米国）",
+          "url": "https://musashipaint.xsrv.jp/staging/global-network/%ef%bc%91%ef%bc%93%ef%bc%9au-s-paint-corporation%ef%bc%88%e7%b1%b3%e5%9b%bd%ef%bc%89/",
+          "order": 14
+        }
+      ],
+      "status": 200
+    },
+    "product": {
+      "path": "/product/",
+      "title": "製品情報",
+      "totalCount": 59,
+      "posts": [
+        {
+          "title": "ヴィータ ウルトラ バイン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3/",
+          "order": 1
+        },
+        {
+          "title": "ヴィータ ウレックス",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9/",
+          "order": 2
+        },
+        {
+          "title": "ヴィータ ウレックス",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-2/",
+          "order": 3
+        },
+        {
+          "title": "ヴィータ サンシャイン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%b5%e3%83%b3%e3%82%b7%e3%83%a3%e3%82%a4%e3%83%b3/",
+          "order": 4
+        },
+        {
+          "title": "ヴィータ パナコ",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%83%91%e3%83%8a%e3%82%b3/",
+          "order": 5
+        },
+        {
+          "title": "ヴィータ パナコ PP",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%83%91%e3%83%8a%e3%82%b3-pp/",
+          "order": 6
+        },
+        {
+          "title": "ヴィータ ラバサン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3/",
+          "order": 7
+        },
+        {
+          "title": "アクアコ ウルトラ バイン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3/",
+          "order": 8
+        },
+        {
+          "title": "アクアコ サンシャイン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%82%b5%e3%83%b3%e3%82%b7%e3%83%a3%e3%82%a4%e3%83%b3/",
+          "order": 9
+        },
+        {
+          "title": "アクアコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p/",
+          "order": 10
+        },
+        {
+          "title": "アクアコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-2/",
+          "order": 11
+        },
+        {
+          "title": "アクアコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-3/",
+          "order": 12
+        },
+        {
+          "title": "アクアコ パナコ",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3/",
+          "order": 13
+        },
+        {
+          "title": "アクアコ プラエース",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9/",
+          "order": 14
+        },
+        {
+          "title": "エコ ミラー 49",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%9f%e3%83%a9%e3%83%bc-49/",
+          "order": 15
+        },
+        {
+          "title": "エコ ミラー 49",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%9f%e3%83%a9%e3%83%bc-49-2/",
+          "order": 16
+        },
+        {
+          "title": "エコ ミラー 49",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%9f%e3%83%a9%e3%83%bc-49-3/",
+          "order": 17
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89/",
+          "order": 18
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-2/",
+          "order": 19
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-3/",
+          "order": 20
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-4/",
+          "order": 21
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-5/",
+          "order": 22
+        },
+        {
+          "title": "エコ アーバス ウレックス",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%82%a2%e3%83%bc%e3%83%90%e3%82%b9-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9/",
+          "order": 23
+        },
+        {
+          "title": "エコ アーバス ウレックス マット",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%82%a2%e3%83%bc%e3%83%90%e3%82%b9-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-%e3%83%9e%e3%83%83%e3%83%88/",
+          "order": 24
+        },
+        {
+          "title": "エコ ウルトラ バイン CAR IP",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-car-ip/",
+          "order": 25
+        },
+        {
+          "title": "エコ サンシャイン スーパー MH",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%82%b5%e3%83%b3%e3%82%b7%e3%83%a3%e3%82%a4%e3%83%b3-%e3%82%b9%e3%83%bc%e3%83%91%e3%83%bc-mh/",
+          "order": 26
+        },
+        {
+          "title": "エコ ネオ メッキキャンテック",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8d%e3%82%aa-%e3%83%a1%e3%83%83%e3%82%ad%e3%82%ad%e3%83%a3%e3%83%b3%e3%83%86%e3%83%83%e3%82%af/",
+          "order": 27
+        },
+        {
+          "title": "エコ ハイウッレックス SR",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%83%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-sr/",
+          "order": 28
+        },
+        {
+          "title": "エコ ハイウレックス KL",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-kl/",
+          "order": 29
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p/",
+          "order": 30
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-2/",
+          "order": 31
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-3/",
+          "order": 32
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-4/",
+          "order": 33
+        },
+        {
+          "title": "エコ ハイウレックス P グランデ ボヌール",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%82%b0%e3%83%a9%e3%83%b3%e3%83%87-%e3%83%9c%e3%83%8c%e3%83%bc%e3%83%ab/",
+          "order": 34
+        },
+        {
+          "title": "エコ ハイウレックス P ブライトーン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%83%96%e3%83%a9%e3%82%a4%e3%83%88%e3%83%bc%e3%83%b3/",
+          "order": 35
+        },
+        {
+          "title": "エコ ハイウレックス P ブランデ ボヌール",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%83%96%e3%83%a9%e3%83%b3%e3%83%87-%e3%83%9c%e3%83%8c%e3%83%bc%e3%83%ab/",
+          "order": 36
+        },
+        {
+          "title": "エコ ハイウレックス P レーザー エッチング",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%83%ac%e3%83%bc%e3%82%b6%e3%83%bc-%e3%82%a8%e3%83%83%e3%83%81%e3%83%b3%e3%82%b0/",
+          "order": 37
+        },
+        {
+          "title": "エコ パナコ MG",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-mg/",
+          "order": 38
+        },
+        {
+          "title": "エコ パナコ MG",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-mg-2/",
+          "order": 39
+        },
+        {
+          "title": "エコ パナコ PA",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-pa/",
+          "order": 40
+        },
+        {
+          "title": "エコ パナコ PP",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-pp/",
+          "order": 41
+        },
+        {
+          "title": "エコ パナコ PP",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-pp-2/",
+          "order": 42
+        },
+        {
+          "title": "エコ プラエース",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9/",
+          "order": 43
+        },
+        {
+          "title": "エコ プラエース PP",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a8%e3%82%b3-%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9-pp/",
+          "order": 44
+        },
+        {
+          "title": "ウルトラ バイン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3/",
+          "order": 45
+        },
+        {
+          "title": "ウルトラ バイン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-2/",
+          "order": 46
+        },
+        {
+          "title": "ウルトラ バイン BV",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-bv/",
+          "order": 47
+        },
+        {
+          "title": "ウルトラ バイン BV マット",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-bv-%e3%83%9e%e3%83%83%e3%83%88/",
+          "order": 48
+        },
+        {
+          "title": "ネオラバサン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3/",
+          "order": 49
+        },
+        {
+          "title": "ネオピーチスキン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%8d%e3%82%aa%e3%83%94%e3%83%bc%e3%83%81%e3%82%b9%e3%82%ad%e3%83%b3/",
+          "order": 50
+        },
+        {
+          "title": "ネオラバサン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3-2/",
+          "order": 51
+        },
+        {
+          "title": "ネオラバサン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3-3/",
+          "order": 52
+        },
+        {
+          "title": "ネオラバサン ソフト",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3-%e3%82%bd%e3%83%95%e3%83%88/",
+          "order": 53
+        },
+        {
+          "title": "アートーン",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%83%bc%e3%83%88%e3%83%bc%e3%83%b3/",
+          "order": 54
+        },
+        {
+          "title": "アーマトップ",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%82%a2%e3%83%bc%e3%83%9e%e3%83%88%e3%83%83%e3%83%97/",
+          "order": 55
+        },
+        {
+          "title": "パナコ PA",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%91%e3%83%8a%e3%82%b3-pa/",
+          "order": 56
+        },
+        {
+          "title": "プラエース",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9/",
+          "order": 57
+        },
+        {
+          "title": "メタルド",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89/",
+          "order": 58
+        },
+        {
+          "title": "プロクリア",
+          "url": "https://musashipaint.xsrv.jp/staging/product/%e3%83%97%e3%83%ad%e3%82%af%e3%83%aa%e3%82%a2/",
+          "order": 59
+        }
+      ],
+      "status": 200
+    },
+    "news": {
+      "path": "/news/",
+      "title": "ニュース",
+      "totalCount": 7,
+      "posts": [
+        {
+          "title": "2025大阪・関西万博特設ページを開設しました。",
+          "url": "https://musashipaint.xsrv.jp/staging/news/%e5%a4%a7%e9%98%aa%e4%b8%87%e5%8d%9a%e7%89%b9%e8%a8%ad%e3%83%9a%e3%83%bc%e3%82%b8/",
+          "order": 1
+        },
+        {
+          "title": "武蔵塗料グループの第2回CSR報告書（Musashi Paint Report 2025）を発行しました。",
+          "url": "https://musashipaint.xsrv.jp/staging/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%b0%e3%83%ab%e3%83%bc%e3%83%97%e3%81%ae%e7%ac%ac2%e5%9b%9ecsr%e5%a0%b1%e5%91%8a%e6%9b%b8%ef%bc%88musashi-paint-report-2025%ef%bc%89%e3%82%92%e7%99%ba%e8%a1%8c/",
+          "order": 2
+        },
+        {
+          "title": "2025年大阪・関西万博に参加 MATSURIの一員としてPAINTOMOを公開",
+          "url": "https://musashipaint.xsrv.jp/staging/news/2025%e5%b9%b4%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%e3%81%ab%e5%8f%82%e5%8a%a0-matsuri%e3%81%ae%e4%b8%80%e5%93%a1%e3%81%a8%e3%81%97%e3%81%a6paintomo%e3%82%92%e5%85%ac%e9%96%8b/",
+          "order": 3
+        },
+        {
+          "title": "【受賞】武蔵塗料本社ビル　「東京バーティカルレインボー」は「Top 10 Commercial Posts of 2024」に選ばれました。",
+          "url": "https://musashipaint.xsrv.jp/staging/news/%e3%80%90%e5%8f%97%e8%b3%9e%e3%80%91w1-%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%80%80%e3%80%8c%e6%9d%b1%e4%ba%ac%e3%83%90%e3%83%bc%e3%83%86%e3%82%a3%e3%82%ab/",
+          "order": 4
+        },
+        {
+          "title": "【受賞】武蔵塗料は「WORLD CLEANUP DAY 2024 の企業部門でグローバルネットワー ク賞」に選出されました。",
+          "url": "https://musashipaint.xsrv.jp/staging/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%af%e3%80%8cworld-cleanup-day-2024-%e3%81%ae%e4%bc%81%e6%a5%ad%e9%83%a8%e9%96%80%e3%81%a7%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e3%83%8d%e3%83%83/",
+          "order": 5
+        },
+        {
+          "title": "【受賞】武蔵塗料の本社ビルは、2 0 2 4年のAsia Architecture Design Awardsで受賞しました。",
+          "url": "https://musashipaint.xsrv.jp/staging/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%ae%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%81%af%e3%80%812-0-2-4%e5%b9%b4%e3%81%aeasia-architecture-design-awards%e3%81%a7%e5%8f%97%e8%b3%9e%e3%81%97%e3%81%be/",
+          "order": 6
+        },
+        {
+          "title": "武蔵塗料グループ初のCSR報告書（Musashi Paint Report 2024）を発行しました。",
+          "url": "https://musashipaint.xsrv.jp/staging/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%b0%e3%83%ab%e3%83%bc%e3%83%97%e5%88%9d%e3%81%aecsr%e5%a0%b1%e5%91%8a%e6%9b%b8%ef%bc%88musashi-paint-report-2024%ef%bc%89%e3%82%92%e7%99%ba%e8%a1%8c%e3%81%97/",
+          "order": 7
+        }
+      ],
+      "status": 200
+    },
+    "media": {
+      "path": "/media-page/",
+      "title": "Pick up",
+      "totalCount": 3,
+      "posts": [
+        {
+          "title": "2025年 日本国際博覧会（大阪・関西万博）」の日本館において、「PAINTOMO」を公開しました。",
+          "url": "https://musashipaint.xsrv.jp/staging/media-page/2025%e5%b9%b4-%e6%97%a5%e6%9c%ac%e5%9b%bd%e9%9a%9b%e5%8d%9a%e8%a6%a7%e4%bc%9a%ef%bc%88%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%ef%bc%89%e3%80%8d%e3%81%ae%e6%97%a5%e6%9c%ac/",
+          "order": 1
+        },
+        {
+          "title": "福井社長、レノボ（Lenovo）のインタビューを受けました。",
+          "url": "https://musashipaint.xsrv.jp/staging/media-page/%e7%a6%8f%e4%ba%95%e7%a4%be%e9%95%b7%e3%80%81%e3%83%ac%e3%83%8e%e3%83%9c%ef%bc%88lenovo%ef%bc%89%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc%e3%82%92%e5%8f%97%e3%81%91%e3%81%be/",
+          "order": 2
+        },
+        {
+          "title": "「カラーウォーズ～華麗なる色の仕掛け人たち～」 (2007年5月8日放送)ＴＶ番組『ガイアの夜明け』",
+          "url": "https://musashipaint.xsrv.jp/staging/media-page/%e3%80%8c%e3%82%ab%e3%83%a9%e3%83%bc%e3%82%a6%e3%82%a9%e3%83%bc%e3%82%ba%ef%bd%9e%e8%8f%af%e9%ba%97%e3%81%aa%e3%82%8b%e8%89%b2%e3%81%ae%e4%bb%95%e6%8e%9b%e3%81%91%e4%ba%ba%e3%81%9f%e3%81%a1%ef%bd%9e/",
+          "order": 3
+        }
+      ],
+      "status": 200
+    },
+    "featured": {
+      "path": "/featured/",
+      "title": "注目製品",
+      "totalCount": 0,
+      "posts": [],
+      "status": 200
+    },
+    "voice": {
+      "path": "/voice/",
+      "title": "お客様の声",
+      "totalCount": 6,
+      "posts": [
+        {
+          "title": "内装加飾色開発の最重要パートナー",
+          "url": "https://musashipaint.xsrv.jp/staging/voice/%e5%86%85%e8%a3%85%e5%8a%a0%e9%a3%be%e8%89%b2%e9%96%8b%e7%99%ba%e3%81%ae%e6%9c%80%e9%87%8d%e8%a6%81%e3%83%91%e3%83%bc%e3%83%88%e3%83%8a%e3%83%bc/",
+          "order": 1
+        },
+        {
+          "title": "本当のプロフェッショナル",
+          "url": "https://musashipaint.xsrv.jp/staging/voice/%e6%9c%ac%e5%bd%93%e3%81%ae%e3%83%97%e3%83%ad%e3%83%95%e3%82%a7%e3%83%83%e3%82%b7%e3%83%a7%e3%83%8a%e3%83%ab/",
+          "order": 2
+        },
+        {
+          "title": "独自の気風が育む豊かな人間性",
+          "url": "https://musashipaint.xsrv.jp/staging/voice/%e7%8b%ac%e8%87%aa%e3%81%ae%e6%b0%97%e9%a2%a8%e3%81%8c%e8%82%b2%e3%82%80%e8%b1%8a%e3%81%8b%e3%81%aa%e4%ba%ba%e9%96%93%e6%80%a7/",
+          "order": 3
+        },
+        {
+          "title": "感性を分かり合える存在",
+          "url": "https://musashipaint.xsrv.jp/staging/voice/%e6%84%9f%e6%80%a7%e3%82%92%e5%88%86%e3%81%8b%e3%82%8a%e5%90%88%e3%81%88%e3%82%8b%e5%ad%98%e5%9c%a8/",
+          "order": 4
+        },
+        {
+          "title": "常に挑戦する姿勢を手本に",
+          "url": "https://musashipaint.xsrv.jp/staging/voice/%e5%b8%b8%e3%81%ab%e6%8c%91%e6%88%a6%e3%81%99%e3%82%8b%e5%a7%bf%e5%8b%a2%e3%82%92%e6%89%8b%e6%9c%ac%e3%81%ab/",
+          "order": 5
+        },
+        {
+          "title": "ものづくりに、真摯な企業姿勢",
+          "url": "https://musashipaint.xsrv.jp/staging/voice/%e3%82%82%e3%81%ae%e3%81%a5%e3%81%8f%e3%82%8a%e3%81%ab%e3%80%81%e7%9c%9f%e6%91%af%e3%81%aa%e4%bc%81%e6%a5%ad%e5%a7%bf%e5%8b%a2/",
+          "order": 6
+        }
+      ],
+      "status": 200
+    },
+    "faq": {
+      "path": "/faq/",
+      "title": "よくある質問",
+      "totalCount": 0,
+      "posts": [],
+      "status": 200
+    }
+  },
+  "topPage": {
+    "pickup": [
+      {
+        "title": "Event",
+        "url": "https://musashipaint.xsrv.jp/staging/media-page/2025%e5%b9%b4-%e6%97%a5%e6%9c%ac%e5%9b%bd%e9%9a%9b%e5%8d%9a%e8%a6%a7%e4%bc%9a%ef%bc%88%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%ef%bc%89%e3%80%8d%e3%81%ae%e6%97%a5%e6%9c%ac/"
+      },
+      {
+        "title": "Movie",
+        "url": "https://musashipaint.xsrv.jp/staging/media-page/%e7%a6%8f%e4%ba%95%e7%a4%be%e9%95%b7%e3%80%81%e3%83%ac%e3%83%8e%e3%83%9c%ef%bc%88lenovo%ef%bc%89%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc%e3%82%92%e5%8f%97%e3%81%91%e3%81%be/"
+      },
+      {
+        "title": "Television",
+        "url": "https://musashipaint.xsrv.jp/staging/media-page/%e3%80%8c%e3%82%ab%e3%83%a9%e3%83%bc%e3%82%a6%e3%82%a9%e3%83%bc%e3%82%ba%ef%bd%9e%e8%8f%af%e9%ba%97%e3%81%aa%e3%82%8b%e8%89%b2%e3%81%ae%e4%bb%95%e6%8e%9b%e3%81%91%e4%ba%ba%e3%81%9f%e3%81%a1%ef%bd%9e/"
+      }
+    ],
+    "news": [
+      {
+        "title": "2025.09.01",
+        "url": "https://musashipaint.xsrv.jp/staging/news/%e5%a4%a7%e9%98%aa%e4%b8%87%e5%8d%9a%e7%89%b9%e8%a8%ad%e3%83%9a%e3%83%bc%e3%82%b8/"
+      },
+      {
+        "title": "2025.06.30",
+        "url": "https://musashipaint.xsrv.jp/staging/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%b0%e3%83%ab%e3%83%bc%e3%83%97%e3%81%ae%e7%ac%ac2%e5%9b%9ecsr%e5%a0%b1%e5%91%8a%e6%9b%b8%ef%bc%88musashi-paint-report-2025%ef%bc%89%e3%82%92%e7%99%ba%e8%a1%8c/"
+      },
+      {
+        "title": "2025.05.15",
+        "url": "https://musashipaint.xsrv.jp/staging/news/2025%e5%b9%b4%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%e3%81%ab%e5%8f%82%e5%8a%a0-matsuri%e3%81%ae%e4%b8%80%e5%93%a1%e3%81%a8%e3%81%97%e3%81%a6paintomo%e3%82%92%e5%85%ac%e9%96%8b/"
+      }
+    ]
+  },
+  "navigation": {
+    "header": [
+      {
+        "title": "ホーム",
+        "url": "https://musashipaint.xsrv.jp/staging/"
+      },
+      {
+        "title": "環境キーワードでえらぶ",
+        "url": "https://musashipaint.xsrv.jp/staging/product/"
+      },
+      {
+        "title": "私たちについて",
+        "url": "https://musashipaint.xsrv.jp/staging/about-us/"
+      },
+      {
+        "title": "採用情報",
+        "url": "https://musashipaint.xsrv.jp/staging/career/"
+      },
+      {
+        "title": "お問い合わせ",
+        "url": "https://musashipaint.xsrv.jp/staging/contact/"
+      },
+      {
+        "title": "En",
+        "url": "https://en.musashipaint.com"
+      },
+      {
+        "title": "中文",
+        "url": "https://www.musashipaintchina.com/"
+      },
+      {
+        "title": "注目製品",
+        "url": "https://musashipaint.xsrv.jp/staging/featured/"
+      },
+      {
+        "title": "製品用途紹介",
+        "url": "https://musashipaint.xsrv.jp/staging/applications/"
+      },
+      {
+        "title": "会社概要",
+        "url": "https://musashipaint.xsrv.jp/staging/company/"
+      },
+      {
+        "title": "グローバルネットワーク",
+        "url": "https://musashipaint.xsrv.jp/staging/global-network/"
+      },
+      {
+        "title": "ヒストリー",
+        "url": "https://musashipaint.xsrv.jp/staging/history/"
+      },
+      {
+        "title": "サステナビリティ",
+        "url": "https://musashipaint.xsrv.jp/staging/sustainability/"
+      },
+      {
+        "title": "お客様の声",
+        "url": "https://musashipaint.xsrv.jp/staging/voice/"
+      },
+      {
+        "title": "よくある質問",
+        "url": "https://musashipaint.xsrv.jp/staging/faq/"
+      },
+      {
+        "title": "ニュース・お知らせ",
+        "url": "https://musashipaint.xsrv.jp/staging/news/"
+      },
+      {
+        "title": "メディア",
+        "url": "https://musashipaint.xsrv.jp/staging/media-page/"
+      },
+      {
+        "title": "Linkedin",
+        "url": "https://www.linkedin.com/company/musashi-paint-holdings/"
+      },
+      {
+        "title": "Instagram",
+        "url": "https://www.instagram.com/musashi_paint_official/"
+      },
+      {
+        "title": "Facebook",
+        "url": "https://www.facebook.com/musashipaintholdings/"
+      },
+      {
+        "title": "カタログをダウンロードする",
+        "url": "https://musashipaint.xsrv.jp/staging/download/"
+      }
+    ],
+    "footer": [
+      {
+        "title": "ホーム",
+        "url": "https://musashipaint.xsrv.jp/staging/"
+      },
+      {
+        "title": "製品について",
+        "url": "https://musashipaint.xsrv.jp/staging/product/"
+      },
+      {
+        "title": "用途でえらぶ",
+        "url": "https://musashipaint.xsrv.jp/staging/product/application/"
+      },
+      {
+        "title": "基材でえらぶ",
+        "url": "https://musashipaint.xsrv.jp/staging/product/material/"
+      },
+      {
+        "title": "意匠性でえらぶ",
+        "url": "https://musashipaint.xsrv.jp/staging/product/design/"
+      },
+      {
+        "title": "機能でえらぶ",
+        "url": "https://musashipaint.xsrv.jp/staging/product/function/"
+      },
+      {
+        "title": "環境キーワードでえらぶ",
+        "url": "https://musashipaint.xsrv.jp/staging/product/environment/"
+      },
+      {
+        "title": "注目製品",
+        "url": "https://musashipaint.xsrv.jp/staging/featured/"
+      },
+      {
+        "title": "製品用途紹介",
+        "url": "https://musashipaint.xsrv.jp/staging/applications/"
+      },
+      {
+        "title": "武蔵塗料グループについて",
+        "url": "https://musashipaint.xsrv.jp/staging/about-us/"
+      },
+      {
+        "title": "最先端の技術開発力",
+        "url": "https://musashipaint.xsrv.jp/staging/technology/"
+      },
+      {
+        "title": "グローバルネットワーク",
+        "url": "https://musashipaint.xsrv.jp/staging/global-network/"
+      },
+      {
+        "title": "サステナブルなビジネス展開",
+        "url": "https://musashipaint.xsrv.jp/staging/sustainable-business/"
+      },
+      {
+        "title": "顧客志向のカスタマイズ",
+        "url": "https://musashipaint.xsrv.jp/staging/customization/"
+      },
+      {
+        "title": "サステナビリティ",
+        "url": "https://musashipaint.xsrv.jp/staging/sustainability/"
+      },
+      {
+        "title": "お客様の声",
+        "url": "https://musashipaint.xsrv.jp/staging/voice/"
+      },
+      {
+        "title": "よくあるご質問",
+        "url": "https://musashipaint.xsrv.jp/staging/faq/"
+      },
+      {
+        "title": "ピックアップ",
+        "url": "https://musashipaint.xsrv.jp/staging/media-page/"
+      },
+      {
+        "title": "ニュース",
+        "url": "https://musashipaint.xsrv.jp/staging/news/"
+      },
+      {
+        "title": "採用情報",
+        "url": "https://musashipaint.xsrv.jp/staging/career/"
+      },
+      {
+        "title": "インタビュー",
+        "url": "https://musashipaint.xsrv.jp/staging/career/interview/"
+      },
+      {
+        "title": "採用に関するQ&A",
+        "url": "https://musashipaint.xsrv.jp/staging/career-faq/"
+      },
+      {
+        "title": "お問い合わせ",
+        "url": "https://musashipaint.xsrv.jp/staging/contact/"
+      },
+      {
+        "title": "カタログダウンロード",
+        "url": "https://musashipaint.xsrv.jp/staging/download/"
+      },
+      {
+        "title": "",
+        "url": "https://www.linkedin.com/company/musashi-paint-holdings/"
+      },
+      {
+        "title": "",
+        "url": "https://www.instagram.com/musashi_paint_official/"
+      },
+      {
+        "title": "",
+        "url": "https://www.facebook.com/musashipaintholdings/"
+      },
+      {
+        "title": "プライバシーポリシー",
+        "url": "https://musashipaint.xsrv.jp/staging/privacy-policy/"
+      },
+      {
+        "title": "利用規約",
+        "url": "https://musashipaint.xsrv.jp/staging/terms/"
+      }
+    ]
+  },
+  "staticPages": [
+    {
+      "path": "/",
+      "title": "トップページ",
+      "status": 200
+    },
+    {
+      "path": "/about-us/",
+      "title": "私たちについて",
+      "status": 200
+    },
+    {
+      "path": "/company/",
+      "title": "会社概要",
+      "status": 200
+    },
+    {
+      "path": "/history/",
+      "title": "ヒストリー",
+      "status": 200
+    },
+    {
+      "path": "/sustainability/",
+      "title": "サステナビリティ",
+      "status": 200
+    },
+    {
+      "path": "/technology/",
+      "title": "テクノロジー",
+      "status": 200
+    },
+    {
+      "path": "/customization/",
+      "title": "カスタマイズ",
+      "status": 200
+    },
+    {
+      "path": "/contact/",
+      "title": "お問い合わせ",
+      "status": 200
+    },
+    {
+      "path": "/download/",
+      "title": "カタログダウンロード",
+      "status": 200
+    },
+    {
+      "path": "/privacy-policy/",
+      "title": "プライバシーポリシー",
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "title": "利用規約",
+      "status": 200
+    }
+  ],
+  "productCategories": [
+    {
+      "path": "/product/application/",
+      "title": "用途でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/material/",
+      "title": "基材でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/design/",
+      "title": "意匠性でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/function/",
+      "title": "機能でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/environment/",
+      "title": "環境キーワードでえらぶ",
+      "status": 200,
+      "itemCount": 12
+    }
+  ],
+  "seo": [
+    {
+      "path": "/",
+      "pageTitle": "トップページ",
+      "title": "武蔵塗料 -",
+      "description": null,
+      "ogTitle": "武蔵塗料",
+      "ogImage": null
+    },
+    {
+      "path": "/product/",
+      "pageTitle": "製品情報",
+      "title": "製品情報 - 武蔵塗料",
+      "description": null,
+      "ogTitle": "製品情報 - 武蔵塗料",
+      "ogImage": "https://musashipaint.xsrv.jp/staging/wp-content/uploads/2025/12/120308sbpantoneA.jpg"
+    },
+    {
+      "path": "/career/",
+      "pageTitle": "採用情報",
+      "title": "採用情報 - 武蔵塗料",
+      "description": null,
+      "ogTitle": "採用情報 - 武蔵塗料",
+      "ogImage": "https://musashipaint.xsrv.jp/staging/wp-content/uploads/2025/11/zcqSMtb.jpg"
+    },
+    {
+      "path": "/contact/",
+      "pageTitle": "お問い合わせ",
+      "title": "お問い合わせ・採用／求人への応募 - 武蔵塗料",
+      "description": null,
+      "ogTitle": "お問い合わせ・採用／求人への応募 - 武蔵塗料",
+      "ogImage": "https://musashipaint.xsrv.jp/staging/wp-content/uploads/2025/12/gettyimages-618280468-2048x2048-1.jpg"
+    }
+  ],
+  "externalLinks": [
+    {
+      "url": "https://en.musashipaint.com/",
+      "title": "英語サイト"
+    },
+    {
+      "url": "https://www.musashipaintchina.com/",
+      "title": "中国語サイト"
+    },
+    {
+      "url": "https://www.linkedin.com/company/musashi-paint-holdings/",
+      "title": "LinkedIn"
+    },
+    {
+      "url": "https://www.instagram.com/musashi_paint_official/",
+      "title": "Instagram"
+    },
+    {
+      "url": "https://www.facebook.com/musashipaintholdings/",
+      "title": "Facebook"
+    }
+  ]
+}

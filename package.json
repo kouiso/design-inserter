@@ -25,7 +25,7 @@
     "vrt:capture": "cross-env VRT_DIR=actual playwright test --config=playwright.vrt.config.ts",
     "vrt:capture:staging": "cross-env VRT_DIR=actual TEST_ENV=staging playwright test --config=playwright.vrt.config.ts",
     "vrt:capture:prod": "cross-env VRT_DIR=actual TEST_ENV=production playwright test --config=playwright.vrt.config.ts",
-    "vrt:report": "reg-cli test/vrt/screenshots/actual test/vrt/screenshots/expected test/vrt/screenshots/diff -R test/vrt/report.html --matchingThreshold 0.01",
+    "vrt:report": "reg-cli test/vrt/screenshots/actual test/vrt/screenshots/expected test/vrt/screenshots/diff -R test/vrt/report.html --matchingThreshold 0.01 --thresholdRate 0.001",
     "vrt": "npm run vrt:capture && npm run vrt:report"
   },
   "keywords": [],

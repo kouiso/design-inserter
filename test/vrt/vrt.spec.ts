@@ -111,6 +111,20 @@ test.describe('VRT スクリーンショットキャプチャ', () => {
         window.scrollTo(0, 0);
       });
 
+      // GSAP delayedCallで遅延追加されるis-inviewクラスの完了を待つ
+      await page.waitForTimeout(1500);
+
+      // GSAPアニメーションを強制完了し、全data-inview要素にis-inviewクラスを付与
+      await page.evaluate(() => {
+        document.querySelectorAll('[data-inview]').forEach(el => {
+          el.classList.add('is-inview');
+        });
+        // GSAPのdelayedCallやtweenが残っていれば強制終了
+        if (typeof gsap !== 'undefined') {
+          gsap.globalTimeline.clear();
+        }
+      });
+
       // スクロールで発生した画像・アセット読み込み完了待ち
       await page.waitForLoadState('networkidle');
 
