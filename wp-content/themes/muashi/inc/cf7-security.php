@@ -5,8 +5,6 @@
  * - ファイルアップロードの MIME タイプ実体検証（finfo_file）
  * - IP ベースのレート制限（WordPress transient API）
  *
- * reCAPTCHA v3 は CF7 のインテグレーション設定で有効化する（コード不要）。
- *
  * @package Muashi
  * @see     SECURITY_PLAN.md
  */
@@ -239,3 +237,19 @@ function muashi_cf7_get_client_ip() {
 
 	return $validated ? sanitize_text_field( $validated ) : '';
 }
+
+/* ========================================================================
+ * 3. reCAPTCHA 制御
+ * ======================================================================== */
+
+/**
+ * reCAPTCHA のスクリプトとスタイルをフロントエンドから強制的に除外する
+ *
+ * 管理画面でインテグレーションが設定されていても読み込まれないようにする。
+ */
+function muashi_dequeue_cf7_recaptcha() {
+	wp_dequeue_style( 'wpcf7-recaptcha' );
+	wp_dequeue_script( 'wpcf7-recaptcha' );
+	wp_dequeue_script( 'google-recaptcha' );
+}
+add_action( 'wp_enqueue_scripts', 'muashi_dequeue_cf7_recaptcha', 100 );
