@@ -2102,6 +2102,7 @@ a {
   margin: 24px 0;
   display: flex;
   gap: 16px;
+  justify-content: center;
 }
 .page__inner .wp-block-button .wp-block-button__link {
   display: inline-block;
@@ -5588,9 +5589,9 @@ a {
 .download__card-links, .download__links {
   margin-top: auto;
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 12px;
   width: 100%;
 }
@@ -6107,5 +6108,4 @@ a {
     transform: translateX(-50%);
   }
 }
-
 /*# sourceMappingURL=style.css.map */
