@@ -72,7 +72,7 @@
 </div>
 
 <div class="form__actions">
-  [honeypot honeypot-111]
+  [honeypot company_url]
   [submit class:form__submit-button "送信する"]
 </div>
 
