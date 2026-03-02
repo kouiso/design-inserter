@@ -2,9 +2,10 @@
 /**
  * CF7 セキュリティ強化
  *
- * - ハニーポットによるスパム検知（company_url フィールド）
  * - ファイルアップロードの MIME タイプ実体検証（finfo_file）
  * - IP ベースのレート制限（WordPress transient API）
+ *
+ * ハニーポットは CF7 Honeypot プラグインに委譲。
  *
  * @package Muashi
  * @see     SECURITY_PLAN.md
@@ -15,27 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /* ========================================================================
- * 1. ハニーポットによるスパム検知
- * ======================================================================== */
-
-add_action( 'wpcf7_before_send_mail', 'muashi_cf7_honeypot_check', 5, 3 );
-
-/**
- * company_url フィールドに値が入っていたらボット判定して送信中止
- *
- * 画面上は CSS で不可視にしてあるため、人間が入力することはない。
- * ボットがフィールドを自動入力した場合にのみ発火する。
- */
-function muashi_cf7_honeypot_check( $contact_form, &$abort, $submission ) {
-	$posted = $submission->get_posted_data();
-	if ( ! empty( $posted['company_url'] ) ) {
-		$abort = true;
-		$submission->set_response( '送信に失敗しました。' );
-	}
-}
-
-/* ========================================================================
- * 2. MIME タイプ許可リスト
+ * 1. MIME タイプ許可リスト
  * ======================================================================== */
 
 /**
@@ -70,7 +51,7 @@ function muashi_cf7_get_allowed_mime_types() {
 }
 
 /* ========================================================================
- * 3. MIME タイプ実体検証フィルター
+ * 2. MIME タイプ実体検証フィルター
  * ======================================================================== */
 
 add_filter( 'wpcf7_validate_file',  'muashi_cf7_validate_file_mime', 20, 3 );
@@ -170,7 +151,7 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 }
 
 /* ========================================================================
- * 4. レート制限
+ * 3. レート制限
  * ======================================================================== */
 
 add_action( 'wpcf7_before_send_mail', 'muashi_cf7_rate_limit', 10, 3 );
