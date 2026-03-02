@@ -6,7 +6,7 @@
   <p class="contact__lead-tel">
     <span class="contact__lead-label">代表電話</span>
     <a class="contact__lead-number" href="tel:03-3985-8118">03-3985-8118</a>
-    <span class="contact__lead-hours">（平日 9:00–18:00）</span>
+    <span class="contact__lead-hours">（平日9:00-17:00）</span>
   </p>
 </div>
 
@@ -55,7 +55,7 @@
       添付ファイル
       <span class="form__required">任意</span>
     </label>
-    [file your-file id:contact-file class:form__input limit:10mb filetypes:pdf|doc|docx|xls|xlsx|ppt|pptx|jpg|png]
+    [file your-file id:contact-file class:form__input limit:10mb filetypes:pdf|doc|docx|xls|xlsx|ppt|pptx|jpg|png|zip]
   </div>
 
   <!-- 資料選択情報（JSが書き込み） -->
