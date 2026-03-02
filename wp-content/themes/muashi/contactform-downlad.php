@@ -72,7 +72,10 @@
 </div>
 
 <div class="form__actions">
-  [honeypot honeypot-111]
+  <div style="position:absolute;left:-9999px;" aria-hidden="true">
+    <label for="company_url">URL</label>
+    <input type="text" name="company_url" id="company_url" value="" tabindex="-1" autocomplete="off">
+  </div>
   [submit class:form__submit-button "送信する"]
 </div>
 
