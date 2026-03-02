@@ -2226,6 +2226,11 @@ a {
 .navigation__item:not(:first-of-type) .navigation__link {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+.navigation__item.is-active .navigation__item-title {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .navigation__item-title {
   display: block;
   padding: 16px 0;

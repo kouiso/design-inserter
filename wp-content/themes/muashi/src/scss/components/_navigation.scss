@@ -46,6 +46,13 @@
         border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
     }
+
+    // カレントページハイライト（第1階層）
+    &.is-active .navigation__item-title {
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
   }
 
   &__item-title{

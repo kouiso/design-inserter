@@ -2107,6 +2107,41 @@ function muashi_render_sidebar_navigation( $location ) {
 }
 
 /**
+ * カスタム投稿タイプの個別ページでサイドバーメニューの祖先項目をハイライト
+ *
+ * WPメニューはCPT個別ページで親メニュー項目に current フラグを付けないため、
+ * URLのパスを比較して祖先関係を判定する。
+ */
+add_filter( 'wp_nav_menu_objects', 'muashi_sidebar_cpt_ancestor_highlight', 10, 2 );
+function muashi_sidebar_cpt_ancestor_highlight( $items, $args ) {
+	if ( ! is_singular() || is_page() || is_attachment() ) {
+		return $items;
+	}
+
+	$current_url = trailingslashit( get_permalink() );
+	$site_url    = trailingslashit( home_url() );
+
+	foreach ( $items as $item ) {
+		if ( $item->current ) {
+			continue;
+		}
+
+		$item_url = trailingslashit( $item->url );
+
+		if ( strpos( $item_url, $site_url ) !== 0 || $item_url === $site_url ) {
+			continue;
+		}
+
+		if ( strpos( $current_url, $item_url ) === 0 && $current_url !== $item_url ) {
+			$item->current_item_ancestor = true;
+			$item->classes[]             = 'current-menu-ancestor';
+		}
+	}
+
+	return $items;
+}
+
+/**
  * ACF Local JSON 設定
  * JSONファイルでフィールドグループを管理し、Gitでバージョン管理可能にする
  */
