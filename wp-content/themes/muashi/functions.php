@@ -1934,8 +1934,8 @@ class Muashi_Sidebar_Nav_Walker extends Walker_Nav_Menu {
                 $target = ' target="_blank" rel="noopener noreferrer"';
             }
 
-            // 現在のページまたはURL=#はリンクなしのテキスト（見た目は同じ）
-            if ( $item->current || $url === '#' ) {
+            // URL=#はリンクなしのテキスト
+            if ( $url === '#' ) {
                 $output .= '<p class="navigation__item-title">';
                 $output .= esc_html( $item->title );
                 $output .= '</p>';
