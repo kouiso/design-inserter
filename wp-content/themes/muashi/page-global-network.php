@@ -51,7 +51,11 @@ $globalnetwork_query = new WP_Query( array(
                     <?php endwhile; ?>
                 <?php endif; ?>
 
-                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
+                <div class="page__inner">
+                    <?php get_template_part( 'template-parts/global-network', 'map' ); ?>
+                </div>
+
+                <div class="page__inner page__inner--narrow">
 
                     <div class="story" id="overseas-bases">
                         <div class="archive">

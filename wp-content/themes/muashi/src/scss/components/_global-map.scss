@@ -1,0 +1,38 @@
+// ==========================================================================
+// Global Map - グローバルネットワーク世界地図
+// ==========================================================================
+
+.global-map {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+
+	&__object {
+		display: block;
+		width: 100%;
+		min-width: 800px;
+		height: auto;
+	}
+
+	&__fallback {
+		display: block;
+		width: 100%;
+		min-width: 800px;
+		height: auto;
+	}
+}
+
+// 地図の前後ブロックとの余白調整
+.page__inner:has(> .global-map) {
+	margin-top: 0;
+	padding-top: 40px;
+	padding-bottom: 0;
+}
+
+.page__inner:has(+ .page__inner > .global-map) {
+	padding-bottom: 0;
+}
+
+.page__inner:has(> .global-map) + .page__inner {
+	margin-top: 0;
+}
