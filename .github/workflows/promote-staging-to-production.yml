@@ -79,7 +79,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
-      server_label: "musashipaint.xsrv.jp (Production)"
+      server_label: "musashipaint.com (Production)"
       dry_run: ${{ inputs.dry_run || false }}
       ref: 'main'
     secrets:

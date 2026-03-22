@@ -1,11 +1,6 @@
 name: Deploy to Staging
 
 on:
-  push:
-    branches: [develop]
-    paths:
-      - 'wp-content/themes/muashi/**'
-      - 'wp-content/plugins/musashi-inquiry-approval/**'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -23,7 +18,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
-      server_label: "musashipaint.xsrv.jp/staging (Staging)"
+      server_label: "musashipaint.xsrv.jp (Staging)"
       dry_run: ${{ inputs.dry_run || false }}
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
