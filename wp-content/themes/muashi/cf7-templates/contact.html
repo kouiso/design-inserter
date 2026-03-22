@@ -1,4 +1,4 @@
-<div class="contact__lead">
+﻿<div class="contact__lead">
   <p>
     製品・サービス・採用に関するお問い合わせは、下記フォームより受け付けております。<br>
     お急ぎの方はお電話でも承ります。

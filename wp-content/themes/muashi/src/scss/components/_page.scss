@@ -138,11 +138,6 @@
       gap: 16px;
       font-size: 14px;
       color: #666;
-
-      // flex item がコンテンツ幅に縮むのを防ぎ、内部の justify-content を有効にする
-      > .wp-block-group__inner-container {
-        width: 100%;
-      }
     }
 
     .wp-block-post-date {
@@ -368,11 +363,7 @@
       margin: 24px 0;
       display: flex;
       gap: 16px;
-
-      // WordPress 6.x の is-layout-flex による justify-content 上書きを防ぐ
-      &.is-layout-flex {
-        justify-content: center;
-      }
+      justify-content: center;
     }
 
     .wp-block-button {

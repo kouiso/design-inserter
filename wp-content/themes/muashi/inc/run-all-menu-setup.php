@@ -82,7 +82,7 @@ foreach ( $setup_scripts as $script_file => $menu_name ) {
 		ob_start();
 
 		// スクリプトを実行
-		require_once $script_path;
+		require $script_path;
 
 		// 出力を取得して表示
 		$output = ob_get_clean();
