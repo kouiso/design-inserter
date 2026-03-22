@@ -6,29 +6,16 @@
 .global-map {
 	width: 100%;
 
-	@include mq(md) {
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-
 	&__object {
 		display: block;
 		width: 100%;
 		height: auto;
-
-		@include mq(md) {
-			min-width: 800px;
-		}
 	}
 
 	&__fallback {
 		display: block;
 		width: 100%;
 		height: auto;
-
-		@include mq(md) {
-			min-width: 800px;
-		}
 	}
 }
 

@@ -1190,6 +1190,9 @@ a {
   padding-left: 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
+.hamburger__accordion-list .hamburger__accordion-list .hamburger__accordion-link {
+  padding-left: 40px;
+}
 .hamburger__accordion-link {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   display: grid;
@@ -4032,31 +4035,15 @@ a {
 .global-map {
   width: 100%;
 }
-@media screen and (min-width: 768px) {
-  .global-map {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-}
 .global-map__object {
   display: block;
   width: 100%;
   height: auto;
 }
-@media screen and (min-width: 768px) {
-  .global-map__object {
-    min-width: 800px;
-  }
-}
 .global-map__fallback {
   display: block;
   width: 100%;
   height: auto;
-}
-@media screen and (min-width: 768px) {
-  .global-map__fallback {
-    min-width: 800px;
-  }
 }
 
 .page__inner:has(> .global-map) {
