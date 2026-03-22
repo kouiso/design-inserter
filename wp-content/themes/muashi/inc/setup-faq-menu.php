@@ -52,7 +52,7 @@ function muashi_setup_faq_sidebar_menu() {
 			// 第1階層: SNS（クリック不可ラベル、子項目あり）
 			array(
 				'title' => 'SNS',
-				'url'   => 'javascript:void(0);',
+				'url'   => '#',
 				'parent' => 0,
 				'children' => array(
 					array(
