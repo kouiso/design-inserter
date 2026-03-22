@@ -20,8 +20,8 @@ const STAGING_URL = 'https://musashipaint.xsrv.jp/staging';
 // Basic認証（--user=xxx --pass=xxx）
 const userArg = process.argv.find(arg => arg.startsWith('--user='));
 const passArg = process.argv.find(arg => arg.startsWith('--pass='));
-const authUser = userArg ? userArg.split('=')[1] : null;
-const authPass = passArg ? passArg.split('=')[1] : null;
+const authUser = userArg ? userArg.split('=').slice(1).join('=') : null;
+const authPass = passArg ? passArg.split('=').slice(1).join('=') : null;
 
 // スナップショット対象のアーカイブページ
 const archivePages = [

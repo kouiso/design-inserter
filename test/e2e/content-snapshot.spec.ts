@@ -227,13 +227,22 @@ test.describe('ナビゲーション - リンク検証', () => {
 
     const brokenLinks: string[] = [];
 
+    const snapshotHost = new URL(snapshot.baseURL).hostname;
+
     for (const link of snapshot.navigation.footer) {
-      // 外部リンクはスキップ
-      if (link.url.startsWith('http') && !link.url.includes('localhost:10010')) {
-        continue;
+      // 外部リンクはスキップ（スナップショットのbaseURL以外のホスト）
+      try {
+        const linkUrl = new URL(link.url);
+        if (linkUrl.hostname !== snapshotHost) {
+          continue;
+        }
+      } catch {
+        // 相対URLはそのまま処理
       }
 
-      const response = await page.goto(link.url, { waitUntil: 'domcontentloaded' }).catch(() => null);
+      // スナップショットURLのパス部分をローカル環境で検証
+      const linkPath = link.url.startsWith('http') ? new URL(link.url).pathname : link.url;
+      const response = await page.goto(linkPath, { waitUntil: 'domcontentloaded' }).catch(() => null);
       if (!response || response.status() !== 200) {
         brokenLinks.push(`${link.title}: ${link.url} (${response?.status() || 'error'})`);
       }
