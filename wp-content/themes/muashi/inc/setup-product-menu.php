@@ -22,6 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 }
 
+// セキュリティチェック（管理者のみ実行可能）
+if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
+	wp_die( 'このスクリプトは管理者のみ実行可能です。' );
+}
+
 /**
  * 製品情報サイドバーメニューを作成
  */

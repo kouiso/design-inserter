@@ -2,7 +2,7 @@
  * ステージングと本番のコンテンツ差分比較スクリプト
  *
  * 使い方:
- *   node scripts/compare-environments.js --user=kouiso --pass=Kouiso0802!
+ *   node scripts/compare-environments.js --user=<ユーザー名> --pass=<パスワード>
  *
  * 出力:
  *   test/fixtures/content-snapshot-production.json
@@ -117,7 +117,7 @@ async function captureArchivePage(page, baseURL, archiveConfig) {
           });
         }
       } catch (e) {
-        // skip
+        console.error(`captureArchivePage: ${e.message}`);
       }
     }
 

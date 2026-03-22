@@ -10,12 +10,17 @@
 // WordPress環境外から実行された場合は終了
 if ( ! defined( 'ABSPATH' ) ) {
     // WP-CLI経由で実行する場合のためのブートストラップ
-    $wp_load_path = dirname( __FILE__, 6 ) . '/wp-load.php';
+    $wp_load_path = dirname( __FILE__, 5 ) . '/wp-load.php';
     if ( file_exists( $wp_load_path ) ) {
         require_once $wp_load_path;
     } else {
         die( 'WordPress environment not found.' );
     }
+}
+
+// セキュリティチェック（管理者のみ実行可能）
+if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
+	wp_die( 'このスクリプトは管理者のみ実行可能です。' );
 }
 
 /**
