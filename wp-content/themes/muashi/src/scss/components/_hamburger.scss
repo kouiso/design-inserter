@@ -171,6 +171,12 @@
     }
   }
 
+  // ネストされたアコーディオンボタンをリンクと同じ階層に揃える
+  &__accordion-item > &__accordion {
+    padding-left: 20px;
+    border-top: 1px solid rgba(0, 0, 0 , 0.1);
+  }
+
   &__accordion-link{
     border-top: 1px solid rgba(0, 0, 0 , 0.1);
     display: grid;
