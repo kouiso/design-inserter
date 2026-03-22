@@ -171,6 +171,17 @@
     }
   }
 
+  // ネストされたアコーディオンボタンをリンクと同じ階層に揃える
+  &__accordion-item > &__accordion {
+    padding-left: 20px;
+    border-top: 1px solid rgba(0, 0, 0 , 0.1);
+  }
+
+  // ネストアコーディオン内のリンクをさらに1段インデント
+  &__accordion-list &__accordion-list &__accordion-link {
+    padding-left: 40px;
+  }
+
   &__accordion-link{
     border-top: 1px solid rgba(0, 0, 0 , 0.1);
     display: grid;
@@ -196,5 +207,9 @@
     font-size: 12px;
     font-weight: 500;
     color: var(--color-white);
+  }
+
+  &__sub-children {
+    padding-left: 20px;
   }
 }

@@ -44,7 +44,13 @@ get_header();
                     <div class="single__contents">
                         <?php the_content(); ?>
                     </div>
+                </div>
 
+                <div class="page__inner">
+                    <?php get_template_part( 'template-parts/global-network', 'map' ); ?>
+                </div>
+
+                <div class="page__inner page__inner--narrow">
                     <div class="single__back">
                         <a class="single__back-button" href="<?php echo esc_url( $globalnetwork_archive_url ); ?>">一覧へ戻る</a>
                     </div>

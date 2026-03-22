@@ -46,12 +46,31 @@ $globalnetwork_query = new WP_Query( array(
                 <?php the_title(); ?>
                 </h1>
                 <div class="page__inner" style="padding-bottom: 40px;">
-                <?php the_content(); ?>
+                <?php
+                ob_start();
+                the_content();
+                $page_content = ob_get_clean();
+
+                // SVGマップHTMLを取得
+                ob_start();
+                get_template_part( 'template-parts/global-network', 'map' );
+                $svg_map_html = ob_get_clean();
+
+                // 旧マップ画像（div.wp-block-image内）をSVGマップに置換
+                $page_content = preg_replace(
+                    '#<div class="wp-block-image">\s*<figure[^>]*>.*?</figure>\s*</div>#s',
+                    $svg_map_html,
+                    $page_content,
+                    1
+                );
+
+                echo $page_content;
+                ?>
                 </div>
                     <?php endwhile; ?>
                 <?php endif; ?>
 
-                <div class="page__inner page__inner--narrow" style="margin-top: 0;">
+                <div class="page__inner page__inner--narrow">
 
                     <div class="story" id="overseas-bases">
                         <div class="archive">

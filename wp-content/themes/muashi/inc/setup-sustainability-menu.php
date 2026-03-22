@@ -17,6 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 }
 
+// セキュリティチェック（管理者のみ実行可能）
+if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
+	wp_die( 'このスクリプトは管理者のみ実行可能です。' );
+}
+
 function muashi_setup_sustainability_sidebar_menu() {
 	$menu_name = 'サステナビリティ用サイドバー';
 	$menu_location = 'sidebar_sustainability';

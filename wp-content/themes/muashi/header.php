@@ -273,21 +273,36 @@
                                                 <div class="hamburger__accordion-list-wrapper js-accordion-list">
                                                     <ul class="hamburger__accordion-list">
                                                         <?php
-                                                        // 製品タクソノミー設定を取得
                                                         $sp_product_taxonomies = muashi_get_product_taxonomy_config();
                                                         foreach ($sp_product_taxonomies as $taxonomy => $settings) :
-                                                            // 製品ページへリンク
-                                                            $taxonomy_archive_url = URL_PRODUCT;
+                                                            $terms = muashi_get_sorted_product_terms($taxonomy, 0);
+                                                            if (empty($terms)) continue;
                                                         ?>
                                                             <li class="hamburger__accordion-item">
-                                                                <a href="<?php echo esc_url($taxonomy_archive_url); ?>" class="hamburger__accordion-link">
-                                                                    <span class="hamburger__accordion-link-text"><?php echo esc_html($settings['label']); ?></span>
-                                                                    <span class="hamburger__accordion-link-icon">
+                                                                <button class="hamburger__accordion js-accordion-button">
+                                                                    <span class="hamburger__accordion-text"><?php echo esc_html($settings['label']); ?></span>
+                                                                    <span class="hamburger__accordion-icon">
                                                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                            <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white" />
+                                                                        <path d="M3.89258 10.2733L7.66591 6.5L11.4392 10.2733L10.9659 10.74L7.66591 7.44L4.36591 10.74L3.89258 10.2733Z" fill="white"/>
                                                                         </svg>
                                                                     </span>
-                                                                </a>
+                                                                </button>
+                                                                <div class="hamburger__accordion-list-wrapper js-accordion-list">
+                                                                    <ul class="hamburger__accordion-list">
+                                                                        <?php foreach ($terms as $term) : ?>
+                                                                        <li class="hamburger__accordion-item">
+                                                                            <a href="<?php echo esc_url(get_term_link($term)); ?>" class="hamburger__accordion-link">
+                                                                                <span class="hamburger__accordion-link-text"><?php echo esc_html($term->name); ?></span>
+                                                                                <span class="hamburger__accordion-link-icon">
+                                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
+                                                                                    </svg>
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <?php endforeach; ?>
+                                                                    </ul>
+                                                                </div>
                                                             </li>
                                                         <?php endforeach; ?>
                                                     </ul>
@@ -315,78 +330,144 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    <?php
+                                    $hamburger_chevron_svg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.89258 10.2733L7.66591 6.5L11.4392 10.2733L10.9659 10.74L7.66591 7.44L4.36591 10.74L3.89258 10.2733Z" fill="white"/></svg>';
+                                    $hamburger_arrow_svg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/></svg>';
+                                    ?>
                                     <li class="hamburger__item">
                                         <p class="hamburger__title">私たちについて</p>
                                         <ul class="hamburger__sub-list">
                                             <li class="hamburger__sub-item">
                                                 <button class="hamburger__accordion js-accordion-button">
                                                     <span class="hamburger__accordion-text">武蔵塗料グループについて</span>
-                                                    <span class="hamburger__accordion-icon">
-                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M3.89258 10.2733L7.66591 6.5L11.4392 10.2733L10.9659 10.74L7.66591 7.44L4.36591 10.74L3.89258 10.2733Z" fill="white"/>
-                                                        </svg>
-                                                    </span>
+                                                    <span class="hamburger__accordion-icon"><?= $hamburger_chevron_svg ?></span>
                                                 </button>
                                                 <div class="hamburger__accordion-list-wrapper js-accordion-list">
                                                     <ul class="hamburger__accordion-list">
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_COMPANY ?>" class="hamburger__accordion-link">
-                                                                <span class="hamburger__accordion-link-text">会社概要</span>
-                                                                <span class="hamburger__accordion-link-icon">
-                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                                    </svg>
-                                                                </span>
+                                                            <a href="<?= esc_url(URL_COMPANY) ?>" class="hamburger__accordion-link">
+                                                                <span class="hamburger__accordion-link-text">企業概要</span>
+                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                                             </a>
                                                         </li>
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_GLOBAL_NETWORK ?>" class="hamburger__accordion-link">
-                                                                <span class="hamburger__accordion-link-text">グローバルネットワーク</span>
-                                                                <span class="hamburger__accordion-link-icon">
-                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                                    </svg>
-                                                                </span>
-                                                            </a>
+                                                            <button class="hamburger__accordion js-accordion-button">
+                                                                <span class="hamburger__accordion-text">ヒストリー</span>
+                                                                <span class="hamburger__accordion-icon"><?= $hamburger_chevron_svg ?></span>
+                                                            </button>
+                                                            <div class="hamburger__accordion-list-wrapper js-accordion-list">
+                                                                <ul class="hamburger__accordion-list">
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_HISTORY_FOUNDING) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">創業期 1958年～</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_HISTORY_INNOVATION) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">技術革新期 1980年～</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_HISTORY_GLOBAL) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">グローバル展開期 2000年～</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </li>
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_HISTORY ?>" class="hamburger__accordion-link">
-                                                                <span class="hamburger__accordion-link-text">ヒストリー</span>
-                                                                <span class="hamburger__accordion-link-icon">
-                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                                    </svg>
-                                                                </span>
+                                                            <a href="<?= esc_url(URL_TECHNOLOGY) ?>" class="hamburger__accordion-link">
+                                                                <span class="hamburger__accordion-link-text">選ばれる理由</span>
+                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                                             </a>
+                                                            <ul class="hamburger__sub-children">
+                                                                <li class="hamburger__sub-children-item">
+                                                                    <a href="<?= esc_url(URL_TECHNOLOGY) ?>" class="hamburger__accordion-link">
+                                                                        <span class="hamburger__accordion-link-text">最先端の技術開発力</span>
+                                                                        <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="hamburger__sub-children-item">
+                                                                    <a href="<?= esc_url(URL_GLOBAL_NETWORK) ?>" class="hamburger__accordion-link">
+                                                                        <span class="hamburger__accordion-link-text">グローバルネットワーク</span>
+                                                                        <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="hamburger__sub-children-item">
+                                                                    <a href="<?= esc_url(URL_GLOBAL_NETWORK . '#overseas-bases') ?>" class="hamburger__accordion-link">
+                                                                        <span class="hamburger__accordion-link-text">グループ会社</span>
+                                                                        <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="hamburger__sub-children-item">
+                                                                    <a href="<?= esc_url(URL_GLOBAL_NETWORK . '#overseas-bases') ?>" class="hamburger__accordion-link">
+                                                                        <span class="hamburger__accordion-link-text">グローバル生産拠点</span>
+                                                                        <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
                                                         </li>
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_SUSTAINABILITY ?>" class="hamburger__accordion-link">
-                                                                <span class="hamburger__accordion-link-text">サステナビリティ</span>
-                                                                <span class="hamburger__accordion-link-icon">
-                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                                    </svg>
-                                                                </span>
+                                                            <a href="<?= esc_url(URL_SUSTAINABLE_BUSINESS) ?>" class="hamburger__accordion-link">
+                                                                <span class="hamburger__accordion-link-text">サステナブルなビジネス展開</span>
+                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                                             </a>
+                                                            <ul class="hamburger__sub-children">
+                                                                <li class="hamburger__sub-children-item">
+                                                                    <a href="<?= esc_url(URL_CUSTOMIZATION) ?>" class="hamburger__accordion-link">
+                                                                        <span class="hamburger__accordion-link-text">顧客志向のカスタマイズ</span>
+                                                                        <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
                                                         </li>
                                                         <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_VOICE ?>" class="hamburger__accordion-link">
+                                                            <button class="hamburger__accordion js-accordion-button">
+                                                                <span class="hamburger__accordion-text">サステナビリティ</span>
+                                                                <span class="hamburger__accordion-icon"><?= $hamburger_chevron_svg ?></span>
+                                                            </button>
+                                                            <div class="hamburger__accordion-list-wrapper js-accordion-list">
+                                                                <ul class="hamburger__accordion-list">
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_ENVIRONMENT) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">環境</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_SOCIETY) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">社会</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_GOVERNANCE) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">ガバナンス</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_SCM) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">SCM</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_LIBRARY) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">ライブラリー</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="hamburger__accordion-item">
+                                                            <a href="<?= esc_url(URL_VOICE) ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">お客様の声</span>
-                                                                <span class="hamburger__accordion-link-icon">
-                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                                    </svg>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="hamburger__accordion-item">
-                                                            <a href="<?= URL_FAQ ?>" class="hamburger__accordion-link">
-                                                                <span class="hamburger__accordion-link-text">よくある質問</span>
-                                                                <span class="hamburger__accordion-link-icon">
-                                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                                    </svg>
-                                                                </span>
+                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -395,26 +476,44 @@
                                         </ul>
                                     </li>
                                     <li class="hamburger__item">
-                                        <p class="hamburger__title">ニュース、メディア</p>
+                                        <p class="hamburger__title">ニュース・採用情報</p>
                                         <ul class="hamburger__sub-list">
                                             <li class="hamburger__sub-item">
-                                                <a href="<?= URL_NEWS ?>" class="hamburger__accordion">
-                                                    <span class="hamburger__accordion-text">ニュース・お知らせ</span>
-                                                    <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow">
-                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                        </svg>
-                                                    </span>
+                                                <a href="<?= esc_url(URL_MEDIA) ?>" class="hamburger__accordion">
+                                                    <span class="hamburger__accordion-text">ピックアップ</span>
+                                                    <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow"><?= $hamburger_arrow_svg ?></span>
                                                 </a>
                                             </li>
                                             <li class="hamburger__sub-item">
-                                                <a href="<?= URL_MEDIA ?>" class="hamburger__accordion">
-                                                    <span class="hamburger__accordion-text">メディア</span>
-                                                    <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow">
-                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="white"/>
-                                                        </svg>
-                                                    </span>
+                                                <a href="<?= esc_url(URL_NEWS) ?>" class="hamburger__accordion">
+                                                    <span class="hamburger__accordion-text">ニュース</span>
+                                                    <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow"><?= $hamburger_arrow_svg ?></span>
+                                                </a>
+                                            </li>
+                                            <li class="hamburger__sub-item">
+                                                <a href="<?= esc_url(URL_CAREER) ?>" class="hamburger__accordion">
+                                                    <span class="hamburger__accordion-text">採用情報</span>
+                                                    <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow"><?= $hamburger_arrow_svg ?></span>
+                                                </a>
+                                                <ul class="hamburger__sub-children">
+                                                    <li class="hamburger__sub-children-item">
+                                                        <a href="<?= esc_url(URL_INTERVIEW) ?>" class="hamburger__accordion-link">
+                                                            <span class="hamburger__accordion-link-text">インタビュー</span>
+                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="hamburger__sub-children-item">
+                                                        <a href="<?= esc_url(URL_CAREER_FAQ) ?>" class="hamburger__accordion-link">
+                                                            <span class="hamburger__accordion-link-text">採用に関するQ&amp;A</span>
+                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="hamburger__sub-item">
+                                                <a href="<?= esc_url(URL_FAQ) ?>" class="hamburger__accordion">
+                                                    <span class="hamburger__accordion-text">よくあるご質問</span>
+                                                    <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow"><?= $hamburger_arrow_svg ?></span>
                                                 </a>
                                             </li>
                                             <li class="hamburger__sub-item">
