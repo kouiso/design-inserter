@@ -399,9 +399,124 @@ test.describe('メニュー構造のリグレッションテスト', () => {
     const response = await page.goto('/career/');
     if (response) {
       expect(response.status()).not.toBe(404);
-      
+
       const bodyText = await page.locator('body').textContent();
       expect(bodyText).not.toContain('404');
+    }
+  });
+});
+
+test.describe('グローバルネットワーク SVGマップのリグレッションテスト', () => {
+  test('韓国マーカーのリンク先が韓国武蔵塗料のページであること', async ({ page }) => {
+    await page.goto('/wp-content/themes/muashi/assets/img/global-network/world-map.svg');
+    const koreaLink = page.locator('a[data-location="korea"]');
+    await expect(koreaLink).toBeVisible();
+    const href = await koreaLink.getAttribute('href');
+    expect(decodeURIComponent(href!)).toContain('韓国武蔵塗料');
+  });
+
+  test('埼玉マーカーのリンク先が武蔵塗料ホールディングスのページであること', async ({ page }) => {
+    await page.goto('/wp-content/themes/muashi/assets/img/global-network/world-map.svg');
+    const saitamaLink = page.locator('a[data-location="saitama"]');
+    await expect(saitamaLink).toBeVisible();
+    const href = await saitamaLink.getAttribute('href');
+    expect(decodeURIComponent(href!)).toContain('武蔵塗料ホールディングス');
+  });
+
+  test('韓国マーカーのピンが埼玉マーカーより左（西）にあること', async ({ page }) => {
+    await page.goto('/wp-content/themes/muashi/assets/img/global-network/world-map.svg');
+    const koreaPin = page.locator('a[data-location="korea"] g[clip-path] path:first-child');
+    const saitamaPin = page.locator('a[data-location="saitama"] g[clip-path] path:first-child');
+
+    const koreaBBox = await koreaPin.boundingBox();
+    const saitamaBBox = await saitamaPin.boundingBox();
+
+    expect(koreaBBox).not.toBeNull();
+    expect(saitamaBBox).not.toBeNull();
+    expect(koreaBBox!.x).toBeLessThan(saitamaBBox!.x);
+  });
+
+  test('グローバルネットワークページにSVGマップが表示されること', async ({ page }) => {
+    await page.goto('/global-network/');
+    const mapContainer = page.locator('[data-testid="global-network-map"]');
+    await expect(mapContainer).toBeVisible();
+    const svgObject = mapContainer.locator('object.global-map__object');
+    await expect(svgObject).toBeVisible();
+  });
+});
+
+test.describe('ハンバーガーメニュー サステナビリティリンクのリグレッションテスト', () => {
+  test('サステナビリティ配下のリンクが正しいURLを持つこと', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // ハンバーガーボタンをクリック（固定ポジション要素のためevaluateで実行）
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll<HTMLElement>('.header__hamburger.js-header-hamburger');
+      for (const btn of btns) {
+        if (btn.offsetParent !== null && !btn.closest('.hamburger')) {
+          btn.click();
+          break;
+        }
+      }
+    });
+    await page.waitForTimeout(500);
+
+    // 「武蔵塗料グループについて」アコーディオンを開く
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll<HTMLElement>('.js-accordion-button');
+      for (const btn of btns) {
+        if (btn.textContent?.includes('武蔵塗料グループについて')) {
+          btn.click();
+          break;
+        }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    // 「サステナビリティ」アコーディオンを開く
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll<HTMLElement>('.js-accordion-button');
+      for (const btn of btns) {
+        if (btn.textContent?.trim() === 'サステナビリティ') {
+          btn.click();
+          break;
+        }
+      }
+    });
+    await page.waitForTimeout(300);
+
+    // 各リンクのhrefを検証
+    const expectedLinks = [
+      { text: '環境', path: '/sustainability/environment/' },
+      { text: '社会', path: '/sustainability/society/' },
+      { text: 'ガバナンス', path: '/sustainability/governance/' },
+      { text: 'SCM', path: '/sustainability/scm/' },
+      { text: 'ライブラリー', path: '/sustainability/value-creation-process/' },
+    ];
+
+    for (const { text, path } of expectedLinks) {
+      const link = page.locator('.hamburger__accordion-link').filter({
+        has: page.locator(`.hamburger__accordion-link-text:text("${text}")`),
+      }).first();
+      const href = await link.getAttribute('href');
+      expect(href, `「${text}」のリンク先が ${path} であること`).toContain(path);
+    }
+  });
+
+  test('サステナビリティ各ページが404にならないこと', async ({ page }) => {
+    const paths = [
+      '/sustainability/environment/',
+      '/sustainability/society/',
+      '/sustainability/governance/',
+      '/sustainability/scm/',
+      '/sustainability/value-creation-process/',
+    ];
+
+    for (const path of paths) {
+      const response = await page.goto(path);
+      expect(response?.status(), `${path} が200を返すこと`).toBe(200);
     }
   });
 });

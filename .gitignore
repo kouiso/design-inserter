@@ -42,6 +42,7 @@ TODO.md
 # System files
 .DS_Store
 Thumbs.db
+nul
 
 # Local environment
 local-xdebuginfo.php

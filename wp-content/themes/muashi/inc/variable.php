@@ -32,11 +32,11 @@ define('URL_SUSTAINABLE_BUSINESS', home_url('/sustainable-business/'));
 define('URL_CAREER_FAQ', home_url('/career-faq/'));
 
 // Sustainability related pages
-define('URL_ENVIRONMENT', home_url('/environment/'));
-define('URL_SOCIETY', home_url('/society/'));
-define('URL_GOVERNANCE', home_url('/governance/'));
-define('URL_SCM', home_url('/scm/'));
-define('URL_LIBRARY', home_url('/library/'));
+define('URL_ENVIRONMENT', home_url('/sustainability/environment/'));
+define('URL_SOCIETY', home_url('/sustainability/society/'));
+define('URL_GOVERNANCE', home_url('/sustainability/governance/'));
+define('URL_SCM', home_url('/sustainability/scm/'));
+define('URL_LIBRARY', home_url('/sustainability/value-creation-process/'));
 
 // External language sites
 define('URL_LANG_EN', 'https://en.musashipaint.com');
