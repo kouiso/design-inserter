@@ -233,7 +233,7 @@ get_header();
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
                     20年以上前からグローバル展開を進め、アジアを起点に欧州・北米へと生産・販売体制を拡充グループ全体の強固な連携により、世界中のお客様へ同一で、高品質な塗料を安定的に供給しています
                     </p>
-                    <a href="<?= URL_GLOBAL_NETWORK; ?>#overseas-bases" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
+                    <a href="<?= URL_GLOBAL_NETWORK; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
                         Global Network
                         </span>

@@ -51,7 +51,7 @@
 </g>
 </g>
 </g>
-<a href="/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%83%9b%e3%83%bc%e3%83%ab%e3%83%87%e3%82%a3%e3%83%b3%e3%82%b0%e3%82%b9%e6%a0%aa%e5%bc%8f%e4%bc%9a%e7%a4%be/" target="_top" data-location="korea" class="global-map__marker" style="cursor:pointer;">
+<a href="/global-network/%e9%9f%93%e5%9b%bd%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/" target="_top" data-location="korea" class="global-map__marker" style="cursor:pointer;">
 <title>韓国</title>
 <path d="M802.848 337.936L818.272 359.171H990" stroke="url(#paint5_linear_3_2)" stroke-width="0.82" stroke-miterlimit="10"/>
 <mask id="path-13-outside-1_3_2" maskUnits="userSpaceOnUse" x="899" y="313" width="79" height="41" fill="black">
@@ -79,7 +79,7 @@
 <path d="M1302.43 330.969C1308.68 330.969 1313.74 325.948 1313.74 319.753C1313.74 313.558 1308.68 308.536 1302.43 308.536C1296.19 308.536 1291.12 313.558 1291.12 319.753C1291.12 325.948 1296.19 330.969 1302.43 330.969Z" fill="white"/>
 </g>
 </a>
-<a href="/global-network/%e9%9f%93%e5%9b%bd%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/" target="_top" data-location="saitama" class="global-map__marker" style="cursor:pointer;">
+<a href="/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%83%9b%e3%83%bc%e3%83%ab%e3%83%87%e3%82%a3%e3%83%b3%e3%82%b0%e3%82%b9%e6%a0%aa%e5%bc%8f%e4%bc%9a%e7%a4%be/" target="_top" data-location="saitama" class="global-map__marker" style="cursor:pointer;">
 <title>埼玉</title>
 <path d="M849.056 249.141L864.531 223.823H989" stroke="url(#paint1_linear_3_2)" stroke-width="0.82" stroke-miterlimit="10"/>
 <mask id="path-23-outside-3_3_2" maskUnits="userSpaceOnUse" x="899" y="178" width="77" height="40" fill="black">
