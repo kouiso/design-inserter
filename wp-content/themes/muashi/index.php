@@ -7,8 +7,8 @@ get_header();
 
     <div class="top-kv__inner">
         <picture class="top-kv__pic">
-            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_dt_260225.jpg" media="(min-width: 768px)">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_sp_260225.jpg" alt="">
+            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_dt_260325.jpg" media="(min-width: 768px)">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/kv_sp_260325.jpg" alt="">
         </picture>
 
         <div class="top-kv__message-bg u-hidden-md-up">
