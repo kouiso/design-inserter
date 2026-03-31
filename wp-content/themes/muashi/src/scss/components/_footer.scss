@@ -127,6 +127,15 @@
     }
   }
 
+  &__accordion-list &__accordion{
+    padding-left: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  &__accordion-list &__accordion-list &__accordion-link{
+    padding-left: 40px;
+  }
+
   &__accordion-list-wrapper{
     display: block grid;
     transition: grid-template-rows 0.5s;

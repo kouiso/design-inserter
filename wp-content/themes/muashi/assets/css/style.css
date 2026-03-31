@@ -1336,6 +1336,13 @@ a {
 .footer__accordion.is-active .footer__accordion-icon {
   transform: rotate(0);
 }
+.footer__accordion-list .footer__accordion {
+  padding-left: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.footer__accordion-list .footer__accordion-list .footer__accordion-link {
+  padding-left: 40px;
+}
 .footer__accordion-list-wrapper {
   display: block grid;
   transition: grid-template-rows 0.5s;
@@ -4048,8 +4055,8 @@ a {
 
 .page__inner:has(> .global-map) {
   margin-top: 0;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .page__inner:has(+ .page__inner > .global-map) {
@@ -6156,4 +6163,5 @@ a {
     transform: translateX(-50%);
   }
 }
+
 /*# sourceMappingURL=style.css.map */
