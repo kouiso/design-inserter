@@ -32,8 +32,20 @@ if ( $raw_products_slug !== '' ) {
     }
 }
 
+// 製品詳細からの単数パラメータ対応
+$raw_product_slug = isset( $_GET['dl_product'] ) ? sanitize_text_field( wp_unslash( $_GET['dl_product'] ) ) : '';
+if ( $raw_product_slug !== '' ) {
+    $single_slug = sanitize_title( $raw_product_slug );
+    if ( isset( $slug_to_id[ $single_slug ] ) && ! in_array( $slug_to_id[ $single_slug ], $requested_ids, true ) ) {
+        $requested_ids[] = $slug_to_id[ $single_slug ];
+    }
+}
+
+$source_product_id = isset( $_GET['source_product_id'] ) ? absint( $_GET['source_product_id'] ) : 0;
+
 $download_data = array(
     'initialSelection' => $requested_ids,
+    'sourceProductId'  => $source_product_id,
 );
 
 $download_data_json = wp_json_encode( $download_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );

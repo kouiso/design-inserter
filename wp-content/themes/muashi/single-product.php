@@ -55,11 +55,11 @@ get_header();
                                 'dl_product' => $product_slug,
                                 'source_product_id' => get_the_ID(),
                             );
-                            $download_permalink = add_query_arg($download_args, home_url('/catalog/'));
+                            $download_permalink = add_query_arg($download_args, home_url('/download/'));
                             ?>
                             <div class="single__cta">
                                 <a class="single__download-button"
-                                    href="<?php echo esc_url($download_permalink); ?>">本製品の特長や塗膜性能がわかるカタログダウンロード</a>
+                                    href="<?php echo esc_url($download_permalink); ?>">本製品の特長や塗膜性能がわかる資料ダウンロード</a>
                             </div>
 
                             <div class="single__back">

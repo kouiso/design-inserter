@@ -199,14 +199,19 @@ class DownloadPage {
     const now = Date.now();
     initial.forEach((value, index) => {
       const id = Number(value);
-      if (!Number.isFinite(id) || !this.productsById.has(id)) {
+      if (!Number.isFinite(id)) {
+        return;
+      }
+      // form-onlyモードでは製品一覧がないため、productsById チェックをスキップ
+      if (!this.isFormOnly && !this.productsById.has(id)) {
         return;
       }
       const timestamp = now + index / 1000;
       this.state.selected.set(id, timestamp);
     });
 
-    if (!this.productsById.has(this.sourceProductId)) {
+    // form-onlyモードでは製品一覧がないため、存在チェックをスキップ
+    if (!this.isFormOnly && !this.productsById.has(this.sourceProductId)) {
       this.sourceProductId = 0;
     }
 
