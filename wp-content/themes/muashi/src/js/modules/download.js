@@ -44,9 +44,23 @@ class DownloadPage {
     
     this.bindEvents();
     this.bootstrapSelection();
+    this.jumpToSourceProductPage();
     this.renderAll();
     this.syncHiddenInputs();
     this.scrollToInitialProduct();
+  }
+
+  // sourceProductId の製品が含まれるページに自動ジャンプ
+  jumpToSourceProductPage() {
+    if (!this.isDownloadPage || !this.sourceProductId) {
+      return;
+    }
+    const filtered = this.getFilteredProducts();
+    const index = filtered.findIndex((p) => p.id === this.sourceProductId);
+    if (index === -1) {
+      return;
+    }
+    this.state.currentPage = Math.floor(index / this.perPage) + 1;
   }
 
   scrollToInitialProduct() {
