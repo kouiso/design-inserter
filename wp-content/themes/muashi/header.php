@@ -345,6 +345,12 @@
                                                 <div class="hamburger__accordion-list-wrapper js-accordion-list">
                                                     <ul class="hamburger__accordion-list">
                                                         <li class="hamburger__accordion-item">
+                                                            <a href="<?= esc_url(URL_ABOUT_US) ?>" class="hamburger__accordion-link">
+                                                                <span class="hamburger__accordion-link-text">企業情報</span>
+                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="hamburger__accordion-item">
                                                             <a href="<?= esc_url(URL_COMPANY) ?>" class="hamburger__accordion-link">
                                                                 <span class="hamburger__accordion-link-text">企業概要</span>
                                                                 <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
@@ -431,6 +437,12 @@
                                                             </button>
                                                             <div class="hamburger__accordion-list-wrapper js-accordion-list">
                                                                 <ul class="hamburger__accordion-list">
+                                                                    <li class="hamburger__accordion-item">
+                                                                        <a href="<?= esc_url(URL_SUSTAINABILITY) ?>" class="hamburger__accordion-link">
+                                                                            <span class="hamburger__accordion-link-text">基本方針</span>
+                                                                            <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                        </a>
+                                                                    </li>
                                                                     <li class="hamburger__accordion-item">
                                                                         <a href="<?= esc_url(URL_ENVIRONMENT) ?>" class="hamburger__accordion-link">
                                                                             <span class="hamburger__accordion-link-text">環境</span>

@@ -4049,7 +4049,7 @@ a {
 .page__inner:has(> .global-map) {
   margin-top: 0;
   padding-top: 40px;
-  padding-bottom: 0;
+  padding-bottom: 40px;
 }
 
 .page__inner:has(+ .page__inner > .global-map) {
