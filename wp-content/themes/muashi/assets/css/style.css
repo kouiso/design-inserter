@@ -4058,9 +4058,13 @@ a {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.page__inner:has(> .global-map) > .global-map {
+  margin-bottom: 0;
+}
 
 .page__inner:has(+ .page__inner > .global-map) {
   padding-bottom: 0;
+  overflow: hidden;
 }
 
 .page__inner:has(> .global-map) + .page__inner {

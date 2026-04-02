@@ -24,10 +24,15 @@
 	margin-top: 0;
 	padding-top: 20px;
 	padding-bottom: 20px;
+
+	> .global-map {
+		margin-bottom: 0; // 汎用ルール(.page__inner > *)の1.5remを打ち消し
+	}
 }
 
 .page__inner:has(+ .page__inner > .global-map) {
 	padding-bottom: 0;
+	overflow: hidden; // 子要素のmarginが外にはみ出すのを防ぐ（BFC生成）
 }
 
 .page__inner:has(> .global-map) + .page__inner {
