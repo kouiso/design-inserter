@@ -1338,8 +1338,8 @@ add_action( 'pre_get_posts', function( $query ) {
     if ( $query->is_tax( array( 'product_application', 'product_material', 'product_design', 'product_function', 'product_environment' ) ) ) {
         $query->set( 'post_type', array( 'product' ) );
         $query->set( 'posts_per_page', 12 );
-        $query->set( 'orderby', 'date' );
-        $query->set( 'order', 'DESC' );
+        $query->set( 'orderby', 'menu_order' );
+        $query->set( 'order', 'ASC' );
     }
 } );
 
