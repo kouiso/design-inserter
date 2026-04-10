@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 }
 
-// セキュリティチェック（管理者のみ実行可能）
-if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
+// セキュリティチェック（管理者 or CLI実行のみ許可）
+if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) && php_sapi_name() !== 'cli' ) {
 	wp_die( 'このスクリプトは管理者のみ実行可能です。' );
 }
 
