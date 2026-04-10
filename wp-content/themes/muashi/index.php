@@ -195,8 +195,7 @@ get_header();
 
     <div class="top-about__inner">
         <picture class="top-about__pic" data-inview data-fade-in>
-            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/about_260225.jpg" media="(min-width: 768px)">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/about_sp.jpg" alt="">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/about_260225.jpg" alt="">
         </picture>
         <div class="top-about__contents-wrapper">
             <div class="top-about__title-wrapper">
@@ -286,8 +285,7 @@ get_header();
 
     <div class="top-sustainability__inner">
         <picture class="top-sustainability__pic" data-inview data-fade-in>
-            <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/sustainability_260225.jpg" media="(min-width: 768px)">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/sustainability_sp.jpg" alt="">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/sustainability_260225.jpg" alt="">
         </picture>
         <div class="top-sustainability__contents-wrapper">
             <div class="top-sustainability__title-wrapper">
@@ -351,8 +349,7 @@ get_header();
 
 <section class="top-customer" data-text-color="white" data-inview-area="50%">
     <picture class="top-customer__bg">
-        <source srcset="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/customer_260225.jpg" media="(min-width: 768px)">
-        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/customer_sp.jpg" alt="" class="top-customer__bg-img">
+        <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/top/customer_260225.jpg" alt="" class="top-customer__bg-img">
     </picture>
 
     <div class="top-customer__inner">
