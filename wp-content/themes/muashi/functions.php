@@ -1889,6 +1889,7 @@ function muashi_register_sidebar_nav_menus() {
         'sidebar_about_us'       => '私たちについて用サイドバー',
         'sidebar_product'        => '製品情報用サイドバー',
         'sidebar_global_network' => 'グローバルネットワーク用サイドバー',
+        'sidebar_document'       => 'カタログダウンロード用サイドバー',
     ) );
 }
 add_action( 'after_setup_theme', 'muashi_register_sidebar_nav_menus' );
@@ -2163,3 +2164,4 @@ add_filter('acf/settings/load_json', function($paths) {
     $paths[] = get_stylesheet_directory() . '/acf-json';
     return $paths;
 });
+

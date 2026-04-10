@@ -40,6 +40,7 @@ $menus_to_delete = array(
 	'ピックアップ用サイドバー',
 	'ニュース用サイドバー',
 	'ニュース・ピックアップ用サイドバー',
+	'カタログダウンロード用サイドバー',
 );
 
 echo "=== 既存メニュー削除 ===\n\n";
@@ -70,6 +71,7 @@ $setup_scripts = array(
 	'setup-faq-menu.php' => 'よくある質問用サイドバー',
 	'setup-about-us-menu.php' => '私たちについて用サイドバー',
 	'setup-voice-menu.php' => 'お客様の声用サイドバー',
+	'setup-document-menu.php' => 'カタログダウンロード用サイドバー',
 );
 
 foreach ( $setup_scripts as $script_file => $menu_name ) {

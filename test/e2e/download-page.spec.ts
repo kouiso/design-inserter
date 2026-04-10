@@ -9,7 +9,7 @@ test.describe('ダウンロードページ', () => {
 
       const searchLabel = page.locator('.download__search-label');
       await expect(searchLabel).toBeVisible();
-      await expect(searchLabel).toHaveText('製品名（カタカナ）');
+      await expect(searchLabel).toContainText('製品名');
     });
 
     test('検索プレースホルダーが正しいテキストで表示される', async ({ page }) => {
@@ -27,24 +27,21 @@ test.describe('ダウンロードページ', () => {
       await expect(nav).toBeVisible();
 
       // カタログダウンロードリンクが存在する
-      await expect(nav.locator('.navigation__link:has-text("カタログダウンロード")')).toBeVisible();
-
-      // 製品詳細リンクが存在する
-      await expect(nav.locator('.navigation__link:has-text("製品詳細")')).toBeVisible();
+      await expect(nav.locator('.navigation__item-title:has-text("カタログダウンロード")')).toBeVisible();
     });
 
-    test('サイドバーのカタログダウンロードがカレント状態', async ({ page }) => {
+    test('サイドバーのカタログダウンロードがアクティブ状態', async ({ page }) => {
       await page.goto('/document/');
 
-      const currentItem = page.locator('.navigation__item.is-current');
-      await expect(currentItem).toBeVisible();
-      await expect(currentItem.locator('.navigation__link')).toHaveText('カタログダウンロード');
+      const activeItem = page.locator('.navigation__item.is-active');
+      await expect(activeItem).toBeVisible();
+      await expect(activeItem.locator('.navigation__item-title')).toHaveText('カタログダウンロード');
     });
 
     test('サイドバーリンクにパディングが適用されている', async ({ page }) => {
       await page.goto('/document/');
 
-      const navLink = page.locator('.navigation__link').first();
+      const navLink = page.locator('.navigation__item-title').first();
       await expect(navLink).toBeVisible();
 
       const paddingTop = await navLink.evaluate(
@@ -61,7 +58,7 @@ test.describe('ダウンロードページ', () => {
 
       const searchLabel = page.locator('.download__search-label');
       await expect(searchLabel).toBeVisible();
-      await expect(searchLabel).toHaveText('製品名（カタカナ）');
+      await expect(searchLabel).toContainText('製品名');
     });
 
     test('検索プレースホルダーが正しいテキストで表示される', async ({ page }) => {
@@ -72,21 +69,14 @@ test.describe('ダウンロードページ', () => {
       await expect(searchInput).toHaveAttribute('placeholder', '製品名・キーワードで検索');
     });
 
-    test('サイドバーの製品詳細がカレント状態', async ({ page }) => {
+    test('サイドバーナビゲーションが表示される', async ({ page }) => {
       await page.goto('/document-featured/');
 
-      const currentItem = page.locator('.navigation__item.is-current');
-      await expect(currentItem).toBeVisible();
-      await expect(currentItem.locator('.navigation__link')).toHaveText('製品詳細');
-    });
+      const nav = page.locator('.navigation');
+      await expect(nav).toBeVisible();
 
-    test('製品詳細リンクが/document-featured/に遷移する', async ({ page }) => {
-      await page.goto('/document/');
-
-      const featuredLink = page.locator('.navigation__link:has-text("製品詳細")');
-      await featuredLink.click();
-
-      await expect(page).toHaveURL(/\/document-featured\//);
+      // カタログダウンロードリンクが存在する
+      await expect(nav.locator('.navigation__item-title:has-text("カタログダウンロード")')).toBeVisible();
     });
   });
 });

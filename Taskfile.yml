@@ -307,3 +307,27 @@ tasks:
         wp-content/themes/muashi/
         {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/themes/muashi/
       - echo "テーマデプロイ完了"
+
+  # ==========================================================
+  # マイグレーション（SSH経由でステージング上のスクリプト実行）
+  # ==========================================================
+
+  migrate:sidebar:
+    desc: ステージングでサイドバーメニュー初期化を実行
+    cmds:
+      - >-
+        ssh -p 10022 {{.STAGING_SSH_FULL}}
+        "cd {{.STAGING_PATH}} && php wp-content/themes/muashi/inc/setup-document-menu.php"
+      - echo "マイグレーション完了"
+
+  migrate:all-menus:
+    desc: ステージングで全サイドバーメニューを一括初期化
+    preconditions:
+      - sh: test -t 0
+        msg: "⛔ 対話型ターミナルからのみ実行できます"
+    prompt: "ステージングの全サイドバーメニューを再初期化します。よろしいですか？"
+    cmds:
+      - >-
+        ssh -p 10022 {{.STAGING_SSH_FULL}}
+        "cd {{.STAGING_PATH}} && php wp-content/themes/muashi/inc/run-all-menu-setup.php"
+      - echo "全メニュー初期化完了"
