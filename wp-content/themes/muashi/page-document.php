@@ -40,9 +40,6 @@ if ( have_posts() ) {
                 <li class="navigation__item is-current">
                     <a href="<?php echo esc_url( home_url( '/document/' ) ); ?>" class="navigation__link">カタログダウンロード</a>
                 </li>
-                <li class="navigation__item">
-                    <a href="<?php echo esc_url( home_url( '/document-featured/' ) ); ?>" class="navigation__link">製品詳細</a>
-                </li>
             </ul>
         </div>
     </div>
