@@ -81,6 +81,10 @@ test/screenshots/
 test/vrt/screenshots/
 test/vrt/report.html
 
+# Task
+.tmp/
+wp-cli.phar
+
 # Claude
 .claude/
 tmpclaude-*/

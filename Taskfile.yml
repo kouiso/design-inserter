@@ -1,0 +1,309 @@
+version: '3'
+
+vars:
+  # Local by Flywheel パス（バージョン更新時に変更）
+  LOCAL_PHP: C:/Users/suker/AppData/Roaming/Local/lightning-services/php-8.2.27+1/bin/win64/php.exe
+  LOCAL_PHPINI: C:/Users/suker/AppData/Roaming/Local/run/41iJdtYte/conf/php/php.ini
+  LOCAL_MYSQL: C:/Users/suker/AppData/Roaming/Local/lightning-services/mysql-8.0.35+4/bin/win64/bin/mysql.exe
+  LOCAL_MYSQLDUMP: C:/Users/suker/AppData/Roaming/Local/lightning-services/mysql-8.0.35+4/bin/win64/bin/mysqldump.exe
+  LOCAL_MYSQL_PORT: "10011"
+
+  # URL
+  STAGING_URL: https://musashipaint.xsrv.jp
+  LOCAL_URL: http://localhost:10010
+
+  # SSH（~/.ssh/config の Host musashi を利用）
+  SSH_HOST: musashi
+  STAGING_PATH: ~/musashipaint.xsrv.jp/public_html
+  STAGING_SSH_FULL: musashipaint@sv16698.xserver.jp
+
+  # ステージング DB
+  STAGING_DB_USER: musashipaint_wp1
+  STAGING_DB_PASS: j4jtxjtv5f
+  STAGING_DB_NAME: musashipaint_wp1
+
+  # rsync 共通除外
+  RSYNC_EXCLUDES: >-
+    --exclude='node_modules/'
+    --exclude='.git/'
+    --exclude='.sass-cache/'
+    --exclude='cache/'
+    --exclude='upgrade/'
+    --exclude='ai1wm-backups/'
+    --exclude='wpvividbackups/'
+    --exclude='wpvivid_staging/'
+    --exclude='debug.log'
+    --exclude='object-cache.php'
+    --exclude='advanced-cache.php'
+    --exclude='db.php'
+
+  # 内部
+  DUMP_DIR: .tmp
+  WP: '{{.LOCAL_PHP}} -c "{{.LOCAL_PHPINI}}" wp-cli.phar'
+  RSYNC_SSH: rsync -avz -e "ssh -p 10022"
+
+tasks:
+
+  setup:
+    desc: wp-cli をダウンロード
+    status:
+      - test -f wp-cli.phar
+    cmds:
+      - curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+      - '{{.WP}} --version'
+
+  # ==========================================================
+  # ステージング → ローカル（pull 系）
+  # ==========================================================
+
+  pull:
+    desc: DB + 全ファイルをステージングからローカルに完全同期
+    cmds:
+      - task: db:pull
+      - task: files:pull
+
+  pull:diff:
+    desc: DB + 差分ファイルだけステージングからローカルに同期
+    cmds:
+      - task: db:pull
+      - task: files:diff
+
+  # --- DB ---
+
+  db:pull:
+    desc: ステージング DB をローカルに取り込み＆URL置換
+    deps: [setup]
+    cmds:
+      - task: db:backup
+      - task: db:fetch
+      - task: db:import
+      - task: db:replace
+      - task: db:flush
+      - cmd: rm -f {{.DUMP_DIR}}/staging.sql
+        silent: true
+      - echo "DB同期完了！"
+
+  db:backup:
+    internal: true
+    deps: [setup]
+    cmds:
+      - mkdir -p {{.DUMP_DIR}}
+      - cmd: >-
+          "{{.LOCAL_MYSQLDUMP}}"
+          -u root -proot -h 127.0.0.1 -P {{.LOCAL_MYSQL_PORT}}
+          --single-transaction --quick --default-character-set=utf8mb4
+          local > "{{.DUMP_DIR}}/local-backup-$(date +%Y%m%d-%H%M%S).sql"
+      - echo "ローカルDBバックアップ完了"
+
+  db:fetch:
+    internal: true
+    cmds:
+      - mkdir -p {{.DUMP_DIR}}
+      - >-
+        ssh {{.SSH_HOST}} "mysqldump
+        -u {{.STAGING_DB_USER}} -p{{.STAGING_DB_PASS}} {{.STAGING_DB_NAME}}
+        --single-transaction --quick --default-character-set=utf8mb4"
+        > {{.DUMP_DIR}}/staging.sql
+      - echo "ステージングDBダンプ完了"
+
+  db:import:
+    internal: true
+    cmds:
+      - >-
+        "{{.LOCAL_MYSQL}}"
+        -u root -proot -h 127.0.0.1 -P {{.LOCAL_MYSQL_PORT}}
+        local < {{.DUMP_DIR}}/staging.sql
+      - echo "インポート完了"
+
+  db:replace:
+    internal: true
+    cmds:
+      - >-
+        {{.WP}} search-replace "{{.STAGING_URL}}" "{{.LOCAL_URL}}"
+        --all-tables --precise --skip-columns=guid --report-changed-only
+      - >-
+        {{.WP}} search-replace "//musashipaint.xsrv.jp" "//localhost:10010"
+        --all-tables --precise --skip-columns=guid --report-changed-only
+      - echo "URL置換完了"
+
+  db:flush:
+    internal: true
+    cmds:
+      - '{{.WP}} transient delete --all'
+      - '{{.WP}} cache flush'
+      - '{{.WP}} rewrite flush'
+      - echo "キャッシュクリア完了"
+
+  # --- ファイル ---
+
+  files:pull:
+    desc: ステージングの wp-content を丸ごとローカルに上書き同期（--delete付き）
+    cmds:
+      - >-
+        {{.RSYNC_SSH}} --progress --delete
+        {{.RSYNC_EXCLUDES}}
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/themes/
+        wp-content/themes/
+      - >-
+        {{.RSYNC_SSH}} --progress --delete
+        {{.RSYNC_EXCLUDES}}
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/plugins/
+        wp-content/plugins/
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/uploads/
+        wp-content/uploads/
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/languages/
+        wp-content/languages/
+      - echo "全ファイル同期完了"
+
+  files:diff:
+    desc: ステージングとの差分ファイルだけ取り込み（ローカル独自ファイルは残す）
+    cmds:
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.RSYNC_EXCLUDES}}
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/themes/
+        wp-content/themes/
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.RSYNC_EXCLUDES}}
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/plugins/
+        wp-content/plugins/
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/uploads/
+        wp-content/uploads/
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/languages/
+        wp-content/languages/
+      - echo "差分ファイル同期完了"
+
+  files:dry-run:
+    desc: 差分プレビュー（実際には同期しない）
+    cmds:
+      - echo "=== themes ==="
+      - >-
+        {{.RSYNC_SSH}} --dry-run
+        {{.RSYNC_EXCLUDES}}
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/themes/
+        wp-content/themes/
+      - echo "=== plugins ==="
+      - >-
+        {{.RSYNC_SSH}} --dry-run
+        {{.RSYNC_EXCLUDES}}
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/plugins/
+        wp-content/plugins/
+      - echo "=== uploads ==="
+      - >-
+        {{.RSYNC_SSH}} --dry-run
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/uploads/
+        wp-content/uploads/
+
+  uploads:pull:
+    desc: ステージングの uploads だけ同期
+    cmds:
+      - >-
+        {{.RSYNC_SSH}} --progress
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/uploads/
+        wp-content/uploads/
+      - echo "uploads同期完了"
+
+  # ==========================================================
+  # ローカル → ステージング（push 系）
+  # ==========================================================
+
+  push:
+    desc: DB + テーマをステージングに全反映（要確認・AI実行不可）
+    preconditions:
+      - sh: test -t 0
+        msg: "⛔ push 系コマンドは対話型ターミナルからのみ実行できます"
+    prompt: "ローカルの DB + テーマをステージングに反映します。よろしいですか？"
+    cmds:
+      - task: db:push:exec
+      - task: theme:push:exec
+
+  db:push:
+    desc: ローカル DB をステージングに反映（要確認・AI実行不可）
+    preconditions:
+      - sh: test -t 0
+        msg: "⛔ push 系コマンドは対話型ターミナルからのみ実行できます"
+    prompt: "ローカル DB をステージングに上書きします。よろしいですか？"
+    deps: [setup]
+    cmds:
+      - task: db:push:exec
+
+  db:push:exec:
+    internal: true
+    deps: [setup]
+    cmds:
+      - mkdir -p {{.DUMP_DIR}}
+      # 1. ローカルDBバックアップ
+      - cmd: >-
+          "{{.LOCAL_MYSQLDUMP}}"
+          -u root -proot -h 127.0.0.1 -P {{.LOCAL_MYSQL_PORT}}
+          --single-transaction --quick --default-character-set=utf8mb4
+          local > "{{.DUMP_DIR}}/local-backup-$(date +%Y%m%d-%H%M%S).sql"
+      - echo "ローカルDBバックアップ完了"
+      # 2. URL置換（ローカル→ステージング）※ローカルDBを一時的に書き換える
+      - >-
+        {{.WP}} search-replace "{{.LOCAL_URL}}" "{{.STAGING_URL}}"
+        --all-tables --precise --skip-columns=guid --report-changed-only
+      - >-
+        {{.WP}} search-replace "//localhost:10010" "//musashipaint.xsrv.jp"
+        --all-tables --precise --skip-columns=guid --report-changed-only
+      # 3. ステージングURL済みのDBをエクスポート
+      - cmd: >-
+          "{{.LOCAL_MYSQLDUMP}}"
+          -u root -proot -h 127.0.0.1 -P {{.LOCAL_MYSQL_PORT}}
+          --single-transaction --quick --default-character-set=utf8mb4
+          local > "{{.DUMP_DIR}}/push-staging.sql"
+      # 4. ローカルDBを元に戻す（ローカルURL）
+      - >-
+        {{.WP}} search-replace "{{.STAGING_URL}}" "{{.LOCAL_URL}}"
+        --all-tables --precise --skip-columns=guid --report-changed-only
+      - >-
+        {{.WP}} search-replace "//musashipaint.xsrv.jp" "//localhost:10010"
+        --all-tables --precise --skip-columns=guid --report-changed-only
+      - echo "URL置換＆エクスポート完了"
+      # 5. ステージングDBをバックアップ
+      - >-
+        ssh {{.SSH_HOST}} "mysqldump
+        -u {{.STAGING_DB_USER}} -p{{.STAGING_DB_PASS}} {{.STAGING_DB_NAME}}
+        --single-transaction --quick --default-character-set=utf8mb4"
+        > {{.DUMP_DIR}}/staging-backup-$(date +%Y%m%d-%H%M%S).sql
+      - echo "ステージングDBバックアップ完了"
+      # 6. ステージングにインポート
+      - >-
+        ssh {{.SSH_HOST}} "mysql
+        -u {{.STAGING_DB_USER}} -p{{.STAGING_DB_PASS}} {{.STAGING_DB_NAME}}"
+        < {{.DUMP_DIR}}/push-staging.sql
+      - echo "ステージングDBインポート完了"
+      # 7. クリーンアップ
+      - cmd: rm -f {{.DUMP_DIR}}/push-staging.sql
+        silent: true
+      - echo "DB push 完了！"
+
+  theme:push:
+    desc: テーマをステージングにデプロイ（要確認・AI実行不可）
+    preconditions:
+      - sh: test -t 0
+        msg: "⛔ push 系コマンドは対話型ターミナルからのみ実行できます"
+    prompt: "テーマをステージングにデプロイします。よろしいですか？"
+    cmds:
+      - task: theme:push:exec
+
+  theme:push:exec:
+    internal: true
+    cmds:
+      - >-
+        {{.RSYNC_SSH}} --progress --delete
+        --exclude='node_modules/'
+        --exclude='.git/'
+        --exclude='.sass-cache/'
+        wp-content/themes/muashi/
+        {{.STAGING_SSH_FULL}}:{{.STAGING_PATH}}/wp-content/themes/muashi/
+      - echo "テーマデプロイ完了"

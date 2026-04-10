@@ -271,6 +271,12 @@ function muashi_validate_selected_products_field( $result, $tag ) {
     }
     $raw_value = trim( (string) $raw_value );
 
+    // ダウンロード文脈でない場合（通常のお問い合わせ）はバリデーションをスキップ
+    $source_product = isset($_POST['source_product']) ? trim( wp_unslash($_POST['source_product']) ) : '';
+    if ( $raw_value === '' && $source_product === '' ) {
+        return $result;
+    }
+
     $error_message_empty = '資料を少なくとも1件選択してください。';
     $error_message_limit = '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。';
 
