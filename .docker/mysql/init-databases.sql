@@ -4,7 +4,10 @@ CREATE DATABASE IF NOT EXISTS musashi_jp
   DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE DATABASE IF NOT EXISTS musashi_en
   DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS musashi_bogo
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 GRANT ALL PRIVILEGES ON musashi_jp.* TO 'wordpress'@'%';
 GRANT ALL PRIVILEGES ON musashi_en.* TO 'wordpress'@'%';
+GRANT ALL PRIVILEGES ON musashi_bogo.* TO 'wordpress'@'%';
 FLUSH PRIVILEGES;

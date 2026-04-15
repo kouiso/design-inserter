@@ -105,6 +105,42 @@ services:
     networks:
       - musashi-net
 
+  musashi-wp-bogo:
+    build:
+      context: ./.docker/wordpress-bedrock
+    container_name: musashi-wp-bogo
+    restart: unless-stopped
+    ports:
+      - "${WP_BOGO_PORT:-8082}:80"
+    depends_on:
+      musashi-db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_NAME: ${BOGO_DB_NAME:-musashi_bogo}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
+      WORDPRESS_DB_HOST: musashi-db
+      WP_HOME: ${BOGO_WP_HOME:-http://localhost:8082}
+      WP_TITLE: ${BOGO_WP_TITLE:-MusashiPaint Bogo}
+      WP_LOCALE: ${BOGO_WP_LOCALE:-ja}
+      WP_THEME: ${BOGO_WP_THEME:-muashi-bogo}
+      WP_ADMIN_USER: ${BOGO_WP_ADMIN_USER:-admin}
+      WP_ADMIN_PASS: ${BOGO_WP_ADMIN_PASS:-admin}
+      WP_ADMIN_EMAIL: ${BOGO_WP_ADMIN_EMAIL:-admin@example.com}
+      WP_PLUGINS: ${BOGO_WP_PLUGINS:-advanced-custom-fields bogo contact-form-7 contact-form-7-honeypot duplicate-post redirection wp-multibyte-patch wordpress-seo}
+      SMTP_HOST: ${SMTP_HOST:-musashi-mail}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+    volumes:
+      - wp_core_bogo:/var/www/html
+      - ./wp-content/themes/muashi-bogo:/var/www/html/web/app/themes/muashi-bogo
+      - ./wp-content/plugins/musashi-inquiry-approval:/var/www/html/web/app/plugins/musashi-inquiry-approval
+      - wp_uploads_bogo:/var/www/html/web/app/uploads
+      - ./.docker/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+      - ./.docker/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
+      - ./.docker/conf/mysql-client.cnf:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro
+    networks:
+      - musashi-net
+
   musashi-mail:
     image: axllent/mailpit:v1.21
     container_name: musashi-mail
@@ -119,8 +155,10 @@ volumes:
   db_data:
   wp_core_jp:
   wp_core_en:
+  wp_core_bogo:
   wp_uploads_jp:
   wp_uploads_en:
+  wp_uploads_bogo:
 
 networks:
   musashi-net:

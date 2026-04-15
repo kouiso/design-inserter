@@ -14,6 +14,7 @@ const environments = {
   local: 'http://localhost:10010',
   docker: 'http://localhost:8080',
   'docker-en': 'http://localhost:8081',
+  'docker-bogo': 'http://localhost:8082',
   staging: 'https://musashipaint.xsrv.jp/staging',
   production: 'https://musashipaint.xsrv.jp',
 };
