@@ -1,0 +1,473 @@
+@use '../setting' as *;
+
+.page {
+  position: relative;
+
+  &__bg-wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  &__bg-main{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-green);
+  }
+
+  &__bg-sub{
+    position: absolute;
+    top: 0;
+    left: 30px;
+    width: calc(100% - 30px);
+    height: 100%;
+    background-color: var(--color-purple);
+
+    @include mq(lg){
+      display: none;
+    }
+  }
+
+  &__wrapper{
+    margin: 0 auto;
+    width: min(100%, 1440px);
+  }
+
+  &__container{
+    @include mq(lg){
+      margin-left: vw-max(40, 1440);
+      padding-left: vw-max(440, 1440);
+      width: vw-max(1200, 1440);
+      background-color: var(--color-white);
+    }
+  }
+
+  &__kv{
+    position: relative;
+  }
+
+  &__kv-pic{
+    aspect-ratio: 760 / 538;
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__kv-icon{
+    position: absolute;
+    top: calc(100% - 10px);
+    right: 10px;
+    width: 80px;
+    aspect-ratio: 1 / 1;
+
+    @include mq(lg){
+      display: none;
+    }
+    svg{
+      width: 100%;
+    }
+  }
+  
+  &__content{
+    padding: 32px 20px 0;
+
+    @include mq(lg){
+      padding: 32px 60px 0;
+    }
+  }
+
+  // コンテンツブロック全てにマージンを当てる（カスタマイザーから移植）
+  &__inner > *:not(.single__contents) {
+    margin-bottom: 1.5rem;
+  }
+
+  &__inner{
+    margin-top: 32px;
+    padding: 40px 20px 160px;
+    background-color: var(--color-white);
+    color: #2b2b2b;
+
+    // スペーサー非表示（カスタマイザーから移植）
+    .wp-block-spacer {
+      display: none;
+    }
+
+    @include mq(lg){
+      margin-top: 40px;
+      padding: 0 0 260px;
+    }
+
+    &--narrow{
+      padding: 20px 20px 160px;
+
+      > hr.wp-block-separator:first-child {
+        display: none;
+
+        @include mq(lg) {
+          display: block;
+        }
+      }
+    }
+
+    // ピックアップページなど、page__innerが連続する場合の隙間を解消
+    &--intro {
+      padding-bottom: 0;
+      overflow: hidden; // 子要素のmargin-bottomが外にはみ出すのを防ぐ（BFC生成）
+
+      @include mq(lg) {
+        padding-bottom: 0;
+      }
+    }
+
+    &--no-top-margin {
+      margin-top: 0;
+    }
+
+    .wp-block-group:not(.is-style-expandable) {
+      margin-bottom: 24px;
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      color: #666;
+
+      // flex item がコンテンツ幅に縮むのを防ぎ、内部の justify-content を有効にする
+      > .wp-block-group__inner-container {
+        width: 100%;
+      }
+    }
+
+    .wp-block-post-date {
+      time {
+        font-family: $font-family-helvetica;
+      }
+    }
+
+    .wp-block-cover{
+      margin-bottom: 16px;
+    }
+
+    h2.wp-block-heading {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1a1a1a;
+      position: relative;
+      display: inline-block; // 下線をテキスト幅に合わせる
+      border-bottom: solid 0.25rem #f8f9fa;
+      padding: 0 0 1rem;
+      margin: 3rem 0 1rem;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+
+      @include mq(lg) {
+        font-size: 24px;
+      }
+
+      &::before {
+        content: '';
+        display: block;
+        width: 100%; // テキストの端まで伸ばす
+        height: 0.25rem;
+        background: #212529;
+        position: absolute;
+        bottom: -0.25rem;
+        left: 0;
+      }
+
+      &:first-child {
+        margin-top: 0;
+
+        @include mq(lg) {
+          margin-top: 3rem;
+        }
+      }
+
+      // 見出し内のリンク等も見出し色を継承
+      a {
+        color: inherit;
+      }
+    }
+
+    h3.wp-block-heading {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1a1a1a;
+      letter-spacing: 0.04em;
+      position: relative;
+      padding: 0 0 0 1.5em;
+      margin: 1.5rem 0 1rem;
+      line-height: 1.5;
+      border-left: 4px solid var(--color-text-gray, #333);
+
+      @include mq(lg) {
+        font-size: 20px;
+      }
+
+      // 見出し内のリンク等も見出し色を継承
+      a {
+        color: inherit;
+      }
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.8;
+
+      @include mq(lg) {
+        font-size: 16px;
+      }
+    }
+
+    a {
+      color: var(--color-text-gray);
+      text-decoration: underline;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: darken(#007bff, 10%);
+      }
+    }
+
+    strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    hr.wp-block-separator {
+      margin-top: 40px;
+      margin-bottom: 40px;
+      opacity: 0.1;
+
+      &:first-child {
+        margin-top: 0;
+
+        @include mq(lg) {
+          margin-top: 40px;
+        }
+      }
+    }
+
+    ul.wp-block-list,
+    ol.wp-block-list {
+      padding-left: 24px;
+      list-style-type: disc;
+      li {
+        margin-bottom: 8px;
+        list-style: disc;
+      }
+    }
+
+    blockquote.wp-block-quote {
+      margin: 24px 0;
+      padding: 16px 24px;
+      border-left: 4px solid #eee;
+      background-color: #f9f9f9;
+
+      p {
+        margin-bottom: 8px;
+      }
+
+      cite {
+        font-style: normal;
+        font-size: 12px;
+        color: #777;
+      }
+    }
+
+    figure.wp-block-image {
+      margin: 24px 0;
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+      figcaption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+      }
+    }
+
+    figure.wp-block-table {
+      margin: 24px 0;
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      td{
+        background-color: var(--color-white);
+
+        &:first-child{
+          white-space: nowrap;
+        }
+      }
+      thead {
+        background-color: #f5f5f5;
+        border-bottom: 1px solid;
+      }
+      figcaption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #777;
+      }
+
+      &.no-border{
+        th,
+        td {
+          border: none;
+        }
+      }
+    }
+
+    pre.wp-block-code {
+      background-color: #282c34;
+      color: #abb2bf;
+      padding: 32px 24px 24px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 14px;
+      font-family: "Fira Code", "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+      position: relative;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      code {
+        font-family: inherit;
+        background: none;
+        padding: 0;
+      }
+    }
+
+    .wp-block-buttons {
+      margin: 24px 0;
+      display: flex;
+      gap: 16px;
+
+      // WordPress 6.x の is-layout-flex による justify-content 上書きを防ぐ
+      &.is-layout-flex {
+        justify-content: center;
+      }
+    }
+
+    .wp-block-button {
+      .wp-block-button__link{
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+        border-radius: 1000px;
+        transition: opacity 0.3s;
+      }
+      
+      &.is-style-fill {
+        .wp-block-button__link{
+          background-color: var(--color-text-gray);
+          color: var(--color-white) !important;
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+      }
+
+      &.is-style-outline {
+        .wp-block-button__link{
+          border: 1px solid var(--color-text-gray);
+          color: var(--color-text-gray);
+          background-color: transparent;
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+      }
+    }
+
+    figure.wp-block-gallery {
+      margin: 24px 0;
+    }
+
+    figure.wp-block-embed {
+      margin: 24px 0;
+      figcaption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+      }
+    }
+
+    p.has-text-align-right {
+      text-align: right;
+      font-size: 12px;
+      color: #888;
+      margin-top: 40px;
+    }
+
+    .pc-only{
+      + h2 {
+        margin-top: 0;
+
+        @include mq(lg){
+          margin-top: 40px;
+        }
+      }
+    }
+  }
+
+  &__title{
+    padding-left: 20px;
+    font-size: 20px;
+    font-weight: 500;
+
+    @include mq(lg){
+      padding-left: 0;
+      font-size: 24px;
+    }
+  }
+
+  &--no-image{
+    .page__bg-sub{
+      top: 20px;
+      height: calc(100% - 20px);
+    }
+
+    .page__kv-icon{
+      top: 10px;
+    }
+
+    .page__content{
+      padding-top: 50px;
+
+      @include mq(lg){
+        padding-top: 80px;
+      }
+    }
+  }
+}

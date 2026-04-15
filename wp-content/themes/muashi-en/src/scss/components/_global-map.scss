@@ -1,0 +1,40 @@
+// ==========================================================================
+// Global Map - グローバルネットワーク世界地図
+// ==========================================================================
+@use '../setting' as *;
+
+.global-map {
+	width: 100%;
+
+	&__object {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	&__fallback {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+}
+
+// 地図の前後ブロックとの余白調整
+.page__inner:has(> .global-map) {
+	margin-top: 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
+
+	> .global-map {
+		margin-bottom: 0; // 汎用ルール(.page__inner > *)の1.5remを打ち消し
+	}
+}
+
+.page__inner:has(+ .page__inner > .global-map) {
+	padding-bottom: 0;
+	overflow: hidden; // 子要素のmarginが外にはみ出すのを防ぐ（BFC生成）
+}
+
+.page__inner:has(> .global-map) + .page__inner {
+	margin-top: 0;
+}

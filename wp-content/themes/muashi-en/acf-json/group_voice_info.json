@@ -1,0 +1,86 @@
+{
+    "key": "group_voice_info",
+    "title": "お客様の声情報",
+    "fields": [
+        {
+            "key": "field_voice_company",
+            "label": "会社名",
+            "name": "voice_company",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "例: スズキ株式会社 ｜ フィールド名: voice_company",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "会社名を入力",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_voice_position",
+            "label": "部署・役職",
+            "name": "voice_position",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "例: 四輪デザイン部 CMFデザイン課 主幹（改行可） ｜ フィールド名: voice_position",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 3,
+            "placeholder": "部署・役職を入力（改行可）",
+            "new_lines": "br"
+        },
+        {
+            "key": "field_voice_person_name",
+            "label": "氏名",
+            "name": "voice_person_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "例: 日向 隆 様 ｜ フィールド名: voice_person_name",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "氏名を入力",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "voice"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "side",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "お客様の声投稿タイプ用のカスタムフィールド（会社名・部署役職・氏名）",
+    "show_in_rest": 1,
+    "display_title": "",
+    "modified": 1771248081
+}

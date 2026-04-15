@@ -1,0 +1,36 @@
+@use '../setting' as *;
+
+// ==========================================================================
+// ぶら下がりインデント
+// カスタマイザー「追加CSS」から移植・統合
+// ==========================================================================
+
+.is-style-hanging-indent,
+.mp-paragraph {
+  margin-left: 2.5em;
+  position: relative;
+  text-indent: 0;
+  padding: 0;
+
+  em:first-child {
+    font-style: normal;
+    position: absolute;
+    top: 0;
+    left: -2.5em;
+    width: 2em;
+    display: block;
+    text-align: right;
+    margin: 0;
+  }
+}
+
+// 見出しブロック用の調整
+.wp-block-heading.is-style-hanging-indent,
+.wp-block-heading.mp-paragraph {
+  margin-left: 0;
+  padding-left: 2.5em !important;
+
+  em:first-child {
+    left: 0;
+  }
+}

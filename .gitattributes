@@ -1,0 +1,5 @@
+# Docker関連ファイルはLF強制（Linuxコンテナで実行されるため）
+*.sh text eol=lf
+.docker/**/* text eol=lf
+docker-compose.yml text eol=lf
+Dockerfile text eol=lf

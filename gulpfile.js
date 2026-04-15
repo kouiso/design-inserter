@@ -124,7 +124,7 @@ const js = () => {
 //ブラウザの設定
 const browser_init = (done) => {
   browserSync.init({
-    proxy: "http://musashi-toryo.local/", // Local by Flywheelのドメイン
+    proxy: process.env.BROWSERSYNC_PROXY || "http://musashi-toryo.local/",
     open: true,
     watchOptions: {
       debounceDelay: 1000, //1秒間、タスクの再実行を抑制

@@ -12,6 +12,8 @@ import { defineConfig, devices } from '@playwright/test';
 // 環境別のベースURL設定
 const environments = {
   local: 'http://localhost:10010',
+  docker: 'http://localhost:8080',
+  'docker-en': 'http://localhost:8081',
   staging: 'https://musashipaint.xsrv.jp/staging',
   production: 'https://musashipaint.xsrv.jp',
 };

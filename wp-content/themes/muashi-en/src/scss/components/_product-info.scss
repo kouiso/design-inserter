@@ -1,0 +1,79 @@
+@use '../setting' as *;
+
+.product-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @include mq(lg) {
+    gap: 12px;
+  }
+
+  &__name {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__name-value {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+    margin: 0;
+
+    @include mq(lg) {
+      font-size: 16px;
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 16px;
+    padding: 6px 0;
+  }
+
+  &__label {
+    font-size: 10px;
+    line-height: 1.6;
+    color: #666;
+    font-weight: 400;
+    margin: 0;
+    flex: 0 0 auto;
+    min-width: 140px;
+
+    @include mq(lg) {
+      font-size: 11px;
+      min-width: 180px;
+    }
+  }
+
+  &__value {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--color-text-gray);
+    margin: 0;
+    flex: 1 1 auto;
+
+    @include mq(lg) {
+      font-size: 14px;
+    }
+  }
+}
+
+// 製品一覧: archive__link のグリッドを1カラムに上書き（画像なし）
+.archive__link--product {
+  @include mq(lg) {
+    grid-template-columns: 1fr;
+  }
+}

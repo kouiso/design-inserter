@@ -4,6 +4,7 @@ wp-includes/
 wp-config.php
 *.php
 !wp-content/themes/muashi/**/*.php
+!wp-content/themes/muashi-en/**/*.php
 !wp-content/plugins/musashi-inquiry-approval/**/*.php
 !test/**/*.php
 
@@ -88,3 +89,6 @@ wp-cli.phar
 # Claude
 .claude/
 tmpclaude-*/
+
+# Docker
+.env.docker

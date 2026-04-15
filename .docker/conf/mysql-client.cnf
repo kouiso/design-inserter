@@ -1,0 +1,7 @@
+# Docker開発環境用: MariaDBクライアントのSSLを無効化
+# MySQL 8.0の自己署名証明書とMariaDBクライアントの互換性問題を回避
+[client]
+ssl = 0
+
+[client-mariadb]
+ssl = 0

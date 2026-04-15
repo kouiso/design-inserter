@@ -20,6 +20,7 @@ jobs:
       environment: staging-en
       server_label: "musashipaint.xsrv.jp/en (Staging EN)"
       dry_run: ${{ inputs.dry_run || false }}
+      theme_dir: muashi-en
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}

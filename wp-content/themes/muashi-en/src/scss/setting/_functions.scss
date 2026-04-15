@@ -1,0 +1,57 @@
+// ==========================================================================
+// Functions
+// ==========================================================================
+
+// 変数をインポート
+@use 'variables' as *;
+@use 'sass:math';
+
+// ブレイクポイントの取得
+// --------------------------------------------------------------------------
+@function breakpoint($name) {
+  @if map-has-key($breakpoints, $name) {
+    @return map-get($breakpoints, $name);
+  } @else {
+    @error "Breakpoint '#{$name}' is not defined in $breakpoints map.";
+  }
+} 
+
+// vwに変換
+// --------------------------------------------------------------------------
+@function vw($px, $base: 390) {
+  // 文字列として直接出力
+  @return #{"calc(#{$px} / #{$base} * 100vw)"};
+}
+
+// 最大値つきのvwに変換
+// --------------------------------------------------------------------------
+@function vw-max($px, $base: 1440) {
+  @if $px >= 0 {
+    // 文字列として直接出力
+    @return #{"min(#{$px}px, calc(#{$px} / #{$base} * 100vw))"};
+  } @else {
+    // 文字列として直接出力
+    @return #{"max(#{$px}px, calc(#{$px} / #{$base} * 100vw))"};
+  }
+}
+
+// clampに変換
+// --------------------------------------------------------------------------
+@function vw-clamp($min_val, $min_width, $max_val, $max_width) {
+  $value: '';
+  @if ($min_val > $max_val){
+    $min_clamp: calc($min_val / 16);
+    $max_clamp: calc($max_val / 16);
+    $ratio: calc(($max_val - $min_val) / ($max_width - $min_width));
+    $slice: calc(($min_val - ($ratio * $min_width)) / 16);
+    $value: clamp(#{$max_val}px, #{$ratio * 100}vw + #{$slice}rem, #{$min_val}px);
+  } @else {
+    $min_clamp: calc($min_val / 16);
+    $max_clamp: calc($max_val / 16);
+    $ratio: calc(($max-val - $min-val) / ($max-width - $min-width));
+    $slice: calc(($max-val - ($ratio * $max-width)) / 16);
+    $value: clamp(#{$min_clamp}rem, #{$ratio * 100}vw + #{$slice}rem, #{$max_clamp}rem);
+  }
+
+  @return $value;
+}

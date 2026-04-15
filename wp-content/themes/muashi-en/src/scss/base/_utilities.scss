@@ -1,0 +1,144 @@
+// ==========================================================================
+// Utilities
+// ==========================================================================
+
+@use '../setting' as *;
+
+// 表示・非表示
+// --------------------------------------------------------------------------
+.u-hidden {
+  display: none !important;
+}
+
+.u-visible {
+  display: block !important;
+}
+
+.pc-only{
+  display: none;
+
+  @include mq(lg){
+    display: block;
+  }
+}
+
+// レスポンシブ表示・非表示
+// --------------------------------------------------------------------------
+@each $breakpoint, $value in $breakpoints {
+  .u-hidden-#{$breakpoint}-up {
+    @include mq($breakpoint) {
+      display: none !important;
+    }
+  }
+  
+  .u-hidden-#{$breakpoint}-down {
+    @media screen and (max-width: ($value - 1px)) {
+      display: none !important;
+    }
+  }
+  
+  .u-visible-#{$breakpoint}-up {
+    display: none !important;
+    
+    @include mq($breakpoint) {
+      display: block !important;
+    }
+  }
+  
+  .u-visible-#{$breakpoint}-down {
+    display: none !important;
+    
+    @media screen and (max-width: ($value - 1px)) {
+      display: block !important;
+    }
+  }
+}
+
+// display
+// --------------------------------------------------------------------------
+.u-display-inline-block {
+  display: inline-block !important;
+}
+
+.u-display-block {
+  display: block !important;
+}
+
+// テキスト配置
+// --------------------------------------------------------------------------
+.u-text-left {
+  text-align: left !important;
+}
+
+.u-text-center {
+  text-align: center !important;
+}
+
+.u-text-right {
+  text-align: right !important;
+}
+
+// テキスト変形
+// --------------------------------------------------------------------------
+.u-text-lowercase {
+  text-transform: lowercase !important;
+}
+
+.u-text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.u-text-capitalize {
+  text-transform: capitalize !important;
+}
+
+// フォントスタイル
+// --------------------------------------------------------------------------
+.u-font-weight-normal {
+  font-weight: 400 !important;
+}
+
+.u-font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.u-font-italic {
+  font-style: italic !important;
+}
+
+// 位置
+// --------------------------------------------------------------------------
+.u-position-relative {
+  position: relative !important;
+}
+
+.u-position-absolute {
+  position: absolute !important;
+}
+
+.u-position-fixed {
+  position: fixed !important;
+}
+
+.u-position-sticky {
+  position: sticky !important;
+  position: -webkit-sticky !important;
+}
+
+// 余白
+// --------------------------------------------------------------------------
+.u-m-0 { margin: 0 !important; }
+.u-mt-0 { margin-top: 0 !important; }
+.u-mr-0 { margin-right: 0 !important; }
+.u-mb-0 { margin-bottom: 0 !important; }
+.u-ml-0 { margin-left: 0 !important; }
+.u-mx-0 { margin-left: 0 !important; margin-right: 0 !important; }
+.u-my-0 { margin-top: 0 !important; margin-bottom: 0 !important; }
+
+.u-p-0 { padding: 0 !important; }
+.u-pt-0 { padding-top: 0 !important; }
+.u-pr-0 { padding-right: 0 !important; }
+.u-pb-0 { padding-bottom: 0 !important; }
+.u-pl-0 { padding-left: 0 !important; }
+.u-px-0 { padding-left: 0 !important; padding-right: 0 !important; }
+.u-py-0 { padding-top: 0 !important; padding-bottom: 0 !important; }

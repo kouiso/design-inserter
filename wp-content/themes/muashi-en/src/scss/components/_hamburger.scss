@@ -1,0 +1,215 @@
+@use '../setting' as *;
+
+.hamburger {
+  &__inner{
+    padding: 145px 20px 0;
+  }
+
+  &__contents{
+    padding-bottom: 100px;
+    height: 100%;
+  }
+
+  &__hamburger {
+    width: 32px;
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    cursor: pointer;
+    appearance: none;
+    border: none;
+    background: transparent;
+    z-index: 101;
+
+    @include mq(md){
+      display: none;
+    }
+
+    &.is-active{
+      .hamburger__hamburger-line{
+        &:nth-child(1) {
+          top: 50%;
+          transform: translate(-50%, -50%) rotate(45deg);
+        }
+  
+        &:nth-child(2) {
+          opacity: 0;
+        }
+  
+        &:nth-child(3) {
+          width: 24px;
+          top: 50%;
+          transform: translate(-50%, -50%) rotate(-45deg);
+        }
+      }
+    }
+  }
+
+  &__hamburger-line {
+    display: block;
+    position: absolute;
+    left: 50%;
+    height: 2px;
+    background-color: var(--color-white);
+    transition: transform 0.3s ease-in-out, top 0.3s ease-in-out, opacity 0.3s ease-in-out, width 0.3s ease-in-out;
+    &:nth-child(1) {
+      width: 24px;
+      top: 10px;
+      transform: translate(-50%, 0);
+    }
+
+    &:nth-child(2) {
+      width: 20px;
+      top: 15px;
+      transform: translate(calc(-50% - 2px), 0);
+    }
+
+    &:nth-child(3) {
+      width: 16px;
+      top: 20px;
+      transform: translate(calc(-50% - 4px), 0);
+    }
+  }
+
+  &__logo-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 25px 0 0;
+    width: 100%;
+    display: grid;
+    gap: 4px;
+
+    @include mq(md){
+      gap: 28px;
+    }
+  }
+
+  &__icon{
+    position: absolute;
+    top: 52px;
+    right: 20px;
+    width: 81px;
+    z-index: -1;
+  }
+
+  &__list{
+    border-top: 1px solid #4D4D4D;
+  }
+
+  &__item{
+    border-bottom: 1px solid #4D4D4D;
+    padding: 0 10px 0 20px;
+  }
+
+  &__sub-list{
+    padding-bottom: 16px;
+    display: grid;
+    gap: 2px;
+  }
+
+  &__sub-item{
+    padding: 0 10px 0 20px;
+    background-color: rgba(0, 0, 0 , 0.1);
+    border-radius: 3px;
+  }
+
+  &__link,
+  &__title{
+    display: grid;
+    grid-template-columns: 1fr 16px;
+    padding: 17px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+  }
+
+  &__accordion{
+    display: grid;
+    grid-template-columns: 1fr 16px;
+    padding: 17px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+    width: 100%;
+    text-align: left;
+    background-color: initial;
+
+    &.is-active{
+      .hamburger__accordion-icon{
+        transform: rotate(0);
+      }
+    }
+  }
+
+  &__accordion-icon{
+    transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+
+    &.is-active{
+      transform: rotate(0);
+    }
+
+    &--arrow{
+      transform: rotate(0);
+    }
+  }
+
+  &__accordion-list-wrapper{
+    display: block grid;
+    transition: grid-template-rows 0.5s;
+    grid-template-rows: 0fr;
+
+    > * {
+      overflow: hidden;
+    }
+
+    &.is-active{
+      grid-template-rows: 1fr;
+    }
+  }
+
+  // ネストされたアコーディオンボタンをリンクと同じ階層に揃える
+  &__accordion-item > &__accordion {
+    padding-left: 20px;
+    border-top: 1px solid rgba(0, 0, 0 , 0.1);
+  }
+
+  // ネストアコーディオン内のリンクをさらに1段インデント
+  &__accordion-list &__accordion-list &__accordion-link {
+    padding-left: 40px;
+  }
+
+  &__accordion-link{
+    border-top: 1px solid rgba(0, 0, 0 , 0.1);
+    display: grid;
+    grid-template-columns: 1fr 16px;
+    padding: 17px 0 17px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+  }
+
+  &__other-list{
+    padding-top: 32px;
+    padding-left: 20px;
+    display: grid;
+    gap: 24px;
+  }
+
+  &__other-link{
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 5px;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+  }
+
+  &__sub-children {
+    padding-left: 20px;
+  }
+}

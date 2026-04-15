@@ -37,6 +37,9 @@ vars:
     --exclude='advanced-cache.php'
     --exclude='db.php'
 
+  # Docker
+  DC: docker compose --env-file .env.docker
+
   # 内部
   DUMP_DIR: .tmp
   WP: '{{.LOCAL_PHP}} -c "{{.LOCAL_PHPINI}}" wp-cli.phar'
@@ -331,3 +334,190 @@ tasks:
         ssh -p 10022 {{.STAGING_SSH_FULL}}
         "cd {{.STAGING_PATH}} && php wp-content/themes/muashi/inc/run-all-menu-setup.php"
       - echo "全メニュー初期化完了"
+
+  # ==========================================================
+  # Docker ローカル開発環境
+  # ==========================================================
+
+  init:
+    desc: Docker環境の初期セットアップ（破壊→再構築→起動→検証）
+    cmds:
+      - 'docker info > /dev/null 2>&1 || (echo "ERROR: Docker Desktopを起動してください" && exit 1)'
+      - cmd: |
+          if [ ! -f .env.docker ]; then
+            cp .env.docker.example .env.docker
+            echo "INFO: .env.docker を作成しました。ステージングDB認証情報を設定してください"
+          fi
+      - '{{.DC}} down -v --remove-orphans 2>/dev/null || true'
+      - '{{.DC}} build'
+      - '{{.DC}} up -d'
+      - cmd: |
+          echo "サービス起動待機中..."
+          for i in $(seq 1 90); do
+            if curl -sf http://localhost:${WP_JP_PORT:-8080}/ > /dev/null 2>&1; then
+              echo "JP WordPress 準備完了"
+              break
+            fi
+            sleep 2
+          done
+          for i in $(seq 1 90); do
+            if curl -sf http://localhost:${WP_EN_PORT:-8081}/ > /dev/null 2>&1; then
+              echo "EN WordPress 準備完了"
+              break
+            fi
+            sleep 2
+          done
+      - cmd: |
+          echo ""
+          echo "========================================="
+          if curl -sf http://localhost:${WP_JP_PORT:-8080}/ > /dev/null 2>&1; then
+            echo "  JP:   http://localhost:${WP_JP_PORT:-8080} ... OK"
+          else
+            echo "  JP:   http://localhost:${WP_JP_PORT:-8080} ... FAIL"
+          fi
+          if curl -sf http://localhost:${WP_EN_PORT:-8081}/ > /dev/null 2>&1; then
+            echo "  EN:   http://localhost:${WP_EN_PORT:-8081} ... OK"
+          else
+            echo "  EN:   http://localhost:${WP_EN_PORT:-8081} ... FAIL"
+          fi
+          if curl -sf http://localhost:${MAILPIT_UI_PORT:-8025}/ > /dev/null 2>&1; then
+            echo "  Mail: http://localhost:${MAILPIT_UI_PORT:-8025} ... OK"
+          else
+            echo "  Mail: http://localhost:${MAILPIT_UI_PORT:-8025} ... FAIL"
+          fi
+          echo "========================================="
+          echo ""
+          echo "task up で起動、task down で停止"
+
+  up:
+    desc: 全コンテナ起動
+    cmds:
+      - '{{.DC}} up -d'
+
+  up:jp:
+    desc: JP環境のみ起動（DB + JP + Mailpit）
+    cmds:
+      - '{{.DC}} up -d musashi-db musashi-wp-jp musashi-mail'
+
+  up:en:
+    desc: EN環境のみ起動（DB + EN + Mailpit）
+    cmds:
+      - '{{.DC}} up -d musashi-db musashi-wp-en musashi-mail'
+
+  down:
+    desc: 全コンテナ停止（データは保持）
+    cmds:
+      - '{{.DC}} down'
+
+  down:jp:
+    desc: JP WordPressのみ停止
+    cmds:
+      - '{{.DC}} stop musashi-wp-jp'
+
+  down:en:
+    desc: EN WordPressのみ停止
+    cmds:
+      - '{{.DC}} stop musashi-wp-en'
+
+  logs:
+    desc: 全コンテナのログ表示
+    cmds:
+      - '{{.DC}} logs -f'
+
+  logs:jp:
+    desc: JP WordPressのログ表示
+    cmds:
+      - '{{.DC}} logs -f musashi-wp-jp'
+
+  logs:en:
+    desc: EN WordPressのログ表示
+    cmds:
+      - '{{.DC}} logs -f musashi-wp-en'
+
+  shell:jp:
+    desc: JP WordPressコンテナにbash接続
+    interactive: true
+    cmds:
+      - '{{.DC}} exec musashi-wp-jp bash'
+
+  shell:en:
+    desc: EN WordPressコンテナにbash接続
+    interactive: true
+    cmds:
+      - '{{.DC}} exec musashi-wp-en bash'
+
+  wp:jp:
+    desc: "JP環境でWP-CLI実行（例: task wp:jp -- plugin list）"
+    cmds:
+      - '{{.DC}} exec -T musashi-wp-jp wp {{.CLI_ARGS}} --allow-root'
+
+  wp:en:
+    desc: "EN環境でWP-CLI実行（例: task wp:en -- option list）"
+    cmds:
+      - '{{.DC}} exec -T musashi-wp-en wp {{.CLI_ARGS}} --allow-root'
+
+  db:sync:
+    desc: ステージングDBをDocker JP+EN両方に同期
+    cmds:
+      - task: db:sync:jp
+      - task: db:sync:en
+
+  db:sync:jp:
+    desc: ステージングDBをDocker JP環境に同期
+    deps: [up:jp]
+    cmds:
+      - cmd: |
+          set -a; source .env.docker; set +a
+          mkdir -p .tmp
+          ssh "$STAGING_SSH_HOST" "mysqldump \
+            -u $STAGING_JP_DB_USER -p$STAGING_JP_DB_PASS $STAGING_JP_DB_NAME \
+            --single-transaction --quick --default-character-set=utf8mb4" \
+            > .tmp/docker-staging-jp.sql
+          {{.DC}} exec -T musashi-db mysql -u root -p$MYSQL_ROOT_PASSWORD $JP_DB_NAME < .tmp/docker-staging-jp.sql
+          {{.DC}} exec -T musashi-wp-jp wp search-replace \
+            "$STAGING_JP_URL" "$JP_WP_HOME" \
+            --all-tables --precise --skip-columns=guid --report-changed-only --allow-root
+          {{.DC}} exec -T musashi-wp-jp wp cache flush --allow-root
+          rm -f .tmp/docker-staging-jp.sql
+          echo "Docker JP DB同期完了！"
+
+  db:sync:en:
+    desc: ステージング(EN) DBをDocker EN環境に同期（要 STAGING_EN_* 設定）
+    deps: [up:en]
+    cmds:
+      - cmd: |
+          set -a; source .env.docker; set +a
+          if [ -z "$STAGING_EN_DB_USER" ]; then
+            echo "ERROR: STAGING_EN_DB_USER が未設定です。.env.docker にEN用ステージング情報を設定してください"
+            exit 1
+          fi
+          mkdir -p .tmp
+          ssh "$STAGING_SSH_HOST" "mysqldump \
+            -u $STAGING_EN_DB_USER -p$STAGING_EN_DB_PASS $STAGING_EN_DB_NAME \
+            --single-transaction --quick --default-character-set=utf8mb4" \
+            > .tmp/docker-staging-en.sql
+          {{.DC}} exec -T musashi-db mysql -u root -p$MYSQL_ROOT_PASSWORD $EN_DB_NAME < .tmp/docker-staging-en.sql
+          {{.DC}} exec -T musashi-wp-en wp search-replace \
+            "$STAGING_EN_URL" "$EN_WP_HOME" \
+            --all-tables --precise --skip-columns=guid --report-changed-only --allow-root
+          {{.DC}} exec -T musashi-wp-en wp cache flush --allow-root
+          rm -f .tmp/docker-staging-en.sql
+          echo "Docker EN DB同期完了！"
+
+  gulp:
+    desc: Docker環境用のGulp watch起動（BrowserSync → localhost:8080）
+    cmds:
+      - npx gulp
+
+  destroy:
+    desc: 全コンテナ・ボリューム・イメージを完全削除（データ全消去）
+    prompt: "全てのDockerデータを削除します。よろしいですか？"
+    cmds:
+      - '{{.DC}} down -v --rmi local --remove-orphans'
+      - echo "Docker環境を完全削除しました"
+
+  rebuild:
+    desc: イメージをリビルドして再起動（Dockerfile変更後に使用）
+    cmds:
+      - '{{.DC}} build --no-cache'
+      - '{{.DC}} up -d'

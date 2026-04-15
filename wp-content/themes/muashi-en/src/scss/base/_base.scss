@@ -1,0 +1,157 @@
+// ==========================================================================
+// Base
+// ==========================================================================
+
+@use '../setting' as *;
+
+@font-face {
+  font-family: 'Overused Grotesk';
+  src: url('../fonts/OverusedGrotesk-VF.woff2') format('woff2'),
+       url('../fonts/OverusedGrotesk-VF.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+body {
+  font-family: $font-family-noto-sans-jp;
+  letter-spacing: 0;
+  line-height: 1.5;
+  font-size: 16px;
+  color: var(--color-black);
+  overflow-x: clip;
+}
+
+// アンカーリンクのスクロール位置調整（全てのID要素に適用）
+[id] {
+  scroll-margin-top: var(--header-scroll-offset);
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: auto;
+}
+
+@media all and (-ms-high-contrast: none) {
+  * {
+    min-height: 0;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+// 見出し共通スタイル（全ページに適用）
+// h2: 下線をテキスト幅に合わせ、下にアクセントライン
+// h3: 左に菱形アクセント（45度回転した正方形の枠）
+h2.wp-block-heading {
+  font-weight: bold;
+  position: relative;
+  display: inline-block; // 下線をテキスト幅に合わせる
+  border-bottom: solid 0.25rem #f8f9fa;
+  padding: 0 0 1rem;
+  margin: 3rem 0 1rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%; // テキストの端まで伸ばす
+    height: 0.25rem;
+    background: #212529;
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+  }
+}
+
+h3.wp-block-heading {
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  position: relative;
+  padding: 0 0 0 1.5em;
+  margin: 1.5rem 0 1rem;
+  line-height: 1.5;
+  border-left: 4px solid var(--color-text-gray, #333);
+}
+
+button {
+  color: inherit;
+  background-color: inherit;
+}
+
+ul,ol {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+picture {
+  max-width: none;
+}
+
+img {
+  width: 100%;
+  object-fit: cover;
+  height: auto;
+  vertical-align: middle;
+  font-style: italic;
+  background-repeat: no-repeat;
+  background-size: cover;
+  shape-margin: 0.75rem;
+	image-rendering: -webkit-optimize-contrast;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+button {
+  border: none;
+  padding: 0;
+}
+
+input {
+  border: none;
+}
+
+//iPhoneの文字サイズ
+body {
+  -webkit-text-size-adjust: 100%;
+}
+
+//クリック時の青色を削除
+*:focus {
+  outline: none;
+}
+
+//タップ時の青色を削除
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+}

@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         description: 'チェックアウトするブランチ/ref（未指定時はワークフローのデフォルト）'
+      theme_dir:
+        required: false
+        type: string
+        default: 'muashi'
+        description: 'デプロイするテーマディレクトリ名（muashi or muashi-en）'
     secrets:
       XSERVER_HOST:
         required: true
@@ -74,8 +79,8 @@ jobs:
             ${{ inputs.dry_run && '--dry-run' || '' }} \
             --filter='merge .github/deploy-filter-theme.txt' \
             -e "ssh -i ~/.ssh/deploy_key -p $XSERVER_PORT" \
-            ./wp-content/themes/muashi/ \
-            "${XSERVER_USER}@${XSERVER_HOST}:${XSERVER_PATH}/wp-content/themes/muashi/"
+            ./wp-content/themes/${{ inputs.theme_dir }}/ \
+            "${XSERVER_USER}@${XSERVER_HOST}:${XSERVER_PATH}/wp-content/themes/${{ inputs.theme_dir }}/"
 
       - name: Deploy Plugin via rsync
         env:
