@@ -1,4 +1,8 @@
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
 
 /**
  * Playwright設定ファイル
@@ -10,11 +14,23 @@ import { defineConfig, devices } from '@playwright/test';
  */
 
 // 環境別のベースURL設定
+const envFile = [resolve(__dirname, '.env'), resolve(__dirname, '.env.docker')].find((candidate) =>
+  existsSync(candidate),
+);
+
+if (envFile) {
+  dotenv.config({ path: envFile });
+}
+
+const wpJpPort = process.env._DOCKER_COMPOSE_HOST_PORT_WP_JP || process.env.WP_JP_PORT || '8080';
+const wpEnPort = process.env._DOCKER_COMPOSE_HOST_PORT_WP_EN || process.env.WP_EN_PORT || '8081';
+const wpBogoPort = process.env._DOCKER_COMPOSE_HOST_PORT_WP_BOGO || process.env.WP_BOGO_PORT || '8082';
+
 const environments = {
   local: 'http://localhost:10010',
-  docker: 'http://localhost:8080',
-  'docker-en': 'http://localhost:8081',
-  'docker-bogo': 'http://localhost:8082',
+  docker: `http://localhost:${wpJpPort}`,
+  'docker-en': `http://localhost:${wpEnPort}`,
+  'docker-bogo': `http://localhost:${wpBogoPort}`,
   staging: 'https://musashipaint.xsrv.jp/staging',
   production: 'https://musashipaint.xsrv.jp',
 };

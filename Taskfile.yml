@@ -61,6 +61,10 @@ vars:
   DUMP_DIR: .tmp
   WP: '{{.LOCAL_PHP}} -c "{{.LOCAL_PHPINI}}" wp-cli.phar'
   RSYNC_SSH: rsync -avz -e "ssh -p 10022"
+  DOCKER_WP_JP_PORT: '{{default ._DOCKER_COMPOSE_HOST_PORT_WP_JP .WP_JP_PORT | default "8080"}}'
+  DOCKER_WP_EN_PORT: '{{default ._DOCKER_COMPOSE_HOST_PORT_WP_EN .WP_EN_PORT | default "8081"}}'
+  DOCKER_WP_BOGO_PORT: '{{default ._DOCKER_COMPOSE_HOST_PORT_WP_BOGO .WP_BOGO_PORT | default "8082"}}'
+  DOCKER_MAILPIT_UI_PORT: '{{default ._DOCKER_COMPOSE_HOST_PORT_MAILPIT_UI .MAILPIT_UI_PORT | default "8025"}}'
 
 tasks:
 
@@ -409,7 +413,7 @@ tasks:
           echo "サービス起動待機中..."
           i=1
           while [ "$i" -le 90 ]; do
-            if curl -sf http://localhost:${WP_JP_PORT:-8080}/ > /dev/null 2>&1; then
+            if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_JP:-${WP_JP_PORT:-8080}}/ > /dev/null 2>&1; then
               echo "JP WordPress 準備完了"
               break
             fi
@@ -418,7 +422,7 @@ tasks:
           done
           i=1
           while [ "$i" -le 90 ]; do
-            if curl -sf http://localhost:${WP_EN_PORT:-8081}/ > /dev/null 2>&1; then
+            if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_EN:-${WP_EN_PORT:-8081}}/ > /dev/null 2>&1; then
               echo "EN WordPress 準備完了"
               break
             fi
@@ -427,7 +431,7 @@ tasks:
           done
           i=1
           while [ "$i" -le 90 ]; do
-            if curl -sf http://localhost:${WP_BOGO_PORT:-8082}/ > /dev/null 2>&1; then
+            if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_BOGO:-${WP_BOGO_PORT:-8082}}/ > /dev/null 2>&1; then
               echo "Bogo WordPress 準備完了"
               break
             fi
@@ -452,25 +456,25 @@ tasks:
           fi
           echo ""
           echo "========================================="
-          if curl -sf http://localhost:${WP_JP_PORT:-8080}/ > /dev/null 2>&1; then
-            echo "  JP:   http://localhost:${WP_JP_PORT:-8080} ... OK"
+          if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_JP:-${WP_JP_PORT:-8080}}/ > /dev/null 2>&1; then
+            echo "  JP:   http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_JP:-${WP_JP_PORT:-8080}} ... OK"
           else
-            echo "  JP:   http://localhost:${WP_JP_PORT:-8080} ... FAIL"
+            echo "  JP:   http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_JP:-${WP_JP_PORT:-8080}} ... FAIL"
           fi
-          if curl -sf http://localhost:${WP_EN_PORT:-8081}/ > /dev/null 2>&1; then
-            echo "  EN:   http://localhost:${WP_EN_PORT:-8081} ... OK"
+          if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_EN:-${WP_EN_PORT:-8081}}/ > /dev/null 2>&1; then
+            echo "  EN:   http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_EN:-${WP_EN_PORT:-8081}} ... OK"
           else
-            echo "  EN:   http://localhost:${WP_EN_PORT:-8081} ... FAIL"
+            echo "  EN:   http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_EN:-${WP_EN_PORT:-8081}} ... FAIL"
           fi
-          if curl -sf http://localhost:${WP_BOGO_PORT:-8082}/ > /dev/null 2>&1; then
-            echo "  Bogo: http://localhost:${WP_BOGO_PORT:-8082} ... OK"
+          if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_BOGO:-${WP_BOGO_PORT:-8082}}/ > /dev/null 2>&1; then
+            echo "  Bogo: http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_BOGO:-${WP_BOGO_PORT:-8082}} ... OK"
           else
-            echo "  Bogo: http://localhost:${WP_BOGO_PORT:-8082} ... FAIL"
+            echo "  Bogo: http://localhost:${_DOCKER_COMPOSE_HOST_PORT_WP_BOGO:-${WP_BOGO_PORT:-8082}} ... FAIL"
           fi
-          if curl -sf http://localhost:${MAILPIT_UI_PORT:-8025}/ > /dev/null 2>&1; then
-            echo "  Mail: http://localhost:${MAILPIT_UI_PORT:-8025} ... OK"
+          if curl -sf http://localhost:${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_UI:-${MAILPIT_UI_PORT:-8025}}/ > /dev/null 2>&1; then
+            echo "  Mail: http://localhost:${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_UI:-${MAILPIT_UI_PORT:-8025}} ... OK"
           else
-            echo "  Mail: http://localhost:${MAILPIT_UI_PORT:-8025} ... FAIL"
+            echo "  Mail: http://localhost:${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_UI:-${MAILPIT_UI_PORT:-8025}} ... FAIL"
           fi
           echo "========================================="
           echo ""

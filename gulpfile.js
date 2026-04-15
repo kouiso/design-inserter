@@ -1,3 +1,16 @@
+const { existsSync } = require("fs");
+const nodePath = require("path");
+const dotenv = require("dotenv");
+
+const envFile = [
+  nodePath.resolve(__dirname, ".env"),
+  nodePath.resolve(__dirname, ".env.docker"),
+].find((candidate) => existsSync(candidate));
+
+if (envFile) {
+  dotenv.config({ path: envFile });
+}
+
 //browserSync
 const gulp = require("gulp");
 const notify = require("gulp-notify");
@@ -123,8 +136,12 @@ const js = () => {
 
 //ブラウザの設定
 const browser_init = (done) => {
+  const browserSyncProxy = process.env._DOCKER_COMPOSE_BROWSERSYNC_PROXY
+    || process.env.BROWSERSYNC_PROXY
+    || `http://localhost:${process.env._DOCKER_COMPOSE_HOST_PORT_WP_JP || process.env.WP_JP_PORT || "8080"}`;
+
   browserSync.init({
-    proxy: process.env.BROWSERSYNC_PROXY || "http://musashi-toryo.local/",
+    proxy: browserSyncProxy,
     open: true,
     watchOptions: {
       debounceDelay: 1000, //1秒間、タスクの再実行を抑制

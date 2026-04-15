@@ -6,7 +6,7 @@ services:
     container_name: musashi-db
     restart: unless-stopped
     ports:
-      - "${MYSQL_PORT:-3316}:3306"
+      - "${_DOCKER_COMPOSE_HOST_PORT_DB:-${MYSQL_PORT:-3316}}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
       MYSQL_USER: ${MYSQL_USER:-wordpress}
@@ -39,7 +39,7 @@ services:
     container_name: musashi-wp-jp
     restart: unless-stopped
     ports:
-      - "${WP_JP_PORT:-8080}:80"
+      - "${_DOCKER_COMPOSE_HOST_PORT_WP_JP:-${WP_JP_PORT:-8080}}:80"
     depends_on:
       musashi-db:
         condition: service_healthy
@@ -48,7 +48,7 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
       WORDPRESS_DB_HOST: musashi-db
-      WP_HOME: ${JP_WP_HOME:-http://localhost:8080}
+      WP_HOME: ${_DOCKER_COMPOSE_SITE_URL_WP_JP:-${JP_WP_HOME:-http://localhost:8080}}
       WP_TITLE: ${JP_WP_TITLE:-武蔵塗料}
       WP_LOCALE: ${JP_WP_LOCALE:-ja}
       WP_THEME: ${JP_WP_THEME:-muashi}
@@ -75,7 +75,7 @@ services:
     container_name: musashi-wp-en
     restart: unless-stopped
     ports:
-      - "${WP_EN_PORT:-8081}:80"
+      - "${_DOCKER_COMPOSE_HOST_PORT_WP_EN:-${WP_EN_PORT:-8081}}:80"
     depends_on:
       musashi-db:
         condition: service_healthy
@@ -84,7 +84,7 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
       WORDPRESS_DB_HOST: musashi-db
-      WP_HOME: ${EN_WP_HOME:-http://localhost:8081}
+      WP_HOME: ${_DOCKER_COMPOSE_SITE_URL_WP_EN:-${EN_WP_HOME:-http://localhost:8081}}
       WP_TITLE: ${EN_WP_TITLE:-MusashiPaint EN}
       WP_LOCALE: ${EN_WP_LOCALE:-en_US}
       WP_THEME: ${EN_WP_THEME:-muashi-en}
@@ -111,7 +111,7 @@ services:
     container_name: musashi-wp-bogo
     restart: unless-stopped
     ports:
-      - "${WP_BOGO_PORT:-8082}:80"
+      - "${_DOCKER_COMPOSE_HOST_PORT_WP_BOGO:-${WP_BOGO_PORT:-8082}}:80"
     depends_on:
       musashi-db:
         condition: service_healthy
@@ -120,7 +120,7 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
       WORDPRESS_DB_HOST: musashi-db
-      WP_HOME: ${BOGO_WP_HOME:-http://localhost:8082}
+      WP_HOME: ${_DOCKER_COMPOSE_SITE_URL_WP_BOGO:-${BOGO_WP_HOME:-http://localhost:8082}}
       WP_TITLE: ${BOGO_WP_TITLE:-MusashiPaint Bogo}
       WP_LOCALE: ${BOGO_WP_LOCALE:-ja}
       WP_THEME: ${BOGO_WP_THEME:-muashi-bogo}
@@ -146,8 +146,8 @@ services:
     container_name: musashi-mail
     restart: unless-stopped
     ports:
-      - "${MAILPIT_UI_PORT:-8025}:8025"
-      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_UI:-${MAILPIT_UI_PORT:-8025}}:8025"
+      - "${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_SMTP:-${MAILPIT_SMTP_PORT:-1025}}:1025"
     networks:
       - musashi-net
 

@@ -39,6 +39,7 @@
     "babel-loader": "^10.0.0",
     "browser-sync": "^3.0.4",
     "cross-env": "^10.1.0",
+    "dotenv": "^17.4.2",
     "gulp": "^5.0.1",
     "gulp-autoprefixer": "^10.0.0",
     "gulp-cached": "^1.1.1",
