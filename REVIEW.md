@@ -51,6 +51,12 @@ Typical examples:
 - archive and single template behavior
 - navigation and header/footer link logic
 
+When only one theme changes, the PR should include a short sibling-theme note in one of these forms:
+
+- Same logic exists in the sibling theme and was updated there too.
+- Sibling theme checked; no equivalent logic exists.
+- Sibling theme checked; equivalent logic exists but intentionally differs for product or language reasons.
+
 ### 3.2 Permalink and pagination logic is fragile
 
 Recent merged PRs repeatedly touched pagination, archive routing, and with_front behavior. Reviewers should explicitly test whether URLs resolve correctly instead of assuming WordPress defaults will handle it.
@@ -96,7 +102,7 @@ Treat real-page verification as incomplete unless the PR shows concrete evidence
 	- a test result for behavior that can be automated
 	- a short written result only when the check is trivial and the path is explicitly named
 
-Use this minimum evidence format when possible:
+Use this minimum evidence format for Level B and Level C changes:
 
 - environment: local or staging
 - URL or route
@@ -104,6 +110,8 @@ Use this minimum evidence format when possible:
 - item checked
 - artifact: screenshot, test name, or output reference
 - result: pass, fail, or observed behavior
+
+Treat these six fields as the required evidence record for Level B and Level C changes.
 
 For this guide, content-driven or environment-sensitive changes include cases such as:
 
@@ -116,12 +124,23 @@ Use these evidence levels:
 
 - Level A: static visual-only changes with no real-content dependency
 	- minimum: URL, viewport, and screenshot
+	- examples: spacing-only CSS tweaks, color-only changes, static copy updates not driven by CMS data
 - Level B: content-driven changes
 	- minimum: Level A plus either a real-content route note or an automated test
+	- examples: Gutenberg rendering, taxonomy-driven page output, sidebar content depending on stored posts or terms
 - Level C: environment-sensitive changes
 	- minimum: local verification plus one additional method from Section 3.6
+	- examples: routing and cache behavior, mail delivery paths, plugin-dependent approval flows
 
 If a change matches more than one level, apply the highest level.
+
+Quick level chooser:
+
+- If behavior can change by environment, plugin state, cache, routing, or mail path, use Level C.
+- Else if output changes based on stored content, Gutenberg output, taxonomy data, or real content volume, use Level B.
+- Else use Level A.
+
+Reviewers should classify the change with this chooser before deciding what evidence is required.
 
 For Level B and Level C changes, screenshot-only evidence is not enough by itself.
 
@@ -155,7 +174,7 @@ For this guide, a fixed delay is secondary only if both are true:
 - a deterministic readiness check already proves the page or component reached the expected state
 - removing the fixed delay would not change what condition proves correctness, only visual smoothness or animation settling
 
-Caution means comment-level concern by default, not immediate rejection, unless the reviewer can show that the fixed delay is actually carrying the assertion.
+Caution means comment-level concern by default, not immediate rejection. If removing the fixed delay would make the assertion fail or leave readiness unproven, treat it as Reject instead.
 
 Question changes that:
 
@@ -188,6 +207,12 @@ Acceptable environment-aware verification patterns therefore include combination
 - local plus staging
 - local plus dependency-variation check
 - local plus automated test
+
+Examples of dependency-variation checks:
+
+- verify behavior with the relevant plugin disabled or not configured in a safe local environment
+- verify the branch that runs when mail or cache assumptions are missing
+- verify the affected path after changing the local configuration that the PR depends on
 
 For this guide, evidence means something another reviewer can inspect or replay, such as:
 
