@@ -38,7 +38,24 @@ vars:
     --exclude='db.php'
 
   # Docker
-  DC: docker compose --env-file .env.docker
+  DOCKER_ENV_FILE:
+    sh: |
+      if [ -f .env ]; then
+        echo .env
+      elif [ -f .env.docker ]; then
+        echo .env.docker
+      else
+        echo .env
+      fi
+  DC:
+    sh: |
+      if [ -f .env ]; then
+        echo "docker compose --env-file .env"
+      elif [ -f .env.docker ]; then
+        echo "docker compose --env-file .env.docker"
+      else
+        echo "docker compose"
+      fi
 
   # 内部
   DUMP_DIR: .tmp
@@ -224,7 +241,9 @@ tasks:
     preconditions:
       - sh: test -t 0
         msg: "⛔ push 系コマンドは対話型ターミナルからのみ実行できます"
-    prompt: "ローカルの DB + テーマをステージングに反映します。よろしいですか？"
+    prompt:
+      - "危険な操作です。ローカルの DB + テーマをステージングに反映します"
+      - "続行する場合のみ y を入力してください。y 以外は中止します"
     cmds:
       - task: db:push:exec
       - task: theme:push:exec
@@ -234,7 +253,9 @@ tasks:
     preconditions:
       - sh: test -t 0
         msg: "⛔ push 系コマンドは対話型ターミナルからのみ実行できます"
-    prompt: "ローカル DB をステージングに上書きします。よろしいですか？"
+    prompt:
+      - "危険な操作です。ローカル DB をステージングに上書きします"
+      - "続行する場合のみ y を入力してください。y 以外は中止します"
     deps: [setup]
     cmds:
       - task: db:push:exec
@@ -295,7 +316,9 @@ tasks:
     preconditions:
       - sh: test -t 0
         msg: "⛔ push 系コマンドは対話型ターミナルからのみ実行できます"
-    prompt: "テーマをステージングにデプロイします。よろしいですか？"
+    prompt:
+      - "危険な操作です。テーマをステージングにデプロイします"
+      - "続行する場合のみ y を入力してください。y 以外は中止します"
     cmds:
       - task: theme:push:exec
 
@@ -317,6 +340,12 @@ tasks:
 
   migrate:sidebar:
     desc: ステージングでサイドバーメニュー初期化を実行
+    preconditions:
+      - sh: test -t 0
+        msg: "⛔ 対話型ターミナルからのみ実行できます"
+    prompt:
+      - "危険な操作です。ステージングでサイドバーメニュー初期化を実行します"
+      - "続行する場合のみ y を入力してください。y 以外は中止します"
     cmds:
       - >-
         ssh -p 10022 {{.STAGING_SSH_FULL}}
@@ -328,7 +357,9 @@ tasks:
     preconditions:
       - sh: test -t 0
         msg: "⛔ 対話型ターミナルからのみ実行できます"
-    prompt: "ステージングの全サイドバーメニューを再初期化します。よろしいですか？"
+    prompt:
+      - "危険な操作です。ステージングの全サイドバーメニューを再初期化します"
+      - "続行する場合のみ y を入力してください。y 以外は中止します"
     cmds:
       - >-
         ssh -p 10022 {{.STAGING_SSH_FULL}}
@@ -340,18 +371,41 @@ tasks:
   # ==========================================================
 
   init:
-    desc: Docker環境の初期セットアップ（破壊→再構築→起動→検証）
+    desc: Docker環境の初期セットアップ（破壊→再構築→起動→検証→DB同期→停止）
     cmds:
       - 'docker info > /dev/null 2>&1 || (echo "ERROR: Docker Desktopを起動してください" && exit 1)'
       - cmd: |
-          if [ ! -f .env.docker ]; then
-            cp .env.docker.example .env.docker
-            echo "INFO: .env.docker を作成しました。ステージングDB認証情報を設定してください"
+          if [ ! -f .env ]; then
+            if [ -f .env.docker ]; then
+              cp .env.docker .env
+              echo "INFO: 既存の .env.docker を .env に移行しました"
+            elif [ -f .env.example ]; then
+              cp .env.example .env
+              echo "INFO: .env を作成しました。ステージングDB認証情報を設定してください"
+            else
+              echo "ERROR: .env.example が見つかりません"
+              exit 1
+            fi
           fi
       - '{{.DC}} down -v --remove-orphans 2>/dev/null || true'
       - '{{.DC}} build'
       - '{{.DC}} up -d'
       - cmd: |
+          ENV_FILE="{{.DOCKER_ENV_FILE}}"
+          if [ -f "$ENV_FILE" ]; then
+            while IFS= read -r env_line || [ -n "$env_line" ]; do
+              env_line="${env_line%$'\r'}"
+              case "$env_line" in
+                ""|\#*)
+                  continue
+                  ;;
+              esac
+              env_key=${env_line%%=*}
+              env_value=${env_line#*=}
+              env_value=${env_value//\$\$/\$}
+              export "$env_key=$env_value"
+            done < "$ENV_FILE"
+          fi
           echo "サービス起動待機中..."
           i=1
           while [ "$i" -le 90 ]; do
@@ -381,6 +435,21 @@ tasks:
             i=$((i + 1))
           done
       - cmd: |
+          ENV_FILE="{{.DOCKER_ENV_FILE}}"
+          if [ -f "$ENV_FILE" ]; then
+            while IFS= read -r env_line || [ -n "$env_line" ]; do
+              env_line="${env_line%$'\r'}"
+              case "$env_line" in
+                ""|\#*)
+                  continue
+                  ;;
+              esac
+              env_key=${env_line%%=*}
+              env_value=${env_line#*=}
+              env_value=${env_value//\$\$/\$}
+              export "$env_key=$env_value"
+            done < "$ENV_FILE"
+          fi
           echo ""
           echo "========================================="
           if curl -sf http://localhost:${WP_JP_PORT:-8080}/ > /dev/null 2>&1; then
@@ -405,12 +474,46 @@ tasks:
           fi
           echo "========================================="
           echo ""
-          echo "task up で起動、task down で停止"
+      - cmd: |
+          cleanup() {
+            {{.DC}} down
+            echo "Docker環境を停止しました"
+            echo "task up で起動、task down で停止"
+          }
+          trap cleanup EXIT
+          echo "ステージングDBをDocker環境へ同期中..."
+          task db:sync
+          sync_status=$?
+          if [ "$sync_status" -eq 0 ]; then
+            echo "Docker JP/EN DB同期完了"
+          fi
+          exit "$sync_status"
 
   up:
-    desc: 全コンテナ起動
+    desc: "全コンテナ起動（例: task up -- jp でJPを前面ログ表示）"
     cmds:
-      - '{{.DC}} up -d'
+      - cmd: |
+          case "{{.CLI_ARGS}}" in
+            jp)
+              {{.DC}} up -d musashi-db musashi-wp-jp musashi-mail
+              {{.DC}} logs -f musashi-wp-jp
+              ;;
+            en)
+              {{.DC}} up -d musashi-db musashi-wp-en musashi-mail
+              {{.DC}} logs -f musashi-wp-en
+              ;;
+            bogo)
+              {{.DC}} up -d musashi-db musashi-wp-bogo musashi-mail
+              {{.DC}} logs -f musashi-wp-bogo
+              ;;
+            "")
+              {{.DC}} up -d
+              ;;
+            *)
+              echo "ERROR: 対応引数は jp / en / bogo のみです"
+              exit 1
+              ;;
+          esac
 
   up:jp:
     desc: JP環境のみ起動（DB + JP + Mailpit）
@@ -501,17 +604,45 @@ tasks:
       - '{{.DC}} exec -T musashi-wp-bogo wp {{.CLI_ARGS}} --path=/var/www/html/web/wp --allow-root'
 
   db:sync:
-    desc: ステージングDBをDocker JP+EN両方に同期
+    desc: ステージングDBをDocker環境に同期（EN情報未設定時はJPのみ）
     cmds:
       - task: db:sync:jp
-      - task: db:sync:en
+      - cmd: |
+          while IFS= read -r env_line || [ -n "$env_line" ]; do
+            env_line="${env_line%$'\r'}"
+            case "$env_line" in
+              ""|\#*)
+                continue
+                ;;
+            esac
+            env_key=${env_line%%=*}
+            env_value=${env_line#*=}
+            env_value=${env_value//\$\$/\$}
+            export "$env_key=$env_value"
+          done < {{.DOCKER_ENV_FILE}}
+          if [ -z "$STAGING_EN_DB_USER" ] || [ -z "$STAGING_EN_DB_PASS" ] || [ -z "$STAGING_EN_DB_NAME" ] || [ -z "$STAGING_EN_URL" ]; then
+            echo "INFO: EN用ステージングDB情報が未設定のため、EN同期をスキップしました"
+            exit 0
+          fi
+          task db:sync:en
 
   db:sync:jp:
     desc: ステージングDBをDocker JP環境に同期
     deps: [up:jp]
     cmds:
       - cmd: |
-          set -a; source .env.docker; set +a
+          while IFS= read -r env_line || [ -n "$env_line" ]; do
+            env_line="${env_line%$'\r'}"
+            case "$env_line" in
+              ""|\#*)
+                continue
+                ;;
+            esac
+            env_key=${env_line%%=*}
+            env_value=${env_line#*=}
+            env_value=${env_value//\$\$/\$}
+            export "$env_key=$env_value"
+          done < {{.DOCKER_ENV_FILE}}
           mkdir -p .tmp
           ssh "$STAGING_SSH_HOST" "mysqldump \
             -u $STAGING_JP_DB_USER -p$STAGING_JP_DB_PASS $STAGING_JP_DB_NAME \
@@ -530,9 +661,20 @@ tasks:
     deps: [up:en]
     cmds:
       - cmd: |
-          set -a; source .env.docker; set +a
-          if [ -z "$STAGING_EN_DB_USER" ]; then
-            echo "ERROR: STAGING_EN_DB_USER が未設定です。.env.docker にEN用ステージング情報を設定してください"
+          while IFS= read -r env_line || [ -n "$env_line" ]; do
+            env_line="${env_line%$'\r'}"
+            case "$env_line" in
+              ""|\#*)
+                continue
+                ;;
+            esac
+            env_key=${env_line%%=*}
+            env_value=${env_line#*=}
+            env_value=${env_value//\$\$/\$}
+            export "$env_key=$env_value"
+          done < {{.DOCKER_ENV_FILE}}
+          if [ -z "$STAGING_EN_DB_USER" ] || [ -z "$STAGING_EN_DB_PASS" ] || [ -z "$STAGING_EN_DB_NAME" ] || [ -z "$STAGING_EN_URL" ]; then
+            echo "ERROR: EN用ステージングDB情報が不足しています。.env の STAGING_EN_* を設定してください"
             exit 1
           fi
           mkdir -p .tmp
@@ -555,7 +697,12 @@ tasks:
 
   destroy:
     desc: 全コンテナ・ボリューム・イメージを完全削除（データ全消去）
-    prompt: "全てのDockerデータを削除します。よろしいですか？"
+    preconditions:
+      - sh: test -t 0
+        msg: "⛔ 対話型ターミナルからのみ実行できます"
+    prompt:
+      - "危険な操作です。全てのDockerデータを削除します"
+      - "続行する場合のみ y を入力してください。y 以外は中止します"
     cmds:
       - '{{.DC}} down -v --rmi local --remove-orphans'
       - echo "Docker環境を完全削除しました"
