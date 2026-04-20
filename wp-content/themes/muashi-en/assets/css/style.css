@@ -3251,14 +3251,14 @@ a {
   transition: all 0.3s ease;
 }
 .expandable-toggle span::after {
-  content: "もっと見る";
+  content: "Show More";
 }
 .expandable-toggle:hover span {
   background-color: var(--color-text-gray);
   color: var(--color-white);
 }
 .expandable-toggle[aria-expanded=true] span::after {
-  content: "閉じる";
+  content: "Show Less";
 }
 
 .download-item {
@@ -4041,6 +4041,18 @@ a {
 
 .global-map {
   width: 100%;
+}
+.global-map__title {
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+@media screen and (min-width: 992px) {
+  .global-map__title {
+    margin-bottom: 32px;
+    font-size: 32px;
+  }
 }
 .global-map__object {
   display: block;
