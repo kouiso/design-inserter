@@ -57,7 +57,7 @@ jobs:
           if [ -n "$PREVIOUS_SHA" ] && git cat-file -e "${PREVIOUS_SHA}^{commit}" 2>/dev/null; then
             BASE_SHA="$PREVIOUS_SHA"
           else
-            BASE_SHA="$(git merge-base HEAD origin/main)"
+            BASE_SHA="$(git merge-base HEAD FETCH_HEAD)"
           fi
 
           echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
