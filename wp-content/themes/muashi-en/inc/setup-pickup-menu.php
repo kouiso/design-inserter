@@ -1,6 +1,6 @@
 <?php
 /**
- * 「ピックアップ」用サイドバーメニューセットアップ
+ * Featured 用サイドバーメニューセットアップ
  *
  * 実行方法: php で直接実行
  * php wp-content/themes/muashi/inc/setup-pickup-menu.php
@@ -23,7 +23,7 @@ if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
 }
 
 function muashi_setup_pickup_sidebar_menu() {
-	$menu_name = 'ニュース・ピックアップ用サイドバー';
+	$menu_name = 'News / Featured Sidebar';
 	$menu_location = 'sidebar_news_media';
 
 	// 既存メニューを確認
@@ -37,9 +37,9 @@ function muashi_setup_pickup_sidebar_menu() {
 
 		// メニュー項目定義
 		$menu_items = array(
-			// 第1階層: Pick up ピックアップ
+			// 第1階層: Featured
 			array(
-				'title' => 'Pick up ピックアップ',
+				'title' => 'Featured',
 				'url'   => URL_MEDIA,
 				'parent' => 0,
 			),

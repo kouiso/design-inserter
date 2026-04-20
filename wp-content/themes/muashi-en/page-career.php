@@ -53,7 +53,7 @@ $career_query = new WP_Query( array(
 
             <div class="page__content">
                 <h1 class="page__title js-page-title">
-                採用情報
+                Careers
                 </h1>
                 <?php if ( ! empty( $page_content ) ) : ?>
                 <div class="page__inner page__inner--narrow page__inner--intro">

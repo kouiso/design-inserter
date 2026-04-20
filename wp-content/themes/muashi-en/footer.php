@@ -45,7 +45,7 @@
                     <ul class="footer__sub-list">
                         <li class="footer__sub-item">
                             <button class="footer__accordion js-accordion-button">
-                                <span class="footer__accordion-text">製品情報</span>
+                                <span class="footer__accordion-text">Solutions Overview</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.89258 10.2733L7.66591 6.5L11.4392 10.2733L10.9659 10.74L7.66591 7.44L4.36591 10.74L3.89258 10.2733Z" fill="black"/>
@@ -109,7 +109,7 @@
                         </li>
                         <li class="footer__sub-item">
                             <a href="<?= URL_FEATURED ?>" class="footer__accordion">
-                                <span class="footer__accordion-text">注目製品</span>
+                                <span class="footer__accordion-text">Featured Solutions</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -295,10 +295,10 @@
                         </li>
                     </ul>
                 </li>
-                <!-- ピックアップ（新規） -->
+                <!-- Featured -->
                 <li class="footer__item">
                     <a href="<?= URL_MEDIA ?>" class="footer__link">
-                        <span class="footer__link-text">ピックアップ</span>
+                        <span class="footer__link-text">Featured</span>
                         <span class="footer__link-icon">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -365,7 +365,7 @@
                             </svg>
                         </icon>
                         <span class="footer__other-text">
-                            お問い合わせ
+                            Contact
                         </span>
                     </a>
                 </li>
@@ -377,7 +377,7 @@
                             </svg>
                         </icon>
                         <span class="footer__other-text">
-                            カタログをダウンロードする
+                            Request Resources
                         </span>
                     </a>
                 </li>
@@ -413,7 +413,7 @@
                 <a href="<?= URL_PRODUCT ?>" class="footer__nav-pc-title">製品について</a>
                 <div class="footer__nav-pc-contents">
                     <div class="footer__nav-pc-item">
-                        <p class="footer__nav-pc-text">製品情報</p>
+                        <p class="footer__nav-pc-text">Solutions Overview</p>
                         <div class="footer__nav-pc-link-wrapper">
                             <a href="<?= URL_PRODUCT ?>application/" class="footer__nav-pc-link">用途でえらぶ</a>
                             <a href="<?= URL_PRODUCT ?>material/" class="footer__nav-pc-link">基材でえらぶ</a>
@@ -423,7 +423,7 @@
                         </div>
                     </div>
                     <div class="footer__nav-pc-item">
-                        <a href="<?= URL_FEATURED ?>" class="footer__nav-pc-link">注目製品</a>
+                        <a href="<?= URL_FEATURED ?>" class="footer__nav-pc-link">Featured Solutions</a>
                     </div>
                     <div class="footer__nav-pc-item">
                         <a href="<?= URL_APPLICATIONS ?>" class="footer__nav-pc-link">製品用途紹介</a>
@@ -457,21 +457,21 @@
 
                     <!-- お客様の声 -->
                     <div class="footer__nav-pc-item">
-                        <a href="<?= URL_VOICE ?>" class="footer__nav-pc-link">お客様の声</a>
+                        <a href="<?= URL_VOICE ?>" class="footer__nav-pc-link">Customer Stories</a>
                     </div>
                 </div>
             </div>
 
             <div class="footer__nav-pc-other-section">
                 <div class="footer__nav-pc-other-link-top">
-                    <a href="<?= URL_MEDIA ?>" class="footer__nav-pc-link">ピックアップ</a>
-                    <a href="<?= URL_NEWS ?>" class="footer__nav-pc-link">ニュース</a>
-                    <a href="<?= URL_CAREER ?>" class="footer__nav-pc-link">採用情報</a>
+                    <a href="<?= URL_MEDIA ?>" class="footer__nav-pc-link">Featured</a>
+                    <a href="<?= URL_NEWS ?>" class="footer__nav-pc-link">News</a>
+                    <a href="<?= URL_CAREER ?>" class="footer__nav-pc-link">Careers</a>
                     <div class="footer__nav-pc-link-wrapper">
-                        <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">インタビュー</a>
-                        <a href="<?= URL_CAREER_FAQ ?>" class="footer__nav-pc-link">採用に関するQ&A</a>
+                        <a href="<?= URL_INTERVIEW ?>" class="footer__nav-pc-link">Employee Stories</a>
+                        <a href="<?= URL_CAREER_FAQ ?>" class="footer__nav-pc-link">Career FAQs</a>
                     </div>
-                    <a href="<?= URL_FAQ ?>" class="footer__nav-pc-link">よくあるご質問</a>
+                    <a href="<?= URL_FAQ ?>" class="footer__nav-pc-link">FAQs</a>
                 </div>
                 <div class="footer__nav-pc-other-link-bottom">
                     <a href="<?= URL_CONTACT ?>" class="footer__nav-pc-other-link">
@@ -481,7 +481,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                            お問い合わせ
+                            Contact
                         </span>
                     </a>
                     <a href="<?= URL_DOWNLOAD ?>" class="footer__nav-pc-other-link">
@@ -491,7 +491,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                            カタログダウンロード
+                            Request Resources
                         </span>
                     </a>
                 </div>
@@ -524,8 +524,8 @@
 
         <div class="footer__bottom-wrapper">
             <div class="footer__bottom-link-wrapper">
-                <a href="<?= URL_PRIVACY_POLICY ?>" class="footer__bottom-link">プライバシーポリシー</a>
-                <a href="<?= URL_TERMS ?>" class="footer__bottom-link">利用規約</a>
+                <a href="<?= URL_PRIVACY_POLICY ?>" class="footer__bottom-link">Privacy Policy</a>
+                <a href="<?= URL_TERMS ?>" class="footer__bottom-link">Terms of Use</a>
             </div>
 
             <p class="footer__copyright">© Musashi Paint Co.,Ltd. All Rights Reserved.</p>

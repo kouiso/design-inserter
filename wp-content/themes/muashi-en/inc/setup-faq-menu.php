@@ -37,9 +37,9 @@ function muashi_setup_faq_sidebar_menu() {
 
 		// メニュー項目定義
 		$menu_items = array(
-			// 第1階層: Pick up ピックアップ
+			// 第1階層: Featured
 			array(
-				'title' => 'Pick up ピックアップ',
+				'title' => 'Featured',
 				'url'   => URL_MEDIA,
 				'parent' => 0,
 			),

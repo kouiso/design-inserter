@@ -67,12 +67,12 @@ get_header();
             </li>
             <li class="top-kv__nav-item">
                 <a href="<?= URL_CAREER; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">採用情報</span>
+                    <span class="top-kv__nav-link-text">Careers</span>
                 </a>
             </li>
             <li class="top-kv__nav-item">
                 <a href="<?= URL_CONTACT; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">お問い合わせ</span>
+                    <span class="top-kv__nav-link-text">Contact</span>
                 </a>
             </li>
             <li class="top-kv__nav-item top-kv__nav-item--search">
@@ -438,7 +438,7 @@ get_header();
 
         <div class="top-news__contents-wrapper">
             <p class="top-news__contents-title" data-inview data-fade-in data-delay="0.4">
-                Pick up
+                Featured
             </p>
 
             <?php
@@ -500,7 +500,7 @@ get_header();
             <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
                 <a href="<?php echo esc_url( home_url( '/media-page/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
-                    Pick up一覧はこちら
+                    View All Featured Content
                     </span>
                     <div class="top-news__more-icon-wrapper">
                         <div class="top-news__more-icon u-hidden-md-up">
@@ -614,7 +614,7 @@ get_header();
             <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
                 <a href="<?php echo esc_url( home_url( '/news/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
-                    ニュース一覧はこちら
+                    View All News
                     </span>
                     <div class="top-news__more-icon-wrapper">
                         <div class="top-news__more-icon u-hidden-md-up">

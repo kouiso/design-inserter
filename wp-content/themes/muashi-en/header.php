@@ -110,7 +110,7 @@
                         <li class="header__nav-item"><a href="<?= URL_CAREER ?>" class="header__nav-link">Careers</a></li>
                         <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">Contact</a></li>
                         <li class="header__nav-item header__nav-item--search">
-                            <button type="button" class="header__nav-link header__nav-link--search js-search-toggle" aria-label="検索">
+                            <button type="button" class="header__nav-link header__nav-link--search js-search-toggle" aria-label="Search">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="8.5" cy="8.5" r="6.5" stroke="currentColor" stroke-width="2" fill="none"/>
                                     <path d="M13 13L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -119,7 +119,7 @@
                         </li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
-                                <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">En</a>
+                                <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">EN</a>
                                 <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
                             </span>
                         </li>
@@ -492,7 +492,7 @@
                                         <ul class="hamburger__sub-list">
                                             <li class="hamburger__sub-item">
                                                 <a href="<?= esc_url(URL_MEDIA) ?>" class="hamburger__accordion">
-                                                    <span class="hamburger__accordion-text">ピックアップ</span>
+                                                    <span class="hamburger__accordion-text">Featured</span>
                                                     <span class="hamburger__accordion-icon hamburger__accordion-icon--arrow"><?= $hamburger_arrow_svg ?></span>
                                                 </a>
                                             </li>
