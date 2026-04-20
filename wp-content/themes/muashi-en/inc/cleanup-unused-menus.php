@@ -32,7 +32,7 @@ function muashi_cleanup_unused_menus() {
 	$menus_to_delete = array(
 		// 現時点で不要な重複メニュー（ゴミ）- 5個
 		'サステナビリティサイドバー',
-		'News / Featured Sidebar',
+		'繝九Η繝ｼ繧ｹ繝ｻ繝斐ャ繧ｯ繧｢繝・・逕ｨ繧ｵ繧､繝峨ヰ繝ｼ',
 		'ニュース・メディアサイドバー',
 		'よくある質問サイドバー',
 		'私たちについてサイドバー',
