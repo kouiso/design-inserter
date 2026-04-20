@@ -16,7 +16,7 @@ permissions:
 jobs:
   security-scan:
     name: Security Vulnerability Scan
-    runs-on: blacksmith-4vcpu-ubuntu-2204
+    runs-on: blacksmith-2vcpu-ubuntu-2204
 
     steps:
       - name: Checkout code
@@ -40,7 +40,7 @@ jobs:
 
   code-quality:
     name: Code Quality Check
-    runs-on: blacksmith-4vcpu-ubuntu-2204
+    runs-on: blacksmith-2vcpu-ubuntu-2204
 
     steps:
       - name: Checkout code
@@ -70,7 +70,7 @@ jobs:
 
   secret-scan:
     name: Secret Scanning
-    runs-on: blacksmith-4vcpu-ubuntu-2204
+    runs-on: blacksmith-2vcpu-ubuntu-2204
 
     steps:
       - name: Checkout code
@@ -88,7 +88,7 @@ jobs:
 
   semgrep:
     name: Semgrep コード品質スキャン
-    runs-on: blacksmith-4vcpu-ubuntu-2204
+    runs-on: blacksmith-2vcpu-ubuntu-2204
     container:
       image: semgrep/semgrep
     if: (github.actor != 'dependabot[bot]')

@@ -38,7 +38,7 @@ permissions:
 jobs:
   deploy:
     name: Deploy to ${{ inputs.server_label }}
-    runs-on: blacksmith-4vcpu-ubuntu-2204
+    runs-on: blacksmith-2vcpu-ubuntu-2204
     environment: ${{ inputs.environment }}
     timeout-minutes: 10
     steps:
