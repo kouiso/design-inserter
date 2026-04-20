@@ -22,7 +22,8 @@ jobs:
       server_label: 'Xserver (Production JP)'
       dry_run: ${{ inputs.dry_run || false }}
       ref: ${{ github.ref }}
-      theme_dir: muashi
+      source_theme_dir: muashi
+      dest_theme_dir: muashi
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
@@ -37,7 +38,8 @@ jobs:
       server_label: 'Xserver (Production EN)'
       dry_run: ${{ inputs.dry_run || false }}
       ref: ${{ github.ref }}
-      theme_dir: muashi-en
+      source_theme_dir: muashi-en
+      dest_theme_dir: muashi
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
@@ -52,7 +54,8 @@ jobs:
       server_label: 'wpX (Production JP)'
       dry_run: ${{ inputs.dry_run || false }}
       ref: ${{ github.ref }}
-      theme_dir: muashi
+      source_theme_dir: muashi
+      dest_theme_dir: muashi
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
@@ -67,7 +70,8 @@ jobs:
       server_label: 'wpX (Production EN)'
       dry_run: ${{ inputs.dry_run || false }}
       ref: ${{ github.ref }}
-      theme_dir: muashi-en
+      source_theme_dir: muashi-en
+      dest_theme_dir: muashi
     secrets:
       XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
       XSERVER_PORT: ${{ secrets.XSERVER_PORT }}

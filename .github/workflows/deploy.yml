@@ -16,12 +16,17 @@ on:
       ref:
         required: false
         type: string
-        description: 'チェックアウトするブランチ/ref（未指定時はワークフローのデフォルト）'
-      theme_dir:
+        description: 'チェックアウトするブランチまたは ref'
+      source_theme_dir:
         required: false
         type: string
         default: 'muashi'
-        description: 'デプロイするテーマディレクトリ名（muashi or muashi-en）'
+        description: 'ローカルのテーマディレクトリ名'
+      dest_theme_dir:
+        required: false
+        type: string
+        default: 'muashi'
+        description: 'ホスティング先のテーマディレクトリ名'
     secrets:
       XSERVER_HOST:
         required: true
@@ -79,8 +84,8 @@ jobs:
             ${{ inputs.dry_run && '--dry-run' || '' }} \
             --filter='merge .github/deploy-filter-theme.txt' \
             -e "ssh -i ~/.ssh/deploy_key -p $XSERVER_PORT" \
-            ./wp-content/themes/${{ inputs.theme_dir }}/ \
-            "${XSERVER_USER}@${XSERVER_HOST}:${XSERVER_PATH}/wp-content/themes/${{ inputs.theme_dir }}/"
+            ./wp-content/themes/${{ inputs.source_theme_dir }}/ \
+            "${XSERVER_USER}@${XSERVER_HOST}:${XSERVER_PATH}/wp-content/themes/${{ inputs.dest_theme_dir }}/"
 
       - name: Deploy Plugin via rsync
         env:
@@ -107,6 +112,8 @@ jobs:
           SERVER_LABEL: ${{ inputs.server_label }}
           DRY_RUN: ${{ inputs.dry_run }}
           JOB_STATUS: ${{ job.status }}
+          SOURCE_THEME_DIR: ${{ inputs.source_theme_dir }}
+          DEST_THEME_DIR: ${{ inputs.dest_theme_dir }}
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -118,10 +125,12 @@ jobs:
           echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| **Environment** | \`${DEPLOY_ENV}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Server** | ${SERVER_LABEL} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Source Theme** | \`${SOURCE_THEME_DIR}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Destination Theme** | \`${DEST_THEME_DIR}\` |" >> $GITHUB_STEP_SUMMARY
           if [ "$JOB_STATUS" = "success" ]; then
-            echo "| **Status** | ✅ Success |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Status** | Success |" >> $GITHUB_STEP_SUMMARY
           else
-            echo "| **Status** | ❌ Failed |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Status** | Failed |" >> $GITHUB_STEP_SUMMARY
           fi
           echo "| **Commit** | [\`${GITHUB_SHA::7}\`](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}) |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | \`${GITHUB_REF_NAME}\` |" >> $GITHUB_STEP_SUMMARY
