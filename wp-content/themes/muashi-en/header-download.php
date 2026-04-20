@@ -105,7 +105,7 @@
                         </svg>
                     </div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
+                        <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">Contact</a></li>
                     </ul>
                     <div class="header__nav-icon">
                         <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,7 +150,7 @@
                         </svg>
                     </div>
                     <ul class="header__nav-list">
-                        <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">お問い合わせ</a></li>
+                        <li class="header__nav-item"><a href="<?= URL_CONTACT ?>" class="header__nav-link">Contact</a></li>
                     </ul>
                     <div class="header__nav-icon">
                         <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -367,7 +367,7 @@
                                                 </svg>
                                             </icon>
                                             <span class="hamburger__other-text">
-                                            お問い合わせ
+                                            Contact
                                             </span>
                                         </a>
                                     </li>

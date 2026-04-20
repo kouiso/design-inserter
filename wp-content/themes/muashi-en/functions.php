@@ -781,36 +781,55 @@ add_action('init', 'create_post_type');
 function muashi_get_product_taxonomy_base_config() {
     return array(
         'product_application' => array(
-            'label'        => '用途でえらぶ',
-            'plural'       => '用途でえらぶ',
+            'label'        => 'By Industry',
+            'plural'       => 'By Industry',
             'slug'         => 'product/application',
             'hierarchical' => true,
         ),
         'product_material'   => array(
-            'label'        => '基材でえらぶ',
-            'plural'       => '基材でえらぶ',
+            'label'        => 'By Substrate',
+            'plural'       => 'By Substrate',
             'slug'         => 'product/material',
             'hierarchical' => true,
         ),
         'product_design'     => array(
-            'label'        => '意匠性でえらぶ',
-            'plural'       => '意匠性でえらぶ',
+            'label'        => 'By Design / Finish',
+            'plural'       => 'By Design / Finish',
             'slug'         => 'product/design',
             'hierarchical' => true,
         ),
         'product_function'   => array(
-            'label'        => '機能でえらぶ',
-            'plural'       => '機能でえらぶ',
+            'label'        => 'By Performance',
+            'plural'       => 'By Performance',
             'slug'         => 'product/function',
             'hierarchical' => true,
         ),
         'product_environment'=> array(
-            'label'        => '環境キーワードでえらぶ',
-            'plural'       => '環境キーワードでえらぶ',
+            'label'        => 'By Sustainability',
+            'plural'       => 'By Sustainability',
             'slug'         => 'product/environment',
             'hierarchical' => true,
         ),
     );
+}
+
+function muashi_translate_menu_label( $label ) {
+    $translations = array(
+        'Gaming Consoles'                     => 'Gaming Hardware',
+        'Cameras & Optical Equipment'         => 'Cameras / Optical Devices',
+        'Computers'                           => 'Computing Devices',
+        'Others'                              => 'Lifestyle',
+        'Plating-like Finish'                 => 'Chrome-Like Finish',
+        'Anti-Reflective Properties'          => 'Anti-Reflection',
+        'Antibacterial / Antiviral'           => 'Antimicrobial',
+        'Adhesion to Soft Substrates'         => 'Flexible Adhesion',
+        'Radio Wave Transparency'             => 'RF Transparency',
+        'Low VOC / Water-borne'               => 'Low VOC / Waterborne',
+        'Low VOC / Solvent-free / High-solid' => 'Low VOC / Solvent-Free / High Solids',
+        'Reduced Hazardous Substances'        => 'Safer Chemistry',
+    );
+
+    return isset( $translations[ $label ] ) ? $translations[ $label ] : $label;
 }
 
 /**
