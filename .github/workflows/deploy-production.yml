@@ -78,6 +78,11 @@ jobs:
             EN_CHANGED=true
           fi
 
+          if printf '%s\n' "$CHANGED_FILES" | grep -qE '^\.github/workflows/deploy|^\.github/workflows/ci\.yml$|^\.github/workflows/security-checks\.yml$|^\.github/workflows/labeler\.yml$|^\.github/workflows/pr-auto-setting\.yml$'; then
+            JP_CHANGED=true
+            EN_CHANGED=true
+          fi
+
           echo "jp_changed=$JP_CHANGED" >> "$GITHUB_OUTPUT"
           echo "en_changed=$EN_CHANGED" >> "$GITHUB_OUTPUT"
 
