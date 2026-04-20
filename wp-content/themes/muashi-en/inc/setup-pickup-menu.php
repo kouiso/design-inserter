@@ -3,7 +3,7 @@
  * Featured 用サイドバーメニューセットアップ
  *
  * 実行方法: php で直接実行
- * php wp-content/themes/muashi/inc/setup-pickup-menu.php
+ * php wp-content/themes/muashi-en/inc/setup-pickup-menu.php
  */
 
 // WordPress環境外から実行された場合は終了
@@ -45,7 +45,7 @@ function muashi_setup_pickup_sidebar_menu() {
 			),
 			// 第1階層: News ニュース
 			array(
-				'title' => 'News ニュース',
+				'title' => 'News',
 				'url'   => URL_NEWS,
 				'parent' => 0,
 			),
@@ -62,7 +62,7 @@ function muashi_setup_pickup_sidebar_menu() {
 			),
 			// 第1階層: よくあるご質問
 			array(
-				'title' => 'よくあるご質問',
+				'title' => 'FAQs',
 				'url'   => URL_FAQ,
 				'parent' => 0,
 				'children' => array(

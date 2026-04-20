@@ -42,7 +42,7 @@ test.describe('フッター - PCレイアウト', () => {
 
     // リンクのテキストを確認
     const linkText = await faqLink.textContent();
-    expect(linkText).toContain('よくあるご質問');
+    expect(linkText).toContain('FAQs');
   });
 
   test('PCビューで「よくある質問」リンクをクリックできる', async ({ page }) => {
@@ -79,7 +79,7 @@ test.describe('フッター - PCレイアウト', () => {
     // 製品についてのタイトル
     const productTitle = productSection.locator('.footer__nav-pc-title');
     const titleText = await productTitle.textContent();
-    expect(titleText).toContain('製品');
+    expect(titleText).toContain('Solutions');
   });
 
   test('PCフッターに私たちについてセクションが表示される', async ({ page }) => {
@@ -95,7 +95,7 @@ test.describe('フッター - PCレイアウト', () => {
     // 私たちについてのタイトル
     const aboutTitle = aboutSection.locator('.footer__nav-pc-title');
     const titleText = await aboutTitle.textContent();
-    expect(titleText).toContain('私たち');
+    expect(titleText).toContain('Company');
   });
 
   test('PCフッターに採用情報・ニュース等のリンクが表示される', async ({ page }) => {
@@ -127,7 +127,7 @@ test.describe('フッター - PCレイアウト', () => {
 
     // リンクテキストを確認
     const linkText = await contactLink.textContent();
-    expect(linkText).toMatch(/お問い合わせ/);
+    expect(linkText).toMatch(/Contact/);
   });
 
   test('PCフッターにカタログダウンロードリンクが表示される', async ({ page }) => {
@@ -143,7 +143,7 @@ test.describe('フッター - PCレイアウト', () => {
 
     // リンクテキストを確認
     const linkText = await downloadLink.textContent();
-    expect(linkText).toMatch(/カタログ/);
+    expect(linkText).toMatch(/Request Resources/);
   });
 
   test('PCフッターにSNSリンクが表示される', async ({ page }) => {
@@ -200,7 +200,7 @@ test.describe('フッター - モバイルレイアウト', () => {
 
     // リンクのテキストを確認
     const linkText = await faqLink.textContent();
-    expect(linkText).toContain('よくあるご質問');
+    expect(linkText).toContain('FAQs');
   });
 
   test('モバイルビューでフッターアコーディオンが機能する', async ({ page }) => {

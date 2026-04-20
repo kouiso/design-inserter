@@ -7,7 +7,7 @@
     "gulp": "gulp",
     "build:css": "sass wp-content/themes/muashi/src/scss/style.scss:wp-content/themes/muashi/assets/css/style.css --style=expanded && sass wp-content/themes/muashi/src/scss/editor-download-button.scss:wp-content/themes/muashi/assets/css/editor-download-button.css --style=expanded",
     "build:css:muashi-en": "sass wp-content/themes/muashi-en/src/scss/style.scss:wp-content/themes/muashi-en/assets/css/style.css --style=expanded && sass wp-content/themes/muashi-en/src/scss/editor-download-button.scss:wp-content/themes/muashi-en/assets/css/editor-download-button.css --style=expanded",
-    "build": "npm run build:css && gulp js",
+    "build": "npm run build:css && npm run build:css:muashi-en && gulp js",
     "test": "playwright test",
     "test:smoke": "playwright test test/e2e/smoke.spec.ts",
     "test:pagination": "playwright test test/e2e/pagination.spec.ts",
