@@ -51,7 +51,7 @@ function muashi_get_default_meta_description() {
  * SEO用のOG画像URLを返す
  */
 function muashi_get_default_og_image_url() {
-    return get_template_directory_uri() . '/assets/img/common/logo.svg';
+    return get_template_directory_uri() . '/assets/img/top/kv.jpg';
 }
 
 /**
