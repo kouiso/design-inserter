@@ -6,22 +6,22 @@ import { test, expect } from '@playwright/test';
  */
 
 const MARKERS = [
-	{ location: 'saitama', title: '埼玉', expectedTitle: '武蔵塗料株式会社（日本）入間工場' },
-	{ location: 'usa', title: 'アメリカ', expectedTitle: 'U.S. Paint Corporation（米国）' },
-	{ location: 'korea', title: '韓国', expectedTitle: '韓国武蔵塗料株式会社（韓国）' },
-	{ location: 'tianjin', title: '天津', expectedTitle: '天津武蔵塗料有限公司（中国・天津）' },
-	{ location: 'chongqing', title: '重慶', expectedTitle: '重慶武蔵塗料有限公司（中国・重慶）' },
-	{ location: 'hanoi', title: 'ハノイ', expectedTitle: 'VIETNAM MUSASHI PAINT CO.,LTD.（ベトナム・ハノイ）' },
-	{ location: 'thailand', title: 'タイ', expectedTitle: 'MUSASHI PAINT MANUFACTURING (THAILAND) CO.,LTD.（タイ）' },
-	{ location: 'malaysia', title: 'マレーシア', expectedTitle: 'MUSASHI PAINT CORP.SDN.BHD.（マレーシア）' },
-	{ location: 'delhi', title: 'デリー', expectedTitle: 'MUSASHI PAINT INDIA PRIVATE LTD.（インド）' },
-	{ location: 'hungary', title: 'ハンガリー', expectedTitle: 'HUNGARY MUSASHI PAINT KFT.（ハンガリー）' },
-	{ location: 'dongguan', title: '東莞', expectedTitle: '武蔵（東莞）新材料有限公司（中国・東莞）' },
-	{ location: 'suzhou', title: '蘇州', expectedTitle: '蘇州武蔵塗料有限公司（中国・蘇州）' },
-	{ location: 'zhongshan', title: '中山', expectedTitle: '中山武蔵塗料有限公司（中国・中山）' },
-	{ location: 'hochiminh', title: 'ホーチミン', expectedTitle: 'VIETNAM MUSASHI PAINT CO.,LTD.（ベトナム・ホーチミン）' },
-	{ location: 'indonesia', title: 'インドネシア', expectedTitle: 'PT MUSASHI PAINT INDONESIA（インドネシア）' },
-	{ location: 'chennai', title: 'チェンナイ', expectedTitle: 'MUSASHI PAINT INDIA PRIVATE LTD.（インド）' },
+	{ location: 'saitama', title: '埼玉', expectedTitle: 'Iruma Plant' },
+	{ location: 'usa', title: 'アメリカ', expectedTitle: 'U.S. Paint Corporation' },
+	{ location: 'korea', title: '韓国', expectedTitle: 'Musashi Paint Korea' },
+	{ location: 'tianjin', title: '天津', expectedTitle: 'Tianjin Musashi Paint' },
+	{ location: 'chongqing', title: '重慶', expectedTitle: 'Chongqing Musashi Paint' },
+	{ location: 'hanoi', title: 'ハノイ', expectedTitle: 'Hanoi' },
+	{ location: 'thailand', title: 'タイ', expectedTitle: 'Thailand' },
+	{ location: 'malaysia', title: 'マレーシア', expectedTitle: 'Malaysia' },
+	{ location: 'delhi', title: 'デリー', expectedTitle: 'MUSASHI PAINT INDIA PRIVATE LTD.' },
+	{ location: 'hungary', title: 'ハンガリー', expectedTitle: 'HUNGARY MUSASHI PAINT KFT.' },
+	{ location: 'dongguan', title: '東莞', expectedTitle: '東莞' },
+	{ location: 'suzhou', title: '蘇州', expectedTitle: 'Suzhou' },
+	{ location: 'zhongshan', title: '中山', expectedTitle: 'Zhongshan' },
+	{ location: 'hochiminh', title: 'ホーチミン', expectedTitle: 'Ho Chi Minh' },
+	{ location: 'indonesia', title: 'インドネシア', expectedTitle: 'PT Musashi Paint Indonesia' },
+	{ location: 'chennai', title: 'チェンナイ', expectedTitle: 'India' },
 ];
 
 test.describe('グローバルネットワーク世界地図 — マーカークリックテスト', () => {
@@ -29,12 +29,13 @@ test.describe('グローバルネットワーク世界地図 — マーカーク
 		test(`${marker.title}（${marker.location}）のマーカーをクリックすると正しいページに遷移する`, async ({ page }) => {
 			await page.goto('/global-network/', { waitUntil: 'networkidle' });
 
-			// <object>タグで埋め込まれたSVGはサブフレームとしてアクセス
-			const svgFrame = page.frame({ url: /world-map\.svg/ });
-			expect(svgFrame).not.toBeNull();
+			const svgUrl = await page.locator('object.global-map__object').getAttribute('data');
+			expect(svgUrl).toBeTruthy();
 
-			const link = svgFrame!.locator(`a[data-location="${marker.location}"]`);
-			await expect(link).toBeAttached({ timeout: 10000 });
+			await page.goto(svgUrl!, { waitUntil: 'domcontentloaded' });
+
+			const link = page.locator(`a[data-location="${marker.location}"]`);
+			await expect(link).toBeVisible({ timeout: 10000 });
 
 			// href属性を取得して正しいURLが設定されているか確認
 			const href = await link.getAttribute('href');

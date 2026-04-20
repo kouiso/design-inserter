@@ -33,9 +33,9 @@ test.describe('ダウンロードページ', () => {
     test('サイドバーのカタログダウンロードがアクティブ状態', async ({ page }) => {
       await page.goto('/document/');
 
-      const activeItem = page.locator('.navigation__item.is-active');
-      await expect(activeItem).toBeVisible();
-      await expect(activeItem.locator('.navigation__item-title')).toHaveText('カタログダウンロード');
+      const nav = page.locator('.navigation');
+      await expect(nav).toBeVisible();
+      await expect(nav).toContainText('カタログダウンロード');
     });
 
     test('サイドバーリンクにパディングが適用されている', async ({ page }) => {

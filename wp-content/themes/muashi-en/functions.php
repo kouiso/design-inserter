@@ -14,6 +14,95 @@ require_once(get_theme_file_path('/inc/cf7-form-templates.php'));
 require_once(get_theme_file_path('/inc/cf7-security.php'));
 
 /**
+ * SEOメタ情報のフォールバックを返す
+ */
+function muashi_get_default_meta_description() {
+    if ( is_front_page() || is_home() ) {
+        return 'Musashi Paint develops coating solutions for plastics and other materials with global production, technical support, and customization capabilities.';
+    }
+
+    if ( is_page( 'contact' ) ) {
+        return 'Contact Musashi Paint for product inquiries, technical consultations, and resource requests.';
+    }
+
+    if ( is_page( 'download' ) ) {
+        return 'Request product catalogs, technical materials, and other resources from Musashi Paint.';
+    }
+
+    if ( is_singular() ) {
+        $excerpt = wp_strip_all_tags( get_the_excerpt() );
+        if ( ! empty( $excerpt ) ) {
+            return $excerpt;
+        }
+    }
+
+    $title = wp_strip_all_tags( wp_get_document_title() );
+    if ( empty( $title ) ) {
+        $title = get_bloginfo( 'name' );
+    }
+
+    return sprintf(
+        'Learn more about %s from Musashi Paint.',
+        $title
+    );
+}
+
+/**
+ * SEO用のOG画像URLを返す
+ */
+function muashi_get_default_og_image_url() {
+    return get_template_directory_uri() . '/assets/img/common/logo.svg';
+}
+
+/**
+ * Yoast SEOのdescriptionを補完する
+ */
+function muashi_filter_wpseo_metadesc( $description ) {
+    if ( ! empty( $description ) ) {
+        return $description;
+    }
+
+    return muashi_get_default_meta_description();
+}
+add_filter( 'wpseo_metadesc', 'muashi_filter_wpseo_metadesc' );
+
+/**
+ * Yoast SEOのOG descriptionを補完する
+ */
+function muashi_filter_wpseo_opengraph_desc( $description ) {
+    if ( ! empty( $description ) ) {
+        return $description;
+    }
+
+    return muashi_get_default_meta_description();
+}
+add_filter( 'wpseo_opengraph_desc', 'muashi_filter_wpseo_opengraph_desc' );
+
+/**
+ * Yoast SEOのOG画像を補完する
+ */
+function muashi_filter_wpseo_opengraph_image( $image_url ) {
+    if ( ! empty( $image_url ) ) {
+        return $image_url;
+    }
+
+    return muashi_get_default_og_image_url();
+}
+add_filter( 'wpseo_opengraph_image', 'muashi_filter_wpseo_opengraph_image' );
+
+/**
+ * Yoast SEOのX画像を補完する
+ */
+function muashi_filter_wpseo_twitter_image( $image_url ) {
+    if ( ! empty( $image_url ) ) {
+        return $image_url;
+    }
+
+    return muashi_get_default_og_image_url();
+}
+add_filter( 'wpseo_twitter_image', 'muashi_filter_wpseo_twitter_image' );
+
+/**
  * [product_field] ショートコード
  * 投稿のACFカスタムフィールド値を表示する。
  * 使用例: [product_field name="product_name_trademark_en"]
@@ -2183,4 +2272,3 @@ add_filter('acf/settings/load_json', function($paths) {
     $paths[] = get_stylesheet_directory() . '/acf-json';
     return $paths;
 });
-

@@ -62,7 +62,7 @@ const staticPages = [
 
 // 外部リンク
 const externalLinks = [
-  { url: 'https://en.musashipaint.com/', title: '英語サイト' },
+  { url: 'https://musashipaint.com/en/', title: '英語サイト' },
   { url: 'https://www.musashipaintchina.com/', title: '中国語サイト' },
   { url: 'https://www.linkedin.com/company/musashi-paint-holdings/', title: 'LinkedIn' },
   { url: 'https://www.instagram.com/musashi_paint_official/', title: 'Instagram' },

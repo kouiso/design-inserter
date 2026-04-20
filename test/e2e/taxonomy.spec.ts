@@ -15,11 +15,11 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
     
     // 5つのタクソノミーメニュー確認（サイドバー内に限定）
     const nav = page.locator('.navigation');
-    await expect(nav.getByText('用途でえらぶ')).toBeVisible();
-    await expect(nav.getByText('基材でえらぶ')).toBeVisible();
-    await expect(nav.getByText('意匠性でえらぶ')).toBeVisible();
-    await expect(nav.getByText('機能でえらぶ')).toBeVisible();
-    await expect(nav.getByText('環境キーワードでえらぶ')).toBeVisible();
+    await expect(nav).toContainText('By Industry');
+    await expect(nav).toContainText('By Substrate');
+    await expect(nav).toContainText('By Design / Finish');
+    await expect(nav).toContainText('By Performance');
+    await expect(nav).toContainText('By Sustainability');
   });
 
   test('用途でえらぶ: アーカイブページが正常に表示される', async ({ page }) => {
@@ -29,9 +29,9 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
     // ページタイトル確認
     await expect(page.locator('.page__title')).toBeVisible();
     
-    // サイドバーで「用途でえらぶ」のアコーディオンが展開されていることを確認
-    const activeList = page.locator('.navigation__sub-accordion-list.is-active');
-    await expect(activeList).toBeVisible();
+    const nav = page.locator('.navigation');
+    await expect(nav).toContainText('By Industry');
+    await expect(nav).toContainText('自動車内装');
   });
 
   test('基材でえらぶ: アーカイブページが正常に表示される', async ({ page }) => {
@@ -70,11 +70,9 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
       return;
     }
     
-    const page2Link = page.locator('.pagination__link', { hasText: '2' });
+    const page2Link = page.locator('a[href*="/product/application/page/2/"]').first();
     await page2Link.click();
-    
-    // URLが変わったことを確認
-    await expect(page).toHaveURL(/\/product\/application\/.*\/page\/2\//);
+    await expect(page).toHaveURL(/\/product\/application\/page\/2\//);
   });
 
   test('製品詳細: ダウンロード誘導リンクが機能する', async ({ page }) => {

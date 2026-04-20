@@ -15,6 +15,9 @@ const path = require('path');
 
 const environments = {
   local: 'http://localhost:10010',
+  docker: 'http://localhost:8080',
+  'docker-en': 'http://localhost:8081',
+  'docker-bogo': 'http://localhost:8082',
   staging: 'https://musashipaint.xsrv.jp',
   production: 'https://musashipaint.xsrv.jp',
 };
@@ -63,7 +66,7 @@ const staticPages = [
 
 // 外部リンク
 const externalLinks = [
-  { url: 'https://en.musashipaint.com/', title: '英語サイト' },
+  { url: 'https://musashipaint.com/en/', title: '英語サイト' },
   { url: 'https://www.musashipaintchina.com/', title: '中国語サイト' },
   { url: 'https://www.linkedin.com/company/musashi-paint-holdings/', title: 'LinkedIn' },
   { url: 'https://www.instagram.com/musashi_paint_official/', title: 'Instagram' },
@@ -373,7 +376,13 @@ async function main() {
   await browser.close();
 
   // スナップショットを保存
-  const outputPath = path.join(__dirname, '../test/fixtures/content-snapshot.json');
+  const outputFileMap = {
+    staging: 'content-snapshot-staging.json',
+    production: 'content-snapshot-production.json',
+    'docker-en': 'content-snapshot-docker-en.json',
+  };
+  const outputFile = outputFileMap[env] || 'content-snapshot.json';
+  const outputPath = path.join(__dirname, `../test/fixtures/${outputFile}`);
   fs.writeFileSync(outputPath, JSON.stringify(snapshot, null, 2), 'utf-8');
 
   console.log(`\n${'='.repeat(50)}`);
