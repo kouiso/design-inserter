@@ -24,10 +24,15 @@ if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
 
 function muashi_setup_pickup_sidebar_menu() {
 	$menu_name = 'News / Featured Sidebar';
+	$legacy_menu_name = 'ニュース・ピックアップ用サイドバー';
 	$menu_location = 'sidebar_news_media';
 
 	// 既存メニューを確認
 	$menu = wp_get_nav_menu_object($menu_name);
+	if ( ! $menu ) {
+		// 旧メニュー名が残っている環境では既存メニューを再利用する
+		$menu = wp_get_nav_menu_object( $legacy_menu_name );
+	}
 
 	// メニューが存在しない場合のみ作成
 	if (!$menu) {
@@ -120,7 +125,11 @@ function muashi_setup_pickup_sidebar_menu() {
 
 		error_log("Menu assigned to location: $menu_location");
 	} else {
-		error_log("Menu already exists: $menu_name");
+		$locations = get_theme_mod('nav_menu_locations', array());
+		$locations[$menu_location] = $menu->term_id;
+		set_theme_mod('nav_menu_locations', $locations);
+
+		error_log("Menu already exists: {$menu->name}");
 	}
 }
 

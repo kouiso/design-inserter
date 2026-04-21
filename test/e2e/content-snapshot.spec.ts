@@ -298,9 +298,15 @@ test.describe('外部リンク - 到達確認', () => {
 
       const status = response?.status() ?? 0;
 
-      // 外部サイトはBot判定や認証導線により 4xx を返すことがあるため、
-      // 応答があり 5xx ではないことを到達可能の判定とする。
-      expect(status > 0 && status < 500,
+      // 外部サイトはBot判定や認証導線により一部の 4xx を返すことがあるため、
+      // 正常系の 2xx/3xx に加え、認証・Bot 判定由来の代表的なステータスのみ許容する。
+      const allowedExternalStatuses = [401, 403, 429];
+      const allowedStatusByHost: Record<string, number[]> = {
+        'www.facebook.com': [400],
+      };
+      const host = new URL(extLink.url).hostname;
+      const hostSpecificStatuses = allowedStatusByHost[host] ?? [];
+      expect((status >= 200 && status < 400) || allowedExternalStatuses.includes(status) || hostSpecificStatuses.includes(status),
         `${extLink.title}にアクセスできません`).toBeTruthy();
 
       console.log(`✅ ${extLink.title}: ${status}`);
