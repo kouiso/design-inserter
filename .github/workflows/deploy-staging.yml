@@ -5,7 +5,7 @@ on:
     inputs:
       deploy_target:
         description: 'デプロイ先を選択'
-        required: true
+        required: false
         type: choice
         default: all
         options:
