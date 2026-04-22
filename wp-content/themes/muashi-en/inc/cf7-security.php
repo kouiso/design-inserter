@@ -111,7 +111,7 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 		$extension = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
 
 		if ( ! isset( $allowed_mime_types[ $extension ] ) ) {
-			$result->invalidate( $tag, 'このファイル形式はアップロードできません。' );
+			$result->invalidate( $tag, 'This file type cannot be uploaded.' );
 			return $result;
 		}
 
@@ -120,7 +120,7 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 		finfo_close( $finfo );
 
 		if ( false === $detected ) {
-			$result->invalidate( $tag, 'ファイルの検証に失敗しました。別のファイルをお試しください。' );
+			$result->invalidate( $tag, 'File validation failed. Please try a different file.' );
 			return $result;
 		}
 
@@ -133,7 +133,7 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 			}
 			$result->invalidate(
 				$tag,
-				'ファイルの内容が拡張子と一致しません。正しいファイルを選択してください。'
+				'The file contents do not match the extension. Please select the correct file.'
 			);
 			return $result;
 		}
@@ -141,7 +141,7 @@ function muashi_cf7_validate_file_mime( $result, $tag, $args = array() ) {
 		if ( ! in_array( $detected, $allowed_for_ext, true ) ) {
 			$result->invalidate(
 				$tag,
-				'ファイルの内容が拡張子と一致しません。正しいファイルを選択してください。'
+				'The file contents do not match the extension. Please select the correct file.'
 			);
 			return $result;
 		}
@@ -184,7 +184,7 @@ function muashi_cf7_rate_limit( $contact_form, &$abort, $submission ) {
 	if ( $attempts >= $max_attempts ) {
 		$abort = true;
 		$submission->set_response(
-			'送信回数の上限に達しました。しばらく時間を置いてから再度お試しください。'
+			'You have reached the submission limit. Please wait a while and try again.'
 		);
 		return;
 	}
