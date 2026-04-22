@@ -33,6 +33,8 @@ const environments = {
   'docker-bogo': `http://localhost:${wpBogoPort}`,
   staging: 'https://musashipaint.xsrv.jp/staging',
   production: 'https://musashipaint.xsrv.jp',
+  'wpx-en': 'https://xw727268.xwp.jp',
+  'xsrv-en': 'https://musashipaint.xsrv.jp/en',
 };
 
 // 環境変数からベースURLを決定
