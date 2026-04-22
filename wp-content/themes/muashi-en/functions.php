@@ -328,10 +328,10 @@ function wpcf7_validate_email_filter_extend( $result, $tag ) {
             $target_name = $matches[1];
             if ($_POST[$name] != $_POST[$target_name]) {
                 if (method_exists($result, 'invalidate')) {
-                    $result->invalidate( $tag,"確認用のメールアドレスが一致していません");
+                    $result->invalidate( $tag,"The confirmation email address does not match.");
                 } else {
                     $result['valid'] = false;
-                    $result['reason'][$name] = '確認用のメールアドレスが一致していません';
+                    $result['reason'][$name] = 'The confirmation email address does not match.';
                 }
             }
         }
@@ -366,8 +366,8 @@ function muashi_validate_selected_products_field( $result, $tag ) {
         return $result;
     }
 
-    $error_message_empty = '資料を少なくとも1件選択してください。';
-    $error_message_limit = '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。';
+    $error_message_empty = 'Please select at least one item.';
+    $error_message_limit = 'You can select up to 5 items. Please contact us if you need more.';
 
     if ( $raw_value === '' ) {
         if ( method_exists($result, 'invalidate') ) {
@@ -610,7 +610,7 @@ function ts_render_pagination( $query = null, $base_url_override = null, $curren
         echo '<div class="pagination__arrow-wrapper">';
         if ( $current > 1 ) {
             $prev_url = $get_page_url( $current - 1 );
-            echo '<a class="pagination__link pagination__link--prev" href="' . esc_url( $prev_url ) . '" rel="prev" aria-label="前のページ">
+            echo '<a class="pagination__link pagination__link--prev" href="' . esc_url( $prev_url ) . '" rel="prev" aria-label="Previous page">
                     <span class="pagination__icon" aria-hidden="true">
                       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M30.0831 20.5833H10.6873L18.9998 28.8958L17.9548 30.0833L7.66309 19.7917L17.9548 9.5L18.9998 10.6875L10.6873 19H30.0831V20.5833Z" fill="black"/>
@@ -657,7 +657,7 @@ function ts_render_pagination( $query = null, $base_url_override = null, $curren
         echo '<div class="pagination__arrow-wrapper">';
         if ( $current < (int) $query->max_num_pages ) {
             $next_url = $get_page_url( $current + 1 );
-            echo '<a class="pagination__link pagination__link--next" href="' . esc_url( $next_url ) . '" rel="next" aria-label="次のページ">
+            echo '<a class="pagination__link pagination__link--next" href="' . esc_url( $next_url ) . '" rel="next" aria-label="Next page">
                     <span class="pagination__icon" aria-hidden="true">
                       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6.33301 19H25.7288L17.4163 10.6875L18.4613 9.5L28.753 19.7917L18.4613 30.0833L17.4163 28.8958L25.7288 20.5833H6.33301V19Z" fill="black"/>
@@ -1884,7 +1884,7 @@ add_action( 'init', function() {
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料ホールディングス株式会社 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料ホールディングス株式会社 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1898,7 +1898,7 @@ add_action( 'init', function() {
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 入間工場 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 入間工場 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1912,7 +1912,7 @@ add_action( 'init', function() {
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 営業部 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 営業部 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1926,7 +1926,7 @@ add_action( 'init', function() {
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=大阪府東大阪市水走1-17-13&amp;output=embed" aria-label="武蔵塗料株式会社 大阪事業所 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=大阪府東大阪市水走1-17-13&amp;output=embed" aria-label="武蔵塗料株式会社 大阪事業所 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1940,7 +1940,7 @@ add_action( 'init', function() {
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=愛知県小牧市中央1丁目267&amp;output=embed" aria-label="武蔵塗料株式会社 名古屋営業所 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=愛知県小牧市中央1丁目267&amp;output=embed" aria-label="武蔵塗料株式会社 名古屋営業所 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1954,7 +1954,7 @@ add_action( 'init', function() {
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料国際株式会社 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料国際株式会社 Map"></iframe>
         </div>
     </div>
 </div>
