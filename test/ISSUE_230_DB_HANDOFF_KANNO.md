@@ -157,6 +157,29 @@ wp-admin → メニュー編集の前に、これらのファイルが実行ト�
 
 ---
 
+## 12. 固定ページ post_content 内のブロックパターン挿入済み JP 文言
+
+`muashi-en/functions.php` の block pattern (`muashi/domestic-locations` / `muashi/download-button`) を PR #232 commit `99660ddc` で EN 化した。
+
+**ただし、ブロックパターンはパターンを新規挿入した時点の HTML が post_content にコピーされるため、既に挿入済みの固定ページでは JP 文言が残る**。該当想定ページ:
+
+| ページ | 該当パターン | 残存 JP 文言 |
+|---|---|---|
+| `/company/` | `muashi/domestic-locations` | `住所: 〒xxx` × 6 拠点 |
+| `/global-network/` | iframe aria-label (domestic-locations) | `iframe aria-label="武蔵塗料... 地図"` |
+
+作業: wp-admin の Gutenberg エディタで該当固定ページを開き、`住所:` → `Address:`、iframe aria-label の `地図` 部分を `Map` に手動書き換え。もしくはパターンブロックを削除して再挿入 (EN 化済みパターンが復元される)。
+
+---
+
+## 13. Parse error 修正 (7134628a) の xsrv-en デプロイ
+
+PR #232 にマージ/cherry-pick 後、`deploy_target=xsrv-en --ref feature/issue-230-en-translation-phase-a` で **最優先デプロイ**。
+
+現状 xsrv-en には `header-download.php` の `endif` 欠落 (Parse error) が残存し、`/document/` `/document-featured/` が致命エラー状態。
+
+---
+
 ## 引き渡し確認チェックリスト
 
 - [ ] 1. 製品詳細 post_content E14-E19 差替
@@ -174,3 +197,5 @@ wp-admin → メニュー編集の前に、これらのファイルが実行ト�
 - [ ] 9. seed ファイル実行ガード
 - [ ] 10. 進捗シート権限付与
 - [ ] 11. 福田さんシート 96 件残タスク棚卸し
+- [ ] 12. 既存固定ページ内のブロックパターン挿入済み JP 文言 (住所: / iframe 地図 aria-label)
+- [ ] 13. xsrv-en への Parse error fix デプロイ (`/document/` `/document-featured/` 復旧)

@@ -296,3 +296,114 @@ Remarks: [product_field name="product_remarks"]
 
 当セッションでは Playwright MCP ツールが利用不可だったため、WebFetch によるソース DOM 検証で代替。
 ビジュアル検証（スクショ取得）は次回作業時に `test/ISSUE_230_WPX_STAGING_EN_MANUAL_TEST_GUIDE.md` 手順で実施する。
+
+---
+
+## 2026-04-22 後半セッション追記 (Playwright MCP 実機検証 + 追加修正)
+
+### 追加デプロイ / 修正コミット
+
+| commit | 内容 |
+|---|---|
+| `d9ca78a0` | ハンバーガーメニュー Group Companies リンク削除 |
+| `21a31566` | task pull を Docker 環境向けに変更 (pull:legacy / pull:diff 削除) |
+| `bf2ec77d` | wpx-en / xsrv-en 環境と Phase A 検証スペックを追加 |
+| `7134628a` | **Parse error 解消**: header-download.php の欠落 `endif` を復元 |
+| `99660ddc` | functions.php ブロックパターン内 JP 残存を英訳 + Taskfile EN同期後テーマ有効化 |
+| `0daf921e` | /global-network/ の S6 / S11 を DB 待ちで test.fixme マーク |
+
+### デプロイ run
+
+- `24777143794`: d9ca78a0 〜 bf2ec77d → wpx-en (success)
+- `24777487397`: 7134628a → wpx-en (success、Parse error 解消)
+- 99660ddc / 0daf921e: **未デプロイ** (ユーザー指示により保留)
+
+### 重大バグ発見・修正: header-download.php Parse error
+
+事前セッションの commit `e52047a4` で `if ( ! is_page_template('page-document.php') ) :` を閉じる `<?php endif; ?>` が削除されていた。結果として `/document/` `/document-featured/` で WordPress 致命エラー:
+
+```
+Parse error: syntax error, unexpected end of file, expecting "elseif" or "else" or "endif"
+in header-download.php on line 575
+```
+
+commit `7134628a` で line 539 に `endif` を追加して復元。Docker コンテナ内 `php -l` で構文チェック PASS 確認、デプロイ後 `/document/` `/document-featured/` 正常表示を Playwright MCP で確認。
+
+### 重大スコープ漏れ発見・修正: functions.php ブロックパターン JP 残存
+
+ソース側 JP grep 再監査で以下を発見（元プラン S1-S21 に含まれず）:
+
+| 位置 | 修正内容 |
+|---|---|
+| `functions.php:1738` | `ダウンロード` → `Download` (download-button ブロックパターン button 文言) |
+| `functions.php:1742` | 発行日/期間 → `Published: June 2024 / Reporting Period: January–December 2023` |
+| `functions.php:1882/1896/1910/1924/1938/1952` | `住所: 〒xxx` → `Address: 〒xxx` (国内6拠点分、domestic-locations ブロックパターン) |
+| `functions.php:1733-1734` | `ダウンロードボタン` / 説明 → `Download Button` / `Button with download icon` (Gutenberg 管理 UI) |
+| `functions.php:1871-1872` | `国内拠点情報` / 説明 → `Domestic Locations` / `List of domestic offices in Japan (Google Map iframe embed)` (Gutenberg 管理 UI) |
+
+**注意点**: これらのブロックパターン文言は、Gutenberg でパターンを**新規挿入**したときのみ反映される。既存の固定ページ post_content に挿入済みのブロックには反映されない (post_content がスナップショットであるため)。したがって `/global-network/` `/company/` など既存ページには 99660ddc デプロイ後も `住所:` 等が残る可能性がある。該当は O4 (神野さん側 DB 編集) で対応。
+
+### Taskfile.yml db:sync:en 修正
+
+staging DB の `template=muashi` 値がローカル EN コンテナで参照されると、実体の `muashi-en` テーマが読み込めず `localhost:8081` がほぼ空レスポンスになる問題を修正。`db:sync:en` の最後に以下を追加:
+
+```yaml
+{{.DC}} exec -T musashi-wp-en wp theme activate muashi-en --allow-root
+```
+
+### Playwright MCP 実機検証 (2026-04-22 後半)
+
+| ページ | 結果 | 備考 |
+|---|---|---|
+| `/` ホーム | ✅ | Group Companies 不在、Advanced R&D Capabilities / Global Network / Manufacturing Footprint 表示 |
+| `/contact/` | ✅ | CF7 全 EN、Submit Inquiry、I agree to the Privacy Policy |
+| `/catalog/` | ✅ | H1 Request for Catalog、S14 JS localize (Selected / Clear filters / All 等) EN |
+| `/download/` | ✅ | H1 Catalog Download、Go Overview、CF7 全 EN |
+| `/document/` | ✅ | Parse error 解消後、H1 Catalog Download、Katakana フィルタ EN、placeholder EN |
+| `/document-featured/` | ✅ | H1 Product Details、placeholder Search by product details |
+| `/product/` | ✅ | H1 Solutions Overview、サイドバーナビ By Industry / By Material 等 EN、Paint Type (E16 回帰) |
+| `/applications/` | ✅ | タブ Solutions Overview / Featured Solutions / Applications EN |
+| `/featured/` | ✅ | タブ EN |
+| `/voice/` | ✅ | 投稿あり表示 (空投稿メッセージは未レンダー) |
+| `/news/` | ✅ | News 表示、ページネーション EN |
+| `/career/interview/` | ✅ | 179記事 EN アーカイブ |
+| `/company/` | ✅ | H1 Company Profile、CEO Message、拠点名 JP は O11 保持、住所ラベル JP は O4 DB 待ち |
+| `/global-network/` | 🟡 | ソース側 OK、post_content 内 iframe aria-label / 住所: は O4 DB 待ち (S6/S11 test.fixme) |
+| `/story/` | ❌ | 404 (DB 固定ページ欠落、O4) |
+| `/media/` | ❌ | 404 (DB 固定ページ欠落、O4) |
+
+### Playwright 自動テスト結果 (TEST_ENV=wpx-en)
+
+`test/e2e/issue-230-phase-a.spec.ts`:
+
+```
+✓ 13 passed
+~ 2 skipped (S6/S11 DB待ち test.fixme)
+  0 failed
+```
+
+`test/e2e/smoke.spec.ts` (TEST_ENV=docker-en):
+
+```
+✓ 10 passed
+  0 failed
+```
+
+### スクショ
+
+`test/screenshots/issue-230-wpx-en-phase-a-v3/` 配下:
+
+- `home.png` — ホーム
+- `contact.png` — /contact/ CF7 EN 全項目
+- `catalog.png` — /catalog/ Request for Catalog + 商品一覧
+- `download.png` — /download/ Catalog Download CF7
+- `company.png` — /company/ Company Profile + CEO Message
+- `product.png` — /product/ Solutions Overview + サイドバーナビ EN
+
+### CF7 5件超過テスト
+
+S14 JS localize データに `limitReached` = "You can select up to 5 items. Please contact us if you need more." が埋め込まれていることをソース (`inc/featured-product-data.php`) と `/catalog/` 配信 HTML 両方で確認済 (`test/e2e/issue-230-phase-a.spec.ts` S14 test PASS)。実 UI 相互作用は `/catalog/` から 6件以上選択 → `/download/` 遷移時に alert されるフローで、次回手動確認対象 (スクショ省略)。
+
+### xsrv-en デプロイ
+
+ユーザー指示により本セッションでは保留。次回セッションで `deploy_target=xsrv-en --ref feature/issue-230-en-translation-phase-a` 実行予定。**ただし xsrv-en には現状 Parse error fix (7134628a) も未適用のため `/document/` `/document-featured/` が致命エラー状態**。優先度高。
