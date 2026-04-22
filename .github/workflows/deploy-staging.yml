@@ -3,6 +3,17 @@ name: Deploy Staging
 on:
   workflow_dispatch:
     inputs:
+      deploy_target:
+        description: 'デプロイ先を選択'
+        required: true
+        type: choice
+        default: all
+        options:
+          - all
+          - xserver-jp
+          - xserver-en
+          - wpx-jp
+          - wpx-en
       dry_run:
         description: 'ドライラン（実際にはデプロイしない）'
         required: false
@@ -15,6 +26,7 @@ concurrency:
 
 jobs:
   deploy-xserver-jp:
+    if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'xserver-jp' }}
     name: Deploy Xserver Staging (JP)
     uses: ./.github/workflows/deploy.yml
     with:
@@ -31,6 +43,7 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   deploy-xserver-en:
+    if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'xserver-en' }}
     name: Deploy Xserver Staging (EN)
     uses: ./.github/workflows/deploy.yml
     with:
@@ -47,6 +60,7 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   deploy-wpx-jp:
+    if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'wpx-jp' }}
     name: Deploy wpX Staging (JP)
     uses: ./.github/workflows/deploy.yml
     with:
@@ -63,6 +77,7 @@ jobs:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   deploy-wpx-en:
+    if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'wpx-en' }}
     name: Deploy wpX Staging (EN)
     uses: ./.github/workflows/deploy.yml
     with:
