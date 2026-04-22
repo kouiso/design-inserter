@@ -332,6 +332,48 @@ Issue #230 Phase A で実装した英語サイト反映内容が、`wpX staging 
 
 ## 8. 現時点の判定
 
-- Phase A 全体のうち、**製品詳細ラベル群（E14-E19）が未完了**
+- Phase A 全体のうち、**製品詳細ラベル群（E14-E19）が未完了** → `ISSUE_230_DB_HANDOFF_KANNO.md` 第1項で神野さん引き渡し
 - それ以外の確認対象は、今回の staging 実画面確認では通過
 - ただし Phase A外の関連ページには、日本語残り / 404 / 戻る導線不足が現時点で残る
+
+## 9. S1-S21 追加スコープ（2026-04-22 コミット `57b59f78` で全適用）
+
+Issue #230 Phase A 完了版として、E 項目に加えて以下 S1-S21 を muashi-en テーマ内で英訳済。wpX staging EN 反映は run `24774632874` にて適用済。
+
+| # | ファイル | 概要 | 検証ステータス |
+|---|---------|------|---------------|
+| S1 | `cf7-templates/contact.html` | フォーム全文 Drive 03 準拠 | WebFetch PASS |
+| S2 | `cf7-templates/download.html` | フォーム全文 + h1 + リード文 | WebFetch PASS |
+| S3 | `header-download.php` | ハンバーガー全項目 header.php と同期 | 要目視確認 |
+| S4 | `archive.php` | ニュース・お知らせ / 空投稿 | 要目視確認 |
+| S5 | `functions.php:328-375` | CF7 バリデーションエラー | 要目視確認（送信エラー再現） |
+| S6 | `blocks/domestic-locations.php` | 日本国内 / 住所: / 地図 aria-label | 要目視確認 |
+| S7 | `index.php` | ホーム4セクション + News + 空投稿 + Uncategorized | WebFetch PASS |
+| S8 | `page-news.php` | お知らせはまだありません。 | 要目視確認（投稿0件時） |
+| S9 | `page-global-network.php` | お知らせはまだありません。 | 要目視確認 |
+| S10 | `functions.php:610/657` | ページネーション aria-label | 要目視確認 |
+| S11 | `functions.php:1884-1957` | iframe aria-label「地図」×6 → Map | DOM inspection |
+| S12 | `page-document.php` | カタログダウンロード / 検索説明 | 要目視確認 |
+| S13 | `page-document-featured.php` | 製品詳細 / 検索説明 | 要目視確認 |
+| S14 | `inc/featured-product-data.php:127-136` | JS config i18n | WebFetch PASS |
+| S15 | `page-catalog.php:205` | Request for Catalog | WebFetch PASS |
+| S16 | `page-download.php` | Catalog Download / Go Overview | WebFetch PASS |
+| S17 | 5ファイル | 投稿はまだありません。 → No posts yet. | 要目視確認 |
+| S18 | `page-story.php:56` | Stories | 要目視確認 |
+| S19 | `page-product.php:78` | Solutions Overview | 要目視確認 |
+| S20 | `page-applications.php`, `page-featured.php` | タブ3項目×2ファイル | 要目視確認 |
+| S21 | `page-media.php:93` | No featured posts yet. | 要目視確認 |
+
+### 9.1 追加：JP footer 変更（muashi テーマ）
+
+| # | ファイル | 変更内容 |
+|---|---------|---------|
+| F1 | `muashi/footer.php:380` (SP) | カタログをダウンロードする → カタログ・資料請求 |
+| F2 | `muashi/footer.php:494` (PC) | カタログダウンロード → カタログ・資料請求 |
+
+本件は 2026-04-21 17:26 神野さん追加依頼由来。JP サイト側のみ変更。
+
+## 10. Playwright MCP 実機検証（手動再実施）
+
+当セッションでは Playwright MCP ツールが利用不可のため、WebFetch によるソース DOM レベルの検証で代替実施した。
+ビジュアル検証（スクショ取得、クリック操作、送信テスト）は `ISSUE_230_WPX_STAGING_EN_MANUAL_TEST_GUIDE.md` の手順で追って実施する。

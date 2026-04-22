@@ -257,27 +257,42 @@ Remarks: [product_field name="product_remarks"]
 
 ## 結論
 
-### 現時点の判定（2026-04-22 コミット `4239a899` デプロイ後）
+### 現時点の判定（2026-04-22 コミット `57b59f78` デプロイ後 = S1-S21 全適用）
 
-- デプロイ: 成功（run `24768964640`）
-- Phase A テーマ側コード実装: **全E項目 PASS**
-- Phase A staging 実画面反映:
-  - `/product/` 一覧ページ: **E1-E43 全PASS**
-  - `/product/{slug}/` 詳細ページ: E14-E19 はDB側残作業（コード側は対応済み）
+- デプロイ: 成功（run `24774632874`）
+- Phase A テーマ側コード実装: **S1-S21 全 PASS**
+- Phase A staging 実画面反映（WebFetch によるソース DOM 確認、Playwright MCP はセッション利用不可につき次回実機検証予定）:
+  - `/` ホーム: **Advanced R&D Capabilities / Global Network / Sustainable Business Expansion / Customer-Oriented Customization / NEWS すべて反映確認**
+  - `/contact/`: CF7 フォーム全項目 EN 反映（Full Name / Company Name / Email Address / Phone Number / Message / I agree to the Privacy Policy）
+  - `/download/`: Catalog Download / Request a catalog or browse all catalogs / Go Overview 反映確認
+  - `/catalog/`: Request for Catalog 見出し反映、S14 JS config（Selected / Clear filters / No matching products / All）反映確認
+  - `/product/` 一覧ページ: **E1-E43 全PASS**（前回デプロイ時に確認済）
+  - `/product/{slug}/` 詳細ページ: E14-E19 は DB 側残作業
 
-### 残作業（DB側 / 非エンジニア対応範囲）
+### 残作業（DB / 管理画面側 = 神野さん引き渡し）
 
-E14-E19 を詳細ページで英語化するには、WordPress管理画面で各製品の本文を以下のように書き換える必要がある。
+詳細は `test/ISSUE_230_DB_HANDOFF_KANNO.md` を参照。
 
-- 全 product 投稿の `post_content` 内、日本語ラベル `製品名（商標）：`, `ライン番号：` を英語ラベル `Product Name (Trademark):`, `Line Number:` に差し替える
-- ラベルなしの shortcode 行（`[product_field name="product_solvent_type"]` 等）の前に英語ラベル `Paint Type:`, `Paint Category:`, `Resin Type:`, `Remarks:` を追加する
+- 製品詳細 post_content の E14-E19 ラベル差替
+- wp_nav_menu（PC グロナビ / SP ハンバーガー / フッター）
+- CF7 自動返信メール 3通（wp_options）
+- タクソノミー term 名
+- 固定ページ post_content（/contact/, /company/, /history/ など）
+- 言語スイッチャー「中文」リンク先
+- /story/ 404 調査 / news・media サイドバー
 
-### Phase A外の現状メモ（継続確認対象）
+### 2 staging 差分
 
-- `/story/` は 404
-- news / media 詳細に日本語混在残存
-- `/global-network/#overseas-bases` の戻る導線
-- `/career/interview/` 周辺の日本語採用系導線
-- `/download/` の `製品ページへ戻る`
+`test/ISSUE_230_WPX_XSRV_DIFF_2026-04-22.md` に記録。
 
-これらは Phase A 外のためスコープ対象外だが、Phase B（承認要） で対応する候補として記録しておく。
+- wpX staging EN: ソース最新 `57b59f78` 適用済。DB はデフォルト（JP 混在）
+- xsrv staging EN: 神野さん DB 作業進行中。ソース側は PR マージ後に別途デプロイ
+
+### 次 Phase 候補
+
+`test/ISSUE_230_JP_SITE_FIXES.md` に JP サイト側の追従タスクを記録。Phase B として扱う。
+
+### Playwright MCP 実機検証について
+
+当セッションでは Playwright MCP ツールが利用不可だったため、WebFetch によるソース DOM 検証で代替。
+ビジュアル検証（スクショ取得）は次回作業時に `test/ISSUE_230_WPX_STAGING_EN_MANUAL_TEST_GUIDE.md` 手順で実施する。

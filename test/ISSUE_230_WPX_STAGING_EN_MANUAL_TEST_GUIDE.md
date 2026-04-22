@@ -314,6 +314,56 @@ DB編集（製品本文の英語化、メニュー編集など）は `musashipai
 - `/story/` は 404
 - news 詳細に日本語混在サイドバーが残る
 - media 詳細に日本語混在サイドバーが残る
-- `/download/` に `製品ページへ戻る` が残る
+- `/download/` に `製品ページへ戻る` が残る → **S16 で対応済**（Go Overview）
 
 このため、範囲外であっても同様の残りを見つけたらそのまま記録してほしい。
+
+## S1-S21 追加スコープの確認手順（2026-04-22 `57b59f78` デプロイ後 = run `24774632874`）
+
+### C1. ハンバーガーメニュー（S3）
+
+1. 右上のハンバーガーアイコンをクリック
+2. 以下の項目が英語で表示されているか確認:
+   - Solutions 配下: Solutions Overview / By Industry / By Substrate / By Design / Finish / By Performance / By Sustainability / Featured Solutions / Applications
+   - Company 配下: About Musashi Paint / Company Profile / Overview / History（1958– Foundation / 1980– Expansion into Plastic Coatings / 2000– Global Expansion）/ Our Strengths（R&D Excellence / Global Network / Sustainable Business / Custom Engineering）/ Sustainability（Environment / Social / Governance / Responsible Supply Chain）/ Resources / Customer Stories
+3. **Group Companies が非表示**になっていること
+4. **Manufacturing Footprint**（旧：グローバル生産拠点）の項目を確認
+5. PC 版とモバイル（SP）版で同一構造であること
+
+### C2. CF7 エラーメッセージ（S1/S2/S5）
+
+1. `/contact/` を開いて、空のまま Submit
+2. 「This field is required.」など英語エラーが表示されること
+3. `/download/` を開いて、カタログを 6 件以上選択しようとする → 「You can select up to 5 items. Please contact us if you need more.」表示
+4. ファイル添付で不正な拡張子 → 英語エラー
+
+### C3. ページネーション（S10）
+
+1. `/news/` / `/media/` などアーカイブページでページネーション表示
+2. 前後ボタンの `aria-label` が `Previous page` / `Next page` になっていること（DevTools で確認）
+
+### C4. iframe 地図 aria-label（S11）
+
+1. `/global-network/` を開く
+2. 各拠点の Google Maps iframe の `aria-label` が `Map` を含むこと（DevTools）
+
+### C5. 空投稿メッセージ（S4/S7/S8/S9/S17/S21）
+
+投稿が存在しない状態でアクセス可能であれば:
+- `/career/`, `/career/interview/`, `/product/`, `/story/`, `/voice/` → `No posts yet.`
+- `/media/` → `No featured posts yet.`
+
+### C6. カタログ請求フロー（S14/S15）
+
+1. `/catalog/` を開く
+2. 「Request for Catalog」見出し表示
+3. 検索ボックス placeholder: `Search by product details`
+4. 「Clear filters」ボタン表示
+5. 6件目を選択しようとする → `You can select up to 5 items...` メッセージ表示
+6. 検索ヒットなし → `No matching products.`
+
+### C7. JP footer（F1/F2）
+
+1. 日本語本番 `musashi-paint.com` のフッターを確認
+2. 「カタログ・資料請求」になっていること（PC / SP 両方）
+3. デプロイは JP 本番への反映タイミングに注意（通常 xsrv-jp → prod の順）
