@@ -536,7 +536,7 @@
                                         </ul>
                                     </li>
                                 </ul>
-
+                                <?php endif; ?>
 
                                 <ul class="hamburger__other-list">
                                     <li class="hamburger__other-item">
