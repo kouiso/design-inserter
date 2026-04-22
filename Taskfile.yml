@@ -686,6 +686,8 @@ tasks:
             "$STAGING_EN_URL" "$EN_WP_HOME" \
             --all-tables --precise --skip-columns=guid --report-changed-only --allow-root
           {{.DC}} exec -T musashi-wp-en wp cache flush --allow-root
+          # ステージングの template=muashi をローカルEN用の muashi-en に切替（本体は muashi-en テーマのみ存在）
+          {{.DC}} exec -T musashi-wp-en wp theme activate muashi-en --allow-root
           rm -f .tmp/docker-staging-en.sql
           echo "Docker EN DB同期完了！"
 

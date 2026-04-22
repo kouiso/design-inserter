@@ -1730,16 +1730,16 @@ add_action( 'init', function() {
     register_block_pattern(
         'muashi/download-button',
         array(
-            'title'       => 'ダウンロードボタン',
-            'description' => 'ダウンロードアイコン付きのボタン',
+            'title'       => 'Download Button',
+            'description' => 'Button with download icon',
             'categories'  => array( 'buttons' ),
             'content'     => '<!-- wp:group {"layout":{"type":"constrained","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:button {"className":"is-style-download"} -->
-<div class="wp-block-button is-style-download"><a class="wp-block-button__link wp-element-button" href="#">ダウンロード</a></div>
+<div class="wp-block-button is-style-download"><a class="wp-block-button__link wp-element-button" href="#">Download</a></div>
 <!-- /wp:button -->
 
 <!-- wp:paragraph {"fontSize":"small"} -->
-<p class="has-small-font-size">発行：2024年6月　報告対象期間：2023年1月〜12月</p>
+<p class="has-small-font-size">Published: June 2024 / Reporting Period: January–December 2023</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->',
         )
@@ -1868,8 +1868,8 @@ add_action( 'init', function() {
     register_block_pattern(
         'muashi/domestic-locations',
         array(
-            'title'       => '国内拠点情報',
-            'description' => '日本国内の拠点一覧（Google Map iframe埋め込み）',
+            'title'       => 'Domestic Locations',
+            'description' => 'List of domestic offices in Japan (Google Map iframe embed)',
             'categories'  => array( 'muashi' ),
             'content'     => '<!-- wp:html -->
 <div id="office-locations-container" style="max-width: 1000px; margin: 0 auto;">
@@ -1879,7 +1879,7 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 03-3985-8118</p>
                 <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
-                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">Address: 〒171-0022</p>
                 <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル</p>
             </div>
         </div>
@@ -1893,7 +1893,7 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 04-2934-4131</p>
                 <p style="margin: 0 0 4px;">FAX: 04-2934-4134</p>
-                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">Address: 〒358-0032</p>
                 <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
             </div>
         </div>
@@ -1907,7 +1907,7 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 04-2908-7634</p>
                 <p style="margin: 0 0 4px;">FAX: 04-2935-0273</p>
-                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">Address: 〒358-0032</p>
                 <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
             </div>
         </div>
@@ -1921,7 +1921,7 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 072-963-1133</p>
                 <p style="margin: 0 0 4px;">FAX: 072-963-0606</p>
-                <p style="margin: 0;">住所: 〒578-0921</p>
+                <p style="margin: 0;">Address: 〒578-0921</p>
                 <p style="margin: 0;">大阪府東大阪市水走1-17-13</p>
             </div>
         </div>
@@ -1935,7 +1935,7 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 0568-54-2113</p>
                 <p style="margin: 0 0 4px;">FAX: 0568-54-2117</p>
-                <p style="margin: 0;">住所: 〒485-0029</p>
+                <p style="margin: 0;">Address: 〒485-0029</p>
                 <p style="margin: 0;">愛知県小牧市中央1丁目267 小牧ガスビル 3F</p>
             </div>
         </div>
@@ -1949,7 +1949,7 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 03-3985-8118</p>
                 <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
-                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">Address: 〒171-0022</p>
                 <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル 6F</p>
             </div>
         </div>
