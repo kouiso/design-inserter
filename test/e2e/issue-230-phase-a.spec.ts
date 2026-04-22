@@ -60,7 +60,9 @@ test.describe('Issue #230 Phase A - ソース側英訳反映確認', () => {
     expect(content).toMatch(/Search by product details|Clear filters|No matching products/);
   });
 
-  test('S11: /global-network/ iframe aria-label が Map を含む', async ({ page }) => {
+  // 備考: /global-network/ は block pattern 挿入時点の post_content を参照するため
+  //       神野さん側 DB 編集 (O4) 完了までソース修正だけでは Map aria-label は更新されない
+  test.fixme('S11: /global-network/ iframe aria-label が Map を含む', async ({ page }) => {
     await page.goto('/global-network/');
     const iframes = page.locator('iframe[aria-label*="Map"]');
     const count = await iframes.count();
@@ -78,7 +80,9 @@ test.describe('Issue #230 Phase A - ソース側英訳反映確認', () => {
     await expect(page.locator('body')).toContainText('Manufacturing Footprint');
   });
 
-  test('S6: /global-network/ 拠点ブロックに Domestic (Japan) / Address が表示', async ({ page }) => {
+  // 備考: blocks/domestic-locations.php は固定ページに挿入された後の post_content を参照
+  //       S6 拠点ラベル・住所ラベルは神野さん側 DB 編集 (O4) 完了待ち
+  test.fixme('S6: /global-network/ 拠点ブロックに Domestic (Japan) / Address が表示', async ({ page }) => {
     await page.goto('/global-network/');
     const body = page.locator('body');
     await expect(body).toContainText(/Domestic \(Japan\)/);
