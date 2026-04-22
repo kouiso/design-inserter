@@ -24,7 +24,7 @@ get_header();
             <ul class="navigation__list">
                 <li class="navigation__item">
                     <p class="navigation__item-title">
-                    検索結果
+                    Search Results
                     </p>
                 </li>
             </ul>
@@ -37,9 +37,9 @@ get_header();
             <div class="page__content">
                 <h1 class="page__title js-page-title">
                     <?php if ( $search_query ) : ?>
-                        「<?php echo esc_html( $search_query ); ?>」の検索結果
+                        Search results for "<?php echo esc_html( $search_query ); ?>"
                     <?php else : ?>
-                        検索結果
+                        Search Results
                     <?php endif; ?>
                 </h1>
 
@@ -50,7 +50,7 @@ get_header();
                         <?php if ( ! $search_query ) : ?>
                             <!-- 検索キーワードが空の場合 -->
                             <div class="search-results__empty">
-                                <p class="search-results__message">検索キーワードを入力してください。</p>
+                                <p class="search-results__message">Please enter a search keyword.</p>
                                 <div class="search-results__form">
                                     <?php get_search_form(); ?>
                                 </div>
@@ -63,7 +63,7 @@ get_header();
                                     <?php
                                     global $wp_query;
                                     printf(
-                                        esc_html( '%s件の結果が見つかりました' ),
+                                        esc_html( '%s result(s) found' ),
                                         '<strong>' . esc_html( $wp_query->found_posts ) . '</strong>'
                                     );
                                     ?>
@@ -116,9 +116,9 @@ get_header();
                             <!-- 検索結果がない場合 -->
                             <div class="search-results__empty">
                                 <p class="search-results__message">
-                                    「<?php echo esc_html( $search_query ); ?>」に一致する結果は見つかりませんでした。
+                                    No results were found for "<?php echo esc_html( $search_query ); ?>".
                                 </p>
-                                <p class="search-results__suggestion">別のキーワードで検索してみてください。</p>
+                                <p class="search-results__suggestion">Try searching with a different keyword.</p>
                                 <div class="search-results__form">
                                     <?php get_search_form(); ?>
                                 </div>

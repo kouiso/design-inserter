@@ -14,7 +14,7 @@ get_header();
             <ul class="navigation__list">
                 <li class="navigation__item">
                     <p class="navigation__item-title">
-                    ニュース・お知らせ
+                    News
                     </p>
                 </li>
             </ul>
@@ -40,7 +40,7 @@ get_header();
 
             <div class="page__content">
                 <h1 class="page__title js-page-title">
-                ニュース・お知らせ
+                News
                 </h1>
                 <div class="page__inner page__inner--narrow">
 
@@ -79,7 +79,7 @@ get_header();
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">投稿はまだありません。</p>
+                                    <p class="archive__title">No posts yet.</p>
                                 </div>
                                 </li>
                             <?php endif; ?>
