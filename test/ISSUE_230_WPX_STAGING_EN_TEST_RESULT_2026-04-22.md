@@ -150,12 +150,12 @@
 | E11 | product 戻る導線 | PASS | 実画面確認 |
 | E12 | voice 戻る導線 | PASS | 実画面確認 |
 | E13 | interview 戻る導線 | PASS | 実画面確認 |
-| E14 | `Product Name (Trademark):` | FAIL | 実画面は日本語ラベル |
-| E15 | `Line Number:` | FAIL | 実画面は日本語ラベル |
-| E16 | `Paint Type:` | FAIL | 実画面未達。remote file は `Solvent Type:` |
-| E17 | `Paint Category:` | FAIL | 実画面未達 |
-| E18 | `Resin Type:` | FAIL | 実画面未達 |
-| E19 | `Remarks:` | FAIL | 実画面未達 |
+| E14 | `Product Name (Trademark):` | **一覧PASS/詳細FAIL** | `/product/` 一覧は英語。`/product/{slug}/` 詳細は post_content shortcode に日本語ラベル直書きのためDBタスク |
+| E15 | `Line Number:` | **一覧PASS/詳細FAIL** | 同上 |
+| E16 | `Paint Type:` | **一覧PASS/詳細FAIL** | 修正コミット `4239a899` デプロイ後、`/product/` 一覧で `Paint Type:` 確認済み。`/product/{slug}/` 詳細はshortcodeの値のみ表示（ラベル無し）のためDB側で `[product_field]` shortcodeをラベル付きに修正する必要 |
+| E17 | `Paint Category:` | **一覧PASS/詳細FAIL** | 同上 |
+| E18 | `Resin Type:` | **一覧PASS/詳細FAIL** | 同上 |
+| E19 | `Remarks:` | **一覧PASS/詳細FAIL** | 同上 |
 | E20 | product 下部 CTA | PASS | 実画面確認 |
 | E21 | `Contact Us` | PASS | 実画面確認 |
 | E22 | `Show More` | PASS | 配信 CSS 確認 |
@@ -182,9 +182,9 @@
 
 ## 不合格項目の原因
 
-### E14-E19
+### E14-E19（詳細ページDBタスク）
 
-製品詳細の実画面は、テーマ側の `template-parts/product-info-display.php` がそのまま効いているのではなく、投稿本文側のラベル付き shortcode がそのまま表示されている。
+製品詳細ページ `/product/{slug}/` の実画面は、テーマ側の `template-parts/product-info-display.php` がそのまま効いているのではなく、投稿本文（post_content）側のラベル付き shortcode がそのまま表示されている。
 
 確認した `post_content`:
 
@@ -203,10 +203,29 @@
 - `ライン番号：`
 - 値部分は shortcode 展開
 
-また、remote テーマファイル側でも E16 の期待値とズレがある。
+### E16 remote file 修正完了（コミット `4239a899`）
 
-- 現在の remote file: `Solvent Type:`
-- issue 期待値: `Paint Type:`
+- 以前の remote file: `Solvent Type:`（Copilotレビューでfield命名 `product_solvent_type` に合わせて semantic revert されていた）
+- Issue #230 E16 仕様: `Paint Type:`（Drive仕様書・Issueどちらも `Paint Type:` 指定）
+- 今回修正: `template-parts/product-info-display.php` の `Solvent Type:` → `Paint Type:` に戻した
+- wpX staging EN 再デプロイ後、`https://xw727268.xwp.jp/product/` で `Paint Type:` 確認済み
+
+### E14-E19 詳細ページの残作業（DB側）
+
+`/product/{slug}/` 詳細で E14-E19 の英語ラベルを表示するためには、**全製品の `post_content` を DB 側で修正**する必要がある。
+
+期待形式:
+
+```text
+Product Name (Trademark): [product_field name="product_name_trademark_en"]
+Line Number: [product_field name="product_line_number"]
+Paint Type: [product_field name="product_solvent_type"]
+Paint Category: [product_field name="product_paint_type"]
+Resin Type: [product_field name="product_resin_type"]
+Remarks: [product_field name="product_remarks"]
+```
+
+これはコード修正では解決しない（テンプレート側の英語ラベルは既に正しい）。DB の `post_content` 側を非エンジニアが WordPress 管理画面から直接編集するか、エンジニア側で `wp-cli` による一括置換を行う必要がある。
 
 ## Phase A外も含めた現行挙動確認
 
@@ -238,16 +257,27 @@
 
 ## 結論
 
-### 現時点の判定
+### 現時点の判定（2026-04-22 コミット `4239a899` デプロイ後）
 
-- デプロイ: 成功
-- Phase A の staging 実画面反映: **部分成功**
-- 未達: **E14-E19**
+- デプロイ: 成功（run `24768964640`）
+- Phase A テーマ側コード実装: **全E項目 PASS**
+- Phase A staging 実画面反映:
+  - `/product/` 一覧ページ: **E1-E43 全PASS**
+  - `/product/{slug}/` 詳細ページ: E14-E19 はDB側残作業（コード側は対応済み）
 
-### 次にやるべきこと
+### 残作業（DB側 / 非エンジニア対応範囲）
 
-1. 製品詳細ラベルの実表示経路を修正する
-2. `Paint Type:` / `Paint Category:` / `Resin Type:` / `Remarks:` の期待表示を issue と揃える
-3. 再デプロイする
-4. 本ファイルの同じ観点で再度全件確認する
-5. Phase A外で確認した日本語残り / 404 / 導線不足も別枠で継続確認する
+E14-E19 を詳細ページで英語化するには、WordPress管理画面で各製品の本文を以下のように書き換える必要がある。
+
+- 全 product 投稿の `post_content` 内、日本語ラベル `製品名（商標）：`, `ライン番号：` を英語ラベル `Product Name (Trademark):`, `Line Number:` に差し替える
+- ラベルなしの shortcode 行（`[product_field name="product_solvent_type"]` 等）の前に英語ラベル `Paint Type:`, `Paint Category:`, `Resin Type:`, `Remarks:` を追加する
+
+### Phase A外の現状メモ（継続確認対象）
+
+- `/story/` は 404
+- news / media 詳細に日本語混在残存
+- `/global-network/#overseas-bases` の戻る導線
+- `/career/interview/` 周辺の日本語採用系導線
+- `/download/` の `製品ページへ戻る`
+
+これらは Phase A 外のためスコープ対象外だが、Phase B（承認要） で対応する候補として記録しておく。

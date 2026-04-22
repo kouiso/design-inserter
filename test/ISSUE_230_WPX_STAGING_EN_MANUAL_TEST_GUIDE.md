@@ -143,13 +143,11 @@ NG 例:
 
 ### 4.6 製品詳細
 
-1. Solutions 一覧から任意の製品を 1 件開く
-2. 詳細ページの上部と本文近くを見る
+1. `/product/` 一覧を開いて、製品カードのラベルを見る（一覧ページ＝テーマ側反映済み）
+2. 任意の製品カードをクリックして詳細ページを開く（詳細ページ＝DB本文依存）
 
-確認ポイント:
-- `Back to Product List`
-- `Download Technical Information (Features & Performance)`
-- 以下のラベルが英語になっているか
+**一覧ページ（`/product/`）の確認ポイント**:
+- 以下のラベルが英語になっているか（コミット `4239a899` で E16 `Paint Type:` 修正済み）
   - `Product Name (Trademark):`
   - `Line Number:`
   - `Paint Type:`
@@ -157,14 +155,19 @@ NG 例:
   - `Resin Type:`
   - `Remarks:`
 
+**詳細ページ（`/product/{slug}/`）の確認ポイント**:
+- `Back to Product List`
+- `Download Technical Information (Features & Performance)`
+- **本文側ラベル**: 現状は日本語 `製品名（商標）：`, `ライン番号：` が残存＋値のみ shortcode 展開で表示（DB側残作業）
+
 重要:
-- この項目は今回の staging 確認で不具合が見つかっています
-- 実際には日本語ラベルが残っている可能性があります
+- 一覧と詳細で表示源が異なる（一覧＝テンプレート、詳細＝post_content shortcode）
+- 詳細ページの英語化は `6.製品詳細ラベル` セクションに記載の方法で管理画面から対応してください
 
 NG 例:
-- `製品名（商標）：`
-- `ライン番号：`
-- その他ラベルが日本語
+- 一覧ページで `Solvent Type:` が残る（コード修正失敗の兆候）
+- 一覧ページで日本語ラベルが残る
+- 詳細ページで `[product_field name="..."]` が `[]` などに変わってしまっている（shortcode破損）
 
 ### 4.7 Customer Stories
 
@@ -257,16 +260,52 @@ NG 例:
 
 ## 6. 今回の確認で特に注意してほしい既知事項
 
-### 製品詳細ラベル
+### 製品詳細ラベル（DB側の残作業 / 非エンジニア対応範囲）
 
-製品詳細は、今回の staging 確認で未達が見つかっている。
+製品詳細ページの英語ラベルは、**管理画面で各製品の本文を直接書き換える必要がある**。テーマ側のコードでは解決しない。
 
-現在の既知の問題:
-- `Product Name (Trademark):` ではなく日本語ラベルが表示される
-- `Line Number:` ではなく日本語ラベルが表示される
-- 他の製品ラベルも英語化が実画面に反映されていない
+**状態**:
+- `/product/` 一覧ページ: 英語ラベル表示済み（`Product Name (Trademark):`, `Line Number:`, `Paint Type:`, `Paint Category:`, `Resin Type:`, `Remarks:`）
+- `/product/{slug}/` 詳細ページ: 日本語ラベルまたはラベルなしで表示（本文に日本語ショートコードが残存）
 
-そのため、製品詳細ページは特に重点的に見てほしい。
+**対応方法**:
+
+WordPress 管理画面から対象の製品投稿を編集し、本文を以下のように書き換えてください。
+
+現状:
+```
+製品名（商標）：[product_field name="product_name_trademark_en"]
+ライン番号：[product_field name="product_line_number"]
+[product_field name="product_solvent_type"]
+[product_field name="product_paint_type"]
+[product_field name="product_resin_type"]
+[product_field name="product_remarks"]
+```
+
+修正後:
+```
+Product Name (Trademark): [product_field name="product_name_trademark_en"]
+Line Number: [product_field name="product_line_number"]
+Paint Type: [product_field name="product_solvent_type"]
+Paint Category: [product_field name="product_paint_type"]
+Resin Type: [product_field name="product_resin_type"]
+Remarks: [product_field name="product_remarks"]
+```
+
+**注意**: `[product_field name="..."]` の中身は絶対に変更しないでください。これが変わると値が表示されなくなります。
+
+**参考事項**: `product_solvent_type` というフィールド名ですが、英語表示ラベルは Issue #230 仕様により `Paint Type:` が正解です（内部フィールド名と表示ラベルは異なります）。
+
+### 2ステージング環境の使い分け（重要）
+
+武蔵塗料サイトは現在 2系統の staging 環境がある。
+
+| URL | 管理者 | 用途 |
+|---|---|---|
+| `https://xw727268.xwp.jp` | KAGURA (磯貝) | **本ガイドの確認対象**。コード側反映の確認用 |
+| `https://musashipaint.xsrv.jp/en/wp-login.php` | KAGURA (神野) | DB側のコンテンツ編集用 |
+
+DB編集（製品本文の英語化、メニュー編集など）は `musashipaint.xsrv.jp/en/` 側で進んでいる可能性があるため、本番リリース前に両環境の状態を同期する必要がある。
 
 ### Phase A外で今回見つかった現行残課題
 
