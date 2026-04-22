@@ -377,7 +377,7 @@
                             </svg>
                         </icon>
                         <span class="footer__other-text">
-                            カタログをダウンロードする
+                            カタログ・資料請求
                         </span>
                     </a>
                 </li>
@@ -491,7 +491,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                            カタログダウンロード
+                            カタログ・資料請求
                         </span>
                     </a>
                 </div>
