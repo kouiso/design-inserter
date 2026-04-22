@@ -81,16 +81,11 @@ tasks:
   # ==========================================================
 
   pull:
-    desc: DB + 全ファイルをステージングからローカルに完全同期
+    desc: Docker 環境にステージング（JP + EN）DB を同期
     cmds:
-      - task: db:pull
-      - task: files:pull
-
-  pull:diff:
-    desc: DB + 差分ファイルだけステージングからローカルに同期
-    cmds:
-      - task: db:pull
-      - task: files:diff
+      - task: db:sync:jp
+      - task: db:sync:en
+      - echo "Docker pull 完了（DB JP+EN 同期済）"
 
   # --- DB ---
 
