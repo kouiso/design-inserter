@@ -59,11 +59,11 @@ get_header();
                             ?>
                             <div class="single__cta">
                                 <a class="single__download-button"
-                                    href="<?php echo esc_url($download_permalink); ?>">本製品の特長や塗膜性能がわかるカタログダウンロード</a>
+                                    href="<?php echo esc_url($download_permalink); ?>">Download the catalog for this product's features and coating performance</a>
                             </div>
 
                             <div class="single__back">
-                                <a class="single__back-button" href="<?php echo esc_url($featured_archive_url); ?>">一覧へ戻る</a>
+                                <a class="single__back-button" href="<?php echo esc_url($featured_archive_url); ?>">Back to List</a>
                             </div>
                         </div>
                     </div>

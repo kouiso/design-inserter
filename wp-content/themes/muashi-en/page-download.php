@@ -81,14 +81,14 @@ if ( have_posts() ) {
           <div class="page__content page__content--no-image">
 
             <h1 id="01" class="page__title js-page-title">
-              カタログダウンロード
+              Catalog Download
             </h1>
 
             <div class="page__inner page__inner--narrow">
 
               <div class="catalog__header">
-                <p class="catalog__header-text">カタログ請求＋全カタログを閲覧できます</p>
-                <a href="<?php echo esc_url( home_url( '/product/' ) ); ?>" class="catalog__back-button">製品ページへ戻る</a>
+                <p class="catalog__header-text">Request a catalog or browse all catalogs</p>
+                <a href="<?php echo esc_url( home_url( '/product/' ) ); ?>" class="catalog__back-button">Go Overview</a>
               </div>
 
               <!-- Hidden data for form population -->

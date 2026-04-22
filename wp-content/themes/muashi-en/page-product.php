@@ -75,7 +75,7 @@ $product_query = new WP_Query(array(
 
             <div class="page__content">
                 <h1 class="page__title js-page-title">
-                    製品情報
+                    Solutions Overview
                 </h1>
                 <?php if ( ! empty( $page_content ) ) : ?>
                 <div class="page__inner page__inner--narrow page__inner--intro">
@@ -103,7 +103,7 @@ $product_query = new WP_Query(array(
                                 <?php else: ?>
                                     <li class="archive__item">
                                         <div class="archive__text-wrapper">
-                                            <p class="archive__title">投稿はまだありません。</p>
+                                            <p class="archive__title">No posts yet.</p>
                                         </div>
                                     </li>
                                 <?php endif; ?>

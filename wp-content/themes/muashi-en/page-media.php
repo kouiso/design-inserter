@@ -90,7 +90,7 @@ $media_query = new WP_Query( array(
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">Pickupはまだありません。</p>
+                                    <p class="archive__title">No featured posts yet.</p>
                                 </div>
                                 </li>
                             <?php endif; ?>

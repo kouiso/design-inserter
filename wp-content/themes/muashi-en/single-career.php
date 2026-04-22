@@ -43,7 +43,7 @@ get_header();
                     </div>
 
                     <div class="single__back">
-                        <a class="single__back-button" href="<?php echo esc_url( $career_archive_url ); ?>">一覧へ戻る</a>
+                        <a class="single__back-button" href="<?php echo esc_url( $career_archive_url ); ?>">Back to List</a>
                     </div>
                 </div>
             </div>

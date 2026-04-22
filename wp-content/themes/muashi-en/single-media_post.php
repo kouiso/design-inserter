@@ -128,13 +128,13 @@ get_header();
                         $download_permalink = add_query_arg( $download_args, home_url( '/download/' ) );
                         ?>
                         <div class="single__cta">
-                            <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">カタログダウンロード</a>
+                            <a class="single__download-button" href="<?php echo esc_url( $download_permalink ); ?>">Catalog Download</a>
                         </div>
                     <?php endif; ?>
 
                     <?php if ( $back_link ) : ?>
                         <div class="single__back">
-                            <a class="single__back-button" href="<?php echo esc_url( $back_link ); ?>">一覧へ戻る</a>
+                            <a class="single__back-button" href="<?php echo esc_url( $back_link ); ?>">Back to List</a>
                         </div>
                     <?php endif; ?>
                 </div>
