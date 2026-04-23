@@ -52,7 +52,7 @@ get_header();
 
                 <div class="page__inner page__inner--narrow">
                     <div class="single__back">
-                        <a class="single__back-button" href="<?php echo esc_url( $globalnetwork_archive_url ); ?>">Back to List</a>
+                        <a class="single__back-button" href="<?php echo esc_url( $globalnetwork_archive_url ); ?>">Back to list</a>
                     </div>
                 </div>
             </div>
