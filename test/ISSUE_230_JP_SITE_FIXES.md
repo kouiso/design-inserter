@@ -80,13 +80,6 @@ EN 側は Phase A でフォーム構造を Drive 03 に準拠済（アスタリ�
 **JP 側 `muashi/cf7-templates/contact.html`, `download.html` も同一構造に揃えるべき**。
 ただし「必須」バッジ表記（JP: `<span class="form__required">必須</span>`）は JP UX として維持。
 
-### B-10. functions.php iframe 地図 aria-label（6箇所）
-
-EN 側は `地図` → `Map` に英訳済。
-JP 側は `地図` のままで OK だが、共通ヘルパー関数化を検討（JP/EN で文字列だけ違う重複コード）。
-
-該当箇所: `muashi/functions.php` iframe 生成箇所6件。
-
 ### B-11. 空投稿メッセージ（5ファイル）の文言ゆれ
 
 JP 側でも複数ファイルに文言ゆれあり:
@@ -96,27 +89,10 @@ JP 側でも複数ファイルに文言ゆれあり:
 
 統一 or i18n 関数化を検討。
 
-### B-12. `muashi/languages/` i18n 整備
-
-`.po / .mo` ファイルが未整備のため、`カテゴリ未設定` などの文字列をテンプレートに直書きしている。
-将来の EN/JP/中文展開を見据えて i18n 対応の整備を提案。
-
 ### B-13. contactform-downlad.php 孤児ファイル削除
 
 `muashi/contactform-downlad.php`（タイポのまま）は grep で参照0件。
 JP/EN 両方に存在。削除候補。
-
-### B-14. inc/setup-*-menu.php 再実行ガード
-
-`muashi/inc/setup-*-menu.php` 系は JP/EN 共通の seed ファイル。
-誤って本番で再実行すると既存メニューを上書きするリスク。
-- 実行条件チェック（初回のみ）
-- 環境判定（local のみ）
-の追加を推奨。
-
-### B-15. inc/cleanup-unused-menus.php CLI 権限チェック
-
-管理者用 CLI だが、誤用防止に `current_user_can('manage_options')` + `WP_CLI` チェックを徹底。
 
 ---
 

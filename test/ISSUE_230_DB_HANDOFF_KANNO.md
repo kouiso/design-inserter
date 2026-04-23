@@ -129,16 +129,6 @@ EN 化が必要であれば Drive 側で正典が作成され次第対応。
 
 ---
 
-## 9. seed ファイル再実行リスク注意喚起
-
-以下のファイルは **本番で再実行すると既存メニューを上書きする可能性** がある:
-- `wp-content/themes/muashi-en/inc/setup-*-menu.php`
-- `wp-content/themes/muashi-en/inc/cleanup-unused-menus.php`
-
-wp-admin → メニュー編集の前に、これらのファイルが実行トリガーを持っていないか確認すること。
-
----
-
 ## 10. 進捗管理シート 権限付与依頼
 
 以下のシートへのアクセス権限を AI/磯貝 に付与してもらえると、今後の差分確認が自動化できる:
@@ -194,7 +184,6 @@ PR #232 にマージ/cherry-pick 後、`deploy_target=xsrv-en --ref feature/issu
 - [ ] 6. 中文リンク先判断
 - [ ] 7. 国内拠点 business data 判断
 - [ ] 8. /story/ 404 調査・news/media サイドバー対応
-- [ ] 9. seed ファイル実行ガード
 - [ ] 10. 進捗シート権限付与
 - [ ] 11. 福田さんシート 96 件残タスク棚卸し
 - [ ] 12. 既存固定ページ内のブロックパターン挿入済み JP 文言 (住所: / iframe 地図 aria-label)

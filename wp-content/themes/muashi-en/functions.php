@@ -1730,8 +1730,8 @@ add_action( 'init', function() {
     register_block_pattern(
         'muashi/download-button',
         array(
-            'title'       => 'Download Button',
-            'description' => 'Button with download icon',
+            'title'       => 'ダウンロードボタン',
+            'description' => 'ダウンロードアイコン付きのボタン',
             'categories'  => array( 'buttons' ),
             'content'     => '<!-- wp:group {"layout":{"type":"constrained","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:button {"className":"is-style-download"} -->
@@ -1868,8 +1868,8 @@ add_action( 'init', function() {
     register_block_pattern(
         'muashi/domestic-locations',
         array(
-            'title'       => 'Domestic Locations',
-            'description' => 'List of domestic offices in Japan (Google Map iframe embed)',
+            'title'       => '国内拠点情報',
+            'description' => '日本国内の拠点一覧（Google Map iframe埋め込み）',
             'categories'  => array( 'muashi' ),
             'content'     => '<!-- wp:html -->
 <div id="office-locations-container" style="max-width: 1000px; margin: 0 auto;">
