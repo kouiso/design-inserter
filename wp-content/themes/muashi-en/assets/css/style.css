@@ -2084,9 +2084,6 @@ a {
 .page__inner figure.wp-block-table td {
   background-color: var(--color-white);
 }
-.page__inner figure.wp-block-table td:first-child {
-  white-space: nowrap;
-}
 .page__inner figure.wp-block-table thead {
   background-color: #f5f5f5;
   border-bottom: 1px solid;
