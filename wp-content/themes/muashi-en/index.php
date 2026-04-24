@@ -85,8 +85,8 @@ get_header();
             </li>
             <li class="top-kv__nav-item">
                 <div class="top-kv__nav-link top-kv__nav-link--lang">
-                    <a href="<?= URL_LANG_JP ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">JP</a>
-                    <a href="<?= URL_LANG_ZH ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">中文</a>
+                    <a href="<?= URL_LANG_EN ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">EN</a>
+                    <a href="<?= URL_LANG_ZH ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">ZH</a>
                 </div>
             </li>
         </ul>
@@ -412,25 +412,25 @@ get_header();
         <div class="top-news__title-wrapper">
             <div class="top-section__title-wrapper u-hidden-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
-                    <svg width="63" height="15" viewBox="0 0 63 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="31.5" y="7.5" text-anchor="middle" dominant-baseline="central" fill="white" font-size="15" font-weight="700">PICK UP</text>
+                    <svg width="75" height="15" viewBox="0 0 75 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="37.5" y="7.5" text-anchor="middle" dominant-baseline="central" fill="white" font-size="15" font-weight="700">FEATURE</text>
                     </svg>
                 </p>
                 <div class="top-section__title-bg" data-inview>
-                    <svg width="70" height="22" viewBox="0 0 70 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="70" height="22" fill="#FFC194"/>
+                    <svg width="83" height="22" viewBox="0 0 83 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="83" height="22" fill="#FFC194"/>
                     </svg>
                 </div>
             </div>
             <div class="top-section__title-wrapper u-visible-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
-                    <svg width="126" height="29" viewBox="0 0 126 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="63" y="14.5" text-anchor="middle" dominant-baseline="central" fill="white" font-size="29" font-weight="700">PICK UP</text>
+                    <svg width="150" height="29" viewBox="0 0 150 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="75" y="14.5" text-anchor="middle" dominant-baseline="central" fill="white" font-size="29" font-weight="700">FEATURE</text>
                     </svg>
                 </p>
                 <div class="top-section__title-bg" data-inview>
-                    <svg width="145" height="48" viewBox="0 0 145 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="145" height="48" fill="#FFC194"/>
+                    <svg width="172" height="48" viewBox="0 0 172 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="172" height="48" fill="#FFC194"/>
                     </svg>
                 </div>
             </div>
@@ -523,25 +523,25 @@ get_header();
         <div class="top-news__title-wrapper">
             <div class="top-section__title-wrapper u-hidden-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
-                    <svg width="57" height="16" viewBox="0 0 57 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="28.5" y="8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="15" font-weight="700">NEWS</text>
+                    <svg width="75" height="16" viewBox="0 0 75 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="37.5" y="8" text-anchor="middle" dominant-baseline="central" fill="white" font-size="15" font-weight="700">NEWS</text>
                     </svg>
                 </p>
                 <div class="top-section__title-bg" data-inview>
-                    <svg width="66" height="22" viewBox="0 0 66 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="66" height="22" fill="#FFC194"/>
+                    <svg width="83" height="22" viewBox="0 0 83 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="83" height="22" fill="#FFC194"/>
                     </svg>
                 </div>
             </div>
             <div class="top-section__title-wrapper u-visible-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
-                    <svg width="112" height="30" viewBox="0 0 112 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="56" y="15" text-anchor="middle" dominant-baseline="central" fill="white" font-size="29" font-weight="700">NEWS</text>
+                    <svg width="150" height="30" viewBox="0 0 150 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="75" y="15" text-anchor="middle" dominant-baseline="central" fill="white" font-size="29" font-weight="700">NEWS</text>
                     </svg>
                 </p>
                 <div class="top-section__title-bg" data-inview>
-                    <svg width="134" height="48" viewBox="0 0 134 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="134" height="48" fill="#FFC194"/>
+                    <svg width="172" height="48" viewBox="0 0 172 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="172" height="48" fill="#FFC194"/>
                     </svg>
                 </div>
             </div>

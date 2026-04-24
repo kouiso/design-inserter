@@ -62,7 +62,7 @@ if ( have_posts() ) {
                       <div class="download__main download__main--full">
                         <div class="download__controls">
                           <label class="download__search">
-                            <span class="download__search-label">Filter products by product name (Katakana).</span>
+                            <span class="download__search-label">Filter products by product name</span>
                             <input type="search" class="download__search-input" data-download-search placeholder="Search by product name or keyword">
                           </label>
                         </div>
@@ -97,4 +97,3 @@ if ( have_posts() ) {
     </div>
 
 </section>
-
