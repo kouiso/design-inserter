@@ -1,9 +1,9 @@
 <?php
 /**
- * 「ピックアップ」用サイドバーメニューセットアップ
+ * Featured 用サイドバーメニューセットアップ
  *
  * 実行方法: php で直接実行
- * php wp-content/themes/muashi/inc/setup-pickup-menu.php
+ * php wp-content/themes/muashi-en/inc/setup-pickup-menu.php
  */
 
 // WordPress環境外から実行された場合は終了
@@ -23,11 +23,16 @@ if ( ! current_user_can( 'manage_options' ) && ! defined( 'WP_CLI' ) ) {
 }
 
 function muashi_setup_pickup_sidebar_menu() {
-	$menu_name = 'ニュース・ピックアップ用サイドバー';
+	$menu_name = 'News / Featured Sidebar';
+	$legacy_menu_name = 'ニュース・ピックアップ用サイドバー';
 	$menu_location = 'sidebar_news_media';
 
 	// 既存メニューを確認
 	$menu = wp_get_nav_menu_object($menu_name);
+	if ( ! $menu ) {
+		// 旧メニュー名が残っている環境では既存メニューを再利用する
+		$menu = wp_get_nav_menu_object( $legacy_menu_name );
+	}
 
 	// メニューが存在しない場合のみ作成
 	if (!$menu) {
@@ -37,15 +42,15 @@ function muashi_setup_pickup_sidebar_menu() {
 
 		// メニュー項目定義
 		$menu_items = array(
-			// 第1階層: Pick up ピックアップ
+			// 第1階層: Featured
 			array(
-				'title' => 'Pick up ピックアップ',
+				'title' => 'Featured',
 				'url'   => URL_MEDIA,
 				'parent' => 0,
 			),
 			// 第1階層: News ニュース
 			array(
-				'title' => 'News ニュース',
+				'title' => 'News',
 				'url'   => URL_NEWS,
 				'parent' => 0,
 			),
@@ -62,7 +67,7 @@ function muashi_setup_pickup_sidebar_menu() {
 			),
 			// 第1階層: よくあるご質問
 			array(
-				'title' => 'よくあるご質問',
+				'title' => 'FAQs',
 				'url'   => URL_FAQ,
 				'parent' => 0,
 				'children' => array(
@@ -120,7 +125,11 @@ function muashi_setup_pickup_sidebar_menu() {
 
 		error_log("Menu assigned to location: $menu_location");
 	} else {
-		error_log("Menu already exists: $menu_name");
+		$locations = get_theme_mod('nav_menu_locations', array());
+		$locations[$menu_location] = $menu->term_id;
+		set_theme_mod('nav_menu_locations', $locations);
+
+		error_log("Menu already exists: {$menu->name}");
 	}
 }
 

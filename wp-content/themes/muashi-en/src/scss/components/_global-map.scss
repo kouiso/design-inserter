@@ -6,6 +6,18 @@
 .global-map {
 	width: 100%;
 
+	&__title {
+		margin-bottom: 24px;
+		font-size: 24px;
+		font-weight: 500;
+		line-height: 1.4;
+
+		@include mq(lg) {
+			margin-bottom: 32px;
+			font-size: 32px;
+		}
+	}
+
 	&__object {
 		display: block;
 		width: 100%;

@@ -199,7 +199,7 @@ class DownloadPage {
       this.form.addEventListener('submit', (event) => {
         if (this.state.selected.size === 0) {
           event.preventDefault();
-          this.showFeedback((this.data.i18n && this.data.i18n.noneSelectedError) || '資料を1件以上選択してください。', true);
+          this.showFeedback((this.data.i18n && this.data.i18n.noneSelectedError) || 'Please select at least one item.', true);
           if (this.searchInput) {
             this.searchInput.focus();
           }
@@ -317,7 +317,7 @@ class DownloadPage {
     if (!products.length) {
       const emptyItem = document.createElement('li');
       emptyItem.className = 'download__empty';
-      const message = (this.data.i18n && this.data.i18n.noResults) || '該当する製品がありません。';
+      const message = (this.data.i18n && this.data.i18n.noResults) || 'No matching products.';
       emptyItem.textContent = message;
       this.listEl.appendChild(emptyItem);
       return;
@@ -349,7 +349,7 @@ class DownloadPage {
 
     const paginationContainer = document.createElement('nav');
     paginationContainer.className = 'download__pagination';
-    paginationContainer.setAttribute('aria-label', 'ページネーション');
+    paginationContainer.setAttribute('aria-label', 'Pagination');
 
     const paginationList = document.createElement('ul');
     paginationList.className = 'download__pagination-list';
@@ -360,7 +360,7 @@ class DownloadPage {
     const prevButton = document.createElement('button');
     prevButton.type = 'button';
     prevButton.className = 'download__pagination-button download__pagination-button--prev';
-    prevButton.textContent = '前へ';
+    prevButton.textContent = 'Previous';
     prevButton.disabled = this.state.currentPage === 1;
     prevButton.addEventListener('click', () => this.goToPage(this.state.currentPage - 1));
     prevItem.appendChild(prevButton);
@@ -399,7 +399,7 @@ class DownloadPage {
     const nextButton = document.createElement('button');
     nextButton.type = 'button';
     nextButton.className = 'download__pagination-button download__pagination-button--next';
-    nextButton.textContent = '次へ';
+    nextButton.textContent = 'Next';
     nextButton.disabled = this.state.currentPage === totalPages;
     nextButton.addEventListener('click', () => this.goToPage(this.state.currentPage + 1));
     nextItem.appendChild(nextButton);
@@ -525,7 +525,7 @@ class DownloadPage {
     detailLink.href = product.permalink;
     detailLink.target = '_blank';
     detailLink.rel = 'noopener noreferrer';
-    detailLink.textContent = '製品ページ';
+    detailLink.textContent = 'Product Page';
     linksContainer.appendChild(detailLink);
 
     if (this.isDownloadPage) {
@@ -533,7 +533,7 @@ class DownloadPage {
       const requestButton = document.createElement('button');
       requestButton.type = 'button';
       requestButton.className = 'download__link download__link--request';
-      requestButton.textContent = 'カタログ請求';
+      requestButton.textContent = 'Request for Catalog';
 
       requestButton.addEventListener('click', () => {
         // Check if there's already selected products to pass along
@@ -563,7 +563,7 @@ class DownloadPage {
       downloadLink.href = product.pdfUrl;
       downloadLink.target = '_blank';
       downloadLink.rel = 'noopener noreferrer';
-      downloadLink.textContent = 'カタログダウンロード';
+      downloadLink.textContent = 'Catalog Download';
       linksContainer.appendChild(downloadLink);
     } else if (product.pdfUrl) {
       // catalogページ: カタログダウンロードリンク
@@ -572,7 +572,7 @@ class DownloadPage {
       downloadLink.href = product.pdfUrl;
       downloadLink.target = '_blank';
       downloadLink.rel = 'noopener noreferrer';
-      downloadLink.textContent = 'カタログダウンロード';
+      downloadLink.textContent = 'Catalog Download';
       linksContainer.appendChild(downloadLink);
     }
 
@@ -645,7 +645,7 @@ class DownloadPage {
         button.type = 'button';
         button.className = 'download__selected-remove';
         button.setAttribute('data-remove-product', String(id));
-        button.textContent = (this.data.i18n && this.data.i18n.remove) || '削除';
+          button.textContent = (this.data.i18n && this.data.i18n.remove) || 'Remove';
 
         item.appendChild(title);
         item.appendChild(button);

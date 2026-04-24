@@ -64,7 +64,7 @@ get_header();
                             <?php else : ?>
                                 <li class="archive__item">
                                 <div class="archive__text-wrapper">
-                                    <p class="archive__title">該当する製品がありません。</p>
+                                    <p class="archive__title">No matching products.</p>
                                 </div>
                                 </li>
                             <?php endif; ?>

@@ -407,7 +407,7 @@ test.describe('メニュー構造のリグレッションテスト', () => {
 
 test.describe('グローバルネットワーク SVGマップのリグレッションテスト', () => {
   test('韓国マーカーのリンク先が韓国武蔵塗料のページであること', async ({ page }) => {
-    await page.goto('/wp-content/themes/muashi/assets/img/global-network/world-map.svg');
+    await page.goto('/wp-content/themes/muashi-en/assets/img/global-network/world-map.svg');
     const koreaLink = page.locator('a[data-location="korea"]');
     await expect(koreaLink).toBeVisible();
     const href = await koreaLink.getAttribute('href');
@@ -415,7 +415,7 @@ test.describe('グローバルネットワーク SVGマップのリグレッシ�
   });
 
   test('埼玉マーカーのリンク先が武蔵塗料ホールディングスのページであること', async ({ page }) => {
-    await page.goto('/wp-content/themes/muashi/assets/img/global-network/world-map.svg');
+    await page.goto('/wp-content/themes/muashi-en/assets/img/global-network/world-map.svg');
     const saitamaLink = page.locator('a[data-location="saitama"]');
     await expect(saitamaLink).toBeVisible();
     const href = await saitamaLink.getAttribute('href');
@@ -423,7 +423,7 @@ test.describe('グローバルネットワーク SVGマップのリグレッシ�
   });
 
   test('韓国マーカーのピンが埼玉マーカーより左（西）にあること', async ({ page }) => {
-    await page.goto('/wp-content/themes/muashi/assets/img/global-network/world-map.svg');
+    await page.goto('/wp-content/themes/muashi-en/assets/img/global-network/world-map.svg');
     const koreaPin = page.locator('a[data-location="korea"] g[clip-path] path:first-child');
     const saitamaPin = page.locator('a[data-location="saitama"] g[clip-path] path:first-child');
 
@@ -462,11 +462,11 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
     });
     await page.waitForTimeout(500);
 
-    // 「武蔵塗料グループについて」アコーディオンを開く
+    // 会社紹介メニューを開く
     await page.evaluate(() => {
       const btns = document.querySelectorAll<HTMLElement>('.js-accordion-button');
       for (const btn of btns) {
-        if (btn.textContent?.includes('武蔵塗料グループについて')) {
+        if (btn.textContent?.includes('Company')) {
           btn.click();
           break;
         }
@@ -474,11 +474,11 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
     });
     await page.waitForTimeout(300);
 
-    // 「サステナビリティ」アコーディオンを開く
+    // 「Sustainability」アコーディオンを開く
     await page.evaluate(() => {
       const btns = document.querySelectorAll<HTMLElement>('.js-accordion-button');
       for (const btn of btns) {
-        if (btn.textContent?.trim() === 'サステナビリティ') {
+        if (btn.textContent?.includes('Sustainability')) {
           btn.click();
           break;
         }
@@ -488,11 +488,11 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
 
     // 各リンクのhrefを検証
     const expectedLinks = [
-      { text: '環境', path: '/sustainability/environment/' },
-      { text: '社会', path: '/sustainability/society/' },
-      { text: 'ガバナンス', path: '/sustainability/governance/' },
-      { text: 'SCM', path: '/sustainability/scm/' },
-      { text: 'ライブラリー', path: '/sustainability/value-creation-process/' },
+      { text: 'Environment', path: '/sustainability/environment/' },
+      { text: 'Social', path: '/sustainability/society/' },
+      { text: 'Governance', path: '/sustainability/governance/' },
+      { text: 'Responsible Supply Chain', path: '/sustainability/scm/' },
+      { text: 'Resources', path: '/sustainability/value-creation-process/' },
     ];
 
     for (const { text, path } of expectedLinks) {

@@ -57,26 +57,26 @@ get_header();
         <ul class="top-kv__nav-list">
             <li class="top-kv__nav-item">
                 <a href="<?= URL_PRODUCT; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">製品について</span>
+                    <span class="top-kv__nav-link-text">Solutions</span>
                 </a>
             </li>
             <li class="top-kv__nav-item">
                 <a href="<?= URL_ABOUT_US; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">私たちについて</span>
+                    <span class="top-kv__nav-link-text">Company</span>
                 </a>
             </li>
             <li class="top-kv__nav-item">
                 <a href="<?= URL_CAREER; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">採用情報</span>
+                    <span class="top-kv__nav-link-text">Careers</span>
                 </a>
             </li>
             <li class="top-kv__nav-item">
                 <a href="<?= URL_CONTACT; ?>" class="top-kv__nav-link">
-                    <span class="top-kv__nav-link-text">お問い合わせ</span>
+                    <span class="top-kv__nav-link-text">Contact</span>
                 </a>
             </li>
             <li class="top-kv__nav-item top-kv__nav-item--search">
-                <button type="button" class="top-kv__nav-link top-kv__nav-link--search js-search-toggle" aria-label="検索">
+                <button type="button" class="top-kv__nav-link top-kv__nav-link--search js-search-toggle" aria-label="<?php esc_attr_e( 'Search', 'muashi' ); ?>">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="8.5" cy="8.5" r="6.5" stroke="currentColor" stroke-width="2" fill="none"/>
                         <path d="M13 13L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -85,7 +85,7 @@ get_header();
             </li>
             <li class="top-kv__nav-item">
                 <div class="top-kv__nav-link top-kv__nav-link--lang">
-                    <a href="<?= URL_LANG_EN ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">En</a>
+                    <a href="<?= URL_LANG_JP ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">JP</a>
                     <a href="<?= URL_LANG_ZH ?>" class="top-kv__nav-link-text top-kv__nav-link-text--lang" target="_blank" rel="noopener noreferrer">中文</a>
                 </div>
             </li>
@@ -162,10 +162,10 @@ get_header();
             <div class="top-product__contents">
                 <div class="top-section__text-wrapper">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.8">
-                    最先端の開発技術力
+                    Advanced R&D Capabilities
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
-                    60年以上にわたる実績と知見をもとに、市場ニーズを的確に捉え、独自のアイデアと技術で革新的な商品を生み出し続けています
+                    Our 60+ years of experience and knowledge allow us to understand market needs and develop innovative coatings and solutions.
                     </p>
                     <a href="<?= URL_TECHNOLOGY; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
@@ -227,10 +227,10 @@ get_header();
             <div class="top-about__contents">
                 <div class="top-section__text-wrapper">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.8">
-                    グローバルネットワーク
+                    Global Network
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
-                    20年以上前からグローバル展開を進め、アジアを起点に欧州・北米へと生産・販売体制を拡充グループ全体の強固な連携により、世界中のお客様へ同一で、高品質な塗料を安定的に供給しています
+                    We began our global expansion over 20 years ago, starting with Asia and gradually expanding production and sales to Europe and America. With our robust collaboration within our group network, we promise to stably consistent, high-quality paints to our customers around the world.
                     </p>
                     <a href="<?= URL_GLOBAL_NETWORK; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
@@ -319,10 +319,10 @@ get_header();
             <div class="top-sustainability__contents">
                 <div class="top-section__text-wrapper">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.8">
-                    サステナブルなビジネス展開
+                    Sustainable Business Expansion
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="1">
-                    確固たる経営理念のもと、環境に配慮した商品開発と環境負荷の低減に真摯に取り組み、社会貢献を通じて持続可能な社会の実現をめざしています
+                    Bearing a strong management philosophy, we are developing environmentally responsible coatings and measures to reduce our environmental impact. We want to contribute to the achievement of a sustainable society.
                     </p>
                     <a href="<?= URL_SUSTAINABLE_BUSINESS; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="1.2">
                         <span class="top-section__contents-link-text">
@@ -385,10 +385,10 @@ get_header();
             <div class="top-customer__contents">
                 <div class="top-section__text-wrapper top-section__text-wrapper--white">
                     <p class="top-section__contents-title" data-inview data-fade-in data-delay="0.4">
-                    顧客志向のカスタマイズと課題解決力
+                    Customer-Oriented Customization and Problem-Solving Capabilities
                     </p>
                     <p class="top-section__contents-text" data-inview data-fade-in data-delay="0.6">
-                    完全オーダーメイドのアプローチでお客様に寄り添い、多様なニーズに柔軟かつ的確に対応豊富な経験と専門性を生かし、課題の本質を見極めた最適なソリューションを提供しています
+                    We are committed to work with our customers to fully leverage our abundant experience and specialized knowledge to propose the best solution that will meet the diverse needs of our customers and fundamentally resolve the challenges they are facing.
                     </p>
                     <a href="<?= URL_CUSTOMIZATION; ?>" class="top-section__contents-link" data-inview data-fade-in data-delay="0.8">
                         <span class="top-section__contents-link-text">
@@ -438,7 +438,7 @@ get_header();
 
         <div class="top-news__contents-wrapper">
             <p class="top-news__contents-title" data-inview data-fade-in data-delay="0.4">
-                Pick up
+                Featured
             </p>
 
             <?php
@@ -461,7 +461,7 @@ get_header();
                                         if ($category_name !== '') {
                                             echo esc_html($category_name);
                                         } else {
-                                            echo esc_html__('カテゴリ未設定', 'muashi');
+                                            echo esc_html__('Uncategorized', 'muashi');
                                         }
                                         ?>
                                     </p>
@@ -490,7 +490,7 @@ get_header();
                     <li class="top-news__item">
                         <div class="top-news__article-wrapper" style="width: 100%;">
                             <p class="top-news__article-title">
-                                投稿はまだありません。
+                                No posts yet.
                             </p>
                         </div>
                     </li>
@@ -500,7 +500,7 @@ get_header();
             <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
                 <a href="<?php echo esc_url( home_url( '/media-page/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
-                    Pick up一覧はこちら
+                    View All Featured Content
                     </span>
                     <div class="top-news__more-icon-wrapper">
                         <div class="top-news__more-icon u-hidden-md-up">
@@ -549,7 +549,7 @@ get_header();
 
         <div class="top-news__contents-wrapper">
             <p class="top-news__contents-title" data-inview data-fade-in data-delay="0.4">
-                お知らせ
+                News
             </p>
 
             <?php
@@ -575,7 +575,7 @@ get_header();
                                         if ($category_name !== '') {
                                             echo esc_html($category_name);
                                         } else {
-                                            echo esc_html__('カテゴリ未設定', 'muashi');
+                                            echo esc_html__('Uncategorized', 'muashi');
                                         }
                                         ?>
                                     </p>
@@ -604,7 +604,7 @@ get_header();
                     <li class="top-news__item">
                         <div class="top-news__article-wrapper" style="width: 100%;">
                             <p class="top-news__article-title">
-                                投稿はまだありません。
+                                No posts yet.
                             </p>
                         </div>
                     </li>
@@ -614,7 +614,7 @@ get_header();
             <div class="top-news__more" data-inview data-fade-in data-delay="0.8">
                 <a href="<?php echo esc_url( home_url( '/news/' ) ); ?>" class="top-news__more-link">
                     <span class="top-news__more-text">
-                    ニュース一覧はこちら
+                    View All News
                     </span>
                     <div class="top-news__more-icon-wrapper">
                         <div class="top-news__more-icon u-hidden-md-up">

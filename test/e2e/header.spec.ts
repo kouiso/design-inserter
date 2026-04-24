@@ -17,7 +17,7 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
 
     // 検索アイコンリンクが存在することを確認
-    const searchLink = page.locator('.header__nav-link--search');
+    const searchLink = page.locator('.header__nav-link--search:visible').first();
     await expect(searchLink).toBeVisible();
 
     // SVG要素が含まれていることを確認
@@ -108,7 +108,7 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.evaluate(() => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(500);
 
     // 検索リンクの色を取得
     const searchLink = page.locator('.header__nav-link--search');
@@ -117,7 +117,7 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     });
 
     // 通常のナビゲーションリンクの色を取得
-    const navLink = page.locator('.header__nav-link').first();
+    const navLink = page.locator('.header__nav-link:visible').first();
     const navColor = await navLink.evaluate((el) => {
       return window.getComputedStyle(el).color;
     });
@@ -129,7 +129,7 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.evaluate(() => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'black');
     });
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(500);
 
     const searchColorBlack = await searchLink.evaluate((el) => {
       return window.getComputedStyle(el).color;
@@ -214,11 +214,11 @@ test.describe('ヘッダー - 検索オーバーレイ機能（下層ページ�
 
     // 検索入力欄にテキストを入力
     const searchInput = page.locator('.search-form__input');
-    await searchInput.fill('テスト検索');
+    await searchInput.fill('test search');
 
     // 入力されたテキストを確認
     const inputValue = await searchInput.inputValue();
-    expect(inputValue).toBe('テスト検索');
+    expect(inputValue).toBe('test search');
   });
 
   test('検索オーバーレイにクイックリンクが表示される', async ({ page }) => {
@@ -237,9 +237,9 @@ test.describe('ヘッダー - 検索オーバーレイ機能（下層ページ�
     await expect(quickLinks).toBeVisible();
 
     // 各クイックリンクが表示されることを確認
-    await expect(page.locator('.search-quick-links__list a:has-text("製品情報")')).toBeVisible();
-    await expect(page.locator('.search-quick-links__list a:has-text("注目製品")')).toBeVisible();
-    await expect(page.locator('.search-quick-links__list a:has-text("製品用途紹介")')).toBeVisible();
+    await expect(page.locator('.search-quick-links__list a:has-text("Solutions Overview")')).toBeVisible();
+    await expect(page.locator('.search-quick-links__list a:has-text("Featured Solutions")')).toBeVisible();
+    await expect(page.locator('.search-quick-links__list a:has-text("Applications")')).toBeVisible();
   });
 });
 

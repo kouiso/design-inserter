@@ -29,9 +29,8 @@ test.describe('Smoke Tests - 主要ページの表示確認', () => {
     await expect(page.locator('.navigation')).toBeVisible();
     await expect(page.locator('.navigation__list')).toBeVisible();
     
-    // 用途でえらぶ、基材でえらぶなどのメニュー項目確認（サイドバー内のみ）
-    await expect(page.locator('.navigation').getByText('用途でえらぶ')).toBeVisible();
-    await expect(page.locator('.navigation').getByText('基材でえらぶ')).toBeVisible();
+    await expect(page.locator('.navigation')).toContainText('By Industry');
+    await expect(page.locator('.navigation')).toContainText('By Substrate');
   });
 
   test('ニュース: ニュース一覧が正常に表示される', async ({ page }) => {

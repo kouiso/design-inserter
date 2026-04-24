@@ -81,16 +81,11 @@ tasks:
   # ==========================================================
 
   pull:
-    desc: DB + 全ファイルをステージングからローカルに完全同期
+    desc: Docker 環境にステージング（JP + EN）DB を同期
     cmds:
-      - task: db:pull
-      - task: files:pull
-
-  pull:diff:
-    desc: DB + 差分ファイルだけステージングからローカルに同期
-    cmds:
-      - task: db:pull
-      - task: files:diff
+      - task: db:sync:jp
+      - task: db:sync:en
+      - echo "Docker pull 完了（DB JP+EN 同期済）"
 
   # --- DB ---
 
@@ -691,6 +686,8 @@ tasks:
             "$STAGING_EN_URL" "$EN_WP_HOME" \
             --all-tables --precise --skip-columns=guid --report-changed-only --allow-root
           {{.DC}} exec -T musashi-wp-en wp cache flush --allow-root
+          # ステージングの template=muashi をローカルEN用の muashi-en に切替（本体は muashi-en テーマのみ存在）
+          {{.DC}} exec -T musashi-wp-en wp theme activate muashi-en --allow-root
           rm -f .tmp/docker-staging-en.sql
           echo "Docker EN DB同期完了！"
 

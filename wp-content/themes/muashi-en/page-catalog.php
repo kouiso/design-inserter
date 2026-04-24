@@ -154,16 +154,16 @@ $download_data = array(
     'initialSelection' => $requested_ids,
     'sourceProductId' => $source_product_id,
     'i18n' => array(
-        'selectedHeading' => '選択中',
-        'selectedEmpty' => '資料が選択されていません。',
-        'remove' => '削除',
-        'searchPlaceholder' => '製品詳細で検索',
-        'resultCount' => '該当件数: %d件',
-        'noResults' => '該当する製品がありません。',
-        'limitReached' => '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。',
-        'noneSelectedError' => '資料を1件以上選択してください。',
-        'resetFilters' => '条件をクリア',
-        'allOption' => 'すべて',
+        'selectedHeading' => 'Selected',
+        'selectedEmpty' => 'No items selected.',
+        'remove' => 'Remove',
+        'searchPlaceholder' => 'Search by product details',
+        'resultCount' => '%d result(s)',
+        'noResults' => 'No matching products.',
+        'limitReached' => 'You can select up to 5 items. Please contact us if you need more.',
+        'noneSelectedError' => 'Please select at least one item.',
+        'resetFilters' => 'Clear filters',
+        'allOption' => 'All',
     ),
 );
 
@@ -202,7 +202,7 @@ if (have_posts()) {
             <div class="page__content page__content--no-image">
 
                 <h1 id="01" class="page__title js-page-title">
-                    カタログ請求
+                    Request for Catalog
                 </h1>
 
                 <div class="page__inner page__inner--narrow">

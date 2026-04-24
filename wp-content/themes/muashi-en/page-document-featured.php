@@ -48,7 +48,7 @@ if ( have_posts() ) {
           <div class="page__content page__content--no-image">
 
             <h1 id="01" class="page__title js-page-title">
-              製品詳細
+              Product Details
             </h1>
 
             <div class="page__inner page__inner--narrow">
@@ -60,8 +60,8 @@ if ( have_posts() ) {
                       <div class="download__main download__main--full">
                         <div class="download__controls">
                           <label class="download__search">
-                            <span class="download__search-label">製品名 （カタカナ） で目的の製品を絞り込めます。</span>
-                            <input type="search" class="download__search-input" data-download-search placeholder="製品名・キーワードで検索">
+                            <span class="download__search-label">Search by product details</span>
+                            <input type="search" class="download__search-input" data-download-search placeholder="Search by product details">
                           </label>
                         </div>
 
@@ -95,4 +95,3 @@ if ( have_posts() ) {
     </div>
 
 </section>
-

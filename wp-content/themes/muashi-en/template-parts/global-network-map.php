@@ -6,16 +6,17 @@
  */
 ?>
 <div class="global-map" data-testid="global-network-map">
+	<h2 class="global-map__title"><?php esc_html_e( 'Manufacturing Footprint', 'muashi' ); ?></h2>
 	<?php $svg_ver = filemtime( get_stylesheet_directory() . '/assets/img/global-network/world-map.svg' ) . '.' . time(); ?>
 	<object
 		data="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/global-network/world-map.svg?v=' . $svg_ver ); ?>"
 		type="image/svg+xml"
 		class="global-map__object"
-		aria-label="<?php echo esc_attr( '武蔵塗料グループ グローバル生産拠点マップ' ); ?>"
+		aria-label="<?php echo esc_attr__( 'Manufacturing Footprint map', 'muashi' ); ?>"
 	>
 		<img
 			src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/global-network/world-map.svg' ); ?>"
-			alt="<?php echo esc_attr( 'グローバル生産拠点マップ' ); ?>"
+			alt="<?php echo esc_attr__( 'Manufacturing Footprint map', 'muashi' ); ?>"
 			class="global-map__fallback"
 		>
 	</object>

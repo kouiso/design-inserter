@@ -3,7 +3,7 @@
  * 「よくある質問」用サイドバーメニューセットアップ
  *
  * 実行方法: php で直接実行
- * php wp-content/themes/muashi/inc/setup-faq-menu.php
+ * php wp-content/themes/muashi-en/inc/setup-faq-menu.php
  */
 
 // WordPress環境外から実行された場合は終了
@@ -37,15 +37,15 @@ function muashi_setup_faq_sidebar_menu() {
 
 		// メニュー項目定義
 		$menu_items = array(
-			// 第1階層: Pick up ピックアップ
+			// 第1階層: Featured
 			array(
-				'title' => 'Pick up ピックアップ',
+				'title' => 'Featured',
 				'url'   => URL_MEDIA,
 				'parent' => 0,
 			),
 			// 第1階層: News ニュース
 			array(
-				'title' => 'News ニュース',
+				'title' => 'News',
 				'url'   => URL_NEWS,
 				'parent' => 0,
 			),
@@ -71,7 +71,7 @@ function muashi_setup_faq_sidebar_menu() {
 			),
 			// 第1階層: よくあるご質問（子項目なし）
 			array(
-				'title' => 'よくあるご質問',
+				'title' => 'FAQs',
 				'url'   => URL_FAQ,
 				'parent' => 0,
 			),

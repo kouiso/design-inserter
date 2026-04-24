@@ -61,7 +61,7 @@ $locations = array(
 );
 ?>
 <section class="location-section" id="03">
-    <h2 class="location-header">日本国内</h2>
+    <h2 class="location-header">Domestic (Japan)</h2>
     <div class="location-cards">
         <?php foreach ( $locations as $location ) :
             $map_url = 'https://maps.google.com/maps?q=' . rawurlencode( $location['map_query'] ) . '&output=embed';
@@ -74,7 +74,7 @@ $locations = array(
                     <?php if ( ! empty( $location['fax'] ) ) : ?>
                     <p><span class="location-card__label">FAX:</span> <?php echo esc_html( $location['fax'] ); ?></p>
                     <?php endif; ?>
-                    <p><span class="location-card__label">住所:</span> 〒<?php echo esc_html( $location['postal'] ); ?></p>
+                    <p><span class="location-card__label">Address:</span> 〒<?php echo esc_html( $location['postal'] ); ?></p>
                     <p><?php echo esc_html( $location['address'] ); ?></p>
                 </div>
             </div>
@@ -86,7 +86,7 @@ $locations = array(
                     frameborder="0"
                     style="border:0"
                     loading="lazy"
-                    aria-label="<?php echo esc_attr( $location['name'] ); ?> 地図">
+                    aria-label="<?php echo esc_attr( $location['name'] ); ?> Map">
                 </iframe>
             </div>
         </div>

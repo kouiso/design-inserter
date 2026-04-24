@@ -17,17 +17,17 @@ get_header();
             <ul class="navigation__list">
                 <li class="navigation__item">
                     <a href="<?php echo URL_PRODUCT; ?>" class="navigation__item-title">
-                    製品情報
+                    Solutions Overview
                     </a>
                 </li>
                 <li class="navigation__item">
                     <a href="<?php echo URL_FEATURED; ?>" class="navigation__item-title">
-                    注目製品
+                    Featured Solutions
                     </a>
                 </li>
                 <li class="navigation__item">
                     <p class="navigation__item-title">
-                    製品用途紹介
+                    Applications
                     </p>
                 </li>
             </ul>

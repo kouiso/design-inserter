@@ -28,7 +28,7 @@ get_header();
           <div class="page__content page__content--no-image">
 
             <h1 id="01" class="page__title js-page-title">
-            お問い合わせ
+            Contact Us
             </h1>
 
             <div class="page__inner page__inner--narrow">

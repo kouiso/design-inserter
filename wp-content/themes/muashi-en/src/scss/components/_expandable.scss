@@ -97,7 +97,7 @@
     transition: all 0.3s ease;
 
     &::after {
-      content: 'もっと見る';
+      content: 'Show More';
     }
   }
 
@@ -108,7 +108,7 @@
 
   &[aria-expanded="true"] {
     span::after {
-      content: '閉じる';
+      content: 'Show Less';
     }
   }
 }

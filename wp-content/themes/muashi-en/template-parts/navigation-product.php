@@ -1,8 +1,8 @@
 <?php
 /**
- * 製品情報サイドバーナビゲーション
+ * プロダクト用サイドバーナビゲーション
  *
- * 管理画面の「外観 > メニュー」で「製品情報用サイドバー」にメニューが
+ * 管理画面の「外観 > メニュー」で対象サイドバーにメニューが
  * 設定されている場合はそちらを表示。未設定の場合はタクソノミーベースの
  * デフォルト表示にフォールバックする。
  *
@@ -40,7 +40,7 @@ $current_term_anc      = ( $current_term_obj instanceof WP_Term ) ? array_map( '
         <ul class="navigation__list">
             <li class="navigation__item">
                 <p class="navigation__item-title">
-                製品情報
+                Solutions Overview
                 </p>
                 <ul class="navigation__sub-list">
                     <?php
@@ -111,12 +111,12 @@ $current_term_anc      = ( $current_term_obj instanceof WP_Term ) ? array_map( '
             </li>
             <li class="navigation__item">
                 <a href="<?php echo esc_url( URL_FEATURED ); ?>" class="navigation__item-title">
-                注目製品
+                Featured Solutions
                 </a>
             </li>
             <li class="navigation__item">
                 <a href="<?php echo esc_url( URL_APPLICATIONS ); ?>" class="navigation__item-title">
-                製品用途紹介
+                Applications
                 </a>
             </li>
         </ul>

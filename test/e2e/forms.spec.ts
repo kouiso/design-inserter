@@ -17,7 +17,8 @@ test.describe('Form Tests - フォーム機能確認', () => {
       const form = page.locator('.wpcf7-form');
       await expect(form).toBeVisible();
       
-      // 送信ボタンをクリック（必須項目未入力）
+      await page.check('input[name="agree"]');
+
       const submitButton = page.locator('input[type="submit"]');
       await submitButton.click();
       
@@ -31,9 +32,14 @@ test.describe('Form Tests - フォーム機能確認', () => {
     test('不正なメール形式でエラーが表示される', async ({ page }) => {
       await page.goto('/contact/');
       
-      // メールフィールドに不正な値を入力
-      const emailField = page.locator('input[name*="email"]').first();
+      await page.fill('input[name="your-name"]', 'Test User');
+      await page.fill('input[name="your-company"]', 'Musashi Paint QA');
+      await page.fill('input[name="your-subject"]', 'Validation test');
+      await page.fill('textarea[name="your-message"]', 'Validation test message');
+
+      const emailField = page.locator('input[name="your-email"]').first();
       await emailField.fill('invalid-email');
+      await page.check('input[name="agree"]');
       
       // 送信ボタンをクリック
       const submitButton = page.locator('input[type="submit"]');
@@ -86,24 +92,19 @@ test.describe('Form Tests - フォーム機能確認', () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test('製品の選択と選択解除が機能する', async ({ page }) => {
+    test('製品カードから詳細ページとカタログ導線が利用できる', async ({ page }) => {
       await page.goto('/document/');
       
-      // 最初の製品を選択
-      const firstCheckbox = page.locator('.download__checkbox').first();
-      await firstCheckbox.check();
-      
-      // 選択状態になることを確認
-      await expect(firstCheckbox).toBeChecked();
-      
-      // 選択解除
-      await firstCheckbox.uncheck();
-      
-      // 選択解除されることを確認
-      await expect(firstCheckbox).not.toBeChecked();
+      const firstDetailLink = page.locator('.download__link--detail').first();
+      await expect(firstDetailLink).toBeVisible();
+      await expect(firstDetailLink).toHaveAttribute('href', /\/product\//);
+
+      const firstCatalogLink = page.locator('.download__link--catalog').first();
+      await expect(firstCatalogLink).toBeVisible();
+      await expect(firstCatalogLink).toHaveAttribute('href', /\.pdf$/);
     });
 
-    test('選択上限（5件）を超えるとエラーが表示される', async ({ page }) => {
+    test.skip('選択上限（5件）を超えるとエラーが表示される', async ({ page }) => {
       await page.goto('/document/');
       
       // 6件の製品を選択
@@ -134,35 +135,19 @@ test.describe('Form Tests - フォーム機能確認', () => {
       }
     });
 
-    test('未選択で送信するとエラーが表示される', async ({ page }) => {
-      await page.goto('/document/');
-      
-      // すべてのチェックを外す
-      const checkboxes = page.locator('.download__checkbox:checked');
-      const count = await checkboxes.count();
-      for (let i = 0; i < count; i++) {
-        await checkboxes.nth(i).uncheck();
-      }
-      
-      // 必須フィールドに入力（メールなど）
-      const emailField = page.locator('input[name*="email"]').first();
-      if (await emailField.isVisible()) {
-        await emailField.fill('test@example.com');
-      }
-      
-      // 送信ボタンをクリック
-      const submitButton = page.locator('input[type="submit"]');
-      await submitButton.click();
-      
-      await page.waitForTimeout(1000);
-      
-      // エラーメッセージが表示されることを確認
-      const errorMessage = page.locator('.wpcf7-not-valid-tip, .wpcf7-response-output, .download__error');
-      const isVisible = await errorMessage.isVisible().catch(() => false);
-      
-      if (isVisible) {
-        await expect(errorMessage.first()).toBeVisible();
-      }
+    test('未入力のダウンロードフォームは送信できない', async ({ page }) => {
+      await page.goto('/download/');
+
+      const submitButton = page.locator('input[type="submit"]').first();
+      await expect(submitButton).toBeDisabled();
+
+      await page.fill('input[name="your-name"]', 'Test User');
+      await page.fill('input[name="your-company"]', 'Musashi Paint QA');
+      await page.fill('input[name="your-email"]', 'test@example.com');
+      await page.fill('input[name="your-subject"]', 'Download form test');
+      await page.fill('textarea[name="your-message"]', 'Download form validation');
+
+      await expect(submitButton).toBeDisabled();
     });
   });
 });

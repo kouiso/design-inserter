@@ -14,6 +14,95 @@ require_once(get_theme_file_path('/inc/cf7-form-templates.php'));
 require_once(get_theme_file_path('/inc/cf7-security.php'));
 
 /**
+ * SEOメタ情報のフォールバックを返す
+ */
+function muashi_get_default_meta_description() {
+    if ( is_front_page() || is_home() ) {
+        return 'Musashi Paint develops coating solutions for plastics and other materials with global production, technical support, and customization capabilities.';
+    }
+
+    if ( is_page( 'contact' ) ) {
+        return 'Contact Musashi Paint for product inquiries, technical consultations, and resource requests.';
+    }
+
+    if ( is_page( 'download' ) ) {
+        return 'Request product catalogs, technical materials, and other resources from Musashi Paint.';
+    }
+
+    if ( is_singular() ) {
+        $excerpt = wp_strip_all_tags( get_the_excerpt() );
+        if ( ! empty( $excerpt ) ) {
+            return $excerpt;
+        }
+    }
+
+    $title = wp_strip_all_tags( wp_get_document_title() );
+    if ( empty( $title ) ) {
+        $title = get_bloginfo( 'name' );
+    }
+
+    return sprintf(
+        'Learn more about %s from Musashi Paint.',
+        $title
+    );
+}
+
+/**
+ * SEO用のOG画像URLを返す
+ */
+function muashi_get_default_og_image_url() {
+    return get_template_directory_uri() . '/assets/img/top/kv.jpg';
+}
+
+/**
+ * Yoast SEOのdescriptionを補完する
+ */
+function muashi_filter_wpseo_metadesc( $description ) {
+    if ( ! empty( $description ) ) {
+        return $description;
+    }
+
+    return muashi_get_default_meta_description();
+}
+add_filter( 'wpseo_metadesc', 'muashi_filter_wpseo_metadesc' );
+
+/**
+ * Yoast SEOのOG descriptionを補完する
+ */
+function muashi_filter_wpseo_opengraph_desc( $description ) {
+    if ( ! empty( $description ) ) {
+        return $description;
+    }
+
+    return muashi_get_default_meta_description();
+}
+add_filter( 'wpseo_opengraph_desc', 'muashi_filter_wpseo_opengraph_desc' );
+
+/**
+ * Yoast SEOのOG画像を補完する
+ */
+function muashi_filter_wpseo_opengraph_image( $image_url ) {
+    if ( ! empty( $image_url ) ) {
+        return $image_url;
+    }
+
+    return muashi_get_default_og_image_url();
+}
+add_filter( 'wpseo_opengraph_image', 'muashi_filter_wpseo_opengraph_image' );
+
+/**
+ * Yoast SEOのX画像を補完する
+ */
+function muashi_filter_wpseo_twitter_image( $image_url ) {
+    if ( ! empty( $image_url ) ) {
+        return $image_url;
+    }
+
+    return muashi_get_default_og_image_url();
+}
+add_filter( 'wpseo_twitter_image', 'muashi_filter_wpseo_twitter_image' );
+
+/**
  * [product_field] ショートコード
  * 投稿のACFカスタムフィールド値を表示する。
  * 使用例: [product_field name="product_name_trademark_en"]
@@ -239,10 +328,10 @@ function wpcf7_validate_email_filter_extend( $result, $tag ) {
             $target_name = $matches[1];
             if ($_POST[$name] != $_POST[$target_name]) {
                 if (method_exists($result, 'invalidate')) {
-                    $result->invalidate( $tag,"確認用のメールアドレスが一致していません");
+                    $result->invalidate( $tag,"The confirmation email address does not match.");
                 } else {
                     $result['valid'] = false;
-                    $result['reason'][$name] = '確認用のメールアドレスが一致していません';
+                    $result['reason'][$name] = 'The confirmation email address does not match.';
                 }
             }
         }
@@ -277,8 +366,8 @@ function muashi_validate_selected_products_field( $result, $tag ) {
         return $result;
     }
 
-    $error_message_empty = '資料を少なくとも1件選択してください。';
-    $error_message_limit = '資料は最大5件まで選択できます。5件を超える場合はお問い合わせください。';
+    $error_message_empty = 'Please select at least one item.';
+    $error_message_limit = 'You can select up to 5 items. Please contact us if you need more.';
 
     if ( $raw_value === '' ) {
         if ( method_exists($result, 'invalidate') ) {
@@ -521,7 +610,7 @@ function ts_render_pagination( $query = null, $base_url_override = null, $curren
         echo '<div class="pagination__arrow-wrapper">';
         if ( $current > 1 ) {
             $prev_url = $get_page_url( $current - 1 );
-            echo '<a class="pagination__link pagination__link--prev" href="' . esc_url( $prev_url ) . '" rel="prev" aria-label="前のページ">
+            echo '<a class="pagination__link pagination__link--prev" href="' . esc_url( $prev_url ) . '" rel="prev" aria-label="Previous page">
                     <span class="pagination__icon" aria-hidden="true">
                       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M30.0831 20.5833H10.6873L18.9998 28.8958L17.9548 30.0833L7.66309 19.7917L17.9548 9.5L18.9998 10.6875L10.6873 19H30.0831V20.5833Z" fill="black"/>
@@ -568,7 +657,7 @@ function ts_render_pagination( $query = null, $base_url_override = null, $curren
         echo '<div class="pagination__arrow-wrapper">';
         if ( $current < (int) $query->max_num_pages ) {
             $next_url = $get_page_url( $current + 1 );
-            echo '<a class="pagination__link pagination__link--next" href="' . esc_url( $next_url ) . '" rel="next" aria-label="次のページ">
+            echo '<a class="pagination__link pagination__link--next" href="' . esc_url( $next_url ) . '" rel="next" aria-label="Next page">
                     <span class="pagination__icon" aria-hidden="true">
                       <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6.33301 19H25.7288L17.4163 10.6875L18.4613 9.5L28.753 19.7917L18.4613 30.0833L17.4163 28.8958L25.7288 20.5833H6.33301V19Z" fill="black"/>
@@ -1646,11 +1735,11 @@ add_action( 'init', function() {
             'categories'  => array( 'buttons' ),
             'content'     => '<!-- wp:group {"layout":{"type":"constrained","justifyContent":"left"}} -->
 <div class="wp-block-group"><!-- wp:button {"className":"is-style-download"} -->
-<div class="wp-block-button is-style-download"><a class="wp-block-button__link wp-element-button" href="#">ダウンロード</a></div>
+<div class="wp-block-button is-style-download"><a class="wp-block-button__link wp-element-button" href="#">Download</a></div>
 <!-- /wp:button -->
 
 <!-- wp:paragraph {"fontSize":"small"} -->
-<p class="has-small-font-size">発行：2024年6月　報告対象期間：2023年1月〜12月</p>
+<p class="has-small-font-size">Published: June 2024 / Reporting Period: January–December 2023</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->',
         )
@@ -1790,12 +1879,12 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 03-3985-8118</p>
                 <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
-                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">Address: 〒171-0022</p>
                 <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル</p>
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料ホールディングス株式会社 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料ホールディングス株式会社 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1804,12 +1893,12 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 04-2934-4131</p>
                 <p style="margin: 0 0 4px;">FAX: 04-2934-4134</p>
-                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">Address: 〒358-0032</p>
                 <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 入間工場 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 入間工場 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1818,12 +1907,12 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 04-2908-7634</p>
                 <p style="margin: 0 0 4px;">FAX: 04-2935-0273</p>
-                <p style="margin: 0;">住所: 〒358-0032</p>
+                <p style="margin: 0;">Address: 〒358-0032</p>
                 <p style="margin: 0;">埼玉県入間市狭山ヶ原11-2</p>
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 営業部 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=埼玉県入間市狭山ヶ原11-2&amp;output=embed" aria-label="武蔵塗料株式会社 営業部 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1832,12 +1921,12 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 072-963-1133</p>
                 <p style="margin: 0 0 4px;">FAX: 072-963-0606</p>
-                <p style="margin: 0;">住所: 〒578-0921</p>
+                <p style="margin: 0;">Address: 〒578-0921</p>
                 <p style="margin: 0;">大阪府東大阪市水走1-17-13</p>
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=大阪府東大阪市水走1-17-13&amp;output=embed" aria-label="武蔵塗料株式会社 大阪事業所 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=大阪府東大阪市水走1-17-13&amp;output=embed" aria-label="武蔵塗料株式会社 大阪事業所 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1846,12 +1935,12 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 0568-54-2113</p>
                 <p style="margin: 0 0 4px;">FAX: 0568-54-2117</p>
-                <p style="margin: 0;">住所: 〒485-0029</p>
+                <p style="margin: 0;">Address: 〒485-0029</p>
                 <p style="margin: 0;">愛知県小牧市中央1丁目267 小牧ガスビル 3F</p>
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=愛知県小牧市中央1丁目267&amp;output=embed" aria-label="武蔵塗料株式会社 名古屋営業所 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=愛知県小牧市中央1丁目267&amp;output=embed" aria-label="武蔵塗料株式会社 名古屋営業所 Map"></iframe>
         </div>
     </div>
     <div class="office-location-card" style="display: flex; flex-wrap: wrap; border: 1px solid #999; margin-bottom: 20px; background: #fff; overflow: hidden;">
@@ -1860,12 +1949,12 @@ add_action( 'init', function() {
             <div style="font-size: 14px; line-height: 1.5; color: #444;">
                 <p style="margin: 0;">TEL: 03-3985-8118</p>
                 <p style="margin: 0 0 4px;">FAX: 03-3985-0947</p>
-                <p style="margin: 0;">住所: 〒171-0022</p>
+                <p style="margin: 0;">Address: 〒171-0022</p>
                 <p style="margin: 0;">東京都豊島区南池袋 2-30-16 グリックビル 6F</p>
             </div>
         </div>
         <div class="office-map-container" style="width: 260px; min-height: 180px; flex: 0 0 260px; border-left: 1px solid #999; box-sizing: border-box; background: #eee;">
-            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料国際株式会社 地図"></iframe>
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; display: block; width: 100%; height: 100%; min-height: 180px;" src="https://maps.google.com/maps?q=東京都豊島区南池袋2-30-16&amp;output=embed" aria-label="武蔵塗料国際株式会社 Map"></iframe>
         </div>
     </div>
 </div>
@@ -2183,4 +2272,3 @@ add_filter('acf/settings/load_json', function($paths) {
     $paths[] = get_stylesheet_directory() . '/acf-json';
     return $paths;
 });
-

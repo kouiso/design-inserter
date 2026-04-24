@@ -1,0 +1,1321 @@
+{
+  "capturedAt": "2026-04-20T13:03:40.525Z",
+  "environment": "docker-en",
+  "baseURL": "http://localhost:8081",
+  "archives": {
+    "career": {
+      "path": "/career/",
+      "title": "採用情報",
+      "totalCount": 4,
+      "posts": [
+        {
+          "title": "人事総務部　正社員募集",
+          "url": "http://127.0.0.1:8081/career/%e3%80%90%e6%9d%b1%e4%ba%ac-%e4%ba%ba%e4%ba%8b%e3%80%91%e4%ba%ba%e4%ba%8b%e7%b5%8c%e9%a8%93%e8%80%85%e6%ad%93%e8%bf%8e%e2%98%85%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e7%92%b0%e5%a2%83-%e5%88%b6/",
+          "order": 1
+        },
+        {
+          "title": "情報システム部　正社員募集",
+          "url": "http://127.0.0.1:8081/career/%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%8b%e3%82%a2%e3%83%aa%e3%83%b3%e3%82%b0%e3%81%ae%e5%8b%9f%e9%9b%86/",
+          "order": 2
+        },
+        {
+          "title": "CSR推進室　契約社員募集",
+          "url": "http://127.0.0.1:8081/career/%e3%80%90%e6%b1%a0%e8%a2%8b%e3%80%91csr%e6%8e%a8%e9%80%b2%e6%a5%ad%e5%8b%99%e2%98%85%e6%a5%ad%e7%95%8c%e3%83%bb%e8%81%b7%e7%a8%ae%e6%9c%aa%e7%b5%8c%e9%a8%93%e3%81%8b%e3%82%89%e6%90%ba%e3%82%8f/",
+          "order": 3
+        },
+        {
+          "title": "R&D Position  (Full-Time)",
+          "url": "http://127.0.0.1:8081/career/now-hiring-rd-talent/",
+          "order": 4
+        }
+      ],
+      "status": 200
+    },
+    "interview": {
+      "path": "/career/interview/",
+      "title": "インタビュー",
+      "totalCount": 28,
+      "posts": [
+        {
+          "title": "Emi Miyoshi, Finance Department Manager",
+          "url": "http://127.0.0.1:8081/career/interview/%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc-%e8%a8%98%e4%ba%8b/",
+          "order": 1
+        },
+        {
+          "title": "Ho Chi Minh Office / Sales　Yosuke Yamazaki",
+          "url": "http://127.0.0.1:8081/career/interview/%e3%83%9b%e3%83%bc%e3%83%81%e3%83%9f%e3%83%b3%e6%8b%a0%e7%82%b9%e3%83%bb%e5%96%b6%e6%a5%ad%e3%81%ae%e5%b1%b1%e5%b4%8e-%e6%b4%8b%e8%bc%94%e3%81%95%e3%82%93/",
+          "order": 2
+        },
+        {
+          "title": "Procurement & Logistics Division Keika Shimada",
+          "url": "http://127.0.0.1:8081/career/interview/%e8%aa%bf%e9%81%94%e7%89%a9%e6%b5%81%e6%9c%ac%e9%83%a8%e3%81%a7%e6%b4%bb%e8%ba%8d%e3%81%ae%e5%b3%b6%e7%94%b0%e6%85%a7%e8%8a%b1%e3%81%95%e3%82%93/",
+          "order": 3
+        },
+        {
+          "title": "Global Marketing & Corporate Communications Masahiro Nishiguchi",
+          "url": "http://127.0.0.1:8081/career/interview/global-marketing-%ef%bc%86-corporate-communications%e9%83%a8%e9%95%b7%e3%80%81%e8%a5%bf%e5%8f%a3%e6%98%8c%e5%ae%8f%e3%81%95%e3%82%93/",
+          "order": 4
+        },
+        {
+          "title": "Peter Kikuchi, General Manager, Overseas Sales Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e6%b5%b7%e5%a4%96%e5%96%b6%e6%a5%ad%e9%83%a8%e3%83%bb%e9%83%a8%e9%95%b7%e3%80%81%e8%8f%8a%e6%b1%a0-%e3%83%9a%e3%83%bc%e3%83%86%e3%83%ab%e3%81%95%e3%82%93/",
+          "order": 5
+        },
+        {
+          "title": "Director　Junya Yamada",
+          "url": "http://127.0.0.1:8081/career/interview/%e6%b5%b7%e5%a4%96%e5%96%b6%e6%a5%ad%e9%83%a8%e3%83%bb%e9%83%a8%e9%95%b7%e3%81%ae%e8%8f%8a%e6%b1%a0%e3%83%9a%e3%83%bc%e3%83%86%e3%83%ab%e3%81%95%e3%82%93/",
+          "order": 6
+        },
+        {
+          "title": "General Manager, Production Department Yasuhiro Tanaka",
+          "url": "http://127.0.0.1:8081/career/interview/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e9%87%8d%e6%85%b6%e3%83%bb%e7%94%9f%e7%94%a3%e9%83%a8%e9%83%a8%e9%95%b7%ef%bc%88%e7%94%9f%e7%94%a3-%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc-%e8%aa%bf%e9%81%94%e9%83%a8/",
+          "order": 7
+        },
+        {
+          "title": "Country Manager, Thailand  Tetsuya Asada",
+          "url": "http://127.0.0.1:8081/career/interview/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%bf%e3%82%a4%e3%81%ae%e6%8b%a0%e7%82%b9%e9%95%b7%e3%80%81%e6%b5%85%e7%94%b0-%e5%93%b2%e4%b9%9f%e3%81%95%e3%82%93/",
+          "order": 8
+        },
+        {
+          "title": "A Day in the Life of the Production Department – Color Matching Section",
+          "url": "http://127.0.0.1:8081/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%80%81%e6%97%a9%e5%b7%9d-%e8%a3%95%e3%81%95%e3%82%93%e3%81%ae%e4%b8%80%e6%97%a5%e3%81%ab%e5%af%86%e7%9d%80/",
+          "order": 9
+        },
+        {
+          "title": "A Day in the Life of Mitsumasa Okada, Sales Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%b2%a1%e7%94%b0-%e5%85%89%e6%ad%a3%e3%81%95%e3%82%93%e3%81%ae%e4%b8%80%e6%97%a5%e3%81%ab%e5%af%86%e7%9d%80/",
+          "order": 10
+        },
+        {
+          "title": "A Day in the Life of Kosuke Kaneda, Development Technology Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e9%87%91%e7%94%b0-%e5%85%ac%e4%bb%8b%e3%81%95%e3%82%93/",
+          "order": 11
+        },
+        {
+          "title": "A Day in the Life of Mayuko Miyamoto, Finance & Accounting Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e8%b2%a1%e5%8b%99%e7%b5%8c%e7%90%86%e9%83%a8%e3%81%ae%e5%ae%ae%e6%9c%ac-%e7%9c%9f%e7%94%b1%e5%ad%90%e3%81%95%e3%82%93/",
+          "order": 12
+        },
+        {
+          "title": "A Day in the Life of Miwa Ohana, Production & Shipping Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e9%85%8d%e9%80%81%e8%aa%b2%e3%81%ae%e5%a4%a7%e8%8a%b1-%e7%be%8e%e5%92%8c%e3%81%95%e3%82%93/",
+          "order": 13
+        },
+        {
+          "title": "Production Department, Color Matching Section　Taichi Ishimura",
+          "url": "http://127.0.0.1:8081/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%81%a7%e6%b4%bb%e8%ba%8d%e3%81%ae%e7%9f%b3%e6%9d%91-%e5%a4%aa%e4%b8%80%e3%81%95%e3%82%93/",
+          "order": 14
+        },
+        {
+          "title": "Dai Inagaki, Executive Officer & General Manager of Quality Assurance Division",
+          "url": "http://127.0.0.1:8081/career/interview/%e5%9f%b7%e8%a1%8c%e5%bd%b9%e5%93%a1%e3%83%bb%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc%e6%9c%ac%e9%83%a8%e6%9c%ac%e9%83%a8%e9%95%b7%e3%82%92%e5%85%bc%e4%bb%bb%e3%81%ae%e7%a8%b2%e5%9e%a3-%e5%a4%a7%e3%81%95/",
+          "order": 15
+        },
+        {
+          "title": "Kazuki Motegi, Production Department, Production Section",
+          "url": "http://127.0.0.1:8081/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e7%94%9f%e7%94%a3%e8%aa%b2%e3%81%ae%e8%8c%82%e6%9c%a8-%e4%b8%80%e6%a8%b9%e3%81%95%e3%82%93/",
+          "order": 16
+        },
+        {
+          "title": "Procurement & Logistics Division – Kaori Iseki",
+          "url": "http://127.0.0.1:8081/career/interview/%e8%aa%bf%e9%81%94%e7%89%a9%e6%b5%81%e6%9c%ac%e9%83%a8%e3%81%ae%e4%ba%95%e9%96%a2-%e9%a6%99%e7%90%86%e3%81%95%e3%82%93/",
+          "order": 17
+        },
+        {
+          "title": "Production Department – Color Technology Section – Takashi Kanazawa",
+          "url": "http://127.0.0.1:8081/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e8%aa%bf%e8%89%b2%e8%aa%b2%e3%81%ae%e9%87%91%e6%be%a4-%e5%b4%87%e3%81%95%e3%82%93/",
+          "order": 18
+        },
+        {
+          "title": "Tomomi Mitsuo, CSR Promotion Office",
+          "url": "http://127.0.0.1:8081/career/interview/csr%e6%8e%a8%e9%80%b2%e5%ae%a4%e3%81%ae%e6%ba%80%e5%b0%be-%e6%9c%8b%e7%be%8e%e3%81%95%e3%82%93/",
+          "order": 19
+        },
+        {
+          "title": "Kun Ito, Production Technology Section, Production Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e7%94%9f%e7%94%a3%e9%83%a8%e3%83%bb%e7%94%9f%e7%94%a3%e6%8a%80%e8%a1%93%e8%aa%b2%e3%81%ae%e4%bc%8a%e6%9d%b1-%e8%a8%93%e3%81%95%e3%82%93/",
+          "order": 20
+        },
+        {
+          "title": "Shuntaro Nagasawa, Director, Human Resources & General Affairs Division",
+          "url": "http://127.0.0.1:8081/career/interview/%e4%ba%ba%e4%ba%8b%e7%b7%8f%e5%8b%99%e6%9c%ac%e9%83%a8%e3%80%81%e9%83%a8%e9%95%b7%e3%81%ae%e9%95%b7%e6%be%a4-%e4%bf%8a%e5%a4%aa%e9%83%8e%e3%81%95%e3%82%93/",
+          "order": 21
+        },
+        {
+          "title": "Michiyo Yamazaki, Quality Assurance Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e5%93%81%e8%b3%aa%e4%bf%9d%e8%a8%bc%e9%83%a8%e3%81%ae%e5%b1%b1%ef%a8%91-%e8%bf%aa%e4%bb%a3%e3%81%95%e3%82%93/",
+          "order": 22
+        },
+        {
+          "title": "Tomoyuki Seto, Development Technology Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e7%80%ac%e6%88%b8-%e6%99%ba%e8%a1%8c%e3%81%95%e3%82%93/",
+          "order": 23
+        },
+        {
+          "title": "Kotarou Hashikita, Development Technology Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e9%83%a8%e3%81%ae%e6%a9%8b%e5%8c%97-%e5%b9%b8%e5%a4%9a%e6%9c%97%e3%81%95%e3%82%93/",
+          "order": 24
+        },
+        {
+          "title": "Riho Shimizu, Development Technology Headquarters",
+          "url": "http://127.0.0.1:8081/career/interview/%e9%96%8b%e7%99%ba%e6%8a%80%e8%a1%93%e6%9c%ac%e9%83%a8%e3%81%ae%e6%b8%85%e6%b0%b4-%e9%87%8c%e5%b8%86%e3%81%95%e3%82%93/",
+          "order": 25
+        },
+        {
+          "title": "Sho Maei, Sales Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%89%8d%e4%ba%95-%e7%bf%94%e3%81%95%e3%82%93/",
+          "order": 26
+        },
+        {
+          "title": "Riho Miyahara, Sales Department",
+          "url": "http://127.0.0.1:8081/career/interview/%e5%96%b6%e6%a5%ad%e9%83%a8%e3%81%ae%e5%ae%ae%e5%8e%9f-%e6%9d%8e%e6%ad%a9%e3%81%95%e3%82%93/",
+          "order": 27
+        },
+        {
+          "title": "Yumiko Fukui, CEO",
+          "url": "http://127.0.0.1:8081/career/interview/%e4%bb%a3%e8%a1%a8%e5%8f%96%e7%b7%a0%e5%bd%b9%e3%81%ae%e7%a6%8f%e4%ba%95-%e8%a3%95%e7%be%8e%e5%ad%90%e3%81%95%e3%82%93/",
+          "order": 28
+        }
+      ],
+      "status": 200
+    },
+    "globalnetwork": {
+      "path": "/global-network/",
+      "title": "グローバルネットワーク",
+      "totalCount": 16,
+      "posts": [
+        {
+          "title": "Musashi Paint Co., Ltd. (Japan) – Iruma Plant",
+          "url": "http://127.0.0.1:8081/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%83%9b%e3%83%bc%e3%83%ab%e3%83%87%e3%82%a3%e3%83%b3%e3%82%b0%e3%82%b9%e6%a0%aa%e5%bc%8f%e4%bc%9a%e7%a4%be/",
+          "order": 1
+        },
+        {
+          "title": "Musashi Paint Korea Co., Ltd. (South Korea)",
+          "url": "http://127.0.0.1:8081/global-network/%e9%9f%93%e5%9b%bd%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/",
+          "order": 2
+        },
+        {
+          "title": "Zhongshan Musashi Paint Co., Ltd.(Zhongshan, China)",
+          "url": "http://127.0.0.1:8081/global-network/%e4%b8%ad%e5%b1%b1%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 3
+        },
+        {
+          "title": "武蔵（東莞）新材料有限公司（中国・東莞）",
+          "url": "http://127.0.0.1:8081/global-network/%e6%ad%a6%e8%94%b5%ef%bc%88%e6%9d%b1%e8%8e%9e%ef%bc%89%e6%96%b0%e6%9d%90%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8%ef%bc%88%e4%b8%ad%e5%9b%bd%e3%83%bb%e6%9d%b1%e8%8e%9e%ef%bc%89-2/",
+          "order": 4
+        },
+        {
+          "title": "Suzhou Musashi Paint Co., Ltd. (Suzhou, China)",
+          "url": "http://127.0.0.1:8081/global-network/%e8%98%87%e5%b7%9e%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 5
+        },
+        {
+          "title": "Tianjin Musashi Paint Co., Ltd. (Tianjin, China)",
+          "url": "http://127.0.0.1:8081/global-network/%e5%a4%a9%e6%b4%a5%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 6
+        },
+        {
+          "title": "Chongqing Musashi Paint Co., Ltd. (Chongqing, China)",
+          "url": "http://127.0.0.1:8081/global-network/%e9%87%8d%e6%85%b6%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+          "order": 7
+        },
+        {
+          "title": "Vietnam Musashi Paint Co., Ltd. (Ho Chi Minh City, Vietnam)",
+          "url": "http://127.0.0.1:8081/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%83%99%e3%83%88%e3%83%8a%e3%83%a0/",
+          "order": 8
+        },
+        {
+          "title": "Vietnam Musashi Paint Co., Ltd. – Hanoi Branch (Hanoi, Vietnam)",
+          "url": "http://127.0.0.1:8081/global-network/%ef%bc%97%ef%bc%9avietnam-musashi-paint-co-ltd-%ef%bc%88%e3%83%99%e3%83%88%e3%83%8a%e3%83%a0%e3%83%bb%e3%83%8f%e3%83%8e%e3%82%a4%ef%bc%89/",
+          "order": 9
+        },
+        {
+          "title": "Musashi Paint Manufacturing (Thailand) Co., Ltd. (Thailand)",
+          "url": "http://127.0.0.1:8081/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%82%bf%e3%82%a4%e3%83%a9%e3%83%b3%e3%83%89/",
+          "order": 10
+        },
+        {
+          "title": "Musashi Paint India Private Ltd. India",
+          "url": "http://127.0.0.1:8081/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%a4%e3%83%b3%e3%83%89/",
+          "order": 11
+        },
+        {
+          "title": "Musashi Paint Corp. Sdn. Bhd. (Malaysia)",
+          "url": "http://127.0.0.1:8081/global-network/%e3%83%9e%e3%83%ac%e3%83%bc%e3%82%b7%e3%82%a2%e6%ad%a6%e8%94%b5/",
+          "order": 12
+        },
+        {
+          "title": "PT Musashi Paint Indonesia (Indonesia)",
+          "url": "http://127.0.0.1:8081/global-network/%e3%82%a4%e3%83%b3%e3%83%89%e3%83%8d%e3%82%b7%e3%82%a2%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99/",
+          "order": 13
+        },
+        {
+          "title": "HUNGARY MUSASHI PAINT KFT. (Hungary)",
+          "url": "http://127.0.0.1:8081/global-network/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%80%80%e3%83%8f%e3%83%b3%e3%82%ac%e3%83%aa%e3%83%bc/",
+          "order": 14
+        },
+        {
+          "title": "U.S. Paint Corporation (United States)",
+          "url": "http://127.0.0.1:8081/global-network/%ef%bc%91%ef%bc%93%ef%bc%9au-s-paint-corporation%ef%bc%88%e7%b1%b3%e5%9b%bd%ef%bc%89/",
+          "order": 15
+        },
+        {
+          "title": "MUSASHI PAINT INDIA PRIVATE LTD.（インド・デリー近郊）",
+          "url": "http://127.0.0.1:8081/global-network/musashi-paint-india-private-ltd-%ef%bc%88%e3%82%a4%e3%83%b3%e3%83%89%e3%83%bb%e3%83%87%e3%83%aa%e3%83%bc%e8%bf%91%e9%83%8a%ef%bc%89/",
+          "order": 16
+        }
+      ],
+      "status": 200
+    },
+    "product": {
+      "path": "/product/",
+      "title": "製品情報",
+      "totalCount": 59,
+      "posts": [
+        {
+          "title": "VITA ULTRA VIN",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3/",
+          "order": 1
+        },
+        {
+          "title": "ヴィータ ウレックス",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9/",
+          "order": 2
+        },
+        {
+          "title": "ヴィータ ウレックス",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-2/",
+          "order": 3
+        },
+        {
+          "title": "ヴィータ サンシャイン",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%82%b5%e3%83%b3%e3%82%b7%e3%83%a3%e3%82%a4%e3%83%b3/",
+          "order": 4
+        },
+        {
+          "title": "ヴィータ パナコ",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%83%91%e3%83%8a%e3%82%b3/",
+          "order": 5
+        },
+        {
+          "title": "ヴィータ パナコ PP",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%83%91%e3%83%8a%e3%82%b3-pp/",
+          "order": 6
+        },
+        {
+          "title": "ヴィータ ラバサン",
+          "url": "http://127.0.0.1:8081/product/%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%bf-%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3/",
+          "order": 7
+        },
+        {
+          "title": "アクアコ ウルトラ バイン",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3/",
+          "order": 8
+        },
+        {
+          "title": "アクアコ サンシャイン",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%82%b5%e3%83%b3%e3%82%b7%e3%83%a3%e3%82%a4%e3%83%b3/",
+          "order": 9
+        },
+        {
+          "title": "アクアコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p/",
+          "order": 10
+        },
+        {
+          "title": "アクアコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-2/",
+          "order": 11
+        },
+        {
+          "title": "アクアコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-3/",
+          "order": 12
+        },
+        {
+          "title": "アクアコ パナコ",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3/",
+          "order": 13
+        },
+        {
+          "title": "アクアコ プラエース",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%82%af%e3%82%a2%e3%82%b3-%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9/",
+          "order": 14
+        },
+        {
+          "title": "エコ ミラー 49",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%9f%e3%83%a9%e3%83%bc-49/",
+          "order": 15
+        },
+        {
+          "title": "エコ ミラー 49",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%9f%e3%83%a9%e3%83%bc-49-2/",
+          "order": 16
+        },
+        {
+          "title": "エコ ミラー 49",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%9f%e3%83%a9%e3%83%bc-49-3/",
+          "order": 17
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89/",
+          "order": 18
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-2/",
+          "order": 19
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-3/",
+          "order": 20
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-4/",
+          "order": 21
+        },
+        {
+          "title": "エコ メタルド",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89-5/",
+          "order": 22
+        },
+        {
+          "title": "エコ アーバス ウレックス",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%82%a2%e3%83%bc%e3%83%90%e3%82%b9-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9/",
+          "order": 23
+        },
+        {
+          "title": "エコ アーバス ウレックス マット",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%82%a2%e3%83%bc%e3%83%90%e3%82%b9-%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-%e3%83%9e%e3%83%83%e3%83%88/",
+          "order": 24
+        },
+        {
+          "title": "エコ ウルトラ バイン CAR IP",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-car-ip/",
+          "order": 25
+        },
+        {
+          "title": "エコ サンシャイン スーパー MH",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%82%b5%e3%83%b3%e3%82%b7%e3%83%a3%e3%82%a4%e3%83%b3-%e3%82%b9%e3%83%bc%e3%83%91%e3%83%bc-mh/",
+          "order": 26
+        },
+        {
+          "title": "エコ ネオ メッキキャンテック",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8d%e3%82%aa-%e3%83%a1%e3%83%83%e3%82%ad%e3%82%ad%e3%83%a3%e3%83%b3%e3%83%86%e3%83%83%e3%82%af/",
+          "order": 27
+        },
+        {
+          "title": "エコ ハイウッレックス SR",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%83%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-sr/",
+          "order": 28
+        },
+        {
+          "title": "エコ ハイウレックス KL",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-kl/",
+          "order": 29
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p/",
+          "order": 30
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-2/",
+          "order": 31
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-3/",
+          "order": 32
+        },
+        {
+          "title": "エコ ハイウレックス P",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-4/",
+          "order": 33
+        },
+        {
+          "title": "エコ ハイウレックス P グランデ ボヌール",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%82%b0%e3%83%a9%e3%83%b3%e3%83%87-%e3%83%9c%e3%83%8c%e3%83%bc%e3%83%ab/",
+          "order": 34
+        },
+        {
+          "title": "エコ ハイウレックス P ブライトーン",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%83%96%e3%83%a9%e3%82%a4%e3%83%88%e3%83%bc%e3%83%b3/",
+          "order": 35
+        },
+        {
+          "title": "エコ ハイウレックス P グランデ ボヌール",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%83%96%e3%83%a9%e3%83%b3%e3%83%87-%e3%83%9c%e3%83%8c%e3%83%bc%e3%83%ab/",
+          "order": 36
+        },
+        {
+          "title": "エコ ハイウレックス P レーザー エッチング",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%8f%e3%82%a4%e3%82%a6%e3%83%ac%e3%83%83%e3%82%af%e3%82%b9-p-%e3%83%ac%e3%83%bc%e3%82%b6%e3%83%bc-%e3%82%a8%e3%83%83%e3%83%81%e3%83%b3%e3%82%b0/",
+          "order": 37
+        },
+        {
+          "title": "エコ パナコ MG",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-mg/",
+          "order": 38
+        },
+        {
+          "title": "エコ パナコ MG",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-mg-2/",
+          "order": 39
+        },
+        {
+          "title": "エコ パナコ PA",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-pa/",
+          "order": 40
+        },
+        {
+          "title": "エコ パナコ PP",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-pp/",
+          "order": 41
+        },
+        {
+          "title": "エコ パナコ PP",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%91%e3%83%8a%e3%82%b3-pp-2/",
+          "order": 42
+        },
+        {
+          "title": "エコ プラエース",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9/",
+          "order": 43
+        },
+        {
+          "title": "エコ プラエース PP",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a8%e3%82%b3-%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9-pp/",
+          "order": 44
+        },
+        {
+          "title": "ウルトラ バイン",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3/",
+          "order": 45
+        },
+        {
+          "title": "ウルトラ バイン",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-2/",
+          "order": 46
+        },
+        {
+          "title": "ウルトラ バイン BV",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-bv/",
+          "order": 47
+        },
+        {
+          "title": "ウルトラ バイン BV マット",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a6%e3%83%ab%e3%83%88%e3%83%a9-%e3%83%90%e3%82%a4%e3%83%b3-bv-%e3%83%9e%e3%83%83%e3%83%88/",
+          "order": 48
+        },
+        {
+          "title": "ネオラバサン",
+          "url": "http://127.0.0.1:8081/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3/",
+          "order": 49
+        },
+        {
+          "title": "ネオピーチスキン",
+          "url": "http://127.0.0.1:8081/product/%e3%83%8d%e3%82%aa%e3%83%94%e3%83%bc%e3%83%81%e3%82%b9%e3%82%ad%e3%83%b3/",
+          "order": 50
+        },
+        {
+          "title": "ネオラバサン",
+          "url": "http://127.0.0.1:8081/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3-2/",
+          "order": 51
+        },
+        {
+          "title": "ネオラバサン",
+          "url": "http://127.0.0.1:8081/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3-3/",
+          "order": 52
+        },
+        {
+          "title": "ネオラバサン ソフト",
+          "url": "http://127.0.0.1:8081/product/%e3%83%8d%e3%82%aa%e3%83%a9%e3%83%90%e3%82%b5%e3%83%b3-%e3%82%bd%e3%83%95%e3%83%88/",
+          "order": 53
+        },
+        {
+          "title": "アートーン",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%83%bc%e3%83%88%e3%83%bc%e3%83%b3/",
+          "order": 54
+        },
+        {
+          "title": "アーマトップ",
+          "url": "http://127.0.0.1:8081/product/%e3%82%a2%e3%83%bc%e3%83%9e%e3%83%88%e3%83%83%e3%83%97/",
+          "order": 55
+        },
+        {
+          "title": "パナコ PA",
+          "url": "http://127.0.0.1:8081/product/%e3%83%91%e3%83%8a%e3%82%b3-pa/",
+          "order": 56
+        },
+        {
+          "title": "プラエース",
+          "url": "http://127.0.0.1:8081/product/%e3%83%97%e3%83%a9%e3%82%a8%e3%83%bc%e3%82%b9/",
+          "order": 57
+        },
+        {
+          "title": "メタルド",
+          "url": "http://127.0.0.1:8081/product/%e3%83%a1%e3%82%bf%e3%83%ab%e3%83%89/",
+          "order": 58
+        },
+        {
+          "title": "ピューロクリア",
+          "url": "http://127.0.0.1:8081/product/%e3%83%97%e3%83%ad%e3%82%af%e3%83%aa%e3%82%a2/",
+          "order": 59
+        }
+      ],
+      "status": 200
+    },
+    "news": {
+      "path": "/news/",
+      "title": "ニュース",
+      "totalCount": 7,
+      "posts": [
+        {
+          "title": "Expo 2025 Special Page Launched",
+          "url": "http://127.0.0.1:8081/news/%e5%a4%a7%e9%98%aa%e4%b8%87%e5%8d%9a%e7%89%b9%e8%a8%ad%e3%83%9a%e3%83%bc%e3%82%b8/",
+          "order": 1
+        },
+        {
+          "title": "Second issue of our CSR report “Musashi Paint Report 2025”",
+          "url": "http://127.0.0.1:8081/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%b0%e3%83%ab%e3%83%bc%e3%83%97%e3%81%ae%e7%ac%ac2%e5%9b%9ecsr%e5%a0%b1%e5%91%8a%e6%9b%b8%ef%bc%88musashi-paint-report-2025%ef%bc%89%e3%82%92%e7%99%ba%e8%a1%8c/",
+          "order": 2
+        },
+        {
+          "title": "Participation in Expo 2025 as a MATSURI team member, showcasing PAINTOMO",
+          "url": "http://127.0.0.1:8081/news/2025%e5%b9%b4%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%e3%81%ab%e5%8f%82%e5%8a%a0-matsuri%e3%81%ae%e4%b8%80%e5%93%a1%e3%81%a8%e3%81%97%e3%81%a6paintomo%e3%82%92%e5%85%ac%e9%96%8b/",
+          "order": 3
+        },
+        {
+          "title": "[AWARDS] Musashi Paint head office building “VERTICAL RAINBOW in TOKYO” selected as “Top 10 Commercial Posts of 2024.”",
+          "url": "http://127.0.0.1:8081/news/%e3%80%90%e5%8f%97%e8%b3%9e%e3%80%91w1-%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%80%80%e3%80%8c%e6%9d%b1%e4%ba%ac%e3%83%90%e3%83%bc%e3%83%86%e3%82%a3%e3%82%ab/",
+          "order": 4
+        },
+        {
+          "title": "[AWARDS] Musashi Paint selected for “WORLD CLEANUP DAY 2024 Global Network Award.”",
+          "url": "http://127.0.0.1:8081/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%af%e3%80%8cworld-cleanup-day-2024-%e3%81%ae%e4%bc%81%e6%a5%ad%e9%83%a8%e9%96%80%e3%81%a7%e3%82%b0%e3%83%ad%e3%83%bc%e3%83%90%e3%83%ab%e3%83%8d%e3%83%83/",
+          "order": 5
+        },
+        {
+          "title": "[AWARDS] Musashi Paint head office building awarded with “2024 Asia Architecture Design Awards.”",
+          "url": "http://127.0.0.1:8081/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%81%ae%e6%9c%ac%e7%a4%be%e3%83%93%e3%83%ab%e3%81%af%e3%80%812-0-2-4%e5%b9%b4%e3%81%aeasia-architecture-design-awards%e3%81%a7%e5%8f%97%e8%b3%9e%e3%81%97%e3%81%be/",
+          "order": 6
+        },
+        {
+          "title": "武蔵塗料グループ初のCSR報告書（Musashi Paint Report 2024）を発行しました。",
+          "url": "http://127.0.0.1:8081/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%b0%e3%83%ab%e3%83%bc%e3%83%97%e5%88%9d%e3%81%aecsr%e5%a0%b1%e5%91%8a%e6%9b%b8%ef%bc%88musashi-paint-report-2024%ef%bc%89%e3%82%92%e7%99%ba%e8%a1%8c%e3%81%97/",
+          "order": 7
+        }
+      ],
+      "status": 200
+    },
+    "media": {
+      "path": "/media-page/",
+      "title": "Pick up",
+      "totalCount": 3,
+      "posts": [
+        {
+          "title": "PAINTOMO Showcased at the Japan Pavilion of Expo 2025 Osaka, Kansai",
+          "url": "http://127.0.0.1:8081/media-page/2025%e5%b9%b4-%e6%97%a5%e6%9c%ac%e5%9b%bd%e9%9a%9b%e5%8d%9a%e8%a6%a7%e4%bc%9a%ef%bc%88%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%ef%bc%89%e3%80%8d%e3%81%ae%e6%97%a5%e6%9c%ac/",
+          "order": 1
+        },
+        {
+          "title": "President Fukui Interviewed by Lenovo",
+          "url": "http://127.0.0.1:8081/media-page/%e7%a6%8f%e4%ba%95%e7%a4%be%e9%95%b7%e3%80%81%e3%83%ac%e3%83%8e%e3%83%9c%ef%bc%88lenovo%ef%bc%89%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc%e3%82%92%e5%8f%97%e3%81%91%e3%81%be/",
+          "order": 2
+        },
+        {
+          "title": "Musashi Paint Featured on TV Program “Gaia no Yoake”",
+          "url": "http://127.0.0.1:8081/media-page/%e3%80%8c%e3%82%ab%e3%83%a9%e3%83%bc%e3%82%a6%e3%82%a9%e3%83%bc%e3%82%ba%ef%bd%9e%e8%8f%af%e9%ba%97%e3%81%aa%e3%82%8b%e8%89%b2%e3%81%ae%e4%bb%95%e6%8e%9b%e3%81%91%e4%ba%ba%e3%81%9f%e3%81%a1%ef%bd%9e/",
+          "order": 3
+        }
+      ],
+      "status": 200
+    },
+    "featured": {
+      "path": "/featured/",
+      "title": "注目製品",
+      "totalCount": 0,
+      "posts": [],
+      "status": 0
+    },
+    "voice": {
+      "path": "/voice/",
+      "title": "お客様の声",
+      "totalCount": 6,
+      "posts": [
+        {
+          "title": "Our Most Important Partner in Interior Decorative Color Development",
+          "url": "http://127.0.0.1:8081/voice/%e5%86%85%e8%a3%85%e5%8a%a0%e9%a3%be%e8%89%b2%e9%96%8b%e7%99%ba%e3%81%ae%e6%9c%80%e9%87%8d%e8%a6%81%e3%83%91%e3%83%bc%e3%83%88%e3%83%8a%e3%83%bc/",
+          "order": 1
+        },
+        {
+          "title": "A True Professional",
+          "url": "http://127.0.0.1:8081/voice/%e6%9c%ac%e5%bd%93%e3%81%ae%e3%83%97%e3%83%ad%e3%83%95%e3%82%a7%e3%83%83%e3%82%b7%e3%83%a7%e3%83%8a%e3%83%ab/",
+          "order": 2
+        },
+        {
+          "title": "A Distinctive Ethos That Nurtures Rich Human Character",
+          "url": "http://127.0.0.1:8081/voice/%e7%8b%ac%e8%87%aa%e3%81%ae%e6%b0%97%e9%a2%a8%e3%81%8c%e8%82%b2%e3%82%80%e8%b1%8a%e3%81%8b%e3%81%aa%e4%ba%ba%e9%96%93%e6%80%a7/",
+          "order": 3
+        },
+        {
+          "title": "A Partner Who Shares Sensibilities",
+          "url": "http://127.0.0.1:8081/voice/%e6%84%9f%e6%80%a7%e3%82%92%e5%88%86%e3%81%8b%e3%82%8a%e5%90%88%e3%81%88%e3%82%8b%e5%ad%98%e5%9c%a8/",
+          "order": 4
+        },
+        {
+          "title": "Taking Inspiration from a Constantly Challenging Attitude",
+          "url": "http://127.0.0.1:8081/voice/%e5%b8%b8%e3%81%ab%e6%8c%91%e6%88%a6%e3%81%99%e3%82%8b%e5%a7%bf%e5%8b%a2%e3%82%92%e6%89%8b%e6%9c%ac%e3%81%ab/",
+          "order": 5
+        },
+        {
+          "title": "A Sincere Corporate Commitment to Manufacturing",
+          "url": "http://127.0.0.1:8081/voice/%e3%82%82%e3%81%ae%e3%81%a5%e3%81%8f%e3%82%8a%e3%81%ab%e3%80%81%e7%9c%9f%e6%91%af%e3%81%aa%e4%bc%81%e6%a5%ad%e5%a7%bf%e5%8b%a2/",
+          "order": 6
+        }
+      ],
+      "status": 200
+    },
+    "faq": {
+      "path": "/faq/",
+      "title": "よくある質問",
+      "totalCount": 0,
+      "posts": [],
+      "status": 200
+    }
+  },
+  "topPage": {
+    "pickup": [
+      {
+        "title": "Event",
+        "url": "http://127.0.0.1:8081/media-page/2025%e5%b9%b4-%e6%97%a5%e6%9c%ac%e5%9b%bd%e9%9a%9b%e5%8d%9a%e8%a6%a7%e4%bc%9a%ef%bc%88%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%ef%bc%89%e3%80%8d%e3%81%ae%e6%97%a5%e6%9c%ac/"
+      },
+      {
+        "title": "Movie",
+        "url": "http://127.0.0.1:8081/media-page/%e7%a6%8f%e4%ba%95%e7%a4%be%e9%95%b7%e3%80%81%e3%83%ac%e3%83%8e%e3%83%9c%ef%bc%88lenovo%ef%bc%89%e3%81%ae%e3%82%a4%e3%83%b3%e3%82%bf%e3%83%93%e3%83%a5%e3%83%bc%e3%82%92%e5%8f%97%e3%81%91%e3%81%be/"
+      },
+      {
+        "title": "Television",
+        "url": "http://127.0.0.1:8081/media-page/%e3%80%8c%e3%82%ab%e3%83%a9%e3%83%bc%e3%82%a6%e3%82%a9%e3%83%bc%e3%82%ba%ef%bd%9e%e8%8f%af%e9%ba%97%e3%81%aa%e3%82%8b%e8%89%b2%e3%81%ae%e4%bb%95%e6%8e%9b%e3%81%91%e4%ba%ba%e3%81%9f%e3%81%a1%ef%bd%9e/"
+      },
+      {
+        "title": "View All Featured Content",
+        "url": "http://127.0.0.1:8081/media-page/"
+      }
+    ],
+    "news": [
+      {
+        "title": "2025.09.01",
+        "url": "http://127.0.0.1:8081/news/%e5%a4%a7%e9%98%aa%e4%b8%87%e5%8d%9a%e7%89%b9%e8%a8%ad%e3%83%9a%e3%83%bc%e3%82%b8/"
+      },
+      {
+        "title": "2025.06.30",
+        "url": "http://127.0.0.1:8081/news/%e6%ad%a6%e8%94%b5%e5%a1%97%e6%96%99%e3%82%b0%e3%83%ab%e3%83%bc%e3%83%97%e3%81%ae%e7%ac%ac2%e5%9b%9ecsr%e5%a0%b1%e5%91%8a%e6%9b%b8%ef%bc%88musashi-paint-report-2025%ef%bc%89%e3%82%92%e7%99%ba%e8%a1%8c/"
+      },
+      {
+        "title": "2025.05.15",
+        "url": "http://127.0.0.1:8081/news/2025%e5%b9%b4%e5%a4%a7%e9%98%aa%e3%83%bb%e9%96%a2%e8%a5%bf%e4%b8%87%e5%8d%9a%e3%81%ab%e5%8f%82%e5%8a%a0-matsuri%e3%81%ae%e4%b8%80%e5%93%a1%e3%81%a8%e3%81%97%e3%81%a6paintomo%e3%82%92%e5%85%ac%e9%96%8b/"
+      },
+      {
+        "title": "View All News",
+        "url": "http://127.0.0.1:8081/news/"
+      }
+    ]
+  },
+  "navigation": {
+    "header": [
+      {
+        "title": "Home",
+        "url": "http://127.0.0.1:8081/"
+      },
+      {
+        "title": "Solutions",
+        "url": "http://127.0.0.1:8081/product/"
+      },
+      {
+        "title": "Overview",
+        "url": "http://127.0.0.1:8081/about-us/"
+      },
+      {
+        "title": "Careers",
+        "url": "http://127.0.0.1:8081/career/"
+      },
+      {
+        "title": "Contact",
+        "url": "http://127.0.0.1:8081/contact/"
+      },
+      {
+        "title": "EN",
+        "url": "https://musashipaint.com/en/"
+      },
+      {
+        "title": "ZH",
+        "url": "https://www.musashipaintchina.com/"
+      },
+      {
+        "title": "自動車内装",
+        "url": "http://127.0.0.1:8081/product/application/%e8%87%aa%e5%8b%95%e8%bb%8a%e5%86%85%e8%a3%85/"
+      },
+      {
+        "title": "自動車外装",
+        "url": "http://127.0.0.1:8081/product/application/%e8%87%aa%e5%8b%95%e8%bb%8a%e5%a4%96%e8%a3%85/"
+      },
+      {
+        "title": "家電",
+        "url": "http://127.0.0.1:8081/product/application/%e5%ae%b6%e9%9b%bb/"
+      },
+      {
+        "title": "ゲーム機",
+        "url": "http://127.0.0.1:8081/product/application/%e3%82%b2%e3%83%bc%e3%83%a0%e6%a9%9f/"
+      },
+      {
+        "title": "カメラ / 光学機器",
+        "url": "http://127.0.0.1:8081/product/application/%e3%82%ab%e3%83%a1%e3%83%a9-%e5%85%89%e5%ad%a6%e6%a9%9f%e5%99%a8/"
+      },
+      {
+        "title": "モバイル機器",
+        "url": "http://127.0.0.1:8081/product/application/%e3%83%a2%e3%83%90%e3%82%a4%e3%83%ab%e6%a9%9f%e5%99%a8/"
+      },
+      {
+        "title": "パソコン",
+        "url": "http://127.0.0.1:8081/product/application/%e3%83%91%e3%82%bd%e3%82%b3%e3%83%b3/"
+      },
+      {
+        "title": "その他",
+        "url": "http://127.0.0.1:8081/product/application/%e3%81%9d%e3%81%ae%e4%bb%96/"
+      },
+      {
+        "title": "ABS",
+        "url": "http://127.0.0.1:8081/product/material/abs/"
+      },
+      {
+        "title": "PC",
+        "url": "http://127.0.0.1:8081/product/material/pc/"
+      },
+      {
+        "title": "PC / ABS",
+        "url": "http://127.0.0.1:8081/product/material/pc-abs/"
+      },
+      {
+        "title": "PS",
+        "url": "http://127.0.0.1:8081/product/material/ps/"
+      },
+      {
+        "title": "PMMA",
+        "url": "http://127.0.0.1:8081/product/material/pmma/"
+      },
+      {
+        "title": "PP",
+        "url": "http://127.0.0.1:8081/product/material/pp/"
+      },
+      {
+        "title": "ナイロン",
+        "url": "http://127.0.0.1:8081/product/material/%e3%83%8a%e3%82%a4%e3%83%ad%e3%83%b3/"
+      },
+      {
+        "title": "ステンレス",
+        "url": "http://127.0.0.1:8081/product/material/%e3%82%b9%e3%83%86%e3%83%b3%e3%83%ac%e3%82%b9/"
+      },
+      {
+        "title": "アルミニウム",
+        "url": "http://127.0.0.1:8081/product/material/%e3%82%a2%e3%83%ab%e3%83%9f%e3%83%8b%e3%82%a6%e3%83%a0/"
+      },
+      {
+        "title": "マグネシウム合金",
+        "url": "http://127.0.0.1:8081/product/material/%e3%83%9e%e3%82%b0%e3%83%8d%e3%82%b7%e3%82%a6%e3%83%a0%e5%90%88%e9%87%91/"
+      },
+      {
+        "title": "めっき",
+        "url": "http://127.0.0.1:8081/product/material/%e3%82%81%e3%81%a3%e3%81%8d/"
+      },
+      {
+        "title": "その他 金属",
+        "url": "http://127.0.0.1:8081/product/material/%e3%81%9d%e3%81%ae%e4%bb%96%e9%87%91%e5%b1%9e/"
+      },
+      {
+        "title": "高光沢",
+        "url": "http://127.0.0.1:8081/product/design/%e9%ab%98%e5%85%89%e6%b2%a2/"
+      },
+      {
+        "title": "高輝度",
+        "url": "http://127.0.0.1:8081/product/design/%e9%ab%98%e8%bc%9d%e5%ba%a6/"
+      },
+      {
+        "title": "金属調 / メタリック",
+        "url": "http://127.0.0.1:8081/product/design/%e9%87%91%e5%b1%9e%e8%aa%bf-%e3%83%a1%e3%82%bf%e3%83%aa%e3%83%83%e3%82%af/"
+      },
+      {
+        "title": "メッキ調",
+        "url": "http://127.0.0.1:8081/product/design/%e3%83%a1%e3%83%83%e3%82%ad%e8%aa%bf/"
+      },
+      {
+        "title": "ミラー調 / メッキ代替",
+        "url": "http://127.0.0.1:8081/product/design/%e3%83%9f%e3%83%a9%e3%83%bc%e8%aa%bf-%e3%83%a1%e3%83%83%e3%82%ad%e4%bb%a3%e6%9b%bf/"
+      },
+      {
+        "title": "ソフトフィール（触感）",
+        "url": "http://127.0.0.1:8081/product/design/%e3%82%bd%e3%83%95%e3%83%88%e3%83%95%e3%82%a3%e3%83%bc%e3%83%ab%ef%bc%88%e8%a7%a6%e6%84%9f%ef%bc%89/"
+      },
+      {
+        "title": "艶消し",
+        "url": "http://127.0.0.1:8081/product/design/%e8%89%b6%e6%b6%88%e3%81%97/"
+      },
+      {
+        "title": "模様",
+        "url": "http://127.0.0.1:8081/product/design/%e6%a8%a1%e6%a7%98/"
+      },
+      {
+        "title": "耐傷つき性",
+        "url": "http://127.0.0.1:8081/product/function/%e8%80%90%e5%82%b7%e3%81%a4%e3%81%8d%e6%80%a7/"
+      },
+      {
+        "title": "耐汚染性",
+        "url": "http://127.0.0.1:8081/product/function/%e8%80%90%e6%b1%9a%e6%9f%93%e6%80%a7/"
+      },
+      {
+        "title": "無反射",
+        "url": "http://127.0.0.1:8081/product/function/%e7%84%a1%e5%8f%8d%e5%b0%84/"
+      },
+      {
+        "title": "抗菌 / 抗ウィルス",
+        "url": "http://127.0.0.1:8081/product/function/%e6%8a%97%e8%8f%8c%e3%83%bb%e6%8a%97%e3%82%a6%e3%82%a3%e3%83%ab%e3%82%b9/"
+      },
+      {
+        "title": "軟密着素材対応",
+        "url": "http://127.0.0.1:8081/product/function/%e8%bb%9f%e5%af%86%e7%9d%80%e7%b4%a0%e6%9d%90%e5%af%be%e5%bf%9c/"
+      },
+      {
+        "title": "耐加水分解性",
+        "url": "http://127.0.0.1:8081/product/function/%e8%80%90%e5%8a%a0%e6%b0%b4%e5%88%86%e8%a7%a3%e6%80%a7/"
+      },
+      {
+        "title": "電波透過性",
+        "url": "http://127.0.0.1:8081/product/function/%e9%9b%bb%e6%b3%a2%e9%80%8f%e9%81%8e%e6%80%a7/"
+      },
+      {
+        "title": "カーボンニュートラル / バイオ",
+        "url": "http://127.0.0.1:8081/product/environment/%e3%82%ab%e3%83%bc%e3%83%9c%e3%83%b3%e3%83%8b%e3%83%a5%e3%83%bc%e3%83%88%e3%83%a9%e3%83%ab-%e3%83%90%e3%82%a4%e3%82%aa/"
+      },
+      {
+        "title": "省エネ / 低温硬化",
+        "url": "http://127.0.0.1:8081/product/environment/%e7%9c%81%e3%82%a8%e3%83%8d-%e4%bd%8e%e6%b8%a9%e7%a1%ac%e5%8c%96/"
+      },
+      {
+        "title": "省エネ / UV硬化",
+        "url": "http://127.0.0.1:8081/product/environment/%e7%9c%81%e3%82%a8%e3%83%8d-uv%e7%a1%ac%e5%8c%96/"
+      },
+      {
+        "title": "低VOC / 水系",
+        "url": "http://127.0.0.1:8081/product/environment/%e4%bd%8evoc-%e6%b0%b4%e7%b3%bb/"
+      },
+      {
+        "title": "低VOC / 無溶剤 / ハイソリッド",
+        "url": "http://127.0.0.1:8081/product/environment/%e4%bd%8evoc-%e7%84%a1%e6%ba%b6%e5%89%a4%e3%83%bb%e3%83%8f%e3%82%a4%e3%82%bd%e3%83%aa%e3%83%83%e3%83%89/"
+      },
+      {
+        "title": "有害物質低減 / BTXフリー / BPAフリー",
+        "url": "http://127.0.0.1:8081/product/environment/%e6%9c%89%e5%ae%b3%e7%89%a9%e8%b3%aa%e4%bd%8e%e6%b8%9b-btx%e3%83%95%e3%83%aa%e3%83%bc%e3%83%bb-bpa%e3%83%95%e3%83%aa%e3%83%bc/"
+      },
+      {
+        "title": "有害物質低減 / メッキ代替塗装",
+        "url": "http://127.0.0.1:8081/product/environment/%e6%9c%89%e5%ae%b3%e7%89%a9%e8%b3%aa%e4%bd%8e%e6%b8%9b-%e3%83%a1%e3%83%83%e3%82%ad%e4%bb%a3%e6%9b%bf%e5%a1%97%e8%a3%85/"
+      },
+      {
+        "title": "低VOC / 型内塗装",
+        "url": "http://127.0.0.1:8081/product/environment/%e4%bd%8evoc-%e5%9e%8b%e5%86%85%e5%a1%97%e8%a3%85/"
+      },
+      {
+        "title": "Featured Solutions",
+        "url": "http://127.0.0.1:8081/featured/"
+      },
+      {
+        "title": "Applications",
+        "url": "http://127.0.0.1:8081/applications/"
+      },
+      {
+        "title": "Company Profile",
+        "url": "http://127.0.0.1:8081/company/"
+      },
+      {
+        "title": "1958– Foundation",
+        "url": "http://127.0.0.1:8081/history-founding/"
+      },
+      {
+        "title": "1980– Expansion into Plastic Coatings",
+        "url": "http://127.0.0.1:8081/history-innovation/"
+      },
+      {
+        "title": "2000– Global Expansion",
+        "url": "http://127.0.0.1:8081/history-global/"
+      },
+      {
+        "title": "R&D Excellence",
+        "url": "http://127.0.0.1:8081/technology/"
+      },
+      {
+        "title": "Global Network",
+        "url": "http://127.0.0.1:8081/global-network/"
+      },
+      {
+        "title": "Manufacturing Footprint",
+        "url": "http://127.0.0.1:8081/global-network/#overseas-bases"
+      },
+      {
+        "title": "Sustainable Business",
+        "url": "http://127.0.0.1:8081/sustainable-business/"
+      },
+      {
+        "title": "Custom Engineering",
+        "url": "http://127.0.0.1:8081/customization/"
+      },
+      {
+        "title": "Sustainability",
+        "url": "http://127.0.0.1:8081/sustainability/"
+      },
+      {
+        "title": "Environment",
+        "url": "http://127.0.0.1:8081/sustainability/environment/"
+      },
+      {
+        "title": "Social",
+        "url": "http://127.0.0.1:8081/sustainability/society/"
+      },
+      {
+        "title": "Governance",
+        "url": "http://127.0.0.1:8081/sustainability/governance/"
+      },
+      {
+        "title": "Responsible Supply Chain",
+        "url": "http://127.0.0.1:8081/sustainability/scm/"
+      },
+      {
+        "title": "Resources",
+        "url": "http://127.0.0.1:8081/sustainability/value-creation-process/"
+      },
+      {
+        "title": "Customer Stories",
+        "url": "http://127.0.0.1:8081/voice/"
+      },
+      {
+        "title": "Featured",
+        "url": "http://127.0.0.1:8081/media-page/"
+      },
+      {
+        "title": "News",
+        "url": "http://127.0.0.1:8081/news/"
+      },
+      {
+        "title": "Employee Stories",
+        "url": "http://127.0.0.1:8081/career/interview/"
+      },
+      {
+        "title": "FAQs",
+        "url": "http://127.0.0.1:8081/career-faq/"
+      },
+      {
+        "title": "FAQs",
+        "url": "http://127.0.0.1:8081/faq/"
+      },
+      {
+        "title": "Linkedin",
+        "url": "https://www.linkedin.com/company/musashi-paint-holdings/"
+      },
+      {
+        "title": "Instagram",
+        "url": "https://www.instagram.com/musashi_paint_official/"
+      },
+      {
+        "title": "Facebook",
+        "url": "https://www.facebook.com/musashipaintholdings/"
+      },
+      {
+        "title": "Request Resources",
+        "url": "http://127.0.0.1:8081/download/"
+      }
+    ],
+    "footer": [
+      {
+        "title": "Home",
+        "url": "http://127.0.0.1:8081/"
+      },
+      {
+        "title": "Solutions",
+        "url": "http://127.0.0.1:8081/product/"
+      },
+      {
+        "title": "By Application",
+        "url": "http://127.0.0.1:8081/product/application/"
+      },
+      {
+        "title": "By Material",
+        "url": "http://127.0.0.1:8081/product/material/"
+      },
+      {
+        "title": "By Design",
+        "url": "http://127.0.0.1:8081/product/design/"
+      },
+      {
+        "title": "By Function",
+        "url": "http://127.0.0.1:8081/product/function/"
+      },
+      {
+        "title": "By Environmental Keyword",
+        "url": "http://127.0.0.1:8081/product/environment/"
+      },
+      {
+        "title": "Featured Solutions",
+        "url": "http://127.0.0.1:8081/featured/"
+      },
+      {
+        "title": "Applications",
+        "url": "http://127.0.0.1:8081/applications/"
+      },
+      {
+        "title": "About Musashi Paint Group",
+        "url": "http://127.0.0.1:8081/about-us/"
+      },
+      {
+        "title": "Company Profile",
+        "url": "http://127.0.0.1:8081/company/"
+      },
+      {
+        "title": "Founding & Foundation 1958-",
+        "url": "http://127.0.0.1:8081/history-founding/"
+      },
+      {
+        "title": "Expansion into Plastic Coatings 1980-",
+        "url": "http://127.0.0.1:8081/history-innovation/"
+      },
+      {
+        "title": "Global Expansion 2000-",
+        "url": "http://127.0.0.1:8081/history-global/"
+      },
+      {
+        "title": "Advanced R&D Capabilities",
+        "url": "http://127.0.0.1:8081/technology/"
+      },
+      {
+        "title": "Global Network",
+        "url": "http://127.0.0.1:8081/global-network/"
+      },
+      {
+        "title": "Sustainable Business Development",
+        "url": "http://127.0.0.1:8081/sustainable-business/"
+      },
+      {
+        "title": "Customer-Focused Customization",
+        "url": "http://127.0.0.1:8081/customization/"
+      },
+      {
+        "title": "Sustainability",
+        "url": "http://127.0.0.1:8081/sustainability/"
+      },
+      {
+        "title": "Customer Stories",
+        "url": "http://127.0.0.1:8081/voice/"
+      },
+      {
+        "title": "FAQs",
+        "url": "http://127.0.0.1:8081/faq/"
+      },
+      {
+        "title": "Featured",
+        "url": "http://127.0.0.1:8081/media-page/"
+      },
+      {
+        "title": "News",
+        "url": "http://127.0.0.1:8081/news/"
+      },
+      {
+        "title": "Careers",
+        "url": "http://127.0.0.1:8081/career/"
+      },
+      {
+        "title": "Employee Stories",
+        "url": "http://127.0.0.1:8081/career/interview/"
+      },
+      {
+        "title": "Career FAQs",
+        "url": "http://127.0.0.1:8081/career-faq/"
+      },
+      {
+        "title": "Contact",
+        "url": "http://127.0.0.1:8081/contact/"
+      },
+      {
+        "title": "Request Resources",
+        "url": "http://127.0.0.1:8081/download/"
+      },
+      {
+        "title": "",
+        "url": "https://www.linkedin.com/company/musashi-paint-holdings/"
+      },
+      {
+        "title": "",
+        "url": "https://www.instagram.com/musashi_paint_official/"
+      },
+      {
+        "title": "",
+        "url": "https://www.facebook.com/musashipaintholdings/"
+      },
+      {
+        "title": "Privacy Policy",
+        "url": "http://127.0.0.1:8081/privacy-policy/"
+      },
+      {
+        "title": "Terms of Use",
+        "url": "http://127.0.0.1:8081/terms/"
+      }
+    ]
+  },
+  "staticPages": [
+    {
+      "path": "/",
+      "title": "トップページ",
+      "status": 200
+    },
+    {
+      "path": "/about-us/",
+      "title": "私たちについて",
+      "status": 200
+    },
+    {
+      "path": "/company/",
+      "title": "会社概要",
+      "status": 200
+    },
+    {
+      "path": "/history/",
+      "title": "ヒストリー",
+      "status": 200
+    },
+    {
+      "path": "/sustainability/",
+      "title": "サステナビリティ",
+      "status": 200
+    },
+    {
+      "path": "/technology/",
+      "title": "テクノロジー",
+      "status": 200
+    },
+    {
+      "path": "/customization/",
+      "title": "カスタマイズ",
+      "status": 200
+    },
+    {
+      "path": "/contact/",
+      "title": "お問い合わせ",
+      "status": 200
+    },
+    {
+      "path": "/download/",
+      "title": "カタログダウンロード",
+      "status": 200
+    },
+    {
+      "path": "/privacy-policy/",
+      "title": "プライバシーポリシー",
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "title": "利用規約",
+      "status": 200
+    }
+  ],
+  "productCategories": [
+    {
+      "path": "/product/application/",
+      "title": "用途でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/material/",
+      "title": "基材でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/design/",
+      "title": "意匠性でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/function/",
+      "title": "機能でえらぶ",
+      "status": 200,
+      "itemCount": 12
+    },
+    {
+      "path": "/product/environment/",
+      "title": "環境キーワードでえらぶ",
+      "status": 200,
+      "itemCount": 12
+    }
+  ],
+  "seo": [
+    {
+      "path": "/",
+      "pageTitle": "トップページ",
+      "title": "武蔵塗料 -",
+      "description": "Musashi Paint develops coating solutions for plastics and other materials with global production, technical support, and customization capabilities.",
+      "ogTitle": "武蔵塗料",
+      "ogImage": null
+    },
+    {
+      "path": "/product/",
+      "pageTitle": "製品情報",
+      "title": "製品情報 - 武蔵塗料",
+      "description": "Learn more about 製品情報 - 武蔵塗料 from Musashi Paint.",
+      "ogTitle": "製品情報 - 武蔵塗料",
+      "ogImage": "http://127.0.0.1:8081/wp-content/uploads/2026/03/5171508089521dcb9bddb83912966ba9-1024x768.png"
+    },
+    {
+      "path": "/career/",
+      "pageTitle": "採用情報",
+      "title": "Recruiting Information - 武蔵塗料",
+      "description": "The Musashi Paint Group wants to shape the future together with you. Our commitment to people remains unchanged. “Musashi Paint was founded in 1958 and has built a history spanning more than half a century. Over the years, our products and markets have evolved, and our operations have expanded globally. At the same time, there are values that have remained unchanged. One of these is our beli […]",
+      "ogTitle": "Recruiting Information - 武蔵塗料",
+      "ogImage": "http://127.0.0.1:8081/wp-content/uploads/2025/11/zcqSMtb.jpg"
+    },
+    {
+      "path": "/contact/",
+      "pageTitle": "お問い合わせ",
+      "title": "- 武蔵塗料",
+      "description": "Contact Musashi Paint for product inquiries, technical consultations, and resource requests.",
+      "ogTitle": "- 武蔵塗料",
+      "ogImage": null
+    }
+  ],
+  "externalLinks": [
+    {
+      "url": "https://musashipaint.com/en/",
+      "title": "英語サイト"
+    },
+    {
+      "url": "https://www.musashipaintchina.com/",
+      "title": "中国語サイト"
+    },
+    {
+      "url": "https://www.linkedin.com/company/musashi-paint-holdings/",
+      "title": "LinkedIn"
+    },
+    {
+      "url": "https://www.instagram.com/musashi_paint_official/",
+      "title": "Instagram"
+    },
+    {
+      "url": "https://www.facebook.com/musashipaintholdings/",
+      "title": "Facebook"
+    }
+  ]
+}
