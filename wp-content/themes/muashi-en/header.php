@@ -1,5 +1,5 @@
 <!doctype html>
-<html <?php language_attributes(); ?>>
+<html lang="en">
 <head>
     <meta charset="<?php bloginfo('charset'); ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -119,8 +119,8 @@
                         </li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
-                                <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">EN</a>
-                                <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">ZH</a>
+                                <a href="<?= URL_LANG_JP ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">JP</a>
+                                <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
                             </span>
                         </li>
                     </ul>
@@ -181,8 +181,8 @@
                         </li>
                         <li class="header__nav-item header__nav-item--lang">
                             <span class="header__nav-link">
-                                <a href="<?= URL_LANG_EN ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">EN</a>
-                                <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">ZH</a>
+                                <a href="<?= URL_LANG_JP ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">JP</a>
+                                <a href="<?= URL_LANG_ZH ?>" class="header__nav-link--lang" target="_blank" rel="noopener noreferrer">中文</a>
                             </span>
                         </li>
                     </ul>
