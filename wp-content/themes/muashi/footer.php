@@ -491,7 +491,7 @@
                             </svg>
                         </icon>
                         <span class="footer__nav-pc-other-link-text">
-                            資料請求
+                            カタログ・資料請求
                         </span>
                     </a>
                 </div>
