@@ -56,7 +56,7 @@
                                 <ul class="footer__accordion-list">
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_PRODUCT ?>application/" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Application', 'muashi' ); ?></span>
+                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Industry', 'muashi' ); ?></span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -66,7 +66,7 @@
                                     </li>
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_PRODUCT ?>material/" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Material', 'muashi' ); ?></span>
+                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Substrate', 'muashi' ); ?></span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -76,7 +76,7 @@
                                     </li>
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_PRODUCT ?>design/" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Design', 'muashi' ); ?></span>
+                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Design / Finish', 'muashi' ); ?></span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -86,7 +86,7 @@
                                     </li>
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_PRODUCT ?>function/" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Function', 'muashi' ); ?></span>
+                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Performance', 'muashi' ); ?></span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -96,7 +96,7 @@
                                     </li>
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_PRODUCT ?>environment/" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Environmental Keyword', 'muashi' ); ?></span>
+                                            <span class="footer__accordion-link-text"><?php esc_html_e( 'By Sustainability', 'muashi' ); ?></span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -135,7 +135,7 @@
                         <!-- 武蔵塗料グループについて（アコーディオン） -->
                         <li class="footer__sub-item">
                             <button class="footer__accordion js-accordion-button" aria-expanded="false" aria-controls="footer-about-group">
-                                <span class="footer__accordion-text">About Musashi Paint Group</span>
+                                <span class="footer__accordion-text">About Musashi Paint</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.89258 10.2733L7.66591 6.5L11.4392 10.2733L10.9659 10.74L7.66591 7.44L4.36591 10.74L3.89258 10.2733Z" fill="black"/>
@@ -205,7 +205,7 @@
                         <!-- 選ばれる理由（アコーディオン） -->
                         <li class="footer__sub-item">
                             <button class="footer__accordion js-accordion-button" aria-expanded="false" aria-controls="footer-reasons">
-                                <span class="footer__accordion-text">Why Choose Us</span>
+                                <span class="footer__accordion-text">Our Strengths</span>
                                 <span class="footer__accordion-icon">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.89258 10.2733L7.66591 6.5L11.4392 10.2733L10.9659 10.74L7.66591 7.44L4.36591 10.74L3.89258 10.2733Z" fill="black"/>
@@ -216,7 +216,7 @@
                                 <ul class="footer__accordion-list">
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_TECHNOLOGY ?>" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">Advanced R&D Capabilities</span>
+                                            <span class="footer__accordion-link-text">R&D Excellence</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -236,7 +236,7 @@
                                     </li>
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_SUSTAINABLE_BUSINESS ?>" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">Sustainable Business Development</span>
+                                            <span class="footer__accordion-link-text">Sustainable Business</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -246,7 +246,7 @@
                                     </li>
                                     <li class="footer__accordion-item">
                                         <a href="<?= URL_CUSTOMIZATION ?>" class="footer__accordion-link">
-                                            <span class="footer__accordion-link-text">Customer-Focused Customization</span>
+                                            <span class="footer__accordion-link-text">Custom Engineering</span>
                                             <span class="footer__accordion-link-icon">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M4.00065 8H9.50065L7.33398 5.83333L7.78065 5.33333L10.7807 8.33333L7.78065 11.3333L7.33398 10.8333L9.50065 8.66667H4.00065V8ZM14.0006 8.33333C14.0006 10.013 13.3334 11.6239 12.1457 12.8117C10.9579 13.9994 9.34702 14.6667 7.66732 14.6667C4.17398 14.6667 1.33398 11.8333 1.33398 8.33333C1.33398 6.65363 2.00124 5.04272 3.18897 3.85499C4.3767 2.66726 5.98761 2 7.66732 2C9.34702 2 10.9579 2.66726 12.1457 3.85499C13.3334 5.04272 14.0006 6.65363 14.0006 8.33333ZM13.334 8.33333C13.334 6.83044 12.737 5.3891 11.6743 4.32639C10.6115 3.26369 9.17021 2.66667 7.66732 2.66667C6.16442 2.66667 4.72309 3.26369 3.66038 4.32639C2.59767 5.3891 2.00065 6.83044 2.00065 8.33333C2.00065 9.83623 2.59767 11.2776 3.66038 12.3403C4.72309 13.403 6.16442 14 7.66732 14C8.41147 14 9.14834 13.8534 9.83586 13.5686C10.5234 13.2839 11.1481 12.8665 11.6743 12.3403C12.2005 11.8141 12.6179 11.1894 12.9026 10.5019C13.1874 9.81436 13.334 9.07749 13.334 8.33333Z" fill="black"/>
@@ -415,11 +415,11 @@
                     <div class="footer__nav-pc-item">
                         <p class="footer__nav-pc-text"><?php esc_html_e( 'Solutions Overview', 'muashi' ); ?></p>
                         <div class="footer__nav-pc-link-wrapper">
-                            <a href="<?= URL_PRODUCT ?>application/" class="footer__nav-pc-link"><?php esc_html_e( 'By Application', 'muashi' ); ?></a>
-                            <a href="<?= URL_PRODUCT ?>material/" class="footer__nav-pc-link"><?php esc_html_e( 'By Material', 'muashi' ); ?></a>
-                            <a href="<?= URL_PRODUCT ?>design/" class="footer__nav-pc-link"><?php esc_html_e( 'By Design', 'muashi' ); ?></a>
-                            <a href="<?= URL_PRODUCT ?>function/" class="footer__nav-pc-link"><?php esc_html_e( 'By Function', 'muashi' ); ?></a>
-                            <a href="<?= URL_PRODUCT ?>environment/" class="footer__nav-pc-link"><?php esc_html_e( 'By Environmental Keyword', 'muashi' ); ?></a>
+                            <a href="<?= URL_PRODUCT ?>application/" class="footer__nav-pc-link"><?php esc_html_e( 'By Industry', 'muashi' ); ?></a>
+                            <a href="<?= URL_PRODUCT ?>material/" class="footer__nav-pc-link"><?php esc_html_e( 'By Substrate', 'muashi' ); ?></a>
+                            <a href="<?= URL_PRODUCT ?>design/" class="footer__nav-pc-link"><?php esc_html_e( 'By Design / Finish', 'muashi' ); ?></a>
+                            <a href="<?= URL_PRODUCT ?>function/" class="footer__nav-pc-link"><?php esc_html_e( 'By Performance', 'muashi' ); ?></a>
+                            <a href="<?= URL_PRODUCT ?>environment/" class="footer__nav-pc-link"><?php esc_html_e( 'By Sustainability', 'muashi' ); ?></a>
                         </div>
                     </div>
                     <div class="footer__nav-pc-item">
@@ -436,17 +436,17 @@
                 <div class="footer__nav-pc-contents">
                     <!-- 武蔵塗料グループについて -->
                     <div class="footer__nav-pc-item">
-                        <a href="<?= URL_ABOUT_US ?>" class="footer__nav-pc-link">About Musashi Paint Group</a>
+                        <a href="<?= URL_ABOUT_US ?>" class="footer__nav-pc-link">About Musashi Paint</a>
                     </div>
 
                     <!-- 選ばれる理由 -->
                     <div class="footer__nav-pc-item">
-                        <p class="footer__nav-pc-text">Why Choose Us</p>
+                        <p class="footer__nav-pc-text">Our Strengths</p>
                         <div class="footer__nav-pc-link-wrapper">
-                            <a href="<?= URL_TECHNOLOGY ?>" class="footer__nav-pc-link">Advanced R&amp;D Capabilities</a>
+                            <a href="<?= URL_TECHNOLOGY ?>" class="footer__nav-pc-link">R&D Excellence</a>
                             <a href="<?= URL_GLOBAL_NETWORK ?>" class="footer__nav-pc-link">Global Network</a>
-                            <a href="<?= URL_SUSTAINABLE_BUSINESS ?>" class="footer__nav-pc-link">Sustainable Business Development</a>
-                            <a href="<?= URL_CUSTOMIZATION ?>" class="footer__nav-pc-link">Customer-Focused Customization</a>
+                            <a href="<?= URL_SUSTAINABLE_BUSINESS ?>" class="footer__nav-pc-link">Sustainable Business</a>
+                            <a href="<?= URL_CUSTOMIZATION ?>" class="footer__nav-pc-link">Custom Engineering</a>
                         </div>
                     </div>
 

@@ -35,7 +35,7 @@ get_header();
             </div>
 
             <div class="page__content">
-                <h1 class="page__title"><?php the_title(); ?></h1>
+                <h1 class="page__title js-page-title"><?php the_title(); ?></h1>
 
                 <?php
                 $company     = get_post_meta( get_the_ID(), 'interview_company', true );

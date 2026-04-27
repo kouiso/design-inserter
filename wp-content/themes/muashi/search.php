@@ -1,7 +1,7 @@
 <?php
 /**
  * 検索結果ページテンプレート
- * 
+ *
  * サイト内検索の結果を表示
  *
  * @package Muashi
@@ -73,18 +73,16 @@ get_header();
                                 <?php while ( have_posts() ) : the_post(); ?>
                                 <li class="archive__item">
                                     <a href="<?php the_permalink(); ?>" class="archive__link">
-                                        <div class="archive__image-wrapper">
-                                            <?php if ( has_post_thumbnail() ) : ?>
-                                            <img
-                                                src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
-                                                alt="<?php the_title_attribute(); ?>"
-                                                class="archive__image"
-                                                loading="lazy"
-                                            />
-                                            <?php else : ?>
-                                            <div class="archive__image archive__image--placeholder"></div>
-                                            <?php endif; ?>
-                                        </div>
+                                        <?php if ( has_post_thumbnail() ) : ?>
+                                          <div class="archive__image-wrapper">
+                                              <img
+                                                  src="<?php echo esc_url( get_the_post_thumbnail_url( null, 'medium_large' ) ); ?>"
+                                                  alt="<?php the_title_attribute(); ?>"
+                                                  class="archive__image"
+                                                  loading="lazy"
+                                                  />
+                                          </div>
+                                        <?php endif; ?>
                                         <div class="archive__content">
                                             <?php
                                             // 投稿タイプのラベルを取得

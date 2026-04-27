@@ -129,36 +129,10 @@
     color: var(--color-white);
     transition: color 0.3s ease;
     position: relative;
-    padding-left: 15px;
+    min-width: 58px;
 
     @include mq(md){
       font-size: 12px;
-      padding-left: 30px;
-    }
-
-    &::before{
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 1px;
-      height: 12px;
-      background-color: var(--color-white);
-      transform: translateY(-50%);
-      transition: background-color 0.3s ease;
-
-      @include mq(md){
-        height: 24px;
-      }
-    }
-  }
-
-  // 日付がある場合（ニュースセクション）は、カテゴリの縦線を非表示
-  &__date + &__category{
-    padding-left: 0;
-
-    &::before{
-      display: none;
     }
   }
 

@@ -136,15 +136,6 @@
     }
   }
 
-  // 日付がある場合（ニュースセクション）は、カテゴリの縦線を非表示
-  &__date + &__category{
-    padding-left: 0;
-
-    &::before{
-      display: none;
-    }
-  }
-
   &__article-wrapper{
     margin-top: 16px;
     display: grid;
