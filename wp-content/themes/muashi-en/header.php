@@ -401,21 +401,21 @@
                                                                         <span class="hamburger__accordion-link-text">Global Network</span>
                                                                         <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                                                     </a>
+                                                                    <ul class="hamburger__sub-children">
+                                                                        <li class="hamburger__sub-children-item">
+                                                                            <a href="<?= esc_url(URL_GLOBAL_NETWORK . '#overseas-bases') ?>" class="hamburger__accordion-link">
+                                                                                <span class="hamburger__accordion-link-text">Manufacturing Footprint</span>
+                                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
                                                                 </li>
                                                                 <li class="hamburger__sub-children-item">
-                                                                    <a href="<?= esc_url(URL_GLOBAL_NETWORK . '#overseas-bases') ?>" class="hamburger__accordion-link">
-                                                                        <span class="hamburger__accordion-link-text">Manufacturing Footprint</span>
+                                                                    <a href="<?= esc_url(URL_SUSTAINABLE_BUSINESS) ?>" class="hamburger__accordion-link">
+                                                                        <span class="hamburger__accordion-link-text">Sustainable Business</span>
                                                                         <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                                                     </a>
                                                                 </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li class="hamburger__accordion-item">
-                                                            <a href="<?= esc_url(URL_SUSTAINABLE_BUSINESS) ?>" class="hamburger__accordion-link">
-                                                                <span class="hamburger__accordion-link-text">Sustainable Business</span>
-                                                                <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
-                                                            </a>
-                                                            <ul class="hamburger__sub-children">
                                                                 <li class="hamburger__sub-children-item">
                                                                     <a href="<?= esc_url(URL_CUSTOMIZATION) ?>" class="hamburger__accordion-link">
                                                                         <span class="hamburger__accordion-link-text">Custom Engineering</span>

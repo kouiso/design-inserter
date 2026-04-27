@@ -95,7 +95,7 @@
     svg{
       max-width: none;
     }
-    
+
     // Hide initially when data-inview is set
     &[data-inview] svg{
       clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
@@ -106,7 +106,7 @@
   //   --title-bg-width: 0%;
   //   --title-bg-color: var(--color-orange);
   //   --title-text-color: var(--color-white);
-    
+
   //   padding: 0 5px;
   //   font-size: 20px;
   //   color: var(--title-text-color);
@@ -139,7 +139,7 @@
 
   //   &--kv{
   //     font-size: 32px;
-      
+
   //     @include mq(md){
   //       font-size: vw-max(40, 1000);
   //     }
@@ -191,7 +191,7 @@
     @include mq(md){
       font-size: 16px;
     }
-    
+
     &::after{
       content: '';
       position: absolute;
