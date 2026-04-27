@@ -87,8 +87,8 @@ if ( have_posts() ) {
             <div class="page__inner page__inner--narrow">
 
               <div class="catalog__header">
-                <p class="catalog__header-text">Request a catalog or browse all catalogs</p>
-                <a href="<?php echo esc_url( home_url( '/product/' ) ); ?>" class="catalog__back-button">Go Overview</a>
+                <p class="catalog__header-text">Request a Catalog & Browse All Catalogs.</p>
+                <a href="<?php echo esc_url( home_url( '/product/' ) ); ?>" class="catalog__back-button">Back to Solutions Overview</a>
               </div>
 
               <!-- Hidden data for form population -->
