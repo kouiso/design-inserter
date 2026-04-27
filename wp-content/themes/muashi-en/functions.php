@@ -1509,6 +1509,60 @@ add_action( 'pre_get_posts', function( $query ) {
 } );
 
 /**
+ * フロント検索で product 投稿の ACF テキストフィールドも検索対象に含める
+ *
+ * 標準の WP 検索は post_title / post_excerpt / post_content のみを対象とするため、
+ * product 投稿に紐付く以下のメタ値もキーワードに対して LIKE 検索する。
+ * 他の投稿タイプ（news / story 等）の通常検索結果は維持する。
+ */
+add_filter( 'posts_search', function( $search, $wp_query ) {
+    if ( is_admin() || empty( $search ) || ! $wp_query->is_search() || ! $wp_query->is_main_query() ) {
+        return $search;
+    }
+
+    $terms = isset( $wp_query->query_vars['search_terms'] ) ? $wp_query->query_vars['search_terms'] : array();
+    if ( empty( $terms ) ) {
+        return $search;
+    }
+
+    global $wpdb;
+
+    $meta_keys = array(
+        'product_name_trademark_en',
+        'product_line_number',
+        'product_solvent_type',
+        'product_paint_type',
+        'product_resin_type',
+        'product_remarks',
+    );
+    $meta_keys_in = "'" . implode( "','", array_map( 'esc_sql', $meta_keys ) ) . "'";
+
+    $exclusion_prefix = apply_filters( 'wp_query_search_exclusion_prefix', '-' );
+
+    foreach ( $terms as $term ) {
+        if ( $exclusion_prefix && substr( $term, 0, 1 ) === $exclusion_prefix ) {
+            continue;
+        }
+
+        $like = '%' . $wpdb->esc_like( $term ) . '%';
+
+        $original = $wpdb->prepare(
+            "(({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_excerpt LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s))",
+            $like, $like, $like
+        );
+
+        $extended = $wpdb->prepare(
+            "(({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_excerpt LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s) OR ({$wpdb->posts}.post_type = 'product' AND EXISTS ( SELECT 1 FROM {$wpdb->postmeta} WHERE {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID AND {$wpdb->postmeta}.meta_key IN ({$meta_keys_in}) AND {$wpdb->postmeta}.meta_value LIKE %s )))",
+            $like, $like, $like, $like
+        );
+
+        $search = str_replace( $original, $extended, $search );
+    }
+
+    return $search;
+}, 10, 2 );
+
+/**
  * アーカイブページ用の固定ページ設定を取得するヘルパー関数
  * 投稿タイプに対応する固定ページからKV画像、タイトル、本文を取得
  *
