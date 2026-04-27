@@ -984,6 +984,7 @@ a {
 }
 .search-form__input::placeholder {
   color: rgba(0, 0, 0, 0.5);
+  font-size: 18px;
 }
 @media screen and (min-width: 768px) {
   .search-form__input {
@@ -5339,6 +5340,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  flex-wrap: wrap;
   gap: 16px;
   margin: 24px 0;
 }
