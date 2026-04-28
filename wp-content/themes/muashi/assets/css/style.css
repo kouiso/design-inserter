@@ -937,9 +937,16 @@ a {
   transform: translateY(0);
 }
 .search-overlay__inner {
-  width: 90%;
+  width: 100%;
   max-width: 600px;
-  padding: 20px;
+  padding: 0 20px;
+}
+@media screen and (min-width: 768px) {
+  .search-overlay__inner {
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+  }
 }
 .search-overlay__close {
   position: absolute;
@@ -977,13 +984,10 @@ a {
   flex: 1;
   background: transparent;
   border: none;
-  padding: 15px 10px;
-  font-size: 18px;
+  padding: 10px 0;
+  font-size: 16px;
   color: #333;
   outline: none;
-}
-.search-form__input::placeholder {
-  color: rgba(0, 0, 0, 0.5);
 }
 @media screen and (min-width: 768px) {
   .search-form__input {
@@ -991,13 +995,27 @@ a {
     padding: 20px 15px;
   }
 }
+.search-form__input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+}
+@media screen and (min-width: 768px) {
+  .search-form__input::placeholder {
+    font-size: 24px;
+  }
+}
 .search-form__submit {
   background: transparent;
   border: none;
-  padding: 15px;
+  padding: 0;
   cursor: pointer;
   color: #333;
   transition: opacity 0.3s ease;
+}
+@media screen and (min-width: 768px) {
+  .search-form__submit {
+    padding: 15px;
+  }
 }
 .search-form__submit:hover {
   opacity: 0.7;
@@ -1125,6 +1143,54 @@ a {
   right: 20px;
   width: 81px;
   z-index: -1;
+}
+.hamburger__utils {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 10px 16px 20px;
+}
+.hamburger__search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-white);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  appearance: none;
+}
+.hamburger__search:hover {
+  opacity: 0.7;
+}
+.hamburger__search-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+.hamburger__lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-white);
+}
+.hamburger__lang-link {
+  color: var(--color-white);
+}
+.hamburger__lang-link:hover {
+  opacity: 0.7;
+}
+.hamburger__lang-link + .hamburger__lang-link {
+  padding-left: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
 }
 .hamburger__list {
   border-top: 1px solid #4D4D4D;
@@ -2083,9 +2149,6 @@ a {
 }
 .page__inner figure.wp-block-table td {
   background-color: var(--color-white);
-}
-.page__inner figure.wp-block-table td:first-child {
-  white-space: nowrap;
 }
 .page__inner figure.wp-block-table thead {
   background-color: #f5f5f5;

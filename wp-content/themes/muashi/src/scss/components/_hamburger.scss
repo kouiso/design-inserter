@@ -95,6 +95,62 @@
     z-index: -1;
   }
 
+  &__utils{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 10px 16px 20px;
+  }
+
+  &__search{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+
+    &:hover{
+      opacity: 0.7;
+    }
+  }
+
+  &__search-icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+
+  &__lang{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-white);
+  }
+
+  &__lang-link{
+    color: var(--color-white);
+
+    &:hover{
+      opacity: 0.7;
+    }
+
+    & + &{
+      padding-left: 8px;
+      border-left: 1px solid rgba(255, 255, 255, 0.4);
+    }
+  }
+
   &__list{
     border-top: 1px solid #4D4D4D;
   }

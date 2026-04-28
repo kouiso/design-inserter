@@ -1401,11 +1401,25 @@ add_action( 'pre_get_posts', function( $query ) {
 } );
 
 /**
- * フロント検索で product 投稿の ACF テキストフィールドも検索対象に含める
+ * フロント検索の対象投稿タイプを product のみに限定
+ */
+add_action( 'pre_get_posts', function( $query ) {
+    if ( is_admin() || ! $query->is_main_query() ) {
+        return;
+    }
+    if ( $query->is_search() ) {
+        $query->set( 'post_type', 'product' );
+    }
+} );
+
+/**
+ * フロント検索の対象を拡張する
  *
- * 標準の WP 検索は post_title / post_excerpt / post_content のみを対象とするため、
- * product 投稿に紐付く以下のメタ値もキーワードに対して LIKE 検索する。
- * 他の投稿タイプ（news / story 等）の通常検索結果は維持する。
+ * 標準の WP 検索（post_title / post_excerpt / post_content）に加え、以下も検索対象に含める：
+ *   - product 投稿の ACF テキストフィールド
+ *   - product に紐付くタクソノミー term の name / slug
+ *
+ * search 句は str_replace ではなく組み立て直すことで、WP コアの SQL 形式変更に対する堅牢性を確保。
  */
 add_filter( 'posts_search', function( $search, $wp_query ) {
     if ( is_admin() || empty( $search ) || ! $wp_query->is_search() || ! $wp_query->is_main_query() ) {
@@ -1429,29 +1443,59 @@ add_filter( 'posts_search', function( $search, $wp_query ) {
     );
     $meta_keys_in = "'" . implode( "','", array_map( 'esc_sql', $meta_keys ) ) . "'";
 
+    $taxonomies = array(
+        'product_application',
+        'product_material',
+        'product_design',
+        'product_function',
+        'product_environment',
+    );
+    $taxonomies_in = "'" . implode( "','", array_map( 'esc_sql', $taxonomies ) ) . "'";
+
     $exclusion_prefix = apply_filters( 'wp_query_search_exclusion_prefix', '-' );
 
+    $new_search = '';
+    $searchand  = '';
+
     foreach ( $terms as $term ) {
-        if ( $exclusion_prefix && substr( $term, 0, 1 ) === $exclusion_prefix ) {
-            continue;
+        $exclude = $exclusion_prefix && substr( $term, 0, 1 ) === $exclusion_prefix;
+        if ( $exclude ) {
+            $term = substr( $term, 1 );
         }
+
+        $like_op   = $exclude ? 'NOT LIKE'   : 'LIKE';
+        $andor_op  = $exclude ? 'AND'        : 'OR';
+        $exists_op = $exclude ? 'NOT EXISTS' : 'EXISTS';
 
         $like = '%' . $wpdb->esc_like( $term ) . '%';
 
-        $original = $wpdb->prepare(
-            "(({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_excerpt LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s))",
+        $clauses = $wpdb->prepare(
+            "({$wpdb->posts}.post_title $like_op %s) $andor_op ({$wpdb->posts}.post_excerpt $like_op %s) $andor_op ({$wpdb->posts}.post_content $like_op %s)",
             $like, $like, $like
         );
 
-        $extended = $wpdb->prepare(
-            "(({$wpdb->posts}.post_title LIKE %s) OR ({$wpdb->posts}.post_excerpt LIKE %s) OR ({$wpdb->posts}.post_content LIKE %s) OR ({$wpdb->posts}.post_type = 'product' AND EXISTS ( SELECT 1 FROM {$wpdb->postmeta} WHERE {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID AND {$wpdb->postmeta}.meta_key IN ({$meta_keys_in}) AND {$wpdb->postmeta}.meta_value LIKE %s )))",
-            $like, $like, $like, $like
+        $clauses .= " $andor_op " . $wpdb->prepare(
+            "$exists_op ( SELECT 1 FROM {$wpdb->postmeta} WHERE {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID AND {$wpdb->postmeta}.meta_key IN ({$meta_keys_in}) AND {$wpdb->postmeta}.meta_value LIKE %s )",
+            $like
         );
 
-        $search = str_replace( $original, $extended, $search );
+        $clauses .= " $andor_op " . $wpdb->prepare(
+            "$exists_op ( SELECT 1 FROM {$wpdb->term_relationships} tr INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id INNER JOIN {$wpdb->terms} t ON tt.term_id = t.term_id WHERE tr.object_id = {$wpdb->posts}.ID AND tt.taxonomy IN ({$taxonomies_in}) AND ( t.name LIKE %s OR t.slug LIKE %s ) )",
+            $like, $like
+        );
+
+        $new_search .= "{$searchand}({$clauses})";
+        $searchand   = ' AND ';
     }
 
-    return $search;
+    if ( ! empty( $new_search ) ) {
+        $new_search = " AND ({$new_search}) ";
+        if ( ! is_user_logged_in() ) {
+            $new_search .= " AND ({$wpdb->posts}.post_password = '') ";
+        }
+    }
+
+    return $new_search;
 }, 10, 2 );
 
 /**
