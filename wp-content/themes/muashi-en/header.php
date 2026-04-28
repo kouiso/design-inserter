@@ -249,6 +249,21 @@
                 </div>
 
                 <nav class="hamburger__nav">
+                  <div class="hamburger__utils">
+                    <button type="button" class="hamburger__search js-search-toggle" aria-label="<?php esc_attr_e('Search', 'muashi'); ?>">
+                      <span class="hamburger__search-icon">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="8.5" cy="8.5" r="6.5" stroke="currentColor" stroke-width="2" fill="none" />
+                          <path d="M13 13L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                      </span>
+                      <span class="hamburger__search-text"><?php esc_html_e('Search', 'muashi'); ?></span>
+                    </button>
+                    <div class="hamburger__lang">
+                      <a href="<?= URL_LANG_JP ?>" class="hamburger__lang-link" target="_blank" rel="noopener noreferrer">JP</a>
+                      <a href="<?= URL_LANG_ZH ?>" class="hamburger__lang-link" target="_blank" rel="noopener noreferrer">中文</a>
+                    </div>
+                  </div>
                   <ul class="hamburger__list">
                     <li class="hamburger__item">
                       <a href="<?= URL_HOME ?>" class="hamburger__link">
@@ -484,7 +499,7 @@
                       </ul>
                     </li>
                     <li class="hamburger__item">
-                      <p class="hamburger__title">Careers</p>
+                      <p class="hamburger__title">News・Careers</p>
                       <ul class="hamburger__sub-list">
                         <li class="hamburger__sub-item">
                           <a href="<?= esc_url(URL_MEDIA) ?>" class="hamburger__accordion">
