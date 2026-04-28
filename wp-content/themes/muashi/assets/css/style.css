@@ -2400,9 +2400,6 @@ a {
     gap: 20px;
   }
 }
-.archive__image-wrapper {
-  aspect-ratio: 320/180;
-}
 @media screen and (min-width: 992px) {
   .archive__image-wrapper {
     width: min(320px, calc(320 / 1440 * 100vw));

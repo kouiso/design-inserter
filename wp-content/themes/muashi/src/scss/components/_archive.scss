@@ -51,8 +51,6 @@
   }
 
   &__image-wrapper{
-    aspect-ratio: 320 / 180;
-
     @include mq(lg){
       width: vw-max(320, 1440);
     }
