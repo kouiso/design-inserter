@@ -609,7 +609,7 @@
                           </svg>
                         </icon>
                         <span class="hamburger__other-text">
-                          カタログをダウンロードする
+                          カタログ・資料請求
                         </span>
                       </a>
                     </li>

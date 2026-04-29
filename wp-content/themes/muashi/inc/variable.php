@@ -39,5 +39,5 @@ define('URL_SCM', home_url('/sustainability/scm/'));
 define('URL_LIBRARY', home_url('/sustainability/value-creation-process/'));
 
 // External language sites
-define('URL_LANG_EN', 'https://musashipaint.com/en/');
+define('URL_LANG_EN', 'https://en.musashipaint.com/ ');
 define('URL_LANG_ZH', 'https://www.musashipaintchina.com/');
