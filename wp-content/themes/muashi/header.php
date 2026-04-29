@@ -383,19 +383,19 @@
                                   <ul class="hamburger__accordion-list">
                                     <li class="hamburger__accordion-item">
                                       <a href="<?= esc_url(URL_HISTORY_FOUNDING) ?>" class="hamburger__accordion-link">
-                                        <span class="hamburger__accordion-link-text">創業期 1958年～</span>
+                                        <span class="hamburger__accordion-link-text">創業と基盤形成 1958年 -</span>
                                         <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                       </a>
                                     </li>
                                     <li class="hamburger__accordion-item">
                                       <a href="<?= esc_url(URL_HISTORY_INNOVATION) ?>" class="hamburger__accordion-link">
-                                        <span class="hamburger__accordion-link-text">技術革新期 1980年～</span>
+                                        <span class="hamburger__accordion-link-text">プラスチック加飾へ 1980年 -</span>
                                         <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                       </a>
                                     </li>
                                     <li class="hamburger__accordion-item">
                                       <a href="<?= esc_url(URL_HISTORY_GLOBAL) ?>" class="hamburger__accordion-link">
-                                        <span class="hamburger__accordion-link-text">グローバル展開期 2000年～</span>
+                                        <span class="hamburger__accordion-link-text">グローバル展開 2000年 -</span>
                                         <span class="hamburger__accordion-link-icon"><?= $hamburger_arrow_svg ?></span>
                                       </a>
                                     </li>
