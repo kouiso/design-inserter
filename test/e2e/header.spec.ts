@@ -50,16 +50,15 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
 
-    // CSSトランジション（0.4s）の完了を待つ
-    await page.waitForTimeout(500);
-
-    // 検索リンクの色を確認
+    // CSSトランジション（0.4s）後に色が確定するまでポーリングで待機
     const searchLink = page.locator('.header__nav-link--search');
-    const color = await searchLink.evaluate((el) => {
-      return window.getComputedStyle(el).color;
-    });
+    await expect.poll(
+      async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
+      { timeout: 2000 }
+    ).toMatch(/rgb\(255,\s*255,\s*255\)|#fff|white/i);
 
     // RGB値が白（255, 255, 255）に近いことを確認
+    const color = await searchLink.evaluate((el) => window.getComputedStyle(el).color);
     expect(color).toMatch(/rgb\(255,\s*255,\s*255\)|#fff|white/i);
   });
 
@@ -72,16 +71,15 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'black');
     });
 
-    // CSSトランジション（0.4s）の完了を待つ
-    await page.waitForTimeout(500);
-
-    // 検索リンクの色を確認
+    // CSSトランジション（0.4s）後に色が確定するまでポーリングで待機
     const searchLink = page.locator('.header__nav-link--search');
-    const color = await searchLink.evaluate((el) => {
-      return window.getComputedStyle(el).color;
-    });
+    await expect.poll(
+      async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
+      { timeout: 2000 }
+    ).toMatch(/rgb\(0,\s*0,\s*0\)|#000|black/i);
 
     // RGB値が黒（0, 0, 0）に近いことを確認
+    const color = await searchLink.evaluate((el) => window.getComputedStyle(el).color);
     expect(color).toMatch(/rgb\(0,\s*0,\s*0\)|#000|black/i);
   });
 
@@ -108,10 +106,14 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.evaluate(() => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
-    await page.waitForTimeout(500);
+    // CSSトランジション（0.4s）完了まで色がwhite系に確定するのを待つ
+    const searchLink = page.locator('.header__nav-link--search');
+    await expect.poll(
+      async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
+      { timeout: 2000 }
+    ).toMatch(/rgb\(255,\s*255,\s*255\)|#fff|white/i);
 
     // 検索リンクの色を取得
-    const searchLink = page.locator('.header__nav-link--search');
     const searchColor = await searchLink.evaluate((el) => {
       return window.getComputedStyle(el).color;
     });
@@ -129,7 +131,11 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     await page.evaluate(() => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'black');
     });
-    await page.waitForTimeout(500);
+    // CSSトランジション完了でblack系に確定するのを待つ
+    await expect.poll(
+      async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
+      { timeout: 2000 }
+    ).toMatch(/rgb\(0,\s*0,\s*0\)|#000|black/i);
 
     const searchColorBlack = await searchLink.evaluate((el) => {
       return window.getComputedStyle(el).color;
@@ -254,11 +260,10 @@ test.describe('ヘッダー - 検索オーバーレイ機能（トップペー�
     await page.evaluate(() => window.scrollTo(0, 600));
     // is-visibleクラスが付与されるまで待機（GSAPが検知→クラス付与）
     await page.waitForSelector('.js-header-scroll-nav.is-visible', { timeout: 5000 });
-    // CSSトランジション（0.4s）の完了を待つ
-    await page.waitForTimeout(500);
 
     // スクロールナビ内の検索ボタンをクリック
     // fixed + transform transition中はPlaywrightがviewport外と判定するためevaluateで直接クリック
+    // クリック後の overlay is-active 検査が auto-retry してくれるためトランジション待機は不要
     await page.evaluate(() => {
       const btn = document.querySelector('.js-header-scroll-nav .js-search-toggle');
       btn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));

@@ -21,17 +21,15 @@ test.describe('Form Tests - フォーム機能確認', () => {
 
       const submitButton = page.locator('input[type="submit"]');
       await submitButton.click();
-      
-      // エラーメッセージが表示されることを確認
-      await page.waitForTimeout(1000); // CF7のバリデーション待機
-      
+
+      // CF7 のバリデーションエラーメッセージが描画されるまで auto-retry で待機
       const errorMessage = page.locator('.wpcf7-not-valid-tip');
-      await expect(errorMessage.first()).toBeVisible();
+      await expect(errorMessage.first()).toBeVisible({ timeout: 5000 });
     });
 
     test('不正なメール形式でエラーが表示される', async ({ page }) => {
       await page.goto('/contact/');
-      
+
       await page.fill('input[name="your-name"]', 'Test User');
       await page.fill('input[name="your-company"]', 'Musashi Paint QA');
       await page.fill('input[name="your-subject"]', 'Validation test');
@@ -40,16 +38,14 @@ test.describe('Form Tests - フォーム機能確認', () => {
       const emailField = page.locator('input[name="your-email"]').first();
       await emailField.fill('invalid-email');
       await page.check('input[name="agree"]');
-      
+
       // 送信ボタンをクリック
       const submitButton = page.locator('input[type="submit"]');
       await submitButton.click();
-      
-      await page.waitForTimeout(1000);
-      
-      // エラーメッセージが表示されることを確認
+
+      // CF7 のバリデーションエラーメッセージが描画されるまで auto-retry で待機
       const errorMessage = page.locator('.wpcf7-not-valid-tip');
-      await expect(errorMessage.first()).toBeVisible();
+      await expect(errorMessage.first()).toBeVisible({ timeout: 5000 });
     });
 
     test('メール確認欄の不一致でエラーが表示される', async ({ page }) => {
@@ -66,12 +62,10 @@ test.describe('Form Tests - フォーム機能確認', () => {
         // 送信ボタンをクリック
         const submitButton = page.locator('input[type="submit"]');
         await submitButton.click();
-        
-        await page.waitForTimeout(1000);
-        
-        // エラーメッセージが表示されることを確認
+
+        // CF7 のバリデーションエラーメッセージが描画されるまで auto-retry で待機
         const errorMessage = page.locator('.wpcf7-not-valid-tip, .wpcf7-response-output');
-        await expect(errorMessage.first()).toBeVisible();
+        await expect(errorMessage.first()).toBeVisible({ timeout: 5000 });
       } else {
         test.skip();
       }
@@ -114,7 +108,8 @@ test.describe('Form Tests - フォーム機能確認', () => {
       if (count >= 6) {
         for (let i = 0; i < 6; i++) {
           await checkboxes.nth(i).check();
-          await page.waitForTimeout(100);
+          // 各チェックボックスが反映されるのを待機（JS による上限制御の伝播）
+          await expect(checkboxes.nth(i)).toBeChecked();
         }
         
         // エラーメッセージが表示されることを確認

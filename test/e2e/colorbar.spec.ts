@@ -44,7 +44,15 @@ test.describe('TOPページ KVナビ - 検索アイコンの色変化', () => {
     await kvSection.evaluate((el) => {
       el.setAttribute('data-text-color', 'white');
     });
-    await page.waitForTimeout(500);
+    // CSSトランジション完了後、searchIcon と navLinkText の色が同期するのを待つ
+    await expect.poll(
+      async () => {
+        const s = await searchIcon.evaluate((el) => window.getComputedStyle(el).color);
+        const n = await navLinkText.evaluate((el) => window.getComputedStyle(el).color);
+        return s === n ? s : null;
+      },
+      { timeout: 2000 }
+    ).not.toBeNull();
 
     // 検索アイコンとナビリンクテキストの色を取得
     const searchColorWhite = await searchIcon.evaluate((el) => {
@@ -61,7 +69,11 @@ test.describe('TOPページ KVナビ - 検索アイコンの色変化', () => {
     await kvSection.evaluate((el) => {
       el.setAttribute('data-text-color', 'black');
     });
-    await page.waitForTimeout(500);
+    // CSSトランジション完了後、白から色が変化したことを確認
+    await expect.poll(
+      async () => searchIcon.evaluate((el) => window.getComputedStyle(el).color),
+      { timeout: 2000 }
+    ).not.toBe(searchColorWhite);
 
     // 色を再取得
     const searchColorBlack = await searchIcon.evaluate((el) => {

@@ -460,7 +460,10 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
         }
       }
     });
-    await page.waitForTimeout(500);
+    // ハンバーガーメニュー展開後、Companyボタンが操作可能になるのを待つ
+    await expect(
+      page.locator('.js-accordion-button').filter({ hasText: 'Company' }).first()
+    ).toBeVisible({ timeout: 3000 });
 
     // 会社紹介メニューを開く
     await page.evaluate(() => {
@@ -472,7 +475,10 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
         }
       }
     });
-    await page.waitForTimeout(300);
+    // Companyアコーディオン展開後、Sustainabilityサブメニューが表示されるのを待つ
+    await expect(
+      page.locator('.js-accordion-button').filter({ hasText: 'Sustainability' }).first()
+    ).toBeVisible({ timeout: 3000 });
 
     // 「Sustainability」アコーディオンを開く
     await page.evaluate(() => {
@@ -484,7 +490,10 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
         }
       }
     });
-    await page.waitForTimeout(300);
+    // Sustainabilityサブアコーディオン展開後、最終リンクが表示されるのを待つ
+    await expect(
+      page.locator('.hamburger__accordion-link').filter({ hasText: 'Environment' }).first()
+    ).toBeVisible({ timeout: 3000 });
 
     // 各リンクのhrefを検証
     const expectedLinks = [
