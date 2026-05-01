@@ -39,16 +39,11 @@ test.describe('エラーページ - 404 (JP)', () => {
     await expect(body).toBeVisible();
 
     // body に「見つかりません」「Not Found」「404」「ページがありません」のいずれかが
-    // 含まれること、または page__title 要素 / main コンテンツが表示されていることで
-    // テンプレートが正常に処理されたと判断する。
-    const bodyText = await body.textContent();
-    const hasNotFoundIndicator =
-      /見つかりません|見つかりませんでした|Not Found|404|ページがありません|お探しのページ/i.test(
-        bodyText ?? ''
-      );
-    const mainVisible = await page.locator('main, .page, .l-main').first().isVisible().catch(() => false);
-
-    expect(hasNotFoundIndicator || mainVisible).toBe(true);
+    // 含まれることを auto-retry assertion で検証する。
+    // toContainText は内部で polling するため、レンダリング遅延に強い。
+    await expect(body).toContainText(
+      /見つかりません|見つかりませんでした|Not Found|404|ページがありません|お探しのページ/i
+    );
   });
 });
 
@@ -68,9 +63,13 @@ test.describe('エラーページ - 404 (EN)', () => {
     );
 
     // /en/ にアクセスしてリダイレクトでサブドメインに飛ぶ場合も skip
+    // baseURL がパスプレフィックス (例: /staging) を持つ場合に startsWith 比較は誤検知するため、
+    // origin (scheme + host + port) 同士で比較する。
     const finalUrl = page.url();
+    const finalOrigin = new URL(finalUrl).origin;
+    const baseOrigin = baseURL ? new URL(baseURL).origin : '';
     test.skip(
-      !finalUrl.startsWith(baseURL ?? ''),
+      finalOrigin !== baseOrigin,
       `EN サイトが別オリジンに存在するため skip (final url: ${finalUrl})`
     );
 
@@ -111,26 +110,17 @@ test.describe('検索 - 0件ヒット', () => {
     // search.php が読み込まれ、ページタイトルが表示される
     await expect(page.locator('.page__title.js-page-title')).toBeVisible();
 
-    // 0 件メッセージの判定:
-    //   1) .search-results__empty が表示される
-    //   2) または「一致する結果は見つかりませんでした」というテンプレ文言が含まれる
+    // muashi テーマの search.php は、検索キーワードあり & have_posts() が false の場合
+    // 必ず .search-results__empty + .search-results__message を出力するため、
+    // 直接 auto-retry assertion で検証する（フォールバック分岐は不要）。
     const emptyContainer = page.locator('.search-results__empty');
     const emptyMessage = page.locator(
       '.search-results__message',
       { hasText: /一致する結果は見つかりませんでした/ }
     );
 
-    // どちらかが表示されていることを確認（auto-retry 構文）
-    const emptyVisible = await emptyContainer.isVisible().catch(() => false);
-    if (emptyVisible) {
-      await expect(emptyContainer).toBeVisible();
-      await expect(emptyMessage).toBeVisible();
-    } else {
-      // フォールバック: archive リストが存在しない、または件数が 0 であることを確認
-      const archiveItems = page.locator('.archive__item');
-      const itemCount = await archiveItems.count();
-      expect(itemCount).toBe(0);
-    }
+    await expect(emptyContainer).toBeVisible();
+    await expect(emptyMessage).toBeVisible();
   });
 
   test('0件ヒットの検索結果ページでもグローバル header / footer がレンダリングされる', async ({ page }) => {
