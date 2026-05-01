@@ -221,8 +221,9 @@ test.describe('資料ダウンロード機能のリグレッションテスト',
     // Contact Form 7のフォームが存在することを確認
     await page.goto('/contact/');
     
-    // フォーム要素の確認（いくつかのパターンに対応）
-    const form = page.locator('form.wpcf7-form, form[action*="wpcf7"], form[method="post"]').first();
+    // フォーム要素の確認
+    // data-testid="contact-form" は `<section class="contact">` に付与されるため、内側 form を取得
+    const form = page.locator('[data-testid="contact-form"] form').first();
     const formCount = await form.count();
     
     // /contact/にはフォームが必ず存在することを確認
@@ -337,8 +338,8 @@ test.describe('KV（キービジュアル）画像のリグレッションテス
   test('トップページのKV画像が表示される', async ({ page }) => {
     await page.goto('/');
     
-    // KV画像エリアを探す
-    const kvImage = page.locator('.top-kv__pic img').first();
+    // KV画像エリアを探す（data-testid="top-kv" 配下にスコープ）
+    const kvImage = page.locator('[data-testid="top-kv"] .top-kv__pic img').first();
     const imageCount = await kvImage.count();
     
     // KV画像が必ず存在することを確認
@@ -451,8 +452,11 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
     await page.waitForLoadState('networkidle');
 
     // ハンバーガーボタンをクリック（固定ポジション要素のためevaluateで実行）
+    // data-testid="hamburger-toggle" は `.header__hamburger.js-header-hamburger` に付与
+    // 開閉ボタン（hamburger-toggle）と閉じるボタン（hamburger-close）は別 testid のため、
+    // testid で絞り込めば `.hamburger` 配下の close ボタンは自動的に除外される
     await page.evaluate(() => {
-      const btns = document.querySelectorAll<HTMLElement>('.header__hamburger.js-header-hamburger');
+      const btns = document.querySelectorAll<HTMLElement>('[data-testid="hamburger-toggle"]');
       for (const btn of btns) {
         if (btn.offsetParent !== null && !btn.closest('.hamburger')) {
           btn.click();

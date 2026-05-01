@@ -66,7 +66,8 @@ test.describe('Smoke Tests - 主要ページの表示確認', () => {
     await expect(page.locator('.page__title')).toBeVisible();
     
     // Contact Form 7のフォームが表示されることを確認
-    await expect(page.locator('.wpcf7-form')).toBeVisible();
+    // data-testid="contact-form" は `<section class="contact">` に付与されるため、内側 form を取得
+    await expect(page.locator('[data-testid="contact-form"] form')).toBeVisible();
   });
 
   test('資料ダウンロード: 資料ダウンロードページが正常に表示される', async ({ page }) => {

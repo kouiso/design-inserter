@@ -176,9 +176,10 @@ test.describe('UI/UX Improvement Tests', () => {
     test('should display Media section (Pick up) before News section', async ({ page }) => {
       await page.goto(`/`);
       
-      // Media セクションと News セクションを取得（同一section内のため、inner divで区別）
-      const mediaSection = await page.locator('.top-news__inner:not(.top-news__inner--bottom)').first();
-      const newsSection = await page.locator('.top-news__inner--bottom').first();
+      // Media セクション（PICK UP）と News セクションを取得
+      // data-testid は index.php の `.top-news__inner` / `.top-news__inner--bottom` に対応
+      const mediaSection = await page.locator('[data-testid="top-news-pickup"]').first();
+      const newsSection = await page.locator('[data-testid="top-news-list"]').first();
       
       if (await mediaSection.isVisible() && await newsSection.isVisible()) {
         const mediaBox = await mediaSection.boundingBox();
@@ -195,19 +196,20 @@ test.describe('UI/UX Improvement Tests', () => {
       await page.goto(`/`);
       
       // メディアセクションの記事数（index.phpで posts_per_page => 3）
-      const mediaItems = await page.locator('.top-news__inner:not(.top-news__inner--bottom) .top-news__item').all();
+      // data-testid は wrapper にあり、`.top-news__item` は子孫要素（testidなし）
+      const mediaItems = await page.locator('[data-testid="top-news-pickup"] .top-news__item').all();
       expect(mediaItems.length).toBe(3);
 
       // ニュースセクションの記事数（index.phpで posts_per_page => 3）
-      const newsItems = await page.locator('.top-news__inner--bottom .top-news__item').all();
+      const newsItems = await page.locator('[data-testid="top-news-list"] .top-news__item').all();
       expect(newsItems.length).toBe(3);
     });
 
     test('should navigate to media list page via "View All" link', async ({ page }) => {
       await page.goto(`/`);
       
-      // 「一覧へ」リンク（メディアセクション）
-      const viewAllLink = await page.locator('.top-news__inner:not(.top-news__inner--bottom) a:has-text("一覧")').first();
+      // 「一覧へ」リンク（メディアセクション = PICK UP）
+      const viewAllLink = await page.locator('[data-testid="top-news-pickup"] a:has-text("一覧")').first();
       
       if (await viewAllLink.isVisible()) {
         const href = await viewAllLink.getAttribute('href');
@@ -619,7 +621,9 @@ test.describe('Plugin: musashi-inquiry-approval (PR #72)', () => {
       await page.goto(`/contact/`);
       
       // Contact Form 7 フォームの存在確認
-      const form = page.locator('form.wpcf7-form');
+      // data-testid="contact-form" は `<section class="contact">` ラッパに付与（page-contact.php）
+      // 内側の form 要素を取得するため testid 配下に絞る
+      const form = page.locator('[data-testid="contact-form"] form');
       await expect(form).toBeVisible();
     });
 
@@ -736,7 +740,8 @@ test.describe('Common/Integration Tests', () => {
     await page.goto(`/`);
     
     // モバイルメニューが表示されていることを確認
-    const mobileMenu = page.locator('.header__hamburger');
+    // data-testid="hamburger-toggle" は `.header__hamburger.js-header-hamburger` に付与（header.php）
+    const mobileMenu = page.locator('[data-testid="hamburger-toggle"]');
     await expect(mobileMenu.first()).toBeVisible();
   });
 
