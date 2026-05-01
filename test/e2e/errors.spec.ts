@@ -12,26 +12,45 @@ import { test, expect } from '@playwright/test';
  *   レイアウト崩れを起こさないことを確認するため、グローバル header / footer の表示も検証。
  */
 
+/**
+ * baseURL のパスプレフィックス（例: /staging）を尊重して URL を組み立てる。
+ *
+ * 注意: `new URL(relative, base)` は base の末尾が `/` でない場合、
+ * 最終セグメントを relative で置換する仕様のため、必ず末尾スラッシュを付与する。
+ *   例: new URL('foo', 'https://h/staging')  -> https://h/foo  (誤)
+ *       new URL('foo', 'https://h/staging/') -> https://h/staging/foo (正)
+ */
+function buildUrl(relative: string, baseURL: string | undefined): string {
+  if (!baseURL) {
+    throw new Error('baseURL is not configured in playwright.config');
+  }
+  const normalizedBase = baseURL.endsWith('/') ? baseURL : `${baseURL}/`;
+  return new URL(relative, normalizedBase).toString();
+}
+
 test.describe('エラーページ - 404 (JP)', () => {
 
-  test('存在しないパスにアクセスすると HTTP 404 が返る', async ({ page }) => {
-    const response = await page.goto('/this-path-definitely-does-not-exist-xyz/');
+  test('存在しないパスにアクセスすると HTTP 404 が返る', async ({ page, baseURL }) => {
+    const url = buildUrl('this-path-definitely-does-not-exist-xyz/', baseURL);
+    const response = await page.goto(url);
 
     // goto の戻り値で HTTP ステータスを検証（auto-retry 不要・1リクエストで確定）
     expect(response).not.toBeNull();
     expect(response!.status()).toBe(404);
   });
 
-  test('404 ページでもグローバル header / footer がレンダリングされる', async ({ page }) => {
-    await page.goto('/this-path-definitely-does-not-exist-xyz/');
+  test('404 ページでもグローバル header / footer がレンダリングされる', async ({ page, baseURL }) => {
+    const url = buildUrl('this-path-definitely-does-not-exist-xyz/', baseURL);
+    await page.goto(url);
 
     // レイアウトが保たれていることを確認
     await expect(page.locator('header').first()).toBeVisible();
     await expect(page.locator('footer').first()).toBeVisible();
   });
 
-  test('404 ページに「見つかりません」系の文言またはトップへの導線が表示される', async ({ page }) => {
-    await page.goto('/this-path-definitely-does-not-exist-xyz/');
+  test('404 ページに「見つかりません」系の文言またはトップへの導線が表示される', async ({ page, baseURL }) => {
+    const url = buildUrl('this-path-definitely-does-not-exist-xyz/', baseURL);
+    await page.goto(url);
 
     // 404.php が存在しないため WordPress 既定の挙動に依存する。
     // 安定セレクタとして body 要素の存在 + ページタイトル系要素のいずれかを検証。
@@ -53,7 +72,8 @@ test.describe('エラーページ - 404 (EN)', () => {
     // EN サイトはサブドメイン（https://en.musashipaint.com）または別構成の可能性が高く、
     // baseURL と異なるオリジンの場合はこのスペックの責務外として skip する。
     // 同一オリジン配下に /en/ プレフィックスでホスティングされている場合のみ検証する。
-    const response = await page.goto('/en/this-path-definitely-does-not-exist-xyz/', {
+    const url = buildUrl('en/this-path-definitely-does-not-exist-xyz/', baseURL);
+    const response = await page.goto(url, {
       waitUntil: 'domcontentloaded',
     }).catch(() => null);
 
@@ -79,8 +99,9 @@ test.describe('エラーページ - 404 (EN)', () => {
 
 test.describe('アクセス制御 - 管理画面保護', () => {
 
-  test('未ログイン時に /wp-admin/ へアクセスすると wp-login.php へリダイレクトされる', async ({ page }) => {
-    await page.goto('/wp-admin/');
+  test('未ログイン時に /wp-admin/ へアクセスすると wp-login.php へリダイレクトされる', async ({ page, baseURL }) => {
+    const url = buildUrl('wp-admin/', baseURL);
+    await page.goto(url);
 
     // WordPress 既定挙動: 未ログイン時は wp-login.php へリダイレクトされる
     await expect(page).toHaveURL(/wp-login\.php/);
@@ -99,9 +120,10 @@ test.describe('アクセス制御 - 管理画面保護', () => {
 
 test.describe('検索 - 0件ヒット', () => {
 
-  test('該当のないキーワードで検索すると 0 件メッセージが表示される', async ({ page }) => {
+  test('該当のないキーワードで検索すると 0 件メッセージが表示される', async ({ page, baseURL }) => {
     const noisyQuery = 'zzzzz_no_results_query_xyzqq';
-    const response = await page.goto(`/?s=${noisyQuery}`);
+    const url = buildUrl(`?s=${noisyQuery}`, baseURL);
+    const response = await page.goto(url);
 
     // 検索結果ページは 200 OK で返る（致命エラーではない）
     expect(response).not.toBeNull();
@@ -123,8 +145,9 @@ test.describe('検索 - 0件ヒット', () => {
     await expect(emptyMessage).toBeVisible();
   });
 
-  test('0件ヒットの検索結果ページでもグローバル header / footer がレンダリングされる', async ({ page }) => {
-    await page.goto('/?s=zzzzz_no_results_query_xyzqq');
+  test('0件ヒットの検索結果ページでもグローバル header / footer がレンダリングされる', async ({ page, baseURL }) => {
+    const url = buildUrl('?s=zzzzz_no_results_query_xyzqq', baseURL);
+    await page.goto(url);
 
     await expect(page.locator('header').first()).toBeVisible();
     await expect(page.locator('footer').first()).toBeVisible();
