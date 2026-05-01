@@ -62,7 +62,7 @@ planファイル作成前に以下を必ず確認：
 git worktree add /path/to/worktree-dir -b feature/xxx
 
 # 必要な設定ファイルコピー
-cp .env /path/to/worktree-dir/
+cp .env .envrc /path/to/worktree-dir/
 ```
 
 #### 2.2. 実装時

@@ -96,6 +96,7 @@ wp-cli.phar
 **/.claude/projects/
 **/.claude/figma-images/
 **/.claude/*.local.md
+**/.claude/**/*.local.md
 tmpclaude-*/
 
 # direnv（機密環境変数）

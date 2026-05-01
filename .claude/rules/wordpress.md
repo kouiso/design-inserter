@@ -26,10 +26,10 @@ echo wp_kses_post( $html_content );
 ### Nonce Verification
 
 ```php
-// Form side
+// フォーム側
 wp_nonce_field( 'my_action_nonce', 'my_nonce_field' );
 
-// Processing side
+// 処理側
 if ( ! wp_verify_nonce( $_POST['my_nonce_field'], 'my_action_nonce' ) ) {
 	wp_die( '不正なリクエストです' );
 }

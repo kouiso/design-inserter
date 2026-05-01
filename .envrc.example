@@ -15,7 +15,7 @@ export FIGMA_API_KEY="figd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 # export GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # ===== WordPress staging SSH（task db:sync 用） =====
-# export STAGING_SSH_HOST="musashipaint@sv16698.xserver.jp"
+# export STAGING_SSH_HOST="your-user@sv-XXXXX.xserver.jp"
 # export STAGING_JP_DB_USER="xxxxxxxx"
 # export STAGING_JP_DB_PASS="xxxxxxxx"
 # export STAGING_EN_DB_USER="xxxxxxxx"

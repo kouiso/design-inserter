@@ -23,7 +23,7 @@
         "/home/node/.mcp-servers/mobile-mcp/lib/index.js"
       ],
       "env": {
-        "ANDROID_HOME": "/home/kouiso/Android/SDK"
+        "ANDROID_HOME": "${env:ANDROID_HOME}"
       }
     },
     "exa": {
@@ -38,7 +38,7 @@
     },
     "serena": {
       "type": "stdio",
-      "command": "/home/kouiso/.local/bin/uvx",
+      "command": "uvx",
       "args": [
         "--from",
         "git+https://github.com/oraios/serena",
@@ -83,14 +83,14 @@
       ],
       "env": {}
     },
+    "_filesystem_comment": "filesystem の許可パスは利用者ごとに異なるため、各自 .claude/mcp.json で必要なパスを追記してください（例: ${env:HOME} やプロジェクト配下の絶対パス）。",
     "filesystem": {
       "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/workspace",
-        "/home/node"
+        "${workspaceFolder}"
       ],
       "env": {}
     },
