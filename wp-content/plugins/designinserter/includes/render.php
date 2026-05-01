@@ -15,13 +15,15 @@ function designinserter_render_part( $part_id ) {
 	$html   = isset( $part['html'] ) ? $part['html'] : '';
 	$css    = isset( $part['css'] ) ? $part['css'] : '';
 	$source = isset( $part['sourceUrl'] ) ? esc_url( $part['sourceUrl'] ) : esc_url( DESIGNINSERTER_SOURCE_URL );
+	$style  = '' !== trim( $css )
+		? sprintf( "<style data-designinserter-style=\"%s\">\n%s\n</style>\n", $id, $css )
+		: '';
 
 	return sprintf(
-		"\n<!-- Design Inserter: %s | Source: %s -->\n<style data-designinserter-style=\"%s\">\n%s\n</style>\n<div class=\"designinserter-part\" data-designinserter-id=\"%s\" aria-label=\"%s\">\n%s\n</div>\n",
+		"\n<!-- Design Inserter: %s | Source: %s -->\n%s<div class=\"designinserter-part\" data-designinserter-id=\"%s\" aria-label=\"%s\">\n%s\n</div>\n",
 		esc_html( $title ),
 		$source,
-		$id,
-		$css,
+		$style,
 		$id,
 		$title,
 		$html

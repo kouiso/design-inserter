@@ -147,3 +147,41 @@
 - CSS Stock をスクレイピングし、全カテゴリ/全パーツの HTML/CSS を `data/css-stock-parts.json` に保存する。
 - `IMPLEMENTATION_PLAN.md` に UX 計画とプレモーテムを記載する。
 - 生成 catalog を使って Gutenberg block / shortcode で挿入できる状態にする。
+
+## Phase 6: プラグイン本体実装計画 + 初期実装
+
+### 完了内容
+- CSS Stock の guide page とカテゴリページをスクレイピングする `scripts/scrape-css-stock.mjs` を作成した。
+- `npm run scrape:css-stock` を実行し、全カテゴリ/全パーツの catalog を生成した。
+  - Categories: 28
+  - Expected parts from source counts: 222
+  - Scraped parts: 222
+  - Output: `wp-content/plugins/designinserter/data/css-stock-parts.json`
+- SVG-only loading partsは CSS が空のため、空 `<style>` を出力しないよう renderer/editor を調整した。
+- `IMPLEMENTATION_PLAN.md` を作成し、UX 方針を記載した。
+- 実装済み UX:
+  - Gutenberg dynamic block: `designinserter/css-part`
+  - shortcode: `[designinserter_part id="heading-1"]`
+  - admin settings page: Settings > Design Inserter
+- CSS Stock の source URL を catalog と render comment に保持した。
+
+### プレモーテム所見
+- CSS は現状グローバル出力のため、テーマや他ブロックと class が衝突する可能性がある。衝突が見えたら selector prefixer を追加する。
+- 一部 HTML は `/css-stock/img/...` の placeholder 画像パスを含む。画像直リンクは避けるべきなので、次段階で Media Library 置換 UI を検討する。
+- `wp_kses_post` を通すと form/input/svg 系パーツが壊れるため、catalog を信頼済みローカルデータとして扱って raw render している。catalog 更新時の diff review が必要。
+- Gutenberg editor の dropdown は 222 件を一括表示するため、実利用では検索 UI またはカテゴリ絞り込みを追加した方がよい。
+
+### 残課題
+- Docker/OrbStack VM hang のため、WordPress admin 上のブロック挿入、shortcode 表示、プラグイン有効化は未確認。
+- ローカルに `php` がないため PHP 構文検査も未実行。
+- Playwright/ブラウザ検証は Docker 復旧後に実施する。
+
+### 次 Phase 計画
+- Docker daemon 復旧後:
+  - `docker compose down -v`
+  - `docker compose up -d --build`
+  - install 画面確認
+  - WP-CLI で初期インストール
+  - `wp plugin activate designinserter`
+  - block/shortcode の表示確認
+- その後、editor の検索/カテゴリ絞り込みと画像 placeholder 対策を追加する。

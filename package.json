@@ -4,6 +4,7 @@
   "private": true,
   "description": "Local WordPress plugin development environment for Design Inserter.",
   "scripts": {
+    "scrape:css-stock": "node scripts/scrape-css-stock.mjs",
     "wp": "docker compose exec -T wordpress wp --allow-root",
     "php:lint": "docker compose exec -T wordpress php -l wp-content/plugins/designinserter/designinserter.php"
   },

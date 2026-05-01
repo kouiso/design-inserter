@@ -70,7 +70,7 @@
 						{
 							className: 'designinserter-editor-preview',
 						},
-						el( 'style', {}, part.css ),
+						part.css ? el( 'style', {}, part.css ) : null,
 						el( 'div', {
 							className: 'designinserter-part',
 							dangerouslySetInnerHTML: { __html: part.html }
