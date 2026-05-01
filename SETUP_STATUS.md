@@ -82,3 +82,38 @@
 - `docker compose down -v` の後、`docker compose up -d --build` を実行する。
 - `http://localhost:8080` で WordPress install 画面を確認する。
 - WP-CLI で初期インストールし、`designinserter-dev` テーマを有効化する。
+
+## Phase 4: WordPress 初期化
+
+### 完了内容
+- 実機 Docker context は `orbstack` であることを確認した。
+- OrbStack アプリを起動/再起動した。
+- `docker compose config --quiet` による Compose 構文検証は Phase 3 で完了済み。
+
+### ブロッカー
+- `docker compose down -v`、`docker info`、`orb status` が daemon 応答待ちで停止した。
+- OrbStack log に `VM hang` / `health check failed` / Docker port forward `context deadline exceeded` が出ている。
+- そのため、この時点では以下を実機検証できていない:
+  - `docker compose down -v`
+  - `docker compose up -d --build`
+  - `http://localhost:8080` の WordPress install 画面
+  - WP-CLI による初期インストール
+  - admin login / テーマ適用確認
+
+### admin login 情報
+- 予定値: `http://localhost:8080/wp-admin/`
+- 予定ユーザー: `admin`
+- 予定パスワード: `admin`
+- 備考: Docker daemon 復旧後に WP-CLI で初期インストールして確定する。
+
+### プレモーテム所見
+- Docker/OrbStack VM が復旧しない限り、WordPress install 画面とプラグイン有効化の UI 確認は完了できない。
+- `WP_AUTO_INSTALL=false` のため、daemon 復旧後はまず install 画面が出る想定。自動インストールに切り替える場合は `.env` の `WP_AUTO_INSTALL=true` に変更する。
+
+### 残課題
+- Docker daemon 復旧後、Phase 4 の実機検証を再実行する。
+- Phase 5 の WordPress admin 表示・有効化確認も Docker 復旧後に実施する。
+
+### 次 Phase 計画
+- Docker に依存しない範囲で `designinserter` plugin skeleton を作成する。
+- ローカル PHP が利用できる場合は PHP 構文検査を行う。
