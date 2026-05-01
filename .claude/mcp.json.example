@@ -1,5 +1,8 @@
 {
-  "_comment": "実際の利用時はこのファイルを mcp.json にコピーし、API キーを .envrc 経由で注入する。mcp.json 自体は .gitignore で除外される。",
+  "_comment": [
+    "実際の利用時はこのファイルを mcp.json にコピーし、API キーを .envrc 経由で注入する。mcp.json 自体は .gitignore で除外される。",
+    "filesystem の許可パスは利用者ごとに異なるため、各自 .claude/mcp.json で必要なパスを追記してください（例: ${env:HOME} やプロジェクト配下の絶対パス）。"
+  ],
   "mcpServers": {
     "github-remote": {
       "type": "http",
@@ -83,7 +86,6 @@
       ],
       "env": {}
     },
-    "_filesystem_comment": "filesystem の許可パスは利用者ごとに異なるため、各自 .claude/mcp.json で必要なパスを追記してください（例: ${env:HOME} やプロジェクト配下の絶対パス）。",
     "filesystem": {
       "type": "stdio",
       "command": "npx",
