@@ -646,7 +646,11 @@ test.describe('Plugin: musashi-inquiry-approval (PR #72)', () => {
     });
 
     test.skip('should send admin notification email with approval link', async ({ page }) => {
-      // メールサーバー接続が必要なため未実装
+      // TODO: wp_mail のキャプチャ手段（Mailpit / WP Mail Logging プラグイン / wp_mail フィルタ経由のテストフック）
+      //       が musashi-inquiry-approval プラグインに無いため未実装。
+      //       Blocker: メール送信を検証するための fixture/mock インフラ未整備。
+      //       Next step: Local では Mailpit (docker compose up mailpit / port 8025) からメールを取得する
+      //                  ヘルパーを test/helpers/mail.ts に追加し、ここから利用する。
     });
 
     test('should display approval page with token parameter', async ({ page, context }) => {
@@ -662,30 +666,38 @@ test.describe('Plugin: musashi-inquiry-approval (PR #72)', () => {
     });
 
     test.skip('should have approval and rejection buttons on approval page', async ({ page }) => {
-      // 有効なトークンが必要なため未実装
+      // TODO: Blocker: 有効な承認トークンを生成するヘルパー / fixture が無い。
+      //       Next step: musashi-inquiry-approval の token 生成ロジックをテスト用に呼び出す
+      //                  WP-CLI コマンドまたは REST フックを追加し、test/helpers/approval.ts から利用する。
     });
 
     test.skip('should send approval email when approval button clicked', async ({ page }) => {
-      // メールサーバー接続が必要なため未実装
+      // TODO: Blocker: 上記2件の前提（メール検証 + 有効トークン）が共に未整備。
+      //       Next step: Mailpit ヘルパー + 承認トークン fixture が揃ったら有効化する。
     });
 
     test.skip('should send rejection email when rejection button clicked', async ({ page }) => {
-      // メールサーバー接続が必要なため未実装
+      // TODO: Blocker: 上記2件の前提（メール検証 + 有効トークン）が共に未整備。
+      //       Next step: Mailpit ヘルパー + 承認トークン fixture が揃ったら有効化する。
     });
 
     test.skip('should prevent double submission (second click should not send email)', async ({ page }) => {
-      // メールサーバー接続が必要なため未実装
+      // TODO: Blocker: メール送信回数を検証するため Mailpit ヘルパー必須。
+      //       Next step: Mailpit ヘルパー実装後、送信メール数の差分を検証する。
     });
   });
 
   test.describe('Email Templates Admin Page', () => {
-    
+
     test.skip('should display email templates management page in admin', async ({ page, context }) => {
-      // Playwright admin認証セットアップ後に実装
+      // TODO: Blocker: WP 管理画面アクセスのための storageState（wp-admin ログイン済み Cookie）が未整備。
+      //       Next step: playwright.config.ts に globalSetup を追加し wp-admin ログインを行った
+      //                  storageState を `test/.auth/admin.json` に保存し、このスイートで use する。
     });
 
     test.skip('should allow editing email templates', async ({ page }) => {
-      // Playwright admin認証セットアップ後に実装
+      // TODO: Blocker: 上記と同じく管理画面用 storageState が未整備。
+      //       Next step: globalSetup 整備後に有効化する。
     });
   });
 

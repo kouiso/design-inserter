@@ -26,19 +26,14 @@ test.describe('TOPページ KVナビ - 検索アイコンの色変化', () => {
     // KVナビはPCのみ表示（要素が存在しない場合はスキップ）
     const kvExists = await kvSection.count();
     const searchExists = await searchIcon.count();
+    test.skip(
+      kvExists === 0 || searchExists === 0,
+      'TOPページのKVセクションまたは検索アイコンが存在しないためスキップ',
+    );
 
-    if (kvExists === 0 || searchExists === 0) {
-      test.skip();
-      return;
-    }
-
-    // 検索アイコンが表示されているか確認
+    // 検索アイコンが表示されているか確認（モバイル表示では非表示）
     const isSearchVisible = await searchIcon.isVisible();
-    if (!isSearchVisible) {
-      // モバイル表示では検索アイコンが非表示のためスキップ
-      test.skip();
-      return;
-    }
+    test.skip(!isSearchVisible, 'モバイル表示では検索アイコンが非表示のためスキップ');
 
     // 初期色を捕捉してから data-text-color="white" を適用する
     // 初期状態で偶然 searchIcon と navLinkText の色が一致していた場合、

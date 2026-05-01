@@ -136,8 +136,12 @@ test.describe('Content Integrity Tests - コンテンツ整合性確認', () => 
     });
   });
 
-  // Note: /story/ はアーカイブページではなく固定ページのため、スキップ
-  // ストーリー記事は /technology/ 等から個別にリンクされている
+  // Note: /story/ はアーカイブページではなく固定ページのため、アーカイブ用の検証ロジックを
+  //       適用できない。ストーリー記事は /technology/ 等から個別にリンクされている。
+  //       TODO: ストーリー記事の整合性は archive ベースではなく個別投稿スラッグ単位の検証が必要。
+  //             Blocker: 整合性検証のための個別投稿一覧 fixture（slug + title）が未整備。
+  //             Next step: expected-posts.json に story.individualPosts セクションを追加し、
+  //                        各 slug への直接アクセス + タイトル一致を検証する別 describe ブロックを実装する。
   test.describe.skip('ストーリー (/story/)', () => {
     const archiveData = expectedPosts.archives.story;
 
