@@ -108,8 +108,10 @@ test.describe('Form Tests - フォーム機能確認', () => {
       if (count >= 6) {
         for (let i = 0; i < 6; i++) {
           await checkboxes.nth(i).check();
-          // 各チェックボックスが反映されるのを待機（JS による上限制御の伝播）
-          await expect(checkboxes.nth(i)).toBeChecked();
+          // 5件目までは反映を確認（6件目は上限制御で自動解除される可能性があるため後段で個別検証）
+          if (i < 5) {
+            await expect(checkboxes.nth(i)).toBeChecked();
+          }
         }
         
         // エラーメッセージが表示されることを確認

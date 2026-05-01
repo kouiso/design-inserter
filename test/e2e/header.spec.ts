@@ -51,15 +51,12 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     });
 
     // CSSトランジション（0.4s）後に色が確定するまでポーリングで待機
-    const searchLink = page.locator('.header__nav-link--search');
+    // header.php に PC/SP/sticky 用に複数の .header__nav-link--search が存在するため .first() で strict-mode 違反を回避
+    const searchLink = page.locator('.header__nav-link--search').first();
     await expect.poll(
       async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
       { timeout: 2000 }
     ).toMatch(/rgb\(255,\s*255,\s*255\)|#fff|white/i);
-
-    // RGB値が白（255, 255, 255）に近いことを確認
-    const color = await searchLink.evaluate((el) => window.getComputedStyle(el).color);
-    expect(color).toMatch(/rgb\(255,\s*255,\s*255\)|#fff|white/i);
   });
 
   test('blackテーマで検索アイコンが黒色になる', async ({ page }) => {
@@ -72,22 +69,20 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
     });
 
     // CSSトランジション（0.4s）後に色が確定するまでポーリングで待機
-    const searchLink = page.locator('.header__nav-link--search');
+    // 複数マッチの strict-mode 違反を防ぐため .first()
+    const searchLink = page.locator('.header__nav-link--search').first();
     await expect.poll(
       async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
       { timeout: 2000 }
     ).toMatch(/rgb\(0,\s*0,\s*0\)|#000|black/i);
-
-    // RGB値が黒（0, 0, 0）に近いことを確認
-    const color = await searchLink.evaluate((el) => window.getComputedStyle(el).color);
-    expect(color).toMatch(/rgb\(0,\s*0,\s*0\)|#000|black/i);
   });
 
   test('検索アイコンに0.4秒のトランジションが設定されている', async ({ page }) => {
     await page.goto('/');
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    const searchLink = page.locator('.header__nav-link--search');
+    // 複数マッチの strict-mode 違反を防ぐため .first()
+    const searchLink = page.locator('.header__nav-link--search').first();
 
     // transition プロパティの確認
     const transition = await searchLink.evaluate((el) => {
@@ -107,7 +102,8 @@ test.describe('ヘッダー - 検索アイコンの表示と色変化', () => {
       document.querySelector('.js-header')?.setAttribute('data-logo-color', 'white');
     });
     // CSSトランジション（0.4s）完了まで色がwhite系に確定するのを待つ
-    const searchLink = page.locator('.header__nav-link--search');
+    // 複数マッチの strict-mode 違反を防ぐため .first()
+    const searchLink = page.locator('.header__nav-link--search').first();
     await expect.poll(
       async () => searchLink.evaluate((el) => window.getComputedStyle(el).color),
       { timeout: 2000 }
