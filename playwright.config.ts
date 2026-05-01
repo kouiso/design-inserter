@@ -67,17 +67,35 @@ export default defineConfig({
   },
 
   projects: [
+    // 公開サイト向けテスト用の 3 ブラウザ並列プロジェクト。
+    // degradation.spec.ts は WordPress の管理画面オプション（共有 DB 状態）を
+    // 書き換えるテストを含むため、cross-worker race を避ける目的で
+    // 各プロジェクトから testIgnore で除外する。実体は下の admin プロジェクトで
+    // chromium のみ単一ワーカーで実行する。
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: [/degradation\.spec\.ts/],
     },
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      testIgnore: [/degradation\.spec\.ts/],
     },
     {
       name: 'msedge',
       use: { ...devices['Desktop Edge'] },
+      testIgnore: [/degradation\.spec\.ts/],
+    },
+    // 管理画面 / DB ミューテーションを伴うテスト専用のプロジェクト。
+    // test.describe.configure({ mode: 'serial' }) は単一ワーカー内でしか直列化を
+    // 保証しないため、複数プロジェクトを並列実行すると同じ wp_options を
+    // 別ワーカーが同時に書き換えて flaky になる。chromium のみに絞ることで
+    // ワーカー多重化を排除し、共有 DB 状態の整合性を担保する。
+    {
+      name: 'admin',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: [/degradation\.spec\.ts/],
     },
     // モバイルテスト（必要に応じて有効化）
     // {
