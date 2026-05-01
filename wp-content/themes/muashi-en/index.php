@@ -2,7 +2,7 @@
 get_header();
 ?>
 
-<section class="top-kv" data-bg-color="changeable" data-text-color="white" data-inview-area="100%">
+<section class="top-kv" data-bg-color="changeable" data-text-color="white" data-inview-area="100%" data-testid="top-kv">
     <div class="top-kv__bg js-color-bg"></div>
 
     <div class="top-kv__inner">
@@ -408,7 +408,7 @@ get_header();
 <section class="top-news" data-bg-color="changeable" data-text-color="white" data-inview-area="50%">
     <div class="top-news__bg js-color-bg"></div>
 
-    <div class="top-news__inner">
+    <div class="top-news__inner" data-testid="top-news-pickup">
         <div class="top-news__title-wrapper">
             <div class="top-section__title-wrapper u-hidden-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
@@ -519,7 +519,7 @@ get_header();
         </div>
     </div>
 
-    <div class="top-news__inner top-news__inner--bottom">
+    <div class="top-news__inner top-news__inner--bottom" data-testid="top-news-list">
         <div class="top-news__title-wrapper">
             <div class="top-section__title-wrapper u-hidden-md-up">
                 <p class="top-section__title-text top-section__title-text--news">
