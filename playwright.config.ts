@@ -47,6 +47,10 @@ console.log(`📍 Base URL: ${baseURL}\n`);
 export default defineConfig({
   testDir: './test',
   testIgnore: ['**/vrt/**'],
+  // Materialise test/.auth/admin.json once per run. Tests that need wp-admin
+  // opt-in via `test.use({ storageState: 'test/.auth/admin.json' })` — the
+  // default fixture stays anonymous so public-site tests are unchanged.
+  globalSetup: './test/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
