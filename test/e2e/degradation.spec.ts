@@ -192,7 +192,7 @@ test.describe('UI/UX Improvement Tests', () => {
       }
     });
 
-    test('should display 6 media items and 6 news items on homepage', async ({ page }) => {
+    test('should display 3 media items and 3 news items on homepage', async ({ page }) => {
       await page.goto(`/`);
       
       // メディアセクションの記事数（index.phpで posts_per_page => 3）
