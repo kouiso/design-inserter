@@ -10,8 +10,6 @@ on:
         default: all
         options:
           - all
-          - xserver-jp
-          - xserver-en
           - wpx-jp
           - wpx-en
       dry_run:
@@ -25,40 +23,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy-xserver-jp:
-    if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'xserver-jp' }}
-    name: Deploy Xserver Staging (JP)
-    uses: ./.github/workflows/deploy.yml
-    with:
-      environment: staging
-      server_label: 'Xserver (Staging JP)'
-      dry_run: ${{ inputs.dry_run || false }}
-      ref: ${{ github.ref }}
-      source_theme_dir: muashi
-      dest_theme_dir: muashi
-    secrets:
-      XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
-      XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
-      XSERVER_USER: ${{ secrets.XSERVER_USER }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
-  deploy-xserver-en:
-    if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'xserver-en' }}
-    name: Deploy Xserver Staging (EN)
-    uses: ./.github/workflows/deploy.yml
-    with:
-      environment: staging-en
-      server_label: 'Xserver (Staging EN)'
-      dry_run: ${{ inputs.dry_run || false }}
-      ref: ${{ github.ref }}
-      source_theme_dir: muashi-en
-      dest_theme_dir: muashi
-    secrets:
-      XSERVER_HOST: ${{ secrets.XSERVER_HOST }}
-      XSERVER_PORT: ${{ secrets.XSERVER_PORT }}
-      XSERVER_USER: ${{ secrets.XSERVER_USER }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
   deploy-wpx-jp:
     if: ${{ inputs.deploy_target == 'all' || inputs.deploy_target == 'wpx-jp' }}
     name: Deploy wpX Staging (JP)
