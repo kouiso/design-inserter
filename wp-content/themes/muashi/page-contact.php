@@ -32,7 +32,7 @@ get_header();
             </h1>
 
             <div class="page__inner page__inner--narrow">
-              <section class="contact">
+              <section class="contact" data-testid="contact-form">
                     <!-- エディタ本文（任意の注意書き等） -->
                     <div class="contact__content">
                         <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
