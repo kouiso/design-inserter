@@ -10,7 +10,7 @@
  *      `SKIP_AUTH_SETUP=1` を尊重する。
  */
 
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import { dirname } from 'path';
 
 import { chromium, type FullConfig } from '@playwright/test';
@@ -22,6 +22,24 @@ import {
 } from './helpers/auth';
 
 const STORAGE_STATE_PATH = 'test/.auth/admin.json';
+
+/**
+ * STORAGE_STATE_PATH が残っている場合に削除する。
+ * ログイン失敗時に古い storageState を残してしまうと、後続のテストランで
+ * 古い／無効な Cookie が再利用されて wp-admin に到達できているかのように
+ * 見えてしまうため、失敗パスでは必ずファイルごと破棄する。
+ */
+function removeStaleStorageState(): void {
+  if (existsSync(STORAGE_STATE_PATH)) {
+    try {
+      unlinkSync(STORAGE_STATE_PATH);
+    } catch (err) {
+      console.warn(
+        `[global-setup] Failed to remove stale storageState: ${(err as Error).message}`,
+      );
+    }
+  }
+}
 
 async function globalSetup(config: FullConfig): Promise<void> {
   const baseURL = config.projects?.[0]?.use?.baseURL || process.env.BASE_URL;
@@ -62,11 +80,39 @@ async function globalSetup(config: FullConfig): Promise<void> {
     const page = await context.newPage();
     await loginAsAdmin(page, baseURL, credentials);
     await saveAdminStorageState(page, STORAGE_STATE_PATH);
+
+    // スモークチェック: 書き出した storageState が実際に管理者権限を伴って
+    // wp-admin に到達できることを 1 リクエストで検証する。
+    // /wp-admin/index.php に GET し、最終 URL が /wp-admin/ 配下に留まっていれば
+    // Cookie が有効。wp-login.php へリダイレクトされた場合は認証無効と判断し、
+    // 古い／壊れた storageState を残さないよう削除して例外を投げる。
+    const adminUrl = new URL('/wp-admin/index.php', baseURL).toString();
+    const probeResponse = await page.goto(adminUrl, { waitUntil: 'domcontentloaded' });
+    const finalUrl = page.url();
+    const reachedAdmin =
+      probeResponse !== null &&
+      probeResponse.status() < 400 &&
+      /\/wp-admin\//.test(finalUrl) &&
+      !/wp-login\.php/.test(finalUrl);
+
+    if (!reachedAdmin) {
+      removeStaleStorageState();
+      throw new Error(
+        `storageState smoke check failed: final URL=${finalUrl}, ` +
+          `status=${probeResponse?.status() ?? 'no-response'}.`,
+      );
+    }
+
     console.log(`[global-setup] Admin storageState written to ${STORAGE_STATE_PATH}.`);
   } catch (err) {
+    // ログイン or スモークチェック失敗時は古い storageState を残さない。
+    // 残してしまうと次回ラン以降で existsSync が真になり、無効な Cookie で
+    // 管理画面テストが走って誤判定（古いセッションで通ってしまう／真っ白で落ちる）
+    // を起こすため、失敗パスでは必ずファイルを削除する。
+    removeStaleStorageState();
     console.warn(
       `[global-setup] Admin login failed: ${(err as Error).message}. ` +
-        'Admin-only tests will be unable to load storageState.',
+        'Stale storageState removed; admin-only tests will be unable to load storageState.',
     );
   } finally {
     await browser.close();
