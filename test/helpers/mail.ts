@@ -1,12 +1,12 @@
 /**
- * Mailpit helper for E2E tests.
+ * E2E テスト用 Mailpit ヘルパー。
  *
- * MusashiPaint Docker compose ships an `axllent/mailpit` container exposing the
- * Mailpit HTTP API on port 8025 and SMTP on port 1025. WordPress (`wp_mail`) is
- * configured to deliver via SMTP, so any email triggered during a test run is
- * captured by Mailpit and observable via the JSON API.
+ * MusashiPaint の Docker compose は `axllent/mailpit` コンテナを同梱しており、
+ * Mailpit HTTP API をポート 8025、SMTP をポート 1025 で公開している。
+ * WordPress (`wp_mail`) は SMTP 経由で配信するよう設定されているため、テスト実行中に
+ * トリガーされたメールはすべて Mailpit で受信され、JSON API から観測可能。
  *
- * Usage:
+ * 使い方:
  *   import { clearMailpit, waitForMailpitMessage } from '../helpers/mail';
  *
  *   test.beforeEach(async () => {
@@ -20,15 +20,14 @@
  *     expect(msg.Subject).toContain('問い合わせ');
  *   });
  *
- * Reference: https://mailpit.axllent.org/docs/api-v1/
+ * 参考: https://mailpit.axllent.org/docs/api-v1/
  */
 
 export const MAILPIT_BASE_URL: string =
   process.env.MAILPIT_BASE_URL || 'http://localhost:8025';
 
 /**
- * Mailpit address entry as returned by `/api/v1/messages` and
- * `/api/v1/message/{id}`.
+ * `/api/v1/messages` と `/api/v1/message/{id}` が返す Mailpit アドレスエントリ。
  */
 export interface MailpitAddress {
   Name: string;
@@ -36,10 +35,10 @@ export interface MailpitAddress {
 }
 
 /**
- * Summary entry returned by `GET /api/v1/messages`.
+ * `GET /api/v1/messages` が返すサマリーエントリ。
  *
- * Mailpit truncates body fields in the listing endpoint; full text/HTML can be
- * fetched via `getMailpitMessageById` if needed.
+ * Mailpit の一覧エンドポイントは本文フィールドを切り詰めるため、
+ * 必要に応じて `getMailpitMessageById` で text/HTML 全文を取得すること。
  */
 export interface MailpitMessageSummary {
   ID: string;
@@ -58,7 +57,7 @@ export interface MailpitMessageSummary {
 }
 
 /**
- * Full message returned by `GET /api/v1/message/{ID}`.
+ * `GET /api/v1/message/{ID}` が返す完全なメッセージ。
  */
 export interface MailpitMessage extends MailpitMessageSummary {
   ReplyTo?: MailpitAddress[];
@@ -86,10 +85,10 @@ export interface MailpitFilter {
 }
 
 /**
- * Delete every message currently held by Mailpit. Should be called from
- * `test.beforeEach` so each test observes a clean inbox.
+ * Mailpit に保持されている全メッセージを削除する。
+ * 各テストがクリーンな受信箱で開始できるよう `test.beforeEach` から呼び出す想定。
  *
- * Mailpit returns 200 with an empty body on success.
+ * Mailpit は成功時に空ボディの 200 を返す。
  */
 export async function clearMailpit(): Promise<void> {
   const res = await fetch(`${MAILPIT_BASE_URL}/api/v1/messages`, {
@@ -103,12 +102,11 @@ export async function clearMailpit(): Promise<void> {
 }
 
 /**
- * Fetch the current message list from Mailpit, optionally narrowed by an
- * in-memory filter on `to` (any recipient address) and/or `subject` (substring,
- * case-insensitive).
+ * Mailpit から現在のメッセージ一覧を取得する。任意で `to`（受信者アドレスのいずれか）
+ * および/または `subject`（部分一致・大文字小文字無視）によるインメモリフィルタを適用可能。
  *
- * Filtering is applied client-side rather than via Mailpit search syntax to
- * keep the helper predictable and free of search-grammar surprises.
+ * Mailpit の検索構文を使わずクライアント側でフィルタリングすることで、
+ * ヘルパーの挙動を予測可能にし、検索文法による思わぬ挙動を避ける。
  */
 export async function getMailpitMessages(
   filter?: MailpitFilter,
@@ -140,7 +138,7 @@ export async function getMailpitMessages(
 }
 
 /**
- * Fetch the full message (including Text, HTML, and Headers) by Mailpit ID.
+ * Mailpit ID を指定してメッセージ全文（Text / HTML / Headers を含む）を取得する。
  */
 export async function getMailpitMessageById(id: string): Promise<MailpitMessage> {
   const res = await fetch(`${MAILPIT_BASE_URL}/api/v1/message/${encodeURIComponent(id)}`);
@@ -153,11 +151,11 @@ export async function getMailpitMessageById(id: string): Promise<MailpitMessage>
 }
 
 /**
- * Poll Mailpit until a message matching `filter` arrives, or `timeout` ms pass.
+ * `filter` に合致するメッセージが届くまで、または `timeout` ミリ秒が経過するまで
+ * Mailpit をポーリングする。
  *
- * Returns the FULL message (Text + HTML + Headers) by chaining a follow-up
- * call to `/api/v1/message/{id}`. Throws if no message arrives within the
- * timeout.
+ * 戻り値は `/api/v1/message/{id}` への追加呼び出しでメッセージ全文
+ * （Text + HTML + Headers）を取得したもの。タイムアウト内に届かなければ throw する。
  */
 export async function waitForMailpitMessage(
   filter: MailpitFilter,
@@ -166,18 +164,15 @@ export async function waitForMailpitMessage(
   const intervalMs = 250;
   const deadline = Date.now() + timeout;
 
-  let lastSeen = 0;
   while (Date.now() < deadline) {
     const matches = await getMailpitMessages(filter);
     if (matches.length > 0) {
       return getMailpitMessageById(matches[0].ID);
     }
-    lastSeen = matches.length;
     await new Promise((resolve) => setTimeout(resolve, intervalMs));
   }
 
   throw new Error(
-    `Timed out after ${timeout}ms waiting for Mailpit message ` +
-      `matching ${JSON.stringify(filter)} (last seen=${lastSeen}).`,
+    `Mailpit message matching ${JSON.stringify(filter)} did not arrive within ${timeout}ms.`,
   );
 }

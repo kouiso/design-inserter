@@ -1,14 +1,13 @@
 /**
- * Playwright globalSetup.
+ * Playwright globalSetup。
  *
- * Responsibilities:
- *   1. Materialise `test/.auth/admin.json` once per test run by logging into
- *      `wp-login.php`. Individual tests then opt-in via `test.use({ storageState })`.
- *   2. Be tolerant when WordPress is not reachable (e.g. unit-style invocation
- *      in CI without a live container) — log and return rather than aborting,
- *      so admin-less tests can still run.
- *   3. Honour `SKIP_AUTH_SETUP=1` for fast iteration when an existing
- *      storageState file is already on disk.
+ * 役割:
+ *   1. 1 ラン 1 回だけ `wp-login.php` にログインして `test/.auth/admin.json` を生成する。
+ *      個別のテストは `test.use({ storageState })` でオプトイン取得する。
+ *   2. WordPress に到達できない場合（ライブコンテナのない CI でのユニット風実行など）は
+ *      中断せずにログを残して return することで、管理者不要のテストを引き続き走らせる。
+ *   3. 既に storageState ファイルがディスクにある場合の高速反復用に
+ *      `SKIP_AUTH_SETUP=1` を尊重する。
  */
 
 import { existsSync, mkdirSync } from 'fs';

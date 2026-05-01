@@ -1,13 +1,13 @@
 /**
- * Admin storageState helper for E2E tests.
+ * E2E テスト用の管理者 storageState ヘルパー。
  *
- * Pattern: admin auth is OPT-IN per test. The Playwright globalSetup writes
- * `test/.auth/admin.json` once per run; tests that need wp-admin then add
- * `test.use({ storageState: 'test/.auth/admin.json' })` at the top of their
- * describe block. Tests that hit only the public site stay anonymous.
+ * 方針: 管理者認証はテストごとのオプトイン。Playwright の globalSetup が
+ * 1 ラン 1 回だけ `test/.auth/admin.json` を書き出し、wp-admin が必要なテストは
+ * describe ブロック先頭で `test.use({ storageState: 'test/.auth/admin.json' })` を
+ * 付与して取り込む。公開サイトのみを叩くテストは匿名のまま走らせる。
  *
- * Credentials come from env: WP_ADMIN_USER (default `admin`) and WP_ADMIN_PASS
- * (default `password` — local-dev only; CI is warned in the console).
+ * 認証情報は環境変数から取得: WP_ADMIN_USER（既定 `admin`）と
+ * WP_ADMIN_PASS（既定 `password` — ローカル開発専用。CI ではコンソール警告を出す）。
  */
 
 import type { Page } from '@playwright/test';
@@ -18,8 +18,9 @@ export interface AdminCredentials {
 }
 
 /**
- * Resolve admin credentials from env vars, falling back to local-dev defaults.
- * Emits a console warning when defaulting in CI so a missing secret is loud.
+ * 環境変数から管理者の認証情報を解決し、未設定の場合はローカル開発用のデフォルトに
+ * フォールバックする。CI でデフォルトに落ちた場合はコンソール警告を出して、
+ * シークレット未設定を気付かせる。
  */
 export function getAdminCredentialsFromEnv(): AdminCredentials {
   const username = process.env.WP_ADMIN_USER || 'admin';
@@ -36,11 +37,11 @@ export function getAdminCredentialsFromEnv(): AdminCredentials {
 }
 
 /**
- * Submit the wp-login.php form and wait for the redirect into wp-admin.
+ * wp-login.php フォームを送信し、wp-admin へのリダイレクトを待つ。
  *
- * Uses CSS selectors (`#user_login`, `#user_pass`, `#wp-submit`) which are
- * stable across WordPress core versions. Throws if the redirect lands anywhere
- * other than under `/wp-admin/` — that indicates auth failed.
+ * セレクタは WordPress コアのバージョンを通して安定している
+ * `#user_login` / `#user_pass` / `#wp-submit` を使用。
+ * `/wp-admin/` 以外へリダイレクトされた場合は認証失敗とみなして throw する。
  */
 export async function loginAsAdmin(
   page: Page,
@@ -67,8 +68,8 @@ export async function loginAsAdmin(
 }
 
 /**
- * Persist the current browser context's storage state to disk so other tests
- * can re-attach via `test.use({ storageState: path })`.
+ * 現在のブラウザコンテキストの storage state をディスクに書き出す。
+ * 他のテストが `test.use({ storageState: path })` で再アタッチできるようにする。
  */
 export async function saveAdminStorageState(page: Page, path: string): Promise<void> {
   await page.context().storageState({ path });
