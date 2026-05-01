@@ -11,7 +11,77 @@
  *   npx playwright test degradation.spec.ts -g "Product Pagination"  (フィルタリング)
  */
 
+import { existsSync } from 'node:fs';
+
 import { test, expect } from '@playwright/test';
+
+import {
+  clearMailpit,
+  getMailpitMessageById,
+  getMailpitMessages,
+  waitForMailpitMessage,
+} from '../helpers/mail';
+
+const ADMIN_STORAGE_STATE = 'test/.auth/admin.json';
+
+/**
+ * Submit the contact form with deterministic test data and return the email
+ * address used so a test can later look up the matching Mailpit message.
+ */
+async function submitContactForm(
+  page: import('@playwright/test').Page,
+  overrides: Partial<{ email: string; name: string; subject: string }> = {},
+): Promise<{ email: string; name: string; subject: string }> {
+  // 並列ワーカー間で Date.now() ms が衝突しうるため workerIndex を付与する。
+  const stamp = `${Date.now()}-${test.info().workerIndex}`;
+  const email = overrides.email ?? `pw-${stamp}@example.test`;
+  const name = overrides.name ?? `Playwright User ${stamp}`;
+  const subject = overrides.subject ?? `Playwright inquiry ${stamp}`;
+
+  await page.goto('/contact/');
+  await page.fill('input[name="your-name"]', name);
+  await page.fill('input[name="your-company"]', 'Musashi Paint QA');
+  await page.fill('input[name="your-email"]', email);
+  await page.fill('input[name="your-subject"]', subject);
+  await page.fill('textarea[name="your-message"]', 'Test inquiry message');
+  await page.check('input[name="agree"]');
+
+  const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
+  await expect(submitButton).toBeEnabled();
+  await submitButton.click();
+
+  await expect(page.locator('.wpcf7-response-output')).toBeVisible({ timeout: 10_000 });
+
+  return { email, name, subject };
+}
+
+/**
+ * Wait for the admin notification mail to land in Mailpit, then extract the
+ * review URL token. The admin notification body always renders the review
+ * URL via `?musashi_review=1&token=...`. Since `clearMailpit()` runs in
+ * `beforeEach`, any mail observed post-submission belongs to the current test.
+ */
+async function captureReviewToken(): Promise<{ token: string; reviewUrl: string }> {
+  const tokenPattern = /musashi_review=1&(?:amp;)?token=([A-Za-z0-9._-]+)/;
+  const deadline = Date.now() + 15_000;
+
+  while (Date.now() < deadline) {
+    const summaries = await getMailpitMessages();
+    for (const summary of summaries) {
+      const detail = await getMailpitMessageById(summary.ID);
+      const haystack = `${detail.HTML || ''}\n${detail.Text || ''}`;
+      const match = haystack.match(tokenPattern);
+      if (match) {
+        return { token: match[1], reviewUrl: `/?musashi_review=1&token=${match[1]}` };
+      }
+    }
+    await new Promise((r) => setTimeout(r, 250));
+  }
+
+  throw new Error(
+    'captureReviewToken: no admin notification mail with a review URL arrived within 15s.',
+  );
+}
 
 /**
  * =================================================================
@@ -649,59 +719,164 @@ test.describe('Plugin: musashi-inquiry-approval (PR #72)', () => {
       await expect(successMessage).toBeVisible({ timeout: 10000 });
     });
 
-    test.skip('should send admin notification email with approval link', async ({ page }) => {
-      // TODO: wp_mail のキャプチャ手段（Mailpit / WP Mail Logging プラグイン / wp_mail フィルタ経由のテストフック）
-      //       が musashi-inquiry-approval プラグインに無いため未実装。
-      //       Blocker: メール送信を検証するための fixture/mock インフラ未整備。
-      //       Next step: Local では Mailpit (docker compose up mailpit / port 8025) からメールを取得する
-      //                  ヘルパーを test/helpers/mail.ts に追加し、ここから利用する。
-    });
+    test.describe('Mail-driven approval flow', () => {
+      // Mailpit 受信箱は describe 内のテスト間で共有されるため、fullyParallel:true 下でも
+      // 並列実行による相互干渉（他テストの clearMailpit が走るなど）を避けて serial 化する。
+      test.describe.configure({ mode: 'serial' });
 
-    test('should display approval page with token parameter', async ({ page, context }) => {
-      // ?musashi_review=1&token=xxx パラメータで確認ページ表示
-      // 実際のトークンは上記のメール検証テストから取得
-      
-      const approvalUrl = `/?musashi_review=1&token=test_token`;
-      const response = await page.goto(approvalUrl);
-      
-      // トークンが不正な場合は 404
-      // 有効なトークンの場合は確認ページ表示
-      expect([200, 404]).toContain(response?.status());
-    });
+      test.beforeEach(async () => {
+        await clearMailpit();
+      });
 
-    test.skip('should have approval and rejection buttons on approval page', async ({ page }) => {
-      // TODO: Blocker: 有効な承認トークンを生成するヘルパー / fixture が無い。
-      //       Next step: musashi-inquiry-approval の token 生成ロジックをテスト用に呼び出す
-      //                  WP-CLI コマンドまたは REST フックを追加し、test/helpers/approval.ts から利用する。
-    });
+      test('should send admin notification email with approval link', async ({ page }) => {
+        await submitContactForm(page);
+        // The plugin sends both a user confirmation and an admin notification;
+        // the admin one carries the `musashi_review=1&token=...` URL.
+        const { token } = await captureReviewToken();
+        expect(token.length).toBeGreaterThan(0);
+      });
 
-    test.skip('should send approval email when approval button clicked', async ({ page }) => {
-      // TODO: Blocker: 上記2件の前提（メール検証 + 有効トークン）が共に未整備。
-      //       Next step: Mailpit ヘルパー + 承認トークン fixture が揃ったら有効化する。
-    });
+      test('should display approval page with token parameter', async ({ page }) => {
+        await submitContactForm(page);
+        const { reviewUrl } = await captureReviewToken();
+        const response = await page.goto(reviewUrl);
+        expect(response?.status()).toBe(200);
+        await expect(page.locator('#approve-form, #reject-form').first()).toBeVisible();
+      });
 
-    test.skip('should send rejection email when rejection button clicked', async ({ page }) => {
-      // TODO: Blocker: 上記2件の前提（メール検証 + 有効トークン）が共に未整備。
-      //       Next step: Mailpit ヘルパー + 承認トークン fixture が揃ったら有効化する。
-    });
+      test('should have approval and rejection buttons on approval page', async ({ page }) => {
+        await submitContactForm(page);
+        const { reviewUrl } = await captureReviewToken();
+        await page.goto(reviewUrl);
 
-    test.skip('should prevent double submission (second click should not send email)', async ({ page }) => {
-      // TODO: Blocker: メール送信回数を検証するため Mailpit ヘルパー必須。
-      //       Next step: Mailpit ヘルパー実装後、送信メール数の差分を検証する。
+        await expect(page.locator('#approve-form input[name="action_type"][value="approve"]')).toHaveCount(1);
+        await expect(page.locator('#reject-form input[name="action_type"][value="reject"]')).toHaveCount(1);
+        await expect(page.locator('.btn-approve')).toBeVisible();
+        await expect(page.locator('.btn-reject')).toBeVisible();
+      });
+
+      test('should send approval email when approval button clicked', async ({ page }) => {
+        const { email } = await submitContactForm(page);
+        const { reviewUrl } = await captureReviewToken();
+
+        // 承認クリックで生成されたメールだけを観測するため受信箱を空にする。
+        await clearMailpit();
+
+        await page.goto(reviewUrl);
+        // 実際の UI フロー: 承認ボタン → 確認モーダル → 実行ボタン。
+        // ボタン経由で踏むことで JS のクリックハンドラを通常通り発火させる。
+        await page.locator('.btn-approve').click();
+        await page.locator('#confirmation-submit').click();
+
+        // ユーザー向け承認メールは問い合わせ者のアドレス宛て。
+        const userMail = await waitForMailpitMessage({ to: email }, 15_000);
+        expect(userMail.Subject.length).toBeGreaterThan(0);
+      });
+
+      test('should send rejection email when rejection button clicked', async ({ page }) => {
+        const { email } = await submitContactForm(page);
+        const { reviewUrl } = await captureReviewToken();
+
+        await clearMailpit();
+
+        await page.goto(reviewUrl);
+        await page.locator('.btn-reject').click();
+        await page.locator('#confirmation-submit').click();
+
+        const userMail = await waitForMailpitMessage({ to: email }, 15_000);
+        expect(userMail.Subject.length).toBeGreaterThan(0);
+      });
+
+      test('should prevent double submission (second click should not send email)', async ({ page }) => {
+        const { email } = await submitContactForm(page);
+        const { reviewUrl } = await captureReviewToken();
+
+        // 1 回目の承認 — 実際にメールが届くことを確認してから、受信箱を空にする。
+        // これをやらないと「1 回目が無音で失敗 → 2 回目も無音 → no-mail を検出」で
+        // 誤って PASS してしまう。
+        await page.goto(reviewUrl);
+        await page.locator('.btn-approve').click();
+        await page.locator('#confirmation-submit').click();
+        await page.waitForLoadState('networkidle');
+
+        // 1 回目の送信で実際にユーザー向けメールが届いたことを確認。
+        await waitForMailpitMessage({ to: email }, 15_000);
+        await clearMailpit();
+
+        // 同一トークンでの 2 回目。プラグインは再アクションを短絡しメールを再送信しない想定。
+        await page.goto(reviewUrl);
+        await page.locator('.btn-approve').click();
+        await page.locator('#confirmation-submit').click();
+        await page.waitForLoadState('networkidle');
+
+        // Mailpit をポーリングし、観測ウィンドウ全体で受信箱が空のままであることを確認。
+        // ローカル Docker の SMTP/CF7 配送は通常 1 秒未満で完了するが、
+        // CI などでの遅延を考慮し 3 秒に設定（伸ばすほどテストが遅くなるため、
+        // 「届かない」確認には 3 秒が現実的な妥協点）。
+        await expect
+          .poll(async () => (await getMailpitMessages()).length, {
+            intervals: [250, 250, 250, 250, 250, 250, 500, 500, 500],
+            timeout: 3000,
+          })
+          .toBe(0);
+      });
     });
   });
 
   test.describe('Email Templates Admin Page', () => {
+    // WP Settings API を書き換える（共有 DB をミューテートする）テスト群のため serial 化する。
+    test.describe.configure({ mode: 'serial' });
 
-    test.skip('should display email templates management page in admin', async ({ page, context }) => {
-      // TODO: Blocker: WP 管理画面アクセスのための storageState（wp-admin ログイン済み Cookie）が未整備。
-      //       Next step: playwright.config.ts に globalSetup を追加し wp-admin ログインを行った
-      //                  storageState を `test/.auth/admin.json` に保存し、このスイートで use する。
+    // globalSetup が失敗した／走っていない環境では admin storageState ファイルが
+    // 存在しない。そのまま test.use すると Playwright が即エラーを出すため、
+    // ファイル不在時はこの describe 全体を skip する。
+    test.skip(
+      !existsSync(ADMIN_STORAGE_STATE),
+      'admin storageState 未生成のため skip',
+    );
+    test.use({ storageState: ADMIN_STORAGE_STATE });
+
+    test('should display email templates management page in admin', async ({ page }) => {
+      const response = await page.goto('/wp-admin/admin.php?page=musashi-inquiry-email-templates');
+      expect(response?.status()).toBe(200);
+
+      // The plugin's settings page registers a `<form>` carrying the
+      // `musashi-inquiry-email-templates` settings group; presence of the
+      // wrapper plus at least one mail-template field proves the page rendered.
+      await expect(page.locator('#wpcontent form').first()).toBeVisible();
+      await expect(
+        page.locator('input[name^="musashi_email_"], textarea[name^="musashi_email_"]').first(),
+      ).toBeVisible();
     });
 
-    test.skip('should allow editing email templates', async ({ page }) => {
-      // TODO: Blocker: 上記と同じく管理画面用 storageState が未整備。
-      //       Next step: globalSetup 整備後に有効化する。
+    test('should allow editing email templates', async ({ page }) => {
+      await page.goto('/wp-admin/admin.php?page=musashi-inquiry-email-templates');
+
+      // Pick a stable, low-blast-radius field — the user button text — and
+      // verify it survives a round-trip through the WP Settings API.
+      const fieldSelector = 'input[name="musashi_email_user_button_text"]';
+      const field = page.locator(fieldSelector).first();
+      await expect(field).toBeVisible();
+
+      const original = (await field.inputValue()) || '';
+      // 並列ワーカー間での衝突回避のため workerIndex を付与。
+      const probe = `pw-${Date.now()}-${test.info().workerIndex}`;
+      try {
+        await field.fill(probe);
+        await page.locator('input[type="submit"][name="submit"], button[type="submit"][name="submit"]').first().click();
+        await page.waitForLoadState('networkidle');
+
+        const refreshed = page.locator(fieldSelector).first();
+        await expect(refreshed).toHaveValue(probe);
+      } finally {
+        // Restore the original value so subsequent runs / shared envs are unaffected.
+        await page.locator(fieldSelector).first().fill(original);
+        await page
+          .locator('input[type="submit"][name="submit"], button[type="submit"][name="submit"]')
+          .first()
+          .click();
+        await page.waitForLoadState('networkidle');
+      }
     });
   });
 
