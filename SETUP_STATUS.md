@@ -117,3 +117,33 @@
 ### 次 Phase 計画
 - Docker に依存しない範囲で `designinserter` plugin skeleton を作成する。
 - ローカル PHP が利用できる場合は PHP 構文検査を行う。
+
+## Phase 5: プラグイン skeleton
+
+### 完了内容
+- `wp-content/plugins/designinserter/` を作成した。
+- `designinserter.php` を作成し、指定の WordPress plugin header を記載した。
+- skeleton だけでなく、Phase 6 実装に接続しやすい最小構成を追加した:
+  - `includes/data.php`: JSON catalog loader。
+  - `includes/render.php`: shortcode/render 関数。
+  - `includes/block.php`: dynamic Gutenberg block 登録。
+  - `includes/admin.php`: 設定画面に件数/source/shortcode を表示。
+  - `assets/editor.js` / `assets/editor.css`: Gutenberg editor UI。
+- npm は既存の重い build tool を削除し、`package.json` を最小の plugin dev 用 script に更新済み。
+
+### ブロッカー
+- Docker/OrbStack VM hang のため、WordPress admin のプラグイン一覧表示・有効化 UI は未確認。
+- ローカルに `php` コマンドがなく、コンテナ外の PHP 構文検査も未実行。
+
+### プレモーテム所見
+- catalog JSON が空または壊れている場合、ブロックのセレクトは空になる。Phase 6 で scraper と JSON 生成を入れる。
+- Dynamic block の保存は `null` のため、プラグイン停止時にはブロック表示が消える。shortcode も同様に plugin 依存。
+
+### 残課題
+- Docker daemon 復旧後、plugin list 表示、有効化、ブロック挿入、shortcode 表示を WordPress admin で確認する。
+- Phase 6 で CSS Stock catalog を生成し、全パーツを選択可能にする。
+
+### 次 Phase 計画
+- CSS Stock をスクレイピングし、全カテゴリ/全パーツの HTML/CSS を `data/css-stock-parts.json` に保存する。
+- `IMPLEMENTATION_PLAN.md` に UX 計画とプレモーテムを記載する。
+- 生成 catalog を使って Gutenberg block / shortcode で挿入できる状態にする。
