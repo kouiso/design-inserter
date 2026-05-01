@@ -61,15 +61,11 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
   test('タクソノミーページネーション: 2ページ目への遷移が正常に機能する', async ({ page }) => {
     // 用途でえらぶのタームページに遷移（データが十分にある前提）
     await page.goto('/product/application/');
-    
+
     const pagination = page.locator('.pagination');
     const hasPagination = await pagination.isVisible().catch(() => false);
-    
-    if (!hasPagination) {
-      test.skip();
-      return;
-    }
-    
+    test.skip(!hasPagination, '/product/application/ にページネーションが無い（製品数が12件以下）ためスキップ');
+
     const page2Link = page.locator('a[href*="/product/application/page/2/"]').first();
     await page2Link.click();
     await expect(page).toHaveURL(/\/product\/application\/page\/2\//);
@@ -77,25 +73,21 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
 
   test('製品詳細: ダウンロード誘導リンクが機能する', async ({ page }) => {
     await page.goto('/product/');
-    
+
     // 最初の製品リンクをクリック
     const firstProduct = page.locator('.archive__link').first();
     const isVisible = await firstProduct.isVisible().catch(() => false);
-    
-    if (!isVisible) {
-      test.skip();
-      return;
-    }
-    
+    test.skip(!isVisible, '/product/ に製品リンクが存在しないためスキップ');
+
     await firstProduct.click();
-    
+
     // 詳細ページに遷移したことを確認
     await page.waitForLoadState('networkidle');
-    
+
     // 資料ダウンロードリンクが存在する場合確認
     const downloadLink = page.locator('a[href*="/download/"]');
     const hasDownloadLink = await downloadLink.isVisible().catch(() => false);
-    
+
     if (hasDownloadLink) {
       await expect(downloadLink).toBeVisible();
     }
@@ -104,18 +96,14 @@ test.describe('Taxonomy Tests - タクソノミー機能確認', () => {
   test('メディアカテゴリ: カテゴリページが正常に表示される', async ({ page }) => {
     // メディアページに移動
     await page.goto('/media-page/');
-    
+
     // カテゴリリンクをクリック（存在する場合）
     const categoryLink = page.locator('.archive__category-link').first();
     const isVisible = await categoryLink.isVisible().catch(() => false);
-    
-    if (!isVisible) {
-      test.skip();
-      return;
-    }
-    
+    test.skip(!isVisible, '/media-page/ にカテゴリリンクが存在しないためスキップ');
+
     await categoryLink.click();
-    
+
     // カテゴリページに遷移したことを確認
     await page.waitForLoadState('networkidle');
     await expect(page.locator('.page__title')).toBeVisible();
