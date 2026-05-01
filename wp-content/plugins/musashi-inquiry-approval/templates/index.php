@@ -1,9 +1,0 @@
-<?php
-// Silence is golden.
-
-
-
-
-
-
-

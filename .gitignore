@@ -1,107 +1,44 @@
-# WordPress core
+# WordPress core downloaded into Docker volume or local root.
 wp-admin/
 wp-includes/
 wp-config.php
-*.php
-!wp-content/themes/muashi/**/*.php
-!wp-content/themes/muashi-en/**/*.php
-!wp-content/themes/muashi-bogo/**/*.php
-!wp-content/plugins/musashi-inquiry-approval/**/*.php
-!test/**/*.php
-
-# WordPress default files
+wp-*.php
+xmlrpc.php
 license.txt
 readme.html
 .htaccess
 
-# WordPress content - system directories
+# WordPress runtime content.
 wp-content/uploads/
 wp-content/upgrade/
 wp-content/cache/
 wp-content/backups/
-wp-content/ai1wm-backups/
-wp-content/wpvividbackups/
-wp-content/wpvivid_staging/
-wp-content/siteguard/
-wp-content/plugins/*
-!wp-content/plugins/musashi-inquiry-approval/
-wp-content/plugins/all-in-one-wp-migration/storage/
-wp-content/index.php
-wp-content/themes/index.php
 wp-content/languages/
+wp-content/mu-plugins/
 
-# WordPress default themes
-wp-content/themes/twentytwenty/
-wp-content/themes/twentytwentyone/
-wp-content/themes/twentytwentytwo/
-wp-content/themes/twentytwentythree/
-wp-content/themes/twentytwentyfour/
-wp-content/themes/twentytwentyfive/
+# Track only this plugin and the minimal dev theme.
+wp-content/plugins/*
+!wp-content/plugins/index.php
+!wp-content/plugins/designinserter/
+!wp-content/plugins/designinserter/**
+wp-content/themes/*
+!wp-content/themes/index.php
+!wp-content/themes/designinserter-dev/
+!wp-content/themes/designinserter-dev/**
 
-# Development files
-TODO.md
-
-# System files
+# Local environment.
+.env
+.env.docker
+*.log
 .DS_Store
 Thumbs.db
-nul
 
-# Local environment
-local-xdebuginfo.php
-*.log
-
-# Node.js
+# Node.
 node_modules/
 npm-debug.log*
 
-# Editor
-.idea/
-.vscode/mcp.json
-*.code-workspace
-
-# Build artifacts
-.sass-cache/
-build-css.js
-compile-direct.js
-compile-log.txt
-compile-output.txt
-compile-scss-gulp.js
-compile-scss.js
-final-compile.js
-
-# Test files
-test-*.html
-
-# Playwright
-/test-results/
-/playwright-report/
-/playwright/.cache/
-/.playwright-mcp/
-test/screenshots/
-
-# VRT（ビジュアルリグレッションテスト）
-test/vrt/screenshots/
-test/vrt/report.html
-
-# Task
+# Test/build artifacts.
+test-results/
+playwright-report/
+.playwright-mcp/
 .tmp/
-wp-cli.phar
-
-# Claude（rules/agents/commands/skills/hooks は git 管理、機密と一時データのみ除外）
-**/.claude/mcp.json
-**/.claude/settings.local.json
-**/.claude/cache/
-**/.claude/sessions/
-**/.claude/logs/
-**/.claude/projects/
-**/.claude/figma-images/
-**/.claude/*.local.md
-**/.claude/**/*.local.md
-tmpclaude-*/
-
-# direnv（機密環境変数）
-.envrc
-
-# Docker
-.env
-.env.docker

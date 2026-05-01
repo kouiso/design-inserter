@@ -46,3 +46,39 @@
 ### 次 Phase 計画
 - musashipaint 固有のテーマロジック、既存プラグイン、GitHub Actions、テスト/プロンプト類を削除する。
 - Docker 開発環境だけを汎用 WordPress プラグイン開発用に残す。
+
+## Phase 3: YAGNI 削除
+
+### 完了内容
+- Docker dev 環境を 1 MySQL + 1 WordPress に縮退した。
+- 残したもの:
+  - `docker-compose.yml`
+  - `.docker/wordpress/Dockerfile`
+  - `.docker/wordpress/docker-entrypoint.sh`
+  - `.docker/mysql/init-databases.sql`
+  - `.docker/conf/*`
+  - `.env.example` / `.env.docker.example` / local `.env`
+- 削除したもの:
+  - 旧 `muashi` テーマ本体、カスタム投稿タイプ、ACF/CF7/業務ロジック、ページテンプレート、画像/SCSS/JS。
+  - 旧 `musashi-inquiry-approval` プラグイン。
+  - GitHub Actions / GitHub 設定。
+  - 旧テスト、VRT、Playwright、gulp、Taskfile、プロンプト/エージェント設定、ステージング同期設定。
+  - Bedrock/Bogo 用 Dockerfile。
+- 代わりに `wp-content/themes/designinserter-dev` を最小テーマとして作成した。
+- `package.json` / `package-lock.json` を Design Inserter 用の最小 npm 設定に更新した。
+- `docker compose config --quiet` で Compose 構文を確認済み。
+- `SETUP_STATUS.md` 以外に `musashi` / `muashi` / `musashipaint` 参照が残っていないことを `rg` で確認済み。
+
+### プレモーテム所見
+- WordPress core は Docker volume にダウンロードする構成のため、volume が壊れた場合は `docker compose down -v` で再生成する。
+- Phase 4 では `WP_AUTO_INSTALL=false` のまま起動し、インストール画面が表示されることを先に確認する。その後 WP-CLI で初期インストールする。
+- プラグイン mount は `wp-content/plugins` ディレクトリ単位にしたため、Phase 5 で追加した `designinserter` が再起動なしでもコンテナ側に見える想定。
+
+### 残課題
+- 実機 Docker で volume reset、起動、install 画面確認、初期インストール、テーマ有効化確認を行う。
+- local `.env` は git 管理対象外。
+
+### 次 Phase 計画
+- `docker compose down -v` の後、`docker compose up -d --build` を実行する。
+- `http://localhost:8080` で WordPress install 画面を確認する。
+- WP-CLI で初期インストールし、`designinserter-dev` テーマを有効化する。

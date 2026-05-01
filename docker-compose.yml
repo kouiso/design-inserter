@@ -1,17 +1,17 @@
-name: musashi
+name: wordpress-plugin-designinserter
 
 services:
-  musashi-db:
+  db:
     image: mysql:8.0
-    container_name: musashi-db
+    container_name: designinserter-db
     restart: unless-stopped
     ports:
-      - "${_DOCKER_COMPOSE_HOST_PORT_DB:-${MYSQL_PORT:-3316}}:3306"
+      - "${MYSQL_PORT:-3316}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
       MYSQL_USER: ${MYSQL_USER:-wordpress}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-musashi_jp}
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME:-designinserter}
     volumes:
       - db_data:/var/lib/mysql
       - ./.docker/mysql/init-databases.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -31,135 +31,48 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - musashi-net
+      - designinserter-net
 
-  musashi-wp-jp:
+  wordpress:
     build:
       context: ./.docker/wordpress
-    container_name: musashi-wp-jp
+    container_name: designinserter-wp
     restart: unless-stopped
     ports:
-      - "${_DOCKER_COMPOSE_HOST_PORT_WP_JP:-${WP_JP_PORT:-8080}}:80"
+      - "${WP_PORT:-8080}:80"
     depends_on:
-      musashi-db:
+      db:
         condition: service_healthy
     environment:
-      WORDPRESS_DB_NAME: ${JP_DB_NAME:-musashi_jp}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-designinserter}
       WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
-      WORDPRESS_DB_HOST: musashi-db
-      WP_HOME: ${_DOCKER_COMPOSE_SITE_URL_WP_JP:-${JP_WP_HOME:-http://localhost:8080}}
-      WP_TITLE: ${JP_WP_TITLE:-武蔵塗料}
-      WP_LOCALE: ${JP_WP_LOCALE:-ja}
-      WP_THEME: ${JP_WP_THEME:-muashi}
-      WP_ADMIN_USER: ${JP_WP_ADMIN_USER:-admin}
-      WP_ADMIN_PASS: ${JP_WP_ADMIN_PASS:-admin}
-      WP_ADMIN_EMAIL: ${JP_WP_ADMIN_EMAIL:-admin@example.com}
+      WORDPRESS_DB_HOST: db
+      WP_HOME: ${WP_HOME:-http://localhost:8080}
+      WP_TITLE: ${WP_TITLE:-Design Inserter Dev}
+      WP_LOCALE: ${WP_LOCALE:-ja}
+      WP_THEME: ${WP_THEME:-designinserter-dev}
+      WP_AUTO_INSTALL: ${WP_AUTO_INSTALL:-false}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}
+      WP_ADMIN_PASS: ${WP_ADMIN_PASS:-admin}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@example.com}
       WP_PLUGINS: ${WP_PLUGINS:-}
-      SMTP_HOST: ${SMTP_HOST:-musashi-mail}
-      SMTP_PORT: ${SMTP_PORT:-1025}
     volumes:
-      - wp_core_jp:/var/www/html
-      - ./wp-content/themes/muashi:/var/www/html/wp-content/themes/muashi
-      - ./wp-content/plugins/musashi-inquiry-approval:/var/www/html/wp-content/plugins/musashi-inquiry-approval
-      - wp_uploads_jp:/var/www/html/wp-content/uploads
+      - wp_core:/var/www/html
+      - ./wp-content/themes:/var/www/html/wp-content/themes
+      - ./wp-content/plugins:/var/www/html/wp-content/plugins
+      - wp_uploads:/var/www/html/wp-content/uploads
       - ./.docker/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
       - ./.docker/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
       - ./.docker/conf/mysql-client.cnf:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro
     networks:
-      - musashi-net
-
-  musashi-wp-en:
-    build:
-      context: ./.docker/wordpress
-    container_name: musashi-wp-en
-    restart: unless-stopped
-    ports:
-      - "${_DOCKER_COMPOSE_HOST_PORT_WP_EN:-${WP_EN_PORT:-8081}}:80"
-    depends_on:
-      musashi-db:
-        condition: service_healthy
-    environment:
-      WORDPRESS_DB_NAME: ${EN_DB_NAME:-musashi_en}
-      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
-      WORDPRESS_DB_HOST: musashi-db
-      WP_HOME: ${_DOCKER_COMPOSE_SITE_URL_WP_EN:-${EN_WP_HOME:-http://localhost:8081}}
-      WP_TITLE: ${EN_WP_TITLE:-MusashiPaint EN}
-      WP_LOCALE: ${EN_WP_LOCALE:-en_US}
-      WP_THEME: ${EN_WP_THEME:-muashi-en}
-      WP_ADMIN_USER: ${EN_WP_ADMIN_USER:-admin}
-      WP_ADMIN_PASS: ${EN_WP_ADMIN_PASS:-admin}
-      WP_ADMIN_EMAIL: ${EN_WP_ADMIN_EMAIL:-admin@example.com}
-      WP_PLUGINS: ${WP_PLUGINS:-}
-      SMTP_HOST: ${SMTP_HOST:-musashi-mail}
-      SMTP_PORT: ${SMTP_PORT:-1025}
-    volumes:
-      - wp_core_en:/var/www/html
-      - ./wp-content/themes/muashi-en:/var/www/html/wp-content/themes/muashi-en
-      - ./wp-content/plugins/musashi-inquiry-approval:/var/www/html/wp-content/plugins/musashi-inquiry-approval
-      - wp_uploads_en:/var/www/html/wp-content/uploads
-      - ./.docker/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
-      - ./.docker/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
-      - ./.docker/conf/mysql-client.cnf:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro
-    networks:
-      - musashi-net
-
-  musashi-wp-bogo:
-    build:
-      context: ./.docker/wordpress-bedrock
-    container_name: musashi-wp-bogo
-    restart: unless-stopped
-    ports:
-      - "${_DOCKER_COMPOSE_HOST_PORT_WP_BOGO:-${WP_BOGO_PORT:-8082}}:80"
-    depends_on:
-      musashi-db:
-        condition: service_healthy
-    environment:
-      WORDPRESS_DB_NAME: ${BOGO_DB_NAME:-musashi_bogo}
-      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
-      WORDPRESS_DB_HOST: musashi-db
-      WP_HOME: ${_DOCKER_COMPOSE_SITE_URL_WP_BOGO:-${BOGO_WP_HOME:-http://localhost:8082}}
-      WP_TITLE: ${BOGO_WP_TITLE:-MusashiPaint Bogo}
-      WP_LOCALE: ${BOGO_WP_LOCALE:-ja}
-      WP_THEME: ${BOGO_WP_THEME:-muashi-bogo}
-      WP_ADMIN_USER: ${BOGO_WP_ADMIN_USER:-admin}
-      WP_ADMIN_PASS: ${BOGO_WP_ADMIN_PASS:-admin}
-      WP_ADMIN_EMAIL: ${BOGO_WP_ADMIN_EMAIL:-admin@example.com}
-      WP_PLUGINS: ${BOGO_WP_PLUGINS:-advanced-custom-fields bogo contact-form-7 contact-form-7-honeypot duplicate-post redirection wp-multibyte-patch wordpress-seo}
-      SMTP_HOST: ${SMTP_HOST:-musashi-mail}
-      SMTP_PORT: ${SMTP_PORT:-1025}
-    volumes:
-      - wp_core_bogo:/var/www/html
-      - ./wp-content/themes/muashi-bogo:/var/www/html/web/app/themes/muashi-bogo
-      - ./wp-content/plugins/musashi-inquiry-approval:/var/www/html/web/app/plugins/musashi-inquiry-approval
-      - wp_uploads_bogo:/var/www/html/web/app/uploads
-      - ./.docker/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
-      - ./.docker/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro
-      - ./.docker/conf/mysql-client.cnf:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro
-    networks:
-      - musashi-net
-
-  musashi-mail:
-    image: axllent/mailpit:v1.21
-    container_name: musashi-mail
-    restart: unless-stopped
-    ports:
-      - "${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_UI:-${MAILPIT_UI_PORT:-8025}}:8025"
-      - "${_DOCKER_COMPOSE_HOST_PORT_MAILPIT_SMTP:-${MAILPIT_SMTP_PORT:-1025}}:1025"
-    networks:
-      - musashi-net
+      - designinserter-net
 
 volumes:
   db_data:
-  wp_core_jp:
-  wp_core_en:
-  wp_core_bogo:
-  wp_uploads_jp:
-  wp_uploads_en:
-  wp_uploads_bogo:
+  wp_core:
+  wp_uploads:
 
 networks:
-  musashi-net:
+  designinserter-net:
     driver: bridge
