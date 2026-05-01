@@ -44,7 +44,7 @@ test.describe('Bug Fix Tests', () => {
       await page.goto(`/sustainability/environment/`);
 
       // images にボックスモデル情報取得
-      const images = await page.locator('.page__inner img').first();
+      const images = page.locator('.page__inner img').first();
       const box = await images.boundingBox();
       
       // コンテナ幅（viewport width）を取得
@@ -60,7 +60,7 @@ test.describe('Bug Fix Tests', () => {
       await page.setViewportSize({ width: 800, height: 600 });
       await page.goto(`/sustainability/environment/`);
 
-      const images = await page.locator('.page__inner img').first();
+      const images = page.locator('.page__inner img').first();
       const computedStyle = await images.evaluate((el: HTMLImageElement) => {
         return window.getComputedStyle(el).maxWidth;
       });
@@ -78,7 +78,7 @@ test.describe('Bug Fix Tests', () => {
       expect(response?.status()).toBe(200);
       
       // Career 投稿リストから最初の投稿リンクを取得して移動
-      const firstCareerLink = await page.locator('a[href*="/career/"]:not([href$="/career/"])').first();
+      const firstCareerLink = page.locator('a[href*="/career/"]:not([href$="/career/"])').first();
       const href = await firstCareerLink.getAttribute('href');
       
       if (href) {
@@ -145,7 +145,7 @@ test.describe('Bug Fix Tests', () => {
       expect(voiceItems.length).toBeLessThanOrEqual(12);
       
       // 2ページ目の存在を確認
-      const page2Link = await page.locator('a[href*="/voice/page/2/"]');
+      const page2Link = page.locator('a[href*="/voice/page/2/"]');
       const exists = await page2Link.count();
       
       if (voiceItems.length === 12) {
@@ -178,8 +178,8 @@ test.describe('UI/UX Improvement Tests', () => {
       
       // Media セクション（PICK UP）と News セクションを取得
       // data-testid は index.php の `.top-news__inner` / `.top-news__inner--bottom` に対応
-      const mediaSection = await page.locator('[data-testid="top-news-pickup"]').first();
-      const newsSection = await page.locator('[data-testid="top-news-list"]').first();
+      const mediaSection = page.locator('[data-testid="top-news-pickup"]').first();
+      const newsSection = page.locator('[data-testid="top-news-list"]').first();
       
       if (await mediaSection.isVisible() && await newsSection.isVisible()) {
         const mediaBox = await mediaSection.boundingBox();
@@ -209,7 +209,7 @@ test.describe('UI/UX Improvement Tests', () => {
       await page.goto(`/`);
       
       // 「一覧へ」リンク（メディアセクション = PICK UP）
-      const viewAllLink = await page.locator('[data-testid="top-news-pickup"] a:has-text("一覧")').first();
+      const viewAllLink = page.locator('[data-testid="top-news-pickup"] a:has-text("一覧")').first();
       
       if (await viewAllLink.isVisible()) {
         const href = await viewAllLink.getAttribute('href');
@@ -313,7 +313,7 @@ test.describe('UI/UX Improvement Tests', () => {
       await page.goto(`/`);
       
       // 英語リンク
-      const enLink = await page.locator('header a:has-text("En"), a:has-text("English")').first();
+      const enLink = page.locator('header a:has-text("En"), a:has-text("English")').first();
       
       if (await enLink.isVisible()) {
         const target = await enLink.getAttribute('target');
@@ -328,7 +328,7 @@ test.describe('UI/UX Improvement Tests', () => {
       await page.goto(`/`);
       
       // 中国語リンク
-      const cnLink = await page.locator('header a:has-text("中文"), a:has-text("Chinese")').first();
+      const cnLink = page.locator('header a:has-text("中文"), a:has-text("Chinese")').first();
       
       if (await cnLink.isVisible()) {
         const target = await cnLink.getAttribute('target');
@@ -364,7 +364,7 @@ test.describe('Custom Post Type Tests', () => {
       // 最初に archive ページで最初の投稿リンクを取得
       await page.goto(`/career/interview/`);
       
-      const firstLink = await page.locator('a[href*="/career/interview/"]:not([href$="/career/interview/"])').first();
+      const firstLink = page.locator('a[href*="/career/interview/"]:not([href$="/career/interview/"])').first();
       const href = await firstLink.getAttribute('href');
       
       if (href) {
@@ -434,7 +434,7 @@ test.describe('Custom Post Type Tests', () => {
       await page.goto(`/product/`);
 
       // タクソノミーリンク（/product/application/ 等）を除外し、単一投稿リンクのみ取得
-      const firstLink = await page.locator(
+      const firstLink = page.locator(
         'a[href*="/product/"]:not([href$="/product/"]):not([href*="/product/application/"]):not([href*="/product/material/"]):not([href*="/product/design/"]):not([href*="/product/function/"]):not([href*="/product/environment/"])'
       ).first();
       const href = await firstLink.getAttribute('href');
@@ -463,7 +463,7 @@ test.describe('Custom Post Type Tests', () => {
     test('should access career posts at /career/[slug]/', async ({ page }) => {
       await page.goto(`/career/`);
       
-      const firstLink = await page.locator('a[href*="/career/"]:not([href$="/career/"])').first();
+      const firstLink = page.locator('a[href*="/career/"]:not([href$="/career/"])').first();
       const href = await firstLink.getAttribute('href');
 
       if (href) {
@@ -717,7 +717,7 @@ test.describe('Plugin: musashi-inquiry-approval (PR #72)', () => {
     test('should navigate to download page from footer', async ({ page }) => {
       await page.goto(`/`);
       
-      const downloadLink = await page.locator('footer a:has-text("ダウンロード"), footer a:has-text("Download")').first();
+      const downloadLink = page.locator('footer a:has-text("ダウンロード"), footer a:has-text("Download")').first();
       
       if (await downloadLink.isVisible()) {
         await downloadLink.click();
