@@ -133,7 +133,7 @@
               </div>
             </div>
 
-            <div class="header__hamburger js-header-hamburger" data-testid="hamburger-toggle">
+            <div class="header__hamburger js-header-hamburger" data-testid="hamburger-toggle-page">
               <span class="header__hamburger-line header__hamburger-line--top"></span>
               <span class="header__hamburger-line header__hamburger-line--middle"></span>
               <span class="header__hamburger-line header__hamburger-line--bottom"></span>
@@ -195,14 +195,14 @@
             </div>
           </div>
 
-          <div class="header__hamburger js-header-hamburger" data-testid="hamburger-toggle">
+          <div class="header__hamburger js-header-hamburger" data-testid="hamburger-toggle-scroll">
             <span class="header__hamburger-line header__hamburger-line--top"></span>
             <span class="header__hamburger-line header__hamburger-line--middle"></span>
             <span class="header__hamburger-line header__hamburger-line--bottom"></span>
           </div>
         </nav>
 
-        <div class="header__hamburger js-header-hamburger" data-testid="hamburger-toggle">
+        <div class="header__hamburger js-header-hamburger" data-testid="hamburger-toggle-main">
           <span class="header__hamburger-line header__hamburger-line--top"></span>
           <span class="header__hamburger-line header__hamburger-line--middle"></span>
           <span class="header__hamburger-line header__hamburger-line--bottom"></span>
