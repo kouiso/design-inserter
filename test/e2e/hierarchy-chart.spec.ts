@@ -20,7 +20,7 @@ test.describe('階層図 - 基本表示', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     await expect(hierarchyChart.first()).toBeVisible();
   });
@@ -31,7 +31,7 @@ test.describe('階層図 - 基本表示', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const headers = hierarchyChart.first().locator('.hierarchy-chart__header-item');
     const headerCount = await headers.count();
@@ -54,7 +54,7 @@ test.describe('階層図 - 基本表示', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // ボックス要素の確認
     const boxes = hierarchyChart.first().locator('.hierarchy-chart__box');
@@ -72,7 +72,7 @@ test.describe('階層図 - 基本表示', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const box = hierarchyChart.first().locator('.hierarchy-chart__box').first();
 
@@ -98,7 +98,7 @@ test.describe('階層図 - 基本表示', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const box = hierarchyChart.first().locator('.hierarchy-chart__box').first();
 
@@ -118,7 +118,7 @@ test.describe('階層図 - カラーバリエーション', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // sustainabilityカラーのボックス
     const sustainabilityBox = hierarchyChart.first().locator('.hierarchy-chart__box--sustainability');
@@ -141,7 +141,7 @@ test.describe('階層図 - カラーバリエーション', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // environmentカラーのボックス
     const environmentBox = hierarchyChart.first().locator('.hierarchy-chart__box--environment');
@@ -172,7 +172,7 @@ test.describe('階層図 - カラーバリエーション', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // socialカラーのボックス
     const socialBox = hierarchyChart.first().locator('.hierarchy-chart__box--social');
@@ -195,7 +195,7 @@ test.describe('階層図 - カラーバリエーション', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // governanceカラーのボックス
     const governanceBox = hierarchyChart.first().locator('.hierarchy-chart__box--governance');
@@ -221,7 +221,7 @@ test.describe('階層図 - 空ボックスの処理', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // 空のenvironmentボックスを確認
     const emptyEnvironmentBoxes = hierarchyChart.first().locator(
@@ -240,7 +240,7 @@ test.describe('階層図 - 空ボックスの処理', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // 空ボックス（environment以外）
     const emptyBox = hierarchyChart.first().locator('.hierarchy-chart__box--empty-white').first();
@@ -264,7 +264,7 @@ test.describe('階層図 - 空ボックスの処理', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // 空のenvironmentボックスを含むラッパー
     const wrapper = hierarchyChart.first().locator('.hierarchy-chart__l3-wrapper:has(.hierarchy-chart__box--environment.hierarchy-chart__box--empty-white)');
@@ -285,7 +285,7 @@ test.describe('階層図 - レイアウトとインデント', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const l1Box = hierarchyChart.first().locator('.hierarchy-chart__l1').first();
     const l1Count = await l1Box.count();
@@ -305,7 +305,7 @@ test.describe('階層図 - レイアウトとインデント', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const l2Wrapper = hierarchyChart.first().locator('.hierarchy-chart__l2-wrapper').first();
     const l2Count = await l2Wrapper.count();
@@ -325,7 +325,7 @@ test.describe('階層図 - レイアウトとインデント', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const l3Wrapper = hierarchyChart.first().locator('.hierarchy-chart__l3-wrapper').first();
     const l3Count = await l3Wrapper.count();
@@ -345,7 +345,7 @@ test.describe('階層図 - レイアウトとインデント', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const l2Box = hierarchyChart.first().locator('.hierarchy-chart__l2').first();
     const l2Count = await l2Box.count();
@@ -370,7 +370,7 @@ test.describe('階層図 - レスポンシブ対応', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // ヘッダー要素がモバイルで非表示
     const headers = hierarchyChart.first().locator('.hierarchy-chart__headers');
@@ -387,19 +387,19 @@ test.describe('階層図 - レスポンシブ対応', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const box = hierarchyChart.first().locator('.hierarchy-chart__box').first();
     const boxCount = await box.count();
     test.skip(boxCount === 0, '階層図ボックスが定義されていないためスキップ');
 
-    // ボックスの幅がコンテナ幅に近い値になっているか確認
+    // 可視性を保証してから boundingBox を取得（null による silent pass を防止）
+    await expect(box).toBeVisible();
     const boxWidth = await box.boundingBox();
+    expect(boxWidth).not.toBeNull();
 
-    if (boxWidth) {
-      // モバイルビューではwidth: 100%が適用されるため、コンテナ幅に近い
-      expect(boxWidth.width).toBeGreaterThan(300);
-    }
+    // モバイルビューではwidth: 100%が適用されるため、コンテナ幅に近い
+    expect(boxWidth!.width).toBeGreaterThan(300);
   });
 
   test('モバイルビューでボックスのborder-radiusが8pxになる', async ({ page }) => {
@@ -408,7 +408,7 @@ test.describe('階層図 - レスポンシブ対応', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     const box = hierarchyChart.first().locator('.hierarchy-chart__box').first();
     const boxCount = await box.count();
@@ -428,7 +428,7 @@ test.describe('階層図 - レスポンシブ対応', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // レベル2/3 のラッパー存在確認（両方無ければ検証対象が無いためスキップ）
     const l2Wrapper = hierarchyChart.first().locator('.hierarchy-chart__l2-wrapper').first();
@@ -464,7 +464,7 @@ test.describe('階層図 - セクション構造', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // セクション要素の確認
     const sections = hierarchyChart.first().locator('.hierarchy-chart__section');
@@ -479,7 +479,7 @@ test.describe('階層図 - セクション構造', () => {
 
     const hierarchyChart = page.locator('.hierarchy-chart');
     const chartCount = await hierarchyChart.count();
-    test.skip(chartCount === 0, '/sustainability/ に階層図が無いためスキップ');
+    test.skip(chartCount === 0, `${SUSTAINABILITY_PATH} に階層図が無いためスキップ`);
 
     // small要素の確認
     const smallText = hierarchyChart.first().locator('small');

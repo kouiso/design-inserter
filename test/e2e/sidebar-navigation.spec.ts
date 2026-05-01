@@ -135,7 +135,7 @@ test.describe('サイドバーナビゲーション表示テスト', () => {
     test.skip(linkCount === 0, '/faq/ サイドバーに LinkedIn リンクが無いためスキップ');
 
     await expect(linkedInLink).toHaveAttribute('target', '_blank');
-    await expect(linkedInLink).toHaveAttribute('rel', /noopener\s*noreferrer/);
+    await expect(linkedInLink).toHaveAttribute('rel', /(?=.*\bnoopener\b)(?=.*\bnoreferrer\b)/);
   });
 
   test('レスポンシブ表示確認 - モバイル', async ({ page }) => {
