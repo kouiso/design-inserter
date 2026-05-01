@@ -19,7 +19,7 @@ test.describe('TOPページ KVナビ - 検索アイコンの色変化', () => {
 
   test('data-text-color属性に応じて検索アイコンの色が変わる', async ({ page }) => {
     // KVセクションとナビ要素が存在するか確認
-    // data-testid="top-kv" is on `<section class="top-kv">` in index.php
+    // data-testid="top-kv" は index.php 内の `<section class="top-kv">` に付与されている
     const kvSection = page.locator('[data-testid="top-kv"]');
     const searchIcon = page.locator('.top-kv__nav-link--search');
     const navLinkText = page.locator('.top-kv__nav-link-text').first();
