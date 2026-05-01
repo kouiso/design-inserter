@@ -87,9 +87,20 @@ test/vrt/report.html
 .tmp/
 wp-cli.phar
 
-# Claude
-.claude/
+# Claude（rules/agents/commands/skills/hooks は git 管理、機密と一時データのみ除外）
+**/.claude/mcp.json
+**/.claude/settings.local.json
+**/.claude/cache/
+**/.claude/sessions/
+**/.claude/logs/
+**/.claude/projects/
+**/.claude/figma-images/
+**/.claude/*.local.md
+**/.claude/**/*.local.md
 tmpclaude-*/
+
+# direnv（機密環境変数）
+.envrc
 
 # Docker
 .env
