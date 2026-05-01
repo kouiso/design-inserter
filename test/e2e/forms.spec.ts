@@ -14,7 +14,8 @@ test.describe('Form Tests - フォーム機能確認', () => {
       await page.goto('/contact/');
       
       // フォームが表示されることを確認
-      const form = page.locator('.wpcf7-form');
+      // data-testid="contact-form" は `<section class="contact">` に付与されるため、内側 form を取得
+      const form = page.locator('[data-testid="contact-form"] form');
       await expect(form).toBeVisible();
       
       await page.check('input[name="agree"]');
