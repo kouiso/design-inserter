@@ -9,7 +9,11 @@
 # ===== MCP サーバ用シークレット（.claude/mcp.json から参照） =====
 export TAVILY_API_KEY="tvly-dev-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 export EXA_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export FIGMA_API_KEY="figd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export FIGMA_API_KEY="YOUR_FIGMA_API_KEY"
+
+# ===== mobile-mcp（Android MCP サーバ） =====
+# export MOBILE_MCP_PATH="/path/to/mobile-mcp/lib/index.js"
+# export ANDROID_HOME="/path/to/Android/sdk"
 
 # ===== GitHub（必要なら） =====
 # export GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

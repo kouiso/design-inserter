@@ -20,7 +20,7 @@
       "type": "stdio",
       "command": "node",
       "args": [
-        "/home/node/.mcp-servers/mobile-mcp/lib/index.js"
+        "${env:MOBILE_MCP_PATH}"
       ],
       "env": {
         "ANDROID_HOME": "${env:ANDROID_HOME}"
