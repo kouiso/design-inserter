@@ -24,3 +24,25 @@
 
 ### 次 Phase 計画
 - `wp-content/themes/muashi` と `wp-content/themes/muashi-en` を比較し、プラグイン開発用に残すテーマを決定する。
+
+## Phase 2: テーマ 1 個に絞る
+
+### 完了内容
+- `muashi` と `muashi-en` を比較:
+  - どちらも 215 ファイルで、`functions.php` は 2,000 行超。どちらもプラグイン開発用としては重い。
+  - `muashi` は既存 Docker の JP WordPress デフォルトテーマ。
+  - `muashi-en` は英語サイト用の差分を持つ重複テーマで、今回の `/css-stock/ja` 検証軸から外れる。
+- `wp-content/themes/muashi` を残した。
+- `wp-content/themes/muashi-en` を完全削除した。
+
+### プレモーテム所見
+- 残した `muashi` も業務ロジックが多く、この時点ではまだ「シンプル」とは言えない。
+- Phase 3 で `functions.php`、カスタム投稿タイプ、ACF/CF7 依存、ページテンプレートを削除または最小化しないと、素の WordPress 検証に失敗する可能性が高い。
+
+### 残課題
+- `muashi` をプラグイン開発用の最小テーマへ縮退する。
+- Docker Compose から EN/Bedrock サービス参照を削除する。
+
+### 次 Phase 計画
+- musashipaint 固有のテーマロジック、既存プラグイン、GitHub Actions、テスト/プロンプト類を削除する。
+- Docker 開発環境だけを汎用 WordPress プラグイン開発用に残す。
