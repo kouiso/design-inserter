@@ -452,13 +452,12 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
     await page.waitForLoadState('networkidle');
 
     // ハンバーガーボタンをクリック（固定ポジション要素のためevaluateで実行）
-    // data-testid="hamburger-toggle" は `.header__hamburger.js-header-hamburger` に付与
-    // 開閉ボタン（hamburger-toggle）と閉じるボタン（hamburger-close）は別 testid のため、
-    // testid で絞り込めば `.hamburger` 配下の close ボタンは自動的に除外される
+    // hamburger-toggle-{page,scroll,main} の 3 バリアントを前方一致で取得し、
+    // 現在ビューポートで可視 (offsetParent !== null) のものをクリック
     await page.evaluate(() => {
-      const btns = document.querySelectorAll<HTMLElement>('[data-testid="hamburger-toggle"]');
+      const btns = document.querySelectorAll<HTMLElement>('[data-testid^="hamburger-toggle"]');
       for (const btn of btns) {
-        if (btn.offsetParent !== null && !btn.closest('.hamburger')) {
+        if (btn.offsetParent !== null) {
           btn.click();
           break;
         }

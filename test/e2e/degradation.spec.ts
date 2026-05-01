@@ -740,9 +740,10 @@ test.describe('Common/Integration Tests', () => {
     await page.goto(`/`);
     
     // モバイルメニューが表示されていることを確認
-    // data-testid="hamburger-toggle" は `.header__hamburger.js-header-hamburger` に付与（header.php）
-    const mobileMenu = page.locator('[data-testid="hamburger-toggle"]');
-    await expect(mobileMenu.first()).toBeVisible();
+    // SP 表示時に常時可視のトップレベルハンバーガー (hamburger-toggle-main)
+    // ※ -page / -scroll は文脈別バリアント（header.php 参照）
+    const mobileMenu = page.locator('[data-testid="hamburger-toggle-main"]');
+    await expect(mobileMenu).toBeVisible();
   });
 
   test('should have no broken internal links on homepage', async ({ page }) => {
