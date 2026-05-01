@@ -217,11 +217,10 @@ test.describe('フッター - モバイルレイアウト', () => {
 
       // アコーディオンをクリック
       await accordionButton.click();
-      await page.waitForTimeout(600); // アニメーション待機（CSSトランジション0.5秒）
 
       // アコーディオンリストが表示されることを確認（SPフッター内でスコープ）
+      // grid-template-rows トランジション（0.5s）完了後に toBeVisible が auto-retry で確定する
       const accordionList = spFooterNav.locator('.js-accordion-list').first();
-      // grid-template-rows トランジション完了後に可視になるのを待つ
       await expect(accordionList).toBeVisible({ timeout: 3000 });
     }
   });

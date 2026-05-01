@@ -111,10 +111,8 @@ test.describe('VRT スクリーンショットキャプチャ', () => {
         window.scrollTo(0, 0);
       });
 
-      // GSAP delayedCallで遅延追加されるis-inviewクラスの完了を待つ
-      await page.waitForTimeout(1500);
-
-      // GSAPアニメーションを強制完了し、全data-inview要素にis-inviewクラスを付与
+      // GSAP delayedCallで遅延追加されるis-inviewクラスを強制的に確定させる
+      // （アニメーションを待つのではなく、最終状態に倒すことで VRT を安定化）
       await page.evaluate(() => {
         document.querySelectorAll('[data-inview]').forEach(el => {
           el.classList.add('is-inview');
@@ -124,6 +122,11 @@ test.describe('VRT スクリーンショットキャプチャ', () => {
           gsap.globalTimeline.clear();
         }
       });
+      // 強制付与の結果が反映されるまで auto-retry で確認
+      await page.waitForFunction(() => {
+        const targets = document.querySelectorAll('[data-inview]');
+        return targets.length === 0 || Array.from(targets).every(el => el.classList.contains('is-inview'));
+      }, { timeout: 2000 });
 
       // スクロールで発生した画像・アセット読み込み完了待ち
       await page.waitForLoadState('networkidle');

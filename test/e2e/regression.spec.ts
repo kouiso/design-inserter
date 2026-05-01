@@ -460,19 +460,28 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
         }
       }
     });
-    await page.waitForTimeout(500);
+    // ハンバーガーメニュー展開後、Companyセクションが表示されるのを待つ
+    // EN theme (muashi-en/header.php) では "Company" は <p class="hamburger__title"> であり
+    // クリック可能な .js-accordion-button ではない。Sustainability ボタンを露出させるには
+    // Company セクション直下の "About Musashi Paint" アコーディオンを開く必要がある。
+    await expect(
+      page.locator('.hamburger__title').filter({ hasText: 'Company' }).first()
+    ).toBeVisible({ timeout: 3000 });
 
-    // 会社紹介メニューを開く
+    // 「About Musashi Paint」アコーディオンを開く（この配下に Sustainability ボタンが含まれる）
     await page.evaluate(() => {
       const btns = document.querySelectorAll<HTMLElement>('.js-accordion-button');
       for (const btn of btns) {
-        if (btn.textContent?.includes('Company')) {
+        if (btn.textContent?.includes('About Musashi Paint')) {
           btn.click();
           break;
         }
       }
     });
-    await page.waitForTimeout(300);
+    // About Musashi Paint アコーディオン展開後、Sustainabilityサブメニューが表示されるのを待つ
+    await expect(
+      page.locator('.js-accordion-button').filter({ hasText: 'Sustainability' }).first()
+    ).toBeVisible({ timeout: 3000 });
 
     // 「Sustainability」アコーディオンを開く
     await page.evaluate(() => {
@@ -484,7 +493,10 @@ test.describe('ハンバーガーメニュー サステナビリティリンク�
         }
       }
     });
-    await page.waitForTimeout(300);
+    // Sustainabilityサブアコーディオン展開後、最終リンクが表示されるのを待つ
+    await expect(
+      page.locator('.hamburger__accordion-link').filter({ hasText: 'Environment' }).first()
+    ).toBeVisible({ timeout: 3000 });
 
     // 各リンクのhrefを検証
     const expectedLinks = [
