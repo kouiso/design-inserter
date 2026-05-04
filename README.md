@@ -1,77 +1,52 @@
 # Design Inserter
 
-WordPress プラグイン — CSS Stock のデザインパーツを Gutenberg エディタからワンクリックで挿入。
-
-## 特徴
-
-- **222種類のCSSパーツ**（見出し、ボタン、ボックス等 28カテゴリ）を即座に利用可能
-- **Gutenberg ブロック対応** — エディタ内でリアルタイムプレビュー
-- **検索 & カテゴリフィルタ** — 大量パーツから素早く目的のデザインを発見
-- **ショートコード対応** — クラシックエディタでも `[designinserter_part id="heading-1"]` で利用可
-- **CSS衝突なし** — パーツ固有のクラス名、同一パーツ複数使用時のstyle重複防止
+CSS Stock の222デザインパーツを Gutenberg エディタから検索・選択・挿入できる WordPress プラグイン。
 
 ## インストール
+
+1. [Releases](https://github.com/ritmo-inc/wordpress-plugin-designinserter/releases) から最新の `designinserter-x.x.x.zip` をダウンロード
+2. WordPress 管理画面 → プラグイン → 新規追加 → 「プラグインのアップロード」
+3. zipファイルを選択 → インストール → 有効化
 
 ### 要件
 
 - WordPress 6.0+
 - PHP 7.4+
 
-### 手順
-
-1. `wp-content/plugins/designinserter/` ディレクトリをWordPressにコピー
-2. 管理画面 → プラグイン → 「Design Inserter」を有効化
-
 ## 使い方
 
-### Gutenberg エディタ
+### Gutenberg ブロック
 
-1. 投稿編集画面で「+」ブロック追加ボタンをクリック
-2. 「Design Inserter」ブロックを選択
-3. サイドバーに表示される検索バーまたはカテゴリボタンでパーツを探す
-4. パーツをクリックして選択 → エディタ内にプレビュー表示
-5. 公開するとフロントエンドにCSS付きで描画
+1. 投稿編集画面 → 「+」ブロック追加 → 「Design Inserter」を選択
+2. サイドバーの検索バーまたはカテゴリボタンでパーツを探す
+3. パーツをクリック → エディタ内にプレビュー表示
+4. 公開すると CSS 付きでフロントに描画
 
-### ショートコード
+### ショートコード（クラシックエディタ）
 
 ```
 [designinserter_part id="heading-1"]
 ```
 
-パーツIDはカタログJSON（`data/css-stock-parts.json`）を参照。
+## パーツ一覧
 
-## 開発環境
+28カテゴリ・222パーツ収録:
+
+見出し(39) / ボタン(35) / ボックス(21) / ローディング(16) / リスト(13) / 吹き出し(12) / アコーディオンメニュー(8) / 検索フォーム(7) / セレクトボックス(6) / パンくずリスト(5) / テキストボックス(5) / ツールチップ(5) / Q&Aリスト(4) / 引用ボックス(4) / レーダーチャート(4) / 「続きを読む」ボタン(4) / タブ(4) / トグルボタン(4) / チェックボックス(3) / フッター(3) / 付箋(3) / ページネーション(3) / 円グラフ(3) / ラジオボタン(3) / 目次(3) / 棒グラフ(2) / モーダルウィンドウ(2) / タイムライン(1)
+
+## 開発
 
 ```bash
-# Docker起動
 docker compose up -d --build
-
-# WordPress初期設定
 docker compose exec wordpress wp core install \
-  --url=http://localhost:8080 \
-  --title="Design Inserter Dev" \
-  --admin_user=admin \
-  --admin_password=admin \
-  --admin_email=dev@example.com \
-  --allow-root
-
-# テーマ・プラグイン有効化
+  --url=http://localhost:8080 --title="Dev" \
+  --admin_user=admin --admin_password=admin \
+  --admin_email=dev@example.com --allow-root
 docker compose exec wordpress wp theme activate designinserter-dev --allow-root
 docker compose exec wordpress wp plugin activate designinserter --allow-root
-
-# 動作確認
-open http://localhost:8080/wp-admin/
 ```
 
-## カタログ更新
-
-CSS Stock からパーツカタログを再取得：
-
-```bash
-node scripts/scrape-css-stock.mjs
-```
-
-出力: `wp-content/plugins/designinserter/data/css-stock-parts.json`
+カタログ再取得: `node scripts/scrape-css-stock.mjs`
 
 ## ライセンス
 
@@ -79,4 +54,4 @@ GPL-2.0-or-later
 
 ## クレジット
 
-CSSパーツデザイン: [CSS Stock](https://pote-chil.com/css-stock/)
+CSSデザイン: [CSS Stock](https://pote-chil.com/css-stock/)
