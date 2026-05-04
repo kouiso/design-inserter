@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+    <path d="M0 0h640v360H0V0z" fill="#fff"/>
+    <g fill="#2589d0" style="transform:scale(7) translateX(4.4%) translateY(3%)">
+        <path transform="translate(2)" d="M0 12 V20 H4 V12z">
+            <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z"
+                     dur="1.2s" calcMode="spline" begin="0" repeatCount="indefinite"
+                     keytimes="0;.2;.5;1" keySplines=".2 .2 .4 .8;.2 0.6 .4 .8;.2 .8 .4 .8"/>
+        </path>
+        <path transform="translate(8)" d="M0 12 V20 H4 V12z">
+            <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z"
+                     dur="1.2s" calcMode="spline" begin=".2" repeatCount="indefinite"
+                     keytimes="0;.2;.5;1" keySplines=".2 .2 .4 .8;.2 0.6 .4 .8;.2 .8 .4 .8"/>
+        </path>
+        <path transform="translate(14)" d="M0 12 V20 H4 V12z">
+            <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z"
+                     dur="1.2s" calcMode="spline" begin=".4" repeatCount="indefinite"
+                     keytimes="0;.2;.5;1" keySplines=".2 .2 .4 .8;.2 0.6 .4 .8;.2 .8 .4 .8"/>
+        </path>
+        <path transform="translate(20)" d="M0 12 V20 H4 V12z">
+            <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z"
+                     dur="1.2s" calcMode="spline" begin=".6" repeatCount="indefinite"
+                     keytimes="0;.2;.5;1" keySplines=".2 .2 .4 .8;.2 0.6 .4 .8;.2 .8 .4 .8"/>
+        </path>
+        <path transform="translate(26)" d="M0 12 V20 H4 V12z">
+            <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z"
+                     dur="1.2s" calcMode="spline" begin=".8" repeatCount="indefinite"
+                     keytimes="0;.2;.5;1" keySplines=".2 .2 .4 .8;.2 0.6 .4 .8;.2 .8 .4 .8"/>
+        </path>
+    </g>
+</svg>

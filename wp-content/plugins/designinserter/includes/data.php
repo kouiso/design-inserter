@@ -54,7 +54,7 @@ function designinserter_get_editor_catalog() {
 			'id'            => $part['id'],
 			'title'         => isset( $part['title'] ) ? $part['title'] : $part['id'],
 			'categoryLabel' => isset( $part['categoryLabel'] ) ? $part['categoryLabel'] : '',
-			'previewImage'  => isset( $part['previewImage'] ) ? $part['previewImage'] : '',
+			'previewImage'  => isset( $part['previewImage'] ) ? DESIGNINSERTER_PLUGIN_URL . $part['previewImage'] : '',
 		);
 	}
 

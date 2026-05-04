@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+    <path d="M0 0h640v360H0z" style="fill:#fff"/>
+    <path d="M320 105c-41.2 0-75 33.8-75 75s33.8 75 75 75 75-33.7 75-75-33.7-75-75-75m0 18.8c31.2 0 56.2 25 56.2 56.2s-25 56.2-56.2 56.2-56.2-25-56.2-56.2 25-56.2 56.2-56.2"
+          style="fill:#e6edf3"/>
+    <path d="M320 105c41.3 0 75 33.8 75 75h-18.8c0-31.2-25-56.2-56.2-56.2V105Z" style="fill:#1579c0">
+        <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite"
+                          from="0 320 180" to="360 320 180" dur="1s"/>
+    </path>
+</svg>

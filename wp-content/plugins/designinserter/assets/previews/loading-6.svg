@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+    <path d="M0 0h640v360H0z" style="fill:#fff"/>
+    <g transform="translate(248,108) scale(3)">
+        <rect x="0" y="0" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0s" calcMode="discrete"/>
+        </rect>
+        <rect x="17" y="0" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.125s" calcMode="discrete"/>
+        </rect>
+        <rect x="34" y="0" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.25s" calcMode="discrete"/>
+        </rect>
+        <rect x="0" y="17" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.875s" calcMode="discrete"/>
+        </rect>
+        <rect x="34" y="17" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.375s" calcMode="discrete"/>
+        </rect>
+        <rect x="0" y="34" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.75s" calcMode="discrete"/>
+        </rect>
+        <rect x="17" y="34" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.625s" calcMode="discrete"/>
+        </rect>
+        <rect x="34" y="34" width="14" height="14" fill="#e6edf3">
+            <animate attributeName="fill" values="#2589d0;#e6edf3;#e6edf3" keyTimes="0;0.125;1" dur="1s"
+                     repeatCount="indefinite" begin="0.5s" calcMode="discrete"/>
+        </rect>
+    </g>
+</svg>

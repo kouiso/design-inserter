@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+    <path d="M0 0h640v360H0z" style="fill:#fff"/>
+    <text fill="#2589d0" font-family="ヒラギノ角ゴシック, Hiragino Kaku Gothic ProN, ヒラギノ角ゴ ProN W3, メイリオ, Meiryo, sans-serif">
+        <tspan x="120">
+            L
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin="0s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="170">
+            o
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".1s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="220">
+            a
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".2s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="270">
+            d
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".3s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="330">
+            i
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".4s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="360">
+            n
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".5s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="410">
+            g
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".6s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="460">
+            .
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".7s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="490">
+            .
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".8s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+        <tspan x="520">
+            .
+            <animate attributeName="y" values="210;180;210" dur="1s" repeatCount="indefinite" begin=".9s"
+                     keyTimes="0;.5;1"/>
+        </tspan>
+    </text>
+
+    <style>
+        text {
+        font-weight: 600;
+        font-size: 4em;
+        }
+    </style>
+</svg>
