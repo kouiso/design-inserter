@@ -1,16 +1,19 @@
 ( function( blocks, element, blockEditor, components, i18n ) {
 	var el = element.createElement;
 	var useState = element.useState;
+	var useEffect = element.useEffect;
 	var Fragment = element.Fragment;
 	var InspectorControls = blockEditor.InspectorControls;
 	var PanelBody = components.PanelBody;
 	var TextControl = components.TextControl;
 	var Button = components.Button;
-	var ButtonGroup = components.ButtonGroup;
+	var Spinner = components.Spinner;
 	var Notice = components.Notice;
 	var __ = i18n.__;
 	var catalog = window.DesignInserterCatalog || {};
 	var parts = catalog.parts || [];
+	var restUrl = catalog.restUrl || '';
+	var nonce = catalog.nonce || '';
 
 	var categories = [];
 	var catSet = {};
@@ -21,10 +24,35 @@
 		}
 	} );
 
-	function getPart( partId ) {
-		return parts.find( function( part ) {
-			return part.id === partId;
-		} );
+	function fetchPartContent( partId, callback ) {
+		window.fetch( restUrl + partId, {
+			headers: { 'X-WP-Nonce': nonce }
+		} )
+			.then( function( res ) { return res.json(); } )
+			.then( callback )
+			.catch( function() { callback( null ); } );
+	}
+
+	function PartCard( props ) {
+		var part = props.part;
+		var isSelected = props.isSelected;
+		var onClick = props.onClick;
+
+		return el( 'button', {
+			type: 'button',
+			className: 'di-card' + ( isSelected ? ' is-selected' : '' ),
+			onClick: onClick
+		},
+			part.previewImage
+				? el( 'img', {
+					className: 'di-card__img',
+					src: part.previewImage,
+					alt: part.title,
+					loading: 'lazy'
+				} )
+				: el( 'div', { className: 'di-card__placeholder' }, part.title ),
+			el( 'span', { className: 'di-card__title' }, part.title )
+		);
 	}
 
 	function PartPicker( props ) {
@@ -48,57 +76,100 @@
 			return true;
 		} );
 
-		return el( 'div', { className: 'designinserter-picker' },
+		return el( 'div', { className: 'di-picker' },
 			el( TextControl, {
 				placeholder: __( 'パーツを検索...', 'designinserter' ),
 				value: search,
 				onChange: setSearch,
-				className: 'designinserter-picker__search'
+				className: 'di-picker__search'
 			} ),
-			el( 'div', { className: 'designinserter-picker__cats' },
+			el( 'div', { className: 'di-picker__cats' },
 				el( Button, {
-					variant: activeCat === '' ? 'primary' : 'secondary',
+					variant: activeCat === '' ? 'primary' : 'tertiary',
 					size: 'small',
 					onClick: function() { setActiveCat( '' ); }
-				}, __( '全て', 'designinserter' ) ),
+				}, __( '全て', 'designinserter' ) + ' (' + parts.length + ')' ),
 				categories.map( function( cat ) {
+					var count = parts.filter( function( p ) { return p.categoryLabel === cat; } ).length;
 					return el( Button, {
 						key: cat,
-						variant: activeCat === cat ? 'primary' : 'secondary',
+						variant: activeCat === cat ? 'primary' : 'tertiary',
 						size: 'small',
 						onClick: function() { setActiveCat( cat ); }
-					}, cat );
+					}, cat + ' (' + count + ')' );
 				} )
 			),
-			el( 'div', { className: 'designinserter-picker__count' },
-				filtered.length + ' / ' + parts.length + ' 件'
-			),
-			el( 'div', { className: 'designinserter-picker__list' },
-				filtered.slice( 0, 30 ).map( function( part ) {
-					var isSelected = part.id === currentId;
-					return el( 'button', {
+			el( 'div', { className: 'di-picker__grid' },
+				filtered.slice( 0, 40 ).map( function( part ) {
+					return el( PartCard, {
 						key: part.id,
-						type: 'button',
-						className: 'designinserter-picker__item' + ( isSelected ? ' is-selected' : '' ),
+						part: part,
+						isSelected: part.id === currentId,
 						onClick: function() { onSelect( part.id ); }
-					},
-						el( 'span', { className: 'designinserter-picker__item-cat' }, part.categoryLabel ),
-						el( 'span', { className: 'designinserter-picker__item-title' }, part.title )
-					);
-				} ),
-				filtered.length > 30
-					? el( 'p', { className: 'designinserter-picker__more' },
-						'... 他 ' + ( filtered.length - 30 ) + ' 件（検索で絞り込んでください）'
-					)
-					: null
-			)
+					} );
+				} )
+			),
+			filtered.length > 40
+				? el( 'p', { className: 'di-picker__more' },
+					'他 ' + ( filtered.length - 40 ) + ' 件（検索で絞り込んでください）'
+				)
+				: null,
+			filtered.length === 0
+				? el( 'p', { className: 'di-picker__empty' },
+					__( '該当するパーツがありません', 'designinserter' )
+				)
+				: null
+		);
+	}
+
+	function LivePreview( props ) {
+		var partId = props.partId;
+		var contentState = useState( null );
+		var content = contentState[0];
+		var setContent = contentState[1];
+		var loadingState = useState( false );
+		var loading = loadingState[0];
+		var setLoading = loadingState[1];
+
+		useEffect( function() {
+			if ( ! partId ) {
+				setContent( null );
+				return;
+			}
+			setLoading( true );
+			fetchPartContent( partId, function( data ) {
+				setContent( data );
+				setLoading( false );
+			} );
+		}, [ partId ] );
+
+		if ( loading ) {
+			return el( 'div', { className: 'di-preview di-preview--loading' }, el( Spinner ) );
+		}
+
+		if ( ! content ) {
+			return el(
+				Notice,
+				{ status: 'info', isDismissible: false },
+				__( 'サイドバーからデザインパーツを選択してください', 'designinserter' )
+			);
+		}
+
+		return el( 'div', { className: 'di-preview' },
+			content.css ? el( 'style', {}, content.css ) : null,
+			el( 'div', {
+				className: 'di-preview__render',
+				dangerouslySetInnerHTML: { __html: content.html }
+			} )
 		);
 	}
 
 	blocks.registerBlockType( 'designinserter/css-part', {
 		title: 'Design Inserter',
-		icon: 'insert',
-		category: 'widgets',
+		description: __( 'CSSデザインパーツを挿入', 'designinserter' ),
+		icon: 'art',
+		category: 'design',
+		keywords: [ 'css', 'design', 'parts', 'heading', 'button', 'box' ],
 		attributes: {
 			partId: {
 				type: 'string',
@@ -107,7 +178,6 @@
 		},
 		edit: function( props ) {
 			var partId = props.attributes.partId || '';
-			var part = getPart( partId );
 
 			return el(
 				Fragment,
@@ -126,21 +196,7 @@
 						} )
 					)
 				),
-				part
-					? el(
-						'div',
-						{ className: 'designinserter-editor-preview' },
-						part.css ? el( 'style', {}, part.css ) : null,
-						el( 'div', {
-							className: 'designinserter-part',
-							dangerouslySetInnerHTML: { __html: part.html }
-						} )
-					)
-					: el(
-						Notice,
-						{ status: 'info', isDismissible: false },
-						__( 'サイドバーからCSSパーツを選択してください。', 'designinserter' )
-					)
+				el( LivePreview, { partId: partId } )
 			);
 		},
 		save: function() {

@@ -23,7 +23,7 @@ function designinserter_register_block() {
 	wp_localize_script(
 		'designinserter-editor',
 		'DesignInserterCatalog',
-		designinserter_get_catalog()
+		designinserter_get_editor_catalog()
 	);
 
 	register_block_type(

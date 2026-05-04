@@ -45,6 +45,26 @@ function designinserter_get_parts() {
 	return $catalog['parts'];
 }
 
+function designinserter_get_editor_catalog() {
+	$catalog = designinserter_get_catalog();
+	$items = array();
+
+	foreach ( $catalog['parts'] as $part ) {
+		$items[] = array(
+			'id'            => $part['id'],
+			'title'         => isset( $part['title'] ) ? $part['title'] : $part['id'],
+			'categoryLabel' => isset( $part['categoryLabel'] ) ? $part['categoryLabel'] : '',
+			'previewImage'  => isset( $part['previewImage'] ) ? $part['previewImage'] : '',
+		);
+	}
+
+	return array(
+		'parts'   => $items,
+		'restUrl' => rest_url( 'designinserter/v1/parts/' ),
+		'nonce'   => wp_create_nonce( 'wp_rest' ),
+	);
+}
+
 function designinserter_get_part( $part_id ) {
 	$part_id = sanitize_key( $part_id );
 

@@ -20,3 +20,4 @@ require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/data.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/render.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/block.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/admin.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/rest-api.php';
