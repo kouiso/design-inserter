@@ -67,7 +67,7 @@ CSS Stock から抽出した 222 パーツのメタデータと HTML/CSS を格�
   "inputs": [
     { "label": "メインカラー", "defaultValue": "#333333" }
   ],
-  "previewImage": "https://pote-chil.com/css-stock/img/heading/1.webp",
+  "previewImage": "assets/previews/heading-1.svg",
   "sourceUrl": "https://pote-chil.com/css-stock/ja/heading#1"
 }
 ```
@@ -93,6 +93,7 @@ heading, text, list, box, button, blockquote, table, hr, badge, search, hamburge
 | css フィールドが空文字列 | SVG-only パーツとして扱う | loading カテゴリ等 |
 | inputs 配列が空 | カラー編集 UI を非表示（将来機能） | 現状は無視 |
 | previewImage が空文字列 | プレビュー画像なし | 一部パーツで発生しうる |
+| previewImage が外部 URL | scraper のローカル同梱化漏れとして扱う | 配布物は外部ホットリンクしない |
 | total と expectedTotal が不一致 | scraper がエラーを投げる | データ整合性チェック |
 
 ## 受け入れ基準

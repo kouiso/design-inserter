@@ -46,12 +46,12 @@ docker compose exec wordpress wp theme activate designinserter-dev --allow-root
 docker compose exec wordpress wp plugin activate designinserter --allow-root
 ```
 
-カタログ再取得: `node scripts/scrape-css-stock.mjs`
+カタログ・同梱プレビュー再取得: `node scripts/scrape-css-stock.mjs`
 
 ## ライセンスとクレジット
 
 プラグイン本体コード: GPL-2.0-or-later
 
-同梱している HTML/CSS/SVG デザインパーツ: [CSS Stock](https://pote-chil.com/css-stock/ja)
+同梱している HTML/CSS デザインコードとプレビュー画像: [CSS Stock](https://pote-chil.com/css-stock/ja)
 
 CSS Stock 掲載コードは Web サイト/ブログでの使用が許可され、コード自体を別媒体に掲載する場合は該当ページへのリンクと参照元表記が必要です。本プラグインは各パーツの `sourceUrl` とフロント出力コメントで参照元を保持します。有償プラグインとしての再配布販売は、CSS Stock 側の明示許諾を取得してから進めてください。
