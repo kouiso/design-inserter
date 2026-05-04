@@ -82,7 +82,7 @@ graph TB
 | `html` | string | パーツの HTML コード | `"<h2 class=\"heading-1\">..."` |
 | `css` | string | パーツの CSS コード（空文字可） | `".heading-1 { ... }"` |
 | `inputs` | Input[] | カスタマイズ可能パラメータ | `[{"label": "左線の色", "defaultValue": "#2589d0"}]` |
-| `previewImage` | string | プレビュー画像 URL | `"https://pote-chil.com/css-stock/img/snippets/heading/1.svg"` |
+| `previewImage` | string | 同梱プレビュー画像の相対パス | `"assets/previews/heading-1.svg"` |
 | `sourceUrl` | string | 元パーツの URL | `"https://pote-chil.com/css-stock/ja/heading#1"` |
 
 ### Input オブジェクト
