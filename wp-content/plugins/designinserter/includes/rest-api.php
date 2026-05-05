@@ -36,9 +36,14 @@ function designinserter_rest_get_part( $request ) {
 		);
 	}
 
-	return rest_ensure_response( array(
-		'id'   => $part['id'],
-		'html' => isset( $part['html'] ) ? $part['html'] : '',
-		'css'  => isset( $part['css'] ) ? $part['css'] : '',
-	) );
+	$scope = wp_unique_id( 'di-preview-' . sanitize_key( $part['id'] ) . '-' );
+	$html  = isset( $part['html'] ) ? designinserter_scope_interactive_html( designinserter_resolve_local_asset_urls( $part['html'] ), $scope ) : '';
+
+	return rest_ensure_response(
+		array(
+			'id'   => $part['id'],
+			'html' => $html,
+			'css'  => isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '',
+		)
+	);
 }

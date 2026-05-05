@@ -6,9 +6,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function designinserter_register_block() {
 	wp_register_script(
+		'designinserter-frontend',
+		DESIGNINSERTER_PLUGIN_URL . 'assets/frontend.js',
+		array(),
+		DESIGNINSERTER_VERSION,
+		true
+	);
+
+	wp_register_style(
+		'designinserter-frontend',
+		DESIGNINSERTER_PLUGIN_URL . 'assets/frontend.css',
+		array(),
+		DESIGNINSERTER_VERSION
+	);
+
+	wp_register_script(
 		'designinserter-editor',
 		DESIGNINSERTER_PLUGIN_URL . 'assets/editor.js',
-		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n', 'designinserter-frontend' ),
 		DESIGNINSERTER_VERSION,
 		true
 	);
@@ -16,7 +31,7 @@ function designinserter_register_block() {
 	wp_register_style(
 		'designinserter-editor',
 		DESIGNINSERTER_PLUGIN_URL . 'assets/editor.css',
-		array(),
+		array( 'designinserter-frontend' ),
 		DESIGNINSERTER_VERSION
 	);
 
@@ -32,6 +47,7 @@ function designinserter_register_block() {
 			'api_version'   => 2,
 			'editor_script' => 'designinserter-editor',
 			'editor_style'  => 'designinserter-editor',
+			'style'         => 'designinserter-frontend',
 			'attributes'    => array(
 				'partId' => array(
 					'type'    => 'string',
@@ -43,6 +59,11 @@ function designinserter_register_block() {
 	);
 }
 add_action( 'init', 'designinserter_register_block' );
+
+function designinserter_enqueue_frontend_base_styles() {
+	wp_enqueue_style( 'designinserter-frontend' );
+}
+add_action( 'wp_enqueue_scripts', 'designinserter_enqueue_frontend_base_styles' );
 
 function designinserter_render_block( $attributes ) {
 	$part_id = isset( $attributes['partId'] ) ? $attributes['partId'] : '';

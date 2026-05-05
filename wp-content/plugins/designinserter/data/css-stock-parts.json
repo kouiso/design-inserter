@@ -2,7 +2,7 @@
   "sourceName": "CSS Stock",
   "sourceUrl": "https://pote-chil.com/css-stock/ja",
   "sourceNotice": "CSS Stock permits use of listed source code on websites/blogs and asks that source links be included when the code itself is republished elsewhere.",
-  "scrapedAt": "2026-05-01T12:38:07.170Z",
+  "scrapedAt": "2026-05-04T08:30:07.100Z",
   "expectedTotal": 222,
   "total": 222,
   "categories": [
@@ -715,7 +715,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/heading-10.svg",
+      "previewImage": "assets/previews/heading-10.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/heading#10"
     },
     {
@@ -738,7 +738,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/heading-14.svg",
+      "previewImage": "assets/previews/heading-14.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/heading#14"
     },
     {
@@ -761,7 +761,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/heading-15.svg",
+      "previewImage": "assets/previews/heading-15.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/heading#15"
     },
     {
@@ -1105,7 +1105,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-1.svg",
+      "previewImage": "assets/previews/button-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#1"
     },
     {
@@ -1143,7 +1143,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-45.svg",
+      "previewImage": "assets/previews/button-45.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#45"
     },
     {
@@ -1162,7 +1162,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-39.svg",
+      "previewImage": "assets/previews/button-39.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#39"
     },
     {
@@ -1200,7 +1200,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-3.svg",
+      "previewImage": "assets/previews/button-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#3"
     },
     {
@@ -1219,7 +1219,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-4.svg",
+      "previewImage": "assets/previews/button-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#4"
     },
     {
@@ -1257,7 +1257,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-43.svg",
+      "previewImage": "assets/previews/button-43.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#43"
     },
     {
@@ -1299,6 +1299,21 @@
           "defaultValue": "#ffffff"
         }
       ],
+      "behavior": {
+        "type": "scrollTop",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".button-20",
+        "selectors": [
+          ".button-20"
+        ],
+        "events": [
+          "click"
+        ],
+        "a11y": [
+          "aria-label"
+        ]
+      },
       "previewImage": "assets/previews/button-20.svg",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#20"
     },
@@ -1417,7 +1432,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-10.svg",
+      "previewImage": "assets/previews/button-10.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#10"
     },
     {
@@ -1455,7 +1470,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-51.svg",
+      "previewImage": "assets/previews/button-51.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#51"
     },
     {
@@ -1474,7 +1489,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-36.svg",
+      "previewImage": "assets/previews/button-36.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#36"
     },
     {
@@ -1493,7 +1508,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-29.svg",
+      "previewImage": "assets/previews/button-29.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#29"
     },
     {
@@ -1512,7 +1527,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-31.svg",
+      "previewImage": "assets/previews/button-31.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#31"
     },
     {
@@ -1531,7 +1546,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-32.svg",
+      "previewImage": "assets/previews/button-32.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#32"
     },
     {
@@ -1550,7 +1565,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-30.svg",
+      "previewImage": "assets/previews/button-30.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#30"
     },
     {
@@ -1569,7 +1584,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-33.svg",
+      "previewImage": "assets/previews/button-33.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#33"
     },
     {
@@ -1588,7 +1603,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-41.svg",
+      "previewImage": "assets/previews/button-41.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#41"
     },
     {
@@ -1607,7 +1622,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-38.svg",
+      "previewImage": "assets/previews/button-38.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#38"
     },
     {
@@ -1626,7 +1641,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/button-37.svg",
+      "previewImage": "assets/previews/button-37.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#37"
     },
     {
@@ -1645,7 +1660,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/button-44.svg",
+      "previewImage": "assets/previews/button-44.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#44"
     },
     {
@@ -1659,7 +1674,7 @@
       "html": "<button class=\"button-40\">ボタンデザイン</button>",
       "css": ".button-40 {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    position: relative;\n    width: 250px;\n    margin: 0 auto;\n    padding: .9em 2em;\n    border: none;\n    border-radius: 5px;\n    box-shadow: 0 7px 10px rgb(0 0 0 / 10%);\n    background-color: #fff;\n    color: #333;\n    font-size: 1em;\n    transition: transform .3s, box-shadow .3s;\n}\n\n.button-40:hover {\n    transform: translateY(-2px);\n    box-shadow: 0 7px 10px rgb(0 0 0 / 15%);\n}",
       "inputs": [],
-      "previewImage": "assets/previews/button-40.svg",
+      "previewImage": "assets/previews/button-40.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#40"
     },
     {
@@ -1678,7 +1693,7 @@
           "defaultValue": "#555555"
         }
       ],
-      "previewImage": "assets/previews/button-21.svg",
+      "previewImage": "assets/previews/button-21.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#21"
     },
     {
@@ -1739,7 +1754,7 @@
           "defaultValue": "#ffffff"
         }
       ],
-      "previewImage": "assets/previews/button-13.svg",
+      "previewImage": "assets/previews/button-13.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#13"
     },
     {
@@ -1758,7 +1773,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/button-46.svg",
+      "previewImage": "assets/previews/button-46.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/button#46"
     },
     {
@@ -1777,7 +1792,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/box-18.svg",
+      "previewImage": "assets/previews/box-18.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#18"
     },
     {
@@ -1796,7 +1811,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/box-21.svg",
+      "previewImage": "assets/previews/box-21.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#21"
     },
     {
@@ -1815,7 +1830,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/box-11.svg",
+      "previewImage": "assets/previews/box-11.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#11"
     },
     {
@@ -1834,7 +1849,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/box-12.svg",
+      "previewImage": "assets/previews/box-12.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#12"
     },
     {
@@ -1853,7 +1868,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/box-19.svg",
+      "previewImage": "assets/previews/box-19.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#19"
     },
     {
@@ -1872,7 +1887,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/box-13.svg",
+      "previewImage": "assets/previews/box-13.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#13"
     },
     {
@@ -1895,7 +1910,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/box-17.svg",
+      "previewImage": "assets/previews/box-17.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#17"
     },
     {
@@ -1918,7 +1933,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/box-16.svg",
+      "previewImage": "assets/previews/box-16.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#16"
     },
     {
@@ -1945,7 +1960,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-6.svg",
+      "previewImage": "assets/previews/box-6.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#6"
     },
     {
@@ -1972,7 +1987,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-8.svg",
+      "previewImage": "assets/previews/box-8.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#8"
     },
     {
@@ -1999,7 +2014,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-4.svg",
+      "previewImage": "assets/previews/box-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#4"
     },
     {
@@ -2022,7 +2037,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-7.svg",
+      "previewImage": "assets/previews/box-7.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#7"
     },
     {
@@ -2045,7 +2060,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-9.svg",
+      "previewImage": "assets/previews/box-9.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#9"
     },
     {
@@ -2068,7 +2083,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-5.svg",
+      "previewImage": "assets/previews/box-5.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#5"
     },
     {
@@ -2087,7 +2102,7 @@
           "defaultValue": "#5ba9f7"
         }
       ],
-      "previewImage": "assets/previews/box-14.svg",
+      "previewImage": "assets/previews/box-14.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#14"
     },
     {
@@ -2106,7 +2121,7 @@
           "defaultValue": "#e0efff"
         }
       ],
-      "previewImage": "assets/previews/box-20.svg",
+      "previewImage": "assets/previews/box-20.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#20"
     },
     {
@@ -2129,7 +2144,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-10.svg",
+      "previewImage": "assets/previews/box-10.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#10"
     },
     {
@@ -2152,7 +2167,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-15.svg",
+      "previewImage": "assets/previews/box-15.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#15"
     },
     {
@@ -2171,7 +2186,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/box-1.svg",
+      "previewImage": "assets/previews/box-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#1"
     },
     {
@@ -2190,7 +2205,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/box-3.svg",
+      "previewImage": "assets/previews/box-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#3"
     },
     {
@@ -2201,7 +2216,7 @@
       "categoryTitle": "HTML・CSSでつくるおしゃれなボックス (囲み枠) デザイン21選",
       "section": "その他のボックス",
       "title": "iPhone風",
-      "html": "<div  class=\"box-002\">\n    <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 90 25\" fill=\"#3c3c3c\">\n        <circle cx=\"22.5\" cy=\"7.5\" r=\"5\"/>\n        <circle cx=\"37.5\" cy=\"7.5\" r=\"5\"/>\n        <circle cx=\"52.5\" cy=\"7.5\" r=\"5\"/>\n        <circle cx=\"67.5\" cy=\"7.5\" r=\"5\"/>\n    </svg>\n    <!-- 囲みたい画像を指定してください -->\n    <img src=\"/css-stock/img/about/coding.svg\" alt=\"\"/>\n</div>",
+      "html": "<div  class=\"box-002\">\n    <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 90 25\" fill=\"#3c3c3c\">\n        <circle cx=\"22.5\" cy=\"7.5\" r=\"5\"/>\n        <circle cx=\"37.5\" cy=\"7.5\" r=\"5\"/>\n        <circle cx=\"52.5\" cy=\"7.5\" r=\"5\"/>\n        <circle cx=\"67.5\" cy=\"7.5\" r=\"5\"/>\n    </svg>\n    <!-- 囲みたい画像を指定してください -->\n    <img src=\"assets/embedded/css-stock-img-about-coding.svg\" alt=\"\"/>\n</div>",
       "css": ".box-002 {\n    position: relative;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    width: 168px;\n    height: 360px;\n    margin: 0 auto;\n    overflow: hidden;\n    border: 8px solid #303030;\n    border-radius: 25px;\n    box-sizing: content-box;\n    box-shadow: 0 15px 30px -7px rgba(0, 12, 66, .2);\n    background: #303030;\n}\n\n.box-002::after {\n    position: absolute;\n    bottom: 5px;\n    width: 60px;\n    height: 3px;\n    border-radius: 20px;\n    background-color: rgba(255, 255, 255, .8);\n    content: '';\n}\n\n.box-002 svg {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    position: absolute;\n    width: 60px;\n    height: 15px;\n    border-radius: 0 0 15px 15px;\n    background-color: #303030;\n}\n\n.box-002 img {\n    width: 100%;\n    height: 100%;\n    object-fit: contain;\n}",
       "inputs": [
         {
@@ -2209,7 +2224,7 @@
           "defaultValue": "#303030"
         }
       ],
-      "previewImage": "assets/previews/box-2.svg",
+      "previewImage": "assets/previews/box-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/box#2"
     },
     {
@@ -2438,14 +2453,14 @@
       "section": "ローディングスピナー",
       "title": "回転する立方体",
       "html": "<div class=\"loading-15\">\n    <span></span>\n    <span></span>\n    <span></span>\n    <span></span>\n    <span></span>\n    <span></span>\n</div>",
-      "css": ".loading-15 {\n    transform-style: preserve-3d;\n    animation: animation-loading-15 3s infinite forwards;\n}\n\n.loading-15 span {\n    position: absolute;\n    top: -24px;\n    left: -24px;\n    width: 48px;\n    height: 48px;\n    border: 1px solid #2589d0;\n    background-color: #fff;\n}\n\n.loading-15 span:nth-of-type(1) {\n    transform: translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(2) {\n    transform: rotateY(180deg) translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(3) {\n    transform: rotateY(-90deg) translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(4) {\n    transform: rotateY(90deg) translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(5) {\n    transform: rotateX(-90deg) translateZ(24px)\n}\n\n.loading-15 span:nth-of-type(6) {\n    transform: rotateX(90deg) translateZ(24px);\n}\n\n@keyframes animation-loading-15 {\n    0% {\n        transform: rotateY(0deg) rotateZ(0deg);\n    }\n    20% {\n        transform: rotateY(90deg) rotateZ(0deg);\n    }\n    40% {\n        transform: rotateX(45deg) rotateZ(45deg);\n    }\n    60% {\n        transform: rotateX(90deg) rotateY(180deg) rotateX(90deg);\n    }\n    80% {\n        transform: rotateX(310deg) rotateZ(230deg)\n    }\n    100% {\n        transform: rotateX(360deg) rotateZ(360deg)\n    }\n}",
+      "css": ".loading-15 {\n    position: relative;\n    width: 48px;\n    height: 48px;\n    margin: 24px auto;\n    transform-style: preserve-3d;\n    animation: animation-loading-15 3s infinite forwards;\n}\n\n.loading-15 span {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 48px;\n    height: 48px;\n    border: 1px solid #2589d0;\n    background-color: #fff;\n}\n\n.loading-15 span:nth-of-type(1) {\n    transform: translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(2) {\n    transform: rotateY(180deg) translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(3) {\n    transform: rotateY(-90deg) translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(4) {\n    transform: rotateY(90deg) translateZ(24px);\n}\n\n.loading-15 span:nth-of-type(5) {\n    transform: rotateX(-90deg) translateZ(24px)\n}\n\n.loading-15 span:nth-of-type(6) {\n    transform: rotateX(90deg) translateZ(24px);\n}\n\n@keyframes animation-loading-15 {\n    0% {\n        transform: rotateY(0deg) rotateZ(0deg);\n    }\n    20% {\n        transform: rotateY(90deg) rotateZ(0deg);\n    }\n    40% {\n        transform: rotateX(45deg) rotateZ(45deg);\n    }\n    60% {\n        transform: rotateX(90deg) rotateY(180deg) rotateX(90deg);\n    }\n    80% {\n        transform: rotateX(310deg) rotateZ(230deg)\n    }\n    100% {\n        transform: rotateX(360deg) rotateZ(360deg)\n    }\n}",
       "inputs": [
         {
           "label": "立方体の色",
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/loading-15.svg",
+      "previewImage": "assets/previews/loading-15.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/loading#15"
     },
     {
@@ -2525,7 +2540,7 @@
           "defaultValue": "#eeeeee"
         }
       ],
-      "previewImage": "assets/previews/loading-16.svg",
+      "previewImage": "assets/previews/loading-16.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/loading#16"
     },
     {
@@ -2544,7 +2559,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-1.svg",
+      "previewImage": "assets/previews/list-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#1"
     },
     {
@@ -2563,7 +2578,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-9.svg",
+      "previewImage": "assets/previews/list-9.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#9"
     },
     {
@@ -2586,7 +2601,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/list-11.svg",
+      "previewImage": "assets/previews/list-11.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#11"
     },
     {
@@ -2605,7 +2620,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-8.svg",
+      "previewImage": "assets/previews/list-8.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#8"
     },
     {
@@ -2624,7 +2639,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-4.svg",
+      "previewImage": "assets/previews/list-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#4"
     },
     {
@@ -2647,7 +2662,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/list-5.svg",
+      "previewImage": "assets/previews/list-5.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#5"
     },
     {
@@ -2666,7 +2681,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-2.svg",
+      "previewImage": "assets/previews/list-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#2"
     },
     {
@@ -2685,7 +2700,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-7.svg",
+      "previewImage": "assets/previews/list-7.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#7"
     },
     {
@@ -2704,7 +2719,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-12.svg",
+      "previewImage": "assets/previews/list-12.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#12"
     },
     {
@@ -2723,7 +2738,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-3.svg",
+      "previewImage": "assets/previews/list-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#3"
     },
     {
@@ -2742,7 +2757,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-10.svg",
+      "previewImage": "assets/previews/list-10.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#10"
     },
     {
@@ -2765,7 +2780,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/list-6.svg",
+      "previewImage": "assets/previews/list-6.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#6"
     },
     {
@@ -2788,7 +2803,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/list-13.svg",
+      "previewImage": "assets/previews/list-13.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/list#13"
     },
     {
@@ -2811,7 +2826,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-1.svg",
+      "previewImage": "assets/previews/balloon-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#1"
     },
     {
@@ -2834,7 +2849,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-2.svg",
+      "previewImage": "assets/previews/balloon-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#2"
     },
     {
@@ -2857,7 +2872,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-4.svg",
+      "previewImage": "assets/previews/balloon-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#4"
     },
     {
@@ -2880,7 +2895,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-3.svg",
+      "previewImage": "assets/previews/balloon-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#3"
     },
     {
@@ -2903,7 +2918,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-5.svg",
+      "previewImage": "assets/previews/balloon-5.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#5"
     },
     {
@@ -2926,7 +2941,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-6.svg",
+      "previewImage": "assets/previews/balloon-6.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#6"
     },
     {
@@ -2949,7 +2964,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-8.svg",
+      "previewImage": "assets/previews/balloon-8.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#8"
     },
     {
@@ -2972,7 +2987,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-7.svg",
+      "previewImage": "assets/previews/balloon-7.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#7"
     },
     {
@@ -2983,7 +2998,7 @@
       "categoryTitle": "HTML・CSSでつくるおしゃれな吹き出しデザイン12選",
       "section": "会話風の吹き出し",
       "title": "左向き",
-      "html": "<div class=\"balloon-009\">\n    <!-- お好きなアイコン画像を指定してください -->\n    <img src=\"/css-stock/img/oteto-icon.svg\" alt=\"\" />\n    <p>これは会話風の吹き出しです。お好きなアイコン画像を指定できます。</p>\n</div>",
+      "html": "<div class=\"balloon-009\">\n    <!-- お好きなアイコン画像を指定してください -->\n    <img src=\"assets/embedded/css-stock-img-oteto-icon.svg\" alt=\"\" />\n    <p>これは会話風の吹き出しです。お好きなアイコン画像を指定できます。</p>\n</div>",
       "css": ".balloon-009 {\n    display: flex;\n    justify-content: center;\n    align-items: start;\n    gap: 0 22px;\n}\n\n.balloon-009 img {\n    max-width: 70px;\n    height: 100%;\n    border: 3px solid #f2f2f2;\n    border-radius: 50%;\n}\n\n.balloon-009 p {\n    position: relative;\n    max-width: 300px;\n    margin: 3px 0 0;\n    padding: .8em 1em;\n    border-radius: 5px;\n    background-color: #f2f2f2;\n    color: #333333;\n}\n\n.balloon-009 p::before {\n    position: absolute;\n    left: -15px;\n    width: 15px;\n    height: 30px;\n    background-color: #f2f2f2;\n    clip-path: polygon(0 50%, 100% 0, 100% 100%);\n    content: '';\n}",
       "inputs": [
         {
@@ -2999,7 +3014,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-9.svg",
+      "previewImage": "assets/previews/balloon-9.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#9"
     },
     {
@@ -3010,7 +3025,7 @@
       "categoryTitle": "HTML・CSSでつくるおしゃれな吹き出しデザイン12選",
       "section": "会話風の吹き出し",
       "title": "右向き",
-      "html": "<div class=\"balloon-010\">\n    <p>これは会話風の吹き出しです。お好きなアイコン画像を指定できます。</p>\n    <!-- お好きなアイコン画像を指定してください -->\n    <img src=\"/css-stock/img/oteto-icon.svg\" alt=\"\" />\n</div>",
+      "html": "<div class=\"balloon-010\">\n    <p>これは会話風の吹き出しです。お好きなアイコン画像を指定できます。</p>\n    <!-- お好きなアイコン画像を指定してください -->\n    <img src=\"assets/embedded/css-stock-img-oteto-icon.svg\" alt=\"\" />\n</div>",
       "css": ".balloon-010 {\n    display: flex;\n    justify-content: center;\n    align-items: start;\n    gap: 0 22px;\n}\n\n.balloon-010 img {\n    max-width: 70px;\n    height: 100%;\n    border: 3px solid #f2f2f2;\n    border-radius: 50%;\n}\n\n.balloon-010 p {\n    position: relative;\n    max-width: 300px;\n    margin: 3px 0 0;\n    padding: .8em 1em;\n    border-radius: 5px;\n    background-color: #f2f2f2;\n    color: #333333;\n}\n\n.balloon-010 p::before {\n    position: absolute;\n    right: -15px;\n    width: 15px;\n    height: 30px;\n    background-color: #f2f2f2;\n    clip-path: polygon(0 0, 100% 50%, 0 100%);\n    content: '';\n}",
       "inputs": [
         {
@@ -3026,7 +3041,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/balloon-10.svg",
+      "previewImage": "assets/previews/balloon-10.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#10"
     },
     {
@@ -3037,10 +3052,10 @@
       "categoryTitle": "HTML・CSSでつくるおしゃれな吹き出しデザイン12選",
       "section": "会話風の吹き出し",
       "title": "LINE風",
-      "html": "<div class=\"balloon-012\">\n    <div class=\"balloon-012__section\">\n        <!-- お好きなアイコン画像を指定してください -->\n        <img class=\"balloon-012__img\" src=\"/css-stock/img/oteto-icon.svg\" alt=\"\" width=\"45\" height=\"45\" />\n        <p class=\"balloon-012__p left\">これはLINE風の吹き出しです。</p>\n    </div>\n    <div class=\"balloon-012__section\">\n        <p class=\"balloon-012__p right\">使い所こそ限られますが、遊び心のある可愛らしいデザインになります。</p>\n    </div>\n</div>",
+      "html": "<div class=\"balloon-012\">\n    <div class=\"balloon-012__section\">\n        <!-- お好きなアイコン画像を指定してください -->\n        <img class=\"balloon-012__img\" src=\"assets/embedded/css-stock-img-oteto-icon.svg\" alt=\"\" width=\"45\" height=\"45\" />\n        <p class=\"balloon-012__p left\">これはLINE風の吹き出しです。</p>\n    </div>\n    <div class=\"balloon-012__section\">\n        <p class=\"balloon-012__p right\">使い所こそ限られますが、遊び心のある可愛らしいデザインになります。</p>\n    </div>\n</div>",
       "css": ".balloon-012 {\n    display: grid;\n    gap: 1em 0;\n    padding: 25px 15px;\n    background-color: #769ece;\n}\n\n.balloon-012__section {\n    display: flex;\n    align-items: center;\n    gap: 0 15px;\n}\n\n.balloon-012__img {\n    width: 2.7em;\n    height: 2.7em;\n    border-radius: 50%;\n}\n\n.balloon-012__p {\n    display: inline-block;\n    position: relative;\n    max-width: 80%;\n    margin: 0;\n    padding: .4em .8em;\n    border-radius: 20px;\n    color: #333;\n    font-size: .9em;\n}\n\n.balloon-012__p.left {\n    background-color: #fff;\n}\n\n.balloon-012__p.right {\n    background-color: #30e852;\n    margin: 0 10px 0 auto;\n}\n\n.balloon-012__p::before {\n    position: absolute;\n    top: -15px;\n    width: 20px;\n    height: 30px;\n    content: '';\n}\n\n.balloon-012__p.left::before {\n    left: -10px;\n    border-radius: 0 0 0 15px;\n    box-shadow: -3px -15px 0 -7px white inset;\n}\n\n.balloon-012__p.right::before {\n    right: -10px;\n    border-radius: 0 0 15px 0;\n    box-shadow: 3px -15px 0 -7px #30e852 inset;\n}",
       "inputs": [],
-      "previewImage": "assets/previews/balloon-12.svg",
+      "previewImage": "assets/previews/balloon-12.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#12"
     },
     {
@@ -3051,7 +3066,7 @@
       "categoryTitle": "HTML・CSSでつくるおしゃれな吹き出しデザイン12選",
       "section": "その他の吹き出し",
       "title": "画像 + 補足",
-      "html": "<div class=\"balloon-013\">\n    <div class=\"balloon-013__img-wrap\">\n        <!-- お好きな画像を指定してください -->\n        <img class=\"balloon-013__img\" src=\"/css-stock/img/about/coding.svg\" alt=\"\" width=\"320\" height=\"180\" />\n    </div>\n    <p class=\"balloon-013__text\">ここに文章を入れます。ここに文章を入れます。ここに文章を入れます。</p>\n</div>",
+      "html": "<div class=\"balloon-013\">\n    <div class=\"balloon-013__img-wrap\">\n        <!-- お好きな画像を指定してください -->\n        <img class=\"balloon-013__img\" src=\"assets/embedded/css-stock-img-about-coding.svg\" alt=\"\" width=\"320\" height=\"180\" />\n    </div>\n    <p class=\"balloon-013__text\">ここに文章を入れます。ここに文章を入れます。ここに文章を入れます。</p>\n</div>",
       "css": ".balloon-013__img-wrap {\n    max-width: 100%;\n}\n\n.balloon-013__img {\n    width: 100%;\n    height: auto;\n}\n\n.balloon-013__text {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    position: relative;\n    padding: .7em;\n    border: 3px solid #d0d0d0;\n    border-radius: 10px;\n    font-size: .95em;\n}\n\n.balloon-013__text::before,\n.balloon-013__text::after {\n    position: absolute;\n    top: -15px;\n    width: 30px;\n    height: 15px;\n    clip-path: polygon(50% 0, 0 100%, 100% 100%);\n    content: '';\n}\n\n.balloon-013__text::before {\n    background-color: #d0d0d0;\n}\n\n.balloon-013__text::after {\n    top: -11px;\n    background-color: #fff;\n}\n\n@media only screen and (min-width: 521px) {\n    .balloon-013 {\n        display: flex;\n        align-items: center;\n        gap: 0 15px;\n    }\n\n    .balloon-013__img-wrap,\n    .balloon-013__text {\n        flex-basis: 50%;\n    }\n\n    .balloon-013__text::before,\n    .balloon-013__text::after {\n        top: unset;\n        left: -15px;\n        width: 15px;\n        height: 30px;\n        clip-path: polygon(0 50%, 100% 0, 100% 100%);\n    }\n\n    .balloon-013__text::after {\n        top: unset;\n        left: -11px;\n    }\n}",
       "inputs": [
         {
@@ -3059,7 +3074,7 @@
           "defaultValue": "#d0d0d0"
         }
       ],
-      "previewImage": "assets/previews/balloon-13.svg",
+      "previewImage": "assets/previews/balloon-13.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/balloon#13"
     },
     {
@@ -3086,7 +3101,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-3.svg",
+      "previewImage": "assets/previews/accordion-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#3"
     },
     {
@@ -3113,7 +3128,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-4.svg",
+      "previewImage": "assets/previews/accordion-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#4"
     },
     {
@@ -3136,7 +3151,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-6.svg",
+      "previewImage": "assets/previews/accordion-6.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#6"
     },
     {
@@ -3155,7 +3170,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-8.svg",
+      "previewImage": "assets/previews/accordion-8.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#8"
     },
     {
@@ -3182,7 +3197,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-1.svg",
+      "previewImage": "assets/previews/accordion-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#1"
     },
     {
@@ -3205,7 +3220,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-2.svg",
+      "previewImage": "assets/previews/accordion-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#2"
     },
     {
@@ -3228,7 +3243,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-7.svg",
+      "previewImage": "assets/previews/accordion-7.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#7"
     },
     {
@@ -3255,7 +3270,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/accordion-5.svg",
+      "previewImage": "assets/previews/accordion-5.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/accordion#5"
     },
     {
@@ -3508,7 +3523,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/selectbox-4.svg",
+      "previewImage": "assets/previews/selectbox-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/selectbox#4"
     },
     {
@@ -3768,6 +3783,26 @@
           "defaultValue": "#ffffff"
         }
       ],
+      "behavior": {
+        "type": "tooltip",
+        "requiresJs": true,
+        "enhancementLevel": "recommended",
+        "rootSelector": ".tooltip-001",
+        "selectors": [
+          ".tooltip-001 > :first-child",
+          ".tooltip-001 span, .tooltip-001 p"
+        ],
+        "events": [
+          "mouseenter",
+          "mouseleave",
+          "focus",
+          "blur"
+        ],
+        "a11y": [
+          "aria-describedby",
+          "roleTooltip"
+        ]
+      },
       "previewImage": "assets/previews/tooltip-1.svg",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tooltip#1"
     },
@@ -3791,6 +3826,26 @@
           "defaultValue": "#ffffff"
         }
       ],
+      "behavior": {
+        "type": "tooltip",
+        "requiresJs": true,
+        "enhancementLevel": "recommended",
+        "rootSelector": ".tooltip-002",
+        "selectors": [
+          ".tooltip-002 > :first-child",
+          ".tooltip-002 span, .tooltip-002 p"
+        ],
+        "events": [
+          "mouseenter",
+          "mouseleave",
+          "focus",
+          "blur"
+        ],
+        "a11y": [
+          "aria-describedby",
+          "roleTooltip"
+        ]
+      },
       "previewImage": "assets/previews/tooltip-2.svg",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tooltip#2"
     },
@@ -3814,6 +3869,26 @@
           "defaultValue": "#ffffff"
         }
       ],
+      "behavior": {
+        "type": "tooltip",
+        "requiresJs": true,
+        "enhancementLevel": "recommended",
+        "rootSelector": ".tooltip-003",
+        "selectors": [
+          ".tooltip-003 > :first-child",
+          ".tooltip-003 span, .tooltip-003 p"
+        ],
+        "events": [
+          "mouseenter",
+          "mouseleave",
+          "focus",
+          "blur"
+        ],
+        "a11y": [
+          "aria-describedby",
+          "roleTooltip"
+        ]
+      },
       "previewImage": "assets/previews/tooltip-3.svg",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tooltip#3"
     },
@@ -3837,6 +3912,26 @@
           "defaultValue": "#ffffff"
         }
       ],
+      "behavior": {
+        "type": "tooltip",
+        "requiresJs": true,
+        "enhancementLevel": "recommended",
+        "rootSelector": ".tooltip-004",
+        "selectors": [
+          ".tooltip-004 > :first-child",
+          ".tooltip-004 span, .tooltip-004 p"
+        ],
+        "events": [
+          "mouseenter",
+          "mouseleave",
+          "focus",
+          "blur"
+        ],
+        "a11y": [
+          "aria-describedby",
+          "roleTooltip"
+        ]
+      },
       "previewImage": "assets/previews/tooltip-4.svg",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tooltip#4"
     },
@@ -3860,7 +3955,27 @@
           "defaultValue": "#000000"
         }
       ],
-      "previewImage": "assets/previews/tooltip-5.svg",
+      "behavior": {
+        "type": "tooltip",
+        "requiresJs": true,
+        "enhancementLevel": "recommended",
+        "rootSelector": ".tooltip-005",
+        "selectors": [
+          ".tooltip-005 > :first-child",
+          ".tooltip-005 span, .tooltip-005 p"
+        ],
+        "events": [
+          "mouseenter",
+          "mouseleave",
+          "focus",
+          "blur"
+        ],
+        "a11y": [
+          "aria-describedby",
+          "roleTooltip"
+        ]
+      },
+      "previewImage": "assets/previews/tooltip-5.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tooltip#5"
     },
     {
@@ -3883,7 +3998,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/qa-8.svg",
+      "previewImage": "assets/previews/qa-8.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/qa#8"
     },
     {
@@ -3906,7 +4021,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/qa-6.svg",
+      "previewImage": "assets/previews/qa-6.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/qa#6"
     },
     {
@@ -3929,7 +4044,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/qa-1.svg",
+      "previewImage": "assets/previews/qa-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/qa#1"
     },
     {
@@ -3948,7 +4063,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/qa-7.svg",
+      "previewImage": "assets/previews/qa-7.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/qa#7"
     },
     {
@@ -3971,7 +4086,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/quote-1.svg",
+      "previewImage": "assets/previews/quote-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/quote#1"
     },
     {
@@ -3998,7 +4113,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/quote-2.svg",
+      "previewImage": "assets/previews/quote-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/quote#2"
     },
     {
@@ -4025,7 +4140,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/quote-3.svg",
+      "previewImage": "assets/previews/quote-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/quote#3"
     },
     {
@@ -4044,7 +4159,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/quote-4.svg",
+      "previewImage": "assets/previews/quote-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/quote#4"
     },
     {
@@ -4063,7 +4178,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/radar-chart-1.svg",
+      "previewImage": "assets/previews/radar-chart-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radar-chart#1"
     },
     {
@@ -4082,7 +4197,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/radar-chart-2.svg",
+      "previewImage": "assets/previews/radar-chart-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radar-chart#2"
     },
     {
@@ -4101,7 +4216,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/radar-chart-3.svg",
+      "previewImage": "assets/previews/radar-chart-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radar-chart#3"
     },
     {
@@ -4120,7 +4235,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/radar-chart-4.svg",
+      "previewImage": "assets/previews/radar-chart-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radar-chart#4"
     },
     {
@@ -4143,7 +4258,24 @@
           "defaultValue": "#c7511f"
         }
       ],
-      "previewImage": "assets/previews/read-more-1.svg",
+      "behavior": {
+        "type": "readMore",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".read-more-1",
+        "selectors": [
+          ".read-more-1 input[type=\"checkbox\"]",
+          ".read-more-1 label"
+        ],
+        "events": [
+          "change"
+        ],
+        "a11y": [
+          "aria-expanded",
+          "aria-controls"
+        ]
+      },
+      "previewImage": "assets/previews/read-more-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/read-more#1"
     },
     {
@@ -4162,7 +4294,24 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/read-more-3.svg",
+      "behavior": {
+        "type": "readMore",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".read-more-3",
+        "selectors": [
+          ".read-more-3 input[type=\"checkbox\"]",
+          ".read-more-3 label"
+        ],
+        "events": [
+          "change"
+        ],
+        "a11y": [
+          "aria-expanded",
+          "aria-controls"
+        ]
+      },
+      "previewImage": "assets/previews/read-more-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/read-more#3"
     },
     {
@@ -4185,7 +4334,24 @@
           "defaultValue": "#c7511f"
         }
       ],
-      "previewImage": "assets/previews/read-more-2.svg",
+      "behavior": {
+        "type": "readMore",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".read-more-2",
+        "selectors": [
+          ".read-more-2 input[type=\"checkbox\"]",
+          ".read-more-2 label"
+        ],
+        "events": [
+          "change"
+        ],
+        "a11y": [
+          "aria-expanded",
+          "aria-controls"
+        ]
+      },
+      "previewImage": "assets/previews/read-more-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/read-more#2"
     },
     {
@@ -4204,7 +4370,24 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/read-more-4.svg",
+      "behavior": {
+        "type": "readMore",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".read-more-4",
+        "selectors": [
+          ".read-more-4 input[type=\"checkbox\"]",
+          ".read-more-4 label"
+        ],
+        "events": [
+          "change"
+        ],
+        "a11y": [
+          "aria-expanded",
+          "aria-controls"
+        ]
+      },
+      "previewImage": "assets/previews/read-more-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/read-more#4"
     },
     {
@@ -4223,7 +4406,27 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/tab-2.svg",
+      "behavior": {
+        "type": "tabs",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".tab-2",
+        "selectors": [
+          ".tab-2 input[type=\"radio\"]",
+          ".tab-2 label"
+        ],
+        "events": [
+          "change",
+          "keydown"
+        ],
+        "a11y": [
+          "roleTablist",
+          "roleTab",
+          "roleTabpanel",
+          "arrowKeys"
+        ]
+      },
+      "previewImage": "assets/previews/tab-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tab#2"
     },
     {
@@ -4246,7 +4449,27 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/tab-1.svg",
+      "behavior": {
+        "type": "tabs",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".tab-1",
+        "selectors": [
+          ".tab-1 input[type=\"radio\"]",
+          ".tab-1 label"
+        ],
+        "events": [
+          "change",
+          "keydown"
+        ],
+        "a11y": [
+          "roleTablist",
+          "roleTab",
+          "roleTabpanel",
+          "arrowKeys"
+        ]
+      },
+      "previewImage": "assets/previews/tab-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tab#1"
     },
     {
@@ -4269,7 +4492,27 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/tab-3.svg",
+      "behavior": {
+        "type": "tabs",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".tab-3",
+        "selectors": [
+          ".tab-3 input[type=\"radio\"]",
+          ".tab-3 label"
+        ],
+        "events": [
+          "change",
+          "keydown"
+        ],
+        "a11y": [
+          "roleTablist",
+          "roleTab",
+          "roleTabpanel",
+          "arrowKeys"
+        ]
+      },
+      "previewImage": "assets/previews/tab-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tab#3"
     },
     {
@@ -4292,7 +4535,27 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/tab-4.svg",
+      "behavior": {
+        "type": "tabs",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".tab-4",
+        "selectors": [
+          ".tab-4 input[type=\"radio\"]",
+          ".tab-4 label"
+        ],
+        "events": [
+          "change",
+          "keydown"
+        ],
+        "a11y": [
+          "roleTablist",
+          "roleTab",
+          "roleTabpanel",
+          "arrowKeys"
+        ]
+      },
+      "previewImage": "assets/previews/tab-4.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/tab#4"
     },
     {
@@ -4315,7 +4578,7 @@
           "defaultValue": "#4bd865"
         }
       ],
-      "previewImage": "assets/previews/toggle-button-1.svg",
+      "previewImage": "assets/previews/toggle-button-1.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toggle-button#1"
     },
     {
@@ -4338,7 +4601,7 @@
           "defaultValue": "#4bd865"
         }
       ],
-      "previewImage": "assets/previews/toggle-button-2.svg",
+      "previewImage": "assets/previews/toggle-button-2.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toggle-button#2"
     },
     {
@@ -4361,7 +4624,7 @@
           "defaultValue": "#4bd865"
         }
       ],
-      "previewImage": "assets/previews/toggle-button-3.svg",
+      "previewImage": "assets/previews/toggle-button-3.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toggle-button#3"
     },
     {
@@ -4384,7 +4647,7 @@
           "defaultValue": "#75bbff"
         }
       ],
-      "previewImage": "assets/previews/toggle-button-4.svg",
+      "previewImage": "assets/previews/toggle-button-4.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toggle-button#4"
     },
     {
@@ -4403,7 +4666,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/checkbox-2.svg",
+      "previewImage": "assets/previews/checkbox-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/checkbox#2"
     },
     {
@@ -4422,7 +4685,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/checkbox-1.svg",
+      "previewImage": "assets/previews/checkbox-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/checkbox#1"
     },
     {
@@ -4441,7 +4704,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/checkbox-3.svg",
+      "previewImage": "assets/previews/checkbox-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/checkbox#3"
     },
     {
@@ -4460,7 +4723,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/footer-1.svg",
+      "previewImage": "assets/previews/footer-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/footer#1"
     },
     {
@@ -4479,7 +4742,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/footer-2.svg",
+      "previewImage": "assets/previews/footer-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/footer#2"
     },
     {
@@ -4498,7 +4761,7 @@
           "defaultValue": "#ffffff"
         }
       ],
-      "previewImage": "assets/previews/footer-3.svg",
+      "previewImage": "assets/previews/footer-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/footer#3"
     },
     {
@@ -4544,7 +4807,7 @@
           "defaultValue": "#333333"
         }
       ],
-      "previewImage": "assets/previews/fusen-2.svg",
+      "previewImage": "assets/previews/fusen-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/fusen#2"
     },
     {
@@ -4582,7 +4845,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/pagination-1.svg",
+      "previewImage": "assets/previews/pagination-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/pagination#1"
     },
     {
@@ -4601,7 +4864,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/pagination-2.svg",
+      "previewImage": "assets/previews/pagination-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/pagination#2"
     },
     {
@@ -4647,7 +4910,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/pie-chart-1.svg",
+      "previewImage": "assets/previews/pie-chart-1.png",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/pie-chart#1"
     },
     {
@@ -4674,7 +4937,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/pie-chart-3.svg",
+      "previewImage": "assets/previews/pie-chart-3.png",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/pie-chart#3"
     },
     {
@@ -4697,7 +4960,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/pie-chart-2.svg",
+      "previewImage": "assets/previews/pie-chart-2.png",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/pie-chart#2"
     },
     {
@@ -4716,7 +4979,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/radio-1.svg",
+      "previewImage": "assets/previews/radio-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radio#1"
     },
     {
@@ -4735,7 +4998,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/radio-2.svg",
+      "previewImage": "assets/previews/radio-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radio#2"
     },
     {
@@ -4754,7 +5017,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/radio-3.svg",
+      "previewImage": "assets/previews/radio-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/radio#3"
     },
     {
@@ -4773,7 +5036,7 @@
           "defaultValue": "#f7f7f7"
         }
       ],
-      "previewImage": "assets/previews/toc-1.svg",
+      "previewImage": "assets/previews/toc-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toc#1"
     },
     {
@@ -4792,7 +5055,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/toc-2.svg",
+      "previewImage": "assets/previews/toc-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toc#2"
     },
     {
@@ -4815,7 +5078,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/toc-5.svg",
+      "previewImage": "assets/previews/toc-5.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/toc#5"
     },
     {
@@ -4834,7 +5097,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/bar-chart-1.svg",
+      "previewImage": "assets/previews/bar-chart-1.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/bar-chart#1"
     },
     {
@@ -4857,7 +5120,7 @@
           "defaultValue": "#f2f2f2"
         }
       ],
-      "previewImage": "assets/previews/bar-chart-2.svg",
+      "previewImage": "assets/previews/bar-chart-2.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/bar-chart#2"
     },
     {
@@ -4880,7 +5143,29 @@
           "defaultValue": "#c7511f"
         }
       ],
-      "previewImage": "assets/previews/modal-1.svg",
+      "behavior": {
+        "type": "modal",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".modal-1__wrap",
+        "selectors": [
+          ".modal-1__wrap .modal-1__open-label",
+          ".modal-1__wrap .modal-1__close-label",
+          ".modal-1__wrap .modal-1__background",
+          ".modal-1__wrap .modal-1__content"
+        ],
+        "events": [
+          "click",
+          "keydown"
+        ],
+        "a11y": [
+          "aria-modal",
+          "focusTrap",
+          "escapeClose",
+          "returnFocus"
+        ]
+      },
+      "previewImage": "assets/previews/modal-1.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/modal#1"
     },
     {
@@ -4903,7 +5188,29 @@
           "defaultValue": "#ffffff"
         }
       ],
-      "previewImage": "assets/previews/modal-2.svg",
+      "behavior": {
+        "type": "modal",
+        "requiresJs": true,
+        "enhancementLevel": "required",
+        "rootSelector": ".modal-2__wrap",
+        "selectors": [
+          ".modal-2__wrap .modal-2__open-label",
+          ".modal-2__wrap .modal-2__close-label",
+          ".modal-2__wrap .modal-2__background",
+          ".modal-2__wrap .modal-2__content"
+        ],
+        "events": [
+          "click",
+          "keydown"
+        ],
+        "a11y": [
+          "aria-modal",
+          "focusTrap",
+          "escapeClose",
+          "returnFocus"
+        ]
+      },
+      "previewImage": "assets/previews/modal-2.gif",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/modal#2"
     },
     {
@@ -4922,7 +5229,7 @@
           "defaultValue": "#2589d0"
         }
       ],
-      "previewImage": "assets/previews/timeline-3.svg",
+      "previewImage": "assets/previews/timeline-3.webp",
       "sourceUrl": "https://pote-chil.com/css-stock/ja/timeline#3"
     }
   ]
