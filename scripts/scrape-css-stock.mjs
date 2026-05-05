@@ -6,6 +6,8 @@ const indexUrl = `${baseUrl}/css-stock/ja`;
 const outputPath = path.resolve('wp-content/plugins/designinserter/data/css-stock-parts.json');
 const previewOutputDir = path.resolve('wp-content/plugins/designinserter/assets/previews');
 const previewTempDir = path.resolve('wp-content/plugins/designinserter/assets/.previews-tmp');
+const embeddedAssetOutputDir = path.resolve('wp-content/plugins/designinserter/assets/embedded');
+const embeddedAssetTempDir = path.resolve('wp-content/plugins/designinserter/assets/.embedded-tmp');
 
 function decodeHtml(value) {
 	return value
@@ -76,6 +78,38 @@ function detectPreviewExtension(bytes, contentType, sourceUrl) {
 	return path.extname(new URL(sourceUrl).pathname).toLowerCase() || '.svg';
 }
 
+function getEmbeddedAssetPath(sourcePath, ext) {
+	const pathname = new URL(sourcePath, baseUrl).pathname;
+	const stem = pathname
+		.replace(/^\/+/, '')
+		.replace(/\.[a-z0-9]+$/i, '')
+		.replace(/[^a-z0-9]+/gi, '-')
+		.replace(/^-+|-+$/g, '')
+		.toLowerCase();
+
+	return `assets/embedded/${stem}${ext}`;
+}
+
+function extractEmbeddedAssetRefs(value) {
+	if (!value || !value.includes('/css-stock/img/')) {
+		return [];
+	}
+
+	const refs = new Set();
+	const attrRegex = /\b(?:src|href)=["'](\/css-stock\/img\/[^"']+)["']/g;
+	const cssUrlRegex = /url\(\s*["']?(\/css-stock\/img\/[^"')]+)["']?\s*\)/g;
+
+	for (const match of value.matchAll(attrRegex)) {
+		refs.add(match[1]);
+	}
+
+	for (const match of value.matchAll(cssUrlRegex)) {
+		refs.add(match[1]);
+	}
+
+	return [...refs];
+}
+
 function extractCategories(html) {
 	const categories = [];
 	const seen = new Set();
@@ -136,6 +170,97 @@ function extractInputs(template) {
 	return inputs;
 }
 
+function getPartBehavior(category, sourcePartId) {
+	const id = `${category.slug}-${sourcePartId}`;
+
+	if (category.slug === 'modal' && sourcePartId >= 1 && sourcePartId <= 2) {
+		const rootSelector = `.modal-${sourcePartId}__wrap`;
+		return {
+			type: 'modal',
+			requiresJs: true,
+			enhancementLevel: 'required',
+			rootSelector,
+			selectors: [
+				`${rootSelector} .modal-${sourcePartId}__open-label`,
+				`${rootSelector} .modal-${sourcePartId}__close-label`,
+				`${rootSelector} .modal-${sourcePartId}__background`,
+				`${rootSelector} .modal-${sourcePartId}__content`,
+			],
+			events: ['click', 'keydown'],
+			a11y: ['aria-modal', 'focusTrap', 'escapeClose', 'returnFocus'],
+		};
+	}
+
+	if (category.slug === 'tab' && sourcePartId >= 1 && sourcePartId <= 4) {
+		const rootSelector = `.tab-${sourcePartId}`;
+		return {
+			type: 'tabs',
+			requiresJs: true,
+			enhancementLevel: 'required',
+			rootSelector,
+			selectors: [`${rootSelector} input[type="radio"]`, `${rootSelector} label`],
+			events: ['change', 'keydown'],
+			a11y: ['roleTablist', 'roleTab', 'roleTabpanel', 'arrowKeys'],
+		};
+	}
+
+	if (category.slug === 'read-more' && sourcePartId >= 1 && sourcePartId <= 4) {
+		const rootSelector = `.read-more-${sourcePartId}`;
+		return {
+			type: 'readMore',
+			requiresJs: true,
+			enhancementLevel: 'required',
+			rootSelector,
+			selectors: [`${rootSelector} input[type="checkbox"]`, `${rootSelector} label`],
+			events: ['change'],
+			a11y: ['aria-expanded', 'aria-controls'],
+		};
+	}
+
+	if (id === 'button-20') {
+		return {
+			type: 'scrollTop',
+			requiresJs: true,
+			enhancementLevel: 'required',
+			rootSelector: '.button-20',
+			selectors: ['.button-20'],
+			events: ['click'],
+			a11y: ['aria-label'],
+		};
+	}
+
+	if (category.slug === 'tooltip' && sourcePartId >= 1 && sourcePartId <= 5) {
+		const rootSelector = `.tooltip-${String(sourcePartId).padStart(3, '0')}`;
+		return {
+			type: 'tooltip',
+			requiresJs: true,
+			enhancementLevel: 'recommended',
+			rootSelector,
+			selectors: [`${rootSelector} > :first-child`, `${rootSelector} span, ${rootSelector} p`],
+			events: ['mouseenter', 'mouseleave', 'focus', 'blur'],
+			a11y: ['aria-describedby', 'roleTooltip'],
+		};
+	}
+
+	return null;
+}
+
+function normalizePartCss(category, sourcePartId, cssCode) {
+	if (category.slug === 'loading' && sourcePartId === 15) {
+		return cssCode
+			.replace(
+				'.loading-15 {\n    transform-style: preserve-3d;',
+				'.loading-15 {\n    position: relative;\n    width: 48px;\n    height: 48px;\n    margin: 24px auto;\n    transform-style: preserve-3d;'
+			)
+			.replace(
+				'.loading-15 span {\n    position: absolute;\n    top: -24px;\n    left: -24px;',
+				'.loading-15 span {\n    position: absolute;\n    top: 0;\n    left: 0;'
+			);
+	}
+
+	return cssCode;
+}
+
 function extractParts(category, html) {
 	const sections = [];
 	const sectionRegex = /<h2\b[^>]*class="[^"]*_title_1dytu_[^"]*"[^>]*>([\s\S]*?)<\/h2>/g;
@@ -157,18 +282,20 @@ function extractParts(category, html) {
 		const title = stripTags((card.match(/<h3\b[^>]*>([\s\S]*?)<\/h3>/) || [null, ''])[1]);
 		const imagePath = (card.match(/<img\b[^>]*src="([^"]+)"/) || [null, ''])[1];
 		const htmlCode = extractCode(template, 'HTMLをコピペする');
-		const cssCode = extractCode(template, 'CSSをコピペする');
+		const cssCode = normalizePartCss(category, Number.parseInt(rawId || '0', 10), extractCode(template, 'CSSをコピペする'));
 
 		if (!rawId || !title || !htmlCode) {
 			continue;
 		}
 
 		const id = `${category.slug}-${rawId}`;
+		const sourcePartId = Number.parseInt(rawId, 10);
+		const behavior = getPartBehavior(category, sourcePartId);
 		const previewSourceImage = imagePath ? `${baseUrl}${imagePath}` : '';
 
 		parts.push({
 			id,
-			sourcePartId: Number.parseInt(rawId, 10),
+			sourcePartId,
 			category: category.slug,
 			categoryLabel: category.label,
 			categoryTitle: pageTitle,
@@ -177,6 +304,7 @@ function extractParts(category, html) {
 			html: htmlCode,
 			css: cssCode,
 			inputs: extractInputs(template),
+			...(behavior ? { behavior } : {}),
 			previewImage: getPreviewAssetPath(id, imagePath),
 			previewSourceImage,
 			sourceUrl: `${category.url}#${rawId}`,
@@ -210,6 +338,44 @@ async function downloadPreviewAssets(parts) {
 	console.log(`Downloaded ${downloaded} preview assets to ${previewOutputDir}`);
 }
 
+async function downloadEmbeddedAssets(parts) {
+	await rm(embeddedAssetTempDir, { recursive: true, force: true });
+	await mkdir(embeddedAssetTempDir, { recursive: true });
+
+	const sourcePaths = new Set();
+	for (const part of parts) {
+		for (const sourcePath of extractEmbeddedAssetRefs(part.html)) {
+			sourcePaths.add(sourcePath);
+		}
+		for (const sourcePath of extractEmbeddedAssetRefs(part.css)) {
+			sourcePaths.add(sourcePath);
+		}
+	}
+
+	const assetMap = new Map();
+	for (const sourcePath of sourcePaths) {
+		const sourceUrl = new URL(sourcePath, baseUrl).href;
+		const { bytes, contentType } = await fetchAsset(sourceUrl);
+		const ext = detectPreviewExtension(bytes, contentType, sourceUrl);
+		const assetPath = getEmbeddedAssetPath(sourcePath, ext);
+		const outputFile = path.join(embeddedAssetTempDir, path.basename(assetPath));
+		await writeFile(outputFile, bytes);
+		assetMap.set(sourcePath, assetPath);
+	}
+
+	for (const part of parts) {
+		for (const [sourcePath, assetPath] of assetMap.entries()) {
+			part.html = part.html.replaceAll(sourcePath, assetPath);
+			part.css = part.css.replaceAll(sourcePath, assetPath);
+		}
+	}
+
+	await rm(embeddedAssetOutputDir, { recursive: true, force: true });
+	await mkdir(path.dirname(embeddedAssetOutputDir), { recursive: true });
+	await rename(embeddedAssetTempDir, embeddedAssetOutputDir);
+	console.log(`Downloaded ${assetMap.size} embedded assets to ${embeddedAssetOutputDir}`);
+}
+
 async function main() {
 	const indexHtml = await fetchText(indexUrl);
 	const categories = extractCategories(indexHtml);
@@ -228,6 +394,7 @@ async function main() {
 
 	const expectedTotal = categories.reduce((sum, category) => sum + category.expectedPartCount, 0);
 	await downloadPreviewAssets(parts);
+	await downloadEmbeddedAssets(parts);
 	const catalogParts = parts.map(({ previewSourceImage, ...part }) => part);
 	const catalog = {
 		sourceName: 'CSS Stock',

@@ -15,9 +15,14 @@ function designinserter_render_part( $part_id ) {
 
 	$id     = esc_attr( $part['id'] );
 	$title  = isset( $part['title'] ) ? esc_html( $part['title'] ) : $id;
-	$html   = isset( $part['html'] ) ? $part['html'] : '';
-	$css    = isset( $part['css'] ) ? $part['css'] : '';
+	$html   = isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '';
+	$css    = isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '';
 	$source = isset( $part['sourceUrl'] ) ? esc_url( $part['sourceUrl'] ) : esc_url( DESIGNINSERTER_SOURCE_URL );
+	$behavior = designinserter_get_part_behavior( $part );
+	if ( designinserter_behavior_requires_js( $behavior ) ) {
+		designinserter_enqueue_frontend_behavior();
+	}
+
 	$rendered_instances++;
 	$scope = sprintf( 'di-%s-%d', $id, $rendered_instances );
 	$html  = designinserter_scope_interactive_html( $html, $scope );
@@ -28,15 +33,69 @@ function designinserter_render_part( $part_id ) {
 		$rendered_styles[ $id ] = true;
 	}
 
+	$behavior_attr = '';
+	if ( ! empty( $behavior['type'] ) ) {
+		$behavior_attr = sprintf( ' data-designinserter-behavior="%s"', esc_attr( $behavior['type'] ) );
+		if ( ! empty( $behavior['rootSelector'] ) ) {
+			$behavior_attr .= sprintf( ' data-designinserter-root-selector="%s"', esc_attr( $behavior['rootSelector'] ) );
+		}
+	}
+
 	return sprintf(
-		"\n<!-- Design Inserter: %s | Source: %s -->\n%s<div class=\"designinserter-part\" data-designinserter-id=\"%s\" aria-label=\"%s\">\n%s\n</div>\n",
+		"\n<!-- Design Inserter: %s | Source: %s -->\n%s<div class=\"designinserter-part\" data-designinserter-id=\"%s\"%s aria-label=\"%s\">\n%s\n</div>\n",
 		esc_html( $title ),
 		$source,
 		$style,
 		$id,
+		$behavior_attr,
 		$title,
 		$html
 	);
+}
+
+function designinserter_resolve_local_asset_urls( $value ) {
+	if ( '' === $value || false === strpos( $value, 'assets/' ) ) {
+		return $value;
+	}
+
+	$base_url = trailingslashit( DESIGNINSERTER_PLUGIN_URL );
+	$value = preg_replace_callback(
+		'/\b(src|href)=(["\'])(assets\/(?:embedded|previews)\/[^"\']+)\2/',
+		function ( $matches ) use ( $base_url ) {
+			return sprintf( '%s=%s%s%s', $matches[1], $matches[2], esc_url( $base_url . $matches[3] ), $matches[2] );
+		},
+		$value
+	);
+
+	return preg_replace_callback(
+		'/url\(\s*(["\']?)(assets\/(?:embedded|previews)\/[^)"\']+)\1\s*\)/',
+		function ( $matches ) use ( $base_url ) {
+			return sprintf( 'url("%s")', esc_url( $base_url . $matches[2] ) );
+		},
+		$value
+	);
+}
+
+function designinserter_get_part_behavior( $part ) {
+	if ( ! isset( $part['behavior'] ) || ! is_array( $part['behavior'] ) ) {
+		return array();
+	}
+
+	return $part['behavior'];
+}
+
+function designinserter_behavior_requires_js( $behavior ) {
+	return is_array( $behavior ) && ! empty( $behavior['requiresJs'] );
+}
+
+function designinserter_enqueue_frontend_behavior() {
+	if ( wp_script_is( 'designinserter-frontend', 'registered' ) ) {
+		wp_enqueue_script( 'designinserter-frontend' );
+	}
+
+	if ( wp_style_is( 'designinserter-frontend', 'registered' ) ) {
+		wp_enqueue_style( 'designinserter-frontend' );
+	}
 }
 
 function designinserter_scope_interactive_html( $html, $scope ) {
