@@ -50,12 +50,22 @@ function designinserter_get_editor_catalog() {
 	$items = array();
 
 	foreach ( $catalog['parts'] as $part ) {
-		$items[] = array(
+		$item = array(
 			'id'            => $part['id'],
 			'title'         => isset( $part['title'] ) ? $part['title'] : $part['id'],
 			'categoryLabel' => isset( $part['categoryLabel'] ) ? $part['categoryLabel'] : '',
 			'previewImage'  => isset( $part['previewImage'] ) ? DESIGNINSERTER_PLUGIN_URL . $part['previewImage'] : '',
 		);
+
+		if ( isset( $part['behavior'] ) && is_array( $part['behavior'] ) ) {
+			$item['behavior'] = array(
+				'type'                 => isset( $part['behavior']['type'] ) ? $part['behavior']['type'] : '',
+				'requiresJs'           => ! empty( $part['behavior']['requiresJs'] ),
+				'enhancementLevel'     => isset( $part['behavior']['enhancementLevel'] ) ? $part['behavior']['enhancementLevel'] : '',
+			);
+		}
+
+		$items[] = $item;
 	}
 
 	return array(
