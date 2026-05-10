@@ -13,8 +13,9 @@ function designinserter_render_part( $part_id ) {
 		return '';
 	}
 
-	$id     = esc_attr( $part['id'] );
-	$title  = isset( $part['title'] ) ? esc_html( $part['title'] ) : $id;
+	$id        = esc_attr( $part['id'] );
+	$title_raw = isset( $part['title'] ) ? $part['title'] : $part['id'];
+	$title     = esc_html( $title_raw );
 	$html   = isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '';
 	$css    = isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '';
 	$source = isset( $part['sourceUrl'] ) ? esc_url( $part['sourceUrl'] ) : esc_url( DESIGNINSERTER_SOURCE_URL );
@@ -48,7 +49,7 @@ function designinserter_render_part( $part_id ) {
 		$style,
 		$id,
 		$behavior_attr,
-		$title,
+		esc_attr( $title_raw ),
 		$html
 	);
 }
@@ -145,3 +146,4 @@ function designinserter_shortcode( $atts ) {
 	return designinserter_render_part( $atts['id'] );
 }
 add_shortcode( 'designinserter_part', 'designinserter_shortcode' );
+add_shortcode( 'designinserter', 'designinserter_shortcode' );
