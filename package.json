@@ -4,9 +4,16 @@
   "private": true,
   "description": "Local WordPress plugin development environment for Design Inserter.",
   "scripts": {
+    "test": "node scripts/test.mjs",
+    "build": "node scripts/build-plugin-zip.mjs",
     "scrape:css-stock": "node scripts/scrape-css-stock.mjs",
     "wp": "docker compose exec -T wordpress wp --allow-root",
-    "php:lint": "docker compose exec -T wordpress php -l wp-content/plugins/designinserter/designinserter.php"
+    "php:lint": "find wp-content/plugins/designinserter wp-content/themes/designinserter-dev tests -name '*.php' -print0 | xargs -0 -n1 php -l",
+    "php:lint:docker": "docker compose exec -T wordpress php -l wp-content/plugins/designinserter/designinserter.php",
+    "smoke:wp": "node scripts/wp-smoke.mjs",
+    "smoke:wp:docker": "node scripts/wp-smoke.mjs --docker",
+    "smoke:wp:portable": "node scripts/wp-smoke.mjs --portable",
+    "smoke:wp:stubs": "node scripts/wp-smoke.mjs --stubs"
   },
-  "license": "UNLICENSED"
+  "license": "GPL-2.0-or-later"
 }
