@@ -3,6 +3,7 @@ wp-admin/
 wp-includes/
 wp-config.php
 wp-*.php
+!tests/wp-stubs.php
 xmlrpc.php
 license.txt
 readme.html
@@ -38,6 +39,7 @@ node_modules/
 npm-debug.log*
 
 # Test/build artifacts.
+dist/
 test-results/
 playwright-report/
 .playwright-mcp/
