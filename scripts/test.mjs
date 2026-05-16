@@ -62,7 +62,7 @@ function testPhpSyntax() {
 
   const missingPhp = run('php', ['-v']);
   if (missingPhp.status !== 0) {
-    fail('php CLI is available');
+    fail('php CLI is not available');
     return;
   }
 

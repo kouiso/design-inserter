@@ -49,7 +49,7 @@ function assertSuccess(result, label, options = {}) {
 }
 
 function requireCommand(command) {
-  const result = runProcess('bash', ['-lc', `command -v ${command}`], { capture: true, environment: true });
+  const result = runProcess('sh', ['-c', `command -v ${command}`], { capture: true, environment: true });
   assertSuccess(result, `${command} is required`, { environment: true });
   return result.stdout.trim();
 }
