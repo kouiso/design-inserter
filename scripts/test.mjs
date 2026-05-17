@@ -82,6 +82,7 @@ function testGitVisibility() {
     'tests/wp-stubs.php',
     'tests/render-smoke.php',
     'tests/catalog-fallback.php',
+    'tests/portable-smoke-integration.php',
     'scripts/test.mjs',
     'scripts/wp-smoke.mjs',
     'scripts/build-plugin-zip.mjs',
@@ -366,77 +367,12 @@ function testEditorAssetContract() {
   assert(block.includes("'render_callback' => 'designinserter_render_block'"), 'block registration uses PHP render callback');
 }
 
-function testSmokeScriptContract() {
-  const smoke = fs.readFileSync('scripts/wp-smoke.mjs', 'utf8');
+// NOTE: testSmokeScriptContract / testBuildScriptContract removed (Issue #7).
+// They grepped script source strings, which is brittle (Gemini PR #6 review).
+// Smoke and build behavior is verified by running them directly
+// (`npm run smoke:wp:portable` / `npm run build`); contract drift will surface
+// there as a real failure instead of a string-includes false positive.
 
-  assert(smoke.includes("process.env.WP_SMOKE_WP_VERSION || '6.9.4'"), 'portable smoke pins WordPress version by default');
-  assert(smoke.includes("process.env.WP_SMOKE_WP_CLI_VERSION || '2.12.0'"), 'portable smoke pins WP-CLI version by default');
-  assert(smoke.includes('WP_SMOKE_TIMEOUT_MS'), 'smoke commands have a configurable timeout');
-  assert(smoke.includes('error_reporting=6143'), 'portable smoke suppresses WP-CLI dependency deprecation noise');
-  assert(smoke.includes('class SmokeEnvironmentError extends Error'), 'portable smoke separates environment failures from plugin failures');
-  assert(smoke.includes("fs.mkdtempSync(path.join(os.tmpdir(), 'designinserter-real-wp-smoke-'))"), 'portable smoke uses unique temp directories by default');
-  assert(smoke.includes('WP_SMOKE_PORTABLE_DIR'), 'portable smoke allows explicit inspection directory override');
-  assert(smoke.includes('WP_SMOKE_KEEP_PORTABLE'), 'portable smoke can keep temp runtime for inspection');
-  assert(smoke.includes('Unsafe WP_SMOKE_PORTABLE_DIR'), 'portable smoke rejects unsafe explicit directories');
-  assert(smoke.includes('cleanupPortableRoot'), 'portable smoke cleans unique temp runtimes by default');
-  assert(smoke.includes('unpackDistributionZipIntoPortableWp'), 'portable smoke unpacks built zip when available');
-  assert(smoke.includes("requireCommand('unzip')"), 'portable zip smoke requires unzip before unpacking');
-  assert(smoke.includes('assertDistributionZipFresh'), 'portable zip smoke verifies the built zip matches current plugin source');
-  assert(smoke.includes('crc32Hex'), 'portable zip smoke compares zip entry CRCs to current source files');
-  assert(smoke.includes('Distribution zip is stale; run npm run build before portable zip smoke.'), 'portable zip smoke fails stale distribution archives');
-  assert(smoke.includes('zip content differs from plugin source'), 'portable zip smoke reports changed source files when the zip is stale');
-  assert(smoke.includes('Distribution zip version mismatch'), 'portable zip smoke fails when only another version zip is present');
-  assert(smoke.includes('expectedName'), 'portable zip smoke derives the expected zip from package.json version');
-  assert(smoke.includes('Distribution zip did not unpack designinserter.php'), 'portable zip smoke verifies the unpacked plugin root');
-  assert(!smoke.includes("plugin', 'install'") && !smoke.includes('wp plugin install'), 'portable zip smoke avoids the WP-CLI plugin installer under SQLite');
-  assert(smoke.includes("plugin', 'is-active', 'designinserter'"), 'portable smoke verifies WordPress marks the plugin active');
-  assert(smoke.includes('Portable zip-installed shortcode smoke'), 'portable smoke renders shortcode from zip-installed plugin');
-  assert(smoke.includes("plugin', 'delete', 'designinserter'"), 'portable smoke removes zip-installed plugin before source smoke');
-  assert(smoke.includes('hook registration smoke failed'), 'portable smoke verifies real shortcode and hook registration');
-  assert(smoke.includes('editor catalog contract smoke failed'), 'portable smoke verifies real localized editor catalog shape');
-  assert(smoke.includes('frontend base style smoke failed'), 'portable smoke verifies real wp_enqueue_scripts base style enqueue');
-  assert(smoke.includes('REST route contract smoke failed'), 'portable smoke verifies real REST route method and argument contract');
-  assert(smoke.includes('REST permission smoke failed'), 'portable smoke verifies real REST permission denial');
-  assert(smoke.includes('REST not-found smoke failed'), 'portable smoke verifies real REST missing-part errors');
-  assert(smoke.includes('admin page smoke failed'), 'portable smoke verifies the real admin page callback output');
-  assert(smoke.includes('style dedupe smoke failed'), 'portable smoke verifies real CSS style de-duplication');
-  assert(smoke.includes('embedded asset render smoke failed'), 'portable smoke verifies real embedded asset URL resolution');
-  assert(smoke.includes('interactive render scoping smoke failed'), 'portable smoke verifies real interactive render scoping');
-  assert(smoke.includes('REST interactive scoping smoke failed'), 'portable smoke verifies real REST interactive preview scoping');
-  assert(smoke.includes('REST embedded asset smoke failed'), 'portable smoke verifies real REST embedded asset URL resolution');
-  assert(!smoke.includes('runPortableSmokeOld'), 'portable smoke has no dead duplicate implementation');
-  assert(smoke.includes('assertDockerPortIsSafe'), 'Docker smoke checks host port before startup');
-  assert(smoke.includes("readPortEnv('WP_PORT', 8080)"), 'Docker smoke honors WP_PORT override');
-  assert(smoke.includes("envName: 'MYSQL_PORT', defaultPort: 3316"), 'Docker smoke checks MYSQL_PORT conflicts');
-  assert(smoke.includes('process.env.WP_HOME = getDockerWpUrl()'), 'Docker smoke aligns WP_HOME with the selected WordPress port');
-  assert(smoke.includes('`--url=${getDockerWpUrl()}`'), 'Docker smoke installs WordPress with the selected WordPress URL');
-  assert(smoke.includes('${getDockerWpUrl()}/wp-admin/'), 'Docker smoke reports the selected WordPress admin URL');
-  assert(smoke.includes('isHostPortAvailable'), 'Docker smoke can detect occupied host ports');
-  assert(smoke.includes("timeout: 5000"), 'Docker port probe has a short timeout');
-  assert(smoke.includes("timeout: commandTimeoutMs"), 'Docker availability probe has timeout protection');
-  assert(smoke.includes('assertComposeRuntimeStable'), 'Docker smoke checks compose runtime stability');
-  assert(smoke.includes('waitMs(3000)'), 'Docker smoke rechecks for short-lived runtime exits');
-  assert(smoke.includes("['compose', 'exec', '-T', 'wordpress', 'wp', 'core', 'is-installed', '--allow-root']"), 'Docker install probe uses the timeout-wrapped runner');
-}
-
-function testBuildScriptContract() {
-  const build = fs.readFileSync('scripts/build-plugin-zip.mjs', 'utf8');
-
-  assert(build.includes("spawnSync('unzip', ['-tq', outPath]"), 'build verifies zip integrity with unzip');
-  assert(build.includes('missingSourceFiles'), 'build verifies all plugin source files are present in zip');
-  assert(build.includes('unexpectedDevFiles'), 'build rejects repo-level dev/test/build files in zip');
-  assert(build.includes('missingPreviewEntries'), 'build verifies catalog preview files are present in zip');
-  assert(build.includes('expectedCatalogAssetReferenceCount'), 'build verifies the catalog embedded asset reference count');
-  assert(build.includes('missingCatalogAssetEntries'), 'build verifies catalog embedded asset references are present in zip');
-  assert(build.includes('headerFailures'), 'build verifies plugin headers inside zip');
-  assert(build.includes('DESIGNINSERTER_VERSION'), 'build verifies plugin version constant inside zip');
-  assert(build.includes('DESIGNINSERTER_SOURCE_URL'), 'build verifies plugin source URL constant inside zip');
-  assert(build.includes('Requires at least: 6.0'), 'build verifies minimum WordPress header inside zip');
-  assert(build.includes('Requires PHP: 7.4'), 'build verifies minimum PHP header inside zip');
-  assert(build.includes('License URI: https://www.gnu.org/licenses/gpl-2.0.html'), 'build verifies license URI header inside zip');
-  assert(build.includes('catalog.total === 222'), 'build verifies catalog totals inside zip');
-  assert(build.includes('catalog.categories.length === 28'), 'build verifies category totals inside zip');
-}
 
 function testRenderSmoke() {
   const result = run('php', ['tests/render-smoke.php']);
@@ -455,8 +391,6 @@ testCatalogFallbacks();
 testBehaviorMetadata();
 testDistributionShape();
 testEditorAssetContract();
-testSmokeScriptContract();
-testBuildScriptContract();
 testRenderSmoke();
 
 if (failures > 0) {
