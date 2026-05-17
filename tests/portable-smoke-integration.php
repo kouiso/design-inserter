@@ -29,7 +29,7 @@ if (!$block_type || !is_callable($block_type->render_callback)) {
 }
 
 global $wp_scripts;
-$script = isset($wp_scripts->registered['designinserter-editor']) ? $wp_scripts->registered['designinserter-editor'] : null;
+$script = $wp_scripts->registered['designinserter-editor'] ?? null;
 if (!$script || empty($script->extra['data']) || false === strpos($script->extra['data'], 'DesignInserterCatalog')) {
     fwrite(STDERR, "editor catalog not localized\n");
     exit(1);
@@ -62,7 +62,7 @@ if (!wp_script_is('designinserter-frontend', 'enqueued')) {
 
 $denied_request  = new WP_REST_Request('GET', '/designinserter/v1/parts/heading-3');
 $denied_response = rest_do_request($denied_request);
-if (!$denied_response->is_error() || !in_array($denied_response->get_status(), array(401, 403), true)) {
+if (!$denied_response->is_error() || !in_array($denied_response->get_status(), [401, 403], true)) {
     fwrite(STDERR, "REST permission smoke failed\n");
     exit(1);
 }
