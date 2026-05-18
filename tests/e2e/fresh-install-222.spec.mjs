@@ -33,11 +33,11 @@ async function dockerCompose(args, options = {}) {
 	return run('docker', ['compose', '-f', composePath, '-p', projectName, ...args], options);
 }
 
-async function prepareExternalDatabase() {
-	await run('docker', [
-		'exec',
-		'designinserter-db',
-		'mysql',
+async function prepareDatabase() {
+	// Issue #13: the spec now provisions its own db service inside the
+	// generated e2e compose (see writeFreshCompose). This runs inside the
+	// e2e compose project, not against the main dev stack.
+	await dockerCompose(['exec', '-T', 'db', 'mysql',
 		'-uroot',
 		'-prootpass',
 		'-e',
@@ -45,11 +45,8 @@ async function prepareExternalDatabase() {
 	], { timeout: 60000 });
 }
 
-async function cleanupExternalDatabase() {
-	await run('docker', [
-		'exec',
-		'designinserter-db',
-		'mysql',
+async function cleanupDatabase() {
+	await dockerCompose(['exec', '-T', 'db', 'mysql',
 		'-uroot',
 		'-prootpass',
 		'-e',
@@ -200,16 +197,31 @@ async function writeFreshCompose() {
 	await mkdir(evidenceDir, { recursive: true });
 
 	await writeFile(composePath, `services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_DATABASE: designinserter_e2e
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
   wordpress:
     build:
       context: ${yamlDoubleQuoted(path.join(repoRoot, '.docker', 'wordpress'))}
     ports:
       - "${port}:80"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       WORDPRESS_DB_NAME: designinserter_e2e
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_HOST: designinserter-db
+      WORDPRESS_DB_HOST: db
       WP_HOME: ${yamlDoubleQuoted(baseUrl)}
       WP_TITLE: Design Inserter Fresh E2E
       WP_LOCALE: ja
@@ -223,15 +235,8 @@ async function writeFreshCompose() {
       - ${yamlDoubleQuoted(`${tmpRoot}:/e2e`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'php.ini')}:/usr/local/etc/php/conf.d/custom.ini:ro`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'mysql-client.cnf')}:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro`)}
-    networks:
-      - default
-      - designinserter_dev
 volumes:
   wp_core:
-networks:
-  designinserter_dev:
-    external: true
-    name: wordpress-plugin-designinserter_designinserter-net
 `);
 }
 
@@ -256,8 +261,11 @@ test.beforeAll(async () => {
 	await writeFreshCompose();
 	await run('npm', ['run', 'build:zip']);
 	await dockerCompose(['down', '-v', '--remove-orphans']).catch(() => '');
-	await prepareExternalDatabase();
+	// Issue #13: bring up self-contained db + wordpress, THEN prepareDatabase
+	// (was running prepareDatabase before up, which referenced an external
+	// container that did not exist outside the main dev stack).
 	await dockerCompose(['up', '-d', '--build', '--wait'], { timeout: 180000 });
+	await prepareDatabase();
 	await waitForWordPressInstall();
 	await dockerCompose(['exec', '-T', 'wordpress', 'touch', '/var/www/html/favicon.ico'], { timeout: 60000 });
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'option', 'update', 'permalink_structure', '', '--allow-root'], { timeout: 60000 });
@@ -281,7 +289,7 @@ test.beforeAll(async () => {
 test.afterAll(async () => {
 	if (process.env.DI_E2E_KEEP_DOCKER !== '1') {
 		await dockerCompose(['down', '-v', '--remove-orphans']).catch(() => '');
-		await cleanupExternalDatabase();
+		await cleanupDatabase();
 	}
 });
 
