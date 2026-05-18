@@ -85,8 +85,8 @@ diff --stat origin/main..d2a62f82
 
 **含意**:
 
-- v1.0.0 は **私が PR #4/#6/#10 で main に commit したすべての doc / test infra を削除する** 前提で書かれている
-- 削除される総量: doc 約 744 行 + scripts 約 1,397 行 + tests 約 599 行 = **約 2,740 行**
+- v1.0.0 と origin/main の直接 tip-to-tip diff (`origin/main..d2a62f82`) は表面上 2,740 行の deletion を示すが、これは 3-way merge の挙動とは異なる。merge-base (2de3816e) を起点とした 3-way merge では main 側 added file は preserved される (Phase 4 Codex C1 検証済)。下記 §1.3 数値は直接 diff の表面値のみで、merge 結果ではない。
+- tip-to-tip diff 表面値: doc 約 744 行 + scripts 約 1,397 行 + tests 約 599 行 = **約 2,740 行** (ただし上記の通り 3-way merge では削除されない)
 - 入れ替えとして導入: composer ベース PHPUnit 9 + PHPCS 3 + Playwright E2E + ready-checklist generator = 約 3,200 行
 - 入替先のアーキテクチャは **本質的に v1.0.0 の方が販売プロダクト品質に近い** (composer / Playwright / PHPUnit = WordPress プラグイン業界標準)
 
@@ -228,8 +228,8 @@ diff --stat origin/main..d2a62f82
 
 | Item | Evidence |
 |---|---|
-| UX/UI audit 37 findings doc | PR #4 merged (但し v1.0.0 で削除される運命) |
-| Test infrastructure on main | PR #6 / #10 merged (同上) |
+| UX/UI audit 37 findings doc | PR #4 merged (3-way merge で preserve、PR #11 で実証済) |
+| Test infrastructure on main | PR #6 / #10 merged (3-way merge で preserve、PR #11 release-candidate に含まれる) |
 | Gemini Code Assist config | PR #9 merged ✅ (v1.0.0 commit にも .gemini/ 無いため共存可能) |
 | Issue #7, #8 close | PR #10 で close |
 
