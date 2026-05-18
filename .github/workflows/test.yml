@@ -1,0 +1,72 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [main, release-candidate-v1.0.0]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    name: PHPUnit + PHPCS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Composer install
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit --configuration phpunit.xml.dist
+
+      - name: PHPCS
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
+
+      - name: PHP lint (plugin source)
+        run: find wp-content/plugins/designinserter tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  js:
+    name: JS syntax + catalog smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Setup PHP 8.2 (for npm test PHP smoke)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: npm install
+        run: npm install --no-audit --no-fund
+
+      - name: JS syntax check
+        run: |
+          for f in scripts/*.mjs wp-content/plugins/designinserter/assets/*.js; do
+            node --check "$f"
+          done
+
+      - name: npm test (catalog + contract + stub smoke)
+        run: npm test
