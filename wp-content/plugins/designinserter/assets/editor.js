@@ -155,11 +155,27 @@
 			);
 		}
 
+		// C-02: render in sandboxed iframe to isolate untrusted/tampered
+		// catalog HTML from the editor context. Sandbox attribute with
+		// empty value disables scripts/forms/popups/plugins/top-nav.
+		// 'allow-same-origin' is intentionally NOT granted — keeps the
+		// iframe in a unique opaque origin.
+		var srcdoc = [
+			'<!doctype html><html><head><meta charset="utf-8">',
+			'<style>html,body{margin:0;padding:0;}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:8px;}',
+			content.css || '',
+			'</style></head><body>',
+			content.html || '',
+			'</body></html>'
+		].join( '' );
+
 		return el( 'div', { className: 'di-preview' },
-			content.css ? el( 'style', {}, content.css ) : null,
-			el( 'div', {
-				className: 'di-preview__render',
-				dangerouslySetInnerHTML: { __html: content.html }
+			el( 'iframe', {
+				className: 'di-preview__iframe',
+				title: __( 'パーツプレビュー', 'designinserter' ),
+				sandbox: '',
+				srcDoc: srcdoc,
+				style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
 			} )
 		);
 	}
