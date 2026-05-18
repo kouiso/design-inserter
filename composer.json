@@ -12,6 +12,12 @@
         "phpunit": "phpunit --configuration phpunit.xml.dist"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2"
+        }
+    },
+    "require": {
+        "php": ">=8.2"
     }
 }
