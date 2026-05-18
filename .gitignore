@@ -38,6 +38,14 @@ Thumbs.db
 node_modules/
 npm-debug.log*
 
+# PHP tooling.
+vendor/
+.phpunit.result.cache
+
+# AI agent workspace (local-only, not distributed).
+.agents/
+.claude/
+
 # Test/build artifacts.
 dist/
 test-results/

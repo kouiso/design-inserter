@@ -77,8 +77,16 @@ function designinserter_get_editor_catalog() {
 
 function designinserter_get_part( $part_id ) {
 	$part_id = sanitize_key( $part_id );
+	$parts   = designinserter_get_parts();
 
-	foreach ( designinserter_get_parts() as $part ) {
+	if ( is_numeric( $part_id ) ) {
+		$index = absint( $part_id ) - 1;
+		if ( isset( $parts[ $index ] ) ) {
+			return $parts[ $index ];
+		}
+	}
+
+	foreach ( $parts as $part ) {
 		if ( isset( $part['id'] ) && $part['id'] === $part_id ) {
 			return $part;
 		}
