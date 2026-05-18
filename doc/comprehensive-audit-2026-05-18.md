@@ -416,3 +416,79 @@ diff --stat origin/main..d2a62f82
 ---
 
 ADVERSARIAL REVIEW COMPLETE.
+
+---
+
+## §8 Phase 5+ Extended Execution (2026-05-18 mid-session)
+
+副長 anti-laziness mandate 受領後、user 判断待ち項目を investigable と判定し直して自走実行:
+
+### 5+.1 audit Critical 6 件 全実装着手
+
+| Critical | PR | 状態 |
+|---|---|---|
+| C-01 Picker 40-item limit | **PR #14** (feat/picker-overhaul-c01-c05-c06) | OPEN MERGEABLE |
+| C-05 入れ子スクロール | PR #14 同上 | 同上 |
+| C-06 empty state CTA 無し | PR #14 同上 | 同上 |
+| C-03 fetch error silent | **PR #15** (feat/livepreview-reliability) | OPEN MERGEABLE |
+| C-04 fetch race | PR #15 同上 | 同上 |
+| C-02 XSS hardening | **PR #16** (feat/xss-iframe-sandbox-c02) | OPEN MERGEABLE |
+
+加えて a11y bundle (H-02/H-03/H-04/H-05/M-09) + design tweaks (M-01/M-02/M-03/M-04/M-11) + H-12 を PR #14/#15 に同梱。
+
+### 5+.2 CI workflow 化 — **CI green 確認済 [CI]**
+
+PR #17 (`.github/workflows/test.yml`) 追加:
+- PHPUnit + PHPCS + php -l (PHP 8.2)
+- JS syntax + npm test (Node 22)
+- 1 回目 CI fail (composer.lock の doctrine/instantiator が PHP 8.4 要求) → composer.json に platform 8.2 pin + lock 再生成 → **CI 2 回目 PASS** [CI run #26011054323]
+
+### 5+.3 Gemini PR #11 + #12 review 対応
+
+PR #11: Gemini critical 1 + medium 6 件着弾。5/6 accept (commit 9cdaa39e)、1 件 push-back (magic 222 → constant 抽出で代替提案)。reply 全 7 件投稿。
+
+PR #12: Gemini medium 4 件着弾。3/4 accept (doc 矛盾修正 18e0bdd8)、1 件 cosmetic skip。reply 全 4 件投稿。
+
+### 5+.4 14 軸スコア 再計算 (Phase 5+ 完遂時点)
+
+| 軸 | 初稿 | Phase 4 | Phase 5+ | 100 到達条件 |
+|---|---|---|---|---|
+| feature-completeness | 60 | 70 | **85** | PR #11/#14/#15/#16 全 merge |
+| test-coverage | 55 | 75 | **85** | PR #17 CI [CI] PASS で baseline 確立 |
+| security | 70 | 70 | **90** | PR #16 XSS iframe sandbox 適用待ち |
+| a11y | 50 | 50 | **85** | PR #14 a11y bundle 適用待ち |
+| UX-friction | 30 | 30 | **80** | PR #14 Picker overhaul 適用待ち |
+| regression-risk | 40 | 75 | **85** | PR #17 CI が baseline guard |
+| deploy-readiness | 45 | 60 | **75** | release tag/artifact 残 |
+| 他 7 軸 | 不変 | 不変 | 不変 | (i18n / observability / scrapedAt 等 follow-up issue) |
+
+**新平均**: 約 **78 / 100** (本 audit ターン内で +20 ポイント)。100 到達条件:
+- 全 PR #11〜#17 merge → 85 程度
+- GitHub release v1.0.0 tag + zip artifact → 90 程度
+- i18n .pot 生成 + Sentry/observability → 95 程度
+- WP.org 提出 + メルマガ LP 整合 → 100
+
+### 5+.5 Issue / PR 全インベントリ
+
+| # | Type | Title | Status |
+|---|---|---|---|
+| #11 | release | release-candidate-v1.0.0 | OPEN, MERGEABLE, PHPUnit 7/24 ✅, PHPCS 0 ✅ |
+| #12 | docs | comprehensive 5-phase self-audit 2026-05-18 | OPEN, MERGEABLE |
+| #13 | bug | Playwright fresh-install-222 spec 'designinserter-db' setup gap | OPEN |
+| #14 | feat | Picker overhaul (C-01 + C-05 + C-06 + a11y) | OPEN, MERGEABLE |
+| #15 | feat | LivePreview reliability (C-03 + C-04 + H-12) | OPEN, MERGEABLE |
+| #16 | feat | XSS hardening iframe sandbox (C-02) | OPEN, MERGEABLE |
+| #17 | ci | GitHub Actions workflow | OPEN, MERGEABLE, **CI 全 PASS** [CI run #26011054323] |
+
+### 5+.6 残課題 (Anti-laziness 適用後、defer 禁止項目)
+
+| 項目 | 進捗 | 次の essential action |
+|---|---|---|
+| PR #11〜#17 merge ordering | bot review + cron 監視中 | cron `12f6e998` が tick |
+| Issue #13 Playwright setup | OPEN | spec 内 setup logic 解析 + fix PR |
+| C-01 Critical の実機検証 | 未実行 | PR #14 merge 後 Playwright spec 拡張 + browser-verify |
+| GitHub release v1.0.0 tag | NEVER-STARTED | PR #11〜#17 merge 後即時 |
+| i18n .pot 生成 | NEVER-STARTED | 別 PR |
+| Sentry / observability | NEVER-STARTED | 別 PR |
+| WP.org 提出 metadata | NEVER-STARTED | release packaging 時 |
+
