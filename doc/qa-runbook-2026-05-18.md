@@ -273,11 +273,6 @@ gh release view v1.0.0 -R kouiso/design-inserter --json assets,tagName,published
 ### Verification
 
 ```bash
-python3 - <<'EOF'
-import json
-runs = json.load(open(f"{__import__('os').environ.get('EVIDENCE_DIR','/tmp')}/gate4-main-runs.json")) if False else None
-EOF
-# Simpler shell:
 FAILED=$(python3 -c "
 import json
 d=json.load(open('$EVIDENCE_DIR/gate4-main-runs.json'))
