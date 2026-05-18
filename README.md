@@ -37,6 +37,8 @@ CSS Stock の222デザインパーツを Gutenberg エディタから検索・�
 ## 開発
 
 ```bash
+npm test
+npm run build
 docker compose up -d --build
 docker compose exec wordpress wp core install \
   --url=http://localhost:8080 --title="Dev" \
@@ -45,6 +47,19 @@ docker compose exec wordpress wp core install \
 docker compose exec wordpress wp theme activate designinserter-dev --allow-root
 docker compose exec wordpress wp plugin activate designinserter --allow-root
 ```
+
+WordPress smoke:
+
+- `npm run smoke:wp`: Docker が使える場合はコンテナ上の WordPress/WP-CLI smoke、使えない場合は portable WordPress smoke、portable も不可の場合は PHP stubs による Docker-free smoke
+- `npm run smoke:wp:docker`: Docker コンテナ上で plugin activate / shortcode / dynamic block render を確認
+- `npm run smoke:wp:portable`: 一時ディレクトリに WP-CLI + WordPress + SQLite drop-in を作成し、plugin activate / shortcode / dynamic block / REST を実 WordPress で確認
+- `npm run smoke:wp:stubs`: Docker なしで plugin load / hooks / shortcode / dynamic block / REST route を PHP stubs で確認
+
+`wp-env` は通常 Docker 前提です。Docker なしでは experimental な Playground runtime が候補ですが、任意コマンド実行の `wp-env run` が未対応のため、このリポジトリの Docker-free 実 WordPress smoke は一時 WordPress + SQLite drop-in を主経路にしています。
+portable smoke は既定で WordPress 6.9.4 / WP-CLI 2.12.0 を使います。別バージョン検証は `WP_SMOKE_WP_VERSION=6.8.3 npm run smoke:wp:portable` のように指定できます。
+Docker smoke は `WP_PORT` / `MYSQL_PORT` の衝突を起動前に確認し、`WP_PORT` 指定時は smoke 内の `WP_HOME` と WordPress install URL も同じ port に合わせます。
+
+stub smoke の範囲と不足: `docs/testing.md`
 
 カタログ・同梱プレビュー再取得: `node scripts/scrape-css-stock.mjs`
 
