@@ -52,7 +52,7 @@ Evidence destination: `.work/qa/runbook-2026-05-18-evidence/<ISO timestamp>/`
 
 ```bash
 # Working directory
-cd /Users/$USER/ghq/kouiso/design-inserter   # adjust for your host
+cd "$(git rev-parse --show-toplevel)"   # repo root (host-agnostic)
 
 # Evidence directory
 EVIDENCE_DIR=".work/qa/runbook-2026-05-18-evidence/$(date -u +%Y-%m-%dT%H-%M-%SZ)"
@@ -301,7 +301,7 @@ UP_EXIT=$?
 
 # Step 5.2 — install plugin from the freshly built zip
 ZIP_PATH=$(find dist .tmp/dist -name "designinserter-*.zip" 2>/dev/null | head -1)
-ZIP_HOST_PATH=$(realpath "$ZIP_PATH")
+ZIP_HOST_PATH=$(python3 -c "import os, sys; print(os.path.realpath(sys.argv[1]))" "$ZIP_PATH")
 docker cp "$ZIP_HOST_PATH" designinserter-wp:/tmp/plugin.zip 2>&1 | tee "$EVIDENCE_DIR/gate5-cp.log"
 docker compose exec -T wordpress wp plugin install /tmp/plugin.zip --activate --force --allow-root \
   > "$EVIDENCE_DIR/gate5-install.txt" 2>&1
