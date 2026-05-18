@@ -41,17 +41,21 @@
 		return el( 'button', {
 			type: 'button',
 			className: 'di-card' + ( isSelected ? ' is-selected' : '' ),
-			onClick: onClick
+			onClick: onClick,
+			'aria-pressed': isSelected ? 'true' : 'false',
+			'aria-label': part.title,
+			title: part.title
 		},
 			part.previewImage
 				? el( 'img', {
 					className: 'di-card__img',
 					src: part.previewImage,
-					alt: part.title,
+					alt: '',
+					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder' }, part.title ),
-			el( 'span', { className: 'di-card__title' }, part.title )
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🎨' ),
+			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, part.title )
 		);
 	}
 
@@ -76,6 +80,9 @@
 			return true;
 		} );
 
+		var hasActiveFilter = search !== '' || activeCat !== '';
+		var clearFilters = function() { setSearch( '' ); setActiveCat( '' ); };
+
 		return el( 'div', { className: 'di-picker' },
 			el( TextControl, {
 				placeholder: __( 'パーツを検索...', 'designinserter' ),
@@ -83,24 +90,28 @@
 				onChange: setSearch,
 				className: 'di-picker__search'
 			} ),
-			el( 'div', { className: 'di-picker__cats' },
+			el( 'div', { className: 'di-picker__cats', role: 'group', 'aria-label': __( 'カテゴリ', 'designinserter' ) },
 				el( Button, {
 					variant: activeCat === '' ? 'primary' : 'tertiary',
 					size: 'small',
+					'aria-pressed': activeCat === '' ? 'true' : 'false',
+					'aria-label': __( '全て', 'designinserter' ) + '、' + parts.length + ' 件',
 					onClick: function() { setActiveCat( '' ); }
-				}, __( '全て', 'designinserter' ) + ' (' + parts.length + ')' ),
+				}, __( '全て', 'designinserter' ), ' ', el( 'span', { 'aria-hidden': 'true' }, '(' + parts.length + ')' ) ),
 				categories.map( function( cat ) {
 					var count = parts.filter( function( p ) { return p.categoryLabel === cat; } ).length;
 					return el( Button, {
 						key: cat,
 						variant: activeCat === cat ? 'primary' : 'tertiary',
 						size: 'small',
+						'aria-pressed': activeCat === cat ? 'true' : 'false',
+						'aria-label': cat + '、' + count + ' 件',
 						onClick: function() { setActiveCat( cat ); }
-					}, cat + ' (' + count + ')' );
+					}, cat, ' ', el( 'span', { 'aria-hidden': 'true' }, '(' + count + ')' ) );
 				} )
 			),
-			el( 'div', { className: 'di-picker__grid' },
-				filtered.slice( 0, 40 ).map( function( part ) {
+			el( 'div', { className: 'di-picker__grid', role: 'list' },
+				filtered.map( function( part ) {
 					return el( PartCard, {
 						key: part.id,
 						part: part,
@@ -109,14 +120,16 @@
 					} );
 				} )
 			),
-			filtered.length > 40
-				? el( 'p', { className: 'di-picker__more' },
-					'他 ' + ( filtered.length - 40 ) + ' 件（検索で絞り込んでください）'
-				)
-				: null,
 			filtered.length === 0
-				? el( 'p', { className: 'di-picker__empty' },
-					__( '該当するパーツがありません', 'designinserter' )
+				? el( 'div', { className: 'di-picker__empty' },
+					el( 'p', {}, __( '該当するパーツがありません', 'designinserter' ) ),
+					hasActiveFilter
+						? el( Button, {
+							variant: 'secondary',
+							size: 'small',
+							onClick: clearFilters
+						}, __( '検索 / カテゴリをクリア', 'designinserter' ) )
+						: null
 				)
 				: null
 		);
