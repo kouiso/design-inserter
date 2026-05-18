@@ -263,7 +263,7 @@ test.beforeAll(async () => {
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'option', 'update', 'permalink_structure', '', '--allow-root'], { timeout: 60000 });
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'rewrite', 'flush', '--allow-root'], { timeout: 60000 });
 
-	const zipPath = '/dist/designinserter-0.2.0.zip';
+	const zipPath = '/dist/designinserter-1.0.0.zip';
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'plugin', 'install', zipPath, '--activate', '--allow-root'], { timeout: 60000 });
 	const contentPath = await createAllDesignsBlockContent();
 	allDesignsPageId = await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'post', 'create', '/e2e/all-designs-blocks.html', '--post_type=page', '--post_status=publish', '--post_title=All Designs E2E', '--porcelain', '--allow-root'], { timeout: 60000 });
@@ -477,7 +477,7 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 	expect(selectedState.designInserterBlockCount).toBe(1);
 	expect(selectedState.selectedBlockName).toBe('designinserter/css-part');
 	expect(selectedState.partId).toBe('button-54');
-	expect(Date.now() - startedAt).toBeGreaterThanOrEqual(60000);
+	expect(Date.now() - startedAt).toBeGreaterThanOrEqual(continuousUseMs);
 	expect(issues.failedRequests).toHaveLength(0);
 	expect(issues.consoleErrors).toHaveLength(0);
 	expect(issues.pageErrors).toHaveLength(0);
