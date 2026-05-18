@@ -361,7 +361,9 @@ function testEditorAssetContract() {
   assert(editor.includes("blocks.registerBlockType( 'designinserter/css-part'"), 'editor registers designinserter/css-part block');
   assert(editor.includes("return null;"), 'editor save function is dynamic-block only');
   assert(editor.includes('window.fetch( restUrl + partId'), 'editor fetches selected part content through REST');
-  assert(editor.includes('dangerouslySetInnerHTML'), 'editor preview renders catalog HTML');
+  assert(editor.includes("sandbox: ''"), 'editor preview isolates catalog HTML in sandboxed iframe (C-02 XSS hardening)');
+  assert(editor.includes('srcDoc:'), 'editor preview uses srcDoc inline document (no separate URL fetch)');
+  assert(!editor.includes('dangerouslySetInnerHTML'), 'editor preview does NOT use dangerouslySetInnerHTML on catalog HTML (replaced by iframe sandbox)');
   assert(block.includes("'wp-block-editor'"), 'block registration declares wp-block-editor dependency');
   assert(block.includes("'DesignInserterCatalog'"), 'block registration localizes editor catalog');
   assert(block.includes("'render_callback' => 'designinserter_render_block'"), 'block registration uses PHP render callback');

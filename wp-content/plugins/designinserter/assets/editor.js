@@ -216,13 +216,30 @@
 			);
 		}
 
-		// H-12: when refreshing for a new partId, keep prior content visible behind a dim overlay.
+		// C-02: render in sandboxed iframe to isolate untrusted/tampered
+		// catalog HTML from the editor context. Sandbox attribute with
+		// empty value disables scripts/forms/popups/plugins/top-nav.
+		// 'allow-same-origin' is intentionally NOT granted — keeps the
+		// iframe in a unique opaque origin.
+		// H-12 (merged from PR #15): aria-busy + overlay during refresh
+		// so the prior preview stays visible while iframe reloads.
+		var srcdoc = [
+			'<!doctype html><html><head><meta charset="utf-8">',
+			'<style>html,body{margin:0;padding:0;}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:8px;}',
+			content.css || '',
+			'</style></head><body>',
+			content.html || '',
+			'</body></html>'
+		].join( '' );
+
 		var wrapperClass = 'di-preview' + ( loading ? ' di-preview--refreshing' : '' );
 		return el( 'div', { className: wrapperClass, 'aria-busy': loading ? 'true' : 'false' },
-			content.css ? el( 'style', {}, content.css ) : null,
-			el( 'div', {
-				className: 'di-preview__render',
-				dangerouslySetInnerHTML: { __html: content.html }
+			el( 'iframe', {
+				className: 'di-preview__iframe',
+				title: __( 'パーツプレビュー', 'designinserter' ),
+				sandbox: '',
+				srcDoc: srcdoc,
+				style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
 			} ),
 			loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
 		);
