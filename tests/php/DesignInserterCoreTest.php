@@ -3,11 +3,14 @@
 use PHPUnit\Framework\TestCase;
 
 final class DesignInserterCoreTest extends TestCase {
+	private const EXPECTED_CSS_STOCK_PART_COUNT = 222;
+	private const EXPECTED_CSS_STOCK_CATEGORY_COUNT = 28;
+
 	public function test_catalog_contains_expected_css_stock_parts() {
 		$catalog = designinserter_get_catalog();
 
-		$this->assertCount( 222, $catalog['parts'] );
-		$this->assertCount( 28, $catalog['categories'] );
+		$this->assertCount( self::EXPECTED_CSS_STOCK_PART_COUNT, $catalog['parts'] );
+		$this->assertCount( self::EXPECTED_CSS_STOCK_CATEGORY_COUNT, $catalog['categories'] );
 		$this->assertSame( DESIGNINSERTER_SOURCE_URL, $catalog['sourceUrl'] );
 	}
 
@@ -22,7 +25,7 @@ final class DesignInserterCoreTest extends TestCase {
 	public function test_editor_catalog_exposes_preview_urls_and_rest_settings() {
 		$catalog = designinserter_get_editor_catalog();
 
-		$this->assertCount( 222, $catalog['parts'] );
+		$this->assertCount( self::EXPECTED_CSS_STOCK_PART_COUNT, $catalog['parts'] );
 		$this->assertStringStartsWith( DESIGNINSERTER_PLUGIN_URL . 'assets/previews/', $catalog['parts'][0]['previewImage'] );
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/parts/', $catalog['restUrl'] );
 		$this->assertSame( 'nonce-wp_rest', $catalog['nonce'] );
@@ -44,8 +47,8 @@ final class DesignInserterCoreTest extends TestCase {
 		$output = designinserter_render_part( 'modal-1' );
 
 		$this->assertStringContainsString( 'data-designinserter-behavior="modal"', $output );
-		$this->assertContains( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_scripts'] );
-		$this->assertContains( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_styles'] );
+		$this->assertContainsEquals( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_scripts'] );
+		$this->assertContainsEquals( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_styles'] );
 		$this->assertMatchesRegularExpression( '/id="modal-1__open__di-modal-1-\d+"/', $output );
 		$this->assertMatchesRegularExpression( '/for="modal-1__open__di-modal-1-\d+"/', $output );
 	}
