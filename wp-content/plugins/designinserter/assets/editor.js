@@ -24,13 +24,24 @@
 		}
 	} );
 
-	function fetchPartContent( partId, callback ) {
+	function fetchPartContent( partId, callback, signal ) {
 		window.fetch( restUrl + partId, {
-			headers: { 'X-WP-Nonce': nonce }
+			headers: { 'X-WP-Nonce': nonce },
+			signal: signal
 		} )
-			.then( function( res ) { return res.json(); } )
-			.then( callback )
-			.catch( function() { callback( null ); } );
+			.then( function( res ) {
+				if ( ! res.ok ) {
+					var httpErr = new Error( 'http_' + res.status );
+					httpErr.status = res.status;
+					throw httpErr;
+				}
+				return res.json();
+			} )
+			.then( function( data ) { callback( null, data ); } )
+			.catch( function( err ) {
+				if ( err && err.name === 'AbortError' ) { return; }
+				callback( err || new Error( 'unknown' ), null );
+			} );
 	}
 
 	function PartCard( props ) {
@@ -143,20 +154,57 @@
 		var loadingState = useState( false );
 		var loading = loadingState[0];
 		var setLoading = loadingState[1];
+		var errorState = useState( null );
+		var errorVal = errorState[0];
+		var setError = errorState[1];
+		var retryState = useState( 0 );
+		var retryNonce = retryState[0];
+		var setRetry = retryState[1];
 
 		useEffect( function() {
 			if ( ! partId ) {
 				setContent( null );
+				setError( null );
 				return;
 			}
+			var controller = ( typeof AbortController === 'function' ) ? new AbortController() : null;
 			setLoading( true );
-			fetchPartContent( partId, function( data ) {
-				setContent( data );
+			setError( null );
+			fetchPartContent( partId, function( err, data ) {
 				setLoading( false );
-			} );
-		}, [ partId ] );
+				if ( err ) {
+					setError( err );
+					return;
+				}
+				if ( data && data.id && data.id !== partId ) {
+					// Race guard: stale response for a previous partId — ignore.
+					return;
+				}
+				setContent( data );
+			}, controller ? controller.signal : undefined );
+			return function() {
+				if ( controller ) { controller.abort(); }
+			};
+		}, [ partId, retryNonce ] );
 
-		if ( loading ) {
+		if ( errorVal ) {
+			var label = errorVal.status
+				? __( 'プレビュー取得に失敗しました', 'designinserter' ) + ' (HTTP ' + errorVal.status + ')'
+				: __( 'プレビュー取得に失敗しました (ネットワーク or サーバ応答なし)', 'designinserter' );
+			return el( Notice, { status: 'error', isDismissible: false },
+				el( 'div', {},
+					el( 'p', { style: { margin: '0 0 8px 0' } }, label ),
+					el( Button, {
+						variant: 'secondary',
+						size: 'small',
+						onClick: function() { setRetry( retryNonce + 1 ); }
+					}, __( '再試行', 'designinserter' ) )
+				)
+			);
+		}
+
+		if ( loading && ! content ) {
+			// H-12: skeleton fallback when no prior content (first load).
 			return el( 'div', { className: 'di-preview di-preview--loading' }, el( Spinner ) );
 		}
 
@@ -168,12 +216,15 @@
 			);
 		}
 
-		return el( 'div', { className: 'di-preview' },
+		// H-12: when refreshing for a new partId, keep prior content visible behind a dim overlay.
+		var wrapperClass = 'di-preview' + ( loading ? ' di-preview--refreshing' : '' );
+		return el( 'div', { className: wrapperClass, 'aria-busy': loading ? 'true' : 'false' },
 			content.css ? el( 'style', {}, content.css ) : null,
 			el( 'div', {
 				className: 'di-preview__render',
 				dangerouslySetInnerHTML: { __html: content.html }
-			} )
+			} ),
+			loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
 		);
 	}
 
