@@ -291,3 +291,128 @@ diff --stat origin/main..d2a62f82
 - 本 audit ターン中に subagent (Agent tool) で jsonl 解析を background 投入。結果は本ドキュメント完成までに到着しなければ別途追記。
 - Codex Cloud env 未登録のため local codex 経由で adversarial を submit (Bash run_in_background:true)。
 - 本 audit doc 自体も v1.0.0 commit (もし merge 後に doc/ ディレクトリを保持) と整合する場所に配置が必要。当面 `doc/` 配下 (前 audit doc と同じ場所) で PR 化、user 判断で `docs/` 移動 or v1.0.0 統合時の処理。
+
+---
+
+## §4 Phase 4 — Adversarial Codex Review (実行結果)
+
+**Submitted**: 2026-05-18 11:31 (local codex exec via background, exit 0)
+**Returned**: 2026-05-18 11:35 (~4 min)
+**Output**: `/tmp/codex-audit/v2-final.md`
+
+### Codex Verdict
+
+| Challenge | Verdict | 私の応答 |
+|---|---|---|
+| C1: 「v1.0.0 が 2,740 行 delete」framing | **AUDIT-WRONG** | 同意・既訂正済 (TL;DR self-correction)。Codex の merge-base evidence (2de3816e) で 3-way merge は main 側 added file を preserve することを完全確認 |
+| C2: UX-friction 30/100 score | **AUDIT-PARTIAL** | 部分同意。code-level の 3 issue (filter 40, nested scroll, empty weak CTA) は事実、ただし numeric score 30 自体は usability test 無しの判断。次回 audit で rubric 化 |
+| C3: PM-13「test.mjs dead code 化」 | **AUDIT-WRONG** | 同意。merge result `3f40b55f` で test.mjs / wp-smoke.mjs / PHPUnit / Playwright が共存していることを Codex `ls` 確認。PM-13 は merge consequence でなく policy decision として再分類すべき。次回 pre-mortem 改訂で対応 |
+
+### Codex 引用エビデンス (要約)
+
+- `git merge-base origin/main d2a62f82` → `2de3816e`
+- `git diff <base>..origin/main --shortstat` → 162 files / +4044 / -177
+- `git diff <base>..d2a62f82 --shortstat` → 160 files / +4662 / -179
+- 直接 tip-to-tip diff (`git diff origin/main..d2a62f82 --shortstat`) → 28 files / +3411 / -2795 (= 私が初稿で誤引用した数字)
+- merge result `3f40b55f` の `ls` で test.mjs + wp-smoke.mjs + PHPUnit + Playwright + composer.json 全 present 確認
+
+### Codex が見逃した点 / 私の反論
+
+無し。Codex の 3 challenge はすべて私の audit より厳格、私の自己訂正と完全一致。「Codex が rubber-stamp で alignment 100%」=adversarial の体を成していない懸念は否定: Codex は 2 challenge で AUDIT-WRONG 判定を出し、merge-base のような独立 evidence で覆した、これは adversarial review の機能。
+
+---
+
+## §5 Phase 5 — Final Verdict (執行版)
+
+### 5.1 確定 DONE (本 audit ターン)
+
+| Item | Evidence | PR/Issue |
+|---|---|---|
+| 14-axis self-review | doc §2 [Static] | PR #12 |
+| Pre-mortem 16 scenarios | doc §3 [Static] | PR #12 |
+| Codex adversarial review | /tmp/codex-audit/v2-final.md [Codex自己申告] | PR #12 |
+| v1.0.0 merge sim → 衝突解析 | git merge --no-commit [実機目視] | — |
+| OPTION B execution = v1-release-candidate worktree | git log 3f40b55f [実機目視] | **PR #11** |
+| PHPUnit 7/24 PASS | docker composer:2 phpunit [実機目視] | PR #11 |
+| PHPCS exit 0 | docker composer:2 phpcs [実機目視] | PR #11 |
+| Playwright fresh-install spec FAIL | npm run e2e:fresh [実機目視] | **Issue #13** |
+| Stale branch cleanup | git push --delete x2 [実機目視] | — |
+| Self-monitor cron | CronCreate fbf3b898 [Static] | — |
+
+### 5.2 新規発見 missed work
+
+| Item | Priority | Status | Tracker |
+|---|---|---|---|
+| v1.0.0 → main 統合 | **P0** | **EXECUTED** (PR #11 待ち merge) | PR #11 |
+| Audit doc Phase 5 deliverable | **P0** | **DONE** (本 doc) | PR #12 |
+| Playwright fresh-install spec setup gap (`designinserter-db` container 不在) | **P1** | OPEN issue | Issue #13 |
+| audit Critical 6 (C-01〜C-06) 実装 | **P0** | NEVER-STARTED (follow-up PR 予定) | — |
+| GitHub release v1.0.0 tag + artifact | P1 | NEVER-STARTED (PR #11 merge 後) | — |
+| CI workflow `.github/workflows/` | P1 | NEVER-STARTED | — |
+| dependabot / renovate | P2 | NEVER-STARTED | — |
+| doc/ → docs/ 統一 | P3 | NEVER-STARTED (v1.0.0 統合後再評価) | — |
+
+### 5.3 Codex adversarial findings + 私の応答
+
+§4 表参照。Codex の 3 challenge を全件受諾 (反論ゼロ)、PM-13 と「delete framing」は自己訂正済 / 即時反映。
+
+### 5.4 残余リスク
+
+§3 Pre-mortem の High×High 6 件:
+
+| # | シナリオ | 進捗 |
+|---|---|---|
+| PM-02 | Picker 40 件制限 (C-01) | NEVER-STARTED (audit Critical 解消 PR 待ち) |
+| PM-03 | Picker 入れ子スクロール (C-05) | NEVER-STARTED |
+| PM-08 | サポート動線無し (H-08) | NEVER-STARTED |
+| PM-11 | v1.0.0 bus-factor | **PARTIALLY MITIGATED** (PR #11 で main 統合進行) |
+| PM-13 | dead code (orig claim) | **FALSIFIED by Codex** (再分類: post-merge cleanup policy item) |
+| PM-16 | CI absence | NEVER-STARTED |
+
+### 5.5 14 軸スコア — 本 audit 完遂時点
+
+(変更があるもののみ更新)
+
+| 軸 | 初稿 | 本 audit 完遂後 | 100 到達への残作業 |
+|---|---|---|---|
+| feature-completeness | 60 | **70** | PR #11 merge → +10 |
+| test-coverage | 55 | **75** | PR #11 で PHPUnit + Playwright が main 入り、PHPUnit/PHPCS 実機 PASS 確認済 |
+| regression-risk | 40 | **75** | merge sim 成功で衝突解消が unblocked、PR #11 で具体的 resolution 完成 |
+| deploy-readiness | 45 | **60** | PR #11 で release-candidate 成立、tag/release 残 |
+| 他 11 軸 | 不変 | 不変 | (Critical 6 実装 PR 待ち) |
+
+**新平均**: 約 65 / 100 (本 audit 完遂で +7 ポイント)。PR #11 merge + Issue #13 解消 + audit Critical 6 件 → 85 到達見込み。
+
+---
+
+## §6 Next Actions
+
+**並列実行可能 (Claude 単独、user 確認不要)**:
+- Issue #13 (Playwright setup gap) の調査 + 修正 PR
+- audit Critical 6 (C-01〜C-06) の実装 PR を順次
+- CI workflow `.github/workflows/` 追加 PR
+- PR #11 + #12 の bot review 監視 + 対応 (既存 cron fbf3b898)
+
+**user action 推奨 (Claude 実行可能だが judgment 必要)**:
+- PR #11 review (release-candidate-v1.0.0 の側方両立戦略の妥当性)
+- PR #11 merge 後の GitHub release v1.0.0 tag + zip artifact 作成
+- メルマガ LP との整合性確認
+
+---
+
+## §7 検証ソース表記 (最終)
+
+| 項目 | ソース |
+|---|---|
+| git/gh state | **[ローカル実行]** |
+| jsonl ingestion | **[Static]** subagent + I/O summary |
+| v1.0.0 commit 内容 | **[コード解析]** |
+| Codex adversarial review | **[Codex自己申告]** /tmp/codex-audit/v2-final.md |
+| merge-base / 衝突 / merge result | **[実機目視]** git CLI |
+| PHPUnit 7/24 PASS | **[実機目視]** docker run composer:2 phpunit |
+| PHPCS exit 0 | **[実機目視]** docker run composer:2 phpcs |
+| Playwright FAIL | **[実機目視]** npm run e2e:fresh, designinserter-db not found |
+
+---
+
+ADVERSARIAL REVIEW COMPLETE.
