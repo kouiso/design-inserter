@@ -14,6 +14,10 @@
 	var parts = catalog.parts || [];
 	var restUrl = catalog.restUrl || '';
 	var nonce = catalog.nonce || '';
+	window.DesignInserterPreviewRequest = window.DesignInserterPreviewRequest || {
+		id: 0,
+		partId: ''
+	};
 
 	var categories = [];
 	var catSet = {};
@@ -24,13 +28,17 @@
 		}
 	} );
 
-	function fetchPartContent( partId, callback ) {
-		window.fetch( restUrl + partId, {
-			headers: { 'X-WP-Nonce': nonce }
+	function fetchPartContent( partId, signal ) {
+		return window.fetch( restUrl + partId, {
+			headers: { 'X-WP-Nonce': nonce },
+			signal: signal
 		} )
-			.then( function( res ) { return res.json(); } )
-			.then( callback )
-			.catch( function() { callback( null ); } );
+			.then( function( res ) {
+				if ( ! res.ok ) {
+					throw new Error( 'Failed to load part.' );
+				}
+				return res.json();
+			} );
 	}
 
 	function PartCard( props ) {
@@ -130,18 +138,63 @@
 		var loadingState = useState( false );
 		var loading = loadingState[0];
 		var setLoading = loadingState[1];
+		var errorState = useState( '' );
+		var errorMessage = errorState[0];
+		var setErrorMessage = errorState[1];
+		var retryState = useState( 0 );
+		var retryCount = retryState[0];
+		var setRetryCount = retryState[1];
 
 		useEffect( function() {
+			var requestId = window.DesignInserterPreviewRequest.id + 1;
+			var controller = window.AbortController ? new window.AbortController() : null;
+			window.DesignInserterPreviewRequest = {
+				id: requestId,
+				partId: partId
+			};
+
 			if ( ! partId ) {
 				setContent( null );
+				setErrorMessage( '' );
+				setLoading( false );
 				return;
 			}
+
 			setLoading( true );
-			fetchPartContent( partId, function( data ) {
-				setContent( data );
-				setLoading( false );
-			} );
-		}, [ partId ] );
+			setErrorMessage( '' );
+
+			fetchPartContent( partId, controller ? controller.signal : undefined )
+				.then( function( data ) {
+					if (
+						window.DesignInserterPreviewRequest.id !== requestId ||
+						window.DesignInserterPreviewRequest.partId !== partId
+					) {
+						return;
+					}
+					setContent( data );
+					setLoading( false );
+				} )
+				.catch( function( error ) {
+					if ( error && error.name === 'AbortError' ) {
+						return;
+					}
+					if (
+						window.DesignInserterPreviewRequest.id !== requestId ||
+						window.DesignInserterPreviewRequest.partId !== partId
+					) {
+						return;
+					}
+					setContent( null );
+					setLoading( false );
+					setErrorMessage( __( '選択した部品を読み込めませんでした。もう一度お試しください。', 'designinserter' ) );
+				} );
+
+			return function() {
+				if ( controller ) {
+					controller.abort();
+				}
+			};
+		}, [ partId, retryCount ] );
 
 		if ( loading ) {
 			return el( 'div', { className: 'di-preview di-preview--loading' }, el( Spinner ) );
@@ -150,8 +203,14 @@
 		if ( ! content ) {
 			return el(
 				Notice,
-				{ status: 'info', isDismissible: false },
-				__( 'サイドバーからデザインパーツを選択してください', 'designinserter' )
+				{ status: errorMessage ? 'error' : 'info', isDismissible: false },
+				errorMessage || __( 'サイドバーからデザインパーツを選択してください', 'designinserter' ),
+				errorMessage
+					? el( Button, {
+						variant: 'secondary',
+						onClick: function() { setRetryCount( retryCount + 1 ); }
+					}, __( '再試行', 'designinserter' ) )
+					: null
 			);
 		}
 
