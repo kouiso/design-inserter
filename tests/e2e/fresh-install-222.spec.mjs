@@ -12,6 +12,7 @@ const composePath = path.join(tmpRoot, 'docker-compose.yml');
 const projectName = 'designinserter-e2e';
 const port = process.env.DI_E2E_PORT || '18082';
 const baseUrl = `http://127.0.0.1:${port}`;
+const packageJson = JSON.parse(await readFile(path.join(repoRoot, 'package.json'), 'utf8'));
 let allDesignsPageId = '';
 let shortcodePageId = '';
 let editorPageId = '';
@@ -157,11 +158,15 @@ async function selectDesignInserterBlock(page) {
 async function selectPartFromInspector(page, { categoryLabel, search, cardText }) {
 	const picker = page.locator('.di-picker').first();
 	await expect(picker).toBeVisible();
+	await expect(picker.locator('.di-picker__guide-title')).toHaveText('右側でページに入れる素材を選びます');
+	await expect(picker.locator('.di-picker__guide-text')).toContainText('素材の変更はこの欄で行います');
 	await picker.locator('button').filter({ hasText: new RegExp(`^${categoryLabel}\\s*\\(`) }).first().click();
 	const searchInput = picker.locator('.di-picker__search input, input.di-picker__search, .components-text-control__input').first();
 	await searchInput.fill(search);
 	await expect(picker.locator('.di-card').filter({ hasText: cardText }).first()).toBeVisible();
 	await picker.locator('.di-card').filter({ hasText: cardText }).first().click();
+	await expect(picker.locator('.di-picker__current')).toContainText(cardText);
+	await page.screenshot({ path: path.join(evidenceDir, 'sbi36-picker-guide-selected.png'), fullPage: false });
 }
 
 async function getDesignInserterEditorState(page) {
@@ -263,7 +268,7 @@ test.beforeAll(async () => {
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'option', 'update', 'permalink_structure', '', '--allow-root'], { timeout: 60000 });
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'rewrite', 'flush', '--allow-root'], { timeout: 60000 });
 
-	const zipPath = '/dist/designinserter-0.2.0.zip';
+	const zipPath = `/dist/designinserter-${packageJson.version}.zip`;
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'plugin', 'install', zipPath, '--activate', '--allow-root'], { timeout: 60000 });
 	const contentPath = await createAllDesignsBlockContent();
 	allDesignsPageId = await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'post', 'create', '/e2e/all-designs-blocks.html', '--post_type=page', '--post_status=publish', '--post_title=All Designs E2E', '--porcelain', '--allow-root'], { timeout: 60000 });
