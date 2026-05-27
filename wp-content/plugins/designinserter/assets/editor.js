@@ -14,10 +14,6 @@
 	var parts = catalog.parts || [];
 	var restUrl = catalog.restUrl || '';
 	var nonce = catalog.nonce || '';
-	window.DesignInserterPreviewRequest = window.DesignInserterPreviewRequest || {
-		id: 0,
-		partId: ''
-	};
 
 	var categories = [];
 	var catSet = {};
@@ -146,12 +142,8 @@
 		var setRetryCount = retryState[1];
 
 		useEffect( function() {
-			var requestId = window.DesignInserterPreviewRequest.id + 1;
+			var active = true;
 			var controller = window.AbortController ? new window.AbortController() : null;
-			window.DesignInserterPreviewRequest = {
-				id: requestId,
-				partId: partId
-			};
 
 			if ( ! partId ) {
 				setContent( null );
@@ -165,10 +157,7 @@
 
 			fetchPartContent( partId, controller ? controller.signal : undefined )
 				.then( function( data ) {
-					if (
-						window.DesignInserterPreviewRequest.id !== requestId ||
-						window.DesignInserterPreviewRequest.partId !== partId
-					) {
+					if ( ! active ) {
 						return;
 					}
 					setContent( data );
@@ -178,10 +167,7 @@
 					if ( error && error.name === 'AbortError' ) {
 						return;
 					}
-					if (
-						window.DesignInserterPreviewRequest.id !== requestId ||
-						window.DesignInserterPreviewRequest.partId !== partId
-					) {
+					if ( ! active ) {
 						return;
 					}
 					setContent( null );
@@ -190,6 +176,7 @@
 				} );
 
 			return function() {
+				active = false;
 				if ( controller ) {
 					controller.abort();
 				}

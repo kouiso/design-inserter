@@ -319,17 +319,21 @@ async function downloadPreviewAssets(parts) {
 	await mkdir(previewTempDir, { recursive: true });
 
 	let downloaded = 0;
-	for (const part of parts) {
-		if (!part.previewSourceImage || !part.previewImage) {
-			continue;
-		}
+	const concurrencyLimit = 10;
+	for (let index = 0; index < parts.length; index += concurrencyLimit) {
+		const chunk = parts.slice(index, index + concurrencyLimit);
+		await Promise.all(chunk.map(async (part) => {
+			if (!part.previewSourceImage || !part.previewImage) {
+				return;
+			}
 
-		const { bytes, contentType } = await fetchAsset(part.previewSourceImage);
-		const ext = detectPreviewExtension(bytes, contentType, part.previewSourceImage);
-		part.previewImage = `assets/previews/${part.id}${ext}`;
-		const outputFile = path.join(previewTempDir, path.basename(part.previewImage));
-		await writeFile(outputFile, bytes);
-		downloaded += 1;
+			const { bytes, contentType } = await fetchAsset(part.previewSourceImage);
+			const ext = detectPreviewExtension(bytes, contentType, part.previewSourceImage);
+			part.previewImage = `assets/previews/${part.id}${ext}`;
+			const outputFile = path.join(previewTempDir, path.basename(part.previewImage));
+			await writeFile(outputFile, bytes);
+			downloaded += 1;
+		}));
 	}
 
 	await rm(previewOutputDir, { recursive: true, force: true });

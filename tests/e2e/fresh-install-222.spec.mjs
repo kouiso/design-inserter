@@ -1,11 +1,12 @@
 import { execFile } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { test, expect } from '@playwright/test';
 
 const execFileAsync = promisify(execFile);
-const repoRoot = path.resolve(new URL('../..', import.meta.url).pathname);
+const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
 const packageJson = JSON.parse(await readFile(path.join(repoRoot, 'package.json'), 'utf8'));
 const tmpRoot = path.join(repoRoot, '.tmp', 'e2e-fresh-wp');
 const evidenceDir = path.join(tmpRoot, 'evidence');

@@ -71,7 +71,7 @@ function designinserter_resolve_local_asset_urls( $value ) {
 	return preg_replace_callback(
 		'/url\(\s*(["\']?)(assets\/(?:embedded|previews)\/[^)"\']+)\1\s*\)/',
 		function ( $matches ) use ( $base_url ) {
-			return sprintf( 'url("%s")', esc_url( $base_url . $matches[2] ) );
+			return sprintf( 'url("%s")', esc_url_raw( $base_url . $matches[2] ) );
 		},
 		$value
 	);
