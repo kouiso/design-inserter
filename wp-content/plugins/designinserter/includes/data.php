@@ -134,7 +134,7 @@ function designinserter_get_template( $template_id ) {
 	$templates   = designinserter_get_templates();
 
 	foreach ( $templates as $template ) {
-		if ( isset( $template['id'] ) && $template['id'] === $template_id ) {
+		if ( isset( $template['id'] ) && strtolower( $template['id'] ) === $template_id ) {
 			return $template;
 		}
 	}
@@ -177,7 +177,7 @@ function designinserter_get_editor_catalog() {
 
 	foreach ( $tmpl_catalog['templates'] as $template ) {
 		$tmpl_items[] = array(
-			'id'            => isset( $template['id'] ) ? $template['id'] : '',
+			'id'            => isset( $template['id'] ) ? strtolower( $template['id'] ) : '',
 			'title'         => isset( $template['title'] ) ? $template['title'] : '',
 			'categoryLabel' => isset( $template['categoryLabel'] ) ? $template['categoryLabel'] : '',
 			'previewImage'  => isset( $template['thumb'] ) && $template['thumb']
@@ -202,6 +202,12 @@ function designinserter_get_editor_catalog() {
 		'nonce'            => wp_create_nonce( 'wp_rest' ),
 		'templatesRestUrl' => rest_url( 'designinserter/v1/templates/' ),
 	);
+}
+
+// ─── bundle-dir sanitizer (preserves case; blocks path traversal) ────────────
+
+function designinserter_sanitize_bundle_dir( $value ) {
+	return preg_replace( '/[^A-Za-z0-9_\-]/', '', basename( (string) $value ) );
 }
 
 // ─── single part lookup ───────────────────────────────────────────────────────

@@ -5,10 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $bundle_dir_meta = get_post_meta( get_the_ID(), '_di_template_bundle_dir', true );
-$bundle_dir_safe = sanitize_key( $bundle_dir_meta );
+$bundle_dir_safe = designinserter_sanitize_bundle_dir( $bundle_dir_meta );
 $index_path      = DESIGNINSERTER_PLUGIN_DIR . 'data/template-party-bundles/' . $bundle_dir_safe . '/index.html';
 
-if ( $bundle_dir_safe && file_exists( $index_path ) ) {
+$bundles_root    = realpath( DESIGNINSERTER_PLUGIN_DIR . 'data/template-party-bundles' );
+$index_real      = $bundle_dir_safe ? realpath( $index_path ) : false;
+$path_safe       = $bundles_root && $index_real && strpos( $index_real, $bundles_root . DIRECTORY_SEPARATOR ) === 0;
+
+if ( $bundle_dir_safe && $path_safe ) {
 	$base_url = DESIGNINSERTER_PLUGIN_URL . 'data/template-party-bundles/' . $bundle_dir_safe . '/';
 	$html     = file_get_contents( $index_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	$html     = preg_replace(

@@ -85,7 +85,9 @@ function designinserter_rest_create_template_page( $request ) {
 			'meta_input'  => array(
 				'_wp_page_template'       => 'designinserter-full-template',
 				'_di_template_id'         => sanitize_key( $template['id'] ),
-				'_di_template_bundle_dir' => sanitize_key( isset( $template['bundleDir'] ) ? $template['bundleDir'] : '' ),
+				'_di_template_bundle_dir' => designinserter_sanitize_bundle_dir(
+					isset( $template['variantId'] ) ? $template['variantId'] : ''
+				),
 			),
 		),
 		true
