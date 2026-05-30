@@ -5,6 +5,7 @@ on:
     branches: [main, release-candidate-v1.0.0]
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,6 +16,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install git-crypt and unlock repository
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+        run: |
+          sudo apt-get install -y -qq git-crypt
+          echo "$GIT_CRYPT_KEY" | base64 --decode > /tmp/git-crypt-key
+          git-crypt unlock /tmp/git-crypt-key
+          rm /tmp/git-crypt-key
 
       - name: Setup PHP 8.2
         uses: shivammathur/setup-php@v2
@@ -46,6 +56,15 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install git-crypt and unlock repository
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+        run: |
+          sudo apt-get install -y -qq git-crypt
+          echo "$GIT_CRYPT_KEY" | base64 --decode > /tmp/git-crypt-key
+          git-crypt unlock /tmp/git-crypt-key
+          rm /tmp/git-crypt-key
 
       - name: Setup Node 22
         uses: actions/setup-node@v4

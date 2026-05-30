@@ -113,3 +113,67 @@ heading, text, list, box, button, blockquote, table, hr, badge, search, hamburge
 - [rendering](rendering.md) — catalog データを描画に使用する
 - [gutenberg-block](gutenberg-block.md) — catalog をエディタに渡す
 - [editor-ui](editor-ui.md) — catalog データの UI 表示
+
+---
+
+# Template Party 統合カタログ（2026-05-30 追加）
+
+## 概要
+
+Phase 3–5 でマルチソース対応に拡張。CSS Stock パーツ（222件）に加え、Template Party のコピペパーツ（138件）とフルページテンプレート（1017件）が統合カタログとして提供される。
+
+## データファイル一覧
+
+| ファイル | 管理 | 概要 |
+|---|---|---|
+| `data/css-stock-parts.json` | Git 管理 | CSS Stock 222パーツ |
+| `data/template-party-parts.json` | Git 管理 | TP コピペパーツ 138件 |
+| `data/template-party-templates.json` | Git 管理 | TP フルページテンプレート 1017件 |
+| `data/template-party-bundles/<id>/` | **Git 非管理**（.gitignore）| ZIPバンドル展開実体 |
+| `data/template-party-scrape-state.json` | **Git 非管理** | スクレイパー進捗ファイル |
+
+## PHP API
+
+```php
+// パーツ（CSS Stock + TP コピペ統合）
+$catalog   = designinserter_get_catalog();    // ['parts', 'categories', 'sourceUrl']
+$parts     = designinserter_get_parts();      // 全パーツ配列 (360件)
+$part      = designinserter_get_part($id);    // 単一パーツ取得
+
+// フルページテンプレート
+$templates = designinserter_get_templates();          // 全テンプレ配列 (1017件)
+$template  = designinserter_get_template($id);        // 単一テンプレ取得（null if not found）
+$tmpl_cat  = designinserter_get_templates_catalog();  // ['templates', 'categories', 'sourceUrl', 'scrapedAt']
+
+// エディタ用統合カタログ（JS に渡す）
+$editor_catalog = designinserter_get_editor_catalog();
+// {
+//   parts: [{id, title, categoryLabel, previewImage, source, type:'part', ...}],
+//   templates: [{id, title, categoryLabel, previewImage, source:'template-party', type:'template', demoUrl, bundleDir}],
+//   sources: [{id:'all'|'css-stock'|'template-party', label}],
+//   restUrl, nonce, templatesRestUrl
+// }
+```
+
+## template-party-templates.json スキーマ
+
+```json
+{
+  "id": "tp_wa1_blue",
+  "baseId": "tp_wa1",
+  "variant": "blue",
+  "category": "japanese-food",
+  "categoryLabel": "和食・寿司・うどん",
+  "title": "和菓子店向け tp_wa1_blue",
+  "thumb": "assets/previews/tp-wa1_blue.webp",
+  "demoUrl": "https://template-party.com/template/tp_wa1/tp_wa1_blue/",
+  "sourceUrl": "https://template-party.com/db_new/detail?category=template&id=12345",
+  "bundleDir": "data/template-party-bundles/tp_wa1_blue",
+  "entryHtml": "index.html",
+  "source": "template-party"
+}
+```
+
+## 著作権表示の保持
+
+TP バンドルの `index.html` に含まれる `Web Design:Template-Party` 著作権表示行は、スクレイパーおよびプラグインの asset 配信時に**削除・上書き禁止**。`full-page.php` は `<base href>` 注入のみ行い、著作表示はそのまま保持する。

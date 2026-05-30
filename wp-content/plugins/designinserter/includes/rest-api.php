@@ -7,12 +7,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 function designinserter_register_rest_routes() {
 	register_rest_route(
 		'designinserter/v1',
-		'/parts/(?P<id>[a-z0-9\-]+)',
+		'/parts/(?P<id>[a-z0-9_\-]+)',
 		array(
 			'methods'             => 'GET',
 			'callback'            => 'designinserter_rest_get_part',
 			'permission_callback' => function () {
 				return current_user_can( 'edit_posts' );
+			},
+			'args'                => array(
+				'id' => array(
+					'required'          => true,
+					'sanitize_callback' => 'sanitize_key',
+				),
+			),
+		)
+	);
+
+	register_rest_route(
+		'designinserter/v1',
+		'/templates/(?P<id>[a-z0-9_\-]+)/create-page',
+		array(
+			'methods'             => 'POST',
+			'callback'            => 'designinserter_rest_create_template_page',
+			'permission_callback' => function () {
+				return current_user_can( 'edit_pages' );
 			},
 			'args'                => array(
 				'id' => array(
@@ -44,6 +62,43 @@ function designinserter_rest_get_part( $request ) {
 			'id'   => $part['id'],
 			'html' => $html,
 			'css'  => isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '',
+		)
+	);
+}
+
+function designinserter_rest_create_template_page( $request ) {
+	$template = designinserter_get_template( $request['id'] );
+
+	if ( ! $template ) {
+		return new WP_Error(
+			'not_found',
+			'Template not found.',
+			array( 'status' => 404 )
+		);
+	}
+
+	$post_id = wp_insert_post(
+		array(
+			'post_title'  => sanitize_text_field( isset( $template['title'] ) ? $template['title'] : $request['id'] ),
+			'post_type'   => 'page',
+			'post_status' => 'draft',
+			'meta_input'  => array(
+				'_wp_page_template'       => 'designinserter-full-template',
+				'_di_template_id'         => sanitize_key( $template['id'] ),
+				'_di_template_bundle_dir' => sanitize_key( isset( $template['bundleDir'] ) ? $template['bundleDir'] : '' ),
+			),
+		),
+		true
+	);
+
+	if ( is_wp_error( $post_id ) ) {
+		return $post_id;
+	}
+
+	return rest_ensure_response(
+		array(
+			'page_id'  => $post_id,
+			'edit_url' => get_edit_post_link( $post_id, 'raw' ),
 		)
 	);
 }

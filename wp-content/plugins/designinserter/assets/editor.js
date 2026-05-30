@@ -11,18 +11,12 @@
 	var Notice = components.Notice;
 	var __ = i18n.__;
 	var catalog = window.DesignInserterCatalog || {};
-	var parts = catalog.parts || [];
+	var allParts = catalog.parts || [];
+	var allTemplates = catalog.templates || [];
+	var sources = catalog.sources || [];
 	var restUrl = catalog.restUrl || '';
+	var templatesRestUrl = catalog.templatesRestUrl || '';
 	var nonce = catalog.nonce || '';
-
-	var categories = [];
-	var catSet = {};
-	parts.forEach( function( part ) {
-		if ( ! catSet[ part.categoryLabel ] ) {
-			catSet[ part.categoryLabel ] = true;
-			categories.push( part.categoryLabel );
-		}
-	} );
 
 	function fetchPartContent( partId, callback, signal ) {
 		window.fetch( restUrl + partId, {
@@ -70,76 +64,158 @@
 		);
 	}
 
-	function PartPicker( props ) {
-		var onSelect = props.onSelect;
-		var currentId = props.currentId;
+	function TemplateCard( props ) {
+		var template = props.template;
+		var isSelected = props.isSelected;
+		var onClick = props.onClick;
+
+		return el( 'button', {
+			type: 'button',
+			className: 'di-card di-card--template' + ( isSelected ? ' is-selected' : '' ),
+			onClick: onClick,
+			'aria-pressed': isSelected ? 'true' : 'false',
+			'aria-label': template.title,
+			title: template.title
+		},
+			template.previewImage
+				? el( 'img', {
+					className: 'di-card__img',
+					src: template.previewImage,
+					alt: '',
+					'aria-hidden': 'true',
+					loading: 'lazy'
+				} )
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🖼️' ),
+			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, template.title ),
+			el( 'span', { className: 'di-card__badge', 'aria-hidden': 'true' }, 'テンプレ' )
+		);
+	}
+
+	function ItemPicker( props ) {
+		var onSelectPart = props.onSelectPart;
+		var onSelectTemplate = props.onSelectTemplate;
+		var currentPartId = props.currentPartId;
+		var currentTemplateId = props.currentTemplateId;
+
 		var searchState = useState( '' );
 		var search = searchState[0];
 		var setSearch = searchState[1];
+
 		var catState = useState( '' );
 		var activeCat = catState[0];
 		var setActiveCat = catState[1];
 
-		var filtered = parts.filter( function( part ) {
-			if ( activeCat && part.categoryLabel !== activeCat ) return false;
+		var sourceState = useState( 'all' );
+		var activeSource = sourceState[0];
+		var setActiveSource = sourceState[1];
+
+		var visibleParts = allParts.filter( function( p ) {
+			return activeSource === 'all' || p.source === activeSource;
+		} );
+		var visibleTemplates = ( activeSource === 'all' || activeSource === 'template-party' ) ? allTemplates : [];
+
+		var catSet = {};
+		var categories = [];
+		visibleParts.concat( visibleTemplates ).forEach( function( item ) {
+			if ( item.categoryLabel && ! catSet[ item.categoryLabel ] ) {
+				catSet[ item.categoryLabel ] = true;
+				categories.push( item.categoryLabel );
+			}
+		} );
+
+		var filteredParts = visibleParts.filter( function( p ) {
+			if ( activeCat && p.categoryLabel !== activeCat ) { return false; }
 			if ( search ) {
 				var q = search.toLowerCase();
-				return part.title.toLowerCase().indexOf( q ) !== -1 ||
-					part.categoryLabel.toLowerCase().indexOf( q ) !== -1 ||
-					part.id.toLowerCase().indexOf( q ) !== -1;
+				return p.title.toLowerCase().indexOf( q ) !== -1 ||
+					( p.categoryLabel || '' ).toLowerCase().indexOf( q ) !== -1 ||
+					p.id.toLowerCase().indexOf( q ) !== -1;
 			}
 			return true;
 		} );
 
+		var filteredTemplates = visibleTemplates.filter( function( t ) {
+			if ( activeCat && t.categoryLabel !== activeCat ) { return false; }
+			if ( search ) {
+				var q = search.toLowerCase();
+				return t.title.toLowerCase().indexOf( q ) !== -1 ||
+					( t.categoryLabel || '' ).toLowerCase().indexOf( q ) !== -1 ||
+					t.id.toLowerCase().indexOf( q ) !== -1;
+			}
+			return true;
+		} );
+
+		var totalVisible = filteredParts.length + filteredTemplates.length;
+		var totalAll = visibleParts.length + visibleTemplates.length;
 		var hasActiveFilter = search !== '' || activeCat !== '';
 		var clearFilters = function() { setSearch( '' ); setActiveCat( '' ); };
 
 		return el( 'div', { className: 'di-picker' },
+			sources.length > 0
+				? el( 'div', { className: 'di-picker__sources', role: 'group', 'aria-label': 'Source filter' },
+					sources.map( function( src ) {
+						return el( Button, {
+							key: src.id,
+							variant: activeSource === src.id ? 'primary' : 'secondary',
+							size: 'small',
+							'aria-pressed': activeSource === src.id ? 'true' : 'false',
+							onClick: function() { setActiveSource( src.id ); setActiveCat( '' ); }
+						}, src.label );
+					} )
+				)
+				: null,
 			el( TextControl, {
-				placeholder: __( 'パーツを検索...', 'designinserter' ),
+				placeholder: 'デザインを検索...',
 				value: search,
 				onChange: setSearch,
 				className: 'di-picker__search'
 			} ),
-			el( 'div', { className: 'di-picker__cats', role: 'group', 'aria-label': __( 'カテゴリ', 'designinserter' ) },
+			el( 'div', { className: 'di-picker__cats', role: 'group', 'aria-label': 'カテゴリ' },
 				el( Button, {
 					variant: activeCat === '' ? 'primary' : 'tertiary',
 					size: 'small',
 					'aria-pressed': activeCat === '' ? 'true' : 'false',
-					'aria-label': __( '全て', 'designinserter' ) + '、' + parts.length + ' 件',
 					onClick: function() { setActiveCat( '' ); }
-				}, __( '全て', 'designinserter' ), ' ', el( 'span', { 'aria-hidden': 'true' }, '(' + parts.length + ')' ) ),
+				}, '全て', ' ', el( 'span', { 'aria-hidden': 'true' }, '(' + totalAll + ')' ) ),
 				categories.map( function( cat ) {
-					var count = parts.filter( function( p ) { return p.categoryLabel === cat; } ).length;
+					var count = visibleParts.filter( function( p ) { return p.categoryLabel === cat; } ).length
+					          + visibleTemplates.filter( function( t ) { return t.categoryLabel === cat; } ).length;
 					return el( Button, {
 						key: cat,
 						variant: activeCat === cat ? 'primary' : 'tertiary',
 						size: 'small',
 						'aria-pressed': activeCat === cat ? 'true' : 'false',
-						'aria-label': cat + '、' + count + ' 件',
 						onClick: function() { setActiveCat( cat ); }
 					}, cat, ' ', el( 'span', { 'aria-hidden': 'true' }, '(' + count + ')' ) );
 				} )
 			),
 			el( 'div', { className: 'di-picker__grid', role: 'list' },
-				filtered.map( function( part ) {
+				filteredParts.map( function( part ) {
 					return el( PartCard, {
 						key: part.id,
 						part: part,
-						isSelected: part.id === currentId,
-						onClick: function() { onSelect( part.id ); }
+						isSelected: part.id === currentPartId,
+						onClick: function() { onSelectPart( part.id ); }
+					} );
+				} ),
+				filteredTemplates.map( function( template ) {
+					return el( TemplateCard, {
+						key: template.id,
+						template: template,
+						isSelected: template.id === currentTemplateId,
+						onClick: function() { onSelectTemplate( template ); }
 					} );
 				} )
 			),
-			filtered.length === 0
+			totalVisible === 0
 				? el( 'div', { className: 'di-picker__empty' },
-					el( 'p', {}, __( '該当するパーツがありません', 'designinserter' ) ),
+					el( 'p', {}, '該当するデザインがありません' ),
 					hasActiveFilter
 						? el( Button, {
 							variant: 'secondary',
 							size: 'small',
 							onClick: clearFilters
-						}, __( '検索 / カテゴリをクリア', 'designinserter' ) )
+						}, '検索 / カテゴリをクリア' )
 						: null
 				)
 				: null
@@ -177,7 +253,6 @@
 					return;
 				}
 				if ( data && data.id && data.id !== partId ) {
-					// Race guard: stale response for a previous partId — ignore.
 					return;
 				}
 				setContent( data );
@@ -198,22 +273,17 @@
 						variant: 'secondary',
 						size: 'small',
 						onClick: function() { setRetry( retryNonce + 1 ); }
-					}, __( '再試行', 'designinserter' ) )
+					}, '再試行' )
 				)
 			);
 		}
 
 		if ( loading && ! content ) {
-			// H-12: skeleton fallback when no prior content (first load).
 			return el( 'div', { className: 'di-preview di-preview--loading' }, el( Spinner ) );
 		}
 
 		if ( ! content ) {
-			return el(
-				Notice,
-				{ status: 'info', isDismissible: false },
-				__( 'サイドバーからデザインパーツを選択してください', 'designinserter' )
-			);
+			return el( Notice, { status: 'info', isDismissible: false }, 'サイドバーからデザインパーツを選択してください' );
 		}
 
 		// C-02: render in sandboxed iframe to isolate untrusted/tampered
@@ -245,44 +315,116 @@
 		);
 	}
 
+	function TemplatePreview( props ) {
+		var template = props.template;
+		var previewUrl = template.demoUrl || '';
+
+		return el( 'div', { className: 'di-preview di-preview--template' },
+			el( 'p', { className: 'di-preview__template-title' }, template.title ),
+			previewUrl
+				? el( 'iframe', {
+					className: 'di-preview__iframe',
+					title: 'テンプレプレビュー: ' + template.title,
+					src: previewUrl,
+					sandbox: 'allow-scripts allow-same-origin',
+					style: { width: '100%', height: '480px', border: 0, display: 'block', borderRadius: '4px' }
+				} )
+				: el( 'p', { style: { color: '#757575', fontSize: '13px', margin: 0 } }, 'プレビューURLがありません' )
+		);
+	}
+
+	function CreatePageButton( props ) {
+		var template = props.template;
+		var creatingState = useState( false );
+		var creating = creatingState[0];
+		var setCreating = creatingState[1];
+		var resultState = useState( null );
+		var result = resultState[0];
+		var setResult = resultState[1];
+		var errorState = useState( null );
+		var error = errorState[0];
+		var setError = errorState[1];
+
+		if ( result ) {
+			return el( 'div', { className: 'di-create-page-result' },
+				el( Notice, { status: 'success', isDismissible: false }, '固定ページを作成しました' ),
+				el( Button, {
+					variant: 'primary',
+					href: result.edit_url,
+					target: '_blank',
+					style: { marginTop: '8px' }
+				}, 'ページを編集する →' )
+			);
+		}
+
+		return el( 'div', { className: 'di-create-page' },
+			error ? el( Notice, { status: 'error', isDismissible: false, style: { marginBottom: '8px' } }, error ) : null,
+			el( Button, {
+				variant: 'primary',
+				isBusy: creating,
+				disabled: creating,
+				onClick: function() {
+					setCreating( true );
+					setError( null );
+					window.fetch( templatesRestUrl + encodeURIComponent( template.id ) + '/create-page', {
+						method: 'POST',
+						headers: { 'X-WP-Nonce': nonce, 'Content-Type': 'application/json' }
+					} )
+						.then( function( res ) {
+							if ( ! res.ok ) { throw new Error( 'HTTP ' + res.status ); }
+							return res.json();
+						} )
+						.then( function( data ) { setCreating( false ); setResult( data ); } )
+						.catch( function( err ) {
+							setCreating( false );
+							setError( 'ページ作成に失敗しました: ' + err.message );
+						} );
+				}
+			}, 'このテンプレで固定ページを作成' )
+		);
+	}
+
 	blocks.registerBlockType( 'designinserter/css-part', {
 		title: 'Design Inserter',
-		description: __( 'CSSデザインパーツを挿入', 'designinserter' ),
+		description: 'CSSデザインパーツを挿入',
 		icon: 'art',
 		category: 'design',
 		keywords: [ 'css', 'design', 'parts', 'heading', 'button', 'box' ],
 		attributes: {
-			partId: {
-				type: 'string',
-				default: ''
-			}
+			partId: { type: 'string', default: '' }
 		},
 		edit: function( props ) {
 			var partId = props.attributes.partId || '';
+			var selectedTemplateState = useState( null );
+			var selectedTemplate = selectedTemplateState[0];
+			var setSelectedTemplate = selectedTemplateState[1];
 
-			return el(
-				Fragment,
-				{},
-				el(
-					InspectorControls,
-					{},
-					el(
-						PanelBody,
-						{ title: 'Design Inserter', initialOpen: true },
-						el( PartPicker, {
-							currentId: partId,
-							onSelect: function( value ) {
-								props.setAttributes( { partId: value } );
+			return el( Fragment, {},
+				el( InspectorControls, {},
+					el( PanelBody, { title: 'Design Inserter', initialOpen: true },
+						el( ItemPicker, {
+							currentPartId: partId,
+							currentTemplateId: selectedTemplate ? selectedTemplate.id : '',
+							onSelectPart: function( id ) {
+								props.setAttributes( { partId: id } );
+								setSelectedTemplate( null );
+							},
+							onSelectTemplate: function( tmpl ) {
+								setSelectedTemplate( tmpl );
+								props.setAttributes( { partId: '' } );
 							}
 						} )
 					)
 				),
-				el( LivePreview, { partId: partId } )
+				selectedTemplate
+					? el( Fragment, {},
+						el( TemplatePreview, { template: selectedTemplate } ),
+						el( CreatePageButton, { template: selectedTemplate } )
+					  )
+					: el( LivePreview, { partId: partId } )
 			);
 		},
-		save: function() {
-			return null;
-		}
+		save: function() { return null; }
 	} );
 } )(
 	window.wp.blocks,

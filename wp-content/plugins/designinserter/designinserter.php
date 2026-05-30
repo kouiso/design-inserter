@@ -26,3 +26,4 @@ require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/render.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/block.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/admin.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/rest-api.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/templates.php';
