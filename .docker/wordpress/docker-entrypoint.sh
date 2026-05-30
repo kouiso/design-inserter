@@ -66,8 +66,8 @@ if wp core is-installed --path="${WP_PATH}" --allow-root 2>/dev/null; then
 	fi
 
 	wp plugin activate designinserter --path="${WP_PATH}" --allow-root 2>/dev/null || true
-	wp rewrite structure '/%postname%/' --path="${WP_PATH}" --allow-root
-	wp rewrite flush --hard --path="${WP_PATH}" --allow-root
+	wp rewrite structure '/%postname%/' --path="${WP_PATH}" --allow-root 2>/dev/null || true
+	wp rewrite flush --hard --path="${WP_PATH}" --allow-root 2>/dev/null || true
 fi
 
 mkdir -p "${WP_PATH}/wp-content/uploads"
