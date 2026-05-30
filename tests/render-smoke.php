@@ -27,7 +27,7 @@ assert_true( isset( $state['scripts']['designinserter-editor'] ), 'init register
 assert_true( isset( $state['styles']['designinserter-editor'] ), 'init registers editor style' );
 assert_true( isset( $state['blocks']['designinserter/css-part'] ), 'init registers dynamic block' );
 assert_true( isset( $state['localized']['designinserter-editor']['DesignInserterCatalog'] ), 'init localizes editor catalog' );
-assert_true( isset( $state['rest_routes']['designinserter/v1']['/parts/(?P<id>[a-z0-9\-]+)'] ), 'REST route is registered' );
+assert_true( isset( $state['rest_routes']['designinserter/v1']['/parts/(?P<id>[a-z0-9_\-]+)'] ), 'REST route is registered' );
 assert_true( isset( $state['options_pages']['designinserter'] ), 'admin menu page is registered' );
 assert_true( 'manage_options' === $state['options_pages']['designinserter']['capability'], 'admin settings page requires manage_options' );
 
@@ -35,7 +35,7 @@ ob_start();
 designinserter_stub_call( $state['options_pages']['designinserter']['callback'] );
 $admin_output = ob_get_clean();
 assert_true( strpos( $admin_output, '<h1>Design Inserter</h1>' ) !== false, 'admin page callback renders heading' );
-assert_true( strpos( $admin_output, '<td>222</td>' ) !== false, 'admin page callback renders catalog count' );
+assert_true( strpos( $admin_output, '<td>360</td>' ) !== false, 'admin page callback renders catalog count' );
 assert_true( strpos( $admin_output, DESIGNINSERTER_SOURCE_URL ) !== false, 'admin page callback renders source URL' );
 assert_true( strpos( $admin_output, '[designinserter_part id="heading-1"]' ) !== false, 'admin page callback renders shortcode example' );
 
@@ -44,12 +44,12 @@ $state = designinserter_stub_state();
 assert_true( ! empty( $state['styles']['designinserter-frontend']['enqueued'] ), 'wp_enqueue_scripts enqueues frontend base style' );
 
 $editor_catalog = $state['localized']['designinserter-editor']['DesignInserterCatalog'];
-assert_true( count( $editor_catalog['parts'] ) === 222, 'editor catalog has 222 parts' );
+assert_true( count( $editor_catalog['parts'] ) === 360, 'editor catalog has 360 parts (222 CSS Stock + 138 TP)' );
 assert_true( $editor_catalog['restUrl'] === 'http://example.test/wp-json/designinserter/v1/parts/', 'editor catalog exposes REST URL' );
 assert_true( $editor_catalog['nonce'] === 'test-nonce', 'editor catalog exposes nonce' );
 
 $catalog = designinserter_get_catalog();
-assert_true( count( $catalog['parts'] ) === 222, 'catalog has 222 parts' );
+assert_true( count( $catalog['parts'] ) === 360, 'catalog has 360 parts (222 CSS Stock + 138 TP)' );
 
 $heading = designinserter_render_part( 'heading-1' );
 assert_true( strpos( $heading, '<!-- Design Inserter:' ) !== false, 'render includes source comment' );
@@ -117,7 +117,7 @@ $state = designinserter_stub_state();
 assert_true( ! empty( $state['scripts']['designinserter-frontend']['enqueued'] ), 'JS behavior enqueues frontend script' );
 assert_true( ! empty( $state['styles']['designinserter-frontend']['enqueued'] ), 'JS behavior enqueues frontend style' );
 
-$route = $state['rest_routes']['designinserter/v1']['/parts/(?P<id>[a-z0-9\-]+)'];
+$route = $state['rest_routes']['designinserter/v1']['/parts/(?P<id>[a-z0-9_\-]+)'];
 assert_true( 'GET' === $route['methods'], 'REST route uses GET only' );
 assert_true( isset( $route['args']['id']['required'] ) && true === $route['args']['id']['required'], 'REST route requires id parameter' );
 assert_true( isset( $route['args']['id']['sanitize_callback'] ) && 'sanitize_key' === $route['args']['id']['sanitize_callback'], 'REST route sanitizes id parameter' );

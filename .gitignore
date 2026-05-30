@@ -46,6 +46,10 @@ vendor/
 .agents/
 .claude/
 
+# Template Party bundles: local-only, not committed (non-redistribution per ToS; git-size protection).
+wp-content/plugins/designinserter/data/template-party-bundles/
+wp-content/plugins/designinserter/data/template-party-scrape-state.json
+
 # Test/build artifacts.
 dist/
 test-results/
