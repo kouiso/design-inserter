@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+  ci:fast:
+    cmds:
+      - npm ci
+      - npm run phpcs
+      - npm run php:lint
+      - npm run build
+      - npm test
+      - npm run test:php
+
+  ci:
+    cmds:
+      - task: ci:fast
