@@ -161,6 +161,36 @@ async function selectPartFromInspector(page, { categoryLabel, search, cardText }
 	await picker.locator('.di-card').filter({ hasText: cardText }).first().click();
 }
 
+async function installPreviewRaceRoute(page) {
+	const events = [];
+
+	await page.route('**/*', async (route) => {
+		const url = route.request().url();
+		const decodedUrl = decodeURIComponent(url);
+		if (!decodedUrl.includes('/designinserter/v1/parts/heading-1') && !decodedUrl.includes('/designinserter/v1/parts/button-54')) {
+			await route.continue();
+			return;
+		}
+
+		const id = decodedUrl.includes('/heading-1') ? 'heading-1' : 'button-54';
+		events.push({ id, event: 'received', at: Date.now() });
+
+		if (id === 'heading-1') {
+			await page.waitForTimeout(1200);
+		}
+
+		try {
+			const response = await route.fetch();
+			await route.fulfill({ response });
+			events.push({ id, event: 'fulfilled', at: Date.now() });
+		} catch (error) {
+			events.push({ id, event: 'aborted', message: error.message, at: Date.now() });
+		}
+	});
+
+	return events;
+}
+
 async function getDesignInserterEditorState(page) {
 	return page.evaluate(() => {
 		const selector = window.wp?.data?.select('core/block-editor');
@@ -432,6 +462,12 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 
 	await insertDesignInserterBlock(page);
 	await selectDesignInserterBlock(page);
+	const previewRaceEvents = await installPreviewRaceRoute(page);
+	await selectPartFromInspector(page, {
+		categoryLabel: '見出し',
+		search: 'heading-1',
+		cardText: '左線',
+	});
 	await selectPartFromInspector(page, {
 		categoryLabel: 'ボタン',
 		search: 'button-54',
@@ -445,6 +481,18 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 	const selectedState = await getDesignInserterEditorState(page);
 	const preview = await getEditorCanvasLocator(page, '.di-preview__render .button-54');
 	await expect(preview.first()).toBeVisible();
+	await page.waitForTimeout(1500);
+	const previewContainer = await getEditorCanvasLocator(page, '.di-preview');
+	const racePreviewState = await previewContainer.first().evaluate((root) => ({
+		text: root.innerText,
+		html: root.innerHTML,
+	}));
+	await writeEvidenceJson('gutenberg-preview-race-state.json', {
+		state: racePreviewState,
+		events: previewRaceEvents,
+	});
+	await expect(preview.first()).toBeVisible();
+	await expect(await getEditorCanvasLocator(page, '.di-preview__render .heading-1')).toHaveCount(0);
 	await page.screenshot({ path: path.join(evidenceDir, 'gutenberg-part-picker-selected.png'), fullPage: false });
 
 	const startedAt = Date.now();
@@ -470,23 +518,31 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 	}
 
 	await page.screenshot({ path: path.join(evidenceDir, 'continuous-use-audit.png'), fullPage: false });
+	const unexpectedFailedRequests = issues.failedRequests.filter((requestInfo) => !(
+		requestInfo.failure === 'net::ERR_ABORTED' &&
+		requestInfo.url.includes('/designinserter/v1/parts/heading-1')
+	));
 	await writeEvidenceJson('gutenberg-cta-report.json', {
 		url: editorUrl,
 		selectedState,
+		previewRaceEvents,
 		continuousUseMs,
+		intentionalAbortedPreviewRequests: issues.failedRequests.length - unexpectedFailedRequests.length,
 	});
 	await writeEvidenceJson('continuous-use-audit.json', {
 		url: editorUrl,
 		durationMs: Date.now() - startedAt,
 		steps: continuousSteps,
 		issues,
+		unexpectedFailedRequests,
 	});
 
 	expect(selectedState.designInserterBlockCount).toBe(1);
 	expect(selectedState.selectedBlockName).toBe('designinserter/css-part');
 	expect(selectedState.partId).toBe('button-54');
+	expect(previewRaceEvents.filter((event) => event.id === 'button-54' && event.event === 'fulfilled')).toHaveLength(1);
 	expect(Date.now() - startedAt).toBeGreaterThanOrEqual(continuousUseMs);
-	expect(issues.failedRequests).toHaveLength(0);
+	expect(unexpectedFailedRequests).toHaveLength(0);
 	expect(issues.consoleErrors).toHaveLength(0);
 	expect(issues.pageErrors).toHaveLength(0);
 });
