@@ -1,23 +1,3 @@
-<!-- AUTO-GENERATED from AGENTS.md by scripts/sync-ai-rules.sh -->
-<!-- DO NOT HAND-EDIT — changes will be overwritten on next sync -->
-<!-- To update: edit AGENTS.md, then run: bash scripts/sync-ai-rules.sh -->
-
-# design-inserter — Gemini Code Assist スタイルガイド
-
-## レビュー言語
-
-- すべてのレビューコメントは **日本語** で記述してください
-- 内部の思考プロセス（think）のみ英語で行い、出力は日本語にしてください
-
-## PR サマリー
-
-- PR の要約はポエティックで読みやすい形式で記述してください（CodeRabbit 風）
-- 変更内容の本質を捉えた、わかりやすく印象的な表現を使用してください
-
----
-
-<!-- ===== AGENTS.md CONTENT (auto-synced) ===== -->
-
 # design-inserter
 
 CSS Stock のデザインパーツ（222件）＆テンプレートを Gutenberg エディターに挿入できる WordPress プラグイン。販売プロダクトとして商用品質が必須。

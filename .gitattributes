@@ -4,6 +4,10 @@
 docker-compose.yml text eol=lf
 Dockerfile text eol=lf
 
+# CI の sync-ai-rules.sh チェックで CRLF/LF ズレを防ぐ
+*.md text eol=lf
+*.yml text eol=lf
+
 # Template Party content — encrypted with git-crypt (personal use only, ToS non-redistribution)
 wp-content/plugins/designinserter/data/template-party-parts.json filter=git-crypt diff=git-crypt
 wp-content/plugins/designinserter/data/template-party-templates.json filter=git-crypt diff=git-crypt
