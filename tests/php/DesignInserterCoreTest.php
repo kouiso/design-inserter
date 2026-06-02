@@ -3,12 +3,40 @@
 use PHPUnit\Framework\TestCase;
 
 final class DesignInserterCoreTest extends TestCase {
-	public function test_catalog_contains_expected_css_stock_parts() {
+	private const EXPECTED_CSS_STOCK_PART_COUNT    = 222;
+	private const EXPECTED_CSS_STOCK_CATEGORY_COUNT = 28;
+	private const EXPECTED_TP_PART_COUNT           = 138;
+	private const EXPECTED_TOTAL_PART_COUNT        = 360; // 222 + 138
+	private const EXPECTED_TP_TEMPLATE_COUNT       = 1017;
+	private const KNOWN_TP_TEMPLATE_ID             = 'tp_wa1_blue';
+
+	public function test_catalog_merges_css_stock_and_template_party_parts() {
 		$catalog = designinserter_get_catalog();
 
-		$this->assertCount( 222, $catalog['parts'] );
-		$this->assertCount( 28, $catalog['categories'] );
+		$this->assertCount( self::EXPECTED_TOTAL_PART_COUNT, $catalog['parts'] );
 		$this->assertSame( DESIGNINSERTER_SOURCE_URL, $catalog['sourceUrl'] );
+	}
+
+	public function test_catalog_css_stock_parts_have_correct_source() {
+		$catalog    = designinserter_get_catalog();
+		$css_parts  = array_filter( $catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' );
+
+		$this->assertCount( self::EXPECTED_CSS_STOCK_PART_COUNT, array_values( $css_parts ) );
+	}
+
+	public function test_catalog_template_party_parts_have_correct_source() {
+		$catalog  = designinserter_get_catalog();
+		$tp_parts = array_filter( $catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'template-party' );
+
+		$this->assertCount( self::EXPECTED_TP_PART_COUNT, array_values( $tp_parts ) );
+	}
+
+	public function test_catalog_categories_have_no_duplicate_slugs() {
+		$catalog = designinserter_get_catalog();
+		$slugs   = array_column( $catalog['categories'], 'slug' );
+
+		$this->assertSameSize( $slugs, array_unique( $slugs ) );
+		$this->assertGreaterThan( self::EXPECTED_CSS_STOCK_CATEGORY_COUNT, count( $slugs ) );
 	}
 
 	public function test_get_part_sanitizes_and_finds_known_part() {
@@ -19,13 +47,63 @@ final class DesignInserterCoreTest extends TestCase {
 		$this->assertSame( 'heading', $part['category'] );
 	}
 
-	public function test_editor_catalog_exposes_preview_urls_and_rest_settings() {
+	public function test_get_templates_returns_all_template_party_templates() {
+		$templates = designinserter_get_templates();
+
+		$this->assertIsArray( $templates );
+		$this->assertCount( self::EXPECTED_TP_TEMPLATE_COUNT, $templates );
+	}
+
+	public function test_get_template_by_id_returns_known_template() {
+		$template = designinserter_get_template( self::KNOWN_TP_TEMPLATE_ID );
+
+		$this->assertIsArray( $template );
+		$this->assertSame( self::KNOWN_TP_TEMPLATE_ID, $template['id'] );
+		$this->assertArrayHasKey( 'demoUrl', $template );
+		$this->assertArrayHasKey( 'bundleDir', $template );
+		$this->assertStringContainsString( 'template-party.com', $template['demoUrl'] );
+	}
+
+	public function test_get_template_returns_null_for_unknown_id() {
+		$result = designinserter_get_template( 'nonexistent-template-xyz' );
+
+		$this->assertNull( $result );
+	}
+
+	public function test_editor_catalog_exposes_merged_parts_and_templates() {
 		$catalog = designinserter_get_editor_catalog();
 
-		$this->assertCount( 222, $catalog['parts'] );
+		$this->assertCount( self::EXPECTED_TOTAL_PART_COUNT, $catalog['parts'] );
+		$this->assertCount( self::EXPECTED_TP_TEMPLATE_COUNT, $catalog['templates'] );
 		$this->assertStringStartsWith( DESIGNINSERTER_PLUGIN_URL . 'assets/previews/', $catalog['parts'][0]['previewImage'] );
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/parts/', $catalog['restUrl'] );
 		$this->assertSame( 'nonce-wp_rest', $catalog['nonce'] );
+		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/templates/', $catalog['templatesRestUrl'] );
+	}
+
+	public function test_editor_catalog_exposes_three_source_filters() {
+		$catalog  = designinserter_get_editor_catalog();
+		$sources  = $catalog['sources'];
+		$ids      = array_column( $sources, 'id' );
+
+		$this->assertCount( 3, $sources );
+		$this->assertContains( 'all', $ids );
+		$this->assertContains( 'css-stock', $ids );
+		$this->assertContains( 'template-party', $ids );
+	}
+
+	public function test_editor_catalog_template_entries_have_required_fields() {
+		$catalog   = designinserter_get_editor_catalog();
+		$first_tmpl = $catalog['templates'][0] ?? null;
+
+		$this->assertNotNull( $first_tmpl );
+		$this->assertArrayHasKey( 'id', $first_tmpl );
+		$this->assertArrayHasKey( 'type', $first_tmpl );
+		$this->assertArrayHasKey( 'source', $first_tmpl );
+		$this->assertArrayHasKey( 'demoUrl', $first_tmpl );
+		$this->assertArrayHasKey( 'bundleDir', $first_tmpl );
+		$this->assertSame( 'template', $first_tmpl['type'] );
+		$this->assertSame( 'template-party', $first_tmpl['source'] );
 	}
 
 	public function test_render_part_outputs_scoped_markup_and_source() {
@@ -44,8 +122,8 @@ final class DesignInserterCoreTest extends TestCase {
 		$output = designinserter_render_part( 'modal-1' );
 
 		$this->assertStringContainsString( 'data-designinserter-behavior="modal"', $output );
-		$this->assertContains( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_scripts'] );
-		$this->assertContains( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_styles'] );
+		$this->assertContainsEquals( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_scripts'] );
+		$this->assertContainsEquals( 'designinserter-frontend', $GLOBALS['designinserter_enqueued_styles'] );
 		$this->assertMatchesRegularExpression( '/id="modal-1__open__di-modal-1-\d+"/', $output );
 		$this->assertMatchesRegularExpression( '/for="modal-1__open__di-modal-1-\d+"/', $output );
 	}

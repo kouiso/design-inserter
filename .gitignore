@@ -3,6 +3,7 @@ wp-admin/
 wp-includes/
 wp-config.php
 wp-*.php
+!tests/wp-stubs.php
 xmlrpc.php
 license.txt
 readme.html
@@ -45,7 +46,12 @@ vendor/
 .agents/
 .claude/
 
+# Template Party bundles: local-only, not committed (non-redistribution per ToS; git-size protection).
+wp-content/plugins/designinserter/data/template-party-bundles/
+wp-content/plugins/designinserter/data/template-party-scrape-state.json
+
 # Test/build artifacts.
+dist/
 test-results/
 playwright-report/
 .playwright-mcp/

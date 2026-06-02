@@ -35,10 +35,6 @@ function esc_url( $url ) {
 	return filter_var( (string) $url, FILTER_SANITIZE_URL );
 }
 
-function esc_url_raw( $url ) {
-	return filter_var( (string) $url, FILTER_SANITIZE_URL );
-}
-
 function trailingslashit( $value ) {
 	return rtrim( (string) $value, '/' ) . '/';
 }

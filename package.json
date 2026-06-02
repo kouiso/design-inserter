@@ -4,17 +4,27 @@
   "private": true,
   "description": "Local WordPress plugin development environment for Design Inserter.",
   "scripts": {
-    "build:zip": "node scripts/build-plugin-zip.mjs",
+    "test": "node scripts/test.mjs",
+    "build": "node scripts/build-plugin-zip.mjs",
     "e2e:fresh": "playwright test tests/e2e/fresh-install-222.spec.mjs --reporter=list",
+    "e2e:template-party": "playwright test tests/e2e/template-party.spec.mjs --reporter=list",
     "ready:checklist": "node scripts/generate-ready-checklist.mjs",
     "scrape:css-stock": "node scripts/scrape-css-stock.mjs",
+    "scrape:template-party": "node scripts/scrape-template-party.mjs",
+    "scrape:template-party:meta": "node scripts/scrape-template-party.mjs --skip-zips",
+    "scrape:template-party:parts": "node scripts/scrape-template-party-parts.mjs",
     "test:php": "docker run --rm -v \"$PWD\":/app -w /app composer:2 php vendor/bin/phpunit --configuration phpunit.xml.dist",
     "phpcs": "docker run --rm -v \"$PWD\":/app -w /app composer:2 php vendor/bin/phpcs --standard=phpcs.xml.dist",
     "wp": "docker compose exec -T wordpress wp --allow-root",
-    "php:lint": "docker compose exec -T wordpress php -l wp-content/plugins/designinserter/designinserter.php"
+    "php:lint": "find wp-content/plugins/designinserter wp-content/themes/designinserter-dev tests -name '*.php' -print0 | xargs -0 -n1 php -l",
+    "php:lint:docker": "docker compose exec -T wordpress php -l wp-content/plugins/designinserter/designinserter.php",
+    "smoke:wp": "node scripts/wp-smoke.mjs",
+    "smoke:wp:docker": "node scripts/wp-smoke.mjs --docker",
+    "smoke:wp:portable": "node scripts/wp-smoke.mjs --portable",
+    "smoke:wp:stubs": "node scripts/wp-smoke.mjs --stubs"
   },
   "devDependencies": {
     "@playwright/test": "^1.53.0"
   },
-  "license": "UNLICENSED"
+  "license": "GPL-2.0-or-later"
 }

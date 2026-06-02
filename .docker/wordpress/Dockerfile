@@ -1,4 +1,4 @@
-FROM php:8.2-apache-bookworm
+FROM php:8.2-apache
 
 # システム依存パッケージ
 RUN apt-get update && apt-get install -y --no-install-recommends \
