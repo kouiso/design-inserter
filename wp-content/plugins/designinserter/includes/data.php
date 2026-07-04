@@ -86,6 +86,48 @@ function designinserter_get_catalog() {
 	return $catalog;
 }
 
+
+function designinserter_get_part_display_title( $part ) {
+	$id             = isset( $part['id'] ) ? (string) $part['id'] : '';
+	$title          = isset( $part['title'] ) ? trim( (string) $part['title'] ) : '';
+	$category_label = isset( $part['categoryLabel'] ) ? trim( (string) $part['categoryLabel'] ) : '';
+
+	if ( '' !== $title && $title !== $id ) {
+		return $title;
+	}
+
+	$base_label = '' !== $category_label ? $category_label : '素材';
+	if ( preg_match( '/(?:^|[-_])(\d+)$/', $id, $matches ) ) {
+		return sprintf( '%s %s', $base_label, $matches[1] );
+	}
+
+	$hash = strtoupper( substr( md5( $id ), 0, 6 ) );
+	return sprintf( '%s %s', $base_label, $hash );
+}
+
+function designinserter_shape_part_for_editor_catalog( $part ) {
+	$item = array(
+		'id'            => $part['id'],
+		'title'         => designinserter_get_part_display_title( $part ),
+		'categoryLabel' => isset( $part['categoryLabel'] ) ? $part['categoryLabel'] : '',
+		'previewImage'  => isset( $part['previewImage'] ) && $part['previewImage']
+			? DESIGNINSERTER_PLUGIN_URL . $part['previewImage']
+			: '',
+		'source'        => isset( $part['source'] ) ? $part['source'] : 'css-stock',
+		'type'          => 'part',
+	);
+
+	if ( isset( $part['behavior'] ) && is_array( $part['behavior'] ) ) {
+		$item['behavior'] = array(
+			'type'             => isset( $part['behavior']['type'] ) ? $part['behavior']['type'] : '',
+			'requiresJs'       => ! empty( $part['behavior']['requiresJs'] ),
+			'enhancementLevel' => isset( $part['behavior']['enhancementLevel'] ) ? $part['behavior']['enhancementLevel'] : '',
+		);
+	}
+
+	return $item;
+}
+
 function designinserter_get_parts() {
 	$catalog = designinserter_get_catalog();
 	return $catalog['parts'];
@@ -149,26 +191,7 @@ function designinserter_get_editor_catalog() {
 	$items   = array();
 
 	foreach ( $catalog['parts'] as $part ) {
-		$item = array(
-			'id'            => $part['id'],
-			'title'         => isset( $part['title'] ) ? $part['title'] : $part['id'],
-			'categoryLabel' => isset( $part['categoryLabel'] ) ? $part['categoryLabel'] : '',
-			'previewImage'  => isset( $part['previewImage'] ) && $part['previewImage']
-				? DESIGNINSERTER_PLUGIN_URL . $part['previewImage']
-				: '',
-			'source'        => isset( $part['source'] ) ? $part['source'] : 'css-stock',
-			'type'          => 'part',
-		);
-
-		if ( isset( $part['behavior'] ) && is_array( $part['behavior'] ) ) {
-			$item['behavior'] = array(
-				'type'             => isset( $part['behavior']['type'] ) ? $part['behavior']['type'] : '',
-				'requiresJs'       => ! empty( $part['behavior']['requiresJs'] ),
-				'enhancementLevel' => isset( $part['behavior']['enhancementLevel'] ) ? $part['behavior']['enhancementLevel'] : '',
-			);
-		}
-
-		$items[] = $item;
+		$items[] = designinserter_shape_part_for_editor_catalog( $part );
 	}
 
 	// Append full-page template entries.

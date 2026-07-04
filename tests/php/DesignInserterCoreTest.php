@@ -3,6 +3,13 @@
 use PHPUnit\Framework\TestCase;
 
 final class DesignInserterCoreTest extends TestCase {
+	private function skip_if_template_party_data_is_encrypted() {
+		$path = DESIGNINSERTER_PLUGIN_DIR . 'data/template-party-parts.json';
+		if ( file_exists( $path ) && 0 === strpos( (string) file_get_contents( $path, false, null, 0, 10 ), "\0GITCRYPT" ) ) {
+			$this->markTestSkipped( 'Template Party data is git-crypt encrypted in this environment.' );
+		}
+	}
+
 	private const EXPECTED_CSS_STOCK_PART_COUNT    = 222;
 	private const EXPECTED_CSS_STOCK_CATEGORY_COUNT = 28;
 	private const EXPECTED_TP_PART_COUNT           = 138;
@@ -11,6 +18,7 @@ final class DesignInserterCoreTest extends TestCase {
 	private const KNOWN_TP_TEMPLATE_ID             = 'tp_wa1_blue';
 
 	public function test_catalog_merges_css_stock_and_template_party_parts() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$catalog = designinserter_get_catalog();
 
 		$this->assertCount( self::EXPECTED_TOTAL_PART_COUNT, $catalog['parts'] );
@@ -25,6 +33,7 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_catalog_template_party_parts_have_correct_source() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$catalog  = designinserter_get_catalog();
 		$tp_parts = array_filter( $catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'template-party' );
 
@@ -32,6 +41,7 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_catalog_categories_have_no_duplicate_slugs() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$catalog = designinserter_get_catalog();
 		$slugs   = array_column( $catalog['categories'], 'slug' );
 
@@ -48,6 +58,7 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_get_templates_returns_all_template_party_templates() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$templates = designinserter_get_templates();
 
 		$this->assertIsArray( $templates );
@@ -55,6 +66,7 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_get_template_by_id_returns_known_template() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$template = designinserter_get_template( self::KNOWN_TP_TEMPLATE_ID );
 
 		$this->assertIsArray( $template );
@@ -71,6 +83,7 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_editor_catalog_exposes_merged_parts_and_templates() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$catalog = designinserter_get_editor_catalog();
 
 		$this->assertCount( self::EXPECTED_TOTAL_PART_COUNT, $catalog['parts'] );
@@ -79,6 +92,41 @@ final class DesignInserterCoreTest extends TestCase {
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/parts/', $catalog['restUrl'] );
 		$this->assertSame( 'nonce-wp_rest', $catalog['nonce'] );
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/templates/', $catalog['templatesRestUrl'] );
+	}
+
+
+	public function test_editor_catalog_uses_japanese_friendly_title_when_title_is_empty_or_slug() {
+		$empty_title_item = designinserter_shape_part_for_editor_catalog(
+			array(
+				'id'            => 'button-54',
+				'title'         => '',
+				'categoryLabel' => 'ボタン',
+			)
+		);
+		$slug_title_item  = designinserter_shape_part_for_editor_catalog(
+			array(
+				'id'            => 'button-55',
+				'title'         => 'button-55',
+				'categoryLabel' => 'ボタン',
+			)
+		);
+
+		$this->assertSame( 'ボタン 54', $empty_title_item['title'] );
+		$this->assertSame( 'ボタン 55', $slug_title_item['title'] );
+		$this->assertNotSame( 'button-54', $empty_title_item['title'] );
+		$this->assertStringContainsString( 'ボタン', $empty_title_item['title'] );
+	}
+
+	public function test_editor_catalog_keeps_existing_readable_title() {
+		$item = designinserter_shape_part_for_editor_catalog(
+			array(
+				'id'            => 'button-54',
+				'title'         => '細い矢印',
+				'categoryLabel' => 'ボタン',
+			)
+		);
+
+		$this->assertSame( '細い矢印', $item['title'] );
 	}
 
 	public function test_editor_catalog_exposes_three_source_filters() {
@@ -93,6 +141,7 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_editor_catalog_template_entries_have_required_fields() {
+		$this->skip_if_template_party_data_is_encrypted();
 		$catalog   = designinserter_get_editor_catalog();
 		$first_tmpl = $catalog['templates'][0] ?? null;
 
