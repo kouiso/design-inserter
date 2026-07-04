@@ -58,6 +58,7 @@
 	function PartPicker( props ) {
 		var onSelect = props.onSelect;
 		var currentId = props.currentId;
+		var currentPart = parts.find( function( part ) { return part.id === currentId; } );
 		var searchState = useState( '' );
 		var search = searchState[0];
 		var setSearch = searchState[1];
@@ -77,8 +78,18 @@
 		} );
 
 		return el( 'div', { className: 'di-picker' },
+			el( 'div', { className: 'di-picker__guide' },
+				el( 'p', { className: 'di-picker__guide-title' }, __( '右側でページに入れる素材を選びます', 'designinserter' ) ),
+				el( 'p', { className: 'di-picker__guide-text' }, __( '左側の検索はブロック追加用です。素材の変更はこの欄で行います。', 'designinserter' ) ),
+				el( 'p', { className: 'di-picker__current' },
+					currentPart
+						? __( '選択中: ', 'designinserter' ) + currentPart.title
+						: __( '選択中: まだ素材が選ばれていません', 'designinserter' )
+				)
+			),
 			el( TextControl, {
-				placeholder: __( 'パーツを検索...', 'designinserter' ),
+				label: __( '素材を探す', 'designinserter' ),
+				placeholder: __( '例: ボタン、見出し', 'designinserter' ),
 				value: search,
 				onChange: setSearch,
 				className: 'di-picker__search'
