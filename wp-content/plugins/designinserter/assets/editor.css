@@ -197,3 +197,22 @@
 .di-create-page-result {
 	padding: 12px 0 4px;
 }
+
+/* Insert confirmation */
+.di-insert-confirm {
+	margin-bottom: 12px;
+}
+
+.di-insert-confirm:focus {
+	outline: none;
+}
+
+.di-insert-confirm__message,
+.di-insert-confirm__guidance {
+	margin: 0 0 8px;
+}
+
+.di-insert-confirm__guidance {
+	color: #757575;
+	font-size: 13px;
+}
