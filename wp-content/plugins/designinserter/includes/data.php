@@ -96,7 +96,7 @@ function designinserter_get_part_display_title( $part ) {
 		return $title;
 	}
 
-	$base_label = '' !== $category_label ? $category_label : '素材';
+	$base_label = '' !== $category_label ? $category_label : __( '素材', 'designinserter' );
 	if ( preg_match( '/(?:^|[-_])(\d+)$/', $id, $matches ) ) {
 		return sprintf( '%s %s', $base_label, $matches[1] );
 	}
@@ -107,7 +107,7 @@ function designinserter_get_part_display_title( $part ) {
 
 function designinserter_shape_part_for_editor_catalog( $part ) {
 	$item = array(
-		'id'            => $part['id'],
+		'id'            => isset( $part['id'] ) ? $part['id'] : '',
 		'title'         => designinserter_get_part_display_title( $part ),
 		'categoryLabel' => isset( $part['categoryLabel'] ) ? $part['categoryLabel'] : '',
 		'previewImage'  => isset( $part['previewImage'] ) && $part['previewImage']
