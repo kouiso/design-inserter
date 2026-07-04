@@ -1,9 +1,11 @@
-( function( blocks, element, blockEditor, components, i18n ) {
+( function( blocks, element, blockEditor, components, i18n, data ) {
 	var el = element.createElement;
 	var useState = element.useState;
 	var useEffect = element.useEffect;
 	var Fragment = element.Fragment;
 	var useRef = element.useRef;
+	// wp.data.useSelect でエディター状態を購読し、ステータスやプレビューリンクの変化に追従させる
+	var useSelect = data && data.useSelect ? data.useSelect : null;
 	var InspectorControls = blockEditor.InspectorControls;
 	var PanelBody = components.PanelBody;
 	var TextControl = components.TextControl;
@@ -334,10 +336,7 @@
 		);
 	}
 
-	function getPostConfirmTarget() {
-		var editorSelect = window.wp && window.wp.data && window.wp.data.select
-			? window.wp.data.select( 'core/editor' )
-			: null;
+	function computePostConfirmTarget( editorSelect ) {
 		if ( ! editorSelect ) {
 			return null;
 		}
@@ -377,7 +376,16 @@
 	function InsertConfirmNotice( props ) {
 		var insertedKey = props.insertedKey;
 		var noticeRef = useRef( null );
-		var target = getPostConfirmTarget();
+		// useSelect が使える環境ではエディター状態を購読して自動再描画。無ければ従来の一度きり読み取りにフォールバック。
+		var target = useSelect
+			? useSelect( function( select ) {
+				return computePostConfirmTarget( select( 'core/editor' ) );
+			}, [] )
+			: computePostConfirmTarget(
+				window.wp && window.wp.data && window.wp.data.select
+					? window.wp.data.select( 'core/editor' )
+					: null
+			);
 
 		useEffect( function() {
 			if ( insertedKey && noticeRef.current ) {
@@ -512,5 +520,6 @@
 	window.wp.element,
 	window.wp.blockEditor,
 	window.wp.components,
-	window.wp.i18n
+	window.wp.i18n,
+	window.wp.data
 );
