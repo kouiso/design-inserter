@@ -1,8 +1,11 @@
-( function( blocks, element, blockEditor, components, i18n ) {
+( function( blocks, element, blockEditor, components, i18n, data ) {
 	var el = element.createElement;
 	var useState = element.useState;
 	var useEffect = element.useEffect;
 	var Fragment = element.Fragment;
+	var useRef = element.useRef;
+	// wp.data.useSelect でエディター状態を購読し、ステータスやプレビューリンクの変化に追従させる
+	var useSelect = data && data.useSelect ? data.useSelect : null;
 	var InspectorControls = blockEditor.InspectorControls;
 	var PanelBody = components.PanelBody;
 	var TextControl = components.TextControl;
@@ -333,6 +336,86 @@
 		);
 	}
 
+	function computePostConfirmTarget( editorSelect ) {
+		if ( ! editorSelect ) {
+			return null;
+		}
+
+		var currentPost = editorSelect.getCurrentPost ? editorSelect.getCurrentPost() : null;
+		var status = editorSelect.getEditedPostAttribute
+			? editorSelect.getEditedPostAttribute( 'status' )
+			: ( currentPost && currentPost.status ? currentPost.status : '' );
+		var permalink = editorSelect.getPermalink ? editorSelect.getPermalink() : '';
+		var postLink = currentPost && currentPost.link ? currentPost.link : '';
+		var editedLink = editorSelect.getEditedPostAttribute
+			? editorSelect.getEditedPostAttribute( 'link' )
+			: '';
+		var previewLink = editorSelect.getEditedPostPreviewLink
+			? editorSelect.getEditedPostPreviewLink()
+			: '';
+
+		if ( status === 'publish' && ( permalink || postLink ) ) {
+			return {
+				url: permalink || postLink,
+				label: __( '公開ページで確認', 'designinserter' ),
+				message: __( '素材を入れました。公開ページで見た目を確認してください。', 'designinserter' )
+			};
+		}
+
+		if ( editedLink || previewLink || permalink || postLink ) {
+			return {
+				url: editedLink || previewLink || permalink || postLink,
+				label: __( 'プレビューで確認', 'designinserter' ),
+				message: __( '素材を入れました。プレビューで見た目を確認してください。', 'designinserter' )
+			};
+		}
+
+		return null;
+	}
+
+	function InsertConfirmNotice( props ) {
+		var insertedKey = props.insertedKey;
+		var noticeRef = useRef( null );
+		// useSelect が使える環境ではエディター状態を購読して自動再描画。無ければ従来の一度きり読み取りにフォールバック。
+		var target = useSelect
+			? useSelect( function( select ) {
+				return computePostConfirmTarget( select( 'core/editor' ) );
+			}, [] )
+			: computePostConfirmTarget(
+				window.wp && window.wp.data && window.wp.data.select
+					? window.wp.data.select( 'core/editor' )
+					: null
+			);
+
+		useEffect( function() {
+			if ( insertedKey && noticeRef.current ) {
+				noticeRef.current.focus();
+			}
+		}, [ insertedKey ] );
+
+		if ( ! insertedKey ) {
+			return null;
+		}
+
+		return el( 'div', {
+			className: 'di-insert-confirm',
+			ref: noticeRef,
+			tabIndex: '-1'
+		},
+			el( Notice, { status: 'success', isDismissible: false },
+				el( 'p', { className: 'di-insert-confirm__message' }, target ? target.message : __( '素材を入れました。', 'designinserter' ) ),
+				el( 'p', { className: 'di-insert-confirm__guidance' }, __( 'エディターと公開ページでは表示が変わる場合があります。', 'designinserter' ) ),
+				target ? el( Button, {
+					variant: 'secondary',
+					size: 'small',
+					href: target.url,
+					target: '_blank',
+					rel: 'noopener'
+				}, target.label ) : null
+			)
+		);
+	}
+
 	function CreatePageButton( props ) {
 		var template = props.template;
 		var creatingState = useState( false );
@@ -398,6 +481,9 @@
 			var selectedTemplateState = useState( null );
 			var selectedTemplate = selectedTemplateState[0];
 			var setSelectedTemplate = selectedTemplateState[1];
+			var insertedKeyState = useState( '' );
+			var insertedKey = insertedKeyState[0];
+			var setInsertedKey = insertedKeyState[1];
 
 			return el( Fragment, {},
 				el( InspectorControls, {},
@@ -408,14 +494,17 @@
 							onSelectPart: function( id ) {
 								props.setAttributes( { partId: id } );
 								setSelectedTemplate( null );
+								setInsertedKey( 'part:' + id + ':' + Date.now() );
 							},
 							onSelectTemplate: function( tmpl ) {
 								setSelectedTemplate( tmpl );
 								props.setAttributes( { partId: '' } );
+								setInsertedKey( 'template:' + tmpl.id + ':' + Date.now() );
 							}
 						} )
 					)
 				),
+				el( InsertConfirmNotice, { insertedKey: insertedKey } ),
 				selectedTemplate
 					? el( Fragment, {},
 						el( TemplatePreview, { template: selectedTemplate } ),
@@ -431,5 +520,6 @@
 	window.wp.element,
 	window.wp.blockEditor,
 	window.wp.components,
-	window.wp.i18n
+	window.wp.i18n,
+	window.wp.data
 );

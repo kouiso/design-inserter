@@ -23,7 +23,7 @@ function designinserter_register_block() {
 	wp_register_script(
 		'designinserter-editor',
 		DESIGNINSERTER_PLUGIN_URL . 'assets/editor.js',
-		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n', 'designinserter-frontend' ),
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-data', 'wp-i18n', 'designinserter-frontend' ),
 		DESIGNINSERTER_VERSION,
 		true
 	);
