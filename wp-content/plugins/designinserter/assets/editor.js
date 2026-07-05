@@ -63,6 +63,7 @@
 					loading: 'lazy'
 				} )
 				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🎨' ),
+			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, part.title )
 		);
 	}
@@ -89,6 +90,7 @@
 					loading: 'lazy'
 				} )
 				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🖼️' ),
+			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, template.title ),
 			el( 'span', { className: 'di-card__badge', 'aria-hidden': 'true' }, 'テンプレ' )
 		);
@@ -154,6 +156,10 @@
 		var clearFilters = function() { setSearch( '' ); setActiveCat( '' ); };
 
 		return el( 'div', { className: 'di-picker' },
+			el( 'div', { className: 'di-picker__guide' },
+				el( 'strong', {}, '探す' ),
+				el( 'span', {}, ' キーワードやカテゴリで候補を絞り込みます。' )
+			),
 			sources.length > 0
 				? el( 'div', { className: 'di-picker__sources', role: 'group', 'aria-label': 'Source filter' },
 					sources.map( function( src ) {
@@ -286,7 +292,7 @@
 		}
 
 		if ( ! content ) {
-			return el( Notice, { status: 'info', isDismissible: false }, 'サイドバーからデザインパーツを選択してください' );
+			return el( Notice, { status: 'info', isDismissible: false }, '左の「探す」エリアでデザインを選んでください' );
 		}
 
 		// C-02: render in sandboxed iframe to isolate untrusted/tampered
@@ -306,15 +312,21 @@
 		].join( '' );
 
 		var wrapperClass = 'di-preview' + ( loading ? ' di-preview--refreshing' : '' );
-		return el( 'div', { className: wrapperClass, 'aria-busy': loading ? 'true' : 'false' },
-			el( 'iframe', {
-				className: 'di-preview__iframe',
-				title: __( 'パーツプレビュー', 'designinserter' ),
-				sandbox: '',
-				srcDoc: srcdoc,
-				style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
-			} ),
-			loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
+		return el( 'div', { className: 'di-selection' },
+			el( 'div', { className: 'di-selection__guide' },
+				el( 'strong', {}, '選ぶ / 調整' ),
+				el( 'span', {}, ' 選択中のデザインをここで確認します。' )
+			),
+			el( 'div', { className: wrapperClass, 'aria-busy': loading ? 'true' : 'false' },
+				el( 'iframe', {
+					className: 'di-preview__iframe',
+					title: __( 'パーツプレビュー', 'designinserter' ),
+					sandbox: '',
+					srcDoc: srcdoc,
+					style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
+				} ),
+				loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
+			)
 		);
 	}
 
