@@ -14,7 +14,7 @@ function designinserter_render_part( $part_id ) {
 	}
 
 	$id        = esc_attr( $part['id'] );
-	$title_raw = isset( $part['title'] ) ? $part['title'] : $part['id'];
+	$title_raw = designinserter_get_part_display_title( $part );
 	$title     = esc_html( $title_raw );
 	$html   = isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '';
 	$css    = isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '';

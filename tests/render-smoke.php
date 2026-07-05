@@ -10,6 +10,13 @@ function assert_true( $condition, $message ) {
 	}
 }
 
+function template_party_data_is_encrypted() {
+	$path = DESIGNINSERTER_PLUGIN_DIR . 'data/template-party-parts.json';
+	return file_exists( $path ) && 0 === strpos( (string) file_get_contents( $path, false, null, 0, 10 ), "\0GITCRYPT" );
+}
+
+$expected_part_count = template_party_data_is_encrypted() ? 222 : 360;
+
 $state = designinserter_stub_state();
 assert_true( isset( $state['shortcodes']['designinserter_part'] ), 'plugin registers shortcode on load' );
 assert_true( isset( $state['actions']['init'] ), 'plugin registers init hook on load' );
@@ -35,7 +42,7 @@ ob_start();
 designinserter_stub_call( $state['options_pages']['designinserter']['callback'] );
 $admin_output = ob_get_clean();
 assert_true( strpos( $admin_output, '<h1>Design Inserter</h1>' ) !== false, 'admin page callback renders heading' );
-assert_true( strpos( $admin_output, '<td>360</td>' ) !== false, 'admin page callback renders catalog count' );
+assert_true( strpos( $admin_output, '<td>' . $expected_part_count . '</td>' ) !== false, 'admin page callback renders catalog count' );
 assert_true( strpos( $admin_output, DESIGNINSERTER_SOURCE_URL ) !== false, 'admin page callback renders source URL' );
 assert_true( strpos( $admin_output, '[designinserter_part id="heading-1"]' ) !== false, 'admin page callback renders shortcode example' );
 
@@ -44,12 +51,12 @@ $state = designinserter_stub_state();
 assert_true( ! empty( $state['styles']['designinserter-frontend']['enqueued'] ), 'wp_enqueue_scripts enqueues frontend base style' );
 
 $editor_catalog = $state['localized']['designinserter-editor']['DesignInserterCatalog'];
-assert_true( count( $editor_catalog['parts'] ) === 360, 'editor catalog has 360 parts (222 CSS Stock + 138 TP)' );
+assert_true( count( $editor_catalog['parts'] ) === $expected_part_count, 'editor catalog has expected available parts' );
 assert_true( $editor_catalog['restUrl'] === 'http://example.test/wp-json/designinserter/v1/parts/', 'editor catalog exposes REST URL' );
 assert_true( $editor_catalog['nonce'] === 'test-nonce', 'editor catalog exposes nonce' );
 
 $catalog = designinserter_get_catalog();
-assert_true( count( $catalog['parts'] ) === 360, 'catalog has 360 parts (222 CSS Stock + 138 TP)' );
+assert_true( count( $catalog['parts'] ) === $expected_part_count, 'catalog has expected available parts' );
 
 $heading = designinserter_render_part( 'heading-1' );
 assert_true( strpos( $heading, '<!-- Design Inserter:' ) !== false, 'render includes source comment' );
