@@ -1,0 +1,22 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+          - '.github/labeler.yml'
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.js'
+          - '**/*.mjs'
+          - '**/*.css'
+
+php:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.php'
