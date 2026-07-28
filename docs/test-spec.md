@@ -542,7 +542,9 @@ Docker が使えん場合は Phase 2 の PHPCS / PHPUnit をローカルの `./v
 ```bash
 npm run php:lint > "$EV/p1-php-lint.txt" 2>&1   # DI-CMP-001
 npm test         > "$EV/p1-npm-test.txt" 2>&1   # DI-CAT / BLD / RND / SC / API / ADM 群
-grep -c '^skip' "$EV/p1-npm-test.txt"           # skip 件数を必ず記録する
+# skip 行は先頭に空白が付く（`  skip - ...`）ので行頭アンカーでは拾えん。
+# 0 件のとき grep は exit 1 を返すので、ゲート全体を落とさんように || true を付ける。
+grep -c 'skip - ' "$EV/p1-npm-test.txt" || true # skip 件数を必ず記録する
 ```
 
 ### Phase 2 — PHP 品質
@@ -650,6 +652,14 @@ WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Sta
 
 `tests/php/bootstrap.php` は `DESIGNINSERTER_VERSION` を `1.0.0` と定義しとるが、プラグイン本体は `0.2.0`。スタブなので現状のテストには影響せんが、バージョン依存の分岐を足したときに嘘の環境でテストすることになる。
 
+### F-6 E2E コマンドが clean install 後に起動できん（P1）
+
+`package.json` の `e2e:fresh` / `e2e:template-party` は `playwright` を直接呼ぶが、`@playwright/test` がどの依存にも宣言されとらん（`dependencies` も `devDependencies` も無い）。`npm ci` の直後は `playwright: not found` で即終了する。Docker が起動しても Phase 4 はこのままでは走らん。
+
+依存に足すと CI の全ジョブがブラウザ込みで数十MBを取得することになるので、CI 時間との釣り合いを決めてから直す。
+
+対応ケース: DI-E2E 群全件（実行前提）
+
 ### 環境制約
 
 | # | 制約 | 影響するケース数 | 解除条件 |
@@ -684,6 +694,7 @@ E-2 は E-1 と重なるケースがある（Template Party の E2E）。
 | 項目 | 対応ケース |
 |---|---|
 | `readme.txt` の作成 | DI-BLD-019 |
+| `@playwright/test` の依存宣言（F-6。CI 時間との釣り合いを決めてから） | DI-E2E 群全件 |
 | frontend.js 挙動 5 種の自動化（Playwright） | DI-FE-002〜008 |
 | axe-core による a11y 検査 | DI-FE-011 |
 | 3 viewport でのレイアウト検証 | DI-CMP-009 |
