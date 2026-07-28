@@ -379,6 +379,12 @@ function testEditorAssetContract() {
 function testRenderSmoke() {
   const result = run('php', ['tests/render-smoke.php']);
   if (result.status === 0) {
+    // スキップを黙らせると「検証済み」と誤読されるので、件数と理由をそのまま出す
+    for (const line of (result.stdout || '').split('\n')) {
+      if (line.includes('skip')) {
+        console.log(line.trimEnd());
+      }
+    }
     pass('PHP WordPress stub smoke passed');
   } else {
     fail(`PHP WordPress stub smoke failed\n${result.stderr || result.stdout}`);

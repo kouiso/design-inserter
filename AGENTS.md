@@ -39,6 +39,11 @@ task ci:fast         # npm ci + phpcs + php:lint + build + test + test:php
 task ci              # ci:fast のエイリアス
 ```
 
+## テスト
+
+テストケース台帳・実行手順・現状は `docs/test-spec.md` が正本。テストを足す前にそこを読む。
+ツールの使い方（portable smoke の環境変数など）は `docs/testing.md`。
+
 ## コーディング規約
 
 - **コメント**: 日本語、「なぜ」のみ

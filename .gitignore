@@ -45,6 +45,10 @@ vendor/
 # AI agent workspace (local-only, not distributed).
 .agents/
 .claude/
+.omc/
+
+# QA evidence: local-only. Commit with `git add -f` when a release snapshot is needed.
+.work/
 
 # Template Party bundles: local-only, not committed (non-redistribution per ToS; git-size protection).
 wp-content/plugins/designinserter/data/template-party-bundles/
