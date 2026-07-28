@@ -1,8 +1,11 @@
-( function( blocks, element, blockEditor, components, i18n ) {
+( function( blocks, element, blockEditor, components, i18n, data ) {
 	var el = element.createElement;
 	var useState = element.useState;
 	var useEffect = element.useEffect;
 	var Fragment = element.Fragment;
+	var useRef = element.useRef;
+	// wp.data.useSelect でエディター状態を購読し、ステータスやプレビューリンクの変化に追従させる
+	var useSelect = data && data.useSelect ? data.useSelect : null;
 	var InspectorControls = blockEditor.InspectorControls;
 	var PanelBody = components.PanelBody;
 	var TextControl = components.TextControl;
@@ -60,6 +63,7 @@
 					loading: 'lazy'
 				} )
 				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🎨' ),
+			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, part.title )
 		);
 	}
@@ -86,6 +90,7 @@
 					loading: 'lazy'
 				} )
 				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🖼️' ),
+			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, template.title ),
 			el( 'span', { className: 'di-card__badge', 'aria-hidden': 'true' }, 'テンプレ' )
 		);
@@ -151,6 +156,10 @@
 		var clearFilters = function() { setSearch( '' ); setActiveCat( '' ); };
 
 		return el( 'div', { className: 'di-picker' },
+			el( 'div', { className: 'di-picker__guide' },
+				el( 'strong', {}, '探す' ),
+				el( 'span', {}, ' キーワードやカテゴリで候補を絞り込みます。' )
+			),
 			sources.length > 0
 				? el( 'div', { className: 'di-picker__sources', role: 'group', 'aria-label': 'Source filter' },
 					sources.map( function( src ) {
@@ -283,7 +292,7 @@
 		}
 
 		if ( ! content ) {
-			return el( Notice, { status: 'info', isDismissible: false }, 'サイドバーからデザインパーツを選択してください' );
+			return el( Notice, { status: 'info', isDismissible: false }, '左の「探す」エリアでデザインを選んでください' );
 		}
 
 		// C-02: render in sandboxed iframe to isolate untrusted/tampered
@@ -303,15 +312,21 @@
 		].join( '' );
 
 		var wrapperClass = 'di-preview' + ( loading ? ' di-preview--refreshing' : '' );
-		return el( 'div', { className: wrapperClass, 'aria-busy': loading ? 'true' : 'false' },
-			el( 'iframe', {
-				className: 'di-preview__iframe',
-				title: __( 'パーツプレビュー', 'designinserter' ),
-				sandbox: '',
-				srcDoc: srcdoc,
-				style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
-			} ),
-			loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
+		return el( 'div', { className: 'di-selection' },
+			el( 'div', { className: 'di-selection__guide' },
+				el( 'strong', {}, '選ぶ / 調整' ),
+				el( 'span', {}, ' 選択中のデザインをここで確認します。' )
+			),
+			el( 'div', { className: wrapperClass, 'aria-busy': loading ? 'true' : 'false' },
+				el( 'iframe', {
+					className: 'di-preview__iframe',
+					title: __( 'パーツプレビュー', 'designinserter' ),
+					sandbox: '',
+					srcDoc: srcdoc,
+					style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
+				} ),
+				loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
+			)
 		);
 	}
 
@@ -330,6 +345,86 @@
 					style: { width: '100%', height: '480px', border: 0, display: 'block', borderRadius: '4px' }
 				} )
 				: el( 'p', { style: { color: '#757575', fontSize: '13px', margin: 0 } }, 'プレビューURLがありません' )
+		);
+	}
+
+	function computePostConfirmTarget( editorSelect ) {
+		if ( ! editorSelect ) {
+			return null;
+		}
+
+		var currentPost = editorSelect.getCurrentPost ? editorSelect.getCurrentPost() : null;
+		var status = editorSelect.getEditedPostAttribute
+			? editorSelect.getEditedPostAttribute( 'status' )
+			: ( currentPost && currentPost.status ? currentPost.status : '' );
+		var permalink = editorSelect.getPermalink ? editorSelect.getPermalink() : '';
+		var postLink = currentPost && currentPost.link ? currentPost.link : '';
+		var editedLink = editorSelect.getEditedPostAttribute
+			? editorSelect.getEditedPostAttribute( 'link' )
+			: '';
+		var previewLink = editorSelect.getEditedPostPreviewLink
+			? editorSelect.getEditedPostPreviewLink()
+			: '';
+
+		if ( status === 'publish' && ( permalink || postLink ) ) {
+			return {
+				url: permalink || postLink,
+				label: __( '公開ページで確認', 'designinserter' ),
+				message: __( '素材を入れました。公開ページで見た目を確認してください。', 'designinserter' )
+			};
+		}
+
+		if ( editedLink || previewLink || permalink || postLink ) {
+			return {
+				url: editedLink || previewLink || permalink || postLink,
+				label: __( 'プレビューで確認', 'designinserter' ),
+				message: __( '素材を入れました。プレビューで見た目を確認してください。', 'designinserter' )
+			};
+		}
+
+		return null;
+	}
+
+	function InsertConfirmNotice( props ) {
+		var insertedKey = props.insertedKey;
+		var noticeRef = useRef( null );
+		// useSelect が使える環境ではエディター状態を購読して自動再描画。無ければ従来の一度きり読み取りにフォールバック。
+		var target = useSelect
+			? useSelect( function( select ) {
+				return computePostConfirmTarget( select( 'core/editor' ) );
+			}, [] )
+			: computePostConfirmTarget(
+				window.wp && window.wp.data && window.wp.data.select
+					? window.wp.data.select( 'core/editor' )
+					: null
+			);
+
+		useEffect( function() {
+			if ( insertedKey && noticeRef.current ) {
+				noticeRef.current.focus();
+			}
+		}, [ insertedKey ] );
+
+		if ( ! insertedKey ) {
+			return null;
+		}
+
+		return el( 'div', {
+			className: 'di-insert-confirm',
+			ref: noticeRef,
+			tabIndex: '-1'
+		},
+			el( Notice, { status: 'success', isDismissible: false },
+				el( 'p', { className: 'di-insert-confirm__message' }, target ? target.message : __( '素材を入れました。', 'designinserter' ) ),
+				el( 'p', { className: 'di-insert-confirm__guidance' }, __( 'エディターと公開ページでは表示が変わる場合があります。', 'designinserter' ) ),
+				target ? el( Button, {
+					variant: 'secondary',
+					size: 'small',
+					href: target.url,
+					target: '_blank',
+					rel: 'noopener'
+				}, target.label ) : null
+			)
 		);
 	}
 
@@ -398,6 +493,9 @@
 			var selectedTemplateState = useState( null );
 			var selectedTemplate = selectedTemplateState[0];
 			var setSelectedTemplate = selectedTemplateState[1];
+			var insertedKeyState = useState( '' );
+			var insertedKey = insertedKeyState[0];
+			var setInsertedKey = insertedKeyState[1];
 
 			return el( Fragment, {},
 				el( InspectorControls, {},
@@ -408,14 +506,17 @@
 							onSelectPart: function( id ) {
 								props.setAttributes( { partId: id } );
 								setSelectedTemplate( null );
+								setInsertedKey( 'part:' + id + ':' + Date.now() );
 							},
 							onSelectTemplate: function( tmpl ) {
 								setSelectedTemplate( tmpl );
 								props.setAttributes( { partId: '' } );
+								setInsertedKey( 'template:' + tmpl.id + ':' + Date.now() );
 							}
 						} )
 					)
 				),
+				el( InsertConfirmNotice, { insertedKey: insertedKey } ),
 				selectedTemplate
 					? el( Fragment, {},
 						el( TemplatePreview, { template: selectedTemplate } ),
@@ -431,5 +532,6 @@
 	window.wp.element,
 	window.wp.blockEditor,
 	window.wp.components,
-	window.wp.i18n
+	window.wp.i18n,
+	window.wp.data
 );

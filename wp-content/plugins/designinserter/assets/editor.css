@@ -197,3 +197,50 @@
 .di-create-page-result {
 	padding: 12px 0 4px;
 }
+
+/* Insert confirmation */
+.di-insert-confirm {
+	margin-bottom: 12px;
+}
+
+.di-insert-confirm:focus {
+	outline: none;
+}
+
+.di-insert-confirm__message,
+.di-insert-confirm__guidance {
+	margin: 0 0 8px;
+}
+
+.di-insert-confirm__guidance {
+	color: #757575;
+	font-size: 13px;
+}
+
+.di-picker__guide,
+.di-selection__guide {
+	margin: 0 0 8px;
+	padding: 8px 10px;
+	border-left: 3px solid var(--wp-admin-theme-color, #007cba);
+	background: #f6f7f7;
+	color: #50575e;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.di-picker__guide strong,
+.di-selection__guide strong {
+	color: #1d2327;
+}
+
+.di-card__selected-badge {
+	display: inline-block;
+	margin: -2px 0 4px;
+	padding: 2px 6px;
+	border-radius: 999px;
+	background: var(--wp-admin-theme-color, #007cba);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.4;
+}

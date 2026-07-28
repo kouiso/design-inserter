@@ -108,6 +108,41 @@ final class DesignInserterCoreTest extends TestCase {
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/templates/', $catalog['templatesRestUrl'] );
 	}
 
+
+	public function test_editor_catalog_uses_japanese_friendly_title_when_title_is_empty_or_slug() {
+		$empty_title_item = designinserter_shape_part_for_editor_catalog(
+			array(
+				'id'            => 'button-54',
+				'title'         => '',
+				'categoryLabel' => 'ボタン',
+			)
+		);
+		$slug_title_item  = designinserter_shape_part_for_editor_catalog(
+			array(
+				'id'            => 'button-55',
+				'title'         => 'button-55',
+				'categoryLabel' => 'ボタン',
+			)
+		);
+
+		$this->assertSame( 'ボタン 54', $empty_title_item['title'] );
+		$this->assertSame( 'ボタン 55', $slug_title_item['title'] );
+		$this->assertNotSame( 'button-54', $empty_title_item['title'] );
+		$this->assertStringContainsString( 'ボタン', $empty_title_item['title'] );
+	}
+
+	public function test_editor_catalog_keeps_existing_readable_title() {
+		$item = designinserter_shape_part_for_editor_catalog(
+			array(
+				'id'            => 'button-54',
+				'title'         => '細い矢印',
+				'categoryLabel' => 'ボタン',
+			)
+		);
+
+		$this->assertSame( '細い矢印', $item['title'] );
+	}
+
 	public function test_editor_catalog_exposes_three_source_filters() {
 		$catalog  = designinserter_get_editor_catalog();
 		$sources  = $catalog['sources'];
