@@ -17,16 +17,32 @@ if ( ! function_exists( 'designinserter_tp_data_available' ) ) {
 			return $available;
 		}
 
-		$path = __DIR__ . '/../wp-content/plugins/designinserter/data/template-party-parts.json';
+		// 見るのは「復号できたか」だけにする。件数が 0 なら復号は出来とるので available は true を返し、
+		// 中身の妥当性は各テストの件数アサーションに落とす。ここで空を locked 扱いにすると、
+		// カタログが空へ退行したときに skip されて黙って緑になる。
+		$required = array(
+			__DIR__ . '/../wp-content/plugins/designinserter/data/template-party-parts.json'     => 'parts',
+			__DIR__ . '/../wp-content/plugins/designinserter/data/template-party-templates.json' => 'templates',
+		);
 
-		if ( ! is_readable( $path ) ) {
-			$available = false;
+		foreach ( $required as $path => $key ) {
+			if ( ! is_readable( $path ) ) {
+				$available = false;
 
-			return $available;
+				return $available;
+			}
+
+			$decoded = json_decode( (string) file_get_contents( $path ), true );
+
+			// git-crypt の暗号文は JSON として読めんので decode が null になる。
+			if ( ! is_array( $decoded ) || ! array_key_exists( $key, $decoded ) ) {
+				$available = false;
+
+				return $available;
+			}
 		}
 
-		$decoded   = json_decode( (string) file_get_contents( $path ), true );
-		$available = is_array( $decoded ) && ! empty( $decoded['parts'] );
+		$available = true;
 
 		return $available;
 	}

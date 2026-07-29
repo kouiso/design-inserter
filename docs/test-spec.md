@@ -8,7 +8,7 @@
 
 ### SSOT の関係
 
-```
+```text
 openspec/specs/*.md   要件・仕様の正本（受け入れ基準 50 項目）
         │
         ├─ docs/requirements.md   要件（FR / NFR / 成功基準 6 項目）
@@ -335,10 +335,10 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-SEC-007 | エディタプレビューが sandbox iframe で隔離される | `sandbox: ''` | `scripts/test.mjs` | 自動済 2026-07-28 |
 | DI-SEC-008 | `bundleDir` のパストラバーサルが遮断される | basename + 文字制限 + realpath 検証 | — | 未実装（重要） |
 | DI-SEC-009 | カタログ HTML を意図的に `wp_kses_post` に通さん設計が明文化されとる | 仕様どおり素通し | コードレビュー | 手動要 |
-| DI-SEC-010 | phpcs（WordPress standard）違反 0 | exit 0 | `./vendor/bin/phpcs` | 自動済 2026-07-28 |
-| DI-SEC-011 | 出力エスケープ漏れが無い | 違反 0 | 同上 | 自動済 2026-07-28 |
+| DI-SEC-010 | phpcs 違反 0 | exit 0 | `./vendor/bin/phpcs` | 自動済 2026-07-28（ただし `phpcs.xml.dist` は Generic / Squiz のみ。WordPress Coding Standards は未導入） |
+| DI-SEC-011 | 出力エスケープ漏れが無い | 違反 0 | — | 未実装。現行 phpcs にエスケープ sniff（`WordPress.Security.EscapeOutput`）が無いので、phpcs の緑を根拠にできん |
 | DI-SEC-012 | `full-page.php` の無エスケープ echo が realpath ガードの内側にある | ガード内 | コードレビュー + DI-TPL-007 | 手動要 |
-| DI-SEC-013 | Template Party データが暗号化されたままコミットされとる | ciphertext である | `git check-attr filter` + 先頭バイト確認 | 自動済 2026-07-28 |
+| DI-SEC-013 | Template Party データが暗号化されたままコミットされとる | ciphertext である | `git check-attr filter` + 先頭バイト確認 | 手動要（2026-07-28 に手で実行して確認。どのゲートにも組み込まれとらん） |
 | DI-SEC-014 | 配布 zip に Template Party の平文データが混入せん | 混入 0 | — | 未実装（F-4 と対） |
 | DI-SEC-015 | phpcs の検査範囲が `tests/` 直下と `scripts/` を含む | 含む | 現状 `phpcs.xml.dist` は `wp-content/plugins/designinserter` と `tests/php` のみ | 未実装 |
 
@@ -530,7 +530,11 @@ mkdir -p "$EV" && echo "$EV" > .work/qa/LATEST
 
 ```bash
 docker info                > "$EV/p0-docker.txt" 2>&1 || echo "Docker 停止中: Phase 2 の一部 / 4 / 5 は INAPPLICABLE"
-git-crypt status -e | head > "$EV/p0-gitcrypt.txt" 2>&1
+# `git-crypt status -e | head` と書くと、git-crypt が入っとらん時でも head の成功が返る。
+# 「暗号化されとるか分からんまま Phase 0 が緑」になるのが一番まずいので、存在確認を分ける。
+command -v git-crypt > "$EV/p0-gitcrypt.txt" 2>&1 \
+  && git-crypt status -e >> "$EV/p0-gitcrypt.txt" 2>&1 \
+  || echo "git-crypt 未導入。暗号化状態は未確認として扱う" >> "$EV/p0-gitcrypt.txt"
 node --version && npm ci   > "$EV/p0-npm-ci.txt" 2>&1
 composer install --no-interaction --no-progress > "$EV/p0-composer.txt" 2>&1
 ```
@@ -550,7 +554,7 @@ grep -c 'skip - ' "$EV/p1-npm-test.txt" || true # skip 件数を必ず記録す�
 ### Phase 2 — PHP 品質
 
 ```bash
-./vendor/bin/phpcs   > "$EV/p2-phpcs.txt" 2>&1     # DI-SEC-010, DI-SEC-011, DI-ADM-008
+./vendor/bin/phpcs   > "$EV/p2-phpcs.txt" 2>&1     # DI-SEC-010, DI-ADM-008
 ./vendor/bin/phpunit > "$EV/p2-phpunit.txt" 2>&1   # DI-DAT 群
 ```
 
@@ -560,7 +564,12 @@ Docker 経由で走らせる場合は `npm run phpcs` / `npm run test:php`。
 
 ```bash
 npm run build            > "$EV/p3-build.txt" 2>&1      # DI-BLD-013〜016
-unzip -tq dist/designinserter-*.zip > "$EV/p3-zip.txt" 2>&1
+
+# dist/ に旧版の zip が残っとると `dist/*.zip` が複数に展開され、
+# unzip は 2 個目以降を「アーカイブ内のファイル名」と解釈して偽の失敗を出す。
+# 今ビルドした版だけを名指しする。
+ZIP="dist/designinserter-$(node -p "require('./package.json').version").zip"
+unzip -tq "$ZIP" > "$EV/p3-zip.txt" 2>&1
 npm run smoke:wp:portable > "$EV/p3-portable.txt" 2>&1  # DI-CMP-005, DI-BLD-017
 ```
 
@@ -577,7 +586,10 @@ npm run e2e:template-party > "$EV/p4-e2e-tp.txt" 2>&1      # DI-E2E-005〜009（
 ### Phase 5 — 実機 WordPress（Docker 必須）
 
 ```bash
-docker compose up -d --wait > "$EV/p5-up.txt" 2>&1
+# `docker-compose.yml` の WP_AUTO_INSTALL は既定 false で、false のときは
+# entrypoint が `wp core install` を飛ばす。DB 未作成のまま以降の wp eval が全部落ちるので、
+# 新しいボリュームで始めるときは必ず true を渡す。
+WP_AUTO_INSTALL=true docker compose up -d --wait > "$EV/p5-up.txt" 2>&1
 WP="docker compose exec -T wordpress"
 
 $WP wp eval 'echo do_shortcode("[designinserter_part id=\"heading-1\"]");' --allow-root > "$EV/p5-shortcode.html"
@@ -585,8 +597,12 @@ $WP wp eval 'echo do_shortcode("[designinserter_part id=\"heading-1\"]");' --all
 grep -q 'data-designinserter-id="heading-1"' "$EV/p5-shortcode.html" && echo "DI-SC-011 OK [実機目視]"
 
 $WP wp eval 'echo do_blocks("<!-- wp:designinserter/css-part {\"partId\":\"loading-4\"} /-->");' --allow-root > "$EV/p5-block.html"
+# wp eval は目印が出んでも成功で返る。保存するだけでは判定にならんので必ず突き合わせる。
+grep -q 'data-designinserter-id="loading-4"' "$EV/p5-block.html" && echo "DI-BLK-010 OK [実機目視]"
 
 $WP wp eval 'wp_set_current_user(1); $r=new WP_REST_Request("GET","/designinserter/v1/parts/heading-1"); $r->set_param("id","heading-1"); echo wp_json_encode(rest_do_request($r)->get_data());' --allow-root > "$EV/p5-rest.json"
+# REST はエラー本文でも 0 で返るので、id が入っとることと code が無いことを両方見る。
+node -e 'const d=require("fs").readFileSync(process.argv[1],"utf8");const j=JSON.parse(d);if(j.code||j.id!=="heading-1")throw new Error("DI-API-014 NG: "+d.slice(0,200));console.log("DI-API-014 OK [実機目視]")' "$EV/p5-rest.json"
 
 # F-1 の再現証跡。現状は false が返る（フィルタが登録されとらん）
 $WP wp eval 'var_dump(has_filter("template_include"));' --allow-root > "$EV/p5-template-filter.txt"
@@ -596,7 +612,10 @@ curl -si http://localhost:8080/wp-json/designinserter/v1/parts/heading-1 | head 
 
 続けてブラウザで `http://localhost:8080/wp-admin`（`admin` / `admin`）を開き、次を順に確認して各項目のスクリーンショットまたは録画を `$EV` に残す。
 
-1. プラグイン → 新規追加 → アップロード → `dist/designinserter-*.zip` を有効化（DI-BLD-020）
+1. プラグイン → 新規追加 → アップロード → ビルドした zip を有効化（DI-BLD-020）
+   dev stack は `./wp-content/plugins` を bind mount しとるので、`designinserter/` が先に在る。
+   このままではアップローダが「新規インストール」を通らんので、mount の無い別 WordPress を使うか、
+   先に `npm run wp -- plugin delete designinserter` で source 側を消してから上げる。
 2. 投稿 → 新規追加 → Design Inserter ブロック挿入 → 検索・カテゴリ絞込・カードクリック（DI-EDT-013〜015・018〜020）
 3. 公開 → フロントで behavior 5 種を実操作（DI-FE-002〜009）
 4. 固定ページ編集画面のテンプレート選択欄（DI-TPL-002。**現状は選択肢が出んことが F-1 の証跡**）
@@ -716,6 +735,8 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 | PHP 7.4 での動作確認（`Requires PHP: 7.4` を主張しとる） | DI-CMP-003 |
 | ショートコードとブロックの出力等価比較 | DI-SC-007 |
 | phpcs の検査範囲を `tests/` 直下と `scripts/` へ拡大 | DI-SEC-015 |
+| phpcs へ WordPress Coding Standards（`WordPress.Security.EscapeOutput`）を導入。現行は Generic / Squiz だけでエスケープ漏れを検出できん | DI-SEC-010, DI-SEC-011 |
+| `git check-attr` による ciphertext 確認をゲートへ組み込む（現状は手作業） | DI-SEC-013 |
 
 ### P2 — 継続的な改善
 
@@ -736,5 +757,5 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 
 | 日付 | 内容 |
 |---|---|
-| 2026-07-28 | 初版。`docs/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 198 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
+| 2026-07-28 | 初版。`docs/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 226 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
 | 2026-07-29 | Docker 抜きで実 WordPress を立てられる `smoke:wp:portable` 経路で Phase 5 の一部を実測。8 ケースを環境制約NGから実測済みへ更新。その過程で F-7（実 WP スモークが黙って赤）を発見して修正 |
