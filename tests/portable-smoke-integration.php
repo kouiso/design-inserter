@@ -35,11 +35,23 @@ if (!$script || empty($script->extra['data']) || false === strpos($script->extra
     exit(1);
 }
 
+// Template Party のデータは git-crypt で暗号化されとるので、鍵の有無で総件数が変わる
+// （ロック時 222 / 復号時 360）。222 を直書きするとリリース用の復号済み環境で必ず落ちる。
+// CSS Stock 由来が 222 件という不変条件だけを固定し、総数はカタログ実体から引く。
+$catalog_parts    = designinserter_get_catalog()['parts'];
+$expected_total   = count($catalog_parts);
+$css_stock_parts  = array_filter($catalog_parts, static fn($p) => ($p['source'] ?? '') === 'css-stock');
+
+if (222 !== count($css_stock_parts)) {
+    fwrite(STDERR, "css-stock part count smoke failed: " . count($css_stock_parts) . "\n");
+    exit(1);
+}
+
 preg_match('/var DesignInserterCatalog = (.*);/s', $script->extra['data'], $catalog_match);
 $localized_catalog = isset($catalog_match[1]) ? json_decode($catalog_match[1], true) : null;
 if (
     !is_array($localized_catalog)
-    || count($localized_catalog['parts']) !== 222
+    || count($localized_catalog['parts']) !== $expected_total
     || rest_url('designinserter/v1/parts/') !== $localized_catalog['restUrl']
     || empty($localized_catalog['nonce'])
     || 0 !== strpos($localized_catalog['parts'][0]['previewImage'], DESIGNINSERTER_PLUGIN_URL . 'assets/previews/')
@@ -69,12 +81,23 @@ if (!$denied_response->is_error() || !in_array($denied_response->get_status(), [
 
 wp_set_current_user(1);
 
-$routes        = rest_get_server()->get_routes();
-$route_pattern = '/designinserter/v1/parts/(?P<id>[a-z0-9\-]+)';
+$routes = rest_get_server()->get_routes();
+
+// 経路そのものは id の許容文字を変えることがある（Template Party の id は `_` を含む）。
+// 正規表現を丸ごと書き写すと実装を変えるたびにここが腐って赤になるので、前方一致で拾う。
+$parts_route = null;
+foreach ($routes as $route => $handlers) {
+    if (0 === strpos($route, '/designinserter/v1/parts/(?P<id>')) {
+        $parts_route = $handlers[0];
+        break;
+    }
+}
+
 if (
-    empty($routes[$route_pattern][0]['methods']['GET'])
-    || empty($routes[$route_pattern][0]['args']['id']['required'])
-    || 'sanitize_key' !== $routes[$route_pattern][0]['args']['id']['sanitize_callback']
+    null === $parts_route
+    || empty($parts_route['methods']['GET'])
+    || empty($parts_route['args']['id']['required'])
+    || 'sanitize_key' !== $parts_route['args']['id']['sanitize_callback']
 ) {
     fwrite(STDERR, "REST route contract smoke failed\n");
     exit(1);
@@ -85,7 +108,7 @@ designinserter_admin_page();
 $admin_output = ob_get_clean();
 if (
     false === strpos($admin_output, '<h1>Design Inserter</h1>')
-    || false === strpos($admin_output, '<td>222</td>')
+    || false === strpos($admin_output, '<td>' . $expected_total . '</td>')
     || false === strpos($admin_output, DESIGNINSERTER_SOURCE_URL)
     || false === strpos($admin_output, '[designinserter_part id="heading-1"]')
 ) {
@@ -134,6 +157,18 @@ $response = rest_do_request($request);
 $data     = $response->get_data();
 if ($response->is_error() || empty($data['id']) || 'heading-3' !== $data['id']) {
     fwrite(STDERR, "REST smoke failed\n");
+    exit(1);
+}
+
+$underscore_request  = new WP_REST_Request('GET', '/designinserter/v1/parts/underscore_probe');
+$underscore_response = rest_do_request($underscore_request);
+$underscore_data     = $underscore_response->get_data();
+if (
+    !$underscore_response->is_error()
+    || 404 !== $underscore_response->get_status()
+    || 'not_found' !== ($underscore_data['code'] ?? null)
+) {
+    fwrite(STDERR, "REST underscore id routing smoke failed\n");
     exit(1);
 }
 

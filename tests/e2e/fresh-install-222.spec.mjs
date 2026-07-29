@@ -6,6 +6,7 @@ import { test, expect } from '@playwright/test';
 
 const execFileAsync = promisify(execFile);
 const repoRoot = path.resolve(new URL('../..', import.meta.url).pathname);
+const packageJson = JSON.parse(await readFile(path.join(repoRoot, 'package.json'), 'utf8'));
 const tmpRoot = path.join(repoRoot, '.tmp', 'e2e-fresh-wp');
 const evidenceDir = path.join(tmpRoot, 'evidence');
 const composePath = path.join(tmpRoot, 'docker-compose.yml');
@@ -37,12 +38,23 @@ async function prepareDatabase() {
 	// Issue #13: the spec now provisions its own db service inside the
 	// generated e2e compose (see writeFreshCompose). This runs inside the
 	// e2e compose project, not against the main dev stack.
-	await dockerCompose(['exec', '-T', 'db', 'mysql',
-		'-uroot',
-		'-prootpass',
-		'-e',
-		'DROP DATABASE IF EXISTS designinserter_e2e; CREATE DATABASE designinserter_e2e CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON designinserter_e2e.* TO "wordpress"@"%"; FLUSH PRIVILEGES;',
-	], { timeout: 60000 });
+	let lastError;
+	for (let attempt = 0; attempt < 30; attempt += 1) {
+		try {
+			await dockerCompose(['exec', '-T', 'db', 'mysql',
+				'-uroot',
+				'-prootpass',
+				'-e',
+				'DROP DATABASE IF EXISTS designinserter_e2e; CREATE DATABASE designinserter_e2e CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON designinserter_e2e.* TO "wordpress"@"%"; FLUSH PRIVILEGES;',
+			], { timeout: 60000 });
+			return;
+		} catch (error) {
+			lastError = error;
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		}
+	}
+
+	throw lastError;
 }
 
 async function cleanupDatabase() {
@@ -261,7 +273,7 @@ async function writeFreshCompose() {
       WP_ADMIN_EMAIL: admin@example.com
     volumes:
       - wp_core:/var/www/html
-      - ${yamlDoubleQuoted(`${path.join(repoRoot, '.tmp', 'dist')}:/dist:ro`)}
+      - ${yamlDoubleQuoted(`${path.join(repoRoot, 'dist')}:/dist:ro`)}
       - ${yamlDoubleQuoted(`${tmpRoot}:/e2e`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'php.ini')}:/usr/local/etc/php/conf.d/custom.ini:ro`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'mysql-client.cnf')}:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro`)}
@@ -301,7 +313,7 @@ test.beforeAll(async () => {
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'option', 'update', 'permalink_structure', '', '--allow-root'], { timeout: 60000 });
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'rewrite', 'flush', '--allow-root'], { timeout: 60000 });
 
-	const zipPath = '/dist/designinserter-1.0.0.zip';
+	const zipPath = `/dist/designinserter-${packageJson.version}.zip`;
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'plugin', 'install', zipPath, '--activate', '--allow-root'], { timeout: 60000 });
 	const contentPath = await createAllDesignsBlockContent();
 	allDesignsPageId = await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'post', 'create', '/e2e/all-designs-blocks.html', '--post_type=page', '--post_status=publish', '--post_title=All Designs E2E', '--porcelain', '--allow-root'], { timeout: 60000 });
@@ -479,8 +491,10 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 	}, null, { timeout: 30000 });
 
 	const selectedState = await getDesignInserterEditorState(page);
-	const preview = await getEditorCanvasLocator(page, '.di-preview__render .button-54');
-	await expect(preview.first()).toBeVisible();
+	const previewIframe = await getEditorCanvasLocator(page, '.di-preview__iframe');
+	await expect(previewIframe.first()).toBeVisible();
+	const preview = previewIframe.first().contentFrame();
+	await expect(preview.locator('.button-54')).toBeVisible();
 	await page.waitForTimeout(1500);
 	const previewContainer = await getEditorCanvasLocator(page, '.di-preview');
 	const racePreviewState = await previewContainer.first().evaluate((root) => ({
@@ -491,8 +505,8 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 		state: racePreviewState,
 		events: previewRaceEvents,
 	});
-	await expect(preview.first()).toBeVisible();
-	await expect(await getEditorCanvasLocator(page, '.di-preview__render .heading-1')).toHaveCount(0);
+	await expect(preview.locator('.button-54')).toBeVisible();
+	await expect(preview.locator('.heading-1')).toHaveCount(0);
 	await page.screenshot({ path: path.join(evidenceDir, 'gutenberg-part-picker-selected.png'), fullPage: false });
 
 	const startedAt = Date.now();

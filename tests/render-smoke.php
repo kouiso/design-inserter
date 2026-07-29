@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/wp-stubs.php';
+require __DIR__ . '/tp-availability.php';
 require __DIR__ . '/../wp-content/plugins/designinserter/designinserter.php';
 
 function assert_true( $condition, $message ) {
@@ -10,12 +11,25 @@ function assert_true( $condition, $message ) {
 	}
 }
 
-function template_party_data_is_encrypted() {
-	$path = DESIGNINSERTER_PLUGIN_DIR . 'data/template-party-parts.json';
-	return file_exists( $path ) && 0 === strpos( (string) file_get_contents( $path, false, null, 0, 10 ), "\0GITCRYPT" );
+$designinserter_skipped = array();
+
+/**
+ * Template Party のデータが復号できん環境では、その分のアサーションを飛ばす。
+ * 黙って通ると「検証した」と誤読されるので、飛ばした件数と理由を必ず出力する。
+ */
+function assert_true_tp( $condition, $message ) {
+	global $designinserter_skipped;
+
+	if ( ! designinserter_tp_data_available() ) {
+		$designinserter_skipped[] = $message;
+
+		return;
+	}
+
+	assert_true( $condition, $message );
 }
 
-$expected_part_count = template_party_data_is_encrypted() ? 222 : 360;
+$designinserter_expected_parts = designinserter_tp_data_available() ? 360 : 222;
 
 $state = designinserter_stub_state();
 assert_true( isset( $state['shortcodes']['designinserter_part'] ), 'plugin registers shortcode on load' );
@@ -42,7 +56,7 @@ ob_start();
 designinserter_stub_call( $state['options_pages']['designinserter']['callback'] );
 $admin_output = ob_get_clean();
 assert_true( strpos( $admin_output, '<h1>Design Inserter</h1>' ) !== false, 'admin page callback renders heading' );
-assert_true( strpos( $admin_output, '<td>' . $expected_part_count . '</td>' ) !== false, 'admin page callback renders catalog count' );
+assert_true( strpos( $admin_output, '<td>' . $designinserter_expected_parts . '</td>' ) !== false, 'admin page callback renders catalog count' );
 assert_true( strpos( $admin_output, DESIGNINSERTER_SOURCE_URL ) !== false, 'admin page callback renders source URL' );
 assert_true( strpos( $admin_output, '[designinserter_part id="heading-1"]' ) !== false, 'admin page callback renders shortcode example' );
 
@@ -51,12 +65,15 @@ $state = designinserter_stub_state();
 assert_true( ! empty( $state['styles']['designinserter-frontend']['enqueued'] ), 'wp_enqueue_scripts enqueues frontend base style' );
 
 $editor_catalog = $state['localized']['designinserter-editor']['DesignInserterCatalog'];
-assert_true( count( $editor_catalog['parts'] ) === $expected_part_count, 'editor catalog has expected available parts' );
+assert_true( count( $editor_catalog['parts'] ) === $designinserter_expected_parts, 'editor catalog part count matches decrypted catalog sources' );
+assert_true( count( array_filter( $editor_catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' ) ) === 222, 'editor catalog always exposes 222 CSS Stock parts' );
+assert_true_tp( count( array_filter( $editor_catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'template-party' ) ) === 138, 'editor catalog exposes 138 Template Party parts' );
 assert_true( $editor_catalog['restUrl'] === 'http://example.test/wp-json/designinserter/v1/parts/', 'editor catalog exposes REST URL' );
 assert_true( $editor_catalog['nonce'] === 'test-nonce', 'editor catalog exposes nonce' );
 
 $catalog = designinserter_get_catalog();
-assert_true( count( $catalog['parts'] ) === $expected_part_count, 'catalog has expected available parts' );
+assert_true( count( $catalog['parts'] ) === $designinserter_expected_parts, 'catalog part count matches decrypted catalog sources' );
+assert_true( count( array_filter( $catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' ) ) === 222, 'catalog always contains 222 CSS Stock parts' );
 
 $heading = designinserter_render_part( 'heading-1' );
 assert_true( strpos( $heading, '<!-- Design Inserter:' ) !== false, 'render includes source comment' );
@@ -158,4 +175,11 @@ $rest_forbidden = rest_do_request( new WP_REST_Request( 'GET', '/designinserter/
 assert_true( $rest_forbidden instanceof WP_Error && 'rest_forbidden' === $rest_forbidden->code && 403 === $rest_forbidden->data['status'], 'rest_do_request returns 403 WP_Error when permission is denied' );
 designinserter_stub_set_current_user_can( true );
 
-echo "WordPress stub smoke passed\n";
+if ( $designinserter_skipped ) {
+	echo 'WordPress stub smoke skipped ' . count( $designinserter_skipped ) . " Template Party assertion(s) (git-crypt locked):\n";
+	foreach ( $designinserter_skipped as $skipped_message ) {
+		echo "  skip - {$skipped_message}\n";
+	}
+}
+
+echo 'WordPress stub smoke passed (catalog mode: ' . ( designinserter_tp_data_available() ? 'css-stock + template-party' : 'css-stock only' ) . ")\n";

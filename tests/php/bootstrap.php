@@ -76,5 +76,6 @@ function add_shortcode( $tag, $callback ) {
 	$GLOBALS['designinserter_shortcodes'][ $tag ] = $callback;
 }
 
+require_once __DIR__ . '/../tp-availability.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/data.php';
 require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/render.php';

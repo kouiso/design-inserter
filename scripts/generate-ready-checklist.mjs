@@ -45,7 +45,7 @@ const commandBook = {
 	},
 	buildZip: {
 		command: 'npm run build:zip',
-		artifact: '.tmp/dist/designinserter-<package.version>.zip',
+		artifact: 'dist/designinserter-<package.version>.zip',
 	},
 	phpunit: {
 		command: 'npm run test:php',
@@ -141,8 +141,8 @@ const parsePluginHeader = (source) => {
 	return header;
 };
 
-const collectPackageFacts = async (packageJson) => {
-	const distDir = path.join(repoRoot, '.tmp/dist');
+export const collectPackageFacts = async (packageJson, rootDir = repoRoot) => {
+	const distDir = path.join(rootDir, 'dist');
 	let distFiles = [];
 
 	try {
@@ -154,17 +154,19 @@ const collectPackageFacts = async (packageJson) => {
 	const expectedZipName = `${pluginSlug}-${packageJson.version}.zip`;
 	const expectedZipPath = path.join(distDir, expectedZipName);
 	const expectedZipExists = await fileExists(expectedZipPath);
+	const distZips = distFiles.filter((file) => file.endsWith('.zip')).sort();
 
 	return {
 		name: packageJson.name,
 		version: packageJson.version,
 		private: packageJson.private === true,
 		expectedZip: {
-			path: path.relative(repoRoot, expectedZipPath),
+			path: path.relative(rootDir, expectedZipPath),
 			exists: expectedZipExists,
 			sha256: expectedZipExists ? await sha256File(expectedZipPath) : '',
 		},
-		distZips: distFiles.filter((file) => file.endsWith('.zip')).sort(),
+		distZips,
+		staleDistZips: distZips.filter((file) => file !== expectedZipName),
 	};
 };
 
@@ -639,7 +641,9 @@ const main = async () => {
 	console.log(`Wrote ${path.relative(repoRoot, args.outputPath)}`);
 };
 
-main().catch((error) => {
-	console.error(error);
-	process.exitCode = 1;
-});
+if (path.resolve(process.argv[1] || '') === fileURLToPath(import.meta.url)) {
+	main().catch((error) => {
+		console.error(error);
+		process.exitCode = 1;
+	});
+}
