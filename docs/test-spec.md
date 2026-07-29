@@ -266,8 +266,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-API-011 | 未知 id で `WP_Error(not_found)` | code = not_found | 同上 | 自動済 2026-07-28 |
 | DI-API-012 | `rest_do_request` でルートがディスパッチされる | id 一致 | 同上 | 自動済 2026-07-28 |
 | DI-API-013 | 権限拒否時に 403 `rest_forbidden` | status 403 | 同上 | 自動済 2026-07-28 |
-| DI-API-014 | 実 WP で nonce 付きリクエストが通る | 200 JSON | `npm run smoke:wp:portable` | 自動済 2026-07-29（間接。ログイン済みで `rest_do_request` が 200。生 HTTP + nonce 経路は未） |
-| DI-API-015 | 未ログインの生 HTTP GET が拒否される | 401 または 403 | 同上 | 自動済 2026-07-29（間接。未ログインで 401/403 を確認。生 HTTP 経路は未） |
+| DI-API-014 | 実 WP で nonce 付き HTTP リクエストが通る | 200 JSON | — | 手動要。portable smoke は PHP 内で `rest_do_request` を叩くだけで、Cookie も `X-WP-Nonce` も送っとらん。nonce 経路は未検証 |
+| DI-API-015 | 未ログインの生 HTTP GET が拒否される | 401 または 403 | — | 手動要。同上。内部ディスパッチで 401/403 になることは 2026-07-29 に確認したが、HTTP 経路は未検証 |
 | DI-API-016 | 不正文字を含む id がルート正規表現にマッチせん | 404 | 実機: `curl .../parts/He%20ading` | 環境制約NG（Docker） |
 | DI-API-017 | `/templates/{id}/create-page` が POST で登録される | 登録・POST のみ | — | 未実装 |
 | DI-API-018 | create-page が `edit_pages` を要求する | 権限チェック | — | 未実装 |
@@ -544,11 +544,17 @@ Docker が使えん場合は Phase 2 の PHPCS / PHPUnit をローカルの `./v
 ### Phase 1 — 静的ゲート（Docker 不要）
 
 ```bash
-npm run php:lint > "$EV/p1-php-lint.txt" 2>&1   # DI-CMP-001
-npm test         > "$EV/p1-npm-test.txt" 2>&1   # DI-CAT / BLD / RND / SC / API / ADM 群
+npm run php:lint > "$EV/p1-php-lint.txt" 2>&1; LINT=$?   # DI-CMP-001
+npm test         > "$EV/p1-npm-test.txt" 2>&1; TEST=$?   # DI-CAT / BLD / RND / SC / API / ADM 群
+
 # skip 行は先頭に空白が付く（`  skip - ...`）ので行頭アンカーでは拾えん。
-# 0 件のとき grep は exit 1 を返すので、ゲート全体を落とさんように || true を付ける。
-grep -c 'skip - ' "$EV/p1-npm-test.txt" || true # skip 件数を必ず記録する
+# 0 件のとき grep は exit 1 を返すが、これはゲートの合否と無関係なので握り潰す。
+grep -c 'skip - ' "$EV/p1-npm-test.txt" || true
+
+# 合否は grep やなく上の 2 つの終了コードで決める。
+# 最後の grep の結果をゲートの結果にすると、テストが落ちても緑に見える。
+# 判定は終了コードだけを根拠にする（証跡の分類は [ローカル実行]）
+[ "$LINT" -eq 0 ] && [ "$TEST" -eq 0 ] && echo "Phase 1 OK" || echo "Phase 1 NG (lint=$LINT test=$TEST)"
 ```
 
 ### Phase 2 — PHP 品質
