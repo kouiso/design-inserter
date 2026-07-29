@@ -23,5 +23,8 @@
     "smoke:wp:portable": "node scripts/wp-smoke.mjs --portable",
     "smoke:wp:stubs": "node scripts/wp-smoke.mjs --stubs"
   },
-  "license": "GPL-2.0-or-later"
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@playwright/test": "1.60.0"
+  }
 }
