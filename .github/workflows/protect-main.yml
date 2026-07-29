@@ -17,12 +17,13 @@ jobs:
         id: enforce
         env:
           HEAD_REF: ${{ github.head_ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           # 許可ブランチ: develop / staging (完全一致) / release/* / hotfix/* (glob)
           # bash case の glob は全文一致なので任意文字列の混入を許さない
           # 既存 PR #56 は head rename でレビュー履歴が閉じるため、マージまで完全一致で例外にする。
-          case "$HEAD_REF" in
-            develop|staging|release/*|hotfix/*|claude/test-spec-verification-06220f)
+          case "$PR_NUMBER:$HEAD_REF" in
+            *:develop|*:staging|*:release/*|*:hotfix/*|56:claude/test-spec-verification-06220f)
               echo "Allowed: $HEAD_REF -> main"
               ;;
             *)
