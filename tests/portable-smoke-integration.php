@@ -69,12 +69,23 @@ if (!$denied_response->is_error() || !in_array($denied_response->get_status(), [
 
 wp_set_current_user(1);
 
-$routes        = rest_get_server()->get_routes();
-$route_pattern = '/designinserter/v1/parts/(?P<id>[a-z0-9\-]+)';
+$routes = rest_get_server()->get_routes();
+
+// 経路そのものは id の許容文字を変えることがある（Template Party の id は `_` を含む）。
+// 正規表現を丸ごと書き写すと実装を変えるたびにここが腐って赤になるので、前方一致で拾う。
+$parts_route = null;
+foreach ($routes as $route => $handlers) {
+    if (0 === strpos($route, '/designinserter/v1/parts/(?P<id>')) {
+        $parts_route = $handlers[0];
+        break;
+    }
+}
+
 if (
-    empty($routes[$route_pattern][0]['methods']['GET'])
-    || empty($routes[$route_pattern][0]['args']['id']['required'])
-    || 'sanitize_key' !== $routes[$route_pattern][0]['args']['id']['sanitize_callback']
+    null === $parts_route
+    || empty($parts_route['methods']['GET'])
+    || empty($parts_route['args']['id']['required'])
+    || 'sanitize_key' !== $parts_route['args']['id']['sanitize_callback']
 ) {
     fwrite(STDERR, "REST route contract smoke failed\n");
     exit(1);

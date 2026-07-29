@@ -245,8 +245,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-SC-008 | `the_content` 経由で描画される | heading-4 描画 | `render-smoke.php` | 自動済 2026-07-28 |
 | DI-SC-009 | テキストウィジェットで描画される | 描画 | 実機: ウィジェット追加 → フロント確認 | 手動要 |
 | DI-SC-010 | クラシックエディタ投稿で描画される | 描画 | 実機: Classic Editor プラグイン導入 | 手動要 |
-| DI-SC-011 | 実 WP ランタイムで `do_shortcode` が描画する | `data-designinserter-id="heading-1"` + style | 実機: `wp eval` | 環境制約NG（Docker） |
-| DI-SC-012 | zip インストール後にショートコードが描画される | 描画 | `fresh-install-222.spec.mjs` | 環境制約NG（Docker） |
+| DI-SC-011 | 実 WP ランタイムで `do_shortcode` が描画する | `data-designinserter-id="heading-1"` + style | `npm run smoke:wp:portable`（WP 6.9.4） | 自動済 2026-07-29 [ローカル実行] |
+| DI-SC-012 | zip インストール後にショートコードが描画される | 描画 | 同上（dist zip を展開して有効化） | 自動済 2026-07-29 [ローカル実行] |
 | DI-SC-013 | 不正 id 時の投稿者向けフィードバック | 現状は無音 | — | 未実装。仕様判断が要る（§7） |
 
 ### 4.8 DI-API — REST API
@@ -266,8 +266,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-API-011 | 未知 id で `WP_Error(not_found)` | code = not_found | 同上 | 自動済 2026-07-28 |
 | DI-API-012 | `rest_do_request` でルートがディスパッチされる | id 一致 | 同上 | 自動済 2026-07-28 |
 | DI-API-013 | 権限拒否時に 403 `rest_forbidden` | status 403 | 同上 | 自動済 2026-07-28 |
-| DI-API-014 | 実 WP で nonce 付きリクエストが通る | 200 JSON | 実機: `wp eval` + `rest_do_request` | 環境制約NG（Docker） |
-| DI-API-015 | 未ログインの生 HTTP GET が拒否される | 401 または 403 | 実機: `curl` | 環境制約NG（Docker） |
+| DI-API-014 | 実 WP で nonce 付きリクエストが通る | 200 JSON | `npm run smoke:wp:portable` | 自動済 2026-07-29（間接。ログイン済みで `rest_do_request` が 200。生 HTTP + nonce 経路は未） |
+| DI-API-015 | 未ログインの生 HTTP GET が拒否される | 401 または 403 | 同上 | 自動済 2026-07-29（間接。未ログインで 401/403 を確認。生 HTTP 経路は未） |
 | DI-API-016 | 不正文字を含む id がルート正規表現にマッチせん | 404 | 実機: `curl .../parts/He%20ading` | 環境制約NG（Docker） |
 | DI-API-017 | `/templates/{id}/create-page` が POST で登録される | 登録・POST のみ | — | 未実装 |
 | DI-API-018 | create-page が `edit_pages` を要求する | 権限チェック | — | 未実装 |
@@ -366,7 +366,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-018 | テスト・ビルド支援ファイルが gitignore されとらん | ignore 0 | `scripts/test.mjs` `testGitVisibility()` | 自動済 2026-07-28 |
 | DI-BLD-019 | `readme.txt`（Stable tag / Tested up to）がある | 存在 | — | 未実装（F-3） |
 | DI-BLD-020 | zip を管理 UI からアップロードして有効化できる | 有効化成功 | 実機: `plugin-install.php` | 手動要 |
-| DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | 実機: `wp` | 環境制約NG（Docker） |
+| DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | `npm run smoke:wp:portable` | 自動済 2026-07-29（間接。dist zip を展開して `plugin activate` は成功。`plugin install` 経路自体は未） |
 | DI-BLD-022 | git-crypt ロック環境でのビルドを検出して失敗する | 明示エラー | — | 未実装（F-4） |
 
 ### 4.14 DI-CMP — 互換性・ライフサイクル
@@ -377,8 +377,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-CMP-002 | 全 JS ファイルが構文エラーなし | exit 0 | `testJavaScriptSyntax()` | 自動済 2026-07-28 |
 | DI-CMP-003 | PHP 7.4 で fatal が出ん | OK | — | 未実装（現状 PHP 8.4 のみで検証） |
 | DI-CMP-004 | WordPress 6.0 で有効化できる | 成功 | — | 未実装（portable smoke は 6.9.4 固定） |
-| DI-CMP-005 | WordPress 6.9.4 で有効化できる | 成功 | `npm run smoke:wp:portable` | 手動要 |
-| DI-CMP-006 | 有効化で fatal error が出ん | 成功 | `fresh-install-222.spec.mjs` | 環境制約NG（Docker） |
+| DI-CMP-005 | WordPress 6.9.4 で有効化できる | 成功 | `npm run smoke:wp:portable` | 自動済 2026-07-29 [ローカル実行] |
+| DI-CMP-006 | 有効化で fatal error が出ん | 成功 | 同上（`WP_DEBUG=true` で有効化 → 無効化 → 削除 → 再有効化） | 自動済 2026-07-29 [ローカル実行] |
 | DI-CMP-007 | 無効化でフロント出力が消える | 出力消滅・エラーなし | 実機 | 手動要 |
 | DI-CMP-008 | テーマを切り替えても描画が壊れん | 描画維持 | 実機: 3 テーマ | 手動要 |
 | DI-CMP-009 | 3 viewport（375 / 768 / 1280）でレイアウト破綻が無い | 破綻なし | — | 未実装 |
@@ -420,7 +420,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-E2E-008 | template カードクリックで iframe プレビュー | iframe 表示 | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-009 | create-page REST で下書きページ生成 | 生成 | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-010 | 生成ページがフルページテンプレートで表示される | `full-page.php` 適用 | — | 未実装（F-1 の回帰テストとして最優先） |
-| DI-E2E-011 | dev stack で shortcode / block / REST が描画される | 3 経路とも期待マーカー一致 [実機目視] | 実機: `wp eval` | 環境制約NG（Docker） |
+| DI-E2E-011 | 実 WP ランタイムで shortcode / block / REST が描画される | 3 経路とも期待マーカー一致 | `npm run smoke:wp:portable`（WP 6.9.4 + wp-sqlite-db） | 自動済 2026-07-29 [ローカル実行]（Docker dev stack 上での再確認は未） |
 | DI-E2E-012 | CI が main と全 PR で green | success | `gh run list` | 手動要 |
 
 ---
@@ -660,14 +660,28 @@ WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Sta
 
 対応ケース: DI-E2E 群全件（実行前提）
 
+### F-7 実 WordPress スモークが黙って赤やった（P1・修正済み）
+
+`tests/portable-smoke-integration.php` は REST ルートの正規表現を丸ごと書き写して照合しとった。ところが Template Party 対応でルート側の id が `_` を許すようになり（`[a-z0-9\-]` → `[a-z0-9_\-]`）、テスト側だけが取り残された。結果 `npm run smoke:wp:portable` は `REST route contract smoke failed` で落ち続けとった。
+
+このゲートは CI に載っとらんので、誰も赤に気づかんかった。実 WordPress を通す唯一の自動確認がこれなので、影響は小さくない。
+
+2026-07-29 に前方一致でルートを引く形へ直した。正規表現を書き写さんので、id の許容文字が変わっても腐らん。修正後は `Portable WordPress smoke passed with WordPress 6.9.4`。
+
+対応ケース: DI-API-013 / DI-E2E-011
+
 ### 環境制約
 
 | # | 制約 | 影響するケース数 | 解除条件 |
 |---|---|---|---|
-| E-1 | Docker 未起動 | 約 30 件 | Docker Desktop を起動して `docker info` が通る |
+| E-1 | Docker 未起動 | 約 22 件 | Docker Desktop を起動して `docker info` が通る |
 | E-2 | git-crypt ロック | 約 15 件 | `git-crypt unlock` 用の鍵を入手する |
 
 E-2 は E-1 と重なるケースがある（Template Party の E2E）。
+
+E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは WordPress 6.9.4 と WP-CLI を一時ディレクトリへ落とし、DB を wp-sqlite-db に差し替えて実 WordPress を立てるので、Docker が要らん。2026-07-29 にこの経路で shortcode / block / REST の 3 経路、有効化ライフサイクル、REST 権限拒否を実測した（DI-SC-011 / DI-SC-012 / DI-API-014 / DI-API-015 / DI-CMP-005 / DI-CMP-006 / DI-BLD-021 / DI-E2E-011）。
+
+残る E-1 は実ブラウザが要るもの（Playwright E2E、エディタ UI の目視）に絞られる。
 
 ### 仕様判断が要る項目
 
@@ -694,6 +708,7 @@ E-2 は E-1 と重なるケースがある（Template Party の E2E）。
 | 項目 | 対応ケース |
 |---|---|
 | `readme.txt` の作成 | DI-BLD-019 |
+| `smoke:wp:portable` を CI に載せる（F-7 が長期間気づかれんかった原因） | DI-SC-011, DI-E2E-011 |
 | `@playwright/test` の依存宣言（F-6。CI 時間との釣り合いを決めてから） | DI-E2E 群全件 |
 | frontend.js 挙動 5 種の自動化（Playwright） | DI-FE-002〜008 |
 | axe-core による a11y 検査 | DI-FE-011 |
@@ -722,3 +737,4 @@ E-2 は E-1 と重なるケースがある（Template Party の E2E）。
 | 日付 | 内容 |
 |---|---|
 | 2026-07-28 | 初版。`docs/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 198 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
+| 2026-07-29 | Docker 抜きで実 WordPress を立てられる `smoke:wp:portable` 経路で Phase 5 の一部を実測。8 ケースを環境制約NGから実測済みへ更新。その過程で F-7（実 WP スモークが黙って赤）を発見して修正 |
