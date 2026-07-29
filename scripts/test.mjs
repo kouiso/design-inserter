@@ -83,6 +83,7 @@ function testGitVisibility() {
     'tests/render-smoke.php',
     'tests/catalog-fallback.php',
     'tests/portable-smoke-integration.php',
+    'tests/generate-ready-checklist.test.mjs',
     'scripts/test.mjs',
     'scripts/wp-smoke.mjs',
     'scripts/build-plugin-zip.mjs',
@@ -391,6 +392,15 @@ function testRenderSmoke() {
   }
 }
 
+function testReadyChecklistArtifactSelection() {
+  const result = run('node', ['--test', 'tests/generate-ready-checklist.test.mjs']);
+  if (result.status === 0) {
+    pass('Ready checklist selects the exact current-version artifact');
+  } else {
+    fail(`Ready checklist artifact selection failed\n${result.stderr || result.stdout}`);
+  }
+}
+
 testPhpSyntax();
 testGitVisibility();
 testJavaScriptSyntax();
@@ -400,6 +410,7 @@ testBehaviorMetadata();
 testDistributionShape();
 testEditorAssetContract();
 testRenderSmoke();
+testReadyChecklistArtifactSelection();
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);

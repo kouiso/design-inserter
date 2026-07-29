@@ -160,6 +160,18 @@ if ($response->is_error() || empty($data['id']) || 'heading-3' !== $data['id']) 
     exit(1);
 }
 
+$underscore_request  = new WP_REST_Request('GET', '/designinserter/v1/parts/underscore_probe');
+$underscore_response = rest_do_request($underscore_request);
+$underscore_data     = $underscore_response->get_data();
+if (
+    !$underscore_response->is_error()
+    || 404 !== $underscore_response->get_status()
+    || 'not_found' !== ($underscore_data['code'] ?? null)
+) {
+    fwrite(STDERR, "REST underscore id routing smoke failed\n");
+    exit(1);
+}
+
 $modal_request  = new WP_REST_Request('GET', '/designinserter/v1/parts/modal-1');
 $modal_response = rest_do_request($modal_request);
 $modal_data     = $modal_response->get_data();

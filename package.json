@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node scripts/test.mjs",
     "build": "node scripts/build-plugin-zip.mjs",
+    "build:zip": "node scripts/build-plugin-zip.mjs",
     "e2e:fresh": "playwright test tests/e2e/fresh-install-222.spec.mjs --reporter=list",
     "e2e:template-party": "playwright test tests/e2e/template-party.spec.mjs --reporter=list",
     "ready:checklist": "node scripts/generate-ready-checklist.mjs",

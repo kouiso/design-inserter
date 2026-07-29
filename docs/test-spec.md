@@ -33,7 +33,7 @@ tests/ · scripts/test.mjs   実際のテストコード
 
 | 環境 | 用途 | 起動 | 接続先 | 前提 |
 |---|---|---|---|---|
-| ローカル静的 | Phase 1・2・3 | 不要 | — | PHP 7.4+ / Node 22+ / composer |
+| ローカル静的 | Phase 1・2・3 | 不要 | — | PHP 8.2 / Node 22+ / Composer（ローカルの Composer・PHPUnit・PHPCS 用。配布プラグインの実行要件は PHP 7.4+） |
 | Docker dev WP | Phase 5 実機確認 | `docker compose up -d --wait` | `http://localhost:8080`（`admin` / `admin`） | Docker 稼働。ポート 8080・3316 が空いとること |
 | Playwright E2E（fresh install） | Phase 4 | `npm run e2e:fresh` | ポート 18082（spec が専用 compose を生成） | Docker 稼働。Chromium |
 | Playwright E2E（Template Party） | Phase 4 | `npm run e2e:template-party` | ポート 18083（同上） | Docker 稼働。Chromium。git-crypt 復号済み |
@@ -200,7 +200,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLK-006 | `do_blocks()` でフロント HTML が描画される | `data-designinserter-id="heading-2"` + style | `render-smoke.php` | 自動済 2026-07-28 |
 | DI-BLK-007 | `the_content` フィルタ経由で描画される | heading-5 描画 | 同上 | 自動済 2026-07-28 |
 | DI-BLK-008 | 無効 partId のブロックがフロントで何も出さん | 空 | ブロック経路での直接検証は未実装（render 経路は DI-RND-006） | 未実装 |
-| DI-BLK-009 | ブロック挿入パネルに Design Inserter が出る | 表示 | `tests/e2e/fresh-install-222.spec.mjs` エディタテスト | 環境制約NG（Docker） |
+| DI-BLK-009 | ブロック挿入パネルに Design Inserter が出る | 表示 | `tests/e2e/fresh-install-222.spec.mjs` エディタテスト | 自動済 2026-07-29 [ローカル実行] |
 | DI-BLK-010 | 投稿保存後、フロントで正しい HTML + CSS が描画される | 一致 | `fresh-install-222.spec.mjs` 222 パーツテスト | 環境制約NG（Docker） |
 | DI-BLK-011 | リロード後も `partId` 属性が保持される | 選択維持 | 実機: エディタ再読込 | 手動要 |
 | DI-BLK-012 | プラグイン無効化後、保存済み投稿がエラーにならん | 500 なし・出力が消える | 実機: `wp plugin deactivate` → フロント表示 | 手動要 |
@@ -210,14 +210,14 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-EDT-001 | サイドバーに Design Inserter パネルが出る | 表示 | `fresh-install-222.spec.mjs` | 環境制約NG（Docker） |
+| DI-EDT-001 | サイドバーに Design Inserter パネルが出る | 表示 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-002 | パーツ選択 UI の形式 | — | openspec は SelectControl 223 オプション、実装は検索付きビジュアル picker | 不整合（§7 F-2） |
-| DI-EDT-003 | 検索ボックスで絞り込める | 該当のみ表示 | `fresh-install-222.spec.mjs` | 環境制約NG（Docker） |
-| DI-EDT-004 | カテゴリボタンで絞り込める | 該当のみ | 同上 | 環境制約NG（Docker） |
+| DI-EDT-003 | 検索ボックスで絞り込める | 該当のみ表示 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
+| DI-EDT-004 | カテゴリボタンで絞り込める | 該当のみ | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-005 | source フィルタ 3 種が表示される | 3 ボタン | `tests/e2e/template-party.spec.mjs` | 環境制約NG（Docker + git-crypt） |
 | DI-EDT-006 | Template Party フィルタで template カードが badge 付きで出る | badge 表示 | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-EDT-007 | CSS Stock フィルタで template カードが隠れる | parts のみ | 同上 | 環境制約NG（Docker + git-crypt） |
-| DI-EDT-008 | カードクリックでプレビューが即表示される | プレビュー描画 | `fresh-install-222.spec.mjs` | 環境制約NG（Docker） |
+| DI-EDT-008 | カードクリックでプレビューが即表示される | プレビュー描画 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-009 | プレビューが REST 経由で遅延ロードされる | `window.fetch(restUrl + partId)` | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-28 |
 | DI-EDT-010 | プレビューが sandbox iframe に隔離される | `sandbox: ''` + `srcDoc` | 同上 | 自動済 2026-07-28 |
 | DI-EDT-011 | カタログ HTML に `dangerouslySetInnerHTML` を使わん | 不使用 | 同上 | 自動済 2026-07-28 |
@@ -225,8 +225,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-013 | SVG-only パーツのプレビューに style タグが含まれん | style 無し | 実機: loading 系を選択 | 手動要 |
 | DI-EDT-014 | 未選択時に案内メッセージが出る | 「CSS パーツを選択してください」 | 実機 | 手動要 |
 | DI-EDT-015 | 該当 0 件時に empty state とフィルタ解除が出る | `di-picker__empty` 表示・clear で復帰 | 実機: 存在せん語で検索 | 手動要 |
-| DI-EDT-016 | エディタ操作中に JS console error が出ん | error 0 / failed request 0 | `fresh-install-222.spec.mjs` `collectBrowserIssues()` | 環境制約NG（Docker） |
-| DI-EDT-017 | カード連続クリックで破綻せん | 破綻なし | 同上 | 環境制約NG（Docker） |
+| DI-EDT-016 | エディタ操作中に JS console error が出ん | error 0 / failed request 0 | `fresh-install-222.spec.mjs` `collectBrowserIssues()` | 自動済 2026-07-29 [ローカル実行] |
+| DI-EDT-017 | カード連続クリックで破綻せん | 破綻なし | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-018 | REST fetch に `X-WP-Nonce` が付く | ヘッダ有り | 実機: ネットワーク監視 | 手動要 |
 | DI-EDT-019 | カードの `aria-pressed` / `aria-label` が選択状態と同期する | 同期 | 実機: a11y スナップショット | 手動要 |
 | DI-EDT-020 | 管理画面 9 色テーマで選択状態が視認できる | コントラスト確保 | 実機: 各テーマ | 手動要 |
@@ -361,7 +361,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-013 | zip 整合性 | `unzip -tq` exit 0 | `npm run build` + `unzip -tq` | 自動済 2026-07-28 |
 | DI-BLD-014 | zip root が `designinserter/` 単一 | 単一 | 同上 | 自動済 2026-07-28 |
 | DI-BLD-015 | dev / test / build ファイルが zip に混入せん | 混入 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 自動済 2026-07-28 |
-| DI-BLD-016 | zip 内 catalog の総数・プレビュー画像が揃う | 一致（1329 ファイル） | 同上 | 自動済 2026-07-28 |
+| DI-BLD-016 | zip 内 catalog の総数・プレビュー画像が揃う | 配布対象の欠損 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 手動要（CSS Stock 222 件と参照先だけ自動確認。全配布物の独立した固定 manifest チェックは無い） |
 | DI-BLD-017 | 古い zip / 別バージョン zip を検出して失敗する | 明示エラー | `npm run smoke:wp:portable` | 手動要 |
 | DI-BLD-018 | テスト・ビルド支援ファイルが gitignore されとらん | ignore 0 | `scripts/test.mjs` `testGitVisibility()` | 自動済 2026-07-28 |
 | DI-BLD-019 | `readme.txt`（Stable tag / Tested up to）がある | 存在 | — | 未実装（F-3） |
@@ -410,10 +410,10 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-E2E-001 | 新規 WP に zip を入れて 222 パーツ全件をフロント描画 | 全件描画・console error 0 | `tests/e2e/fresh-install-222.spec.mjs` | 環境制約NG（Docker） |
-| DI-E2E-002 | 同 WP でショートコードが共有 renderer 経由で描画 | 描画 | 同上 | 環境制約NG（Docker） |
-| DI-E2E-003 | 管理設定画面の CTA / ボタン列挙 | 健全 | 同上 | 環境制約NG（Docker） |
-| DI-E2E-004 | Gutenberg で挿入・選択・検索・カテゴリ・連続使用 | 破綻なし | 同上 | 環境制約NG（Docker） |
+| DI-E2E-001 | 新規 WP に zip を入れて 222 パーツ全件をフロント描画 | 全件描画・console error 0 | `tests/e2e/fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
+| DI-E2E-002 | 同 WP でショートコードが共有 renderer 経由で描画 | 描画 | 同上 | 自動済 2026-07-29 [ローカル実行] |
+| DI-E2E-003 | 管理設定画面の CTA / ボタン列挙 | 健全 | 同上 | 自動済 2026-07-29 [ローカル実行] |
+| DI-E2E-004 | Gutenberg で挿入・選択・検索・カテゴリ・連続使用 | 破綻なし | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-E2E-005 | TP source フィルタ表示 | 3 ボタン | `tests/e2e/template-party.spec.mjs` | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-006 | TP カード + badge 表示 | 表示 | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-007 | CSS Stock フィルタで template 非表示 | parts のみ | 同上 | 環境制約NG（Docker + git-crypt） |
@@ -441,17 +441,17 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | catalog | SVG-only の css が空文字列 | DI-CAT-008 | 自動済 |
 | catalog | sourceUrl がアンカーリンク | DI-CAT-009 | 自動済 |
 | catalog | PHP json_decode でエラーなし | DI-CAT-016 | 自動済 |
-| editor-ui | サイドバーに Design Inserter パネル | DI-EDT-001 | 環境制約NG |
+| editor-ui | サイドバーに Design Inserter パネル | DI-EDT-001 | 自動済 |
 | editor-ui | SelectControl に 223 オプション | DI-EDT-002 | 不整合（F-2） |
 | editor-ui | オプションラベルが `[カテゴリ名] パーツ名` 形式 | DI-EDT-002 | 不整合（F-2） |
-| editor-ui | 選択後にプレビューが即表示 | DI-EDT-008 | 環境制約NG |
+| editor-ui | 選択後にプレビューが即表示 | DI-EDT-008 | 自動済 |
 | editor-ui | SVG-only のプレビューに style タグなし | DI-EDT-013 | 手動要 |
 | editor-ui | 未選択で案内メッセージ | DI-EDT-014 | 手動要 |
 | editor-ui | リロード後も選択状態を保持 | DI-BLK-011 | 手動要 |
-| editor-ui | JS エラーがコンソールに出ん | DI-EDT-016 | 環境制約NG |
-| gutenberg-block | 挿入パネルに Design Inserter | DI-BLK-009 | 環境制約NG |
+| editor-ui | JS エラーがコンソールに出ん | DI-EDT-016 | 自動済 |
+| gutenberg-block | 挿入パネルに Design Inserter | DI-BLK-009 | 自動済 |
 | gutenberg-block | SelectControl に 222 件 | DI-EDT-002 | 不整合（F-2） |
-| gutenberg-block | 選択後にエディタ内プレビュー | DI-EDT-008 | 環境制約NG |
+| gutenberg-block | 選択後にエディタ内プレビュー | DI-EDT-008 | 自動済 |
 | gutenberg-block | SVG-only で style タグ出力なし | DI-EDT-013 | 手動要 |
 | gutenberg-block | 保存後フロントで HTML+CSS 描画 | DI-BLK-010 | 環境制約NG |
 | gutenberg-block | 無効 partId でフロント表示なし | DI-BLK-008 | 未実装 |
@@ -484,20 +484,20 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | shortcode | 出力がブロック出力と同一 | DI-SC-007 | 未実装 |
 | shortcode | テキストウィジェットで描画 | DI-SC-009 | 手動要 |
 
-集計: 自動済 27 / 環境制約NG 8 / 手動要 8 / 未実装 4 / 不整合 3。
+集計: 自動済 31 / 環境制約NG 1 / 手動要 10 / 未実装 5 / 不整合 3。
 
 ### 5.2 requirements 成功基準 → テストケース ID
 
 | # | 成功基準 | ID | 現状 |
 |---|---|---|---|
-| 1 | プラグインを有効化できる | DI-CMP-006, DI-BLD-020 | 環境制約NG / 手動要 |
-| 2 | Gutenberg で選択・プレビュー・保存できる | DI-EDT-008, DI-BLK-010, DI-BLK-011 | 環境制約NG / 手動要 |
-| 3 | フロントエンドで描画される | DI-BLK-010, DI-E2E-001 | 環境制約NG |
-| 4 | ショートコードがブロックと同じ結果を出す | DI-SC-007, DI-SC-012 | 未実装 / 環境制約NG |
-| 5 | 222 パーツすべてが選択可能 | DI-E2E-001, DI-CAT-001 | 環境制約NG / 自動済 |
+| 1 | プラグインを有効化できる | DI-CMP-006, DI-BLD-020 | 自動済 / 手動要 |
+| 2 | Gutenberg で選択・プレビュー・保存できる | DI-EDT-008, DI-BLK-010, DI-BLK-011 | 自動済 / 環境制約NG / 手動要 |
+| 3 | フロントエンドで描画される | DI-BLK-010, DI-E2E-001 | 環境制約NG / 自動済 |
+| 4 | ショートコードがブロックと同じ結果を出す | DI-SC-007, DI-SC-012 | 未実装 / 自動済 |
+| 5 | 222 パーツすべてが選択可能 | DI-E2E-001, DI-CAT-001 | 自動済 |
 | 6 | 無効化しても壊れん | DI-BLK-012, DI-CMP-007 | 手動要 |
 
-**成功基準 6 項目のうち、現時点で完全に自動検証できとるものは 0 件。** すべて Docker 実機か手動確認が要る。
+成功基準 6 項目のうち、1・3・5 は自動証跡がある。2・4・6 は保存後の再読込、出力等価比較、無効化後の表示確認が残っとる。
 
 ### 5.3 テストファイル → テストケース ID（逆引き）
 
@@ -554,14 +554,26 @@ grep -c 'skip - ' "$EV/p1-npm-test.txt" || true
 # 合否は grep やなく上の 2 つの終了コードで決める。
 # 最後の grep の結果をゲートの結果にすると、テストが落ちても緑に見える。
 # 判定は終了コードだけを根拠にする（証跡の分類は [ローカル実行]）
-[ "$LINT" -eq 0 ] && [ "$TEST" -eq 0 ] && echo "Phase 1 OK" || echo "Phase 1 NG (lint=$LINT test=$TEST)"
+if [ "$LINT" -eq 0 ] && [ "$TEST" -eq 0 ]; then
+  echo "Phase 1 OK"
+else
+  echo "Phase 1 NG (lint=$LINT test=$TEST)"
+  false
+fi
 ```
 
 ### Phase 2 — PHP 品質
 
 ```bash
-./vendor/bin/phpcs   > "$EV/p2-phpcs.txt" 2>&1     # DI-SEC-010, DI-ADM-008
-./vendor/bin/phpunit > "$EV/p2-phpunit.txt" 2>&1   # DI-DAT 群
+./vendor/bin/phpcs   > "$EV/p2-phpcs.txt" 2>&1; PHPCS=$?     # DI-SEC-010, DI-ADM-008
+./vendor/bin/phpunit > "$EV/p2-phpunit.txt" 2>&1; PHPUNIT=$?  # DI-DAT 群
+
+if [ "$PHPCS" -eq 0 ] && [ "$PHPUNIT" -eq 0 ]; then
+  echo "Phase 2 OK"
+else
+  echo "Phase 2 NG (phpcs=$PHPCS phpunit=$PHPUNIT)"
+  false
+fi
 ```
 
 Docker 経由で走らせる場合は `npm run phpcs` / `npm run test:php`。
@@ -599,16 +611,16 @@ WP_AUTO_INSTALL=true docker compose up -d --wait > "$EV/p5-up.txt" 2>&1
 WP="docker compose exec -T wordpress"
 
 $WP wp eval 'echo do_shortcode("[designinserter_part id=\"heading-1\"]");' --allow-root > "$EV/p5-shortcode.html"
-# 実機の WordPress ランタイムで判定するので、結果には [実機目視] を添える
-grep -q 'data-designinserter-id="heading-1"' "$EV/p5-shortcode.html" && echo "DI-SC-011 OK [実機目視]"
+# wp eval の出力を機械判定する確認なので、検証ソースは [ローカル実行] とする。
+grep -q 'data-designinserter-id="heading-1"' "$EV/p5-shortcode.html" && echo "DI-SC-011 OK [ローカル実行]"
 
 $WP wp eval 'echo do_blocks("<!-- wp:designinserter/css-part {\"partId\":\"loading-4\"} /-->");' --allow-root > "$EV/p5-block.html"
-# wp eval は目印が出んでも成功で返る。保存するだけでは判定にならんので必ず突き合わせる。
-grep -q 'data-designinserter-id="loading-4"' "$EV/p5-block.html" && echo "DI-BLK-010 OK [実機目視]"
+# 投稿の保存・再取得は通らん直接 do_blocks 確認なので、DI-BLK-006 として判定する。
+grep -q 'data-designinserter-id="loading-4"' "$EV/p5-block.html" && echo "DI-BLK-006 OK [ローカル実行]"
 
 $WP wp eval 'wp_set_current_user(1); $r=new WP_REST_Request("GET","/designinserter/v1/parts/heading-1"); $r->set_param("id","heading-1"); echo wp_json_encode(rest_do_request($r)->get_data());' --allow-root > "$EV/p5-rest.json"
-# REST はエラー本文でも 0 で返るので、id が入っとることと code が無いことを両方見る。
-node -e 'const d=require("fs").readFileSync(process.argv[1],"utf8");const j=JSON.parse(d);if(j.code||j.id!=="heading-1")throw new Error("DI-API-014 NG: "+d.slice(0,200));console.log("DI-API-014 OK [実機目視]")' "$EV/p5-rest.json"
+# Cookie・nonce・HTTP transport を通らん内部 dispatch なので、DI-API-012 として判定する。
+node -e 'const d=require("fs").readFileSync(process.argv[1],"utf8");const j=JSON.parse(d);if(j.code||j.id!=="heading-1")throw new Error("DI-API-012 NG: "+d.slice(0,200));console.log("DI-API-012 OK [ローカル実行]")' "$EV/p5-rest.json"
 
 # F-1 の再現証跡。現状は false が返る（フィルタが登録されとらん）
 $WP wp eval 'var_dump(has_filter("template_include"));' --allow-root > "$EV/p5-template-filter.txt"
@@ -669,7 +681,7 @@ WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Sta
 
 `npm run build` は `data/template-party-*.json` が暗号文のままでも zip に同梱して成功する。鍵の無い環境でリリースビルドを実行すると、Template Party のパーツ 138 件とテンプレート 1017 件が丸ごと欠けた状態で、警告も出さずに配布物が出来上がる。実測で `dist/designinserter-0.2.0.zip` に 789KB / 685KB の暗号文が入っとることを確認した。
 
-`.github/workflows/ci.yml`（push to main）は git-crypt unlock をせん。`test.yml`（PR）だけがする。
+`.github/workflows/ci.yml` と `test.yml` は git-crypt unlock をせん。`test.yml` は PR 専用の縮退テストで、Secret 式自体を持たん。main push は別の `trusted-test.yml` と main 限定 Environment でだけ復号し、鍵が無ければ失敗する。
 
 対応ケース: DI-BLD-022, DI-SEC-014
 
@@ -677,13 +689,13 @@ WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Sta
 
 `tests/php/bootstrap.php` は `DESIGNINSERTER_VERSION` を `1.0.0` と定義しとるが、プラグイン本体は `0.2.0`。スタブなので現状のテストには影響せんが、バージョン依存の分岐を足したときに嘘の環境でテストすることになる。
 
-### F-6 E2E コマンドが clean install 後に起動できん（P1）
+### F-6 E2E コマンドの起動前提が不足しとった（P1・修正済み）
 
-`package.json` の `e2e:fresh` / `e2e:template-party` は `playwright` を直接呼ぶが、`@playwright/test` がどの依存にも宣言されとらん（`dependencies` も `devDependencies` も無い）。`npm ci` の直後は `playwright: not found` で即終了する。Docker が起動しても Phase 4 はこのままでは走らん。
+`@playwright/test` を `devDependencies` に固定バージョンで追加し、`npm ci` 後に `playwright` を起動できるようにした。E2E 2 本の `beforeAll` が呼ぶ `npm run build:zip` も `package.json` の alias として追加したため、zip ビルド前に `Missing script: "build:zip"` で止まる経路も解消済み。
 
-依存に足すと CI の全ジョブがブラウザ込みで数十MBを取得することになるので、CI 時間との釣り合いを決めてから直す。
+fresh install E2E は 2026-07-29 に 4 シナリオすべて成功した。残る未検証は Template Party 用 git-crypt データを復号した E2E と、未自動化の手動シナリオ。環境制約は E-2 として追跡する。
 
-対応ケース: DI-E2E 群全件（実行前提）
+対応ケース: DI-E2E-001〜004（検証済み）、DI-E2E-005〜010（未完）
 
 ### F-7 実 WordPress スモークが黙って赤やった（P1・修正済み）
 
@@ -704,9 +716,9 @@ WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Sta
 
 E-2 は E-1 と重なるケースがある（Template Party の E2E）。
 
-E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは WordPress 6.9.4 と WP-CLI を一時ディレクトリへ落とし、DB を wp-sqlite-db に差し替えて実 WordPress を立てるので、Docker が要らん。2026-07-29 にこの経路で shortcode / block / REST の 3 経路、有効化ライフサイクル、REST 権限拒否を実測した（DI-SC-011 / DI-SC-012 / DI-API-014 / DI-API-015 / DI-CMP-005 / DI-CMP-006 / DI-BLD-021 / DI-E2E-011）。
+E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは WordPress 6.9.4 と WP-CLI を一時ディレクトリへ落とし、DB を wp-sqlite-db に差し替えて実 WordPress を立てるので、Docker が要らん。2026-07-29 にこの経路で shortcode、内部 REST dispatch、有効化ライフサイクル、REST 権限拒否を実測した（DI-SC-011 / DI-SC-012 / DI-API-012 / DI-API-013 / DI-CMP-005 / DI-CMP-006 / DI-BLD-021 / DI-E2E-011）。nonce 付き HTTP と未ログイン HTTP は DI-API-014 / DI-API-015 の未検証として残る。
 
-残る E-1 は実ブラウザが要るもの（Playwright E2E、エディタ UI の目視）に絞られる。
+残るブラウザ検証は Template Party E2E と、fresh install E2E が対象にしとらん手動 UI シナリオに絞られる。
 
 ### 仕様判断が要る項目
 
@@ -724,7 +736,7 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 |---|---|
 | F-1 の修正と回帰テスト追加 | DI-TPL-001, DI-E2E-010 |
 | F-4 のビルドガード追加 | DI-BLD-022, DI-SEC-014 |
-| 成功基準 6 項目の実機検証（§5.2 が現状 0/6） | DI-CMP-006・007, DI-BLK-010〜012, DI-SC-007 |
+| 成功基準の未完 3 項目を検証 | DI-CMP-007, DI-BLK-010〜012, DI-SC-007 |
 | `bundleDir` パストラバーサル検証 | DI-SEC-008, DI-DAT-019, DI-TPL-007 |
 | create-page REST の権限・異常系テスト | DI-API-017・018・020, DI-SEC-005 |
 
@@ -734,7 +746,7 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 |---|---|
 | `readme.txt` の作成 | DI-BLD-019 |
 | `smoke:wp:portable` を CI に載せる（F-7 が長期間気づかれんかった原因） | DI-SC-011, DI-E2E-011 |
-| `@playwright/test` の依存宣言（F-6。CI 時間との釣り合いを決めてから） | DI-E2E 群全件 |
+| git-crypt 復号環境で Template Party E2E を実行する | DI-E2E-005〜009 |
 | frontend.js 挙動 5 種の自動化（Playwright） | DI-FE-002〜008 |
 | axe-core による a11y 検査 | DI-FE-011 |
 | 3 viewport でのレイアウト検証 | DI-CMP-009 |
