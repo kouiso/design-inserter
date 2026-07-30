@@ -165,6 +165,7 @@
 					sources.map( function( src ) {
 						return el( Button, {
 							key: src.id,
+							className: 'di-picker__source',
 							variant: activeSource === src.id ? 'primary' : 'secondary',
 							size: 'small',
 							'aria-pressed': activeSource === src.id ? 'true' : 'false',
