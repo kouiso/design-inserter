@@ -18,6 +18,17 @@ add_action( 'admin_menu', 'designinserter_admin_menu' );
 function designinserter_admin_page() {
 	$catalog = designinserter_get_catalog();
 	$parts   = isset( $catalog['parts'] ) ? $catalog['parts'] : array();
+
+	$css_stock_count    = 0;
+	$template_party_count = 0;
+	foreach ( $parts as $part ) {
+		$source = isset( $part['source'] ) ? $part['source'] : 'css-stock';
+		if ( 'template-party' === $source ) {
+			$template_party_count++;
+		} else {
+			$css_stock_count++;
+		}
+	}
 	?>
 	<div class="wrap">
 		<h1>Design Inserter</h1>
@@ -26,7 +37,15 @@ function designinserter_admin_page() {
 			<tbody>
 				<tr>
 					<th scope="row">Parts</th>
-					<td><?php echo esc_html( count( $parts ) ); ?></td>
+					<td><?php echo esc_html( $css_stock_count ); ?></td>
+				</tr>
+				<tr>
+					<th scope="row">Template Party Parts</th>
+					<td><?php echo esc_html( $template_party_count ); ?></td>
+				</tr>
+				<tr>
+					<th scope="row">Total Parts</th>
+					<td><?php echo esc_html( $css_stock_count + $template_party_count ); ?></td>
 				</tr>
 				<tr>
 					<th scope="row">Source</th>
