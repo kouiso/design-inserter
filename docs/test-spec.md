@@ -872,7 +872,9 @@ P2 — 継続改善：
 - `npm run smoke:wp:portable` ... exit 0、WP 6.9.4 で shortcode / block / REST / ライフサイクル確認 `[ローカル実行]`（2026-07-30）
 - `npx playwright install --with-deps chromium` ... 完了 `[ローカル実行]`（2026-07-30）
 - `npm run e2e:fresh` ... exit 0、`tests/e2e/fresh-install-222.spec.mjs` 4 tests passed、`partCount 222` / `uniquePartCount 222` / `styleCount 209` / `behaviorCount 16` / `initializedBehaviorCount 16` / `zeroBox 0` / `frontendCss 1` / `frontendJs 1`、console / network error 0 を確認 `[ローカル実行]`（2026-07-30）
-- `npm run e2e:template-party` ... `git-crypt` 未復号のため `[環境制約NG]`
+- `npm run smoke:wp:docker` ... exit 0、docker compose 上の PHP 8.2-Apache / WP 自動セットアップで shortcode / block 描画を確認 `[ローカル実行]`（2026-07-30）
+- `npm run ready:checklist` ... exit 0、`.tmp/ready-checklist/designinserter-ready-checklist.json` を生成 `[ローカル実行]`（2026-07-30）
+- `npm run e2e:template-party` ... `git-crypt` 未復号のため `[環境制約NG]`（データ復号なしではテスト対象が存在しない）
 - `DI-CMP-003`（PHP 7.4）、`DI-CMP-004`（WordPress 6.0）は本環境未実施
 - `DI-FE-002〜009` フロント behavior 操作、`DI-CMP-008` テーマ切り替え等は引き続き `[手動要]`
 
@@ -880,7 +882,7 @@ P2 — 継続改善：
 
 1. **Template Party 機能全体が F-1 で不通**: `includes/templates.php` が読み込まれておらず、`full-page.php` 適用ルートが死んでいる。US-3 が成立しない。
 2. **git-crypt ロック状態のビルドが黙って成功**: 暗号文 zip を誤配布すると、有料コンテンツが実質入手できないクレームにつながる。
-3. **DI-E2E-001〜004 は `npm run e2e:fresh` で確認済み**: `task ci:fast` / portable smoke / E2E fresh-install すべて green。ただし Template Party 用 E2E は git-crypt 鍵なしで未実行。
+3. **CSS Stock 系自動テストは green**: `task ci:fast` / `smoke:wp:portable` / `smoke:wp:docker` / `e2e:fresh` / `ready:checklist` すべて exit 0。ただし Template Party 用 E2E は git-crypt 鍵なしで未実行。
 4. **PHP 7.4 / WP 6.0 の互換性未確認**: `Requires at least: 6.0` / `Requires PHP: 7.4` を謳っているが、本環境は PHP 8.1 / WP 6.9.4 のみで検証。
 5. **手動項目が大量に残存**: 管理 UI からの zip アップロード、フロント behavior 操作、テーマ切り替え、モバイル viewport 等はテスト台帳にあっても未自動化。
 
@@ -892,4 +894,4 @@ P2 — 継続改善：
 |---|---|
 | 2026-07-28 | 初版。`docs/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 226 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
 | 2026-07-29 | Docker 抜きで実 WordPress を立てられる `smoke:wp:portable` 経路で Phase 5 の一部を実測。8 ケースを環境制約NGから実測済みへ更新。その過程で F-7（実 WP スモークが黙って赤）を発見して修正 |
-| 2026-07-30 | ritmo-inc/wordpress-plugin-designinserter は kouiso/design-inserter の古い重複版で追加統合すべきファイルが無いことを確認。敵対レビューとプレモーテム分析を §10 として追加。本環境実測結果を追記 |
+| 2026-07-30 | `ritmo-inc/wordpress-plugin-designinserter` は `kouiso/design-inserter` の古い重複版で追加統合不要。敵対レビューとプレモーテム分析を §9 として追加。`task ci:fast` / `smoke:wp:portable` / `smoke:wp:docker` / `e2e:fresh` / `ready:checklist` を実測済みに更新。Template Party E2E は git-crypt 未復号で環境制約NG |
