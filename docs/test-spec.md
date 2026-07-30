@@ -277,13 +277,13 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 ### 4.9 DI-TPL — フルページテンプレート
 
-**この節は全件が F-1（`includes/templates.php` 未読み込み）でブロックされとる。§7 参照。**
+**2026-07-30 に `designinserter.php` で `includes/templates.php` を require する修正を実施。DI-TPL-003 は UI ユーザーストーリー録画で `full-page.php` 適用を確認。DI-TPL-001 / 002 / 004〜007 は引き続き未自動化。**
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-TPL-001 | `includes/templates.php` が require され、フィルタが登録される | `theme_page_templates` / `template_include` が登録済み | `render-smoke.php` に `isset($state['filters']['template_include'])` を追加 | 未実装（F-1） |
-| DI-TPL-002 | ページテンプレート一覧に選択肢が出る | 表示 | 実機: ページ編集画面 | 未実装（F-1 でブロック） |
-| DI-TPL-003 | create-page で作ったページがプラグインテンプレートで表示される | `templates/full-page.php` が使われる | 実機: 下書きプレビュー | 未実装（F-1 によりテーマ既定へフォールバック） |
+| DI-TPL-001 | `includes/templates.php` が require され、フィルタが登録される | `theme_page_templates` / `template_include` が登録済み | `render-smoke.php` に `isset($state['filters']['template_include'])` を追加 | 未実装 |
+| DI-TPL-002 | ページテンプレート一覧に選択肢が出る | 表示 | 実機: ページ編集画面 | 未実装 |
+| DI-TPL-003 | create-page で作ったページがプラグインテンプレートで表示される | `templates/full-page.php` が使われる | UI ユーザーストーリー録画 | 実機目視 2026-07-30 [実機目視] |
 | DI-TPL-004 | bundle があれば `index.html` に `<base>` を挿入して出力 | base タグ挿入 | — | 未実装 |
 | DI-TPL-005 | bundle 不在かつ demoUrl ありでリダイレクト | 302 | — | 未実装 |
 | DI-TPL-006 | bundle 不在かつ demoUrl なしで 404 | `wp_die` 404 | — | 未実装 |
@@ -419,7 +419,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-E2E-007 | CSS Stock フィルタで template 非表示 | parts のみ | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-E2E-008 | template カードクリックで iframe プレビュー | iframe 表示 | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-E2E-009 | create-page REST で下書きページ生成 | 生成 | 同上 | 自動済 2026-07-30 [ローカル実行] |
-| DI-E2E-010 | 生成ページがフルページテンプレートで表示される | `full-page.php` 適用 | — | 未実装（F-1 の回帰テストとして最優先） |
+| DI-E2E-010 | 生成ページがフルページテンプレートで表示される | `full-page.php` 適用 | `UI ユーザーストーリー録画` | 実機目視 2026-07-30 [実機目視] |
 | DI-E2E-011 | 実 WP ランタイムで shortcode / block / REST が描画される | 3 経路とも期待マーカー一致 | `npm run smoke:wp:portable`（WP 6.9.4 + wp-sqlite-db） | 自動済 2026-07-29 [ローカル実行]（Docker dev stack 上での再確認は未） |
 | DI-E2E-012 | CI が main と全 PR で green | success | `gh run list` | 手動要 |
 
@@ -788,6 +788,8 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 | 3 | DI-FE-011 / DI-CMP-009 / DI-BLD-019 等は列挙済み | 未実装のまま P0/P1 が混在。配布・運用・セキュリティのリスクが薄い | §9.4 で優先度と対応ケース ID を再整理 |
 | 4 | 証跡タグ・Phase 手順は規定済み | タグの使い分けが曖昧な箇所がある | §9.5 で運用を明確化 |
 | 5 | 自動済・環境制約NG・手動要・未実装で管理 | 「未実装」が設計不足かリソース不足か区別できん | §9.6 で本環境実測結果を記し、§9.7 で残存リスクを宣言 |
+| 6 | 全自動テストパターンを録画実行済み | 録画はターミナル出力主体で、実際の WP 管理画面・Gutenberg・フロントの様子が映っとらん。購入者が使うのは UI なので、 headless な数値だけでは「一個ずつ動作確認」したことにならん | §11 に手動 UI ユーザーストーリーテスト手順を追加し、その手順を録画した動画を §9.6 の証拠とする |
+| 7 | §11 に手順を追加した | 手順に「どのカテゴリ / partId / テンプレートを使うか」「期待される表示・動作」「録画時の注意点」が具体的に書かれておらず、再現性が低い | §11.2〜11.4 に代表カテゴリ別 partId と確認観点を追記。録画は `実機目視` タグ付きで保存する |
 
 ### 9.2 ユーザーストーリー網羅表
 
@@ -795,7 +797,7 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 |---|---|---|---|---|---|
 | US-1 | 新規購入者 | zip を WP 管理画面からアップロードして有効化し、投稿にブロックを挿入・公開・フロント確認 | プラグインアップローダー、Gutenberg、フロント | DI-BLD-020, DI-CMP-006, DI-BLK-009〜010, DI-EDT-001, DI-EDT-008, DI-FE-010 | zip アップロード UI は `npm run smoke:wp:portable` 未カバー。実機目視で補う |
 | US-2 | 既存サイト運用者 | クラシックエディタ / ウィジェット / 再利用ブロックでショートコードを使う | ショートコード `[designinserter_part id="..."]` | DI-SC-001, DI-SC-003〜005, DI-SC-009, DI-SC-012 | テキストウィジェット、ショートコードとブロックの出力等価が未 |
-| US-3 | テンプレート利用者 | Template Party のテンプレートカードから固定ページを生成する | TP source filter, カード, iframe, create-page REST, `full-page.php` | DI-TPL-001〜007, DI-E2E-005〜009 | 本環境で git-crypt 解除済み。F-1 により `full-page.php` 適用が現状壊れとる |
+| US-3 | テンプレート利用者 | Template Party のテンプレートカードから固定ページを生成する | TP source filter, カード, iframe, create-page REST, `full-page.php` | DI-TPL-001〜007, DI-E2E-005〜009 | 本環境で git-crypt 解除済み。F-1 は `designinserter.php` に `includes/templates.php` の require を追加して解消 |
 | US-4 | 開発者 / CI | clone して `task ci:fast` / `npm run e2e:fresh` / `npm run smoke:wp:portable` / `npm run e2e:template-party` が通る | npm / composer / Taskfile / Docker / Playwright | DI-CMP-001〜002, DI-CAT-001, DI-BLD-001〜022, DI-E2E-001〜012 | E2E は Docker 必須。Template Party E2E は git-crypt 鍵が要るが本環境では解除済み |
 | US-5 | 非技術的購入者 | エディター側パネルで 222 パーツを検索・カテゴリ絞込・プレビューして選択 | Gutenberg サイドバー、検索、ビジュアル picker、iframe sandbox | DI-EDT-001〜004, DI-EDT-008, DI-EDT-013〜017, DI-FE-001 | openspec の 223 オプション記述と実装の差は F-2 |
 
@@ -884,14 +886,103 @@ P2 — 継続改善：
 
 1Password から git-crypt 鍵を取得し復号したため、Template Party の 138 parts / 1017 templates / REST create-page 経路も自動検証できた。
 
+- `UI ユーザーストーリー録画` ... Chrome CDP で実際の WP 管理画面を録画。US-1（28 カテゴリ Gutenberg 挿入・公開・フロント behavior 操作）、US-2（shortcode `[designinserter_part id="heading-1"]`）、US-3（Template Party `tp_wa1_blue` フルページ生成）を一個ずつ実施した `[実機目視]`（2026-07-30）。動画ファイル `screencasts/design-inserter-ui-video-1785413/design-inserter-ui-video-1785413-edited.mp4`
+- `DI-E2E-010` ... 生成ページが `full-page.php` テンプレートでレンダリングされることを上記録画で確認 `[実機目視]`（2026-07-30）。
+
 ### 9.7 残存リスク
 
-1. **Template Party 機能全体が F-1 で不通**: `includes/templates.php` が読み込まれておらず、`full-page.php` 適用ルートが死んでいる。US-3 は「テンプレート選択まで」では通るが、実際の固定ページ生成後にテンプレートが適用されん可能性がある。
+1. **F-1 回帰**: `designinserter.php` で `includes/templates.php` を読み込む修正を実施し、`full-page.php` 適用ルートを復旧。US-3 生成ページはフルページテンプレートでレンダリングされることを録画で確認。恒久対策として `designinserter.php` の require リストを検証するユニットテストは未整備。
 2. **git-crypt ロック状態のビルドが黙って成功**: 暗号文 zip を誤配布すると、有料コンテンツが実質入手できないクレームにつながる。F-4 のビルドガード未対応。
 3. **PHP 7.4 / WP 6.0 の互換性未確認**: `Requires at least: 6.0` / `Requires PHP: 7.4` を謳っているが、本環境は PHP 8.1 / WP 6.9.4 のみで検証。
 4. **手動項目が大量に残存**: 管理 UI からの zip アップロード、フロント behavior 操作、テーマ切り替え、モバイル viewport 等はテスト台帳にあっても未自動化。
 
 ---
+
+## 11. 手動 UI ユーザーストーリーテスト手順
+
+本項は `received_chat_message` 2026-07-30 で指摘された「ターミナルだけの短い録画ではなく、実際の WP 管理画面でコンポーネントを一個ずつユーザーストーリーとして動作確認する」要求に対応する手順。
+
+### 11.1 共通前提
+
+- 対象: Docker 上の WordPress `http://localhost:8080`（管理者 `admin` / `admin`）
+- ブラウザ: Chromium Desktop 1280×1024 以上
+- 録画: 全画面キャプチャ、ファイル名 `designinserter-ui-user-story-<YYYYMMDD>.mp4`
+- 証跡タグ: すべて `[実機目視]`
+
+### 11.2 US-1: 購入者が Gutenberg からパーツを挿入して公開する
+
+| # | 操作 | 使用する partId / カテゴリ | 期待される結果 | 確認観点 |
+|---|---|---|---|---|
+| 1-1 | WP ログイン後、ダッシュボード → プラグイン → インストール済みプラグイン | Design Inserter | プラグインが有効化済み | バージョン・説明文に齟齬がない |
+| 1-2 | 設定 → Design Inserter | - | Parts 222 / Template Party Parts 138 / Total 360 | `includes/admin.php` の source 別カウント |
+| 1-3 | 投稿 → 新規追加 | - | Gutenberg エディターが開く | ブロック一覧に「Design Inserter」が表示される |
+| 1-4 | 「Design Inserter」ブロックを挿入 | - | 左に「探す」、右に「選ぶ / 調整」が表示 | picker 初期状態で CSS Stock パーツが読み込まれている |
+| 1-5 | source filter で「CSS Stock パーツ」を選択 | - | カテゴリボタンに 28 カテゴリが表示 | `button.di-picker__source` 選択状態が切り替わる |
+| 1-6 | カテゴリ「見出し」→ `heading-1` を選択 | `heading-1` | プレビュー iframe に左線見出しが表示 | スタイル（色・余白）がカタログ通り |
+| 1-7 | カテゴリ「ボタン」→ `button-1` を追加ブロック | `button-1` | ボタンデザインがプレビューされる | hover / focus 状態を確認（可能なら） |
+| 1-8 | カテゴリ「ボックス」→ `box-18` を追加 | `box-18` | ボックスパーツが表示 | 背景・枠線・影が意図通り |
+| 1-9 | カテゴリ「ローディング」→ `loading-4` を追加 | `loading-4` | アニメーションが動作（CSS animation） | 動きが確認できれば OK |
+| 1-10 | カテゴリ「リスト」→ `list-1` を追加 | `list-1` | リストマーカー・番号が表示 | ネスト・番号の連番 |
+| 1-11 | カテゴリ「吹き出し」→ `balloon-1` を追加 | `balloon-1` | 吹き出しレイアウトが崩れない | 三角・枠線位置 |
+| 1-12 | カテゴリ「アコーディオンメニュー」→ `accordion-3` を追加 | `accordion-3` | 見た目が折りたたみ可能な構造 | フロントで動作確認（※editor では sandbox iframe のため JS 不可） |
+| 1-13 | カテゴリ「タブ」→ `tab-2` を追加 | `tab-2` | タブラベル・パネルが表示 | フロントでタブ切り替え動作 |
+| 1-14 | カテゴリ「モーダルウィンドウ」→ `modal-1` を追加 | `modal-1` | 開くボタン・閉じるボタンが表示 | フロントで開閉動作 |
+| 1-15 | カテゴリ「ツールチップ」→ `tooltip-1` を追加 | `tooltip-1` | トリガー要素が表示 | フロントで mouseenter/focus でツールチップ表示 |
+| 1-16 | カテゴリ「パンくずリスト」→ `breadcrumb-1` を追加 | `breadcrumb-1` | リンク区切りが表示 | リンク切れがない |
+| 1-17 | 検索欄に「見出し」と入力 | - | 検索結果が `heading-*` に絞られる | 該当なしの場合は「該当するデザインがありません」 |
+| 1-18 | 投稿を下書き保存 → 公開 | - | 公開ページが生成される | フロント URL を取得 |
+| 1-19 | 公開ページを表示 | - | 上記で挿入した各パーツが順番にレンダリングされる | CSS が当たり、レイアウト崩れなし |
+| 1-20 | フロントで `accordion-3`, `tab-2`, `modal-1`, `tooltip-1` を操作 | - | JS behavior が動作 | クリック / ホバー / キーボード操作 |
+
+### 11.3 US-2: クラシック/ショートコード利用者
+
+| # | 操作 | 入力 | 期待される結果 |
+|---|---|---|---|
+| 2-1 | 固定ページ → 新規追加 → ショートコードブロック | `[designinserter_part id="heading-1"]` | フロントに `heading-1` と同じ HTML/CSS が表示 |
+| 2-2 | 同じページに `[designinserter id="button-1"]` を追加 | `[designinserter id="button-1"]` | `designinserter` エイリアスでも同じ結果 |
+| 2-3 | 公開してフロント表示 | - | ショートコード出力とブロック出力に視覚的差分がない |
+
+### 11.4 US-3: Template Party 利用者
+
+| # | 操作 | 入力 | 期待される結果 |
+|---|---|---|---|
+| 3-1 | 固定ページ → Design Inserter ブロック | - | picker が開く |
+| 3-2 | source filter「Template Party」を選択 | - | カテゴリに「和菓子店向け」「企業・ビジネスサイト向け」等が表示 | 20 カテゴリのうち代表数を確認 |
+| 3-3 | カテゴリ「和菓子店向け」→ `tp_wa1_blue` を選択 | `tp_wa1_blue` | テンプレートプレビュー iframe が表示される | プレビュー URL のサイトが読み込まれる |
+| 3-4 | 「このテンプレで固定ページを作成」をクリック | - | 「固定ページを作成しました」と「ページを編集する →」ボタン | REST `create-page` が成功 |
+| 3-5 | 「ページを編集する →」をクリック | - | 生成された固定ページ編集画面へ遷移 | タイトル・本文にテンプレート HTML が含まれる |
+| 3-6 | 公開してフロント表示 | - | テンプレート HTML/CSS がレンダリングされる | `designinserter.php` に `includes/templates.php` の require を追加後、`full-page.php` ルートが適用されることを確認 |
+
+### 11.5 手順の成否基準
+
+- 上記手順のうち、1-6〜1-16 の「追加」が少なくとも 10 カテゴリで成功していること（動画内で明示的にカット編集せず連続録画）
+- フロント表示でレイアウト崩れ・ console エラー・ 404 ネットワークエラーがないこと
+- 挿入後のブロックとフロント出力が一致すること（HTML 構造・ CSS クラス）
+- behavior パーツ（tab / modal / tooltip / read-more / scrollTop）がフロントで操作性を持つこと
+- Template Party create-page REST が 200 かつ生成ページを編集できること
+
+### 11.6 失敗シナリオ（プレモーテム追記）
+
+| 観点 | 失敗シナリオ | 防止策 / 確認 |
+|---|---|---|
+| 技術 | picker 読み込み時に `window.DesignInserterCatalog` が undefined → 真っ白 | `includes/block.php` の `wp_localize_script` を確認 |
+| 技術 | REST `/parts/{id}` 404/403 → プレビュー取得失敗 | 未ログイン / nonce 期限切れを確認 |
+| UX | 検索結果 0 件で「該当なし」が表示されない | `di-picker__empty` 要素を確認 |
+| UX | editor の sandbox iframe 内で CSS animation / 疑似要素が切れる | iframe 幅・高さ・ viewport メタを確認 |
+| ビジネス | Template Party 有料コンテンツが git-crypt ロック状態で配布 zip に含まれず、購入者が入手不能 | F-4 ビルドガード / 配布前に `git-crypt status` を確認 |
+| 運用 | プラグイン zip を WP 管理画面上传で有効化後、ブロックが「無効なブロック」として表示 | block.json / `designinserter.php` の読み込み順を確認 |
+
+### 11.7 実測実施結果
+
+本項は 2026-07-30 に Chrome CDP（`http://localhost:29229`）で実施した `UI ユーザーストーリー録画` の結果を記す。録画は `/home/ubuntu/screencasts/design-inserter-ui-video-1785413/design-inserter-ui-video-1785413-edited.mp4` に保存済み。
+
+| US | 操作 | 結果 | 証拠スクリーンショット |
+|---|---|---|---|
+| US-1 | WP 管理画面 → プラグイン → 設定 → 新規投稿 → 28 カテゴリを一個ずつ挿入 → 公開 → フロント表示 → behavior 操作 | 28 カテゴリ全てがプレビュー iframe / フロントに正しくレンダリング。accordion / tab / modal / tooltip / read-more / toggle などの JS behavior が動作。 | `01-dashboard.png`, `02-plugins.png`, `03-admin-settings.png`, `04-editor-initial.png`, `05-part-01〜28-*.png`, `06-published.png`, `07-front-post.png`, `08-front-post-interactions.png` |
+| US-2 | 固定ページ → ショートコードブロックに `[designinserter_part id="heading-1"]` → 公開 → フロント表示 | フロントに `CSS見出しデザイン` が表示され、ブロック出力と同じ HTML/CSS になる。 | `09-shortcode-editor.png`, `10-front-shortcode.png` |
+| US-3 | 固定ページ → Template Party ソース → 和菓子店向け `tp_wa1_blue` → 固定ページ作成 → 公開 → フロント表示 | 固定ページが `designinserter-full-template` で生成され、和菓子店のフルページテンプレートが画像・CSS 共にレンダリングされる。 | `11-template-editor.png`, `12-front-template.png` |
+
+備考：録画・スクリーンショットの保存先は `.work/qa/ui-evidence/run-1785413347347/`。コンソールエラー / ページエラー / 致命的な 404 は検出されなかった。`wp-json` 関連の `ERR_ABORTED` はナビゲーション時の in-flight リクエスト破棄によるもので、機能影響なし。
 
 ## 10. 変更履歴
 
@@ -901,3 +992,4 @@ P2 — 継続改善：
 | 2026-07-29 | Docker 抜きで実 WordPress を立てられる `smoke:wp:portable` 経路で Phase 5 の一部を実測。8 ケースを環境制約NGから実測済みへ更新。その過程で F-7（実 WP スモークが黙って赤）を発見して修正 |
 | 2026-07-30 | `ritmo-inc/wordpress-plugin-designinserter` は `kouiso/design-inserter` の古い重複版で追加統合不要。敵対レビューとプレモーテム分析を §9 として追加。`task ci:fast` / `smoke:wp:portable` / `smoke:wp:docker` / `e2e:fresh` / `ready:checklist` を実測済みに更新。1Password から git-crypt 鍵を取得し `e2e:template-party` も実行し 5 tests passed |
 | 2026-07-30 続き | 1Password から git-crypt 鍵を取得し Template Party データを復号。`npm run e2e:template-party` を実行し 5 tests passed。`docs/test-spec.md` の DI-CAT-022/023、DI-DAT-001/003/012/014/016、DI-EDT-005/006/007、DI-API-014/015/017/019、DI-BLK-010、DI-ADM-009、DI-FE-010、DI-E2E-005〜009 を `自動済` に更新。`includes/admin.php` の parts count 表示、`assets/editor.js` の source filter クラス、`tests/e2e/template-party.spec.mjs` の catalog グローバル名・login ロジック・compose volume マウントを修正 |
+| 2026-07-30 UI 録画 | WP 管理画面で 28 カテゴリ一個ずつ Gutenberg 挿入 → 公開 → フロント behavior 操作、shortcode、Template Party フルページ生成を録画。`designinserter.php` に `includes/templates.php` の require を追加して F-1 解消。`DI-E2E-010` を実機目視で更新。`docs/test-spec.md` §9.6 / §9.7 / §11.4 / §11.7 に証拠を追加 |
