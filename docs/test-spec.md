@@ -771,9 +771,125 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 
 ---
 
-## 9. 変更履歴
+## 9. 敵対レビュー・プレモーテム追記（2026-07-30）
+
+### 9.1 レビュー方法
+
+`docs/test-spec.md` を Proposer / Critic の 5 ラウンドで敵対レビューした。
+
+| ラウンド | Proposer 主張 | Critic 反論 | 合意 |
+|---|---|---|---|
+| 1 | 226 ケース・ openspec 50 項目のトレーサビリティは網羅的 | ユーザーストーリーごとに「誰が何を達成するか」が見えん | §9.2 にユーザーストーリー網羅表を追加 |
+| 2 | F-1〜F-7 と §8 で欠陥は追跡済み | 欠陥が「已知」として止まっとる。購入者視点で「何が壊れるか」をケース化せえ | §9.3 に失敗シナリオマトリクスを追加 |
+| 3 | DI-FE-011 / DI-CMP-009 / DI-BLD-019 等は列挙済み | 未実装のまま P0/P1 が混在。配布・運用・セキュリティのリスクが薄い | §9.4 で優先度と対応ケース ID を再整理 |
+| 4 | 証跡タグ・Phase 手順は規定済み | タグの使い分けが曖昧な箇所がある | §9.5 で運用を明確化 |
+| 5 | 自動済・環境制約NG・手動要・未実装で管理 | 「未実装」が設計不足かリソース不足か区別できん | §9.6 で本環境実測結果を記し、§9.7 で残存リスクを宣言 |
+
+### 9.2 ユーザーストーリー網羅表
+
+| ID | ユーザー | 目的 | 触る機能 | 網羅する既存ケース | 未網羅 / 備考 |
+|---|---|---|---|---|---|
+| US-1 | 新規購入者 | zip を WP 管理画面からアップロードして有効化し、投稿にブロックを挿入・公開・フロント確認 | プラグインアップローダー、Gutenberg、フロント | DI-BLD-020, DI-CMP-006, DI-BLK-009〜010, DI-EDT-001, DI-EDT-008, DI-FE-010 | zip アップロード UI は `npm run smoke:wp:portable` 未カバー。実機目視で補う |
+| US-2 | 既存サイト運用者 | クラシックエディタ / ウィジェット / 再利用ブロックでショートコードを使う | ショートコード `[designinserter_part id="..."]` | DI-SC-001, DI-SC-003〜005, DI-SC-009, DI-SC-012 | テキストウィジェット、ショートコードとブロックの出力等価が未 |
+| US-3 | テンプレート利用者 | Template Party のテンプレートカードから固定ページを生成する | TP source filter, カード, iframe, create-page REST, `full-page.php` | DI-TPL-001〜007, DI-E2E-005〜010 | git-crypt 復号環境が必要。F-1 により `full-page.php` 適用が現状壊れとる |
+| US-4 | 開発者 / CI | clone して `task ci:fast` / `npm run e2e:fresh` / `npm run smoke:wp:portable` が通る | npm / composer / Taskfile / Docker / Playwright | DI-CMP-001〜002, DI-CAT-001, DI-BLD-001〜022, DI-E2E-001〜012 | E2E は Docker 必須。Template Party E2E は git-crypt 鍵必須 |
+| US-5 | 非技術的購入者 | エディター側パネルで 222 パーツを検索・カテゴリ絞込・プレビューして選択 | Gutenberg サイドバー、検索、ビジュアル picker、iframe sandbox | DI-EDT-001〜004, DI-EDT-008, DI-EDT-013〜017, DI-FE-001 | openspec の 223 オプション記述と実装の差は F-2 |
+
+### 9.3 想定失敗シナリオ・プレモーテムマトリクス
+
+購入者が遭遇する前に想定した失敗パターン。
+
+| 観点 | 失敗シナリオ | 影響 | 既存ケース / 対応 | 状態 |
+|---|---|---|---|---|
+| 技術 | `css-stock-parts.json` が欠損 / 破損 / BOM 付き | 全パーツ選択不能、フロント真っ白 | DI-CAT-016, DI-DAT-007〜008 | 自動済 |
+| 技術 | REST nonce 期限切れ / 未ログインで `/parts/{id}` アクセス | エディタープレビュー取得失敗、未認証情報漏洩 | DI-API-014〜015 | 手動要 |
+| 技術 | Docker / MySQL ポート被り、E2E 用 WordPress 起動失敗 | CI 不安定、レビュー遅延 | E-1 | 環境制約 |
+| 技術 | `frontend.js` 読み込み前に DOM 挿入 / `DOMContentLoaded` 未発火 | behavior パーツ（アコーディオン等）動作せず | DI-FE-002〜009 | 手動要 |
+| UX | 検索結果 0 件のとき「該当なし」表示がない | 購入者がパーツが存在しないと誤認 | DI-EDT-014 | 手動要 |
+| UX | 222 パーツ全部を 1 ページに入れて公開 → モバイルでレイアウト崩壊 | 購入者の LP 品質低下 | DI-CMP-009 | 未実装 |
+| ビジネス | 配布 zip に `tests/` / `scripts/` / `.tmp/` / `.git` が混入 | セキュリティリスク、ファイルサイズ肥大 | DI-BLD-015 | 自動済 |
+| ビジネス | `readme.txt` が無いため WP.org ディレクトリ提出不可 | 販売チャネル制限 | DI-BLD-019 | 未実装 |
+| ビジネス | `npm run build` が git-crypt ロック状態で通り、暗号文 zip に混入 | 購入者に Template Party コンテンツが欠損したまま届く | DI-BLD-022, DI-SEC-014 | 未実装（P0） |
+| ビジネス | バージョン不整合（package.json / プラグインヘッダ / `DESIGNINSERTER_VERSION`） | キャッシュ破損、サポート時に混乱 | DI-BLD-001〜012 | 自動済 |
+| 運用 | 過去の `dist/*.zip` が残って `smoke:wp:portable` が旧版を検出できない | 誤ったバージョンで検証 | DI-BLD-017 | 手動要 |
+| 運用 | WordPress 6.0 / PHP 7.4 で fatal / 構文エラー | 購入者環境でプラグインが落ちる | DI-CMP-003〜004 | 未実装 |
+| 運用 | テーマ切り替えで CSS グローバル衝突 | 既存サイトのレイアウト破壊 | DI-CMP-008 | 手動要 |
+| セキュリティ | partId に `<script>alert(1)</script>` 等を通す | `sanitize_key` で除去されるべき | DI-SEC-002, DI-RND-010 | 自動済 |
+| セキュリティ | `previewImage` / `bundleDir` に `../` 等のパストラバーサル | サーバー外ファイル読み出し | DI-SEC-008, DI-DAT-019 | 未実装（重要） |
+| セキュリティ | create-page REST に `edit_pages` 未満の権限でアクセス | 下書きページ不正生成 | DI-SEC-005, DI-API-017〜020 | 未実装 |
+| セキュリティ | 改ざんされた catalog JSON に `script` タグが混入 | 管理者・閲覧者への XSS | DI-SEC-009 | 手動要 |
+| パフォーマンス | エディターが 222 件カタログを一括読み込み → 応答遅延 | 購入者体験低下 | DI-EDT-001 等 | 未実装（計測なし） |
+| パフォーマンス | フロントが 222 パーツ分の CSS/JS を 1 ファイルずつ挿入 | リクエスト数増大 | DI-FE-012 | 自動済 |
+
+### 9.4 合意した追加・強化項目（優先度順）
+
+P0 — 販売前に必須：
+
+| # | 項目 | 対応ケース | 理由 |
+|---|---|---|---|
+| 1 | `includes/templates.php` を `designinserter.php` から読み込む | F-1, DI-TPL-001〜007, DI-E2E-010 | Template Party のコア機能が現状動作せず。購入者は有料コンテンツを使えない |
+| 2 | git-crypt ロック状態でのビルドを即座に失敗させる | F-4, DI-BLD-022, DI-SEC-014 | 暗号文 zip を購入者に誤配布するリスク |
+| 3 | `bundleDir` パストラバーサル遮断の自動テスト | DI-SEC-008, DI-DAT-019, DI-TPL-007 | 外部からの catalog JSON 改ざん時の防御 |
+| 4 | create-page REST の権限・異常系テスト | DI-API-017〜020, DI-SEC-005 | 未認証・低権限アクセスでページ生成されると被害大 |
+| 5 | ショートコードとブロックの出力等価を自動化 | DI-SC-007, DI-SC-012 | 同じ partId で異なる表示になると購入者が混乱 |
+
+P1 — 販売前に埋めたい：
+
+| # | 項目 | 対応ケース |
+|---|---|---|
+| 6 | `readme.txt` 作成 | DI-BLD-019 |
+| 7 | `npm run smoke:wp:portable` を CI に載せる | DI-E2E-011, F-7 回帰 |
+| 8 | axe-core による a11y 自動検査 | DI-FE-011 |
+| 9 | 3 viewport レイアウト検証 | DI-CMP-009 |
+| 10 | PHP 7.4 / WordPress 6.0 互換性検証 | DI-CMP-003〜004 |
+| 11 | `phpcs` 範囲を `tests/` 直下・`scripts/` に拡大 + WordPress Security sniff 追加 | DI-SEC-010〜011, DI-SEC-015 |
+| 12 | git-crypt 復号環境で Template Party E2E 実行 | DI-E2E-005〜009 |
+
+P2 — 継続改善：
+
+| # | 項目 | 対応ケース |
+|---|---|---|
+| 13 | openspec editor-ui / gutenberg-block を実装に合わせ更新 | F-2, DI-EDT-002 |
+| 14 | スクレイパー冪等性・エンティティデコード | DI-SCR-010, DI-SCR-012 |
+| 15 | PHPUnit bootstrap の `DESIGNINSERTER_VERSION` を実物に合わせる | F-5 |
+
+### 9.5 検証ソースタグ運用
+
+本項以降、以下のタグを厳守する。
+
+| タグ | 意味 | 例 |
+|---|---|---|
+| `[ローカル実行]` | この環境で npm / composer / Taskfile を実行して機械的に確認 | `npm run test:php` |
+| `[実機目視]` | Docker 上の WP 管理画面 / フロントを人間が目視・操作 | Gutenberg 挿入動作 |
+| `[CI]` | GitHub Actions 等の CI ログ | `task ci:fast` |
+| `[環境制約NG]` | Docker / git-crypt 等、外部条件がないと確認できない | Template Party E2E |
+
+`[ローカル実行]` だけでは配布可否を判断しない。成功基準（§5.2）はすべて実機目視または CI で確認する。
+
+### 9.6 本環境での実測結果
+
+- `task ci:fast` ... exit 0 `[ローカル実行]`（2026-07-30）
+- `npm run smoke:wp:portable` ... exit 0、WP 6.9.4 で shortcode / block / REST / ライフサイクル確認 `[ローカル実行]`（2026-07-30）
+- `npx playwright install --with-deps chromium` ... 完了 `[ローカル実行]`（2026-07-30）
+- `npm run e2e:fresh` ... exit 0、`tests/e2e/fresh-install-222.spec.mjs` 4 tests passed、`partCount 222` / `uniquePartCount 222` / `styleCount 209` / `behaviorCount 16` / `initializedBehaviorCount 16` / `zeroBox 0` / `frontendCss 1` / `frontendJs 1`、console / network error 0 を確認 `[ローカル実行]`（2026-07-30）
+- `npm run e2e:template-party` ... `git-crypt` 未復号のため `[環境制約NG]`
+- `DI-CMP-003`（PHP 7.4）、`DI-CMP-004`（WordPress 6.0）は本環境未実施
+- `DI-FE-002〜009` フロント behavior 操作、`DI-CMP-008` テーマ切り替え等は引き続き `[手動要]`
+
+### 9.7 残存リスク
+
+1. **Template Party 機能全体が F-1 で不通**: `includes/templates.php` が読み込まれておらず、`full-page.php` 適用ルートが死んでいる。US-3 が成立しない。
+2. **git-crypt ロック状態のビルドが黙って成功**: 暗号文 zip を誤配布すると、有料コンテンツが実質入手できないクレームにつながる。
+3. **DI-E2E-001〜004 は `npm run e2e:fresh` で確認済み**: `task ci:fast` / portable smoke / E2E fresh-install すべて green。ただし Template Party 用 E2E は git-crypt 鍵なしで未実行。
+4. **PHP 7.4 / WP 6.0 の互換性未確認**: `Requires at least: 6.0` / `Requires PHP: 7.4` を謳っているが、本環境は PHP 8.1 / WP 6.9.4 のみで検証。
+5. **手動項目が大量に残存**: 管理 UI からの zip アップロード、フロント behavior 操作、テーマ切り替え、モバイル viewport 等はテスト台帳にあっても未自動化。
+
+---
+
+## 10. 変更履歴
 
 | 日付 | 内容 |
 |---|---|
 | 2026-07-28 | 初版。`docs/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 226 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
 | 2026-07-29 | Docker 抜きで実 WordPress を立てられる `smoke:wp:portable` 経路で Phase 5 の一部を実測。8 ケースを環境制約NGから実測済みへ更新。その過程で F-7（実 WP スモークが黙って赤）を発見して修正 |
+| 2026-07-30 | ritmo-inc/wordpress-plugin-designinserter は kouiso/design-inserter の古い重複版で追加統合すべきファイルが無いことを確認。敵対レビューとプレモーテム分析を §10 として追加。本環境実測結果を追記 |
