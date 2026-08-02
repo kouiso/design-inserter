@@ -133,11 +133,8 @@ export function resolveOutputPath(version = packageJson.version, { allowLocked =
 }
 
 /** 一覧が長くなりすぎんように 10 件で打ち切る（verifyZip の既存慣習に合わせる）。 */
-function formatPathList(paths, describe = () => '') {
-  const head = paths.slice(0, 10).map((abs) => {
-    const note = describe(abs);
-    return `  ${path.relative(root, abs)}${note ? ` (${note})` : ''}`;
-  });
+function formatPathList(paths) {
+  const head = paths.slice(0, 10).map((abs) => `  ${path.relative(root, abs)}`);
   if (paths.length > head.length) {
     head.push(`  ... 他 ${paths.length - head.length} 件`);
   }
