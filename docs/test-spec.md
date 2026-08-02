@@ -442,8 +442,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | catalog | sourceUrl がアンカーリンク | DI-CAT-009 | 自動済 |
 | catalog | PHP json_decode でエラーなし | DI-CAT-016 | 自動済 |
 | editor-ui | サイドバーに Design Inserter パネル | DI-EDT-001 | 自動済 |
-| editor-ui | SelectControl に 223 オプション | DI-EDT-002 | 不整合（F-2） |
-| editor-ui | オプションラベルが `[カテゴリ名] パーツ名` 形式 | DI-EDT-002 | 不整合（F-2） |
+| editor-ui | 検索付きカードグリッド（`.di-picker__grid`）でパーツ / テンプレートを選ぶ | DI-EDT-002 | 自動済 2026-08-02 [ローカル実行] |
+| editor-ui | カードに `previewImage` とタイトル、テンプレは「テンプレ」badge を出す | DI-EDT-002 | 自動済 2026-08-02 [ローカル実行] |
 | editor-ui | 選択後にプレビューが即表示 | DI-EDT-008 | 自動済 |
 | editor-ui | SVG-only のプレビューに style タグなし | DI-EDT-013 | 手動要 |
 | editor-ui | 未選択で案内メッセージ | DI-EDT-014 | 手動要 |
@@ -484,9 +484,9 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | shortcode | 出力がブロック出力と同一 | DI-SC-007 | 未実装 |
 | shortcode | テキストウィジェットで描画 | DI-SC-009 | 手動要 |
 
-集計: 自動済 35 / 環境制約NG 0 / 手動要 8 / 未実装 5 / 不整合 2。
+集計: 自動済 37 / 環境制約NG 0 / 手動要 8 / 未実装 5 / 不整合 0。
 
-（2026-08-02: DI-EDT-002 を openspec 改訂により `不整合` から `自動済` へ更新。残る `不整合` 2 件は editor-ui / gutenberg-block 以外の spec drift。）
+（2026-08-02: openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂したことで、DI-EDT-002 に紐づく 3 行がすべて `不整合` から `自動済` になった。§5.1 の `不整合` は 0 件。）
 
 ### 5.2 requirements 成功基準 → テストケース ID
 

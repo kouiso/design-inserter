@@ -84,57 +84,23 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 
 ```javascript
 {
-  parts: [
-    {
-      id: "heading-1",
-      title: "シンプルな下線の見出し",
-      categoryLabel: "見出し",
-      previewImage: "https://example.com/wp-content/plugins/designinserter/assets/previews/heading-1.webp",
-      source: "css-stock",          // "css-stock" | "template-party"
-      type: "part",
-      behavior: {                    // JS 挙動を持つパーツのみ
-        type: "accordion",
-        requiresJs: true,
-        enhancementLevel: "progressive"
-      }
-    }
-    // ... CSS Stock 222 件 + Template Party 138 件
-  ],
-  templates: [
-    {
-      id: "tp_wa1_blue",
-      title: "和菓子店 ブルー",
-      categoryLabel: "和菓子店向け",
-      previewImage: "...",
-      source: "template-party",
-      type: "template",
-      demoUrl: "https://template-party.com/...",
-      bundleDir: "wa1_blue"
-    }
-    // ... 1017 件
-  ],
-  sources: [
-    { id: "all",            label: "すべて" },
-    { id: "css-stock",      label: "CSS Stock パーツ" },
-    { id: "template-party", label: "Template Party" }
-  ],
+  // CSS Stock 222 件 + Template Party 138 件
+  parts: [ { id, title, categoryLabel, previewImage, source, type: "part",
+             behavior?: { type, requiresJs, enhancementLevel } } ],
+  // 1017 件
+  templates: [ { id, title, categoryLabel, previewImage, source, type: "template", demoUrl, bundleDir } ],
+  sources: [ { id: "all", label: "すべて" },
+             { id: "css-stock", label: "CSS Stock パーツ" },
+             { id: "template-party", label: "Template Party" } ],
   restUrl: "https://example.com/wp-json/designinserter/v1/parts/",
   templatesRestUrl: "https://example.com/wp-json/designinserter/v1/templates/",
   nonce: "abc123"
 }
 ```
 
-`html` と `css` はここに**入らない**。`GET {restUrl}{id}` のレスポンスに入る。
+`source` は `"css-stock"` か `"template-party"`。`previewImage` は `DESIGNINSERTER_PLUGIN_URL` で絶対化済み。`behavior` は JS 挙動を持つパーツにだけ付く。
 
-### REST レスポンス（`GET /designinserter/v1/parts/{id}`）
-
-```javascript
-{
-  id: "heading-1",
-  html: "<h2 class=\"heading01\">見出しテキスト</h2>",
-  css: ".heading01 { border-bottom: 2px solid #333; }"
-}
-```
+`html` と `css` はここに**入らない**。`GET {restUrl}{id}` が `{ id, html, css }` を返す。
 
 ## エッジケース
 
