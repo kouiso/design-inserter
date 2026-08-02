@@ -127,7 +127,7 @@ test('release mode rejects locked, missing and empty catalogs', () => {
   );
 });
 
-test('dev mode tolerates locked catalogs but never malformed ones', () => {
+test('dev mode tolerates locked catalogs only', () => {
   const options = { allowLocked: true };
   assert.doesNotThrow(
     () => assertCatalogsUsable([{ status: 'locked', path: '/tmp/parts.json', key: 'parts' }], options),
@@ -139,6 +139,14 @@ test('dev mode tolerates locked catalogs but never malformed ones', () => {
       options,
     ),
     /データ退行/,
+  );
+  // カタログは git 管理下。消えとるんはロックやのうてリポジトリの退行なので dev でも落とす。
+  assert.throws(
+    () => assertCatalogsUsable(
+      [{ status: 'missing', path: '/tmp/parts.json', key: 'parts', reason: 'ファイルが無い' }],
+      options,
+    ),
+    /リポジトリの退行/,
   );
 });
 

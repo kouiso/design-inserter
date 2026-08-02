@@ -148,10 +148,10 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 | 選択済み partId が catalog に存在しない | REST が 404 → error Notice ＋再試行ボタン | `designinserter_get_part()` が null |
 | REST が 401 / 403（nonce 期限切れ・未ログイン） | 「プレビュー取得に失敗しました (HTTP 403)」＋再試行 | `err.status` |
 | 連打して partId が次々変わる | 古いレスポンスは `data.id !== partId` で捨てる | `AbortController` + id 照合 |
-| CSS が空のパーツ | srcDoc の `<style>` が空のまま HTML だけ描画 | `content.css \|\| ''` |
+| CSS が空のパーツ | srcDoc の `<style>` にはプレビュー用の基本スタイル（`html,body` の margin / padding / font）だけが残り、パーツ固有 CSS の部分が空になる | `content.css \|\| ''` |
 | カタログ HTML に `<script>` が混入 | `sandbox=""` により実行されない | C-02 |
 | テンプレートに demoUrl が無い | 「プレビューURLがありません」 | — |
-| create-page が権限不足 | error Notice にサーバ側メッセージ | `edit_pages` |
+| create-page が権限不足 | error Notice に「ページ作成に失敗しました: HTTP 403」を表示する。現実装は REST の JSON ボディを読まず HTTP ステータスだけを出す | `edit_pages` |
 
 ## 受け入れ基準
 

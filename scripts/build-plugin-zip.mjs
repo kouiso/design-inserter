@@ -142,7 +142,10 @@ function formatPathList(paths) {
 }
 
 /**
- * malformed は allowLocked でも通さん。git-crypt のロックとちごうて、データ退行の疑いやから。
+ * dev モードが大目に見るんは locked だけ。
+ * malformed（データ退行）と missing（ファイル消失）は git-crypt のロックとは別物なので、
+ * どっちのモードでも落とす。ここを緩めると ci:fast がカタログ削除を素通しして、
+ * マージ後の trusted release build まで気づかれん。
  */
 export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
   const malformed = states.filter((state) => state.status === 'malformed');
@@ -154,6 +157,15 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
     ].join('\n'));
   }
 
+  const missing = states.filter((state) => state.status === 'missing');
+  if (missing.length) {
+    throw new Error([
+      'ビルド中止: Template Party カタログが見つかりません。これらは git 管理下のファイルなので、消えとるんはリポジトリの退行です。',
+      missing.map((state) => `  ${path.relative(root, state.path)}: ${state.reason}`).join('\n'),
+      'git-crypt のロックではないので --allow-locked-catalog では回避できません。',
+    ].join('\n'));
+  }
+
   if (allowLocked) {
     return;
   }
@@ -162,7 +174,7 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
   if (unusable.length) {
     throw new Error([
       'リリースビルド中止: Template Party カタログが git-crypt で暗号化されたままです。',
-      unusable.map((state) => `  ${path.relative(root, state.path)} (${state.status === 'locked' ? 'git-crypt 暗号文' : state.reason})`).join('\n'),
+      unusable.map((state) => `  ${path.relative(root, state.path)} (git-crypt 暗号文)`).join('\n'),
       'このまま zip を作ると Template Party のパーツ / テンプレートが丸ごと欠けた配布物になります (F-4 / DI-BLD-022)。',
       '対処: git-crypt unlock <keyfile> を実行してから npm run build をやり直してください。',
       '鍵の無い環境で zip 生成だけ確認したい場合は npm run build:dev（dist/dev/ に出力。リリースには使えません）。',
@@ -450,6 +462,13 @@ export function main(argv = process.argv.slice(2)) {
     throw new Error(`Plugin directory not found: ${pluginDir}`);
   }
 
+  const outPath = resolveOutputPath(packageJson.version, { allowLocked });
+
+  // ガードで落ちたときに前回ビルドの同バージョン zip が残ると、
+  // generate-ready-checklist.mjs がそれを鮮度チェックせずハッシュして「リリース可能」に見せる。
+  // 検査より先に消して、失敗したビルドが成果物を残さんようにする。
+  fs.rmSync(outPath, { force: true });
+
   // カタログ検査を sweep より先に回す。ロック時に「暗号文 1089 件」やのうて
   // 「git-crypt unlock せえ」という具体的な指示を出したいから。
   assertCatalogsUsable(inspectTemplatePartyCatalogs(), { allowLocked });
@@ -462,7 +481,6 @@ export function main(argv = process.argv.slice(2)) {
     console.warn(formatPathList(localOnlyFiles));
   }
 
-  const outPath = resolveOutputPath(packageJson.version, { allowLocked });
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
 
   createZip(included, outPath);

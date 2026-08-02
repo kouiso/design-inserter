@@ -37,7 +37,7 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
 3. catalog のメタデータは `wp_localize_script` で `DesignInserterCatalog` としてエディタに渡す。**`html` / `css` は渡さない**
 4. パーツの HTML / CSS は `GET /designinserter/v1/parts/{id}`（`edit_posts` 必須・`X-WP-Nonce` 付き）で 1 件ずつ取得する
 5. エディタプレビューは iframe の `srcDoc` 内に `<style>` としてインライン出力する。編集画面の DOM には挿入しない（C-02）
-6. SVG-only パーツ（css が空）の場合、srcDoc の `<style>` が空になる
+6. SVG-only パーツ（css が空）の場合、srcDoc の `<style>` にはプレビュー用の基本スタイルだけが残り、パーツ固有 CSS の部分が空になる
 7. プラグイン停止時、保存済みブロックはフロントエンドで何も描画しない（空文字列を返す）
 
 ## データ構造
@@ -107,7 +107,7 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
 | 無効な partId が保存されている | フロントエンドで空文字列を返す | render.php が null チェック |
 | プラグインが無効化された | 保存済みブロックがフロントエンドで非表示になる | dynamic block の仕様 |
 | 360 件の一括描画 | カードグリッドが全件描画（仮想スクロールは未実装） | 現状の制限 |
-| SVG-only パーツの選択 | プレビューに HTML のみ表示、style は空 | css フィールドが空文字列 |
+| SVG-only パーツの選択 | プレビューに HTML のみ表示。style はプレビュー用の基本スタイルのみ | css フィールドが空文字列 |
 | パーツとテンプレートを交互に選ぶ | 常にどちらか一方だけが選択状態になる | 相互に解除する |
 
 ## 受け入れ基準
@@ -115,7 +115,7 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
 - [ ] ブロック挿入パネルで「Design Inserter」が表示されること（DI-BLK-009）
 - [ ] サイドバーの picker がカードグリッドで、CSS Stock 222 件 + Template Party 138 件 + テンプレート 1017 件を扱えること（DI-EDT-002）
 - [ ] カード選択後、ブロック本体に sandbox iframe のプレビューが描画されること（DI-EDT-008 / DI-EDT-010）
-- [ ] SVG-only パーツ選択時、style が空になること（DI-EDT-013）
+- [ ] SVG-only パーツ選択時、style にパーツ固有 CSS が出力されないこと（DI-EDT-013）
 - [ ] 投稿を保存し、フロントエンドで正しい HTML+CSS が描画されること（DI-BLK-010）
 - [ ] 無効な partId の場合、フロントエンドで何も表示されないこと（DI-BLK-008）
 - [ ] プラグイン無効化後、保存済み投稿でエラーが発生しないこと（DI-BLK-012）
