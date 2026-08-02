@@ -6,7 +6,8 @@ tasks:
       - npm ci
       - npm run phpcs
       - npm run php:lint
-      - npm run build
+      # git-crypt ロック環境でもゲートを通す。リリース zip は復号済み環境の npm run build が担当。
+      - npm run build:dev
       - npm test
       - npm run test:php
 

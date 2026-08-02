@@ -1,101 +1,181 @@
 # Editor UI — Gutenberg エディタ UI
 
 作成日: 2026-05-03
+最終更新: 2026-08-02（実装に合わせて全面改訂 / issue #55）
 
 ## 概要
 
-Gutenberg エディタ内で CSS Stock パーツを選択・プレビューするための UI コンポーネント。vanilla JS で実装し、ビルドステップなしで動作する。
+Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレートを検索・選択・プレビューするための UI コンポーネント。vanilla JS で実装し、ビルドステップなしで動作する。
+
+エディタ画面は 2 つの領域からなる:
+
+- **探す（`ItemPicker`）** — InspectorControls（サイドバー）内。source フィルタ / 検索ボックス / カテゴリボタン / カードグリッド
+- **選ぶ・調整（`LivePreview` / `TemplatePreview` + `CreatePageButton`）** — ブロック本体。選択中のデザインを隔離した iframe で表示する
+
+> **⚠️ ドロップダウン（`SelectControl`）へ戻してはいけない。**
+> 2026-05 時点の旧 spec は 223 オプションの `SelectControl` を規定していたが、実装はビジュアル picker に置き換わっている。
+> プレビューの `<iframe sandbox>` 隔離（C-02）はカタログ HTML を編集画面へ直挿ししないための XSS 対策であり、
+> `SelectControl` + `dangerouslySetInnerHTML` に戻すとこの防御が消える。
 
 ## 機能要件
 
+### 共通
+
 1. ファイルパス: `wp-content/plugins/designinserter/assets/editor.js`
-2. IIFE パターンで WordPress グローバル変数を注入する
-3. InspectorControls（サイドバー）内に PanelBody「Design Inserter」を表示する
-4. PanelBody 内に SelectControl でパーツ一覧を表示する
-5. SelectControl のオプション形式: `[{categoryLabel}] {title}`（例: `[見出し] シンプルな下線の見出し`）
-6. 先頭オプション: `パーツを選択`（value: `""`）
-7. パーツ選択時、エディタ本体（edit 関数の戻り値）にライブプレビューを表示する
-8. ライブプレビューの構造:
-   - `div.designinserter-editor-preview` でラップ
-   - CSS がある場合は `<style>` タグをインライン出力
-   - `div.designinserter-part` に `dangerouslySetInnerHTML` で HTML を描画
-9. パーツ未選択時は Notice（status: info）で「Design Inserter の CSS パーツを選択してください。」を表示する
+2. IIFE パターンで WordPress グローバル変数（`wp.blocks` / `wp.element` / `wp.blockEditor` / `wp.components` / `wp.i18n` / `wp.data`）を注入する
+3. InspectorControls 内に PanelBody「Design Inserter」を表示し、その中に `ItemPicker` を置く
+
+### ItemPicker（探す）
+
+4. ヘッダに `div.di-picker__guide`「探す — キーワードやカテゴリで候補を絞り込みます。」を表示する
+5. **source フィルタ**: `div.di-picker__sources`（`role="group"`）に `catalog.sources` のボタンを描画する。各ボタンは `button.di-picker__source` で `aria-pressed` を持ち、選択中は `variant: primary`
+   - `all`（すべて）/ `css-stock`（CSS Stock パーツ）/ `template-party`（Template Party）の 3 種
+   - source を切り替えるとカテゴリ選択はリセットされる
+   - `css-stock` を選ぶと template カードは 0 件になる
+6. **検索**: `TextControl.di-picker__search`（placeholder `デザインを検索...`）。`title` / `categoryLabel` / `id` の大文字小文字を無視した部分一致で絞り込む
+7. **カテゴリ**: `div.di-picker__cats`（`role="group"`）に「全て (件数)」＋現在の source に存在する `categoryLabel` のボタンを件数付きで描画する。`aria-pressed` を持つ
+8. **カードグリッド**: `div.di-picker__grid`（`role="list"`）に絞り込み結果を描画する。パーツが先、テンプレートが後
+   - `PartCard` = `button.di-card`。`previewImage` があれば `img.di-card__img`（`loading="lazy"` / `alt=""`）、無ければ `div.di-card__placeholder`（🎨）
+   - `TemplateCard` = `button.di-card.di-card--template`。プレースホルダは 🖼️、加えて `span.di-card__badge`「テンプレ」を持つ
+   - 選択中のカードは `.is-selected` と `span.di-card__selected-badge`「選択中」を持つ
+   - 各カードは `aria-pressed` / `aria-label`（タイトル）/ `title` を持つ
+9. **0 件時**: `div.di-picker__empty` に「該当するデザインがありません」を表示する。検索語かカテゴリが有効なときは「検索 / カテゴリをクリア」ボタンを併せて出す
+
+### LivePreview（パーツを選んだとき）
+
+10. `partId` の変化を `useEffect` で監視し、`window.fetch( restUrl + partId, { headers: { 'X-WP-Nonce': nonce } } )` で **REST から遅延ロード**する。カタログ全件の `html` / `css` は最初から配らない
+11. `AbortController` があれば前回のリクエストを中断する。到着したレスポンスの `data.id` が現在の `partId` と違えば捨てる（競合状態対策）
+12. 取得中は `div.di-preview--loading` に `Spinner`。再取得中は前のプレビューを残したまま `div.di-preview--refreshing` + `aria-busy="true"` + `div.di-preview__overlay` を重ねる
+13. 取得失敗時は `Notice`（status: error）に「プレビュー取得に失敗しました」（HTTP ステータスがあれば併記）と「再試行」ボタンを出す
+14. 取得成功時は `div.di-selection` にガイド「選ぶ / 調整」と `iframe.di-preview__iframe` を描画する
+15. パーツ未選択時は `Notice`（status: info）で「左の「探す」エリアでデザインを選んでください」を表示する
+
+### TemplatePreview / CreatePageButton（テンプレートを選んだとき）
+
+16. `template.demoUrl` を `src` に持つ `iframe.di-preview__iframe`（高さ 480px）を描画する。`demoUrl` が無ければ「プレビューURLがありません」
+17. 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page`（`X-WP-Nonce` 付き）を呼ぶ
+18. 成功時は `div.di-create-page-result` に `Notice`（success）「固定ページを作成しました」と「ページを編集する →」リンクを出す。失敗時は `Notice`（error）
+
+### InsertConfirmNotice
+
+19. パーツ / テンプレートを選んだ直後に、公開済みなら「公開ページで確認」、下書きなら「プレビューで確認」リンク付きの `Notice`（success）を出す
+20. `wp.data.useSelect( select => select('core/editor') )` で投稿状態を購読する。`useSelect` が無い環境では一度きりの読み取りにフォールバックする
 
 ## 非機能要件
 
 1. **ビルドステップなし**: `@wordpress/scripts` を使用せず、`wp_register_script` で直接読み込む
-2. **依存パッケージ**: `wp-blocks`, `wp-element`, `wp-components`, `wp-block-editor`, `wp-i18n`
-3. **データ供給**: `wp_localize_script` で `window.DesignInserterCatalog` にカタログデータを設定する
-4. **222 件の表示**: 現状は全件を単一 SelectControl に表示する（パフォーマンス上問題なし）
-5. **国際化**: `__()` 関数と `designinserter` テキストドメインを使用する
-6. **CSS スコープ**: エディタプレビュー内の style タグはページ全体に影響する可能性がある（現状の制限）
+2. **依存パッケージ**: `wp-blocks`, `wp-element`, `wp-components`, `wp-block-editor`, `wp-i18n`, `wp-data`
+3. **データ供給**: `wp_localize_script` で `window.DesignInserterCatalog` にカタログのメタデータを設定する
+4. **セキュリティ（C-02）**: パーツプレビューは `<iframe sandbox="" srcDoc=...>` に隔離する。
+   - `sandbox` は空文字。script / form / popup / plugin / top-level navigation をすべて禁止する
+   - **`allow-same-origin` は意図的に付与しない**。iframe を不透明オリジンに閉じ込めるため
+   - カタログ HTML に `dangerouslySetInnerHTML` を使わない。改ざんされたカタログ JSON が編集画面で実行されるのを防ぐ
+   - Template Party プレビューだけは外部サイトを読むため `sandbox="allow-scripts allow-same-origin"`
+5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限（id / title / categoryLabel / previewImage / source / type）だけで、実体は REST で 1 件ずつ取る
+6. **権限**: `/parts/{id}` は `edit_posts`、`/templates/{id}/create-page` は `edit_pages` を要求する。プレビュー取得には `X-WP-Nonce` を付ける
+7. **国際化**: `__()` 関数と `designinserter` テキストドメインを使用する（UI 文言には直書きの日本語も混在する）
+8. **CSS スコープ**: パーツプレビューは iframe 内なので、パーツ CSS が編集画面へ漏れない
 
 ## データ構造
 
 ### window.DesignInserterCatalog
+
+`designinserter_get_editor_catalog()`（`includes/data.php`）が生成する。
 
 ```javascript
 {
   parts: [
     {
       id: "heading-1",
-      category: "heading",
-      categoryLabel: "見出し",
       title: "シンプルな下線の見出し",
-      html: "<h2 class=\"heading01\">見出しテキスト</h2>",
-      css: ".heading01 { border-bottom: 2px solid #333; }"
-    },
-    // ... 222 件
+      categoryLabel: "見出し",
+      previewImage: "https://example.com/wp-content/plugins/designinserter/assets/previews/heading-1.webp",
+      source: "css-stock",          // "css-stock" | "template-party"
+      type: "part",
+      behavior: {                    // JS 挙動を持つパーツのみ
+        type: "accordion",
+        requiresJs: true,
+        enhancementLevel: "progressive"
+      }
+    }
+    // ... CSS Stock 222 件 + Template Party 138 件
   ],
-  categories: [...],
-  sourceUrl: "https://pote-chil.com/css-stock/ja"
+  templates: [
+    {
+      id: "tp_wa1_blue",
+      title: "和菓子店 ブルー",
+      categoryLabel: "和菓子店向け",
+      previewImage: "...",
+      source: "template-party",
+      type: "template",
+      demoUrl: "https://template-party.com/...",
+      bundleDir: "wa1_blue"
+    }
+    // ... 1017 件
+  ],
+  sources: [
+    { id: "all",            label: "すべて" },
+    { id: "css-stock",      label: "CSS Stock パーツ" },
+    { id: "template-party", label: "Template Party" }
+  ],
+  restUrl: "https://example.com/wp-json/designinserter/v1/parts/",
+  templatesRestUrl: "https://example.com/wp-json/designinserter/v1/templates/",
+  nonce: "abc123"
 }
 ```
 
-### SelectControl オプション配列
+`html` と `css` はここに**入らない**。`GET {restUrl}{id}` のレスポンスに入る。
+
+### REST レスポンス（`GET /designinserter/v1/parts/{id}`）
 
 ```javascript
-[
-  { label: "パーツを選択", value: "" },
-  { label: "[見出し] シンプルな下線の見出し", value: "heading-1" },
-  { label: "[見出し] 左線の見出し", value: "heading-2" },
-  // ...
-  { label: "[ボタン] シンプルなボタン", value: "button-1" },
-  // ... 全 222 件
-]
+{
+  id: "heading-1",
+  html: "<h2 class=\"heading01\">見出しテキスト</h2>",
+  css: ".heading01 { border-bottom: 2px solid #333; }"
+}
 ```
 
 ## エッジケース
 
 | ケース | 期待される振る舞い | 備考 |
 |--------|-------------------|------|
-| DesignInserterCatalog が未定義 | 空の parts 配列として処理 | `window.DesignInserterCatalog \|\| {}` |
-| parts 配列が空 | SelectControl に「パーツを選択」のみ表示 | catalog JSON なし |
-| 選択済み partId が catalog に存在しない | Notice（未選択状態）を表示 | getPart() が undefined を返す |
-| CSS が空のパーツを選択 | プレビューに HTML のみ表示、style なし | `part.css ? el('style', ...) : null` |
-| 非常に長い HTML のパーツ | プレビューがスクロール可能に表示 | editor.css で overflow 制御 |
-| dangerouslySetInnerHTML で script 実行 | ブラウザの DOM 挿入では script は実行されない | React/DOM の仕様 |
+| DesignInserterCatalog が未定義 | 空の parts / templates / sources として処理 | `window.DesignInserterCatalog \|\| {}` |
+| parts / templates が空 | グリッドが空になり `.di-picker__empty` を表示 | catalog JSON なし |
+| Template Party カタログが git-crypt ロック | CSS Stock 222 件だけで動作。template カードは 0 件 | `designinserter_get_catalog()` が復号できんファイルを読み飛ばす |
+| `catalog.sources` が空 | source フィルタ行そのものを描画しない | `sources.length > 0` |
+| 検索 / カテゴリで 0 件 | 「該当するデザインがありません」＋クリアボタン | `.di-picker__empty` |
+| 選択済み partId が catalog に存在しない | REST が 404 → error Notice ＋再試行ボタン | `designinserter_get_part()` が null |
+| REST が 401 / 403（nonce 期限切れ・未ログイン） | 「プレビュー取得に失敗しました (HTTP 403)」＋再試行 | `err.status` |
+| 連打して partId が次々変わる | 古いレスポンスは `data.id !== partId` で捨てる | `AbortController` + id 照合 |
+| CSS が空のパーツ | srcDoc の `<style>` が空のまま HTML だけ描画 | `content.css \|\| ''` |
+| カタログ HTML に `<script>` が混入 | `sandbox=""` により実行されない | C-02 |
+| テンプレートに demoUrl が無い | 「プレビューURLがありません」 | — |
+| create-page が権限不足 | error Notice にサーバ側メッセージ | `edit_pages` |
 
 ## 受け入れ基準
 
-- [ ] ブロック挿入後、サイドバーに「Design Inserter」パネルが表示されること
-- [ ] SelectControl に 222 件 + 1（先頭の空オプション）= 223 オプションが表示されること
-- [ ] オプションのラベルが `[カテゴリ名] パーツ名` 形式であること
-- [ ] パーツ選択後、エディタ本体にプレビューが即座に表示されること
-- [ ] SVG-only パーツのプレビューに style タグが含まれないこと
-- [ ] 未選択状態で「CSS パーツを選択してください」メッセージが表示されること
-- [ ] ページリロード後も選択状態が保持されること（属性として保存）
-- [ ] JavaScript エラーがコンソールに出力されないこと
+- [ ] ブロック挿入後、サイドバーに「Design Inserter」パネルと picker が表示されること（DI-EDT-001）
+- [ ] パーツ選択 UI がカードグリッド（`.di-picker__grid`）であり、`SelectControl` でないこと（DI-EDT-002）
+- [ ] 検索ボックスで `title` / `categoryLabel` / `id` の部分一致絞り込みができること（DI-EDT-003）
+- [ ] カテゴリボタンで絞り込みができ、件数が併記されること（DI-EDT-004）
+- [ ] source フィルタが 3 種表示されること（DI-EDT-005）
+- [ ] Template Party フィルタで template カードが「テンプレ」badge 付きで出ること（DI-EDT-006）
+- [ ] CSS Stock フィルタで template カードが隠れること（DI-EDT-007）
+- [ ] カードクリックでプレビューが表示されること（DI-EDT-008）
+- [ ] プレビューが `window.fetch(restUrl + partId)` で遅延ロードされること（DI-EDT-009）
+- [ ] プレビューが `sandbox=''` + `srcDoc` の iframe に隔離され、`dangerouslySetInnerHTML` を使わないこと（DI-EDT-010）
+- [ ] 未選択状態で「左の「探す」エリアでデザインを選んでください」が表示されること
+- [ ] 検索結果 0 件で「該当するデザインがありません」が表示されること（DI-EDT-014）
+- [ ] ページリロード後も `partId` 属性が保持されること（DI-BLK-011）
+- [ ] JavaScript エラーがコンソールに出力されないこと（DI-FE-010）
 
 ## 将来拡張（未実装）
 
-以下は現在の spec に含まれないが、将来追加を検討する機能:
-
-- テキスト検索フィルター
-- カテゴリ別タブ/フィルター UI
 - `@wordpress/scripts` によるビルドステップ導入
-- プレビュー画像の表示
 - カラーカスタマイズ UI（inputs メタデータ使用）
+- カードグリッドの仮想スクロール（現状は 360 件を一括描画）
+- プレビュー iframe の高さ自動調整
 
 ## 関連spec
 

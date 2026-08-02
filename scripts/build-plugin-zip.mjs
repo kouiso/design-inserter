@@ -1,30 +1,197 @@
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 
-const root = process.cwd();
+// cwd 依存だとテストから import したときに解決先がぶれるので、スクリプト位置から引く。
+const root = fileURLToPath(new URL('..', import.meta.url));
 const pluginSlug = 'designinserter';
 const pluginDir = path.join(root, 'wp-content/plugins', pluginSlug);
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const distDir = path.join(root, 'dist');
-const zipPath = path.join(distDir, `${pluginSlug}-${packageJson.version}.zip`);
 
-function listFiles(dir) {
-  const files = [];
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === '.DS_Store') {
-      continue;
-    }
+/** git-crypt v0 が暗号文の先頭に置く 10 バイトの署名。 */
+export const GIT_CRYPT_MAGIC = Buffer.from([0x00, 0x47, 0x49, 0x54, 0x43, 0x52, 0x59, 0x50, 0x54, 0x00]);
 
-    const abs = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...listFiles(abs));
-    } else {
-      files.push(abs);
+/** Template Party カタログ: プラグイン相対パスと、中に必ず配列で入っとるべきキー。 */
+export const TEMPLATE_PARTY_CATALOGS = [
+  { relative: 'data/template-party-parts.json', key: 'parts' },
+  { relative: 'data/template-party-templates.json', key: 'templates' },
+];
+
+// ToS 上 再配布できん / スクレイパーのローカル状態。復号済みのメンテナ環境にだけ存在するため、
+// .gitignore では守れても zip では守れん。ここで常に落とす（DI-SEC-014）。
+const LOCAL_ONLY_PREFIXES = [
+  'data/template-party-bundles/',
+  'data/template-party-scrape-state.json',
+];
+
+/** 先頭 10 バイトだけ読む。1300 ファイル舐めるので全読みはせん。 */
+export function isGitCryptCiphertext(filePath) {
+  let fd;
+  try {
+    fd = fs.openSync(filePath, 'r');
+    const head = Buffer.alloc(GIT_CRYPT_MAGIC.length);
+    const read = fs.readSync(fd, head, 0, GIT_CRYPT_MAGIC.length, 0);
+    return read === GIT_CRYPT_MAGIC.length && head.equals(GIT_CRYPT_MAGIC);
+  } catch {
+    return false;
+  } finally {
+    if (fd !== undefined) {
+      fs.closeSync(fd);
     }
   }
-  return files;
+}
+
+/**
+ * tests/tp-availability.php の designinserter_tp_catalog_file_available() と同じ三分岐。
+ * locked（暗号文）/ malformed（復号済みやが壊れとる）/ ok を区別する。
+ * 壊れとるものを locked 扱いにするとデータ退行が黙って通るので、ここは必ず分ける。
+ * @returns {{status:'ok'|'locked'|'missing'|'malformed', path:string, reason?:string, count?:number}}
+ */
+export function inspectCatalogFile(filePath, requiredKey) {
+  let raw;
+  try {
+    raw = fs.readFileSync(filePath);
+  } catch (error) {
+    return { status: 'missing', path: filePath, reason: error.code === 'ENOENT' ? 'ファイルが無い' : error.message };
+  }
+
+  if (raw.subarray(0, GIT_CRYPT_MAGIC.length).equals(GIT_CRYPT_MAGIC)) {
+    return { status: 'locked', path: filePath };
+  }
+
+  let decoded;
+  try {
+    decoded = JSON.parse(raw.toString('utf8'));
+  } catch (error) {
+    return { status: 'malformed', path: filePath, reason: `JSON パース失敗: ${error.message}` };
+  }
+
+  if (decoded === null || typeof decoded !== 'object' || Array.isArray(decoded) || !Array.isArray(decoded[requiredKey])) {
+    return { status: 'malformed', path: filePath, reason: `配列キー "${requiredKey}" が無い` };
+  }
+
+  // 件数 0 でも復号は出来とるので ok。件数の退行検出は PHPUnit（DI-CAT-022/023）の担当。
+  return { status: 'ok', path: filePath, count: decoded[requiredKey].length };
+}
+
+export function inspectTemplatePartyCatalogs(dir = pluginDir) {
+  return TEMPLATE_PARTY_CATALOGS.map((catalog) => ({
+    ...catalog,
+    ...inspectCatalogFile(path.join(dir, catalog.relative), catalog.key),
+  }));
+}
+
+/**
+ * zip に入れるファイルを 3 つに分類する。
+ * 暗号文はパス決め打ちではなく署名で拾う。.gitattributes が増えても勝手に追随するため。
+ * @returns {{included:string[], lockedFiles:string[], localOnlyFiles:string[]}}
+ */
+export function selectDistributionFiles(dir = pluginDir) {
+  const included = [];
+  const lockedFiles = [];
+  const localOnlyFiles = [];
+
+  const walk = (current) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      if (entry.name === '.DS_Store') {
+        continue;
+      }
+
+      const abs = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(abs);
+        continue;
+      }
+
+      const relative = path.relative(dir, abs).split(path.sep).join('/');
+      if (LOCAL_ONLY_PREFIXES.some((prefix) => relative === prefix || relative.startsWith(prefix))) {
+        localOnlyFiles.push(abs);
+      } else if (isGitCryptCiphertext(abs)) {
+        lockedFiles.push(abs);
+      } else {
+        included.push(abs);
+      }
+    }
+  };
+
+  walk(dir);
+
+  return {
+    included: included.sort(),
+    lockedFiles: lockedFiles.sort(),
+    localOnlyFiles: localOnlyFiles.sort(),
+  };
+}
+
+export function resolveOutputPath(version = packageJson.version, { allowLocked = false } = {}) {
+  return allowLocked
+    ? path.join(distDir, 'dev', `${pluginSlug}-${version}-dev.zip`)
+    : path.join(distDir, `${pluginSlug}-${version}.zip`);
+}
+
+/** 一覧が長くなりすぎんように 10 件で打ち切る（verifyZip の既存慣習に合わせる）。 */
+function formatPathList(paths, describe = () => '') {
+  const head = paths.slice(0, 10).map((abs) => {
+    const note = describe(abs);
+    return `  ${path.relative(root, abs)}${note ? ` (${note})` : ''}`;
+  });
+  if (paths.length > head.length) {
+    head.push(`  ... 他 ${paths.length - head.length} 件`);
+  }
+  return head.join('\n');
+}
+
+/**
+ * malformed は allowLocked でも通さん。git-crypt のロックとちごうて、データ退行の疑いやから。
+ */
+export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
+  const malformed = states.filter((state) => state.status === 'malformed');
+  if (malformed.length) {
+    throw new Error([
+      'ビルド中止: Template Party カタログが壊れています。復号は出来ているのでデータ退行の可能性が高いです。',
+      malformed.map((state) => `  ${path.relative(root, state.path)}: ${state.reason}`).join('\n'),
+      'git-crypt のロックではないので --allow-locked-catalog では回避できません。scraper の出力を確認してください。',
+    ].join('\n'));
+  }
+
+  if (allowLocked) {
+    return;
+  }
+
+  const unusable = states.filter((state) => state.status !== 'ok');
+  if (unusable.length) {
+    throw new Error([
+      'リリースビルド中止: Template Party カタログが git-crypt で暗号化されたままです。',
+      unusable.map((state) => `  ${path.relative(root, state.path)} (${state.status === 'locked' ? 'git-crypt 暗号文' : state.reason})`).join('\n'),
+      'このまま zip を作ると Template Party のパーツ / テンプレートが丸ごと欠けた配布物になります (F-4 / DI-BLD-022)。',
+      '対処: git-crypt unlock <keyfile> を実行してから npm run build をやり直してください。',
+      '鍵の無い環境で zip 生成だけ確認したい場合は npm run build:dev（dist/dev/ に出力。リリースには使えません）。',
+    ].join('\n'));
+  }
+
+  const empty = states.filter((state) => state.count === 0);
+  if (empty.length) {
+    throw new Error([
+      'リリースビルド中止: Template Party カタログが空です。',
+      empty.map((state) => `  ${path.relative(root, state.path)}: ${state.key} が 0 件`).join('\n'),
+      'scraper の出力を確認してください。',
+    ].join('\n'));
+  }
+}
+
+export function assertNoCiphertext(lockedFiles, { allowLocked = false } = {}) {
+  if (allowLocked || !lockedFiles.length) {
+    return;
+  }
+
+  throw new Error([
+    `リリースビルド中止: git-crypt 暗号文のファイルが配布対象に ${lockedFiles.length} 件あります (DI-SEC-014)。`,
+    formatPathList(lockedFiles),
+    '対処: git-crypt unlock <keyfile> を実行してから npm run build をやり直してください。',
+  ].join('\n'));
 }
 
 const crcTable = new Uint32Array(256);
@@ -136,13 +303,20 @@ function createZip(files, outPath) {
   fs.writeFileSync(outPath, Buffer.concat([localData, centralDirectory, end]));
 }
 
-function readZipEntry(outPath, entry) {
-  const result = spawnSync('unzip', ['-p', outPath, entry], { encoding: 'utf8' });
+// 復号済みカタログは 1MB を超えるので maxBuffer を上げておく。
+const UNZIP_MAX_BUFFER = 64 * 1024 * 1024;
+
+function readZipEntryBuffer(outPath, entry) {
+  const result = spawnSync('unzip', ['-p', outPath, entry], { maxBuffer: UNZIP_MAX_BUFFER });
   if (result.status !== 0) {
     throw new Error(`unzip read failed for ${entry}:\n${result.stderr || result.stdout}`);
   }
 
   return result.stdout;
+}
+
+function readZipEntry(outPath, entry) {
+  return readZipEntryBuffer(outPath, entry).toString('utf8');
 }
 
 function extractCatalogAssetReferences(part) {
@@ -159,7 +333,7 @@ function extractCatalogAssetReferences(part) {
   return refs;
 }
 
-function verifyZip(outPath, sourceFiles) {
+function verifyZip(outPath, sourceFiles, { allowLocked = false } = {}) {
   const unzip = spawnSync('unzip', ['-tq', outPath], { encoding: 'utf8' });
   if (unzip.status !== 0) {
     throw new Error(`unzip verification failed:\n${unzip.stderr || unzip.stdout}`);
@@ -176,6 +350,7 @@ function verifyZip(outPath, sourceFiles) {
     `${pluginSlug}/designinserter.php`,
     `${pluginSlug}/index.php`,
     `${pluginSlug}/NOTICE.md`,
+    `${pluginSlug}/readme.txt`,
     `${pluginSlug}/assets/editor.js`,
     `${pluginSlug}/assets/editor.css`,
     `${pluginSlug}/assets/frontend.js`,
@@ -193,9 +368,24 @@ function verifyZip(outPath, sourceFiles) {
   const missingSourceFiles = expectedEntries.filter((entry) => !entrySet.has(entry));
   const unexpectedDevFiles = entries.filter((entry) => {
     const relative = entry.slice(`${pluginSlug}/`.length);
-    return /^(?:tests|docs|scripts|dist|node_modules|\.git|\.github)\//.test(relative) ||
-      /(?:^|\/)(?:package(?:-lock)?\.json|docker-compose\.yml|SETUP_STATUS\.md|README\.md)$/.test(relative);
+    return /^(?:tests|docs|scripts|dist|node_modules|\.git|\.github|data\/template-party-bundles)\//.test(relative) ||
+      /(?:^|\/)(?:package(?:-lock)?\.json|docker-compose\.yml|SETUP_STATUS\.md|README\.md|template-party-scrape-state\.json)$/.test(relative);
   });
+
+  // リリース zip は Template Party を必ず平文で含む。sweep 済みやが、実際に固めた中身でも押さえる。
+  const templatePartyFailures = [];
+  if (!allowLocked) {
+    for (const catalog of TEMPLATE_PARTY_CATALOGS) {
+      const entry = `${pluginSlug}/${catalog.relative}`;
+      if (!entrySet.has(entry)) {
+        templatePartyFailures.push(`${entry} が zip に無い`);
+        continue;
+      }
+      if (readZipEntryBuffer(outPath, entry).subarray(0, GIT_CRYPT_MAGIC.length).equals(GIT_CRYPT_MAGIC)) {
+        templatePartyFailures.push(`${entry} が git-crypt 暗号文のまま`);
+      }
+    }
+  }
 
   const main = readZipEntry(outPath, `${pluginSlug}/designinserter.php`);
   const catalog = JSON.parse(readZipEntry(outPath, `${pluginSlug}/data/css-stock-parts.json`));
@@ -237,7 +427,8 @@ function verifyZip(outPath, sourceFiles) {
     missingPreviewEntries.length ||
     missingCatalogAssetEntries.length ||
     headerFailures.length ||
-    catalogFailures.length
+    catalogFailures.length ||
+    templatePartyFailures.length
   ) {
     throw new Error([
       missing.length ? `missing entries: ${missing.join(', ')}` : '',
@@ -248,21 +439,58 @@ function verifyZip(outPath, sourceFiles) {
       missingCatalogAssetEntries.length ? `catalog embedded asset files missing from zip: ${missingCatalogAssetEntries.slice(0, 10).join(', ')}` : '',
       headerFailures.length ? `plugin header failures: ${headerFailures.join(', ')}` : '',
       catalogFailures.length ? `catalog failures: ${catalogFailures.join(', ')}` : '',
+      templatePartyFailures.length ? `Template Party failures: ${templatePartyFailures.join(', ')}` : '',
     ].filter(Boolean).join('\n'));
   }
 
   return entries.length;
 }
 
-if (!fs.existsSync(pluginDir)) {
-  throw new Error(`Plugin directory not found: ${pluginDir}`);
+export function main(argv = process.argv.slice(2)) {
+  const allowLocked = argv.includes('--allow-locked-catalog');
+
+  if (!fs.existsSync(pluginDir)) {
+    throw new Error(`Plugin directory not found: ${pluginDir}`);
+  }
+
+  // カタログ検査を sweep より先に回す。ロック時に「暗号文 1089 件」やのうて
+  // 「git-crypt unlock せえ」という具体的な指示を出したいから。
+  assertCatalogsUsable(inspectTemplatePartyCatalogs(), { allowLocked });
+
+  const { included, lockedFiles, localOnlyFiles } = selectDistributionFiles();
+  assertNoCiphertext(lockedFiles, { allowLocked });
+
+  if (localOnlyFiles.length) {
+    console.warn(`注記: ローカル専用ファイル ${localOnlyFiles.length} 件を zip から除外しました (再配布不可 / DI-SEC-014)。`);
+    console.warn(formatPathList(localOnlyFiles));
+  }
+
+  const outPath = resolveOutputPath(packageJson.version, { allowLocked });
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+
+  createZip(included, outPath);
+  const entryCount = verifyZip(outPath, included, { allowLocked });
+  const size = fs.statSync(outPath).size;
+
+  if (allowLocked && lockedFiles.length) {
+    console.warn(`警告: git-crypt ロック環境の開発ビルドです。Template Party データ ${lockedFiles.length} 件を zip から除外しました。`);
+    console.warn(`  出力: ${path.relative(root, outPath)}`);
+    console.warn('  この zip はリリースに使えません。リリースは復号済み環境で npm run build を実行してください。');
+  }
+
+  console.log(`Built ${path.relative(root, outPath)} (${entryCount} files, ${size} bytes)`);
+  return outPath;
 }
 
-fs.mkdirSync(distDir, { recursive: true });
+const invokedDirectly = process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
 
-const files = listFiles(pluginDir).sort();
-createZip(files, zipPath);
-const entryCount = verifyZip(zipPath, files);
-const size = fs.statSync(zipPath).size;
-
-console.log(`Built ${path.relative(root, zipPath)} (${entryCount} files, ${size} bytes)`);
+if (invokedDirectly) {
+  try {
+    main();
+  } catch (error) {
+    // スタックトレースを出すと復旧手順が埋もれるので、メッセージだけ出す。
+    console.error(error.message);
+    process.exitCode = 1;
+  }
+}

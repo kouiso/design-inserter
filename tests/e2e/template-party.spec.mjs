@@ -185,6 +185,7 @@ test.describe.configure({ mode: 'serial' });
 
 test.beforeAll(async () => {
 	await writeFreshCompose();
+	// Template Party のテストなので復号済みが前提。ロック環境ではここで明示的に落ちる（DI-BLD-022）。
 	await run('npm', ['run', 'build:zip']);
 	await dockerCompose(['down', '-v', '--remove-orphans']).catch(() => '');
 	await prepareExternalDatabase();

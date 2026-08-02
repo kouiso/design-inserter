@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import { selectDistributionFiles } from './build-plugin-zip.mjs';
+
 const args = process.argv.slice(2);
 const mode = args.includes('--docker')
   ? 'docker'
@@ -222,23 +224,6 @@ function unpackDistributionZipIntoPortableWp(zipPath, wpDir) {
   }
 }
 
-function listPluginSourceFiles(dir = pluginDir) {
-  const files = [];
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === '.DS_Store') {
-      continue;
-    }
-
-    const abs = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...listPluginSourceFiles(abs));
-    } else {
-      files.push(abs);
-    }
-  }
-  return files;
-}
-
 const crcTable = new Uint32Array(256);
 for (let i = 0; i < 256; i += 1) {
   let c = i;
@@ -271,7 +256,8 @@ function readZipCrcs(zipPath) {
 }
 
 function assertDistributionZipFresh(zipPath) {
-  const sourceFiles = listPluginSourceFiles().sort();
+  // 配布対象の選定はビルドスクリプトが正本。ここで再実装すると必ずずれる。
+  const sourceFiles = selectDistributionFiles().included;
   const expectedEntries = new Map(sourceFiles.map((file) => [
     `${pluginSlug}/${path.relative(pluginDir, file).split(path.sep).join('/')}`,
     file,

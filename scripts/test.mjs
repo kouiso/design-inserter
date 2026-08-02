@@ -2,6 +2,8 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { inspectTemplatePartyCatalogs } from './build-plugin-zip.mjs';
+
 const root = process.cwd();
 const pluginDir = 'wp-content/plugins/designinserter';
 const themeDir = 'wp-content/themes/designinserter-dev';
@@ -84,6 +86,7 @@ function testGitVisibility() {
     'tests/catalog-fallback.php',
     'tests/portable-smoke-integration.php',
     'tests/generate-ready-checklist.test.mjs',
+    'tests/build-plugin-zip.test.mjs',
     'scripts/test.mjs',
     'scripts/wp-smoke.mjs',
     'scripts/build-plugin-zip.mjs',
@@ -326,6 +329,7 @@ function testDistributionShape() {
   const requiredFiles = [
     'designinserter.php',
     'NOTICE.md',
+    'readme.txt',
     'assets/editor.js',
     'assets/editor.css',
     'assets/frontend.js',
@@ -401,6 +405,26 @@ function testReadyChecklistArtifactSelection() {
   }
 }
 
+function testBuildCatalogGuard() {
+  const result = run('node', ['--test', 'tests/build-plugin-zip.test.mjs']);
+  if (result.status === 0) {
+    pass('Build guard classifies git-crypt / locked / malformed catalogs');
+  } else {
+    fail(`Build guard classification failed\n${result.stderr || result.stdout}`);
+  }
+}
+
+// 実データを見る側。ロック環境では skip せず「locked」と印字して通し、
+// 復号済み環境ではカタログ退行の検出器になる。
+function testTemplatePartyCatalogState() {
+  const states = inspectTemplatePartyCatalogs();
+  const malformed = states.filter((state) => state.status === 'malformed');
+  const detail = malformed.map((state) => `${state.relative}: ${state.reason}`).join(', ');
+
+  assert(malformed.length === 0, `Template Party catalogs are not malformed${detail ? `: ${detail}` : ''}`);
+  console.log(`# Template Party catalog mode: ${states.every((state) => state.status === 'ok') ? 'decrypted' : states.map((state) => `${state.relative}=${state.status}`).join(' ')}`);
+}
+
 testPhpSyntax();
 testGitVisibility();
 testJavaScriptSyntax();
@@ -411,6 +435,8 @@ testDistributionShape();
 testEditorAssetContract();
 testRenderSmoke();
 testReadyChecklistArtifactSelection();
+testBuildCatalogGuard();
+testTemplatePartyCatalogState();
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);
