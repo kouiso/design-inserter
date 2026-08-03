@@ -42,8 +42,3 @@ Template Party テンプレートからはフルページレイアウトの固�
 
 = 0.2.0 =
 * Initial release.
-
-== Screenshots ==
-
-1. Gutenberg からのパーツ挿入画面
-2. フロント表示例

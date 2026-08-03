@@ -325,8 +325,6 @@ function testDistributionShape() {
   const catalog = readJson(catalogPath);
   const mainFile = path.join(pluginDir, 'designinserter.php');
   const main = fs.readFileSync(mainFile, 'utf8');
-  const notice = fs.readFileSync(path.join(pluginDir, 'NOTICE.md'), 'utf8');
-  const readme = fs.readFileSync(path.join(pluginDir, 'readme.txt'), 'utf8');
   const requiredFiles = [
     'designinserter.php',
     'NOTICE.md',
@@ -345,6 +343,10 @@ function testDistributionShape() {
   const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(pluginDir, file)));
 
   assert(missing.length === 0, `plugin distribution files exist${missing.length ? `: ${missing.join(', ')}` : ''}`);
+
+  // 読み込みはここから。存在アサートより前に読むと ENOENT のスタックトレースで理由が埋もれる。
+  const notice = fs.readFileSync(path.join(pluginDir, 'NOTICE.md'), 'utf8');
+  const readme = fs.readFileSync(path.join(pluginDir, 'readme.txt'), 'utf8');
   assert(packageJson.license === 'GPL-2.0-or-later', 'package.json license matches plugin distribution license');
   assert(packageLock.packages && packageLock.packages[''] && packageLock.packages[''].license === packageJson.license, 'package-lock root license matches package.json');
   assert(main.includes('Plugin Name: Design Inserter'), 'plugin header has Plugin Name');

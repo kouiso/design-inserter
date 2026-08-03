@@ -842,7 +842,7 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 | UX | 222 パーツ全部を 1 ページに入れて公開 → モバイルでレイアウト崩壊 | 購入者の LP 品質低下 | DI-CMP-009 | 未実装 |
 | ビジネス | 配布 zip に `tests/` / `scripts/` / `.tmp/` / `.git` が混入 | セキュリティリスク、ファイルサイズ肥大 | DI-BLD-015 | 自動済 |
 | ビジネス | `readme.txt` が無いため WP.org ディレクトリ提出不可 | 販売チャネル制限 | DI-BLD-019 | 自動済 2026-08-02 |
-| ビジネス | `npm run build` が git-crypt ロック状態で通り、暗号文 zip に混入 | 購入者に Template Party コンテンツが欠損したまま届く | DI-BLD-022, DI-SEC-014 | 自動済 2026-08-02 |
+| ビジネス | `npm run build` が git-crypt ロック状態で通り、暗号文 zip に混入 | 購入者に Template Party コンテンツが欠損したまま届く | DI-BLD-022, DI-SEC-014 | 自動済 2026-08-02。リリース経路は exit 1 で zip を作らん。`npm run build:dev` だけが暗号文を除外した zip を `dist/dev/` に出す（リリース不可） |
 | ビジネス | 復号済みメンテナ環境で `data/template-party-bundles/`（再配布不可）が zip に同梱される | Template Party の ToS 違反 | DI-SEC-014 | 自動済 2026-08-02。`selectDistributionFiles()` が全モードで除外 |
 | ビジネス | バージョン不整合（package.json / プラグインヘッダ / `DESIGNINSERTER_VERSION`） | キャッシュ破損、サポート時に混乱 | DI-BLD-001〜012 | 自動済 |
 | 運用 | 過去の `dist/*.zip` が残って `smoke:wp:portable` が旧版を検出できない | 誤ったバージョンで検証 | DI-BLD-017 | 手動要 |
@@ -852,8 +852,8 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 | セキュリティ | `previewImage` / `bundleDir` に `../` 等のパストラバーサル | サーバー外ファイル読み出し | DI-SEC-008, DI-DAT-019 | 未実装（重要） |
 | セキュリティ | create-page REST に `edit_pages` 未満の権限でアクセス | 下書きページ不正生成 | DI-SEC-005, DI-API-017〜020 | 未実装 |
 | セキュリティ | 改ざんされた catalog JSON に `script` タグが混入 | 管理者・閲覧者への XSS | DI-SEC-009 | 手動要 |
-| パフォーマンス | エディターが 222 件カタログを一括読み込み → 応答遅延 | 購入者体験低下 | DI-EDT-001 等 | 未実装（計測なし） |
-| パフォーマンス | フロントが 222 パーツ分の CSS/JS を 1 ファイルずつ挿入 | リクエスト数増大 | DI-FE-012 | 自動済 |
+| パフォーマンス | エディターが 360 パーツ + 1017 テンプレートのカタログを一括読み込み → 応答遅延 | 購入者体験低下 | DI-EDT-001 等 | 未実装（計測なし） |
+| パフォーマンス | フロントが CSS Stock 222 パーツ分の CSS/JS を 1 ファイルずつ挿入 | リクエスト数増大 | DI-FE-012 | 自動済 |
 
 ### 9.4 合意した追加・強化項目（優先度順）
 
@@ -903,6 +903,9 @@ P2 — 継続改善：
 ### 9.6 本環境での実測結果
 
 - `task ci:fast` ... exit 0 `[ローカル実行]`（2026-07-30）
+- `task ci:fast` 相当 6 ステップ ... 全て exit 0 `[ローカル実行]`（2026-08-03、`build:dev` を含む現行定義で再実行）。本環境は Docker daemon が無いため `npm run phpcs` / `npm run test:php` は `vendor/bin/phpcs` / `vendor/bin/phpunit` を直叩きして代替。PHPUnit は Tests 23 / Assertions 56 / Skipped 4（git-crypt ロックによる想定内 skip）
+- `npm run build`（リリース経路・ロック環境）... exit 1 で zip を作らんことを確認 `[ローカル実行]`（2026-08-03）
+- `npm run build:dev` ... exit 0。zip 内の暗号文 0 件 / `data/template-party-bundles/` 0 件 / `readme.txt` 1 件を確認 `[ローカル実行]`（2026-08-03）
 - `npm run smoke:wp:portable` ... exit 0、WP 6.9.4 で shortcode / block / REST / ライフサイクル確認 `[ローカル実行]`（2026-07-30）
 - `npx playwright install --with-deps chromium` ... 完了 `[ローカル実行]`（2026-07-30）
 - `npm run e2e:fresh` ... exit 0、`tests/e2e/fresh-install-222.spec.mjs` 4 tests passed、`partCount 222` / `uniquePartCount 222` / `styleCount 209` / `behaviorCount 16` / `initializedBehaviorCount 16` / `zeroBox 0` / `frontendCss 1` / `frontendJs 1`、console / network error 0 を確認 `[ローカル実行]`（2026-07-30）
@@ -972,9 +975,9 @@ P2 — 継続改善：
 
 ### 11.4 US-3: Template Party 利用者
 
-| # | 操作 | 入力 | 期待される結果 |
-|---|---|---|---|
-| 3-1 | 固定ページ → Design Inserter ブロック | - | picker が開く |
+| # | 操作 | 入力 | 期待される結果 | 確認観点 |
+|---|---|---|---|---|
+| 3-1 | 固定ページ → Design Inserter ブロック | - | picker が開く | — |
 | 3-2 | source filter「Template Party」を選択 | - | カテゴリに「和菓子店向け」「企業・ビジネスサイト向け」等が表示 | 20 カテゴリのうち代表数を確認 |
 | 3-3 | カテゴリ「和菓子店向け」→ `tp_wa1_blue` を選択 | `tp_wa1_blue` | テンプレートプレビュー iframe が表示される | プレビュー URL のサイトが読み込まれる |
 | 3-4 | 「このテンプレで固定ページを作成」をクリック | - | 「固定ページを作成しました」と「ページを編集する →」ボタン | REST `create-page` が成功 |
