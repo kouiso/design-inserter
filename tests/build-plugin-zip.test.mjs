@@ -8,6 +8,7 @@ import {
   GIT_CRYPT_MAGIC,
   assertCatalogsUsable,
   assertNoCiphertext,
+  collectPreviewReferences,
   inspectCatalogFile,
   isGitCryptCiphertext,
   resolveOutputPath,
@@ -125,6 +126,9 @@ test('release mode rejects locked, missing and empty catalogs', () => {
   assert.doesNotThrow(
     () => assertCatalogsUsable([{ status: 'ok', path: '/tmp/parts.json', key: 'parts', count: 138 }]),
   );
+  assert.doesNotThrow(
+    () => assertCatalogsUsable([{ status: 'ok', path: '/tmp/parts.json', key: 'parts', count: 138 }]),
+  );
 });
 
 test('dev mode tolerates locked catalogs only', () => {
@@ -148,6 +152,64 @@ test('dev mode tolerates locked catalogs only', () => {
     ),
     /リポジトリの退行/,
   );
+  // 復号済みで 0 件も scraper の退行。dev の早期 return より前で捕まえる。
+  assert.throws(
+    () => assertCatalogsUsable(
+      [{ status: 'ok', path: '/tmp/parts.json', key: 'parts', count: 0 }],
+      options,
+    ),
+    /空です/,
+  );
+  // locked には count が無いので、空カタログ判定に巻き込まれない。
+  assert.doesNotThrow(
+    () => assertCatalogsUsable([{ status: 'locked', path: '/tmp/parts.json', key: 'parts' }], options),
+  );
+});
+
+test('preview references are collected from both parts and templates', () => {
+  assert.deepEqual(
+    collectPreviewReferences({
+      parts: [
+        { previewImage: 'assets/previews/tp-1.webp' },
+        { previewImage: 'assets/previews/tp-2.webp' },
+      ],
+    }),
+    ['assets/previews/tp-1.webp', 'assets/previews/tp-2.webp'],
+  );
+  assert.deepEqual(
+    collectPreviewReferences({ templates: [{ thumb: 'assets/previews/tp-wa1.webp' }] }),
+    ['assets/previews/tp-wa1.webp'],
+  );
+  // 同じプレビューを複数エントリが指しても 1 回だけ検証する。
+  assert.deepEqual(
+    collectPreviewReferences({
+      parts: [{ previewImage: 'assets/previews/tp-1.webp' }],
+      templates: [{ thumb: 'assets/previews/tp-1.webp' }],
+    }),
+    ['assets/previews/tp-1.webp'],
+  );
+});
+
+test('preview reference collection ignores anything that is not a plugin-relative asset', () => {
+  // 誤検知でリリースを止めんため、配布物と対応せん値は最初から見ない。
+  assert.deepEqual(
+    collectPreviewReferences({
+      parts: [
+        { previewImage: 'https://template-party.com/thumb.png' },
+        { previewImage: '' },
+        { previewImage: null },
+        { previewImage: 42 },
+        {},
+        null,
+        { previewImage: 'data/template-party-bundles/wa1/screenshot.png' },
+      ],
+    }),
+    [],
+  );
+  assert.deepEqual(collectPreviewReferences({}), []);
+  assert.deepEqual(collectPreviewReferences({ parts: 'nope', templates: 7 }), []);
+  assert.deepEqual(collectPreviewReferences(null), []);
+  assert.deepEqual(collectPreviewReferences([]), []);
 });
 
 test('the ciphertext sweep fails the release build and is skipped in dev mode', () => {

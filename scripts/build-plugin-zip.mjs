@@ -166,6 +166,16 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
     ].join('\n'));
   }
 
+  // 復号済みで 0 件になっとるのも scraper の退行。locked には count が無いのでここには掛からん。
+  const empty = states.filter((state) => state.count === 0);
+  if (empty.length) {
+    throw new Error([
+      'ビルド中止: Template Party カタログが空です。復号は出来ているので scraper の退行の可能性が高いです。',
+      empty.map((state) => `  ${path.relative(root, state.path)}: ${state.key} が 0 件`).join('\n'),
+      'git-crypt のロックではないので --allow-locked-catalog では回避できません。scraper の出力を確認してください。',
+    ].join('\n'));
+  }
+
   if (allowLocked) {
     return;
   }
@@ -180,15 +190,30 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
       '鍵の無い環境で zip 生成だけ確認したい場合は npm run build:dev（dist/dev/ に出力。リリースには使えません）。',
     ].join('\n'));
   }
+}
 
-  const empty = states.filter((state) => state.count === 0);
-  if (empty.length) {
-    throw new Error([
-      'リリースビルド中止: Template Party カタログが空です。',
-      empty.map((state) => `  ${path.relative(root, state.path)}: ${state.key} が 0 件`).join('\n'),
-      'scraper の出力を確認してください。',
-    ].join('\n'));
+/**
+ * カタログが参照するプラグイン相対のプレビューパスを集める。
+ * CSS Stock は parts[].previewImage、Template Party は parts[].previewImage と templates[].thumb。
+ * 絶対 URL や空文字は配布物の中身と対応せんので落とす（誤検知でリリースを止めんため）。
+ */
+export function collectPreviewReferences(catalog) {
+  if (catalog === null || typeof catalog !== 'object') {
+    return [];
   }
+
+  const refs = [];
+  for (const [collection, field] of [['parts', 'previewImage'], ['templates', 'thumb']]) {
+    const items = Array.isArray(catalog[collection]) ? catalog[collection] : [];
+    for (const item of items) {
+      const value = item && typeof item[field] === 'string' ? item[field] : '';
+      if (value.startsWith('assets/')) {
+        refs.push(value);
+      }
+    }
+  }
+
+  return [...new Set(refs)];
 }
 
 export function assertNoCiphertext(lockedFiles, { allowLocked = false } = {}) {
@@ -390,8 +415,27 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false } = {}) {
         templatePartyFailures.push(`${entry} が zip に無い`);
         continue;
       }
-      if (readZipEntryBuffer(outPath, entry).subarray(0, GIT_CRYPT_MAGIC.length).equals(GIT_CRYPT_MAGIC)) {
+      const raw = readZipEntryBuffer(outPath, entry);
+      if (raw.subarray(0, GIT_CRYPT_MAGIC.length).equals(GIT_CRYPT_MAGIC)) {
         templatePartyFailures.push(`${entry} が git-crypt 暗号文のまま`);
+        continue;
+      }
+
+      // 下の missingPreviewEntries は css-stock-parts.json しか見んので、
+      // tp-* プレビューが欠けても素通りしてエディタのカードだけ画像切れになる。
+      let decoded;
+      try {
+        decoded = JSON.parse(raw.toString('utf8'));
+      } catch (error) {
+        templatePartyFailures.push(`${entry} が JSON として読めん: ${error.message}`);
+        continue;
+      }
+
+      const missingRefs = collectPreviewReferences(decoded)
+        .map((reference) => `${pluginSlug}/${reference}`)
+        .filter((candidate) => !entrySet.has(candidate));
+      if (missingRefs.length) {
+        templatePartyFailures.push(`${entry} が参照するプレビューが zip に無い (${missingRefs.length} 件): ${missingRefs.slice(0, 10).join(', ')}`);
       }
     }
   }
