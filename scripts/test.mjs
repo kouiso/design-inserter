@@ -153,7 +153,7 @@ function testCatalog() {
   const categories = Array.isArray(catalog.categories) ? catalog.categories : [];
   const ids = new Set();
   const categoryCounts = new Map();
-  const requiredKeys = ['id', 'sourcePartId', 'category', 'categoryLabel', 'title', 'html'];
+  const requiredKeys = ['id', 'sourcePartId', 'category', 'categoryLabel', 'title', 'html', 'inputs'];
   const badRequired = [];
   const badIds = [];
   const duplicateIds = [];
@@ -164,6 +164,7 @@ function testCatalog() {
   const missingAssetRefs = [];
   const badAssetRefKind = [];
   const badSource = [];
+  const badInputs = [];
 
   for (const category of categories) {
     categoryCounts.set(category.slug, 0);
@@ -172,6 +173,15 @@ function testCatalog() {
   for (const part of parts) {
     if (!requiredKeys.every((key) => Object.hasOwn(part, key))) {
       badRequired.push(part.id || '<missing id>');
+    }
+
+    if (
+      part.inputs &&
+      (!Object.hasOwn(part.inputs, 'colors') ||
+        !Object.hasOwn(part.inputs, 'radios') ||
+        !Object.hasOwn(part.inputs, 'ranges'))
+    ) {
+      badInputs.push(part.id);
     }
 
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9]+$/.test(part.id)) {
@@ -242,6 +252,7 @@ function testCatalog() {
   assert(missingAssetRefs.length === 0, `all catalog embedded asset references exist${missingAssetRefs.length ? `: ${missingAssetRefs.slice(0, 5).join(', ')}` : ''}`);
   assert(badAssetRefKind.length === 0, `catalog embedded asset extensions match file signatures${badAssetRefKind.length ? `: ${badAssetRefKind.slice(0, 5).join(', ')}` : ''}`);
   assert(badSource.length === 0, `part sourceUrl values point to CSS Stock anchors${badSource.length ? `: ${badSource.slice(0, 5).join(', ')}` : ''}`);
+  assert(badInputs.length === 0, `catalog inputs have colors/radios/ranges groups${badInputs.length ? `: ${badInputs.slice(0, 5).join(', ')}` : ''}`);
   assert(svgOnly.length > 0, 'catalog includes SVG-only loading parts with empty CSS');
 }
 
