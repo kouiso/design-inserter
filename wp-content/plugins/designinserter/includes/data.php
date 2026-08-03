@@ -125,6 +125,10 @@ function designinserter_shape_part_for_editor_catalog( $part ) {
 		);
 	}
 
+	if ( isset( $part['inputs'] ) && is_array( $part['inputs'] ) ) {
+		$item['inputs'] = $part['inputs'];
+	}
+
 	return $item;
 }
 

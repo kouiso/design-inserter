@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 
 const root = process.cwd();
 const pluginDir = 'wp-content/plugins/designinserter';
@@ -392,6 +393,34 @@ function testRenderSmoke() {
   }
 }
 
+function testPartCodeFuncs() {
+  const src = fs.readFileSync(path.join(pluginDir, 'assets/part-code-funcs.js'), 'utf8');
+  const ctx = { window: {}, console };
+  vm.createContext(ctx);
+  vm.runInContext(src, ctx);
+  const funcs = ctx.window.designInserterPartCodeFuncs;
+
+  assert(Object.keys(funcs).length === 222, 'part-code-funcs.js registers all 222 parts');
+
+  const heading = funcs['heading-1']({ colors: ['#ff0000', '#333333'] });
+  assert(heading && heading.css.includes('#ff0000'), 'heading-1 color param changes border color');
+
+  const list = funcs['list-1']({ colors: ['#2589d0'], radios: ['ol', false] });
+  assert(list && list.html.startsWith('<ol'), 'list-1 radio tag switches to ol');
+
+  const bar = funcs['bar-chart-1']({ colors: ['#2589d0'], radios: [true], ranges: [80] });
+  assert(bar && bar.html.includes('80%'), 'bar-chart-1 range param updates first bar width');
+
+  const button = funcs['button-37']({ colors: ['#123456'], radios: ['25px', false] });
+  assert(button && button.css.includes('#123456'), 'button-37 color param changes border color');
+
+  const radar = funcs['radar-chart-4']({ colors: ['#ff0000'], ranges: [8, 5, 6, 7, 6, 5, 4] });
+  assert(radar && radar.html.includes('<svg'), 'radar-chart-4 generates svg from range params');
+
+  const loading = funcs['loading-16']({ colors: ['#123456'], ranges: [5] });
+  assert(loading && loading.css.includes('#123456'), 'loading-16 color param updates gradient color');
+}
+
 function testReadyChecklistArtifactSelection() {
   const result = run('node', ['--test', 'tests/generate-ready-checklist.test.mjs']);
   if (result.status === 0) {
@@ -410,6 +439,7 @@ testBehaviorMetadata();
 testDistributionShape();
 testEditorAssetContract();
 testRenderSmoke();
+testPartCodeFuncs();
 testReadyChecklistArtifactSelection();
 
 if (failures > 0) {

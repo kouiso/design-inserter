@@ -4,22 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-function designinserter_render_part( $part_id ) {
+function designinserter_render_part( $part_id, $html = null, $css = null ) {
 	static $rendered_styles = array();
 	static $rendered_instances = 0;
 
-	$part = designinserter_get_part( $part_id );
-	if ( ! $part ) {
-		return '';
+	$part = null;
+	if ( null === $html || null === $css ) {
+		$part = designinserter_get_part( $part_id );
+		if ( ! $part ) {
+			return '';
+		}
 	}
 
-	$id        = esc_attr( $part['id'] );
-	$title_raw = designinserter_get_part_display_title( $part );
+	$id        = esc_attr( $part ? $part['id'] : $part_id );
+	$title_raw = $part ? designinserter_get_part_display_title( $part ) : $part_id;
 	$title     = esc_html( $title_raw );
-	$html   = isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '';
-	$css    = isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '';
-	$source = isset( $part['sourceUrl'] ) ? esc_url( $part['sourceUrl'] ) : esc_url( DESIGNINSERTER_SOURCE_URL );
-	$behavior = designinserter_get_part_behavior( $part );
+	$html   = null !== $html ? designinserter_resolve_local_asset_urls( (string) $html ) : ( isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '' );
+	$css    = null !== $css ? designinserter_resolve_local_asset_urls( (string) $css ) : ( isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '' );
+	$source = $part && isset( $part['sourceUrl'] ) ? esc_url( $part['sourceUrl'] ) : esc_url( DESIGNINSERTER_SOURCE_URL );
+	$behavior = $part ? designinserter_get_part_behavior( $part ) : array();
 	if ( designinserter_behavior_requires_js( $behavior ) ) {
 		designinserter_enqueue_frontend_behavior();
 	}
