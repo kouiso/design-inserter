@@ -533,17 +533,20 @@ export function main(argv = process.argv.slice(2)) {
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
 
-  createZip(included, outPath);
-
-  // 検証が落ちた zip を残すと generate-ready-checklist.mjs が拾ってハッシュし、
-  // 不正な成果物がリリース候補として通ってしまう。失敗したビルドは何も残さん。
+  // 一時ファイルに作って検証が通ってから rename する。
+  // outPath に直接書くと、書き込み途中の失敗（ディスク満杯など）や検証失敗で
+  // 壊れた zip が残り、generate-ready-checklist.mjs がそれを拾ってハッシュしてまう。
+  const tempPath = `${outPath}.tmp`;
   let entryCount;
   try {
-    entryCount = verifyZip(outPath, included, { allowLocked, lockedFiles });
+    createZip(included, tempPath);
+    entryCount = verifyZip(tempPath, included, { allowLocked, lockedFiles });
   } catch (error) {
-    fs.rmSync(outPath, { force: true });
+    fs.rmSync(tempPath, { force: true });
     throw error;
   }
+
+  fs.renameSync(tempPath, outPath);
   const size = fs.statSync(outPath).size;
 
   if (allowLocked && lockedFiles.length) {
