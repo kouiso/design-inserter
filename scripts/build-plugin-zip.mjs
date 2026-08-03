@@ -367,7 +367,10 @@ function extractCatalogAssetReferences(part) {
   return refs;
 }
 
-function verifyZip(outPath, sourceFiles, { allowLocked = false } = {}) {
+function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = [] } = {}) {
+  const lockedEntries = new Set(
+    lockedFiles.map((file) => `${pluginSlug}/${path.relative(pluginDir, file).split(path.sep).join('/')}`),
+  );
   const unzip = spawnSync('unzip', ['-tq', outPath], { encoding: 'utf8' });
   if (unzip.status !== 0) {
     throw new Error(`unzip verification failed:\n${unzip.stderr || unzip.stdout}`);
@@ -407,36 +410,39 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false } = {}) {
   });
 
   // リリース zip は Template Party を必ず平文で含む。sweep 済みやが、実際に固めた中身でも押さえる。
+  // dev でもカタログが zip に居るなら参照は検証する。ロックで除外された分だけ大目に見る。
+  // ここを allowLocked で丸ごと飛ばすと、ci:fast が通る経路でプレビュー削除を検出できん。
   const templatePartyFailures = [];
-  if (!allowLocked) {
-    for (const catalog of TEMPLATE_PARTY_CATALOGS) {
-      const entry = `${pluginSlug}/${catalog.relative}`;
-      if (!entrySet.has(entry)) {
+  for (const catalog of TEMPLATE_PARTY_CATALOGS) {
+    const entry = `${pluginSlug}/${catalog.relative}`;
+    if (!entrySet.has(entry)) {
+      if (!allowLocked) {
         templatePartyFailures.push(`${entry} が zip に無い`);
-        continue;
       }
-      const raw = readZipEntryBuffer(outPath, entry);
-      if (raw.subarray(0, GIT_CRYPT_MAGIC.length).equals(GIT_CRYPT_MAGIC)) {
-        templatePartyFailures.push(`${entry} が git-crypt 暗号文のまま`);
-        continue;
-      }
+      continue;
+    }
+    const raw = readZipEntryBuffer(outPath, entry);
+    if (raw.subarray(0, GIT_CRYPT_MAGIC.length).equals(GIT_CRYPT_MAGIC)) {
+      templatePartyFailures.push(`${entry} が git-crypt 暗号文のまま`);
+      continue;
+    }
 
-      // 下の missingPreviewEntries は css-stock-parts.json しか見んので、
-      // tp-* プレビューが欠けても素通りしてエディタのカードだけ画像切れになる。
-      let decoded;
-      try {
-        decoded = JSON.parse(raw.toString('utf8'));
-      } catch (error) {
-        templatePartyFailures.push(`${entry} が JSON として読めん: ${error.message}`);
-        continue;
-      }
+    // 下の missingPreviewEntries は css-stock-parts.json しか見んので、
+    // tp-* プレビューが欠けても素通りしてエディタのカードだけ画像切れになる。
+    let decoded;
+    try {
+      decoded = JSON.parse(raw.toString('utf8'));
+    } catch (error) {
+      templatePartyFailures.push(`${entry} が JSON として読めん: ${error.message}`);
+      continue;
+    }
 
-      const missingRefs = collectPreviewReferences(decoded)
-        .map((reference) => `${pluginSlug}/${reference}`)
-        .filter((candidate) => !entrySet.has(candidate));
-      if (missingRefs.length) {
-        templatePartyFailures.push(`${entry} が参照するプレビューが zip に無い (${missingRefs.length} 件): ${missingRefs.slice(0, 10).join(', ')}`);
-      }
+    const missingRefs = collectPreviewReferences(decoded)
+      .map((reference) => `${pluginSlug}/${reference}`)
+      // dev では暗号文として外された分だけ許す。単に消えとる参照は退行なので落とす。
+      .filter((candidate) => !entrySet.has(candidate) && !lockedEntries.has(candidate));
+    if (missingRefs.length) {
+      templatePartyFailures.push(`${entry} が参照するプレビューが zip に無い (${missingRefs.length} 件): ${missingRefs.slice(0, 10).join(', ')}`);
     }
   }
 
@@ -528,7 +534,16 @@ export function main(argv = process.argv.slice(2)) {
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
 
   createZip(included, outPath);
-  const entryCount = verifyZip(outPath, included, { allowLocked });
+
+  // 検証が落ちた zip を残すと generate-ready-checklist.mjs が拾ってハッシュし、
+  // 不正な成果物がリリース候補として通ってしまう。失敗したビルドは何も残さん。
+  let entryCount;
+  try {
+    entryCount = verifyZip(outPath, included, { allowLocked, lockedFiles });
+  } catch (error) {
+    fs.rmSync(outPath, { force: true });
+    throw error;
+  }
   const size = fs.statSync(outPath).size;
 
   if (allowLocked && lockedFiles.length) {

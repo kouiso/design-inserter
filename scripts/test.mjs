@@ -423,10 +423,12 @@ function testBuildCatalogGuard() {
 // 復号済み環境ではカタログ退行の検出器になる。
 function testTemplatePartyCatalogState() {
   const states = inspectTemplatePartyCatalogs();
-  const malformed = states.filter((state) => state.status === 'malformed');
-  const detail = malformed.map((state) => `${state.relative}: ${state.reason}`).join(', ');
+  // locked（鍵が無いだけ）と ok 以外は退行。カタログを消しても npm test が通ると、
+  // PR の JS ジョブはビルドを回さんので、マージ後の trusted build まで気づかれん。
+  const broken = states.filter((state) => state.status !== 'ok' && state.status !== 'locked');
+  const detail = broken.map((state) => `${state.relative}=${state.status}${state.reason ? ` (${state.reason})` : ''}`).join(', ');
 
-  assert(malformed.length === 0, `Template Party catalogs are not malformed${detail ? `: ${detail}` : ''}`);
+  assert(broken.length === 0, `Template Party catalogs are neither missing nor malformed${detail ? `: ${detail}` : ''}`);
   console.log(`# Template Party catalog mode: ${states.every((state) => state.status === 'ok') ? 'decrypted' : states.map((state) => `${state.relative}=${state.status}`).join(' ')}`);
 }
 
