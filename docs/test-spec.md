@@ -128,6 +128,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-CAT-021 | behavior 件数の内訳 | scrollTop 1 / tooltip 5 / readMore 4 / tabs 4 / modal 2（計 16） | 同上 | 自動済 2026-07-28 |
 | DI-CAT-022 | Template Party パーツが 138 件 | 138 | `DesignInserterCoreTest::test_catalog_template_party_parts_have_correct_source` | 自動済 2026-07-30 [ローカル実行] |
 | DI-CAT-023 | Template Party テンプレートが 1017 件 | 1017 | `DesignInserterCoreTest::test_get_templates_returns_all_template_party_templates` | 自動済 2026-07-30 [ローカル実行] |
+| DI-CAT-024 | 全 parts に `inputs`（`colors` / `radios` / `ranges`）が定義される | 欠損 0、構造 `{ colors: [], radios: [], ranges: [] }` | `scripts/test.mjs` `testCatalog()` | 自動済 2026-07-30 |
 
 ### 4.2 DI-DAT — データ層
 
@@ -205,6 +206,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLK-011 | リロード後も `partId` 属性が保持される | 選択維持 | 実機: エディタ再読込 | 手動要 |
 | DI-BLK-012 | プラグイン無効化後、保存済み投稿がエラーにならん | 500 なし・出力が消える | 実機: `wp plugin deactivate` → フロント表示 | 手動要 |
 | DI-BLK-013 | 再有効化で出力が復活する | 復活 | 実機: `wp plugin activate` | 手動要 |
+| DI-BLK-014 | ブロック属性に `params` / `html` / `css` が追加される | `attributes` 登録済み | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-30 |
+| DI-BLK-015 | 保存時に `html` / `css` が属性として永続化される | `serialize( { html, css } )` | `assets/editor.js` `save` | 自動済 2026-07-30 |
 
 ### 4.6 DI-EDT — エディタ UI
 
@@ -230,6 +233,10 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-018 | REST fetch に `X-WP-Nonce` が付く | ヘッダ有り | 実機: ネットワーク監視 | 手動要 |
 | DI-EDT-019 | カードの `aria-pressed` / `aria-label` が選択状態と同期する | 同期 | 実機: a11y スナップショット | 手動要 |
 | DI-EDT-020 | 管理画面 9 色テーマで選択状態が視認できる | コントラスト確保 | 実機: 各テーマ | 手動要 |
+| DI-EDT-021 | プレビュー下に「パラメータ調整」パネルが出る | `.di-params` 表示 | 実機: heading-1 選択 | 実機済 2026-07-30 |
+| DI-EDT-022 | 色指定がプレビューに即反映される | 色 input 変更で iframe 内の要素が変化 | 実機: 左線の色を変更 | 実機済 2026-07-30 |
+| DI-EDT-023 | パーツ切替時にパラメータがそのパーツの既定値に戻る | `params` 属性リセット | `assets/editor.js` `onSelectPart` | 自動済 2026-07-30 |
+| DI-EDT-024 | レンジ / ラジオ指定がプレビューに反映される | 数値・選択切替で変化 | `scripts/test.mjs` `testPartCodeFuncs()` | 自動済 2026-07-30 |
 
 ### 4.7 DI-SC — ショートコード
 
@@ -368,6 +375,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-020 | zip を管理 UI からアップロードして有効化できる | 有効化成功 | 実機: `plugin-install.php` | 手動要 |
 | DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | `npm run smoke:wp:portable` | 自動済 2026-07-29（間接。dist zip を展開して `plugin activate` は成功。`plugin install` 経路自体は未） |
 | DI-BLD-022 | git-crypt ロック環境でのビルドを検出して失敗する | 明示エラー | — | 未実装（F-4） |
+| DI-BLD-023 | `part-code-funcs.js` が 222 パーツ分登録される | `window.designInserterPartCodeFuncs` に全 id 存在 | `scripts/test.mjs` `testPartCodeFuncs()` | 自動済 2026-07-30 |
 
 ### 4.14 DI-CMP — 互換性・ライフサイクル
 
@@ -503,7 +511,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ファイル | カバーする ID |
 |---|---|
-| `scripts/test.mjs` | DI-CAT-001〜015・018〜021, DI-BLD-001〜012・018, DI-BLK-004・005, DI-EDT-009〜011, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
+| `scripts/test.mjs` | DI-CAT-001〜015・018〜024, DI-BLD-001〜012・018・023, DI-BLK-004・005・014・015, DI-EDT-009〜011・023・024, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
 | `tests/render-smoke.php` | DI-RND-001〜011・013・015, DI-SCP-001〜004・006, DI-BLK-001〜003・006・007, DI-SC-001・003〜005・008, DI-API-001〜013, DI-ADM-001〜007, DI-FE-012, DI-DAT-009・011・017, DI-CAT-016, DI-SEC-002〜004・006 |
 | `tests/catalog-fallback.php` | DI-DAT-007・008 |
 | `tests/tp-availability.php` | DI-DAT-005 |
