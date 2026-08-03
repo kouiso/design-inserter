@@ -21,9 +21,17 @@ function designinserter_register_block() {
 	);
 
 	wp_register_script(
+		'designinserter-part-code-funcs',
+		DESIGNINSERTER_PLUGIN_URL . 'assets/part-code-funcs.js',
+		array(),
+		DESIGNINSERTER_VERSION,
+		true
+	);
+
+	wp_register_script(
 		'designinserter-editor',
 		DESIGNINSERTER_PLUGIN_URL . 'assets/editor.js',
-		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-data', 'wp-i18n', 'designinserter-frontend' ),
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-data', 'wp-i18n', 'designinserter-frontend', 'designinserter-part-code-funcs' ),
 		DESIGNINSERTER_VERSION,
 		true
 	);
@@ -53,6 +61,18 @@ function designinserter_register_block() {
 					'type'    => 'string',
 					'default' => '',
 				),
+				'params' => array(
+					'type'    => 'object',
+					'default' => array(),
+				),
+				'html'   => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'css'    => array(
+					'type'    => 'string',
+					'default' => '',
+				),
 			),
 			'render_callback' => 'designinserter_render_block',
 		)
@@ -67,5 +87,11 @@ add_action( 'wp_enqueue_scripts', 'designinserter_enqueue_frontend_base_styles' 
 
 function designinserter_render_block( $attributes ) {
 	$part_id = isset( $attributes['partId'] ) ? $attributes['partId'] : '';
+	if ( ! $part_id ) {
+		return '';
+	}
+	if ( ! empty( $attributes['html'] ) || ! empty( $attributes['css'] ) ) {
+		return designinserter_render_part( $part_id, $attributes['html'], $attributes['css'] );
+	}
 	return designinserter_render_part( $part_id );
 }
