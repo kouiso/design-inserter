@@ -496,6 +496,7 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
     main.includes('License URI: https://www.gnu.org/licenses/gpl-2.0.html') ? '' : 'missing GPL license URI header',
     main.includes('Text Domain: designinserter') ? '' : 'missing text domain',
     new RegExp(`^Stable tag:\\s+${packageJson.version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'm').test(readme) ? '' : 'readme.txt Stable tag does not match package.json version',
+    /^Tested up to:\s+\d+(?:\.\d+){1,2}\s*$/m.test(readme) ? '' : 'readme.txt Tested up to is missing or not a valid WordPress version',
   ].filter(Boolean);
 
   const catalogFailures = [

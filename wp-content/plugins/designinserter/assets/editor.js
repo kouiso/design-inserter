@@ -421,12 +421,14 @@
 
 			var controller = ( typeof AbortController === 'function' ) ? new AbortController() : null;
 			fetchPartContent( partId, function( err, data ) {
-				setLoading( false );
 				// AbortController の無い環境では古いリクエストが後から解決し得る。
-				// 自分が要求した partId が現在の選択と食い違っていれば、成功・失敗を問わず無視する。
+				// 自分が要求した partId が現在の選択と食い違っていれば、setLoading も含め一切の
+				// state 更新を行わない。先に setLoading(false) してしまうと、後続で選んだ別パーツの
+				// フェッチがまだ進行中でも spinner が消えて古い content が完了済みに見えてしまう。
 				if ( latestPartIdRef.current !== partId ) {
 					return;
 				}
+				setLoading( false );
 				if ( err ) {
 					setContent( null );
 					setError( err );

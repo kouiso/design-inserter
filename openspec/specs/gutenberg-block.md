@@ -21,12 +21,12 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
    - `partId` (string, default: `""`) — catalog の part id
    - `params` (object, default: `{}`) — 色 / ラジオ / レンジの調整値。パーツ選択時は空、初回のみ `part.inputs` の既定値で初期化される
    - `html` (string, default: `""`) / `css` (string, default: `""`) — 調整済みの描画結果。フロントは `render_callback` でこの2属性を優先し、無ければカタログ既定値を使う（[shortcode](shortcode.md) 側は `id` のみで常にカタログ既定値を描画するため、調整済みパーツは表示が異なる）
-   - `partId` を変更する（`onSelectPart` / テンプレート選択）と `params` / `html` / `css` は毎回空に戻り、新しいパーツの既定値で再初期化される。保存済みブロックの調整値は `params` か `html`/`css` が既に埋まっていれば上書きしない
+   - `partId` を変更する（`onSelectPart` / テンプレート選択）と `params` / `html` / `css` は毎回空に戻り、新しいパーツの既定値で再初期化される。`params` は保存済みブロックを開き直しても再初期化されない（`params` か `html`/`css` が既に埋まっていれば初期化処理は走らない）。ただし `html` / `css` はあくまで現在の `params` を generator に通した結果のキャッシュであり、`LivePreview` は毎回再計算した結果を `onContentChange()` 経由で書き戻す。そのため generator 側の出力がプラグイン更新等で変わった場合、`params` は保持されたまま `html`/`css` だけが新しい出力に自動的に同期される（`editor.js` `LivePreview` / `onContentChange` 参照）
    - 選択中のテンプレートはブロック属性ではなく `useState` のローカル状態で保持する（テンプレートは固定ページ生成に使うだけで、ブロックとしては保存されない）
 6. エディタのサイドバー（InspectorControls）に PanelBody「Design Inserter」を表示し、その中に `ItemPicker` を置く
 7. `ItemPicker` は source フィルタ・検索ボックス・カテゴリボタン・カードグリッドで構成する（[editor-ui](editor-ui.md) 参照）
 8. パーツを選ぶと `partId` を設定し、テンプレート選択を解除する。テンプレートを選ぶと `partId` を空にする（両者は排他）
-9. パーツ選択時はブロック本体に `LivePreview` を表示する。プレビュー内容は REST から遅延ロードし、`<iframe sandbox="">` に隔離する
+9. パーツ選択時はブロック本体に `LivePreview` を表示する。`window.designInserterPartCodeFuncs[partId]` にローカル生成関数があれば最優先で同期的に使う（CSS Stock 222 件はこの経路）。生成関数が無いパーツ（現状 Template Party）だけ REST から遅延ロードする。プレビュー内容は `<iframe sandbox="">` に隔離する
 10. テンプレート選択時はブロック本体に `TemplatePreview`（demoUrl の iframe）と「このテンプレで固定ページを作成」ボタンを表示する
 11. パーツ未選択時は Notice コンポーネントで選択を促すメッセージを表示する
 12. 選択直後に `InsertConfirmNotice` で公開ページ / プレビューへの導線を出す

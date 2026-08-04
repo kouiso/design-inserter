@@ -359,6 +359,8 @@ function testDistributionShape() {
   assert(main.includes(`define( 'DESIGNINSERTER_SOURCE_URL', '${catalog.sourceUrl}' );`), 'plugin source URL constant matches catalog sourceUrl');
   // WP.org は Stable tag で配布版を決める。バージョン上げで readme.txt を忘れると古い版が配られる。
   assert(new RegExp(`^Stable tag:\\s+${packageJson.version.replace(/\./g, '\\.')}\\s*$`, 'm').test(readme), 'readme.txt Stable tag matches package.json version');
+  // Tested up to が消えたり不正な値になっても "readme.txt が存在する" だけでは検出できない。値の形式まで見る。
+  assert(/^Tested up to:\s+\d+(?:\.\d+){1,2}\s*$/m.test(readme), 'readme.txt declares a valid Tested up to WordPress version');
   assert(/Requires at least:\s+6\.0/.test(main), 'plugin header declares minimum WordPress version');
   assert(/Requires PHP:\s+7\.4/.test(main), 'plugin header declares minimum PHP version');
   assert(/License:\s+GPL-2\.0-or-later/.test(main), 'plugin header declares GPL-2.0-or-later');
