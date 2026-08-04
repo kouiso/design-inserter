@@ -66,14 +66,14 @@ assert_true( ! empty( $state['styles']['designinserter-frontend']['enqueued'] ),
 
 $editor_catalog = $state['localized']['designinserter-editor']['DesignInserterCatalog'];
 assert_true( count( $editor_catalog['parts'] ) === $designinserter_expected_parts, 'editor catalog part count matches decrypted catalog sources' );
-assert_true( count( array_filter( $editor_catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' ) ) === 222, 'editor catalog always exposes 222 CSS Stock parts' );
+assert_true( count( array_filter( $editor_catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' ) ) === 222, 'editor catalog always exposes 222 design parts' );
 assert_true_tp( count( array_filter( $editor_catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'template-party' ) ) === 138, 'editor catalog exposes 138 Template Party parts' );
 assert_true( $editor_catalog['restUrl'] === 'http://example.test/wp-json/designinserter/v1/parts/', 'editor catalog exposes REST URL' );
 assert_true( $editor_catalog['nonce'] === 'test-nonce', 'editor catalog exposes nonce' );
 
 $catalog = designinserter_get_catalog();
 assert_true( count( $catalog['parts'] ) === $designinserter_expected_parts, 'catalog part count matches decrypted catalog sources' );
-assert_true( count( array_filter( $catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' ) ) === 222, 'catalog always contains 222 CSS Stock parts' );
+assert_true( count( array_filter( $catalog['parts'], fn( $p ) => ( $p['source'] ?? '' ) === 'css-stock' ) ) === 222, 'catalog always contains 222 design parts' );
 
 $heading = designinserter_render_part( 'heading-1' );
 assert_true( strpos( $heading, '<!-- Design Inserter:' ) !== false, 'render includes source comment' );

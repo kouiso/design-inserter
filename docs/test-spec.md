@@ -43,7 +43,7 @@ Docker dev stack は `wp-content/themes` と `wp-content/plugins` をバイン�
 
 ### git-crypt と Template Party データ
 
-`data/template-party-parts.json` / `template-party-templates.json` / `assets/previews/tp-*` は Template Party の ToS（再配布禁止）に従って git-crypt で暗号化してある。鍵を持たん環境では復号できず、`designinserter_get_catalog()` は CSS Stock の 222 件だけを返す。
+`data/template-party-parts.json` / `template-party-templates.json` / `assets/previews/tp-*` は Template Party の ToS（再配布禁止）に従って git-crypt で暗号化してある。鍵を持たん環境では復号できず、`designinserter_get_catalog()` はデザインパーツの 222 件だけを返す。
 
 テストはこの2モードを自分で判定する（`tests/tp-availability.php`）。
 
@@ -107,13 +107,13 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 |---|---|---|---|---|
 | DI-CAT-001 | parts が 222 件 | `total === expectedTotal === 222` | `scripts/test.mjs` `testCatalog()` | 自動済 2026-07-28 |
 | DI-CAT-002 | categories が 28 件 | 28 | 同上 | 自動済 2026-07-28 |
-| DI-CAT-003 | sourceName が `CSS Stock` | 一致 | 同上 | 自動済 2026-07-28 |
+| DI-CAT-003 | sourceName が `Design Parts` | 一致 | 同上 | 自動済 2026-08-04 |
 | DI-CAT-004 | 全 parts に必須キーが揃う | id / sourcePartId / category / categoryLabel / title / html の欠損 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-005 | 全 id が `{categorySlug}-{sourcePartId}` 形式 | 違反 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-006 | id が全件ユニーク | 重複 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-007 | カテゴリ実件数が `expectedPartCount` と一致 | 不一致 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-008 | SVG-only パーツの css が空文字列 | 1 件以上存在し全て空 | 同上 | 自動済 2026-07-28 |
-| DI-CAT-009 | sourceUrl が CSS Stock のアンカー付き URL | 違反 0 | 同上 | 自動済 2026-07-28 |
+| DI-CAT-009 | sourceUrl が外部サイトのアンカー付き URL | 違反 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-010 | previewImage がローカル相対パス | 外部 URL 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-011 | previewImage の実ファイルが存在 | 欠損 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-012 | preview の拡張子とマジックバイトが一致 | 不一致 0（svg / webp / gif / png） | 同上 | 自動済 2026-07-28 |
@@ -137,7 +137,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-DAT-002 | css-stock 由来に `source='css-stock'` | 222 件 | `test_catalog_css_stock_parts_have_correct_source` | 自動済 2026-07-28 |
 | DI-DAT-003 | TP 由来に `source='template-party'` | 138 件 | `test_catalog_template_party_parts_have_correct_source` | 環境制約NG |
 | DI-DAT-004 | categories が slug で重複排除される | 重複 0 | `test_catalog_categories_have_no_duplicate_slugs` | 自動済 2026-07-28 |
-| DI-DAT-005 | TP カタログが復号できん環境で CSS Stock 単独で正常動作する | fatal なし。222 件で動作し、TP 依存アサーションが skip として報告される | `tests/tp-availability.php` + `tests/render-smoke.php` + PHPUnit `requireTemplateParty()` | 自動済 2026-07-28 |
+| DI-DAT-005 | TP カタログが復号できん環境でデザインパーツ単独で正常動作する | fatal なし。222 件で動作し、TP 依存アサーションが skip として報告される | `tests/tp-availability.php` + `tests/render-smoke.php` + PHPUnit `requireTemplateParty()` | 自動済 2026-07-28 |
 | DI-DAT-006 | catalog が static キャッシュされ 1 リクエスト最大 1 回しか decode せん | 2 回目でファイル I/O が起きん | — | 未実装 |
 | DI-DAT-007 | カタログファイル欠損時に致命的エラーにならん | exit 0 | `tests/catalog-fallback.php missing` | 自動済 2026-07-28 |
 | DI-DAT-008 | カタログ JSON 破損時に致命的エラーにならん | exit 0 | `tests/catalog-fallback.php invalid` | 自動済 2026-07-28 |
@@ -216,7 +216,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-004 | カテゴリボタンで絞り込める | 該当のみ | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-005 | source フィルタ 3 種が表示される | 3 ボタン | `tests/e2e/template-party.spec.mjs` | 環境制約NG（Docker + git-crypt） |
 | DI-EDT-006 | Template Party フィルタで template カードが badge 付きで出る | badge 表示 | 同上 | 環境制約NG（Docker + git-crypt） |
-| DI-EDT-007 | CSS Stock フィルタで template カードが隠れる | parts のみ | 同上 | 環境制約NG（Docker + git-crypt） |
+| DI-EDT-007 | デザインパーツフィルタで template カードが隠れる | parts のみ | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-EDT-008 | カードクリックでプレビューが即表示される | プレビュー描画 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-009 | プレビューが REST 経由で遅延ロードされる | `window.fetch(restUrl + partId)` | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-28 |
 | DI-EDT-010 | プレビューが sandbox iframe に隔離される | `sandbox: ''` + `srcDoc` | 同上 | 自動済 2026-07-28 |
@@ -361,7 +361,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-013 | zip 整合性 | `unzip -tq` exit 0 | `npm run build` + `unzip -tq` | 自動済 2026-07-28 |
 | DI-BLD-014 | zip root が `designinserter/` 単一 | 単一 | 同上 | 自動済 2026-07-28 |
 | DI-BLD-015 | dev / test / build ファイルが zip に混入せん | 混入 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 自動済 2026-07-28 |
-| DI-BLD-016 | zip 内 catalog の総数・プレビュー画像が揃う | 配布対象の欠損 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 手動要（CSS Stock 222 件と参照先だけ自動確認。全配布物の独立した固定 manifest チェックは無い） |
+| DI-BLD-016 | zip 内 catalog の総数・プレビュー画像が揃う | 配布対象の欠損 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 手動要（デザインパーツ 222 件と参照先だけ自動確認。全配布物の独立した固定 manifest チェックは無い） |
 | DI-BLD-017 | 古い zip / 別バージョン zip を検出して失敗する | 明示エラー | `npm run smoke:wp:portable` | 手動要 |
 | DI-BLD-018 | テスト・ビルド支援ファイルが gitignore されとらん | ignore 0 | `scripts/test.mjs` `testGitVisibility()` | 自動済 2026-07-28 |
 | DI-BLD-019 | `readme.txt`（Stable tag / Tested up to）がある | 存在 | — | 未実装（F-3） |
@@ -416,7 +416,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-E2E-004 | Gutenberg で挿入・選択・検索・カテゴリ・連続使用 | 破綻なし | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-E2E-005 | TP source フィルタ表示 | 3 ボタン | `tests/e2e/template-party.spec.mjs` | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-006 | TP カード + badge 表示 | 表示 | 同上 | 環境制約NG（Docker + git-crypt） |
-| DI-E2E-007 | CSS Stock フィルタで template 非表示 | parts のみ | 同上 | 環境制約NG（Docker + git-crypt） |
+| DI-E2E-007 | デザインパーツフィルタで template 非表示 | parts のみ | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-008 | template カードクリックで iframe プレビュー | iframe 表示 | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-009 | create-page REST で下書きページ生成 | 生成 | 同上 | 環境制約NG（Docker + git-crypt） |
 | DI-E2E-010 | 生成ページがフルページテンプレートで表示される | `full-page.php` 適用 | — | 未実装（F-1 の回帰テストとして最優先） |
@@ -763,7 +763,7 @@ E-1 の一部は `npm run smoke:wp:portable` で回避できる。これは Word
 | openspec editor-ui / gutenberg-block の spec 更新 | DI-EDT-002（F-2） |
 | カタログのキャッシュ挙動テスト | DI-DAT-006 |
 | スクレイパーの冪等性・エンティティデコード | DI-SCR-010・012 |
-| CSS Stock 側の更新追随（カタログ差分検出のフロー整備） | DI-SCR-001〜004 |
+| 外部サイト側の更新追随（カタログ差分検出のフロー整備） | DI-SCR-001〜004 |
 | WordPress 6.0 での互換性検証 | DI-CMP-004 |
 | `scrapedAt` の管理画面表示 | DI-ADM-011 |
 | PHPUnit bootstrap の定数を実物に合わせる | F-5 |

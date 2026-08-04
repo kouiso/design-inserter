@@ -18,7 +18,7 @@ wp-content/plugins/designinserter/
 ├── data/
 │   └── css-stock-parts.json    # スクレイプ済みカタログ（222 パーツ）
 scripts/
-└── scrape-css-stock.mjs        # CSS Stock スクレイパー（Node.js）
+└── scrape-css-stock.mjs        # 外部サイト用スクレイパー（Node.js）
 ```
 
 ---
@@ -37,7 +37,7 @@ scripts/
 | `DESIGNINSERTER_PLUGIN_FILE` | `__FILE__` | プラグインファイルパス |
 | `DESIGNINSERTER_PLUGIN_DIR` | `plugin_dir_path(__FILE__)` | ディレクトリパス |
 | `DESIGNINSERTER_PLUGIN_URL` | `plugin_dir_url(__FILE__)` | URL パス |
-| `DESIGNINSERTER_SOURCE_URL` | CSS Stock URL | フォールバック表示用 |
+| `DESIGNINSERTER_SOURCE_URL` | 外部サイト URL | フォールバック表示用 |
 
 **読み込み順序:**
 
@@ -214,22 +214,22 @@ flowchart TD
 
 ### 8. scripts/scrape-css-stock.mjs — スクレイパー
 
-**責務:** CSS Stock サイトからパーツデータを収集し JSON カタログを生成
+**責務:** 外部サイトからパーツデータを収集し JSON カタログを生成
 
 **処理フロー:**
 
 ```mermaid
 sequenceDiagram
     participant Script
-    participant CSSStock
+    participant SourceSite
 
-    Script->>CSSStock: GET /css-stock/ja（ガイドページ）
-    CSSStock-->>Script: カテゴリ一覧 HTML
+    Script->>SourceSite: GET /css-stock/ja（ガイドページ）
+    SourceSite-->>Script: カテゴリ一覧 HTML
     Script->>Script: extractCategories() - 28 カテゴリ抽出
 
     loop 各カテゴリ
-        Script->>CSSStock: GET /css-stock/ja/{slug}
-        CSSStock-->>Script: カテゴリページ HTML
+        Script->>SourceSite: GET /css-stock/ja/{slug}
+        SourceSite-->>Script: カテゴリページ HTML
         Script->>Script: extractParts() - パーツ抽出
     end
 

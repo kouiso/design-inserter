@@ -17,7 +17,7 @@ npm run smoke:wp
 
 ## Template Party data and git-crypt
 
-`data/template-party-*.json` and `assets/previews/tp-*` are git-crypt encrypted. Without the key the catalog falls back to the 222 CSS Stock parts. `tests/tp-availability.php` detects which mode is active; Template Party assertions are reported as skips with a count rather than silently passing. See `docs/test-spec.md` §2.
+`data/template-party-*.json` and `assets/previews/tp-*` are git-crypt encrypted. Without the key the catalog falls back to the 222 design parts. `tests/tp-availability.php` detects which mode is active; Template Party assertions are reported as skips with a count rather than silently passing. See `docs/test-spec.md` §2.
 
 ## Portable WordPress Smoke
 

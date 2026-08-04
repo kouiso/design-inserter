@@ -227,7 +227,7 @@ function testCatalog() {
   const badCategoryCounts = categories.filter((category) => categoryCounts.get(category.slug) !== category.expectedPartCount);
   const svgOnly = parts.filter((part) => part.category === 'loading' && typeof part.css === 'string' && part.css.trim() === '');
 
-  assert(catalog.sourceName === 'CSS Stock', 'catalog sourceName is CSS Stock');
+  assert(catalog.sourceName === 'Design Parts', 'catalog sourceName is Design Parts');
   assert(catalog.total === 222 && catalog.expectedTotal === 222 && parts.length === 222, 'catalog has 222 expected parts');
   assert(categories.length === 28, 'catalog has 28 categories');
   assert(badRequired.length === 0, `all parts include required keys${badRequired.length ? `: ${badRequired.slice(0, 5).join(', ')}` : ''}`);
@@ -240,7 +240,7 @@ function testCatalog() {
   assert(assetRefCount === 5, `catalog embedded asset reference count is stable${assetRefCount !== 5 ? `: ${assetRefCount}/5` : ''}`);
   assert(missingAssetRefs.length === 0, `all catalog embedded asset references exist${missingAssetRefs.length ? `: ${missingAssetRefs.slice(0, 5).join(', ')}` : ''}`);
   assert(badAssetRefKind.length === 0, `catalog embedded asset extensions match file signatures${badAssetRefKind.length ? `: ${badAssetRefKind.slice(0, 5).join(', ')}` : ''}`);
-  assert(badSource.length === 0, `part sourceUrl values point to CSS Stock anchors${badSource.length ? `: ${badSource.slice(0, 5).join(', ')}` : ''}`);
+  assert(badSource.length === 0, `part sourceUrl values point to source-site anchors${badSource.length ? `: ${badSource.slice(0, 5).join(', ')}` : ''}`);
   assert(svgOnly.length > 0, 'catalog includes SVG-only loading parts with empty CSS');
 }
 

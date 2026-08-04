@@ -218,7 +218,7 @@ function designinserter_get_editor_catalog() {
 		'templates'  => $tmpl_items,
 		'sources'    => array(
 			array( 'id' => 'all',            'label' => 'すべて' ),
-			array( 'id' => 'css-stock',      'label' => 'CSS Stock パーツ' ),
+			array( 'id' => 'css-stock',      'label' => 'デザインパーツ' ),
 			array( 'id' => 'template-party', 'label' => 'Template Party' ),
 		),
 		'restUrl'          => rest_url( 'designinserter/v1/parts/' ),

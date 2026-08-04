@@ -73,7 +73,7 @@ Template Party（template-party.com）からフルページテンプレートの
 2. 各パーツの HTML/CSS をスクレイプして `template-party-parts.json` に格納
 3. `source: "template-party"` を全パーツに付与
 4. サムネ DL → `assets/previews/tp-parts-<partId>.webp`
-5. CSS Stock と同一スキーマ: `{id, category, categoryLabel, title, html, css, inputs, previewImage, sourceUrl, source}`
+5. デザインパーツと同一スキーマ: `{id, category, categoryLabel, title, html, css, inputs, previewImage, sourceUrl, source}`
 
 ### 出力 JSON スキーマ（template-party-parts.json）
 

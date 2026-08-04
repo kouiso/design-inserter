@@ -212,7 +212,7 @@ test('source filter buttons render in block inspector', async ({ page }) => {
 	await expect(picker).toBeVisible({ timeout: 15000 });
 
 	const allBtn = picker.locator('button.di-picker__source').filter({ hasText: 'すべて' }).first();
-	const cssStockBtn = picker.locator('button.di-picker__source').filter({ hasText: 'CSS Stock' }).first();
+	const cssStockBtn = picker.locator('button.di-picker__source').filter({ hasText: 'デザインパーツ' }).first();
 	const tpBtn = picker.locator('button.di-picker__source').filter({ hasText: 'Template Party' }).first();
 
 	await expect(allBtn).toBeVisible();
@@ -248,7 +248,7 @@ test('Template Party filter shows template cards with badge', async ({ page }) =
 	expect(cardCount).toBeGreaterThan(0);
 });
 
-test('CSS Stock filter hides template cards and shows only parts', async ({ page }) => {
+test('デザインパーツ filter hides template cards and shows only parts', async ({ page }) => {
 	await loginAsAdmin(page, `/wp-admin/post.php?post=${editorPageId}&action=edit`);
 	await waitForEditorReady(page);
 	await insertDesignInserterBlock(page);
@@ -257,10 +257,10 @@ test('CSS Stock filter hides template cards and shows only parts', async ({ page
 	const picker = page.locator('.di-picker').first();
 	await expect(picker).toBeVisible({ timeout: 15000 });
 
-	const cssStockBtn = picker.locator('button.di-picker__source').filter({ hasText: 'CSS Stock' }).first();
+	const cssStockBtn = picker.locator('button.di-picker__source').filter({ hasText: 'デザインパーツ' }).first();
 	await cssStockBtn.click();
 
-	// Template cards (テンプレ badge) must not be visible when CSS Stock filter is active.
+	// Template cards (テンプレ badge) must not be visible when the デザインパーツ filter is active.
 	await expect(picker.locator('.di-card--template').first()).not.toBeVisible({ timeout: 5000 }).catch(() => {});
 	const templateCardCount = await picker.locator('.di-card--template').count();
 	expect(templateCardCount).toBe(0);

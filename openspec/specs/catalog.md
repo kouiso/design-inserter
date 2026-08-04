@@ -4,7 +4,7 @@
 
 ## 概要
 
-CSS Stock から抽出した 222 パーツのメタデータと HTML/CSS を格納する JSON ファイル。プラグインのデータソースとして、ブロック・ショートコード・管理画面のすべてで参照される。
+外部サイトから抽出した 222 パーツのメタデータと HTML/CSS を格納する JSON ファイル。プラグインのデータソースとして、ブロック・ショートコード・管理画面のすべてで参照される。
 
 ## 機能要件
 
@@ -28,9 +28,9 @@ CSS Stock から抽出した 222 パーツのメタデータと HTML/CSS を格�
 
 ```json
 {
-  "sourceName": "CSS Stock",
+  "sourceName": "Design Parts",
   "sourceUrl": "https://pote-chil.com/css-stock/ja",
-  "sourceNotice": "CSS Stock permits use of listed source code on websites/blogs...",
+  "sourceNotice": "The design parts source permits use of listed source code on websites/blogs...",
   "scrapedAt": "2026-05-01T12:00:00.000Z",
   "expectedTotal": 222,
   "total": 222,
@@ -75,8 +75,8 @@ CSS Stock から抽出した 222 パーツのメタデータと HTML/CSS を格�
 ### ID フォーマット規則
 
 - 形式: `{categorySlug}-{sourcePartId}`
-- categorySlug: CSS Stock の URL パス末尾（英小文字、ハイフンなし）
-- sourcePartId: CSS Stock でのパーツ番号（整数）
+- categorySlug: 外部サイトの URL パス末尾（英小文字、ハイフンなし）
+- sourcePartId: 外部サイトでのパーツ番号（整数）
 - 例: `heading-1`, `button-3`, `loading-5`, `table-2`, `hamburger-4`
 
 ### 28 カテゴリ一覧
@@ -104,7 +104,7 @@ heading, text, list, box, button, blockquote, table, hr, badge, search, hamburge
 - [ ] categories 配列に 28 件のカテゴリが含まれること
 - [ ] total と expectedTotal が一致すること
 - [ ] SVG-only パーツ（loading 等）の css フィールドが空文字列であること
-- [ ] sourceUrl が各パーツの CSS Stock 上のアンカーリンクであること
+- [ ] sourceUrl が各パーツの外部サイト上のアンカーリンクであること
 - [ ] PHP で json_decode した際にエラーが発生しないこと
 
 ## 関連spec
@@ -120,13 +120,13 @@ heading, text, list, box, button, blockquote, table, hr, badge, search, hamburge
 
 ## 概要
 
-Phase 3–5 でマルチソース対応に拡張。CSS Stock パーツ（222件）に加え、Template Party のコピペパーツ（138件）とフルページテンプレート（1017件）が統合カタログとして提供される。
+Phase 3–5 でマルチソース対応に拡張。デザインパーツ（222件）に加え、Template Party のコピペパーツ（138件）とフルページテンプレート（1017件）が統合カタログとして提供される。
 
 ## データファイル一覧
 
 | ファイル | 管理 | 概要 |
 |---|---|---|
-| `data/css-stock-parts.json` | Git 管理 | CSS Stock 222パーツ |
+| `data/css-stock-parts.json` | Git 管理 | デザインパーツ 222パーツ |
 | `data/template-party-parts.json` | Git 管理 | TP コピペパーツ 138件 |
 | `data/template-party-templates.json` | Git 管理 | TP フルページテンプレート 1017件 |
 | `data/template-party-bundles/<id>/` | **Git 非管理**（.gitignore）| ZIPバンドル展開実体 |
@@ -135,7 +135,7 @@ Phase 3–5 でマルチソース対応に拡張。CSS Stock パーツ（222件�
 ## PHP API
 
 ```php
-// パーツ（CSS Stock + TP コピペ統合）
+// パーツ（デザインパーツ + TP コピペ統合）
 $catalog   = designinserter_get_catalog();    // ['parts', 'categories', 'sourceUrl']
 $parts     = designinserter_get_parts();      // 全パーツ配列 (360件)
 $part      = designinserter_get_part($id);    // 単一パーツ取得
