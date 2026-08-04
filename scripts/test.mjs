@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { inspectTemplatePartyCatalogs } from './build-plugin-zip.mjs';
+import { inspectTemplatePartyCatalogs, detectPreviewKind } from './build-plugin-zip.mjs';
 
 const root = process.cwd();
 const pluginDir = 'wp-content/plugins/designinserter';
@@ -121,17 +121,6 @@ function testJavaScriptSyntax() {
   pass(`JavaScript syntax passed for ${jsFiles.length} files`);
 }
 
-function getPreviewKind(buffer) {
-  const textStart = buffer.subarray(0, 128).toString('utf8').trimStart();
-
-  if (textStart.startsWith('<svg') || textStart.startsWith('<?xml')) return 'svg';
-  if (buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP') return 'webp';
-  if (buffer.subarray(0, 3).toString('ascii') === 'GIF') return 'gif';
-  if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
-
-  return 'unknown';
-}
-
 function extractCatalogAssetReferences(part) {
   const refs = [];
   const pattern = /\b(?:src|href)=(['"])(assets\/(?:embedded|previews)\/[^'"]+)\1|url\(\s*(['"]?)(assets\/(?:embedded|previews)\/[^)'" \t\r\n]+)\3\s*\)/g;
@@ -203,7 +192,7 @@ function testCatalog() {
         missingPreview.push(part.id);
       } else {
         const ext = path.extname(previewPath).slice(1);
-        const kind = getPreviewKind(fs.readFileSync(previewPath));
+        const kind = detectPreviewKind(fs.readFileSync(previewPath));
         if (kind !== ext) {
           badPreviewKind.push(`${part.id}: .${ext} contains ${kind}`);
         }
@@ -219,7 +208,7 @@ function testCatalog() {
         missingAssetRefs.push(`${part.id}:${assetRef.field}:${assetRef.path}`);
       } else {
         const ext = path.extname(assetPath).slice(1);
-        const kind = getPreviewKind(fs.readFileSync(assetPath));
+        const kind = detectPreviewKind(fs.readFileSync(assetPath));
         if (kind !== ext) {
           badAssetRefKind.push(`${part.id}: ${assetRef.path} contains ${kind}`);
         }

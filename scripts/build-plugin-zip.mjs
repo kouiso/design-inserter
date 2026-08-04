@@ -192,6 +192,18 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
   }
 }
 
+// scripts/test.mjs の CSS Stock 側検査と同じ判定を共有する（拡張子と中身がズレる改竄・破損を両カタログで検出するため）。
+export function detectPreviewKind(buffer) {
+  const textStart = buffer.subarray(0, 128).toString('utf8').trimStart();
+
+  if (textStart.startsWith('<svg') || textStart.startsWith('<?xml')) return 'svg';
+  if (buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP') return 'webp';
+  if (buffer.subarray(0, 3).toString('ascii') === 'GIF') return 'gif';
+  if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
+
+  return 'unknown';
+}
+
 // 絶対 URL や空文字は配布物の中身と対応せんので落とす（誤検知でリリースを止めんため）。
 export function collectPreviewReferences(catalog) {
   if (catalog === null || typeof catalog !== 'object') {
@@ -435,12 +447,25 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
       continue;
     }
 
-    const missingRefs = collectPreviewReferences(decoded)
-      .map((reference) => `${pluginSlug}/${reference}`)
+    const previewEntries = collectPreviewReferences(decoded).map((reference) => `${pluginSlug}/${reference}`);
+    const missingRefs = previewEntries
       // dev では暗号文として外された分だけ許す。単に消えとる参照は退行なので落とす。
       .filter((candidate) => !entrySet.has(candidate) && !lockedEntries.has(candidate));
     if (missingRefs.length) {
       templatePartyFailures.push(`${entry} が参照するプレビューが zip に無い (${missingRefs.length} 件): ${missingRefs.slice(0, 10).join(', ')}`);
+    }
+
+    // 存在チェックだけでは、暗号化されずに空ファイル・HTML エラーページへ差し替わった破損プレビューを見逃す。
+    const badSignatures = previewEntries
+      .filter((candidate) => entrySet.has(candidate))
+      .map((candidate) => {
+        const ext = candidate.slice(candidate.lastIndexOf('.') + 1).toLowerCase();
+        const kind = detectPreviewKind(readZipEntryBuffer(outPath, candidate));
+        return kind === ext ? '' : `${candidate}: .${ext} contains ${kind}`;
+      })
+      .filter(Boolean);
+    if (badSignatures.length) {
+      templatePartyFailures.push(`${entry} が参照するプレビューの中身が拡張子と一致しない (${badSignatures.length} 件): ${badSignatures.slice(0, 10).join(', ')}`);
     }
   }
 

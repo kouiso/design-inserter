@@ -9,6 +9,7 @@ import {
   assertCatalogsUsable,
   assertNoCiphertext,
   collectPreviewReferences,
+  detectPreviewKind,
   inspectCatalogFile,
   isGitCryptCiphertext,
   resolveOutputPath,
@@ -210,6 +211,18 @@ test('preview reference collection ignores anything that is not a plugin-relativ
   assert.deepEqual(collectPreviewReferences({ parts: 'nope', templates: 7 }), []);
   assert.deepEqual(collectPreviewReferences(null), []);
   assert.deepEqual(collectPreviewReferences([]), []);
+});
+
+test('preview kind detection matches real file signatures, not extensions', () => {
+  // 拡張子ではなく中身で判定する。破損・改竄プレビューを検出する verifyZip の署名検査が依拠する契約。
+  assert.equal(detectPreviewKind(Buffer.concat([Buffer.from('RIFF\0\0\0\0WEBP'), Buffer.alloc(4)])), 'webp');
+  assert.equal(detectPreviewKind(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>')), 'svg');
+  assert.equal(detectPreviewKind(Buffer.from('<?xml version="1.0"?><svg></svg>')), 'svg');
+  assert.equal(detectPreviewKind(Buffer.from('GIF89a')), 'gif');
+  assert.equal(detectPreviewKind(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])), 'png');
+  // 空ファイルや HTML エラーページへの差し替えは、どの署名にも一致せず unknown になる。
+  assert.equal(detectPreviewKind(Buffer.alloc(0)), 'unknown');
+  assert.equal(detectPreviewKind(Buffer.from('<html><body>404</body></html>')), 'unknown');
 });
 
 test('the ciphertext sweep fails the release build and is skipped in dev mode', () => {
