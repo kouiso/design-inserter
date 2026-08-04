@@ -52,7 +52,7 @@ jobs:
           script: |
             const issue = context.payload.issue;
 
-                        const message = `<@${{process.env.DEVIN_USER_ID}}>
+                                    const message = `<@${{process.env.DEVIN_USER_ID}}>
 !swe
 ${{issue.title}}
 ${{issue.html_url}}
