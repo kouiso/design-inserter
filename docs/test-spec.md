@@ -254,7 +254,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-SC-004 | SVG-only パーツで style タグなし | style 無し | 同上 | 自動済 2026-07-28 |
 | DI-SC-005 | 不明 id で何も表示せん | 空文字 | 同上 | 自動済 2026-07-28 |
 | DI-SC-006 | id 属性なしで何も表示せん | 空文字 | — | 未実装 |
-| DI-SC-007 | 出力がブロック出力と同一 | 文字列一致 | — | 未実装（同一 renderer 共有は DI-SC-002 で担保、出力等価比較は無い） |
+| DI-SC-007 | 未調整パーツで出力がブロック出力と同一 | 文字列一致 | — | 未実装（同一 renderer 共有は DI-SC-002 で担保、出力等価比較は無い。パラメータ調整済みパーツはショートコードが `id` しか受け取らず既定値に戻るため対象外。readme.txt FAQ に明記） |
 | DI-SC-008 | `the_content` 経由で描画される | heading-4 描画 | `render-smoke.php` | 自動済 2026-07-28 |
 | DI-SC-009 | テキストウィジェットで描画される | 描画 | 実機: ウィジェット追加 → フロント確認 | 手動要 |
 | DI-SC-010 | クラシックエディタ投稿で描画される | 描画 | 実機: Classic Editor プラグイン導入 | 手動要 |
@@ -1049,3 +1049,4 @@ P2 — 継続改善：
 | 2026-08-04 続き2 | CodeRabbit / Codex の新規指摘3件に対応。(1) `includes/templates.php` / `templates/full-page.php` が `verifyZip()` の `required` と `testDistributionShape()` の `requiredFiles` に未登録で、削除しても `npm test` / `build:dev` が exit 0 のまま素通りしていた（Codex）。両方に追加。(2) `editor-ui.md` の Notice 説明文「公開ページは常に `demoUrl` へリダイレクトされる」が、bundle が存在するローカル復号済み開発環境の実態と食い違っていたため、配布 zip の購入者環境に限定する表現へ修正（CodeRabbit）。(3) 仮想スクロールの説明が parts 360 件のみを記載していたので templates 1,017 件を含む最大 1,377 件に修正、TemplatePreview/CreatePageButton/InsertConfirmNotice（要件16〜21）の受け入れ基準が欠けていたので DI-EDT-021〜025 を追加し §5.1 のトレーサビリティ表・集計（55 項目）も追随させた（CodeRabbit）。§4.6 の残存「CSS Stock」表記も同時に修正 |
 | 2026-08-04 続き3 | Codex 指摘: `verifyZip()` の Template Party プレビュー検査が参照先の存在しか見ておらず、`tp-*.webp` が空ファイルや HTML エラーページに差し替わっても検出できなかった。`scripts/test.mjs` の CSS Stock 側で既に使っていた署名判定（拡張子 vs 実バイト列）を `detectPreviewKind()` として `scripts/build-plugin-zip.mjs` 側に一本化してエクスポートし、`verifyZip()` の Template Party ループで存在する参照先すべてに適用。`scripts/test.mjs` はこの共有関数を import する側に変更し、重複定義を解消。`tests/build-plugin-zip.test.mjs` に signature 判定のユニットテストを追加。DI-BLD-016 の現状列を更新 |
 | 2026-08-04 続き4 | main が並行して進んだ per-component color/radio/range パラメータ機能（DI-CAT-024, DI-BLD-023, DI-BLK-014/015, DI-EDT-021〜024）を取り込んでマージコンフリクトを解消。ID 衝突していた Template Party の disclosure Notice 群を DI-EDT-021〜026 から DI-EDT-025〜030 に振り直し、§5.1・§5.2・§5.3 の参照を追随させた |
+| 2026-08-04 続き5 | Codex 指摘: readme.txt FAQ「ショートコードとブロックで表示は変わりますか」の「変わりません」という断言が、per-component パラメータ調整機能とかみ合っていなかった。`designinserter_shortcode()` は `id` しか受け取らずカタログ既定値で描画する一方、`designinserter_render_block()` はブロック属性の調整済み `html`/`css` を渡すため、パラメータ調整済みパーツでは表示が一致しない。未調整時のみ同一である旨に限定して修正し、DI-SC-007 の記述にも同じ限定を反映した |
