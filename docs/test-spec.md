@@ -657,7 +657,7 @@ $WP wp eval 'wp_set_current_user(1); $r=new WP_REST_Request("GET","/designinsert
 # Cookie・nonce・HTTP transport を通らん内部 dispatch なので、DI-API-012 として判定する。
 node -e 'const d=require("fs").readFileSync(process.argv[1],"utf8");const j=JSON.parse(d);if(j.code||j.id!=="heading-1")throw new Error("DI-API-012 NG: "+d.slice(0,200));console.log("DI-API-012 OK [ローカル実行]")' "$EV/p5-rest.json"
 
-# F-1 の再現証跡。現状は false が返る（フィルタが登録されとらん）
+# DI-TPL-001（F-1 解消の実機確認）。修正後は true が返るはず。false ならリグレッション
 $WP wp eval 'var_dump(has_filter("template_include"));' --allow-root > "$EV/p5-template-filter.txt"
 
 curl -si http://localhost:8080/wp-json/designinserter/v1/parts/heading-1 | head -1 > "$EV/p5-rest-anon.txt"  # DI-API-015
@@ -671,7 +671,7 @@ curl -si http://localhost:8080/wp-json/designinserter/v1/parts/heading-1 | head 
    先に `npm run wp -- plugin delete designinserter` で source 側を消してから上げる。
 2. 投稿 → 新規追加 → Design Inserter ブロック挿入 → 検索・カテゴリ絞込・カードクリック（DI-EDT-013〜015・018〜020）
 3. 公開 → フロントで behavior 5 種を実操作（DI-FE-002〜009）
-4. 固定ページ編集画面のテンプレート選択欄（DI-TPL-002。**現状は選択肢が出んことが F-1 の証跡**）
+4. 固定ページ編集画面のテンプレート選択欄（DI-TPL-002。F-1 解消後は「フルページテンプレート」の選択肢が出るはず）
 5. `npm run wp -- plugin deactivate designinserter` → フロント再表示（DI-CMP-007）
 
 ### 合格判定
@@ -690,13 +690,15 @@ Phase 1〜3 が exit 0、Phase 4 が全 pass、Phase 5 の各経路が期待マ�
 
 ## 7. 既知の欠陥・制約
 
-### F-1 `includes/templates.php` が読み込まれとらん（P0）
+### F-1 `includes/templates.php` が読み込まれとらん（P0・修正済み 2026-07-30）
 
-`designinserter.php` の `require_once` は data / render / block / admin / rest-api の 5 本のみ。リポジトリ全体を検索しても `templates.php` への参照が 0 件。
+当時、`designinserter.php` の `require_once` は data / render / block / admin / rest-api の 5 本のみで、`templates.php` への参照が 0 件だった。
 
-結果、`theme_page_templates` と `template_include` のフィルタが登録されん。Template Party の「このテンプレで固定ページを作成」で作られたページは `_wp_page_template=designinserter-full-template` の meta を持つが、`templates/full-page.php` が読み込まれず、テーマ既定のテンプレートで表示される。販売する機能が動いとらん。
+結果、`theme_page_templates` と `template_include` のフィルタが登録されず、Template Party の「このテンプレで固定ページを作成」で作られたページ（`_wp_page_template=designinserter-full-template` の meta を持つ）が `templates/full-page.php` を経由せず、テーマ既定のテンプレートで表示されてしまっていた。販売する機能が動いとらんかった。
 
-再現: `wp eval 'var_dump(has_filter("template_include"));'` が `false` を返す。
+再現手順（当時）: `wp eval 'var_dump(has_filter("template_include"));'` が `false` を返す。
+
+2026-07-30 に `designinserter.php` へ `require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/templates.php';` を追加して解消。2026-08-02 に `tests/render-smoke.php` へ `theme_page_templates` / `template_include` のフィルタ登録検証（DI-TPL-001）を回帰テストとして追加した。require を外すと `npm test` が赤くなることを実測で確認済み。
 
 対応ケース: DI-TPL-001〜007, DI-E2E-010
 
@@ -1071,3 +1073,4 @@ P2 — 継続改善：
 | 2026-08-04 続き10 | Codex 続報1件 + CodeRabbit 新規指摘4件に対応。(1) [Codex] `Taskfile.yml` の `ci:fast` が `build` → `build:dev` に変わった後も、以前の `npm run build` が残した `dist/designinserter-<version>.zip` が消えず、`generate-ready-checklist.mjs`（K036）がソース変更後もそれを「存在する」だけで現行候補として green 扱いし得た。`build:dev` の直前に `dist/designinserter-*.zip` を削除するステップを追加。(2) [CodeRabbit] `docs/test-spec.md` の DI-EDT-026 が「自動済」だったが、実体は `scripts/test.mjs` の文言存在チェックのみで、実際に可視状態であることを検証する E2E はこの環境では未実行だったため `環境制約NG` に訂正（コード契約チェックは自動済のまま明記）。(3) [CodeRabbit] §5.3 逆引き表の `tests/e2e/template-party.spec.mjs` 行に `DI-EDT-025` が抜けていたため追加。(4) [CodeRabbit] `detectPreviewKind()` の XML 判定が `<svg/>` のような自己終了ルート要素にマッチせず、正当な svg プレビューを `unknown` として拒否していたため、正規表現に `/` を追加しユニットテストを追加。(5) [CodeRabbit] `editor.js` の `LivePreview` が codeFunc 失敗時・REST 失敗時に古い `content` を残したまま `setError()` するだけで、ブロックの保存済み `html`/`css` 属性が実際には失敗した新しい partId のものではなく前のパーツのものになり得た。両エラー経路で `setContent(null)` を追加し、あわせて AbortController 非対応環境向けの stale-response ガードも、リクエスト自身の `partId` と `latestPartIdRef.current`（最新選択）を比較する形に強化した（従来は自分自身の partId としか比較しておらず実質無意味だった）。ついでに `verifyZip()` に readme.txt の Stable tag 値検証（存在チェックのみだった）と、dev モードで欠けているカタログが本当に `lockedFiles` に含まれるか（単純な選定バグでないか）の検証を追加した |
 | 2026-08-04 続き11 | Codex の新規指摘5件に対応。(1) `gutenberg-block.md` 要件9が「プレビュー内容は REST から遅延ロード」と書いたままで、`editor-ui.md` を generator-first に直した後も兄弟 spec 間で通信契約が矛盾していた。CSS Stock 222 件はローカル生成関数を最優先で使い、REST は生成関数の無いパーツ（現状 Template Party）だけの経路である旨に統一。(2) `editor-ui.md` の受け入れ基準で、未選択メッセージに ID が無く、検索結果 0 件の行に誤って `DI-EDT-014` が付いていた（正本の `docs/test-spec.md` では未選択＝DI-EDT-014、0件＝DI-EDT-015）。それぞれ正しい ID に修正。(3) `gutenberg-block.md` 属性5の「`params` か `html`/`css` が既に埋まっていれば上書きしない」という記述が、`LivePreview` が毎回 `params` から `html`/`css` を再計算し `onContentChange()` で書き戻す実装と食い違っていた（`params` 自体は再初期化されないが、`html`/`css` は generator の現在の出力に自動追従するキャッシュである）。実装通りの挙動に記述を修正。(4) [P2] `editor.js` の `LivePreview` の REST コールバックが、stale 応答の判定より先に `setLoading(false)` を実行していたため、AbortController 非対応環境で別パーツ選択直後に古い応答が先着すると、新しいフェッチが継続中でも spinner が消えて古い content が完了済みのように見えるリスクがあった。stale 判定を先頭に移し、stale 応答では `setLoading` を含む一切の state 更新を行わないよう修正。(5) [P2] DI-BLD-019 は「Stable tag / Tested up to」両方の自動検証を謳っていたが、実装は Stable tag のみを検証しており `Tested up to` は readme.txt の存在チェックにしか掛かっていなかった（削除や不正な値でも green のまま通り得た）。`scripts/test.mjs` と `verifyZip()` の両方に `Tested up to` の書式検証（`\d+(\.\d+){1,2}` 形式）を追加し、台帳の記述と実装を一致させた |
 | 2026-08-04 続き12 | Codex の新規指摘6件に対応（うち1件は保留・要ユーザー判断としてコード変更せず）。(1) `docs/test-spec.md` の DI-EDT-013（SVG-only パーツのプレビュー）が「style タグが含まれん」と記載していたが、`LivePreview` の `srcDoc` は margin/padding/font-family のリセット用ベース style を常に出力し、空になるのはパーツ固有 CSS（`content.css`）だけ。台帳の期待値を実装（`gutenberg-block.md` は既に正しかった）に合わせて訂正した（3箇所）。(2) `gutenberg-block.md` の受け入れ基準に、属性5で新設した「保存済み `params` を再初期化しない」「`html`/`css` は generator の現在の出力へ自動再同期される」という契約に対応するチェックボックスが無く、この挙動を一度も検証しないまま全基準を満たした扱いにできた。DI-BLK-016/017 を新設して追加し、§5.1・集計・冒頭 SSOT の受け入れ基準数を 63→65 項目に更新した。(3) `scripts/scrape-template-party-parts.mjs` が Template Party パーツへ常に `inputs: []`（空配列）を設定し、`includes/data.php` の `designinserter_shape_part_for_editor_catalog()` がそれをそのまま editor カタログへ渡していたため、`editor-ui.md` が規定する「調整 UI が無ければ `inputs` キー自体が無い」契約に違反していた（CSS Stock 222 件は全件が実際に colors/radios/ranges のいずれかを持つため、この契約は今まで一度も検証されていなかった）。`data.php` 側で colors/radios/ranges が全て空なら `inputs` キーごと省略するよう正規化し、スクレイパー側も `inputs: []` を書かないよう修正（次回スクレイプから反映。既存の暗号化済みデータは data.php 側の正規化で救済される）。(4) `editor.js` の `LivePreview` が生成関数失敗時に `content` を `null` にするだけで、ブロックの保存済み `html`/`css` 属性はクリアしないため、直前の成功結果が残ったまま公開されると現在の `params` と食い違う懸念について: 属性を明示的に空へ書き換える案は、`computePartContent` が例外を投げる経路は全 222 パーツの回帰テスト（既定値）では踏まないレアケースである一方、書き換えを実装すると一時的なエラーで正当な保存済みカスタマイズを消してしまうリスクの方が大きいと判断し、見送った（理由は PR スレッドに返信）。(5) `scripts/build-plugin-zip.mjs` の `LOCAL_ONLY_PREFIXES` が `data/template-party-bundles/` と `scrape-state.json` しか除外せず、`.gitattributes` が git-crypt 暗号化対象として明記する `template-party-parts.json` / `templates.json` / `assets/previews/tp-*` は復号済み環境では平文で配布 zip に入るため、`.gitattributes` のコメント「personal use only, ToS non-redistribution」と矛盾するとの指摘: これは #53（git-crypt ビルドガード）の設計そのもの（復号済みなら Template Party を同梱するのが正しい、が P0 の前提）と真っ向から対立する事業判断であり、コードで一方的に決めず、PR コメントで @kouiso に判断を仰いだ |
+| 2026-08-04 続き13 | Codex の新規指摘2件に対応。(1) `detectPreviewKind()` の直接 `<svg` から始まる分岐が要素名の境界を見ておらず、`<svg-error>AccessDenied</svg-error>` のような非 SVG タグも `svg` と誤判定していた（先に修正した `<?xml>` 経由の分岐と同じ穴が残っていた）。同じ境界検査（`/^<svg[\s\/>]/`）を適用し回帰テストを追加した。(2) `docs/test-spec.md` の F-1（`includes/templates.php` 未読み込み）が 2026-07-30 に解消済みにもかかわらず、§7 の見出し・本文と Phase 5 の実機手順（660・674行）が「現状は false が返る」「選択肢が出んことが F-1 の証跡」と当時のままの現在形で残っていた。この手順どおりに実機確認すると、正常に修正済みの配布候補を FAIL 扱いにしかねない。F-2/F-3 と同じ「（P0・修正済み 日付）」の記法に統一し、Phase 5 の手順も修正後の期待値（`true` が返る／選択肢が出る）に書き換えた |

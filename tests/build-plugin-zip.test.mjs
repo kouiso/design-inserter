@@ -226,6 +226,8 @@ test('preview kind detection matches real file signatures, not extensions', () =
   assert.equal(detectPreviewKind(Buffer.from('<html><body>404</body></html>')), 'unknown');
   // XML 宣言だけでは svg と判定しない（S3 の AccessDenied 等の XML エラー応答が誤検知で通り抜けるのを防ぐ）。
   assert.equal(detectPreviewKind(Buffer.from('<?xml version="1.0"?><Error>AccessDenied</Error>')), 'unknown');
+  // 直接 <svg で始まる分岐も要素名の境界を見る（<svg-error> のような非 SVG タグの誤検知を防ぐ）。
+  assert.equal(detectPreviewKind(Buffer.from('<svg-error>AccessDenied</svg-error>')), 'unknown');
 });
 
 test('the ciphertext sweep fails the release build and is skipped in dev mode', () => {
