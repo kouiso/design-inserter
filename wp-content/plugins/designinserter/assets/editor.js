@@ -315,18 +315,19 @@
 		var input = props.input;
 		var value = props.value;
 		var onChange = props.onChange;
+		var scope = props.scope || 'di';
 		var label = getInputLabel( input );
 
 		if ( input.choices ) {
 			return el( 'fieldset', { className: 'di-param__group di-param__radio' },
 				el( 'legend', { className: 'di-param__label' }, label ),
 				input.choices.map( function( choice, idx ) {
-					var choiceId = input.key + '-' + idx;
+					var choiceId = scope + '-' + input.key + '-' + idx;
 					return el( 'label', { key: idx, className: 'di-param__choice', htmlFor: choiceId },
 						el( 'input', {
 							id: choiceId,
 							type: 'radio',
-							name: input.key,
+							name: scope + '-' + input.key,
 							checked: value === choice.value,
 							onChange: function() { onChange( choice.value ); }
 						} ),
@@ -339,7 +340,10 @@
 		if ( input.min !== undefined && input.max !== undefined ) {
 			var unit = input.unit && input.unit.ja ? input.unit.ja : ( input.unit && input.unit.en ? input.unit.en : '' );
 			return el( 'div', { className: 'di-param__group di-param__range' },
-				el( 'label', { className: 'di-param__label' }, label, ': ', value, unit ),
+				el( 'label', { className: 'di-param__label' },
+					el( 'span', {}, label ),
+					el( 'span', {}, ': ' + value + unit )
+				),
 				el( 'input', {
 					type: 'range',
 					min: input.min,
@@ -364,8 +368,10 @@
 	function LivePreview( props ) {
 		var partId = props.partId;
 		var params = props.params || {};
+		var paramsKey = JSON.stringify( params );
 		var onParamsChange = props.onParamsChange;
 		var onContentChange = props.onContentChange;
+		var scope = props.scope || partId;
 
 		var part = getPartById( partId );
 		var inputs = part && part.inputs ? part.inputs : {};
@@ -415,7 +421,7 @@
 			return function() {
 				if ( controller ) { controller.abort(); }
 			};
-		}, [ partId, params, retryNonce ] );
+		}, [ partId, paramsKey, retryNonce ] );
 
 		useEffect( function() {
 			if ( onContentChange && content ) {
@@ -491,7 +497,8 @@
 							key: input.key,
 							input: input,
 							value: params[ input.key ] !== undefined ? params[ input.key ] : input.defaultValue,
-							onChange: function( value ) { updateParam( input.key, value ); }
+							onChange: function( value ) { updateParam( input.key, value ); },
+							scope: scope
 						} );
 					} )
 				  )
@@ -686,12 +693,13 @@
 				if ( ! part ) {
 					return;
 				}
+				// 保存済みブロックの調整値を上書きしない。まだ初期化されていない場合だけ既定値を適用する。
+				if ( Object.keys( params ).length > 0 || htmlAttr || cssAttr ) {
+					return;
+				}
 				var defaults = getDefaultParams( part.inputs );
 				var defaultsContent = computePartContent( part.id, defaults ) || partDefaultContent( part );
-				var next = { params: defaults, html: defaultsContent.html, css: defaultsContent.css };
-				if ( JSON.stringify( params ) !== JSON.stringify( defaults ) || htmlAttr !== next.html || cssAttr !== next.css ) {
-					props.setAttributes( next );
-				}
+				props.setAttributes( { params: defaults, html: defaultsContent.html, css: defaultsContent.css } );
 			}, [ partId ] );
 
 			function onSelectPart( selectedPart ) {
@@ -714,8 +722,6 @@
 					props.setAttributes( { html: content.html || '', css: content.css || '' } );
 				}
 			}
-
-			var mergedParams = part ? Object.assign( {}, getDefaultParams( part.inputs ), params ) : params;
 
 			return el( Fragment, {},
 				el( InspectorControls, {},
@@ -740,9 +746,10 @@
 					  )
 					: el( LivePreview, {
 						partId: partId,
-						params: mergedParams,
+						params: params,
 						onParamsChange: onParamsChange,
-						onContentChange: onContentChange
+						onContentChange: onContentChange,
+						scope: props.clientId || partId
 					} )
 			);
 		},

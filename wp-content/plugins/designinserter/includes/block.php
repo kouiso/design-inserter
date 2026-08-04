@@ -90,8 +90,8 @@ function designinserter_render_block( $attributes ) {
 	if ( ! $part_id ) {
 		return '';
 	}
-	if ( ! empty( $attributes['html'] ) || ! empty( $attributes['css'] ) ) {
-		return designinserter_render_part( $part_id, $attributes['html'], $attributes['css'] );
-	}
-	return designinserter_render_part( $part_id );
+	// 空文字は「未設定」とみなし、保存済みパーツの内容を使う。
+	$html = ! empty( $attributes['html'] ) ? $attributes['html'] : null;
+	$css  = ! empty( $attributes['css'] ) ? $attributes['css'] : null;
+	return designinserter_render_part( $part_id, $html, $css );
 }

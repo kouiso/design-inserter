@@ -236,7 +236,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-021 | プレビュー下に「パラメータ調整」パネルが出る | `.di-params` 表示 | 実機: heading-1 選択 | 実機済 2026-07-30 |
 | DI-EDT-022 | 色指定がプレビューに即反映される | 色 input 変更で iframe 内の要素が変化 | 実機: 左線の色を変更 | 実機済 2026-07-30 |
 | DI-EDT-023 | パーツ切替時にパラメータがそのパーツの既定値に戻る | `params` 属性リセット | `assets/editor.js` `onSelectPart` | 自動済 2026-07-30 |
-| DI-EDT-024 | レンジ / ラジオ指定がプレビューに反映される | 数値・選択切替で変化 | `scripts/test.mjs` `testPartCodeFuncs()` | 自動済 2026-07-30 |
+| DI-EDT-024 | レンジ / ラジオ指定がプレビューに反映される | 数値・選択切替で変化 | 実機: bar-chart-1 / list-1 / textbox-1 の range / radio を変更して iframe プレビューが変化 | 実機済 2026-07-30 |
 
 ### 4.7 DI-SC — ショートコード
 
@@ -492,7 +492,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | shortcode | 出力がブロック出力と同一 | DI-SC-007 | 未実装 |
 | shortcode | テキストウィジェットで描画 | DI-SC-009 | 手動要 |
 
-集計: 自動済 34 / 環境制約NG 0 / 手動要 8 / 未実装 5 / 不整合 3。
+集計: 自動済 32 / 環境制約NG 0 / 手動要 10 / 未実装 5 / 不整合 3。
 
 ### 5.2 requirements 成功基準 → テストケース ID
 
@@ -511,7 +511,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ファイル | カバーする ID |
 |---|---|
-| `scripts/test.mjs` | DI-CAT-001〜015・018〜024, DI-BLD-001〜012・018・023, DI-BLK-004・005・014・015, DI-EDT-009〜011・023・024, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
+| `scripts/test.mjs` | DI-CAT-001〜015・018〜024, DI-BLD-001〜012・018・023, DI-BLK-004・005・014・015, DI-EDT-009〜011・023, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
 | `tests/render-smoke.php` | DI-RND-001〜011・013・015, DI-SCP-001〜004・006, DI-BLK-001〜003・006・007, DI-SC-001・003〜005・008, DI-API-001〜013, DI-ADM-001〜007, DI-FE-012, DI-DAT-009・011・017, DI-CAT-016, DI-SEC-002〜004・006 |
 | `tests/catalog-fallback.php` | DI-DAT-007・008 |
 | `tests/tp-availability.php` | DI-DAT-005 |

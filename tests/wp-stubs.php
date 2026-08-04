@@ -79,6 +79,17 @@ function esc_url( $value ) {
 	return filter_var( (string) $value, FILTER_SANITIZE_URL );
 }
 
+function wp_kses_post( $content ) {
+	return (string) $content;
+}
+
+function wp_strip_all_tags( $string, $remove_breaks = false ) {
+	if ( $remove_breaks ) {
+		return preg_replace( '/\s+/', ' ', (string) $string );
+	}
+	return (string) $string;
+}
+
 function add_action( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
 	return designinserter_stub_add_hook( 'actions', $hook_name, $callback, $priority, $accepted_args );
 }

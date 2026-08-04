@@ -4,7 +4,7 @@
   function c(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
   function m(t){return t.replace(/^#/,"")}function p(t,r){const[e,u,a]=c(t).map(n=>n+16*r<0?0:n+16*r>255?255:n+16*r);return f(e,u,a)}function f(t,r,e){return"#"+o(t)+o(r)+o(e)}function o(t){const r=t.toString(16);return r.length===1?"0"+r:r}
 
-  return {a:p, r:m};
+  return {a:p, r:m, c:c};
 })();
   const _di_common_button = {"COMMON":{"RADIO":{"SHAPE":{"legend":{"ja":"ボタンの形状","en":"Button Shape"},"choices":[{"label":{"ja":"四角","en":"Square"},"value":"5px"},{"label":{"ja":"角丸","en":"Rounded corners"},"value":"25px"}]},"ARROW_ICON":{"legend":{"ja":"矢印アイコン","en":"Arrow icon"},"choices":[{"label":{"ja":"なし","en":"OFF"},"value":false},{"label":{"ja":"あり","en":"ON"},"value":true}]},"ICON_POSITION":{"legend":{"ja":"アイコンの位置","en":"Icon position"},"choices":[{"label":{"ja":"右","en":"Right"},"value":false},{"label":{"ja":"左","en":"Left"},"value":true}]},"ANIMATION_COUNT":{"legend":{"ja":"アニメーション","en":"Animation"},"choices":[{"label":{"ja":"永続","en":"Infinite"},"value":true},{"label":{"ja":"一度のみ","en":"once"},"value":false}]},"SPEECH_BUBBLE_BORDER":{"legend":{"ja":"吹き出しの枠線","en":"Speech bubble border"},"choices":[{"label":{"ja":"なし","en":"OFF"},"value":false},{"label":{"ja":"あり","en":"ON"},"value":true}]}}}};
   const _di_common_list = {"COMMON":{"RADIO":{"LIST_TYPE":{"legend":{"ja":"タグの種類","en":"Tag type"},"choices":[{"label":{"ja":"ul","en":"ul"},"value":"ul"},{"label":{"ja":"ol","en":"ol"},"value":"ol"}]},"BORDER_PRESENCE":{"legend":{"ja":"枠線","en":"Border"},"choices":[{"label":{"ja":"あり","en":"ON"},"value":true},{"label":{"ja":"なし","en":"OFF"},"value":false}]}}}};
@@ -45,7 +45,7 @@
 })();
   root.designInserterPartCodeFuncs = root.designInserterPartCodeFuncs || {};
   root.designInserterPartCodeFuncs['heading-1'] = (function(e){
-    const d = {id:1,name:{ja:"左線",en:"Left line"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-1">CSS見出しデザイン</h2>',css:`.heading-1 {
+const d={id:1,name:{ja:"左線",en:"Left line"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-1">CSS見出しデザイン</h2>',css:`.heading-1 {
     padding: .5em .7em;
     border-left: 5px solid ${t[0]};
     color: ${t[1]};
@@ -53,7 +53,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-22'] = (function(e){
-    const r = {id:22,name:{ja:"左線 & 背景色",en:"Left line & background color"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-22">CSS見出しデザイン</h2>',css:`.heading-22 {
+const r={id:22,name:{ja:"左線 & 背景色",en:"Left line & background color"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-22">CSS見出しデザイン</h2>',css:`.heading-22 {
     padding: .5em .7em;
     border-left: 5px solid ${a[0]};
     background-color: ${a[1]};
@@ -62,7 +62,7 @@
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-23'] = (function(e, a){
-    const m = {id:23,name:{ja:"左線 & 背景色 (立体的)",en:"Left line & background color (three dimensional)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-23">CSS見出しデザイン</h2>',css:`.heading-23 {
+const m={id:23,name:{ja:"左線 & 背景色 (立体的)",en:"Left line & background color (three dimensional)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-23">CSS見出しデザイン</h2>',css:`.heading-23 {
     padding: .5em .7em;
     border-left: 5px solid ${o[0]};
     border-bottom: 3px solid ${a(o[1],-2)};
@@ -72,7 +72,7 @@
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['heading-41'] = (function(e){
-    const r = {id:41,name:{ja:"左線 & 背景色 (内側)",en:"Left line & background color (inner)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:n}){return{html:'<h2 class="heading-41">CSS見出しデザイン</h2>',css:`.heading-41 {
+const r={id:41,name:{ja:"左線 & 背景色 (内側)",en:"Left line & background color (inner)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:n}){return{html:'<h2 class="heading-41">CSS見出しデザイン</h2>',css:`.heading-41 {
     display: flex;
     align-items: center;
     padding: .5em .7em;
@@ -91,7 +91,7 @@
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-2'] = (function(e){
-    const t = {id:2,name:{ja:"下線",en:"Underline"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-2">CSS見出しデザイン</h2>',css:`.heading-2 {
+const t={id:2,name:{ja:"下線",en:"Underline"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-2">CSS見出しデザイン</h2>',css:`.heading-2 {
     padding:0 .4em .2em;
     border-bottom: 3px solid ${a[0]};
     background-color: ${a[1]};
@@ -100,7 +100,7 @@
     return function(params){ return t.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-33'] = (function(e){
-    const l = {id:33,name:{ja:"文字数に応じて長さが変わる下線",en:"Underline whose length changes depending on the number of text"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"下線の背景色",en:"Underline background color"},defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:n}){return{html:`<h2 class="heading-33">
+const l={id:33,name:{ja:"文字数に応じて長さが変わる下線",en:"Underline whose length changes depending on the number of text"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"下線の背景色",en:"Underline background color"},defaultValue:e.COLOR.SILVER},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:n}){return{html:`<h2 class="heading-33">
     <span>CSS見出しデザイン</span>
 </h2>`,css:`.heading-33 {
     border-bottom: 3px solid ${n[1]};
@@ -125,7 +125,7 @@
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-3'] = (function(e){
-    const l = {id:3,name:{ja:"下線 (点線)",en:"Underline (dotted)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:d}){return{html:'<h2 class="heading-3">CSS見出しデザイン</h2>',css:`.heading-3 {
+const l={id:3,name:{ja:"下線 (点線)",en:"Underline (dotted)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:d}){return{html:'<h2 class="heading-3">CSS見出しデザイン</h2>',css:`.heading-3 {
     padding:0 .4em .2em;
     border-bottom: 3px dotted ${d[0]};
     background-color: ${d[1]};
@@ -134,7 +134,7 @@
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-4'] = (function(e){
-    const l = {id:4,name:{ja:"下線 (破線)",en:"Underline (dashed)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:d}){return{html:'<h2 class="heading-4">CSS見出しデザイン</h2>',css:`.heading-4 {
+const l={id:4,name:{ja:"下線 (破線)",en:"Underline (dashed)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:d}){return{html:'<h2 class="heading-4">CSS見出しデザイン</h2>',css:`.heading-4 {
     padding:0 .4em .2em;
     border-bottom: 3px dashed ${d[0]};
     background-color: ${d[1]};
@@ -143,7 +143,7 @@
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-5'] = (function(e){
-    const t = {id:5,name:{ja:"下線 (二重線)",en:"Underline (double)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:d}){return{html:'<h2 class="heading-5">CSS見出しデザイン</h2>',css:`.heading-5 {
+const t={id:5,name:{ja:"下線 (二重線)",en:"Underline (double)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.WHITE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:d}){return{html:'<h2 class="heading-5">CSS見出しデザイン</h2>',css:`.heading-5 {
     padding:0 .4em .2em;
     border-bottom: 3px double ${d[0]};
     background-color: ${d[1]};
@@ -152,7 +152,7 @@
     return function(params){ return t.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-21'] = (function(o){
-    const d = {id:21,name:{ja:"吹き出し風 (下線のみ)",en:"Speech bubble style (underline only)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-21">CSS見出しデザイン</h2>',css:`.heading-21 {
+const d={id:21,name:{ja:"吹き出し風 (下線のみ)",en:"Speech bubble style (underline only)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-21">CSS見出しデザイン</h2>',css:`.heading-21 {
     position: relative;
     padding: .5em .7em .4em;
     border-bottom: 3px solid ${e[0]};
@@ -181,7 +181,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-31'] = (function(t){
-    const d = {id:31,name:{ja:"四角形の装飾",en:"Square decoration"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"四角形の色",en:"Square color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-31">CSS見出しデザイン</h2>',css:`.heading-31 {
+const d={id:31,name:{ja:"四角形の装飾",en:"Square decoration"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"四角形の色",en:"Square color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-31">CSS見出しデザイン</h2>',css:`.heading-31 {
     position: relative;
     padding: .3em 0 .2em 1em;
     border-bottom: 3px solid ${e[0]};
@@ -212,7 +212,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-6'] = (function(e){
-    const d = {id:6,name:{ja:"両端に線",en:"lines at both ends"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"線の色",en:"Line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:i}){return{html:'<h2 class="heading-6">CSS見出しデザイン</h2>',css:`.heading-6 {
+const d={id:6,name:{ja:"両端に線",en:"lines at both ends"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"線の色",en:"Line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:i}){return{html:'<h2 class="heading-6">CSS見出しデザイン</h2>',css:`.heading-6 {
     display: inline-block;
     position: relative;
     padding: 0 2.5em;
@@ -240,7 +240,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-7'] = (function(e){
-    const r = {id:7,name:{ja:"下線 (小)",en:"Underline (small)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-7">CSS見出しデザイン</h2>',css:`.heading-7 {
+const r={id:7,name:{ja:"下線 (小)",en:"Underline (small)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-7">CSS見出しデザイン</h2>',css:`.heading-7 {
     display: inline-block;
     position: relative;
     color: #333;
@@ -260,7 +260,7 @@
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-16'] = (function(e){
-    const g = {id:16,name:{ja:"左右に斜線",en:"Diagonal lines left and right"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"線の色",en:"Line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-16">CSS見出しデザイン</h2>',css:`.heading-16 {
+const g={id:16,name:{ja:"左右に斜線",en:"Diagonal lines left and right"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"線の色",en:"Line color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-16">CSS見出しデザイン</h2>',css:`.heading-16 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -287,7 +287,7 @@
     return function(params){ return g.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-36'] = (function(t){
-    const n = {id:36,name:{ja:"鉤括弧",en:"Square bracket"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"括弧の色",en:"Bracket color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-36">CSS見出しデザイン</h2>',css:`.heading-36 {
+const n={id:36,name:{ja:"鉤括弧",en:"Square bracket"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"括弧の色",en:"Bracket color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-36">CSS見出しデザイン</h2>',css:`.heading-36 {
     position: relative;
     padding: .7em 1.3em;
     color: ${e[1]};
@@ -318,7 +318,7 @@
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-37'] = (function(e){
-    const d = {id:37,name:{ja:"鉤括弧 (大)",en:"Square bracket (large)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"括弧の色",en:"Bracket color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-37">CSS見出しデザイン</h2>',css:`.heading-37 {
+const d={id:37,name:{ja:"鉤括弧 (大)",en:"Square bracket (large)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"括弧の色",en:"Bracket color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-37">CSS見出しデザイン</h2>',css:`.heading-37 {
     position: relative;
     padding: .5em 1em;
     color: ${o[1]};
@@ -349,7 +349,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-8'] = (function(i){
-    const d = {id:8,name:{ja:"タグ風",en:"Tag style"},imgFormat:"svg",inputs:{colors:[{legend:i.LEGEND.BG_COLOR,defaultValue:i.COLOR.BLUE}]},codeFunc({colors:e}){return{html:'<h2 class="heading-8">CSS見出しデザイン</h2>',css:`.heading-8 {
+const d={id:8,name:{ja:"タグ風",en:"Tag style"},imgFormat:"svg",inputs:{colors:[{legend:i.LEGEND.BG_COLOR,defaultValue:i.COLOR.BLUE}]},codeFunc({colors:e}){return{html:'<h2 class="heading-8">CSS見出しデザイン</h2>',css:`.heading-8 {
     display: inline-block;
     position: relative;
     padding: .5em .7em;
@@ -370,7 +370,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-9'] = (function(o){
-    const n = {id:9,name:{ja:"吹き出し風",en:"Speech bubble style"},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE}]},codeFunc({colors:e}){return{html:'<h2 class="heading-9">CSS見出しデザイン</h2>',css:`.heading-9 {
+const n={id:9,name:{ja:"吹き出し風",en:"Speech bubble style"},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE}]},codeFunc({colors:e}){return{html:'<h2 class="heading-9">CSS見出しデザイン</h2>',css:`.heading-9 {
     position: relative;
     padding: .5em .7em;
     border-radius: 10px;
@@ -391,7 +391,7 @@
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-11'] = (function(t, e){
-    const p = {id:11,name:{ja:"背景に回り込むリボン風",en:"Ribbon style wrapping around the background"},imgFormat:"svg",inputs:{colors:[{legend:t.LEGEND.BG_COLOR,defaultValue:t.COLOR.BLUE}]},codeFunc({colors:o}){return{html:'<h2 class="heading-11">CSS見出しデザイン</h2>',css:`.heading-11 {
+const p={id:11,name:{ja:"背景に回り込むリボン風",en:"Ribbon style wrapping around the background"},imgFormat:"svg",inputs:{colors:[{legend:t.LEGEND.BG_COLOR,defaultValue:t.COLOR.BLUE}]},codeFunc({colors:o}){return{html:'<h2 class="heading-11">CSS見出しデザイン</h2>',css:`.heading-11 {
     position: relative;
     padding: .5em .7em;
     background-color: ${o[0]};
@@ -409,7 +409,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['heading-12'] = (function(o, t){
-    const l = {id:12,name:{ja:"リボン風",en:"Ribbon style"},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<h2 class="heading-12">
+const l={id:12,name:{ja:"リボン風",en:"Ribbon style"},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<h2 class="heading-12">
     <span>CSS見出しデザイン</span>
 </h2>`,css:`.heading-12 {
     position: relative;
@@ -466,7 +466,7 @@
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['heading-34'] = (function(e){
-    const p = {id:34,name:{ja:"旗風",en:"Flag style"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<h2 class="heading-34">
+const p={id:34,name:{ja:"旗風",en:"Flag style"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<h2 class="heading-34">
     <span>CSS見出しデザイン</span>
 </h2>`,css:`.heading-34 {
     position: relative;
@@ -511,7 +511,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-10'] = (function(e){
-    const n = {id:10,name:{ja:"テープ風",en:"Tape style"},inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-10">CSS見出しデザイン</h2>',css:`.heading-10 {
+const n={id:10,name:{ja:"テープ風",en:"Tape style"},inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-10">CSS見出しデザイン</h2>',css:`.heading-10 {
     display: inline-block;
     position: relative;
     transform: rotate(-5deg);
@@ -525,7 +525,7 @@
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-14'] = (function(e){
-    const d = {id:14,name:{ja:"付箋風 (単色)",en:"Sticky note style (monochromatic)"},inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:"#a9ceec"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-14">CSS見出しデザイン</h2>',css:`.heading-14 {
+const d={id:14,name:{ja:"付箋風 (単色)",en:"Sticky note style (monochromatic)"},inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:"#a9ceec"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-14">CSS見出しデザイン</h2>',css:`.heading-14 {
     display: inline-block;
     position: relative;
     padding: .5em 1.4em .5em 1em;
@@ -548,7 +548,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-15'] = (function(e){
-    const a = {id:15,name:{ja:"付箋風 (先端色)",en:"Sticky note style (tip color)"},inputs:{colors:[{legend:{ja:"先端色",en:"Tip color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-15">CSS見出しデザイン</h2>',css:`.heading-15 {
+const a={id:15,name:{ja:"付箋風 (先端色)",en:"Sticky note style (tip color)"},inputs:{colors:[{legend:{ja:"先端色",en:"Tip color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:'<h2 class="heading-15">CSS見出しデザイン</h2>',css:`.heading-15 {
     display: inline-block;
     position: relative;
     padding: .5em 1em;
@@ -572,7 +572,7 @@
     return function(params){ return a.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-17'] = (function(e){
-    const d = {id:17,name:{ja:"番号",en:"Number"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<h2 class="heading-17">
+const d={id:17,name:{ja:"番号",en:"Number"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<h2 class="heading-17">
     <span>01</span>
     CSS見出しデザイン
 </h2>`,css:`.heading-17 {
@@ -607,7 +607,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-18'] = (function(e){
-    const m = {id:18,name:{ja:"カラフルなシャドウ",en:"Colorful shadow"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:'<h2 class="heading-18">CSS見出しデザイン</h2>',css:`.heading-18 {
+const m={id:18,name:{ja:"カラフルなシャドウ",en:"Colorful shadow"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:'<h2 class="heading-18">CSS見出しデザイン</h2>',css:`.heading-18 {
     padding: .5em .7em;
     border: 2px solid ${o[0]};
     box-shadow: 5px 5px ${o[0]};
@@ -616,7 +616,7 @@
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-19'] = (function(t){
-    const p = {id:19,name:{ja:"立体的",en:"Three dimensional"},imgFormat:"svg",inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-19">CSS見出しデザイン</h2>',css:`.heading-19 {
+const p={id:19,name:{ja:"立体的",en:"Three dimensional"},imgFormat:"svg",inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-19">CSS見出しデザイン</h2>',css:`.heading-19 {
     position: relative;
     padding: .5em .7em;
     border: 3px solid ${e[0]};
@@ -650,7 +650,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-20'] = (function(a){
-    const g = {id:20,name:{ja:"ストライプ背景",en:"Striped background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"ストライプ色1",en:"Stripe color 1"},defaultValue:"#bbdbfb"},{legend:{ja:"ストライプ色2",en:"Stripe color 2"},defaultValue:"#f2f6fc"},{legend:a.LEGEND.TEXT_COLOR,defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-20">CSS見出しデザイン</h2>',css:`.heading-20 {
+const g={id:20,name:{ja:"ストライプ背景",en:"Striped background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"ストライプ色1",en:"Stripe color 1"},defaultValue:"#bbdbfb"},{legend:{ja:"ストライプ色2",en:"Stripe color 2"},defaultValue:"#f2f6fc"},{legend:a.LEGEND.TEXT_COLOR,defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-20">CSS見出しデザイン</h2>',css:`.heading-20 {
     padding: .5em .7em;
     background-image: repeating-linear-gradient(-45deg, ${e[0]}, ${e[0]} 3px, ${e[1]} 3px, ${e[1]} 7px);
     color: ${e[2]};
@@ -658,7 +658,7 @@
     return function(params){ return g.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-40'] = (function(a){
-    const p = {id:40,name:{ja:"チェック柄",en:"Plaid"},imgFormat:"svg",comment:{ja:"チェック柄を背景にした見出し。文字色を黒系統の色にするとせっかくの可愛らしいチェック柄が活かされないため、文字色はあえて基調色と同じものにしています。",en:"Headline on a checkered background. If the font color is black, the cute checkered pattern will not be taken advantage of, so I intentionally chose the font color to match the base color."},inputs:{colors:[{legend:a.LEGEND.BG_COLOR,defaultValue:"#5ba9f7"}],radios:[{legend:{ja:"枠線",en:"Border"},choices:a.CHOICES.ON}]},codeFunc({colors:e,radios:t}){return{html:'<h2 class="heading-40">CSS見出しデザイン</h2>',css:`.heading-40 {
+const p={id:40,name:{ja:"チェック柄",en:"Plaid"},imgFormat:"svg",comment:{ja:"チェック柄を背景にした見出し。文字色を黒系統の色にするとせっかくの可愛らしいチェック柄が活かされないため、文字色はあえて基調色と同じものにしています。",en:"Headline on a checkered background. If the font color is black, the cute checkered pattern will not be taken advantage of, so I intentionally chose the font color to match the base color."},inputs:{colors:[{legend:a.LEGEND.BG_COLOR,defaultValue:"#5ba9f7"}],radios:[{legend:{ja:"枠線",en:"Border"},choices:a.CHOICES.ON}]},codeFunc({colors:e,radios:t}){return{html:'<h2 class="heading-40">CSS見出しデザイン</h2>',css:`.heading-40 {
     padding: .5em .7em;${t[0]?`
     border-top: 2px solid ${e[0]};
     border-bottom: 2px solid ${e[0]};`:""}
@@ -670,7 +670,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-32'] = (function(e){
-    const n = {id:32,name:{ja:"映画フィルム風",en:"Movie film style"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.BLACK}]},codeFunc({colors:o}){return{html:'<h2 class="heading-32">CSS見出しデザイン</h2>',css:`.heading-32 {
+const n={id:32,name:{ja:"映画フィルム風",en:"Movie film style"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.BLACK}]},codeFunc({colors:o}){return{html:'<h2 class="heading-32">CSS見出しデザイン</h2>',css:`.heading-32 {
     display: flex;
     align-items: center;
     position: relative;
@@ -691,7 +691,7 @@
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-28'] = (function(e){
-    const r = {id:28,name:{ja:"大きいラベル",en:"Large label"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-28" data-label="CSS HEADING">CSS見出しデザイン</h2>',css:`.heading-28 {
+const r={id:28,name:{ja:"大きいラベル",en:"Large label"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-28" data-label="CSS HEADING">CSS見出しデザイン</h2>',css:`.heading-28 {
     color: ${t[0]};
     font-weight: 400;
     font-size: .75rem;
@@ -710,7 +710,7 @@
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-13'] = (function(e){
-    const n = {id:13,name:{ja:"下に反射する文字",en:"Letters reflected below"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-13">CSS見出しデザイン</h2>',css:`.heading-13 {
+const n={id:13,name:{ja:"下に反射する文字",en:"Letters reflected below"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-13">CSS見出しデザイン</h2>',css:`.heading-13 {
     position: relative;
     color: ${t[0]};
     -webkit-box-reflect: below -10px -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .5));
@@ -718,7 +718,7 @@
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-26'] = (function(e){
-    const n = {id:26,name:{ja:"1文字目だけ大きめ",en:"Only the 1st character is larger"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"1文字目の色",en:"1st text color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-26">CSS見出しデザイン</h2>',css:`.heading-26 {
+const n={id:26,name:{ja:"1文字目だけ大きめ",en:"Only the 1st character is larger"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"1文字目の色",en:"1st text color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-26">CSS見出しデザイン</h2>',css:`.heading-26 {
     color: ${t[1]};
 }
 
@@ -729,7 +729,7 @@
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-24'] = (function(t){
-    const d = {id:24,name:{ja:"数字の背景",en:"Number background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"数字の色",en:"Number color"},defaultValue:"#d9f4ff"},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-24" data-number="01">CSS見出しデザイン</h2>',css:`.heading-24 {
+const d={id:24,name:{ja:"数字の背景",en:"Number background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"数字の色",en:"Number color"},defaultValue:"#d9f4ff"},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-24" data-number="01">CSS見出しデザイン</h2>',css:`.heading-24 {
     position: relative;
     padding-top: 1.5em;
     color: ${e[1]};
@@ -749,7 +749,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-25'] = (function(t){
-    const r = {id:25,name:{ja:"文字の背景",en:"Text background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景文字の色",en:"background text color"},defaultValue:"#d9f4ff"},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-25" data-word="HEADING">CSS見出しデザイン</h2>',css:`.heading-25 {
+const r={id:25,name:{ja:"文字の背景",en:"Text background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景文字の色",en:"background text color"},defaultValue:"#d9f4ff"},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-25" data-word="HEADING">CSS見出しデザイン</h2>',css:`.heading-25 {
     position: relative;
     padding-top: .75em;
     color: ${e[1]};
@@ -769,7 +769,7 @@
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-29'] = (function(i){
-    const c = {id:29,name:{ja:"円の背景",en:"Circle background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:"#bbdbfb"},{legend:i.LEGEND.TEXT_COLOR,defaultValue:i.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-29">CSS見出しデザイン</h2>',css:`.heading-29 {
+const c={id:29,name:{ja:"円の背景",en:"Circle background"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:"#bbdbfb"},{legend:i.LEGEND.TEXT_COLOR,defaultValue:i.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:'<h2 class="heading-29">CSS見出しデザイン</h2>',css:`.heading-29 {
     display: inline-block;
     position: relative;
     margin: calc(3.5em / 2) 0 calc(3.5em / 4) calc(3.5em / 2);
@@ -791,7 +791,7 @@
     return function(params){ return c.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-38'] = (function(e){
-    const l = {id:38,name:{ja:"重なる2つの正方形",en:"Two overlapping squares"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"正方形の色",en:"Square color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-38">CSS見出しデザイン</h2>',css:`.heading-38 {
+const l={id:38,name:{ja:"重なる2つの正方形",en:"Two overlapping squares"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"正方形の色",en:"Square color"},defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-38">CSS見出しデザイン</h2>',css:`.heading-38 {
     position: relative;
     padding: .5em 1.2em;
     color: ${a[1]};
@@ -820,7 +820,7 @@
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-27'] = (function(e){
-    const d = {id:27,name:{ja:"チェックアイコン",en:"Check icon"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.ICON_COLOR,defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-27">CSS見出しデザイン</h2>',css:`.heading-27 {
+const d={id:27,name:{ja:"チェックアイコン",en:"Check icon"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.ICON_COLOR,defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:'<h2 class="heading-27">CSS見出しデザイン</h2>',css:`.heading-27 {
     display: flex;
     align-items: center;
     column-gap: 8px;
@@ -838,7 +838,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['heading-35'] = (function(e, t){
-    const d = {id:35,name:{ja:"冠アイコン",en:"Crown icon"},imgFormat:"svg",comment:{ja:"ランキングコンテンツなどで役立つ、冠のアイコンが付いた見出しです。2位は銀色、3位は銅色にするのも良いかもしれませんね。",en:"A heading with a crown icon that is useful for ranking content, etc. It might be a good idea to make the 2nd place silver and the 3rd place bronze."},inputs:{colors:[{legend:e.LEGEND.ICON_COLOR,defaultValue:"#ffb500"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-35">CSS見出しデザイン</h2>',css:`.heading-35 {
+const d={id:35,name:{ja:"冠アイコン",en:"Crown icon"},imgFormat:"svg",comment:{ja:"ランキングコンテンツなどで役立つ、冠のアイコンが付いた見出しです。2位は銀色、3位は銅色にするのも良いかもしれませんね。",en:"A heading with a crown icon that is useful for ranking content, etc. It might be a good idea to make the 2nd place silver and the 3rd place bronze."},inputs:{colors:[{legend:e.LEGEND.ICON_COLOR,defaultValue:"#ffb500"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<h2 class="heading-35">CSS見出しデザイン</h2>',css:`.heading-35 {
     display: flex;
     align-items: center;
     gap: 0 7px;
@@ -854,7 +854,7 @@
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['button-1'] = (function(e, r){
-    const u = {id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-1">ボタンデザイン</button>',css:`.button-1 {
+const u={id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-1">ボタンデザイン</button>',css:`.button-1 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -880,7 +880,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-54'] = (function(o, e){
-    const u = {id:54,name:{ja:"細い矢印",en:"Thin arrow"},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[e.RADIO.SHAPE]},codeFunc({colors:t,radios:r}){return{html:'<button class="button-54">ボタンデザイン</button>',css:`.button-54 {
+const u={id:54,name:{ja:"細い矢印",en:"Thin arrow"},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[e.RADIO.SHAPE]},codeFunc({colors:t,radios:r}){return{html:'<button class="button-54">ボタンデザイン</button>',css:`.button-54 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -914,7 +914,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-45'] = (function(e){
-    const u = {id:45,name:{ja:"交差する枠線",en:"Intersecting border"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:t}){return{html:'<button class="button-45">ボタンデザイン</button>',css:`.button-45 {
+const u={id:45,name:{ja:"交差する枠線",en:"Intersecting border"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:t}){return{html:'<button class="button-45">ボタンデザイン</button>',css:`.button-45 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -950,7 +950,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['button-39'] = (function(e, n){
-    const p = {id:39,name:{ja:"平行四辺形",en:"Parallelogram"},comment:{ja:"「skew」で傾斜を付けたボタン。テキストを真っ直ぐのままにするために、疑似要素に傾斜を付けています。",en:`A button with a slant with "skew". I'm slanting the pseudo-element to keep the text straight.`},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[n.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-39">ボタンデザイン</button>',css:`.button-39 {
+const p={id:39,name:{ja:"平行四辺形",en:"Parallelogram"},comment:{ja:"「skew」で傾斜を付けたボタン。テキストを真っ直ぐのままにするために、疑似要素に傾斜を付けています。",en:`A button with a slant with "skew". I'm slanting the pseudo-element to keep the text straight.`},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[n.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-39">ボタンデザイン</button>',css:`.button-39 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -985,7 +985,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-2'] = (function(r, e, n){
-    const p = {id:2,name:{ja:"スタンダード",en:"Standard"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[e.RADIO.SHAPE,e.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-2">ボタンデザイン</button>',css:`.button-2 {
+const p={id:2,name:{ja:"スタンダード",en:"Standard"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[e.RADIO.SHAPE,e.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-2">ボタンデザイン</button>',css:`.button-2 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1016,7 +1016,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-3'] = (function(r, e, n){
-    const u = {id:3,name:{ja:"シャドウ",en:"Shadow"},inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[e.RADIO.SHAPE,e.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-3">ボタンデザイン</button>',css:`.button-3 {
+const u={id:3,name:{ja:"シャドウ",en:"Shadow"},inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[e.RADIO.SHAPE,e.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-3">ボタンデザイン</button>',css:`.button-3 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1048,7 +1048,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-4'] = (function(r, e, n){
-    const l = {id:4,name:{ja:"立体的",en:"Three-dimensional"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-4">ボタンデザイン</button>',css:`.button-4 {
+const l={id:4,name:{ja:"立体的",en:"Three-dimensional"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-4">ボタンデザイン</button>',css:`.button-4 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1083,7 +1083,7 @@
     return function(params){ return l.codeFunc(params); };
   })(_di_common_button.COMMON, _di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-49'] = (function(r, e){
-    const m = {id:49,name:{ja:"内側に枠線",en:"Border inside"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[e.RADIO.SHAPE,e.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-49">ボタンデザイン</button>',css:`.button-49 {
+const m={id:49,name:{ja:"内側に枠線",en:"Border inside"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[e.RADIO.SHAPE,e.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-49">ボタンデザイン</button>',css:`.button-49 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1111,7 +1111,7 @@
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-43'] = (function(o, n){
-    const p = {id:43,name:{ja:"グラデーション (上下)",en:"Gradient (up and down)"},inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[n.RADIO.SHAPE,n.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-43">ボタンデザイン</button>',css:`.button-43 {
+const p={id:43,name:{ja:"グラデーション (上下)",en:"Gradient (up and down)"},inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[n.RADIO.SHAPE,n.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-43">ボタンデザイン</button>',css:`.button-43 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1138,7 +1138,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-50'] = (function(o, n){
-    const m = {id:50,name:{ja:"星アイコンのリボン",en:"Star icon ribbon"},imgFormat:"svg",comment:{ja:"星アイコンをあしらったリボン付きのボタン。リボンの色が白なので、白背景にボタンを置く場合はシャドウを付けて立体的に見せるのがおすすめです。",en:"A button with a ribbon featuring a star icon. The color of the ribbon is white, so if you are placing a button on a white background, we recommend adding a shadow to make it look three-dimensional."},inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[n.RADIO.SHAPE,{legend:{ja:"シャドウ",en:"Shadow"},choices:o.CHOICES.ON}]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-50">ボタンデザイン</button>',css:`.button-50 {
+const m={id:50,name:{ja:"星アイコンのリボン",en:"Star icon ribbon"},imgFormat:"svg",comment:{ja:"星アイコンをあしらったリボン付きのボタン。リボンの色が白なので、白背景にボタンを置く場合はシャドウを付けて立体的に見せるのがおすすめです。",en:"A button with a ribbon featuring a star icon. The color of the ribbon is white, so if you are placing a button on a white background, we recommend adding a shadow to make it look three-dimensional."},inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[n.RADIO.SHAPE,{legend:{ja:"シャドウ",en:"Shadow"},choices:o.CHOICES.ON}]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-50">ボタンデザイン</button>',css:`.button-50 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1184,7 +1184,7 @@
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-20'] = (function(e){
-    const u = {id:20,name:{ja:"ページ上部へ戻る",en:"Scroll to top of page"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.ICON_COLOR,defaultValue:e.COLOR.WHITE}],radios:[{legend:{ja:"ボタンの形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:e.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]}]}]},codeFunc({colors:t,radios:o}){return{html:`<button class="button-20">
+const u={id:20,name:{ja:"ページ上部へ戻る",en:"Scroll to top of page"},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BG_COLOR,defaultValue:e.COLOR.BLUE},{legend:e.LEGEND.ICON_COLOR,defaultValue:e.COLOR.WHITE}],radios:[{legend:{ja:"ボタンの形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:e.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]}]}]},codeFunc({colors:t,radios:o}){return{html:`<button class="button-20">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
         <path fill="${t[1]}" d="m12.9 5.1 10.7 10.7c.5.5.5 1.4 0 1.9l-1.2 1.2c-.5.5-1.3.5-1.9 0L12 10.4l-8.5 8.5c-.5.5-1.3.5-1.9 0L.4 17.7c-.5-.5-.5-1.4 0-1.9L11.1 5.1c.5-.5 1.3-.5 1.8 0z"/>
     </svg>
@@ -1210,7 +1210,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['button-65'] = (function(e, n){
-    const p = {id:65,name:{ja:"通知",en:"Notification"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:"#aaaaaa"},{legend:{ja:"件数の色",en:"Number color"},defaultValue:e.COLOR.BLUE}],radios:[{legend:e.LEGEND.BG_COLOR,choices:e.CHOICES.ON},{legend:{ja:"ボタンの形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:e.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]}]},{legend:{ja:"件数",en:"Number"},choices:e.CHOICES.ON}]},codeFunc({colors:o,radios:t}){return{html:`<button class="button-65">
+const p={id:65,name:{ja:"通知",en:"Notification"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:"#aaaaaa"},{legend:{ja:"件数の色",en:"Number color"},defaultValue:e.COLOR.BLUE}],radios:[{legend:e.LEGEND.BG_COLOR,choices:e.CHOICES.ON},{legend:{ja:"ボタンの形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:e.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]}]},{legend:{ja:"件数",en:"Number"},choices:e.CHOICES.ON}]},codeFunc({colors:o,radios:t}){return{html:`<button class="button-65">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M22 20H2V18H3V11.0314C3 6.04348 7.02944 2 12 2C16.9706 2 21 6.04348 21 11.0314V18H22V20ZM9.5 21H14.5C14.5 22.3807 13.3807 23.5 12 23.5C10.6193 23.5 9.5 22.3807 9.5 21Z"></path>
     </svg>${t[2]?`
@@ -1250,7 +1250,7 @@
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-61'] = (function(t, n){
-    const u = {id:61,name:{ja:"プラスアイコン",en:"Plus icon"},imgFormat:"svg",comment:{ja:"背景の円と共にプラスアイコンを付けてみました。背景の円は画像で、そしてアイコンはあえて疑似要素で表現することで「押下時に回転させてマイナスに変形させる」といった拡張も可能にしています。",en:'I added a plus icon along with a circle in the background. The background circle is an image, and the icon is intentionally expressed as a pseudo-element, making it possible to expand it by "rotating it and deforming it negatively when pressed."'},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}],radios:[n.RADIO.SHAPE]},codeFunc({colors:e,radios:o}){return{html:'<button class="button-61">ボタンデザイン</button>',css:`.button-61 {
+const u={id:61,name:{ja:"プラスアイコン",en:"Plus icon"},imgFormat:"svg",comment:{ja:"背景の円と共にプラスアイコンを付けてみました。背景の円は画像で、そしてアイコンはあえて疑似要素で表現することで「押下時に回転させてマイナスに変形させる」といった拡張も可能にしています。",en:'I added a plus icon along with a circle in the background. The background circle is an image, and the icon is intentionally expressed as a pseudo-element, making it possible to expand it by "rotating it and deforming it negatively when pressed."'},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}],radios:[n.RADIO.SHAPE]},codeFunc({colors:e,radios:o}){return{html:'<button class="button-61">ボタンデザイン</button>',css:`.button-61 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1291,7 +1291,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-55'] = (function(o, n, a){
-    const c = {id:55,name:{ja:"外部リンクアイコン",en:"External link icon"},comment:{ja:"外部リンクのアイコンを付けたボタン。そのリンクが別タブで開くことを明示しておきたい場合におすすめです。",en:"A button with an external link icon. This is recommended if you want to clearly state that the link will open in a separate tab."},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[n.RADIO.SHAPE,n.RADIO.ICON_POSITION]},codeFunc({colors:e,radios:t}){return{html:'<button class="button-55">ボタンデザイン</button>',css:`.button-55 {
+const c={id:55,name:{ja:"外部リンクアイコン",en:"External link icon"},comment:{ja:"外部リンクのアイコンを付けたボタン。そのリンクが別タブで開くことを明示しておきたい場合におすすめです。",en:"A button with an external link icon. This is recommended if you want to clearly state that the link will open in a separate tab."},imgFormat:"svg",inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:o.COLOR.BLUE}],radios:[n.RADIO.SHAPE,n.RADIO.ICON_POSITION]},codeFunc({colors:e,radios:t}){return{html:'<button class="button-55">ボタンデザイン</button>',css:`.button-55 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1320,7 +1320,7 @@
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-56'] = (function(e, n, a){
-    const c = {id:56,name:{ja:"メールアイコン",en:"Mail icon"},comment:{ja:"メールアイコンを付けたボタン。お問い合わせページへの導線などにどうぞ。",en:"Button with email icon. Please use this as a link to the contact page."},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[n.RADIO.SHAPE,n.RADIO.ICON_POSITION]},codeFunc({colors:o,radios:t}){return{html:'<button class="button-56">ボタンデザイン</button>',css:`.button-56 {
+const c={id:56,name:{ja:"メールアイコン",en:"Mail icon"},comment:{ja:"メールアイコンを付けたボタン。お問い合わせページへの導線などにどうぞ。",en:"Button with email icon. Please use this as a link to the contact page."},imgFormat:"svg",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[n.RADIO.SHAPE,n.RADIO.ICON_POSITION]},codeFunc({colors:o,radios:t}){return{html:'<button class="button-56">ボタンデザイン</button>',css:`.button-56 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1349,7 +1349,7 @@
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-64'] = (function(n, o, r){
-    const s = {id:64,name:{ja:"お気に入り",en:"Favorite"},imgFormat:"svg",inputs:{colors:[{legend:n.LEGEND.BASE_COLOR,defaultValue:"#f1443e"}],radios:[o.RADIO.SHAPE,o.RADIO.ICON_POSITION]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-64">ボタンデザイン</button>',css:`.button-64 {
+const s={id:64,name:{ja:"お気に入り",en:"Favorite"},imgFormat:"svg",inputs:{colors:[{legend:n.LEGEND.BASE_COLOR,defaultValue:"#f1443e"}],radios:[o.RADIO.SHAPE,o.RADIO.ICON_POSITION]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-64">ボタンデザイン</button>',css:`.button-64 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1377,7 +1377,7 @@
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.r);
   root.designInserterPartCodeFuncs['button-10'] = (function(r, e, i){
-    const s = {id:10,name:{ja:"通り抜ける光",en:"Light passing through"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-10">ボタンデザイン</button>',css:`.button-10 {
+const s={id:10,name:{ja:"通り抜ける光",en:"Light passing through"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-10">ボタンデザイン</button>',css:`.button-10 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1434,7 +1434,7 @@
     return function(params){ return s.codeFunc(params); };
   })(_di_common_button.COMMON, _di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-59'] = (function(t, a){
-    const f = {id:59,name:{ja:"輝き",en:"Shine"},imgFormat:"svg",comment:{ja:"SVGを利用しボタン右上で星を光らせてみました。光を際立たせるためにも、背景色はできるだけ黒系統するのがおすすめです。",en:"I used SVG to make a star shine at the top right of the button. To make the light stand out, we recommend using a black background color as much as possible."},options:{bgColor:t.COLOR.BLACK_DARKMODE},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}],radios:[a.RADIO.SHAPE]},codeFunc({colors:o,radios:e}){return{html:'<button class="button-59">ボタンデザイン</button>',css:`.button-59 {
+const f={id:59,name:{ja:"輝き",en:"Shine"},imgFormat:"svg",comment:{ja:"SVGを利用しボタン右上で星を光らせてみました。光を際立たせるためにも、背景色はできるだけ黒系統するのがおすすめです。",en:"I used SVG to make a star shine at the top right of the button. To make the light stand out, we recommend using a black background color as much as possible."},options:{bgColor:t.COLOR.BLACK_DARKMODE},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}],radios:[a.RADIO.SHAPE]},codeFunc({colors:o,radios:e}){return{html:'<button class="button-59">ボタンデザイン</button>',css:`.button-59 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1532,7 +1532,7 @@
     return function(params){ return f.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-51'] = (function(o){
-    const s = {id:51,name:{ja:"伸びる下線",en:"Stretching underline"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:o.COLOR.BLUE}]},codeFunc({colors:t}){return{html:'<button class="button-51">ボタンデザイン</button>',css:`.button-51 {
+const s={id:51,name:{ja:"伸びる下線",en:"Stretching underline"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:o.COLOR.BLUE}]},codeFunc({colors:t}){return{html:'<button class="button-51">ボタンデザイン</button>',css:`.button-51 {
     display: flex;
     justify-content: center;
     position: relative;
@@ -1566,7 +1566,7 @@
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['button-36'] = (function(e, r){
-    const u = {id:36,name:{ja:"色が反転",en:"Color inverted"},imgFormat:"gif",comment:{ja:"ホバーすると背景色が基調色となるボタン。シンプルながらもしっかりと目を引くことができます。",en:"A button whose background color becomes the base color when hovered over. Although it is simple, it can definitely catch the eye."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-36">ボタンデザイン</button>',css:`.button-36 {
+const u={id:36,name:{ja:"色が反転",en:"Color inverted"},imgFormat:"gif",comment:{ja:"ホバーすると背景色が基調色となるボタン。シンプルながらもしっかりと目を引くことができます。",en:"A button whose background color becomes the base color when hovered over. Although it is simple, it can definitely catch the eye."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-36">ボタンデザイン</button>',css:`.button-36 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1603,7 +1603,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-29'] = (function(e, r){
-    const u = {id:29,name:{ja:"横にスライド",en:"slide sideways"},imgFormat:"gif",comment:{ja:"背景が横からスライドしてくるボタン。矢印アイコンとの親和性も高めです。",en:"A button whose background slides from the side. It also has a high affinity with arrow icons."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-29">ボタンデザイン</button>',css:`.button-29 {
+const u={id:29,name:{ja:"横にスライド",en:"slide sideways"},imgFormat:"gif",comment:{ja:"背景が横からスライドしてくるボタン。矢印アイコンとの親和性も高めです。",en:"A button whose background slides from the side. It also has a high affinity with arrow icons."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-29">ボタンデザイン</button>',css:`.button-29 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1656,7 +1656,7 @@
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-31'] = (function(e, r){
-    const m = {id:31,name:{ja:"狭まりながら塗りつぶす",en:"Fill while narrowing"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-31">ボタンデザイン</button>',css:`.button-31 {
+const m={id:31,name:{ja:"狭まりながら塗りつぶす",en:"Fill while narrowing"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-31">ボタンデザイン</button>',css:`.button-31 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1694,7 +1694,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-32'] = (function(e, r){
-    const p = {id:32,name:{ja:"対角線上に広がる",en:"Spread diagonally"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-32">ボタンデザイン</button>',css:`.button-32 {
+const p={id:32,name:{ja:"対角線上に広がる",en:"Spread diagonally"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:'<button class="button-32">ボタンデザイン</button>',css:`.button-32 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1746,8 +1746,8 @@ ${o[1]?`
 }`:""}`}}};
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
-  root.designInserterPartCodeFuncs['button-30'] = (function(r, i){
-    const u = {id:30,name:{ja:"波紋",en:"Ripple"},imgFormat:"gif",inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:i.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:e}){const o=n(t[0]);return{html:'<button class="button-30">ボタンデザイン</button>',css:`.button-30 {
+  root.designInserterPartCodeFuncs['button-30'] = (function(r, i, n){
+const u={id:30,name:{ja:"波紋",en:"Ripple"},imgFormat:"gif",inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:i.COLOR.BLUE}],radios:[r.RADIO.SHAPE,r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:e}){const o=n(t[0]);return{html:'<button class="button-30">ボタンデザイン</button>',css:`.button-30 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1785,9 +1785,9 @@ ${o[1]?`
     content: '';
 }`:""}`}}};
     return function(params){ return u.codeFunc(params); };
-  })(_di_common_button.COMMON, _di_consts);
+  })(_di_common_button.COMMON, _di_consts, _di_funcs.c);
   root.designInserterPartCodeFuncs['button-33'] = (function(e, r){
-    const d = {id:33,name:{ja:"枠線を描画",en:"Draw border"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:o[0]?`<button class="button-33">
+const d={id:33,name:{ja:"枠線を描画",en:"Draw border"},imgFormat:"gif",inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[r.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:o}){return{html:o[0]?`<button class="button-33">
     <span>ボタンデザイン</span>
 </button>`:'<button class="button-33">ボタンデザイン</button>',css:`.button-33 {
     position: relative;
@@ -1848,7 +1848,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-41'] = (function(o, n){
-    const l = {id:41,name:{ja:"バウンド",en:"Bounce"},imgFormat:"gif",inputs:{colors:[{legend:n.LEGEND.BASE_COLOR,defaultValue:n.COLOR.BLUE}],radios:[o.RADIO.SHAPE,o.RADIO.ARROW_ICON,o.RADIO.ANIMATION_COUNT]},codeFunc({colors:r,radios:t}){return{html:'<button class="button-41">ボタンデザイン</button>',css:`.button-41 {
+const l={id:41,name:{ja:"バウンド",en:"Bounce"},imgFormat:"gif",inputs:{colors:[{legend:n.LEGEND.BASE_COLOR,defaultValue:n.COLOR.BLUE}],radios:[o.RADIO.SHAPE,o.RADIO.ARROW_ICON,o.RADIO.ANIMATION_COUNT]},codeFunc({colors:r,radios:t}){return{html:'<button class="button-41">ボタンデザイン</button>',css:`.button-41 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1894,7 +1894,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_common_button.COMMON, _di_consts);
   root.designInserterPartCodeFuncs['button-38'] = (function(o, r){
-    const p = {id:38,name:{ja:"震える",en:"Shake"},imgFormat:"gif",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[o.RADIO.SHAPE,o.RADIO.ARROW_ICON,o.RADIO.ANIMATION_COUNT]},codeFunc({colors:n,radios:t}){return{html:'<button class="button-38">ボタンデザイン</button>',css:`.button-38 {
+const p={id:38,name:{ja:"震える",en:"Shake"},imgFormat:"gif",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}],radios:[o.RADIO.SHAPE,o.RADIO.ARROW_ICON,o.RADIO.ANIMATION_COUNT]},codeFunc({colors:n,radios:t}){return{html:'<button class="button-38">ボタンデザイン</button>',css:`.button-38 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1940,7 +1940,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_common_button.COMMON, _di_consts);
   root.designInserterPartCodeFuncs['button-37'] = (function(a, i, o){
-    const u = {id:37,name:{ja:"ローディング",en:"Loading"},imgFormat:"gif",comment:{ja:"クリックするとローディングアニメーションが表示されるボタン。JavaScriptを使わないので、単純なリンクとしてボタンを設置する際などにおすすめです。",en:"A button that displays a loading animation when clicked. Since it does not use Java Script, it is recommended when setting up a button as a simple link."},inputs:{colors:[{legend:a.LEGEND.BASE_COLOR,defaultValue:a.COLOR.BLUE}],radios:[i.RADIO.SHAPE,i.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-37">ボタンデザイン</button>',css:`.button-37 {
+const u={id:37,name:{ja:"ローディング",en:"Loading"},imgFormat:"gif",comment:{ja:"クリックするとローディングアニメーションが表示されるボタン。JavaScriptを使わないので、単純なリンクとしてボタンを設置する際などにおすすめです。",en:"A button that displays a loading animation when clicked. Since it does not use Java Script, it is recommended when setting up a button as a simple link."},inputs:{colors:[{legend:a.LEGEND.BASE_COLOR,defaultValue:a.COLOR.BLUE}],radios:[i.RADIO.SHAPE,i.RADIO.ARROW_ICON]},codeFunc({colors:t,radios:e}){return{html:'<button class="button-37">ボタンデザイン</button>',css:`.button-37 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1986,7 +1986,7 @@ ${o[1]?`
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.r);
   root.designInserterPartCodeFuncs['button-44'] = (function(e, r){
-    const s = {id:44,name:{ja:"ストライプ背景 & 枠線",en:"Striped background & border"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLACK_TEXT}],radios:[r.RADIO.SHAPE,{legend:{ja:"シャドウ",en:"Shadow"},choices:e.CHOICES.OFF},r.RADIO.ARROW_ICON]},codeFunc({colors:o,radios:t}){return{html:'<button class="button-44">ボタンデザイン</button>',css:`.button-44 {
+const s={id:44,name:{ja:"ストライプ背景 & 枠線",en:"Striped background & border"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLACK_TEXT}],radios:[r.RADIO.SHAPE,{legend:{ja:"シャドウ",en:"Shadow"},choices:e.CHOICES.OFF},r.RADIO.ARROW_ICON]},codeFunc({colors:o,radios:t}){return{html:'<button class="button-44">ボタンデザイン</button>',css:`.button-44 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2019,7 +2019,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-40'] = (function(r, o){
-    const d = {id:40,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},inputs:{radios:[o.RADIO.SHAPE,o.RADIO.ARROW_ICON]},options:{bgColor:r.COLOR.SILVER},codeFunc({radios:t}){return{html:'<button class="button-40">ボタンデザイン</button>',css:`.button-40 {
+const d={id:40,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},inputs:{radios:[o.RADIO.SHAPE,o.RADIO.ARROW_ICON]},options:{bgColor:r.COLOR.SILVER},codeFunc({radios:t}){return{html:'<button class="button-40">ボタンデザイン</button>',css:`.button-40 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2053,7 +2053,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-21'] = (function(e, p){
-    const d = {id:21,name:{ja:"ニューモーフィズム風",en:"Neumorphism style"},options:{bgColor:"#e7e7e7"},inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:"#555555"}],radios:[p.RADIO.SHAPE]},codeFunc({colors:o,radios:t}){return{html:'<button class="button-21">ボタンデザイン</button>',css:`.button-21 {
+const d={id:21,name:{ja:"ニューモーフィズム風",en:"Neumorphism style"},options:{bgColor:"#e7e7e7"},inputs:{colors:[{legend:e.LEGEND.TEXT_COLOR,defaultValue:"#555555"}],radios:[p.RADIO.SHAPE]},codeFunc({colors:o,radios:t}){return{html:'<button class="button-21">ボタンデザイン</button>',css:`.button-21 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2073,7 +2073,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON);
   root.designInserterPartCodeFuncs['button-14'] = (function(r, n, e){
-    const l = {id:14,name:{ja:"コントラスト強め",en:"Stronger contrast"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:"#ffff00"}],radios:[n.RADIO.SHAPE]},codeFunc({colors:t,radios:o}){return{html:`<button class="button-14">
+const l={id:14,name:{ja:"コントラスト強め",en:"Stronger contrast"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:"#ffff00"}],radios:[n.RADIO.SHAPE]},codeFunc({colors:t,radios:o}){return{html:`<button class="button-14">
     <span>ボタン</span>
 </button>`,css:`.button-14,
 .button-14 span {
@@ -2141,7 +2141,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_common_button.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-47'] = (function(o){
-    const p = {id:47,name:{ja:"クラシカル",en:"Classical"},imgFormat:"svg",comment:{ja:"古めのOSのUIを彷彿とさせる、クラシックなデザインのボタン。使い勝手に関しては微妙ですが、遊び心を入れたい方にはおすすめです。",en:"A button with a classic design reminiscent of the UI of an old OS. Although it's not easy to use, it's recommended for those who want to add some playfulness to it."},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:"#c0c0c0"}]},codeFunc({colors:t}){return{html:'<button class="button-47">ボタンデザイン</button>',css:`.button-47 {
+const p={id:47,name:{ja:"クラシカル",en:"Classical"},imgFormat:"svg",comment:{ja:"古めのOSのUIを彷彿とさせる、クラシックなデザインのボタン。使い勝手に関しては微妙ですが、遊び心を入れたい方にはおすすめです。",en:"A button with a classic design reminiscent of the UI of an old OS. Although it's not easy to use, it's recommended for those who want to add some playfulness to it."},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:"#c0c0c0"}]},codeFunc({colors:t}){return{html:'<button class="button-47">ボタンデザイン</button>',css:`.button-47 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2163,7 +2163,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['button-13'] = (function(o, e){
-    const u = {id:13,name:{ja:"リアルな円形",en:"Realistic circular shape"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:"#1579c0"},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.WHITE}]},codeFunc({colors:t}){return{html:'<button class="button-13">ボタンデザイン</button>',css:`.button-13 {
+const u={id:13,name:{ja:"リアルな円形",en:"Realistic circular shape"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:"#1579c0"},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.WHITE}]},codeFunc({colors:t}){return{html:'<button class="button-13">ボタンデザイン</button>',css:`.button-13 {
     width: 80px;
     height: 80px;
     border: none;
@@ -2179,7 +2179,7 @@ ${o[1]?`
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['button-46'] = (function(t){
-    const i = {id:46,name:{ja:"凹凸感強め",en:"Strong sense of unevenness"},options:{bgColor:t.COLOR.SILVER},inputs:{colors:[{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:`<button class="button-46">
+const i={id:46,name:{ja:"凹凸感強め",en:"Strong sense of unevenness"},options:{bgColor:t.COLOR.SILVER},inputs:{colors:[{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:o}){return{html:`<button class="button-46">
     <span>ボタン</span>
 </button>`,css:`.button-46 {
     display: flex;
@@ -2213,7 +2213,7 @@ ${o[1]?`
     return function(params){ return i.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-18'] = (function(t){
-    const n = {id:18,name:{ja:"交差する枠線",en:"Intersecting border"},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-018">
+const n={id:18,name:{ja:"交差する枠線",en:"Intersecting border"},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-018">
     枠線を交差させたボックス。はみ出す線は縦横で同じ長さになるようにしていますが、こちらはお好みで調整してください。
 </div>`,css:`.box-018 {
     position: relative;
@@ -2246,7 +2246,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-21'] = (function(e){
-    const l = {id:21,name:{ja:"番号あり",en:"With number"},comment:{ja:"左上に番号を添えたボックス。表示する番号はHTMLタグの属性で指定することができます。",en:"A box with a number on the top left. The number to be displayed can be specified using the HTML tag attribute."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[{legend:{ja:"番号の形状",en:"Number shape"},choices:[{label:{ja:"円",en:"Circle"},value:e.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]}]}]},codeFunc({colors:t,radios:o}){return{html:`<div class="box-021" data-number="1">
+const l={id:21,name:{ja:"番号あり",en:"With number"},comment:{ja:"左上に番号を添えたボックス。表示する番号はHTMLタグの属性で指定することができます。",en:"A box with a number on the top left. The number to be displayed can be specified using the HTML tag attribute."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[{legend:{ja:"番号の形状",en:"Number shape"},choices:[{label:{ja:"円",en:"Circle"},value:e.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]}]}]},codeFunc({colors:t,radios:o}){return{html:`<div class="box-021" data-number="1">
     左上に番号を添えたボックス。ステップに沿って何かを説明・補足したい時におすすめのデザインです。
 </div>`,css:`.box-021 {
     position: relative;
@@ -2276,7 +2276,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-11'] = (function(e){
-    const d = {id:11,name:{ja:"タイトル (枠外)",en:"Title (outside frame)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-011">
+const d={id:11,name:{ja:"タイトル (枠外)",en:"Title (outside frame)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-011">
     <span>タイトル</span>
     <p>枠外にタイトルを付けたボックス。タイトルが枠外にあるかつ単色なので、スッキリしたデザインになっています。</p>
 </div>`,css:`.box-011 {
@@ -2305,7 +2305,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-12'] = (function(r){
-    const n = {id:12,name:{ja:"タイトル (枠内)",en:"Title (inside frame)"},inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-012">
+const n={id:12,name:{ja:"タイトル (枠内)",en:"Title (inside frame)"},inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:r.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-012">
     <span>タイトル</span>
     <p>枠内にタイトルを付けたボックス。単色なのでスッキリしたデザインになっています。タイトル前にアイコンを付けるのもおすすめです。</p>
 </div>`,css:`.box-012 {
@@ -2330,7 +2330,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-19'] = (function(e){
-    const p = {id:19,name:{ja:"タイトル (吹き出し風)",en:"Title (speech bubble style)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[{legend:{ja:"吹き出しの形状",en:"Speech bubble shape"},choices:[{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]}]}]},codeFunc({colors:o,radios:t}){return{html:`<div class="box-019">
+const p={id:19,name:{ja:"タイトル (吹き出し風)",en:"Title (speech bubble style)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[{legend:{ja:"吹き出しの形状",en:"Speech bubble shape"},choices:[{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE},{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]}]}]},codeFunc({colors:o,radios:t}){return{html:`<div class="box-019">
     <div>タイトル</div>
     <p>吹き出し風のタイトルを付けたボックス。角丸にすることで、よりポップで可愛らしい印象を与えることができます。</p>
 </div>`,css:`.box-019 {
@@ -2369,7 +2369,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-13'] = (function(e){
-    const p = {id:13,name:{ja:"タイトル (上部中心)",en:"Title (top center)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-013">
+const p={id:13,name:{ja:"タイトル (上部中心)",en:"Title (top center)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}]},codeFunc({colors:o}){return{html:`<div class="box-013">
     <span>タイトル</span>
     <p>枠内の上中心にタイトルを付けたボックス。タイトルをより目立たせたい場合や文字数が長くなる場合におすすめです。</p>
 </div>`,css:`.box-013 {
@@ -2397,7 +2397,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-17'] = (function(o){
-    const m = {id:17,name:{ja:"見出し風",en:"Heading style"},inputs:{colors:[{legend:{ja:"上線の色",en:"overline color"},defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER}],radios:[{legend:{ja:"シャドウ",en:"Shadow"},choices:o.CHOICES.OFF}]},codeFunc({colors:e,radios:d}){return{html:`<div class="box-017">
+const m={id:17,name:{ja:"見出し風",en:"Heading style"},inputs:{colors:[{legend:{ja:"上線の色",en:"overline color"},defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER}],radios:[{legend:{ja:"シャドウ",en:"Shadow"},choices:o.CHOICES.OFF}]},codeFunc({colors:e,radios:d}){return{html:`<div class="box-017">
     <div>タイトル</div>
     <p>見出し風にタイトルを付けたボックス。上枠線とタイトルの色は、サイトのテーマカラーなどに統一するのがおすすめです。</p>
 </div>`,css:`.box-017 {
@@ -2424,7 +2424,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-16'] = (function(o){
-    const n = {id:16,name:{ja:"引用風",en:"Quote style"},inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER}],radios:[{legend:{ja:"シャドウ",en:"Shadow"},choices:o.CHOICES.OFF}]},codeFunc({colors:e,radios:a}){return{html:`<div class="box-016">
+const n={id:16,name:{ja:"引用風",en:"Quote style"},inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER}],radios:[{legend:{ja:"シャドウ",en:"Shadow"},choices:o.CHOICES.OFF}]},codeFunc({colors:e,radios:a}){return{html:`<div class="box-016">
     引用ブロックのように左線を付けたボックス。どんなサイトとも合う、余白落ち着きのある可愛らしいデザインが特徴です。
 </div>`,css:`.box-016 {
     position: relative;
@@ -2439,7 +2439,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-6'] = (function(a, o){
-    const m = {id:6,name:{ja:"メモアイコン (小)",en:"Memo icon (small)"},inputs:{colors:[{legend:a.LEGEND.BG_COLOR,defaultValue:"#fff9e5"},{legend:a.LEGEND.ICON_COLOR,defaultValue:"#ffb36b"},{legend:a.LEGEND.TEXT_COLOR,defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-006">
+const m={id:6,name:{ja:"メモアイコン (小)",en:"Memo icon (small)"},inputs:{colors:[{legend:a.LEGEND.BG_COLOR,defaultValue:"#fff9e5"},{legend:a.LEGEND.ICON_COLOR,defaultValue:"#ffb36b"},{legend:a.LEGEND.TEXT_COLOR,defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-006">
     <p>メモアイコン付きの小さいボックスです。</p>
 </div>`,css:`.box-006 {
     display: flex;
@@ -2466,7 +2466,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['box-8'] = (function(t){
-    const l = {id:8,name:{ja:"チェックアイコン (小)",en:"Check icon (small)"},inputs:{colors:[{legend:t.LEGEND.BG_COLOR,defaultValue:"#ecffe9"},{legend:t.LEGEND.ICON_COLOR,defaultValue:"#86d67c"},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-008">
+const l={id:8,name:{ja:"チェックアイコン (小)",en:"Check icon (small)"},inputs:{colors:[{legend:t.LEGEND.BG_COLOR,defaultValue:"#ecffe9"},{legend:t.LEGEND.ICON_COLOR,defaultValue:"#86d67c"},{legend:t.LEGEND.TEXT_COLOR,defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-008">
     <p>チェックアイコン付きの小さいボックスです。</p>
 </div>`,css:`.box-008 {
     display: flex;
@@ -2496,7 +2496,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-4'] = (function(a, o){
-    const m = {id:4,name:{ja:"注意アイコン (小)",en:"Attention icon (small)"},inputs:{colors:[{legend:a.LEGEND.BG_COLOR,defaultValue:"#ffebee"},{legend:a.LEGEND.ICON_COLOR,defaultValue:"#f06060"},{legend:a.LEGEND.TEXT_COLOR,defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-004">
+const m={id:4,name:{ja:"注意アイコン (小)",en:"Attention icon (small)"},inputs:{colors:[{legend:a.LEGEND.BG_COLOR,defaultValue:"#ffebee"},{legend:a.LEGEND.ICON_COLOR,defaultValue:"#f06060"},{legend:a.LEGEND.TEXT_COLOR,defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-004">
     <p>注意アイコン付きの小さいボックスです。</p>
 </div>`,css:`.box-004 {
     display: flex;
@@ -2523,7 +2523,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['box-7'] = (function(e, o){
-    const l = {id:7,name:{ja:"メモアイコン (大)",en:"Memo icon (Large)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:"#ffb36b"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:i}){return{html:`<div class="box-007">
+const l={id:7,name:{ja:"メモアイコン (大)",en:"Memo icon (Large)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:"#ffb36b"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:i}){return{html:`<div class="box-007">
     <div>
         タイトル
     </div>
@@ -2565,7 +2565,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['box-9'] = (function(i){
-    const r = {id:9,name:{ja:"チェックアイコン (大)",en:"Check icon (Large)"},inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:"#86d67c"},{legend:i.LEGEND.TEXT_COLOR,defaultValue:i.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-009">
+const r={id:9,name:{ja:"チェックアイコン (大)",en:"Check icon (Large)"},inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:"#86d67c"},{legend:i.LEGEND.TEXT_COLOR,defaultValue:i.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-009">
     <div>
         タイトル
     </div>
@@ -2609,7 +2609,7 @@ ${o[1]?`
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-5'] = (function(e, t){
-    const l = {id:5,name:{ja:"注意アイコン (大)",en:"Attention icon (Large)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:"#f06060"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:i}){return{html:`<div class="box-005">
+const l={id:5,name:{ja:"注意アイコン (大)",en:"Attention icon (Large)"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:"#f06060"},{legend:e.LEGEND.TEXT_COLOR,defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:i}){return{html:`<div class="box-005">
     <div>
         タイトル
     </div>
@@ -2651,7 +2651,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['box-14'] = (function(r){
-    const s = {id:14,name:{ja:"チェック柄",en:"Plaid"},inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:"#5ba9f7"}],radios:[{legend:{ja:"枠線",en:"Border"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:a,radios:e}){return{html:'<div class="box-014">チェック柄のボックス。可愛い系のサイトはもちろんのこと、基調色を落ち着いた色にすることで意外とどんなサイトともマッチします。</div>',css:`.box-014 {
+const s={id:14,name:{ja:"チェック柄",en:"Plaid"},inputs:{colors:[{legend:r.LEGEND.BASE_COLOR,defaultValue:"#5ba9f7"}],radios:[{legend:{ja:"枠線",en:"Border"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:a,radios:e}){return{html:'<div class="box-014">チェック柄のボックス。可愛い系のサイトはもちろんのこと、基調色を落ち着いた色にすることで意外とどんなサイトともマッチします。</div>',css:`.box-014 {
     max-width: 400px;
     margin: 0 auto;
     padding: 1em 1.5em;${e[0]?`
@@ -2664,7 +2664,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-20'] = (function(r, t){
-    const l = {id:20,name:{ja:"めくられた紙風",en:"Turned paper style"},inputs:{colors:[{legend:r.LEGEND.BG_COLOR,defaultValue:r.COLOR.BLUE_LIGHT}]},codeFunc({colors:o}){return{html:`<div class="box-020">
+const l={id:20,name:{ja:"めくられた紙風",en:"Turned paper style"},inputs:{colors:[{legend:r.LEGEND.BG_COLOR,defaultValue:r.COLOR.BLUE_LIGHT}]},codeFunc({colors:o}){return{html:`<div class="box-020">
     紙をめくったように見えるボックス。背景だけのシンプルさにワンポイントの可愛さを加えたデザインとなっています。
 </div>`,css:`.box-020 {
     position: relative;
@@ -2688,7 +2688,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['box-10'] = (function(o){
-    const i = {id:10,name:{ja:"テープで貼られてる風",en:"Looks like it's taped on"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE_LIGHT},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-010">
+const i={id:10,name:{ja:"テープで貼られてる風",en:"Looks like it's taped on"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE_LIGHT},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-010">
     <span>タイトル</span>
     <p>タイトルをテープ風にしたボックス。立体的にすることで、可愛らしさがありながらかなり目立つデザインになっています。</p>
 </div>`,css:`.box-010 {
@@ -2719,7 +2719,7 @@ ${o[1]?`
     return function(params){ return i.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-15'] = (function(o){
-    const d = {id:15,name:{ja:"クリップ風",en:"Clip style"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE_LIGHT},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-015">
+const d={id:15,name:{ja:"クリップ風",en:"Clip style"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.BLUE_LIGHT},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="box-015">
     右上にクリップ風の装飾をしたボックス。ボックス・クリップ両方に影を付けることで、よりリアリティを出しています。
 </div>`,css:`.box-015 {
     position: relative;
@@ -2758,7 +2758,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-1'] = (function(i){
-    const c = {id:1,name:{ja:"ウィンドウ風",en:"Like window"},inputs:{colors:[{legend:{ja:"バーの色",en:"Bar color"},defaultValue:i.COLOR.SILVER}]},codeFunc({colors:o}){return{html:`<div  class="box-001">
+const c={id:1,name:{ja:"ウィンドウ風",en:"Like window"},inputs:{colors:[{legend:{ja:"バーの色",en:"Bar color"},defaultValue:i.COLOR.SILVER}]},codeFunc({colors:o}){return{html:`<div  class="box-001">
     <svg class="window-bar" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ウインドウのボタン">
         <circle cx="25" cy="12" r="5.5" fill="#f48384"/>
         <circle cx="45" cy="12" r="5.5" fill="#fbd172"/>
@@ -2791,7 +2791,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-3'] = (function(e){
-    const d = {id:3,name:{ja:"方眼紙風",en:"Graph paper style"},options:{bgColor:e.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<div class="box-003">背景を方眼紙風にしたボックス。かわいい系のサイトと相性が良く、背景が白以外の箇所で利用するとより効果的です。</div>',css:`.box-003 {
+const d={id:3,name:{ja:"方眼紙風",en:"Graph paper style"},options:{bgColor:e.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc({colors:a}){return{html:'<div class="box-003">背景を方眼紙風にしたボックス。かわいい系のサイトと相性が良く、背景が白以外の箇所で利用するとより効果的です。</div>',css:`.box-003 {
     max-width: 400px;
     margin: 0 auto;
     padding: 1em 1.5em;
@@ -2805,7 +2805,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['box-2'] = (function(i){
-    const x = {id:2,name:{ja:"iPhone風",en:"iPhone style"},inputs:{colors:[{legend:{ja:"端末の色",en:"Device color"},defaultValue:"#303030"}]},codeFunc({colors:o}){return{html:`<div  class="box-002">
+const x={id:2,name:{ja:"iPhone風",en:"iPhone style"},inputs:{colors:[{legend:{ja:"端末の色",en:"Device color"},defaultValue:"#303030"}]},codeFunc({colors:o}){return{html:`<div  class="box-002">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 25" fill="#3c3c3c">
         <circle cx="22.5" cy="7.5" r="5"/>
         <circle cx="37.5" cy="7.5" r="5"/>
@@ -2859,7 +2859,7 @@ ${o[1]?`
     return function(params){ return x.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-4'] = (function(a){
-    const p = {id:4,name:{ja:"回転する長方形",en:"Rotating rectangle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"長方形の色",en:"Rectangle color"},defaultValue:a.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="48" height="48" fill="${t[0]}">
+const p={id:4,name:{ja:"回転する長方形",en:"Rotating rectangle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"長方形の色",en:"Rectangle color"},defaultValue:a.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="48" height="48" fill="${t[0]}">
     <path d="M14 0 H18 V8 H14 z" transform="rotate(0 16 16)" opacity=".1">
         <animate attributeName="opacity" from="1" to=".1" begin="0" dur="1s" repeatCount="indefinite"/>
     </path>
@@ -2888,7 +2888,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-7'] = (function(e){
-    const n = {id:7,name:{ja:"回転する円",en:"Rotating circle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:e.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${t[0]}">
+const n={id:7,name:{ja:"回転する円",en:"Rotating circle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:e.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${t[0]}">
     <circle cx="12" cy="2" r="2" opacity=".1">
         <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0"/>
     </circle>
@@ -2917,7 +2917,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-2'] = (function(t){
-    const l = {id:2,name:{ja:"拡大縮小しながら回転する円",en:"Circle that rotates while scaling"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
+const l={id:2,name:{ja:"拡大縮小しながら回転する円",en:"Circle that rotates while scaling"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
     <circle cx="12" cy="2" r="0">
         <animate attributeName="r" values="0;2;0;0" dur="1s" repeatCount="indefinite" begin="0"
                  keySplines=".2 .2 .4 .8;.2 .2 .4 .8;.2 .2 .4 .8" calcMode="spline"/>
@@ -2958,7 +2958,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-13'] = (function(t){
-    const l = {id:13,name:{ja:"近付きながら回転する円",en:"Circle that rotates as it approaches"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
+const l={id:13,name:{ja:"近付きながら回転する円",en:"Circle that rotates as it approaches"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
     <circle cx="12" cy="3" r="3">
         <animate attributeName="cx" values="12;21;3;12" calcMode="linear" dur="2.2s" repeatCount="indefinite"/>
         <animate attributeName="cy" values="3;21;21;3" calcMode="linear" dur="2.2s" repeatCount="indefinite"/>
@@ -2975,7 +2975,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-1'] = (function(e){
-    const l = {id:1,name:{ja:"なぞられる輪",en:"Traced ring"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"前輪の色",en:"Front wheel color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"後輪の色",en:"Rear wheel color"},defaultValue:e.COLOR.SILVER}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+const l={id:1,name:{ja:"なぞられる輪",en:"Traced ring"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"前輪の色",en:"Front wheel color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"後輪の色",en:"Rear wheel color"},defaultValue:e.COLOR.SILVER}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
     <path fill="${t[1]}"
           d="M12,0C5.4,0,0,5.4,0,12s5.4,12,12,12,12-5.4,12-12S18.6,0,12,0m0,3c5,0,9,4,9,9s-4,9-9,9S3,17,3,12,7,3,12,3"/>
     <path fill="${t[0]}" d="M12,0c6.6,0,12,5.4,12,12h-3c0-5-4-9-9-9V0Z">
@@ -2986,7 +2986,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-10'] = (function(t){
-    const s = {id:10,name:{ja:"長さを変えながら回転する輪",en:"Ring that rotates while changing its length"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"輪の色",en:"Ring color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+const s={id:10,name:{ja:"長さを変えながら回転する輪",en:"Ring that rotates while changing its length"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"輪の色",en:"Ring color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
     <circle cx="12" cy="12" r="10" fill="none" stroke="${e[0]}"
             stroke-width="2" stroke-dasharray="63" stroke-linecap="round">
         <animate attributeName="stroke-dashoffset" values="63;16;63" keyTimes="0;.5;1"
@@ -3002,7 +3002,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-14'] = (function(e){
-    const m = {id:14,name:{ja:"時計風",en:"Clock style"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"輪と針の色",en:"Ring and needle color"},defaultValue:e.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${t[0]}">
+const m={id:14,name:{ja:"時計風",en:"Clock style"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"輪と針の色",en:"Ring and needle color"},defaultValue:e.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${t[0]}">
     <circle cx="12" cy="12" r="11" fill="none" stroke="${t[0]}"/>
     <rect x="11.5" y="3" width="1" height="9">
         <animateTransform attributeName="transform" type="rotate"
@@ -3018,7 +3018,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-11'] = (function(r){
-    const l = {id:11,name:{ja:"円の中で回転する円",en:"Circle rotating within a circle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:r.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
+const l={id:11,name:{ja:"円の中で回転する円",en:"Circle rotating within a circle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:r.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
     <circle cx="12" cy="12" r="12" fill="${t[0]}"/>
     <circle cx="12" cy="5" r="4" fill="#fff">
         <animateTransform attributeName="transform" type="rotate"
@@ -3028,7 +3028,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-8'] = (function(i){
-    const o = {id:8,name:{ja:"バウンドする円",en:"Bouncing circle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"circle Color"},defaultValue:i.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
+const o={id:8,name:{ja:"バウンドする円",en:"Bouncing circle"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"circle Color"},defaultValue:i.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
     <circle cx="12" cy="12" r="12" opacity=".5">
         <animate attributeName="r" values="0;12;0" keySplines="0.42 0.0 0.58 1.0"
                  dur="2s" repeatCount="indefinite" begin="0"/>
@@ -3041,7 +3041,7 @@ ${o[1]?`
     return function(params){ return o.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-12'] = (function(t){
-    const c = {id:12,name:{ja:"波紋を出す円",en:"Circle that makes ripples"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
+const c={id:12,name:{ja:"波紋を出す円",en:"Circle that makes ripples"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"円の色",en:"Circle color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="${e[0]}">
     <circle cx="12" cy="12" r="0">
         <animate attributeName="opacity" values="0;1;0"
                  keyTimes="0;.05;1" calcMode="linear"
@@ -3067,7 +3067,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-6'] = (function(t){
-    const u = {id:6,name:{ja:"回転する正方形",en:"Rotating square"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"活性時の色",en:"Active color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"非活性時の色",en:"Inactive color"},defaultValue:t.COLOR.SILVER}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="${e[1]}">
+const u={id:6,name:{ja:"回転する正方形",en:"Rotating square"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"活性時の色",en:"Active color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"非活性時の色",en:"Inactive color"},defaultValue:t.COLOR.SILVER}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="${e[1]}">
         <rect x="0" y="0" width="14" height="14" fill="#e6edf3">
             <animate attributeName="fill" values="${e[0]};${e[1]};${e[1]}" keyTimes="0;0.125;1" dur="1s"
                      repeatCount="indefinite" begin="0s" calcMode="discrete"></animate>
@@ -3104,7 +3104,7 @@ ${o[1]?`
     return function(params){ return u.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-15'] = (function(a){
-    const p = {id:15,name:{ja:"回転する立方体",en:"Rotating cube"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"立方体の色",en:"Cube color"},defaultValue:a.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<div class="loading-15">
+const p={id:15,name:{ja:"回転する立方体",en:"Rotating cube"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"立方体の色",en:"Cube color"},defaultValue:a.COLOR.BLUE}]},codeFunc({colors:t}){return{html:`<div class="loading-15">
     <span></span>
     <span></span>
     <span></span>
@@ -3173,7 +3173,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-9'] = (function(t){
-    const l = {id:9,name:{ja:"2つの周期で動くバー",en:"Bar moving in two periods"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"前のバーの色",en:"Front bar color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"後ろのバーの色",en:"Back bar color"},defaultValue:t.COLOR.SILVER}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 5" width="150" height="5">
+const l={id:9,name:{ja:"2つの周期で動くバー",en:"Bar moving in two periods"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"前のバーの色",en:"Front bar color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"後ろのバーの色",en:"Back bar color"},defaultValue:t.COLOR.SILVER}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 5" width="150" height="5">
     <rect x="0" y="0" rx="2" ry="2" width="150" height="5" fill="${e[1]}"/>
     <rect x="0" y="0" rx="2" ry="2" width="150" height="5" fill="${e[0]}" transform="scale(0,1)">
         <animateTransform attributeName="transform" type="translate"
@@ -3203,7 +3203,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-3'] = (function(t){
-    const s = {id:3,name:{ja:"縦に伸びる棒 (5本)",en:"Vertically extending bar (5 pieces)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"バーの色",en:"Bar color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="72" height="72" fill="${e[0]}">
+const s={id:3,name:{ja:"縦に伸びる棒 (5本)",en:"Vertically extending bar (5 pieces)"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"バーの色",en:"Bar color"},defaultValue:t.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="72" height="72" fill="${e[0]}">
     <path transform="translate(2)" d="M0 12 V20 H4 V12z">
         <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z"
                  dur="1.2s" calcMode="spline" begin="0" repeatCount="indefinite"
@@ -3233,7 +3233,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-5'] = (function(a){
-    const e = {id:5,name:{ja:"波状的に上下する文字",en:"Letters that rise and fall in a wavy manner"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLUE}]},codeFunc({colors:n}){return{html:`<div class="loading-5">
+const e={id:5,name:{ja:"波状的に上下する文字",en:"Letters that rise and fall in a wavy manner"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLUE}]},codeFunc({colors:n}){return{html:`<div class="loading-5">
     <p>
         <span>L</span>
         <span>o</span>
@@ -3304,7 +3304,7 @@ ${o[1]?`
     return function(params){ return e.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['loading-16'] = (function(o, t){
-    const p = {id:16,name:{ja:"記事の読み込み",en:"Loading articles"},imgFormat:"gif",comment:{ja:"記事一覧などでコンテンツを読み込む際に使えるローティングアニメーションです。幅や行数は使用箇所に応じて適宜調整してみてください。",en:"This is a loading animation that can be used when loading content in article lists, etc. Please adjust the width and number of lines as appropriate depending on where you use it."},inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:"#eeeeee"}],ranges:[{legend:{ja:"行数",en:"Number of lines"},defaultValue:3,min:2,max:10,step:1,unit:{ja:"行",en:"lines"}}]},codeFunc({colors:i,ranges:a}){let e='<div class="loading-16">';for(let n=0;n<a[0];n++)e+=`
+const p={id:16,name:{ja:"記事の読み込み",en:"Loading articles"},imgFormat:"gif",comment:{ja:"記事一覧などでコンテンツを読み込む際に使えるローティングアニメーションです。幅や行数は使用箇所に応じて適宜調整してみてください。",en:"This is a loading animation that can be used when loading content in article lists, etc. Please adjust the width and number of lines as appropriate depending on where you use it."},inputs:{colors:[{legend:o.LEGEND.BASE_COLOR,defaultValue:"#eeeeee"}],ranges:[{legend:{ja:"行数",en:"Number of lines"},defaultValue:3,min:2,max:10,step:1,unit:{ja:"行",en:"lines"}}]},codeFunc({colors:i,ranges:a}){let e='<div class="loading-16">';for(let n=0;n<a[0];n++)e+=`
     <div></div>`;return e+=`
 </div>
 `,e+=e,{html:e,css:`.loading-16 {
@@ -3345,7 +3345,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['list-1'] = (function(t, l){
-    const p = {id:1,name:{ja:"スタンダード",en:"Standard"},comment:{ja:"箇条書きに欠かせない点のみを付けた、とてもシンプルなリスト。シンプルイズベストということで、個人的にイチオシのパーツです。",en:"A very simple list with only the essential bullet points. Simple is best, so this is my personal favorite part."},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:e,radios:i}){return{html:`<${i[0]} class="list-1">
+const p={id:1,name:{ja:"スタンダード",en:"Standard"},comment:{ja:"箇条書きに欠かせない点のみを付けた、とてもシンプルなリスト。シンプルイズベストということで、個人的にイチオシのパーツです。",en:"A very simple list with only the essential bullet points. Simple is best, so this is my personal favorite part."},inputs:{colors:[{legend:t.LEGEND.BASE_COLOR,defaultValue:t.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:e,radios:i}){return{html:`<${i[0]} class="list-1">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3366,7 +3366,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-9'] = (function(l, e){
-    const p = {id:9,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:l.LEGEND.BASE_COLOR,defaultValue:l.COLOR.BLUE}],radios:[e.RADIO.LIST_TYPE,e.RADIO.BORDER_PRESENCE]},codeFunc({colors:i,radios:t}){return{html:`<${t[0]} class="list-9">
+const p={id:9,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:l.LEGEND.BASE_COLOR,defaultValue:l.COLOR.BLUE}],radios:[e.RADIO.LIST_TYPE,e.RADIO.BORDER_PRESENCE]},codeFunc({colors:i,radios:t}){return{html:`<${t[0]} class="list-9">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3392,7 +3392,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-11'] = (function(t, l){
-    const d = {id:11,name:{ja:"引用風",en:"Quote style"},comment:{ja:"左に枠線を付けた、引用ボックスでよく見るデザインです。",en:"This is a design often seen in quote boxes, with a border on the left."},inputs:{colors:[{legend:{ja:"左枠線の色",en:"Left border color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.BG_COLOR,defaultValue:t.COLOR.SILVER}],radios:[l.RADIO.LIST_TYPE]},codeFunc({colors:e,radios:i}){return{html:`<${i[0]} class="list-11">
+const d={id:11,name:{ja:"引用風",en:"Quote style"},comment:{ja:"左に枠線を付けた、引用ボックスでよく見るデザインです。",en:"This is a design often seen in quote boxes, with a border on the left."},inputs:{colors:[{legend:{ja:"左枠線の色",en:"Left border color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.BG_COLOR,defaultValue:t.COLOR.SILVER}],radios:[l.RADIO.LIST_TYPE]},codeFunc({colors:e,radios:i}){return{html:`<${i[0]} class="list-11">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3414,7 +3414,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-8'] = (function(e, o){
-    const r = {id:8,name:{ja:"タイトル (小)",en:"Title (small)"},comment:{ja:"枠線の上にタイトルを置いたリストです。タイトルをより目立たせたい場合はフォントサイズを調整するのもアリかもしれません。",en:"A list with a title above the border. If you want the title to stand out more, you may want to adjust the font size."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[o.RADIO.LIST_TYPE]},codeFunc({colors:t,radios:i}){return{html:`<div class="list-8">
+const r={id:8,name:{ja:"タイトル (小)",en:"Title (small)"},comment:{ja:"枠線の上にタイトルを置いたリストです。タイトルをより目立たせたい場合はフォントサイズを調整するのもアリかもしれません。",en:"A list with a title above the border. If you want the title to stand out more, you may want to adjust the font size."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[o.RADIO.LIST_TYPE]},codeFunc({colors:t,radios:i}){return{html:`<div class="list-8">
     <div>タイトル</div>
     <${i[0]}>
         <li>リストの項目1</li>
@@ -3454,7 +3454,7 @@ ${o[1]?`
     return function(params){ return r.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-4'] = (function(e, l){
-    const d = {id:4,name:{ja:"タイトル (大)",en:"Title (large)"},comment:{ja:"上部にタイトルを付けたリストです。多用するとくどく思われてしまうので、よりリストを強調させたい場合のみに使うのがおすすめです。",en:"This is a list with a title at the top. If you use it too often, it will seem tedious, so we recommend using it only when you want to emphasize the list."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE]},codeFunc({colors:i,radios:t}){return{html:`<div class="list-4">
+const d={id:4,name:{ja:"タイトル (大)",en:"Title (large)"},comment:{ja:"上部にタイトルを付けたリストです。多用するとくどく思われてしまうので、よりリストを強調させたい場合のみに使うのがおすすめです。",en:"This is a list with a title at the top. If you use it too often, it will seem tedious, so we recommend using it only when you want to emphasize the list."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE]},codeFunc({colors:i,radios:t}){return{html:`<div class="list-4">
     <div>タイトル</div>
     <${t[0]}>
         <li>リストの項目1</li>
@@ -3493,7 +3493,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-5'] = (function(l, t){
-    const s = {id:5,name:{ja:"タイトル (大) & 背景色",en:"Title (large) & background color"},inputs:{colors:[{legend:{ja:"左枠線の色",en:"Left border color"},defaultValue:l.COLOR.BLUE},{legend:l.LEGEND.BG_COLOR,defaultValue:l.COLOR.SILVER}],radios:[t.RADIO.LIST_TYPE]},codeFunc({colors:i,radios:e}){return{html:`<div class="list-5">
+const s={id:5,name:{ja:"タイトル (大) & 背景色",en:"Title (large) & background color"},inputs:{colors:[{legend:{ja:"左枠線の色",en:"Left border color"},defaultValue:l.COLOR.BLUE},{legend:l.LEGEND.BG_COLOR,defaultValue:l.COLOR.SILVER}],radios:[t.RADIO.LIST_TYPE]},codeFunc({colors:i,radios:e}){return{html:`<div class="list-5">
     <div>タイトル</div>
     <${e[0]}>
         <li>リストの項目1</li>
@@ -3532,7 +3532,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-2'] = (function(l, t){
-    const c = {id:2,name:{ja:"番号に背景",en:"background with number"},comment:{ja:"数字を囲んだリストです。四角 or 円にするか、お好みで形状を選んでみてください。",en:"A list of numbers. Choose a square or circle, or whatever shape you like."},inputs:{colors:[{legend:l.LEGEND.BASE_COLOR,defaultValue:l.COLOR.BLUE}],radios:[t.RADIO.LIST_TYPE,t.RADIO.BORDER_PRESENCE,{legend:{ja:"番号の形状",en:"Number shape"},choices:[{label:{ja:"円",en:"Circle"},value:!0},{label:{ja:"四角",en:"Square"},value:!1}]}]},codeFunc({colors:i,radios:e}){return{html:`<${e[0]} class="list-2">
+const c={id:2,name:{ja:"番号に背景",en:"background with number"},comment:{ja:"数字を囲んだリストです。四角 or 円にするか、お好みで形状を選んでみてください。",en:"A list of numbers. Choose a square or circle, or whatever shape you like."},inputs:{colors:[{legend:l.LEGEND.BASE_COLOR,defaultValue:l.COLOR.BLUE}],radios:[t.RADIO.LIST_TYPE,t.RADIO.BORDER_PRESENCE,{legend:{ja:"番号の形状",en:"Number shape"},choices:[{label:{ja:"円",en:"Circle"},value:!0},{label:{ja:"四角",en:"Square"},value:!1}]}]},codeFunc({colors:i,radios:e}){return{html:`<${e[0]} class="list-2">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3566,7 +3566,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-7'] = (function(e, l){
-    const n = {id:7,name:{ja:"矢印",en:"Arrow"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:t,radios:i}){return{html:`<${i[0]} class="list-7">
+const n={id:7,name:{ja:"矢印",en:"Arrow"},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:t,radios:i}){return{html:`<${i[0]} class="list-7">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3594,7 +3594,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-12'] = (function(i, l){
-    const n = {id:12,name:{ja:"矢印 (円形)",en:"Arrow (circular)"},inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:i.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:t,radios:e}){return{html:`<${e[0]} class="list-12">
+const n={id:12,name:{ja:"矢印 (円形)",en:"Arrow (circular)"},inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:i.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:t,radios:e}){return{html:`<${e[0]} class="list-12">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3637,7 +3637,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-3'] = (function(e, l){
-    const d = {id:3,name:{ja:"チェックマーク",en:"Check mark"},comment:{ja:"チェックマークを付けた、Todoリストのようにも見えるリスト。比較的シンプルなデザインでありながらユーザーの目を引きやすいのが特徴です。",en:"A list with check marks that looks like a to-do list. Although it has a relatively simple design, it is easy to catch the user's attention."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:t,radios:i}){return{html:`<${i[0]} class="list-3">
+const d={id:3,name:{ja:"チェックマーク",en:"Check mark"},comment:{ja:"チェックマークを付けた、Todoリストのようにも見えるリスト。比較的シンプルなデザインでありながらユーザーの目を引きやすいのが特徴です。",en:"A list with check marks that looks like a to-do list. Although it has a relatively simple design, it is easy to catch the user's attention."},inputs:{colors:[{legend:e.LEGEND.BASE_COLOR,defaultValue:e.COLOR.BLUE}],radios:[l.RADIO.LIST_TYPE,l.RADIO.BORDER_PRESENCE]},codeFunc({colors:t,radios:i}){return{html:`<${i[0]} class="list-3">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3666,7 +3666,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-10'] = (function(i, t){
-    const p = {id:10,name:{ja:"絵文字",en:"Emoji"},comment:{ja:"絵文字を使うことで可愛さが増したリスト。ぜひお好きな絵文字を指定してみてください。",en:"This list is made even more cute by using emojis. Please feel free to specify your favorite emoji."},inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:i.COLOR.BLUE}],radios:[t.RADIO.LIST_TYPE,t.RADIO.BORDER_PRESENCE]},codeFunc({colors:l,radios:e}){return{html:`<${e[0]} class="list-10">
+const p={id:10,name:{ja:"絵文字",en:"Emoji"},comment:{ja:"絵文字を使うことで可愛さが増したリスト。ぜひお好きな絵文字を指定してみてください。",en:"This list is made even more cute by using emojis. Please feel free to specify your favorite emoji."},inputs:{colors:[{legend:i.LEGEND.BASE_COLOR,defaultValue:i.COLOR.BLUE}],radios:[t.RADIO.LIST_TYPE,t.RADIO.BORDER_PRESENCE]},codeFunc({colors:l,radios:e}){return{html:`<${e[0]} class="list-10">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3682,7 +3682,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-6'] = (function(t, o){
-    const m = {id:6,name:{ja:"見出し風",en:"Heading style"},comment:{ja:"背景と左に枠線を付けた、見出し風のリストです。見た目的にもかなり目立つ部類なので、リストを強調したい時に利用するのがおすすめです。",en:"It is a heading-like list with a background and a border on the left. It's a category that stands out visually, so we recommend using it when you want to emphasize a list."},inputs:{colors:[{legend:{ja:"左枠線の色",en:"Left border color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.BG_COLOR,defaultValue:t.COLOR.SILVER}],radios:[o.RADIO.LIST_TYPE]},codeFunc({colors:e,radios:i}){return{html:`<${i[0]} class="list-6">
+const m={id:6,name:{ja:"見出し風",en:"Heading style"},comment:{ja:"背景と左に枠線を付けた、見出し風のリストです。見た目的にもかなり目立つ部類なので、リストを強調したい時に利用するのがおすすめです。",en:"It is a heading-like list with a background and a border on the left. It's a category that stands out visually, so we recommend using it when you want to emphasize a list."},inputs:{colors:[{legend:{ja:"左枠線の色",en:"Left border color"},defaultValue:t.COLOR.BLUE},{legend:t.LEGEND.BG_COLOR,defaultValue:t.COLOR.SILVER}],radios:[o.RADIO.LIST_TYPE]},codeFunc({colors:e,radios:i}){return{html:`<${i[0]} class="list-6">
     <li>リストの項目1</li>
     <li>リストの項目2</li>
     <li>リストの項目3</li>
@@ -3700,7 +3700,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_common_list.COMMON);
   root.designInserterPartCodeFuncs['list-13'] = (function(l, i){
-    const p = {id:13,name:{ja:"ディレクトリリスト (ツリー構造)",en:"Directory list (tree structure)"},comment:{ja:"ディレクトリ・ファイルやサイトマップを表示する場合におすすめなリスト。フォルダ要素に関しては、spanタグで囲むことでアイコンが左に付くようになります。",en:"Recommended list for displaying directories/files and sitemaps. For folder elements, by surrounding them with span tags, the icon will be placed on the left."},inputs:{colors:[{legend:l.LEGEND.BASE_COLOR,defaultValue:l.COLOR.BLACK_TEXT},{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:l.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<ul class="list-13">
+const p={id:13,name:{ja:"ディレクトリリスト (ツリー構造)",en:"Directory list (tree structure)"},comment:{ja:"ディレクトリ・ファイルやサイトマップを表示する場合におすすめなリスト。フォルダ要素に関しては、spanタグで囲むことでアイコンが左に付くようになります。",en:"Recommended list for displaying directories/files and sitemaps. For folder elements, by surrounding them with span tags, the icon will be placed on the left."},inputs:{colors:[{legend:l.LEGEND.BASE_COLOR,defaultValue:l.COLOR.BLACK_TEXT},{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:l.COLOR.BLUE}]},codeFunc({colors:e}){return{html:`<ul class="list-13">
     <li>
         <span>folder1</span>
         <ul>
@@ -3771,7 +3771,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['balloon-1'] = (function(o){
-    const r = {id:1,name:{ja:"下向き",en:"Downward"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<div class="balloon-001">
+const r={id:1,name:{ja:"下向き",en:"Downward"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<div class="balloon-001">
     単色のシンプルな吹き出し。背景色を変えることで、どんなサイトにも馴染ませることができます。
 </div>`,css:`.balloon-001 {
     display: flex;
@@ -3797,7 +3797,7 @@ ${o[1]?`
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-2'] = (function(o){
-    const p = {id:2,name:{ja:"上向き",en:"Upward"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<div class="balloon-002">
+const p={id:2,name:{ja:"上向き",en:"Upward"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<div class="balloon-002">
     単色のシンプルな吹き出し。背景色を変えることで、どんなサイトにも馴染ませることができます。
 </div>`,css:`.balloon-002 {
     display: flex;
@@ -3823,7 +3823,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-4'] = (function(o){
-    const p = {id:4,name:{ja:"左向き",en:"Facing left"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-004">
+const p={id:4,name:{ja:"左向き",en:"Facing left"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-004">
     単色のシンプルな吹き出し。背景色を変えることで、どんなサイトにも馴染ませることができます。
 </div>`,css:`.balloon-004 {
     display: flex;
@@ -3849,7 +3849,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-3'] = (function(o){
-    const r = {id:3,name:{ja:"右向き",en:"Facing right"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-003">
+const r={id:3,name:{ja:"右向き",en:"Facing right"},inputs:{colors:[{legend:o.LEGEND.BG_COLOR,defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-003">
     単色のシンプルな吹き出し。背景色を変えることで、どんなサイトにも馴染ませることができます。
 </div>`,css:`.balloon-003 {
     display: flex;
@@ -3875,7 +3875,7 @@ ${o[1]?`
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-5'] = (function(o){
-    const i = {id:5,name:{ja:"下向き",en:"Downward"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<div class="balloon-005">
+const i={id:5,name:{ja:"下向き",en:"Downward"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:t}){return{html:`<div class="balloon-005">
     枠線付きのシンプルな吹き出し。枠線をコントラストの強い色にすると、より目立たせることができます。
 </div>`,css:`.balloon-005 {
     display: flex;
@@ -3911,7 +3911,7 @@ ${o[1]?`
     return function(params){ return i.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-6'] = (function(o){
-    const p = {id:6,name:{ja:"上向き",en:"Upward"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-006">
+const p={id:6,name:{ja:"上向き",en:"Upward"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-006">
     枠線付きのシンプルな吹き出し。枠線をコントラストの強い色にすると、より目立たせることができます。
 </div>`,css:`.balloon-006 {
     display: flex;
@@ -3947,7 +3947,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-8'] = (function(o){
-    const i = {id:8,name:{ja:"左向き",en:"Facing left"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:l}){return{html:`<div class="balloon-008">
+const i={id:8,name:{ja:"左向き",en:"Facing left"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:l}){return{html:`<div class="balloon-008">
     枠線付きのシンプルな吹き出し。枠線をコントラストの強い色にすると、より目立たせることができます。
 </div>`,css:`.balloon-008 {
     display: flex;
@@ -3983,7 +3983,7 @@ ${o[1]?`
     return function(params){ return i.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-7'] = (function(o){
-    const n = {id:7,name:{ja:"右向き",en:"Facing right"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:l}){return{html:`<div class="balloon-007">
+const n={id:7,name:{ja:"右向き",en:"Facing right"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.BLUE},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:l}){return{html:`<div class="balloon-007">
     枠線付きのシンプルな吹き出し。枠線をコントラストの強い色にすると、より目立たせることができます。
 </div>`,css:`.balloon-007 {
     display: flex;
@@ -4019,7 +4019,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-9'] = (function(o){
-    const r = {id:9,name:{ja:"左向き",en:"Facing left"},inputs:{colors:[{legend:{ja:"吹き出しの色",en:"speech bubble color"},defaultValue:o.COLOR.SILVER},{legend:{ja:"アイコン枠線の色",en:"Icon border color"},defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-009">
+const r={id:9,name:{ja:"左向き",en:"Facing left"},inputs:{colors:[{legend:{ja:"吹き出しの色",en:"speech bubble color"},defaultValue:o.COLOR.SILVER},{legend:{ja:"アイコン枠線の色",en:"Icon border color"},defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-009">
     <!-- お好きなアイコン画像を指定してください -->
     <img src="${o.IMG.ICON}" alt="" />
     <p>これは会話風の吹き出しです。お好きなアイコン画像を指定できます。</p>
@@ -4059,7 +4059,7 @@ ${o[1]?`
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-10'] = (function(o){
-    const r = {id:10,name:{ja:"右向き",en:"Facing right"},inputs:{colors:[{legend:{ja:"吹き出しの色",en:"speech bubble color"},defaultValue:o.COLOR.SILVER},{legend:{ja:"アイコン枠線の色",en:"Icon border color"},defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-010">
+const r={id:10,name:{ja:"右向き",en:"Facing right"},inputs:{colors:[{legend:{ja:"吹き出しの色",en:"speech bubble color"},defaultValue:o.COLOR.SILVER},{legend:{ja:"アイコン枠線の色",en:"Icon border color"},defaultValue:o.COLOR.SILVER},{legend:o.LEGEND.TEXT_COLOR,defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="balloon-010">
     <p>これは会話風の吹き出しです。お好きなアイコン画像を指定できます。</p>
     <!-- お好きなアイコン画像を指定してください -->
     <img src="${o.IMG.ICON}" alt="" />
@@ -4099,7 +4099,7 @@ ${o[1]?`
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-12'] = (function(l){
-    const p = {id:12,name:{ja:"LINE風",en:"LINE style"},inputs:{radios:[{legend:{ja:"右側のアイコン",en:"Icon on the right"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc({radios:o}){return{html:`<div class="balloon-012">
+const p={id:12,name:{ja:"LINE風",en:"LINE style"},inputs:{radios:[{legend:{ja:"右側のアイコン",en:"Icon on the right"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc({radios:o}){return{html:`<div class="balloon-012">
     <div class="balloon-012__section">
         <!-- お好きなアイコン画像を指定してください -->
         <img class="balloon-012__img" src="${l.IMG.ICON}" alt="" width="45" height="45" />
@@ -4172,7 +4172,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['balloon-13'] = (function(e){
-    const p = {id:13,name:{ja:"画像 + 補足",en:"Image + caption"},comment:{ja:"画像の横に吹き出しを添えてみました。画像を元に手順を説明する際などにとても効果的なデザインです。ちなみにモバイルの場合は画像の下に吹き出しが表示されます。",en:"I added a speech bubble next to the image. This design is very effective when explaining procedures based on images. By the way, on mobile, a speech bubble will be displayed below the image."},inputs:{colors:[{legend:e.LEGEND.BORDER_COLOR,defaultValue:e.COLOR.SILVER_DARK}]},codeFunc({colors:o}){return{html:`<div class="balloon-013">
+const p={id:13,name:{ja:"画像 + 補足",en:"Image + caption"},comment:{ja:"画像の横に吹き出しを添えてみました。画像を元に手順を説明する際などにとても効果的なデザインです。ちなみにモバイルの場合は画像の下に吹き出しが表示されます。",en:"I added a speech bubble next to the image. This design is very effective when explaining procedures based on images. By the way, on mobile, a speech bubble will be displayed below the image."},inputs:{colors:[{legend:e.LEGEND.BORDER_COLOR,defaultValue:e.COLOR.SILVER_DARK}]},codeFunc({colors:o}){return{html:`<div class="balloon-013">
     <div class="balloon-013__img-wrap">
         <!-- お好きな画像を指定してください -->
         <img class="balloon-013__img" src="${e.IMG.CATCH}" alt="" width="320" height="180" />
@@ -4246,7 +4246,7 @@ ${o[1]?`
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['accordion-3'] = (function(r, e){
-    const c = {id:3,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:r.COLOR.SILVER_DARK},{legend:{ja:"タイトルの色",en:"Title color"},defaultValue:r.COLOR.BLACK_TEXT},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[e.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:a}){return{html:`<details class="accordion-003">
+const c={id:3,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:r.COLOR.SILVER_DARK},{legend:{ja:"タイトルの色",en:"Title color"},defaultValue:r.COLOR.BLACK_TEXT},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[e.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:a}){return{html:`<details class="accordion-003">
     <summary>アコーディオンのデザイン</summary>
     <p>下線だけのシンプルなアコーディオンメニュー。クセがなくどんなサイトでも使いやすいのが特徴です。</p>
 </details>
@@ -4328,7 +4328,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON);
   root.designInserterPartCodeFuncs['accordion-4'] = (function(o, t){
-    const c = {id:4,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.SILVER_DARK},{legend:{ja:"タイトルの色",en:"Title color"},defaultValue:o.COLOR.BLACK_TEXT},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:o.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:r,radios:a}){return{html:`<details class="accordion-004">
+const c={id:4,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:o.LEGEND.BORDER_COLOR,defaultValue:o.COLOR.SILVER_DARK},{legend:{ja:"タイトルの色",en:"Title color"},defaultValue:o.COLOR.BLACK_TEXT},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:o.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:r,radios:a}){return{html:`<details class="accordion-004">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>枠線付きのシンプルなアコーディオンメニューです。</p>
 </details>
@@ -4411,7 +4411,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON);
   root.designInserterPartCodeFuncs['accordion-6'] = (function(t, e, r){
-    const u = {id:6,name:{ja:"背景色",en:"With background color"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}],radios:[e.RADIO.SHAPE,e.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:a}){return{html:`<details class="accordion-006">
+const u={id:6,name:{ja:"背景色",en:"With background color"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}],radios:[e.RADIO.SHAPE,e.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:a}){return{html:`<details class="accordion-006">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>背景色付きのシンプルなアコーディオンメニューです。</p>
 </details>
@@ -4494,7 +4494,7 @@ ${o[1]?`
     return function(params){ return u.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['accordion-8'] = (function(a, t){
-    const c = {id:8,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},options:{bgColor:a.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:r}){return{html:`<details class="accordion-008">
+const c={id:8,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},options:{bgColor:a.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:r}){return{html:`<details class="accordion-008">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>白背景にシャドウを付けたアコーディオンメニューです。</p>
 </details>
@@ -4578,7 +4578,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON);
   root.designInserterPartCodeFuncs['accordion-1'] = (function(r, t){
-    const s = {id:1,name:{ja:"単色背景",en:"Monochromatic background"},inputs:{colors:[{legend:{ja:"ラベルの背景色",en:"Label background color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"詳細の背景色",en:"Detail background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"詳細の文字色",en:"Detail text color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:a}){return{html:`<details class="accordion-001">
+const s={id:1,name:{ja:"単色背景",en:"Monochromatic background"},inputs:{colors:[{legend:{ja:"ラベルの背景色",en:"Label background color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"詳細の背景色",en:"Detail background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"詳細の文字色",en:"Detail text color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:a}){return{html:`<details class="accordion-001">
     <summary>アコーディオンのデザイン</summary>
     <p>矢印付きのアコーディオン。開閉させると矢印が回転します。サイトのテーマカラーを背景色に設定するのがおすすめです。</p>
 </details>
@@ -4665,7 +4665,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON);
   root.designInserterPartCodeFuncs['accordion-2'] = (function(a, e, t){
-    const l = {id:2,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:r,radios:o}){return{html:`<details class="accordion-002">
+const l={id:2,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:r,radios:o}){return{html:`<details class="accordion-002">
     <summary>アコーディオンのデザイン</summary>
     <p>プラスマイナスの付きのアコーディオン。開閉させるとアイコンが回転します。枠線付きなので複数並べたい際におすすめです。</p>
 </details>
@@ -4751,7 +4751,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_funcs.r, _di_common_accordion.COMMON);
   root.designInserterPartCodeFuncs['accordion-7'] = (function(a, t){
-    const s = {id:7,name:{ja:"枠線あり & 吹き出し風",en:"With background & like speech bubble"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:r}){return{html:`<details class="accordion-007">
+const s={id:7,name:{ja:"枠線あり & 吹き出し風",en:"With background & like speech bubble"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"詳細の文字色",en:"Detail color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[t.RADIO.SHAPE,t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:r}){return{html:`<details class="accordion-007">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>背景色付き&吹き出し風のアコーディオンメニューです。</p>
 </details>
@@ -4857,7 +4857,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON);
   root.designInserterPartCodeFuncs['accordion-5'] = (function(r, t, a){
-    const l = {id:5,name:{ja:"見出し風",en:"Like heading"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"左線色",en:"Left line color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:e}){return{html:`<details class="accordion-005">
+const l={id:5,name:{ja:"見出し風",en:"Like heading"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"左線色",en:"Left line color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[t.RADIO.ICON_TYPE]},codeFunc({colors:o,radios:e}){return{html:`<details class="accordion-005">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>見出し風のアコーディオンメニューです。</p>
 </details>
@@ -4943,7 +4943,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts, _di_common_accordion.COMMON, _di_funcs.a);
   root.designInserterPartCodeFuncs['search-form-3'] = (function(r, o, a){
-    const c = {id:3,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BORDER_COLOR,defaultValue:r.COLOR.BLACK_TEXT_LIGHT},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[o.RADIO.SHAPE]},codeFunc({colors:e,radios:t}){return{html:`<form action="#" class="search-form-3">
+const c={id:3,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BORDER_COLOR,defaultValue:r.COLOR.BLACK_TEXT_LIGHT},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[o.RADIO.SHAPE]},codeFunc({colors:e,radios:t}){return{html:`<form action="#" class="search-form-3">
     <label>
         <input type="text" placeholder="キーワードを入力">
     </label>
@@ -4992,7 +4992,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_search_form.COMMON, _di_funcs.r);
   root.designInserterPartCodeFuncs['search-form-4'] = (function(r, t, a){
-    const c = {id:4,name:{ja:"枠線あり & 左アイコン",en:"With border & left icon"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BORDER_COLOR,defaultValue:r.COLOR.BLACK_TEXT_LIGHT},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[t.RADIO.SHAPE]},codeFunc({colors:e,radios:o}){return{html:`<form action="#" class="search-form-4">
+const c={id:4,name:{ja:"枠線あり & 左アイコン",en:"With border & left icon"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BORDER_COLOR,defaultValue:r.COLOR.BLACK_TEXT_LIGHT},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[t.RADIO.SHAPE]},codeFunc({colors:e,radios:o}){return{html:`<form action="#" class="search-form-4">
     <button type="submit" aria-label="検索"></button>
     <label>
         <input type="text" placeholder="キーワードを入力">
@@ -5040,7 +5040,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_search_form.COMMON, _di_funcs.r);
   root.designInserterPartCodeFuncs['search-form-5'] = (function(r, o, a){
-    const m = {id:5,name:{ja:"背景色あり",en:"With background color"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BG_COLOR,defaultValue:r.COLOR.SILVER},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[o.RADIO.SHAPE]},codeFunc({colors:e,radios:t}){return{html:`<form action="#" class="search-form-5">
+const m={id:5,name:{ja:"背景色あり",en:"With background color"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BG_COLOR,defaultValue:r.COLOR.SILVER},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[o.RADIO.SHAPE]},codeFunc({colors:e,radios:t}){return{html:`<form action="#" class="search-form-5">
     <label>
         <input type="text" placeholder="キーワードを入力">
     </label>
@@ -5090,7 +5090,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_common_search_form.COMMON, _di_funcs.r);
   root.designInserterPartCodeFuncs['search-form-2'] = (function(r, t){
-    const c = {id:2,name:{ja:"スタンダード",en:"Standard"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"ボタンの色",en:"Button color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[t.RADIO.SHAPE]},codeFunc({colors:e,radios:o}){return{html:`<form action="#" class="search-form-2">
+const c={id:2,name:{ja:"スタンダード",en:"Standard"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"ボタンの色",en:"Button color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[t.RADIO.SHAPE]},codeFunc({colors:e,radios:o}){return{html:`<form action="#" class="search-form-2">
     <label>
         <input type="text" placeholder="キーワードを入力">
     </label>
@@ -5140,7 +5140,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_search_form.COMMON);
   root.designInserterPartCodeFuncs['search-form-1'] = (function(r, o){
-    const d = {id:1,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[o.RADIO.SHAPE]},codeFunc({colors:e,radios:t}){return{html:`<form action="#" class="search-form-1">
+const d={id:1,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE},{legend:{ja:"プレースホルダーの色",en:"Placeholder color"},defaultValue:r.COLOR.BLACK_TEXT_LIGHT}],radios:[o.RADIO.SHAPE]},codeFunc({colors:e,radios:t}){return{html:`<form action="#" class="search-form-1">
     <label>
         <input type="text" placeholder="キーワードを入力">
     </label>
@@ -5189,7 +5189,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_common_search_form.COMMON);
   root.designInserterPartCodeFuncs['search-form-6'] = (function(r, o){
-    const s = {id:6,name:{ja:"Google風",en:"Google style"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BORDER_COLOR,defaultValue:"#dfe1e5"},{legend:{ja:"アイコンの色",en:"Placeholder color"},defaultValue:"#9aa0a6"}]},codeFunc({colors:e}){return{html:`<form action="#" class="search-form-6">
+const s={id:6,name:{ja:"Google風",en:"Google style"},imgFormat:"svg",inputs:{colors:[{legend:r.LEGEND.BORDER_COLOR,defaultValue:"#dfe1e5"},{legend:{ja:"アイコンの色",en:"Placeholder color"},defaultValue:"#9aa0a6"}]},codeFunc({colors:e}){return{html:`<form action="#" class="search-form-6">
     <label>
         <input type="text" aria-label="キーワードを入力">
     </label>
@@ -5225,7 +5225,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['search-form-7'] = (function(t){
-    const l = {id:7,name:{ja:"Yahoo風",en:"Yahoo style"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"ボタン色",en:"Button color"},defaultValue:"#4070ff"},{legend:t.LEGEND.BORDER_COLOR,defaultValue:"#999999"}]},codeFunc({colors:e}){return{html:`<form action="#" class="search-form-7">
+const l={id:7,name:{ja:"Yahoo風",en:"Yahoo style"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"ボタン色",en:"Button color"},defaultValue:"#4070ff"},{legend:t.LEGEND.BORDER_COLOR,defaultValue:"#999999"}]},codeFunc({colors:e}){return{html:`<form action="#" class="search-form-7">
     <label>
         <input type="text" aria-label="キーワードを入力">
     </label>
@@ -5274,7 +5274,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['selectbox-3'] = (function(e, n){
-    const c = {id:3,name:{ja:"スタンダード",en:"Standard"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"枠線の色",en:"Border color"},defaultValue:e.COLOR.SILVER_DARK},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-3">
+const c={id:3,name:{ja:"スタンダード",en:"Standard"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"枠線の色",en:"Border color"},defaultValue:e.COLOR.SILVER_DARK},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-3">
     <select>
         <option>optionの例1</option>
         <option>optionの例2</option>
@@ -5312,7 +5312,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['selectbox-6'] = (function(e, l){
-    const s = {id:6,name:{ja:"矢印2つ",en:"Two arrows"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"枠線の色",en:"Border color"},defaultValue:e.COLOR.SILVER_DARK},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-6">
+const s={id:6,name:{ja:"矢印2つ",en:"Two arrows"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"枠線の色",en:"Border color"},defaultValue:e.COLOR.SILVER_DARK},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-6">
     <select>
         <option>optionの例1</option>
         <option>optionの例2</option>
@@ -5358,7 +5358,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['selectbox-5'] = (function(o, t){
-    const c = {id:5,name:{ja:"下線あり",en:"With underline"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:o.COLOR.SILVER_DARK},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<label class="selectbox-5">
+const c={id:5,name:{ja:"下線あり",en:"With underline"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:o.COLOR.SILVER_DARK},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<label class="selectbox-5">
     <select>
         <option>optionの例1</option>
         <option>optionの例2</option>
@@ -5400,7 +5400,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['selectbox-4'] = (function(e, n){
-    const c = {id:4,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},options:{bgColor:e.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-4">
+const c={id:4,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},options:{bgColor:e.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-4">
     <select>
         <option>optionの例1</option>
         <option>optionの例2</option>
@@ -5439,7 +5439,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['selectbox-1'] = (function(e){
-    const s = {id:1,name:{ja:"フラットデザイン",en:"Flat design"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"矢印の背景色",en:"Arrow background color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:e.COLOR.SILVER}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-1">
+const s={id:1,name:{ja:"フラットデザイン",en:"Flat design"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"矢印の背景色",en:"Arrow background color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:e.COLOR.SILVER}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:o,radios:t}){return{html:`<label class="selectbox-1">
     <select>
         <option>optionの例1</option>
         <option>optionの例2</option>
@@ -5495,7 +5495,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['selectbox-2'] = (function(o){
-    const s = {id:2,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:e,radios:t}){return{html:`<label class="selectbox-2">
+const s={id:2,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]}]},codeFunc({colors:e,radios:t}){return{html:`<label class="selectbox-2">
     <select>
         <option>optionの例1</option>
         <option>optionの例2</option>
@@ -5554,7 +5554,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['breadcrumb-1'] = (function(a, o){
-    const s = {id:1,name:{ja:"矢印",en:"Arrow"},comment:{ja:"シンプルなパンくずリスト。「ホーム」アイコンの有無は任意で選択することが可能です。リンクと分かりやすくするために、ホバーアニメーションを加えるのも良いですね。",en:'A simple breadcrumb trail. You can optionally choose whether or not to include the "Home" icon. It is also a good idea to add a hover animation to make the link easier to understand.'},imgFormat:"svg",inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT},{legend:{ja:"アイコン色",en:"Icon color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:r}){return{html:`<ol class="breadcrumb-001">
+const s={id:1,name:{ja:"矢印",en:"Arrow"},comment:{ja:"シンプルなパンくずリスト。「ホーム」アイコンの有無は任意で選択することが可能です。リンクと分かりやすくするために、ホバーアニメーションを加えるのも良いですね。",en:'A simple breadcrumb trail. You can optionally choose whether or not to include the "Home" icon. It is also a good idea to add a hover animation to make the link easier to understand.'},imgFormat:"svg",inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT},{legend:{ja:"アイコン色",en:"Icon color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:r}){return{html:`<ol class="breadcrumb-001">
     <li><a href="#">ホーム</a></li>
     <li><a href="#">カテゴリー</a></li>
     <li><a href="#">タイトル</a></li>
@@ -5599,7 +5599,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['breadcrumb-5'] = (function(a, r){
-    const d = {id:5,name:{ja:"矢印（塗りつぶし）",en:"Arrow（fill）"},comment:{ja:"矢印を塗りつぶしてみました。よりコンパクトに見せたい場合におすすめです。",en:"I tried filling in the arrow. Recommended if you want to look more compact."},imgFormat:"svg",inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT},{legend:{ja:"アイコン色",en:"Icon color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:l}){return{html:`<ol class="breadcrumb-005">
+const d={id:5,name:{ja:"矢印（塗りつぶし）",en:"Arrow（fill）"},comment:{ja:"矢印を塗りつぶしてみました。よりコンパクトに見せたい場合におすすめです。",en:"I tried filling in the arrow. Recommended if you want to look more compact."},imgFormat:"svg",inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT},{legend:{ja:"アイコン色",en:"Icon color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:l}){return{html:`<ol class="breadcrumb-005">
     <li><a href="#">ホーム</a></li>
     <li><a href="#">カテゴリー</a></li>
     <li><a href="#">タイトル</a></li>
@@ -5643,7 +5643,7 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['breadcrumb-2'] = (function(a, l){
-    const c = {id:2,name:{ja:"スラッシュ",en:"Slash"},imgFormat:"svg",comment:{ja:"区切りをスラッシュにしてみました。「/」という文字をそのまま指定しているので、矢印と比べて若干実装がシンプルになっています。",en:'I tried using a slash as the delimiter. Since the character "/" is specified as is, the implementation is slightly simpler than the arrow.'},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT},{legend:{ja:"アイコン色",en:"Icon color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:i}){return{html:`<ol class="breadcrumb-002">
+const c={id:2,name:{ja:"スラッシュ",en:"Slash"},imgFormat:"svg",comment:{ja:"区切りをスラッシュにしてみました。「/」という文字をそのまま指定しているので、矢印と比べて若干実装がシンプルになっています。",en:'I tried using a slash as the delimiter. Since the character "/" is specified as is, the implementation is slightly simpler than the arrow.'},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT},{legend:{ja:"アイコン色",en:"Icon color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:i}){return{html:`<ol class="breadcrumb-002">
     <li><a href="#">ホーム</a></li>
     <li><a href="#">カテゴリー</a></li>
     <li><a href="#">タイトル</a></li>
@@ -5684,7 +5684,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_funcs.r);
   root.designInserterPartCodeFuncs['breadcrumb-3'] = (function(t, r){
-    const c = {id:3,name:{ja:"灰色背景",en:"Gray background"},comment:{ja:"ダッシュボードのような矢印付きのパンくずリスト。白・黒をテーマカラーとしたサイトにおすすめです。",en:"Breadcrumbs with arrows like a dashboard. Recommended for sites with white and black theme colors."},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:a}){return{html:`<ol class="breadcrumb-003">
+const c={id:3,name:{ja:"灰色背景",en:"Gray background"},comment:{ja:"ダッシュボードのような矢印付きのパンくずリスト。白・黒をテーマカラーとしたサイトにおすすめです。",en:"Breadcrumbs with arrows like a dashboard. Recommended for sites with white and black theme colors."},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:r.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:r.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:a}){return{html:`<ol class="breadcrumb-003">
     <li><a href="#">ホーム</a></li>
     <li><a href="#">カテゴリー</a></li>
     <li><a href="#">タイトル</a></li>
@@ -5744,7 +5744,7 @@ ${o[1]?`
     return function(params){ return c.codeFunc(params); };
   })(_di_funcs.r, _di_consts);
   root.designInserterPartCodeFuncs['breadcrumb-4'] = (function(t){
-    const d = {id:4,name:{ja:"カラフルな背景",en:"Colorful background"},comment:{ja:"背景を単色にすることでより矢印が目立つようにしたパンくずリスト。文字色が白のため、背景はコントラスト強めの色にするのがおすすめです。",en:"A breadcrumb list with a single color background to make the arrows more noticeable. Since the font color is white, it is recommended that the background be a color with strong contrast.。"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.BLUE}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:r}){return{html:`<ol class="breadcrumb-004">
+const d={id:4,name:{ja:"カラフルな背景",en:"Colorful background"},comment:{ja:"背景を単色にすることでより矢印が目立つようにしたパンくずリスト。文字色が白のため、背景はコントラスト強めの色にするのがおすすめです。",en:"A breadcrumb list with a single color background to make the arrows more noticeable. Since the font color is white, it is recommended that the background be a color with strong contrast.。"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.BLUE}],radios:[{legend:{ja:"ホームアイコン",en:"Home icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:r}){return{html:`<ol class="breadcrumb-004">
     <li><a href="#">ホーム</a></li>
     <li><a href="#">カテゴリー</a></li>
     <li><a href="#">タイトル</a></li>
@@ -5804,27 +5804,236 @@ ${o[1]?`
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['textbox-1'] = (function(l){
-    const p = {id:1,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:l.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:l.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({radios:e}){return{html:o(e[0],e[2]),css:r(e[1],e[2])}}};
+const p={id:1,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",inputs:{radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:l.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:l.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({radios:e}){return{html:o(e[0],e[2]),css:r(e[1],e[2])}}};function o(e,t){const a=e?'<input type="text" class="textbox-1" placeholder="テキストボックスの例"/>':'<textarea class="textbox-1" placeholder="テキストエリアの例"></textarea>';return t?`<label>
+    <span class="textbox-1-label">ラベルの例</span>
+    ${a}
+</label>`:a}function r(e,t){return t?`.textbox-1-label,
+.textbox-1 {
+    color: #333;
+}
+
+.textbox-1-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9em;
+}
+
+.textbox-1 {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #969da3;
+    border-radius: ${e};
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-1::placeholder {
+    color: #999;
+}`:`.textbox-1 {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #969da3;
+    border-radius: ${e};
+    color: #333;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-1::placeholder {
+    color: #999;
+}`}
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['textbox-3'] = (function(o){
-    const d = {id:3,name:{ja:"背景色あり",en:"With background color"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#f7f7f7"}],radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:t,radios:e}){return{html:l(e[0],e[2]),css:n(e[1],e[2],t[0])}}};
+const d={id:3,name:{ja:"背景色あり",en:"With background color"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#f7f7f7"}],radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:t,radios:e}){return{html:l(e[0],e[2]),css:n(e[1],e[2],t[0])}}};function l(t,e){const a=t?'<input type="text" class="textbox-3" placeholder="テキストボックスの例"/>':'<textarea class="textbox-3" placeholder="テキストエリアの例"></textarea>';return e?`<label>
+    <span class="textbox-3-label">ラベルの例</span>
+    ${a}
+</label>`:a}function n(t,e,a){return e?`.textbox-3-label,
+.textbox-3 {
+    color: #333;
+}
+
+.textbox-3-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9em;
+}
+
+.textbox-3 {
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: ${t};
+    background: ${a};
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-3::placeholder {
+    color: #999;
+}`:`.textbox-3 {
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: ${t};
+    background: ${a};
+    color: #333;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-3::placeholder {
+    color: #999;
+}`}
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['textbox-2'] = (function(o){
-    const c = {id:2,name:{ja:"枠線 & 背景色あり",en:"With border & background color"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#f7f7f7"}],radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:t,radios:e}){return{html:l(e[0],e[2]),css:r(e[1],e[2],t[0])}}};
+const c={id:2,name:{ja:"枠線 & 背景色あり",en:"With border & background color"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#f7f7f7"}],radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:t,radios:e}){return{html:l(e[0],e[2]),css:r(e[1],e[2],t[0])}}};function l(t,e){const a=t?'<input type="text" class="textbox-2" placeholder="テキストボックスの例"/>':'<textarea class="textbox-2" placeholder="テキストエリアの例"></textarea>';return e?`<label>
+    <span class="textbox-2-label">ラベルの例</span>
+    ${a}
+</label>`:a}function r(t,e,a){return e?`.textbox-2-label,
+.textbox-2 {
+    color: #333;
+}
+
+.textbox-2-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9em;
+}
+
+.textbox-2 {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d2d2d2;
+    border-radius: ${t};
+    background: ${a};
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-2::placeholder {
+    color: #999;
+}`:`.textbox-2 {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d2d2d2;
+    border-radius: ${t};
+    background: ${a};
+    color: #333;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-2::placeholder {
+    color: #999;
+}`}
     return function(params){ return c.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['textbox-4'] = (function(o){
-    const p = {id:4,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",options:{bgColor:o.COLOR.BLACK_DARKMODE},inputs:{radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({radios:e}){return{html:a(e[0],e[2]),css:r(e[1],e[2])}}};
+const p={id:4,name:{ja:"枠線あり",en:"With border"},imgFormat:"svg",options:{bgColor:o.COLOR.BLACK_DARKMODE},inputs:{radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({radios:e}){return{html:a(e[0],e[2]),css:r(e[1],e[2])}}};function a(e,t){const l=e?'<input type="text" class="textbox-4" placeholder="テキストボックスの例"/>':'<textarea class="textbox-4" placeholder="テキストエリアの例"></textarea>';return t?`<label>
+    <span class="textbox-4-label">ラベルの例</span>
+    ${l}
+</label>`:l}function r(e,t){return t?`.textbox-4,
+.textbox-4-label {
+    color: #e5e5e5;
+}
+
+.textbox-4-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9em;
+}
+
+.textbox-4 {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #555;
+    border-radius: ${e};
+    background-color: transparent;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-4:focus{
+    outline: 1px solid #fff;
+}
+
+.textbox-4::placeholder {
+    color: #666;
+}`:`.textbox-4 {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #555;
+    border-radius: ${e};
+    background-color: transparent;
+    color: #e5e5e5;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-4:focus{
+    outline: 1px solid #fff;
+}
+
+.textbox-4::placeholder {
+    color: #666;
+}`}
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['textbox-5'] = (function(o){
-    const s = {id:5,name:{ja:"背景色あり",en:"With background color"},imgFormat:"svg",options:{bgColor:o.COLOR.BLACK_DARKMODE},inputs:{radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({radios:e}){return{html:a(e[0],e[2]),css:n(e[1],e[2])}}};
+const s={id:5,name:{ja:"背景色あり",en:"With background color"},imgFormat:"svg",options:{bgColor:o.COLOR.BLACK_DARKMODE},inputs:{radios:[{legend:{ja:"タグの種類",en:"Tag type"},choices:[{label:{ja:"input",en:"input"},value:!0},{label:{ja:"textarea",en:"textarea"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"ラベル",en:"Label"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({radios:e}){return{html:a(e[0],e[2]),css:n(e[1],e[2])}}};function a(e,t){const l=e?'<input type="text" class="textbox-5" placeholder="テキストボックスの例"/>':'<textarea class="textbox-5" placeholder="テキストエリアの例"></textarea>';return t?`<label>
+    <span class="textbox-5-label">ラベルの例</span>
+    ${l}
+</label>`:l}function n(e,t){return t?`.textbox-5,
+.textbox-5-label {
+    color: #e5e5e5;
+}
+
+.textbox-5-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .9em;
+}
+
+.textbox-5 {
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: ${e};
+    background-color: #24282e;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-5:focus{
+    outline: 1px solid #fff;
+}
+
+.textbox-5::placeholder {
+    color: rgba(255,255,255,.5);
+}`:`.textbox-5 {
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: ${e};
+    background-color: #24282e;
+    color: #e5e5e5;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.textbox-5:focus{
+    outline: 1px solid #fff;
+}
+
+.textbox-5::placeholder {
+    color: rgba(255,255,255,.5);
+}`}
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tooltip-1'] = (function(t){
-    const l = {id:1,name:{ja:"上向き",en:"Upward"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.WHITE}]},codeFunc({colors:o}){return{html:`<div class="tooltip-001">
+const l={id:1,name:{ja:"上向き",en:"Upward"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.WHITE}]},codeFunc({colors:o}){return{html:`<div class="tooltip-001">
     <div>マウスホバーしてください</div>
     <span>ツールチップの内容</span>
 </div>`,css:`.tooltip-001 {
@@ -5871,7 +6080,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tooltip-2'] = (function(t){
-    const l = {id:2,name:{ja:"下向き",en:"Downward"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.WHITE}]},codeFunc({colors:o}){return{html:`<div class="tooltip-002">
+const l={id:2,name:{ja:"下向き",en:"Downward"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.WHITE}]},codeFunc({colors:o}){return{html:`<div class="tooltip-002">
     <div>マウスホバーしてください</div>
     <span>ツールチップの内容</span>
 </div>`,css:`.tooltip-002 {
@@ -5918,7 +6127,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tooltip-3'] = (function(o){
-    const n = {id:3,name:{ja:"左向き",en:"Facing left"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:o.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.WHITE}]},codeFunc({colors:i}){return{html:`<div class="tooltip-003">
+const n={id:3,name:{ja:"左向き",en:"Facing left"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:o.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.WHITE}]},codeFunc({colors:i}){return{html:`<div class="tooltip-003">
     <div>マウスホバーしてください</div>
     <span>ツールチップの内容</span>
 </div>`,css:`.tooltip-003 {
@@ -5965,7 +6174,7 @@ ${o[1]?`
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tooltip-4'] = (function(o){
-    const l = {id:4,name:{ja:"右向き",en:"Facing right"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:o.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.WHITE}]},codeFunc({colors:i}){return{html:`<div class="tooltip-004">
+const l={id:4,name:{ja:"右向き",en:"Facing right"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:o.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.WHITE}]},codeFunc({colors:i}){return{html:`<div class="tooltip-004">
     <div>マウスホバーしてください</div>
     <span>ツールチップの内容</span>
 </div>`,css:`.tooltip-004 {
@@ -6012,7 +6221,7 @@ ${o[1]?`
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tooltip-5'] = (function(i){
-    const s = {id:5,name:{ja:"クエスチョンマーク",en:"Question mark"},inputs:{colors:[{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:i.COLOR.SILVER_DARK},{legend:{ja:"吹き出しの背景色",en:"background color of speech bubble"},defaultValue:i.COLOR.BLACK}],radios:[{legend:{ja:"アイコンの塗りつぶし",en:"Filling icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:o,radios:e}){const t=o[0];return{html:`<div class="tooltip-005">
+const s={id:5,name:{ja:"クエスチョンマーク",en:"Question mark"},inputs:{colors:[{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:i.COLOR.SILVER_DARK},{legend:{ja:"吹き出しの背景色",en:"background color of speech bubble"},defaultValue:i.COLOR.BLACK}],radios:[{legend:{ja:"アイコンの塗りつぶし",en:"Filling icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:o,radios:e}){const t=o[0];return{html:`<div class="tooltip-005">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">${e[0]?`
         <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 15V17H13V15H11ZM13 13.3551C14.4457 12.9248 15.5 11.5855 15.5 10C15.5 8.067 13.933 6.5 12 6.5C10.302 6.5 8.88637 7.70919 8.56731 9.31346L10.5288 9.70577C10.6656 9.01823 11.2723 8.5 12 8.5C12.8284 8.5 13.5 9.17157 13.5 10C13.5 10.8284 12.8284 11.5 12 11.5C11.4477 11.5 11 11.9477 11 12.5V14H13V13.3551Z"
               fill="${t}"></path>`:`
@@ -6066,7 +6275,7 @@ ${o[1]?`
     return function(params){ return s.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['qa-8'] = (function(e){
-    const m = {id:8,name:{ja:"回答に背景色あり",en:"With background color"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:e.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc:({colors:d})=>({html:`<dl class="qa-8">
+const m={id:8,name:{ja:"回答に背景色あり",en:"With background color"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:e.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc:({colors:d})=>({html:`<dl class="qa-8">
     <dt>これはどのようなテンプレートですか？</dt>
     <dd>回答に背景を付けたシンプルなQ&Aリストです。</dd>
     <dt>どのような特徴がありますか？</dt>
@@ -6099,7 +6308,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['qa-6'] = (function(t){
-    const m = {id:6,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:"#d6dde3"},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc:({colors:e})=>({html:`<details class="qa-6">
+const m={id:6,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:"#d6dde3"},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}]},codeFunc:({colors:e})=>({html:`<details class="qa-6">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>下線付きの、アコーディオンとして開閉できるQ&Aリストです。</p>
 </details>
@@ -6174,7 +6383,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['qa-1'] = (function(a){
-    const m = {id:1,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:{ja:"枠線の色",en:"Border color"},defaultValue:"#d6dde3"},{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["5PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:a.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:t})=>({html:`<details class="qa-1">
+const m={id:1,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:{ja:"枠線の色",en:"Border color"},defaultValue:"#d6dde3"},{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["5PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:a.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:t})=>({html:`<details class="qa-1">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>アコーディオンとして開閉できるQ&Aです。コンパクトに見せることができるので、質問の数が多い場合などにおすすめです。</p>
 </details>
@@ -6250,7 +6459,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['qa-7'] = (function(e){
-    const m = {id:7,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},options:{bgColor:e.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:a,radios:o})=>({html:`<details class="qa-7">
+const m={id:7,name:{ja:"白背景 & シャドウ",en:"White background & shadow"},options:{bgColor:e.COLOR.SILVER},inputs:{colors:[{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:e.BORDER_RADIUS["5PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:e.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:a,radios:o})=>({html:`<details class="qa-7">
     <summary>これはどのようなテンプレートですか？</summary>
     <p>白背景にシャドウを付けた、アコーディオンとして開閉できるQ&Aです。</p>
 </details>
@@ -6328,7 +6537,7 @@ ${o[1]?`
     return function(params){ return m.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['quote-1'] = (function(o, a){
-    const c = {id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:o.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:t}){return{html:`<blockquote class="quote-1">
+const c={id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"左線の色",en:"Left line color"},defaultValue:o.COLOR.SILVER},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:t}){return{html:`<blockquote class="quote-1">
     <p>左に線を付けたシンプルな引用ボックスです。</p>
     <p>ここに引用するコンテンツを入れます。ここに引用するコンテンツを入れます。</p>${t[0]?`
     <cite>出典：ここに引用元を入れる</cite>`:""}
@@ -6358,7 +6567,7 @@ ${t[0]?`.quote-1 cite {
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['quote-2'] = (function(t, a, i){
-    const m = {id:2,name:{ja:"かぎ括弧風",en:"Like angle bracket"},inputs:{colors:[{legend:{ja:"かぎ括弧の色",en:"Angle bracket color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:o}){return{html:`<blockquote class="quote-2">
+const m={id:2,name:{ja:"かぎ括弧風",en:"Like angle bracket"},inputs:{colors:[{legend:{ja:"かぎ括弧の色",en:"Angle bracket color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:o}){return{html:`<blockquote class="quote-2">
     <p>かぎ括弧で囲いアイコンを付けた、可愛らしい引用ボックスです。</p>
     <p>ここに引用するコンテンツを入れます。ここに引用するコンテンツを入れます。</p>${o[0]?`
     <cite>出典：ここに引用元を入れる</cite>`:""}
@@ -6411,7 +6620,7 @@ ${o[0]?`.quote-2 cite {
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_funcs.r, _di_funcs.a);
   root.designInserterPartCodeFuncs['quote-3'] = (function(t, a, l){
-    const m = {id:3,name:{ja:"背景あり",en:"With background"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.SILVER},{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:o}){return{html:`<blockquote class="quote-3">
+const m={id:3,name:{ja:"背景あり",en:"With background"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:t.COLOR.SILVER},{legend:{ja:"アイコンの色",en:"Icon color"},defaultValue:t.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:t.COLOR.BLACK_TEXT}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:e,radios:o}){return{html:`<blockquote class="quote-3">
     <p>背景とアイコンを付けた、シンプルかつ分かりやすい引用ボックスです。</p>
     <p>ここに引用するコンテンツを入れます。ここに引用するコンテンツを入れます。</p>${o[0]?`
     <cite>出典：ここに引用元を入れる</cite>`:""}
@@ -6450,7 +6659,7 @@ ${o[0]?`.quote-3 cite {
     return function(params){ return m.codeFunc(params); };
   })(_di_consts, _di_funcs.r, _di_funcs.a);
   root.designInserterPartCodeFuncs['quote-4'] = (function(o){
-    const n = {id:4,name:{ja:"太めの左枠線",en:"Thick left border"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:t,radios:e}){return{html:`<blockquote class="quote-4">
+const n={id:4,name:{ja:"太めの左枠線",en:"Thick left border"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"出典（citeタグ）",en:"Source (cite tag）"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc({colors:t,radios:e}){return{html:`<blockquote class="quote-4">
     <p>左枠線を太くし、アイコンをより際立たせた引用ボックスです。</p>
     <p>ここに引用するコンテンツを入れます。ここに引用するコンテンツを入れます。</p>${e[0]?`
     <cite>出典：ここに引用元を入れる</cite>`:""}
@@ -6488,7 +6697,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['radar-chart-1'] = (function(r, d, e){
-    const v = {id:1,name:{ja:"三角形",en:"Triangle"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-1">
+const v={id:1,name:{ja:"三角形",en:"Triangle"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-1">
     ${e(a[0],t,3)}
     <dl>
         <div>
@@ -6558,7 +6767,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return v.codeFunc(params); };
   })(_di_consts, _di_common_radar_chart.RANGES_ITEM, _di_functions_radar_chart.generateSvg);
   root.designInserterPartCodeFuncs['radar-chart-2'] = (function(r, d, e){
-    const v = {id:2,name:{ja:"五角形",en:"Pentagon"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d},{legend:{ja:"項目4の値",en:"Item-4 value"},...d},{legend:{ja:"項目5の値",en:"Item-5 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-2">
+const v={id:2,name:{ja:"五角形",en:"Pentagon"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d},{legend:{ja:"項目4の値",en:"Item-4 value"},...d},{legend:{ja:"項目5の値",en:"Item-5 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-2">
     ${e(a[0],t,5)}
     <dl>
         <div>
@@ -6648,7 +6857,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return v.codeFunc(params); };
   })(_di_consts, _di_common_radar_chart.RANGES_ITEM, _di_functions_radar_chart.generateSvg);
   root.designInserterPartCodeFuncs['radar-chart-3'] = (function(e, d, r){
-    const s = {id:3,name:{ja:"六角形",en:"Hexagon"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:e.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d},{legend:{ja:"項目4の値",en:"Item-4 value"},...d},{legend:{ja:"項目5の値",en:"Item-5 value"},...d},{legend:{ja:"項目6の値",en:"Item-6 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-3">
+const s={id:3,name:{ja:"六角形",en:"Hexagon"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:e.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d},{legend:{ja:"項目4の値",en:"Item-4 value"},...d},{legend:{ja:"項目5の値",en:"Item-5 value"},...d},{legend:{ja:"項目6の値",en:"Item-6 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-3">
     ${r(a[0],t,6)}
     <dl>
         <div>
@@ -6748,7 +6957,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_radar_chart.RANGES_ITEM, _di_functions_radar_chart.generateSvg);
   root.designInserterPartCodeFuncs['radar-chart-4'] = (function(e, d, r){
-    const s = {id:4,name:{ja:"七角形",en:"Heptagon"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:e.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d},{legend:{ja:"項目4の値",en:"Item-4 value"},...d},{legend:{ja:"項目5の値",en:"Item-5 value"},...d},{legend:{ja:"項目6の値",en:"Item-6 value"},...d},{legend:{ja:"項目7の値",en:"Item-7 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-4">
+const s={id:4,name:{ja:"七角形",en:"Heptagon"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:e.COLOR.BLUE}],ranges:[{legend:{ja:"項目1の値",en:"Item-1 value"},...d},{legend:{ja:"項目2の値",en:"Item-2 value"},...d},{legend:{ja:"項目3の値",en:"Item-3 value"},...d},{legend:{ja:"項目4の値",en:"Item-4 value"},...d},{legend:{ja:"項目5の値",en:"Item-5 value"},...d},{legend:{ja:"項目6の値",en:"Item-6 value"},...d},{legend:{ja:"項目7の値",en:"Item-7 value"},...d}]},codeFunc:({colors:a,ranges:t})=>({html:`<div class="radar-chart-4">
     ${r(a[0],t,7)}
     <dl>
         <div>
@@ -6858,7 +7067,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_radar_chart.RANGES_ITEM, _di_functions_radar_chart.generateSvg);
   root.designInserterPartCodeFuncs['read-more-1'] = (function(o, t){
-    const s = {id:1,name:{ja:"リンク風",en:"Like link"},inputs:{colors:[{legend:{ja:"リンク色",en:"Link color"},defaultValue:o.COLOR.BLUE_LINK},{legend:{ja:"ホバー時のリンク色",en:"Color on hover"},defaultValue:o.COLOR.ORANGE_LINK_HOVER}],radios:[{legend:{ja:"開く時のアニメーション",en:"Animation when opening"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:a})=>({html:`<div class="read-more-1">
+const s={id:1,name:{ja:"リンク風",en:"Like link"},inputs:{colors:[{legend:{ja:"リンク色",en:"Link color"},defaultValue:o.COLOR.BLUE_LINK},{legend:{ja:"ホバー時のリンク色",en:"Color on hover"},defaultValue:o.COLOR.ORANGE_LINK_HOVER}],radios:[{legend:{ja:"開く時のアニメーション",en:"Animation when opening"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:a})=>({html:`<div class="read-more-1">
     <p>
         ${t.sentence}
     </p>
@@ -6934,7 +7143,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_read_more.COMMON);
   root.designInserterPartCodeFuncs['read-more-3'] = (function(a, r){
-    const s = {id:3,name:{ja:"ボタン風",en:"Like button"},inputs:{colors:[{legend:{ja:"ボタン色",en:"Button color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"ボタンの形状",en:"Button shape"},choices:[{label:{ja:"四角",en:"Square"},value:"1px"},{label:{ja:"角丸",en:"Rounded corners"},value:a.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"開く時のアニメーション",en:"Animation when opening"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:o})=>({html:`<div class="read-more-3">
+const s={id:3,name:{ja:"ボタン風",en:"Like button"},inputs:{colors:[{legend:{ja:"ボタン色",en:"Button color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"ボタンの形状",en:"Button shape"},choices:[{label:{ja:"四角",en:"Square"},value:"1px"},{label:{ja:"角丸",en:"Rounded corners"},value:a.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"開く時のアニメーション",en:"Animation when opening"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:o})=>({html:`<div class="read-more-3">
     <p>
         ${r.sentence}
     </p>
@@ -7018,7 +7227,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_common_read_more.COMMON);
   root.designInserterPartCodeFuncs['read-more-2'] = (function(o, a){
-    const p = {id:2,name:{ja:"リンク風",en:"Like link"},inputs:{colors:[{legend:{ja:"リンク色",en:"Link color"},defaultValue:o.COLOR.BLUE_LINK},{legend:{ja:"ホバー時のリンク色",en:"Color on hover"},defaultValue:o.COLOR.ORANGE_LINK_HOVER}]},codeFunc:({colors:e})=>({html:`<div class="read-more-2">
+const p={id:2,name:{ja:"リンク風",en:"Like link"},inputs:{colors:[{legend:{ja:"リンク色",en:"Link color"},defaultValue:o.COLOR.BLUE_LINK},{legend:{ja:"ホバー時のリンク色",en:"Color on hover"},defaultValue:o.COLOR.ORANGE_LINK_HOVER}]},codeFunc:({colors:e})=>({html:`<div class="read-more-2">
     <p>
         ${a.sentence}
     </p>
@@ -7095,7 +7304,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_read_more.COMMON);
   root.designInserterPartCodeFuncs['read-more-4'] = (function(o, r){
-    const c = {id:4,name:{ja:"ボタン風",en:"Like button"},inputs:{colors:[{legend:{ja:"ボタン色",en:"Button color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"ボタンの形状",en:"Button shape"},choices:[{label:{ja:"四角",en:"Square"},value:"1px"},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:a})=>({html:`<div class="read-more-4">
+const c={id:4,name:{ja:"ボタン風",en:"Like button"},inputs:{colors:[{legend:{ja:"ボタン色",en:"Button color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"ボタンの形状",en:"Button shape"},choices:[{label:{ja:"四角",en:"Square"},value:"1px"},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:a})=>({html:`<div class="read-more-4">
     <p>
         ${r.sentence}
     </p>
@@ -7180,7 +7389,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return c.codeFunc(params); };
   })(_di_consts, _di_common_read_more.COMMON);
   root.designInserterPartCodeFuncs['tab-2'] = (function(e){
-    const p = {id:2,name:{ja:"シンプル",en:"Simple"},inputs:{colors:[{legend:{ja:"タブの色",en:"Tab color"},defaultValue:e.COLOR.BLUE}]},codeFunc({colors:a}){return{html:`<div class="tab-2">
+const p={id:2,name:{ja:"シンプル",en:"Simple"},inputs:{colors:[{legend:{ja:"タブの色",en:"Tab color"},defaultValue:e.COLOR.BLUE}]},codeFunc({colors:a}){return{html:`<div class="tab-2">
     <label>
         <input type="radio" name="tab-2" checked>
         タブ1
@@ -7247,7 +7456,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tab-1'] = (function(a, o){
-    const n = {id:1,name:{ja:"付箋風",en:"Like sticky note"},inputs:{colors:[{legend:{ja:"上線の色",en:"Top line color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"タブ文字の色",en:"Tab text color"},defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="tab-1">
+const n={id:1,name:{ja:"付箋風",en:"Like sticky note"},inputs:{colors:[{legend:{ja:"上線の色",en:"Top line color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"タブ文字の色",en:"Tab text color"},defaultValue:a.COLOR.BLACK_TEXT}]},codeFunc({colors:e}){return{html:`<div class="tab-1">
     <label>
         <input type="radio" name="tab-1" checked>
         タブ1
@@ -7318,7 +7527,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return n.codeFunc(params); };
   })(_di_consts, _di_funcs.a);
   root.designInserterPartCodeFuncs['tab-3'] = (function(a){
-    const n = {id:3,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:a.COLOR.SILVER}]},codeFunc({colors:e}){return{html:`<div class="tab-3">
+const n={id:3,name:{ja:"下線あり",en:"With underline"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:a.COLOR.SILVER}]},codeFunc({colors:e}){return{html:`<div class="tab-3">
     <label>
         <input type="radio" name="tab-3" checked>
         タブ1
@@ -7383,7 +7592,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['tab-4'] = (function(a){
-    const r = {id:4,name:{ja:"吹き出し風",en:"Like speech bubble"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:a.COLOR.SILVER}],radios:[{legend:{ja:"タブ文字の太さ",en:"Tab text thickness"},choices:[{label:{ja:"細め",en:"Thin"},value:!1},{label:{ja:"太め",en:"Thick"},value:!0}]}]},codeFunc({colors:e,radios:l}){return{html:`<div class="tab-4">
+const r={id:4,name:{ja:"吹き出し風",en:"Like speech bubble"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:a.COLOR.SILVER}],radios:[{legend:{ja:"タブ文字の太さ",en:"Tab text thickness"},choices:[{label:{ja:"細め",en:"Thin"},value:!1},{label:{ja:"太め",en:"Thick"},value:!0}]}]},codeFunc({colors:e,radios:l}){return{html:`<div class="tab-4">
     <label>
         <input type="radio" name="tab-4" checked>
         タブ1
@@ -7457,7 +7666,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['toggle-button-1'] = (function(){
-    const o = {id:1,name:{ja:"iOS風",en:"Like iOS"},imgFormat:"gif",comment:{ja:"iOSで採用されているトグルボタンを再現してみました。ラベルを置く場合、ユーザーの視線移動を考慮して左側に置くのがおすすめです。",en:"I tried to reproduce the toggle button used in iOS. When placing a label, it is recommended to place it on the left side in consideration of the user's eye movement."},inputs:{colors:[{legend:{ja:"非アクティブ時の色",en:"Inactive color"},defaultValue:"#dddddd"},{legend:{ja:"アクティブ時の色",en:"Active color"},defaultValue:"#4bd865"}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-1">
+const o={id:1,name:{ja:"iOS風",en:"Like iOS"},imgFormat:"gif",comment:{ja:"iOSで採用されているトグルボタンを再現してみました。ラベルを置く場合、ユーザーの視線移動を考慮して左側に置くのがおすすめです。",en:"I tried to reproduce the toggle button used in iOS. When placing a label, it is recommended to place it on the left side in consideration of the user's eye movement."},inputs:{colors:[{legend:{ja:"非アクティブ時の色",en:"Inactive color"},defaultValue:"#dddddd"},{legend:{ja:"アクティブ時の色",en:"Active color"},defaultValue:"#4bd865"}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-1">
     <input type="checkbox"/>
 </label>`,css:`.toggle-button-1 {
     display: inline-block;
@@ -7497,7 +7706,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return o.codeFunc(params); };
   })();
   root.designInserterPartCodeFuncs['toggle-button-2'] = (function(){
-    const o = {id:2,name:{ja:"iOS風（縁あり）",en:"Like iOS（with edges）"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"非アクティブ時の色",en:"Inactive color"},defaultValue:"#dddddd"},{legend:{ja:"アクティブ時の色",en:"Active color"},defaultValue:"#4bd865"}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-2">
+const o={id:2,name:{ja:"iOS風（縁あり）",en:"Like iOS（with edges）"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"非アクティブ時の色",en:"Inactive color"},defaultValue:"#dddddd"},{legend:{ja:"アクティブ時の色",en:"Active color"},defaultValue:"#4bd865"}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-2">
     <input type="checkbox"/>
 </label>`,css:`.toggle-button-2 {
     display: inline-block;
@@ -7539,7 +7748,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return o.codeFunc(params); };
   })();
   root.designInserterPartCodeFuncs['toggle-button-3'] = (function(){
-    const o = {id:3,name:{ja:"iOS風（背景細め）",en:"Like iOS（thin background）"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"非アクティブ時の色",en:"Inactive color"},defaultValue:"#dddddd"},{legend:{ja:"アクティブ時の色",en:"Active color"},defaultValue:"#4bd865"}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-3">
+const o={id:3,name:{ja:"iOS風（背景細め）",en:"Like iOS（thin background）"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"非アクティブ時の色",en:"Inactive color"},defaultValue:"#dddddd"},{legend:{ja:"アクティブ時の色",en:"Active color"},defaultValue:"#4bd865"}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-3">
     <input type="checkbox"/>
 </label>`,css:`.toggle-button-3 {
     display: flex;
@@ -7580,7 +7789,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return o.codeFunc(params); };
   })();
   root.designInserterPartCodeFuncs['toggle-button-4'] = (function(){
-    const o = {id:4,name:{ja:"Yes/No",en:"Yes/No"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"「No」の色",en:"「No」color"},defaultValue:"#ff8d8d"},{legend:{ja:"「Yes」の色",en:"「Yes」color"},defaultValue:"#75bbff"}],radios:[{legend:{ja:"アニメーション",en:"animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-4">
+const o={id:4,name:{ja:"Yes/No",en:"Yes/No"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"「No」の色",en:"「No」color"},defaultValue:"#ff8d8d"},{legend:{ja:"「Yes」の色",en:"「Yes」color"},defaultValue:"#75bbff"}],radios:[{legend:{ja:"アニメーション",en:"animation"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:e,radios:t})=>({html:`<label class="toggle-button-4">
     <input type="checkbox"/>
 </label>`,css:`.toggle-button-4 {
     display: flex;
@@ -7637,7 +7846,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return o.codeFunc(params); };
   })();
   root.designInserterPartCodeFuncs['checkbox-2'] = (function(a){
-    const n = {id:2,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"並びの向き",en:"Direction"},choices:[{label:{ja:"横",en:"Horizontal"},value:!0},{label:{ja:"縦",en:"Vertical"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]},{label:{ja:"円",en:"Circle"},value:a.BORDER_RADIUS.HALF}]}]},codeFunc:({colors:l,radios:e})=>({html:`<fieldset class="checkbox-2">
+const n={id:2,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"並びの向き",en:"Direction"},choices:[{label:{ja:"横",en:"Horizontal"},value:!0},{label:{ja:"縦",en:"Vertical"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]},{label:{ja:"円",en:"Circle"},value:a.BORDER_RADIUS.HALF}]}]},codeFunc:({colors:l,radios:e})=>({html:`<fieldset class="checkbox-2">
     <label>
         <input type="checkbox" name="checkbox-2" checked/>
         radio1
@@ -7692,7 +7901,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['checkbox-1'] = (function(o){
-    const b = {id:1,name:{ja:"背景色あり",en:"With background color"},comment:{ja:"チェック時に背景色ごと変わるチェックボックスです。白いチェックマークを際立たせるために、基調色はコントラストが強めの色にするのがおすすめです。",en:"This is a checkbox whose background color changes when checked. To make the white checkmark stand out, we recommend using a color with a strong contrast as the base color."},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"並びの向き",en:"Direction"},choices:[{label:{ja:"横",en:"Horizontal"},value:!0},{label:{ja:"縦",en:"Vertical"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"円",en:"Circle"},value:o.BORDER_RADIUS.HALF}]}]},codeFunc:({colors:a,radios:e})=>({html:`<fieldset class="checkbox-1">
+const b={id:1,name:{ja:"背景色あり",en:"With background color"},comment:{ja:"チェック時に背景色ごと変わるチェックボックスです。白いチェックマークを際立たせるために、基調色はコントラストが強めの色にするのがおすすめです。",en:"This is a checkbox whose background color changes when checked. To make the white checkmark stand out, we recommend using a color with a strong contrast as the base color."},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"並びの向き",en:"Direction"},choices:[{label:{ja:"横",en:"Horizontal"},value:!0},{label:{ja:"縦",en:"Vertical"},value:!1}]},{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"円",en:"Circle"},value:o.BORDER_RADIUS.HALF}]}]},codeFunc:({colors:a,radios:e})=>({html:`<fieldset class="checkbox-1">
     <label>
         <input type="checkbox" name="checkbox-1" checked/>
         radio1
@@ -7754,7 +7963,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return b.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['checkbox-3'] = (function(o){
-    const i = {id:3,name:{ja:"枠線 & 背景色",en:"Border & background color"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:a})=>({html:`<fieldset class="checkbox-3">
+const i={id:3,name:{ja:"枠線 & 背景色",en:"Border & background color"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:o.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:o.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:a})=>({html:`<fieldset class="checkbox-3">
     <label>
         <input type="radio" name="checkbox-3" checked/>
         radio1
@@ -7816,7 +8025,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return i.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['footer-1'] = (function(c){
-    const r = {id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:c.COLOR.BLUE}],radios:[{legend:{ja:"リストの区切り線",en:"list separator line"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:l,radios:e})=>({html:`<footer class="footer-001">
+const r={id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:c.COLOR.BLUE}],radios:[{legend:{ja:"リストの区切り線",en:"list separator line"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:l,radios:e})=>({html:`<footer class="footer-001">
     <a href="#">
         <!--お好きな画像を指定してください-->
         <svg class="footer-001__logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1722.9 411.2">
@@ -7877,7 +8086,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['footer-2'] = (function(s){
-    const e = {id:2,name:{ja:"SNSリンクあり",en:"With SNS link"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:s.COLOR.BLUE}]},codeFunc:({colors:c})=>({html:`<footer class="footer-2">
+const e={id:2,name:{ja:"SNSリンクあり",en:"With SNS link"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:s.COLOR.BLUE}]},codeFunc:({colors:c})=>({html:`<footer class="footer-2">
     <a href="#">
         <!--お好きな画像を指定してください-->
         <svg class="footer-2__logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1722.9 411.2">
@@ -7967,7 +8176,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return e.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['footer-3'] = (function(o){
-    const r = {id:3,name:{ja:"コーポレート風",en:"Corporate style"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:o.COLOR.WHITE}],radios:[{legend:{ja:"ロゴ下のキャプション",en:"Caption below logo"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},options:{bgColor:o.COLOR.SILVER},codeFunc:({colors:e,radios:l})=>({html:`<footer class="footer-3">
+const r={id:3,name:{ja:"コーポレート風",en:"Corporate style"},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:o.COLOR.WHITE}],radios:[{legend:{ja:"ロゴ下のキャプション",en:"Caption below logo"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},options:{bgColor:o.COLOR.SILVER},codeFunc:({colors:e,radios:l})=>({html:`<footer class="footer-3">
     <div class="footer-3__container">
         <div class="footer-3__head">
             <a href="#">
@@ -8079,7 +8288,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['fusen-1'] = (function(o){
-    const d = {id:1,name:{ja:"単色",en:"Monochromatic"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#a9ceec"},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc:({colors:e})=>({html:'<div class="fusen-1">おしゃれな付箋デザイン</div>',css:`.fusen-1 {
+const d={id:1,name:{ja:"単色",en:"Monochromatic"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#a9ceec"},{legend:{ja:"文字色",en:"Text color"},defaultValue:o.COLOR.BLACK_TEXT}]},codeFunc:({colors:e})=>({html:'<div class="fusen-1">おしゃれな付箋デザイン</div>',css:`.fusen-1 {
     display: inline-block;
     position: relative;
     padding: .5em 1.3em .5em 1em;
@@ -8102,7 +8311,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['fusen-2'] = (function(e){
-    const d = {id:2,name:{ja:"先端色あり",en:"With tip color"},inputs:{colors:[{legend:{ja:"右先端の色",en:"Right tip color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc:({colors:o})=>({html:'<div class="fusen-2">おしゃれな付箋デザイン</div>',css:`.fusen-2 {
+const d={id:2,name:{ja:"先端色あり",en:"With tip color"},inputs:{colors:[{legend:{ja:"右先端の色",en:"Right tip color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"文字色",en:"Text color"},defaultValue:e.COLOR.BLACK_TEXT}]},codeFunc:({colors:o})=>({html:'<div class="fusen-2">おしゃれな付箋デザイン</div>',css:`.fusen-2 {
     display: inline-block;
     position: relative;
     padding: .5em 1em;
@@ -8126,7 +8335,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['fusen-3'] = (function(){
-    const o = {id:3,name:{ja:"単色",en:"Monochromatic"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#a9ceec"}]},codeFunc:({colors:e})=>({html:`<div class="fusen-3">
+const o={id:3,name:{ja:"単色",en:"Monochromatic"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#a9ceec"}]},codeFunc:({colors:e})=>({html:`<div class="fusen-3">
     おしゃれな付箋デザイン
     おしゃれな付箋デザイン
     おしゃれな付箋デザイン
@@ -8157,7 +8366,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return o.codeFunc(params); };
   })();
   root.designInserterPartCodeFuncs['pagination-1'] = (function(i){
-    const p = {id:1,name:{ja:"単色",en:"Monochromatic"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:i.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"正方形",en:"Square"},value:"1px"},{label:{ja:"円",en:"Circle"},value:i.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"「前へ・次へ」ボタン",en:'"Previous/Next" button'},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:e,radios:a})=>({html:`<ol class="pagination-1">
+const p={id:1,name:{ja:"単色",en:"Monochromatic"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:i.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"正方形",en:"Square"},value:"1px"},{label:{ja:"円",en:"Circle"},value:i.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"「前へ・次へ」ボタン",en:'"Previous/Next" button'},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:e,radios:a})=>({html:`<ol class="pagination-1">
     <li class="prev"><a href="#">${a[1]?"前へ":"<"}</a></li>
     <li><a href="#">1</a></li>
     <li class="current"><a href="#">2</a></li>
@@ -8225,7 +8434,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['pagination-2'] = (function(i){
-    const p = {id:2,name:{ja:"灰色背景",en:"Gray background"},inputs:{colors:[{legend:{ja:"文字色",en:"Word color"},defaultValue:i.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"正方形",en:"Square"},value:"1px"},{label:{ja:"円",en:"Circle"},value:i.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"「前へ・次へ」ボタン",en:'"Previous/Next" button'},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:e,radios:a})=>({html:`<ol class="pagination-2">
+const p={id:2,name:{ja:"灰色背景",en:"Gray background"},inputs:{colors:[{legend:{ja:"文字色",en:"Word color"},defaultValue:i.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"正方形",en:"Square"},value:"1px"},{label:{ja:"円",en:"Circle"},value:i.BORDER_RADIUS.ELLIPSE}]},{legend:{ja:"「前へ・次へ」ボタン",en:'"Previous/Next" button'},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:e,radios:a})=>({html:`<ol class="pagination-2">
     <li class="prev"><a href="#">${a[1]?"前へ":"<"}</a></li>
     <li><a href="#">1</a></li>
     <li class="current"><a href="#">2</a></li>
@@ -8293,7 +8502,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['pagination-3'] = (function(i){
-    const p = {id:3,name:{ja:"下線付き",en:"With underline"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:i.COLOR.SILVER},{legend:{ja:"下線（アクティブ）の色",en:"Underline (active) color"},defaultValue:i.COLOR.BLUE}],radios:[{legend:{ja:"「前へ・次へ」ボタン",en:'"Previous/Next" button'},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:a,radios:e})=>({html:`<ol class="pagination-3">
+const p={id:3,name:{ja:"下線付き",en:"With underline"},imgFormat:"svg",inputs:{colors:[{legend:{ja:"下線の色",en:"Underline color"},defaultValue:i.COLOR.SILVER},{legend:{ja:"下線（アクティブ）の色",en:"Underline (active) color"},defaultValue:i.COLOR.BLUE}],radios:[{legend:{ja:"「前へ・次へ」ボタン",en:'"Previous/Next" button'},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}]},codeFunc:({colors:a,radios:e})=>({html:`<ol class="pagination-3">
     <li class="prev"><a href="#">${e[0]?"前へ":"<"}</a></li>
     <li><a href="#">1</a></li>
     <li class="current"><a href="#">2</a></li>
@@ -8356,7 +8565,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return p.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['pie-chart-1'] = (function(i, n){
-    const d = {id:1,name:{ja:"スタンダード",en:"Standard"},comment:{ja:"CSSの「conic-gradient」というプロパティ1つで描ける円グラフ。jsどころからSVGすら使わずに作れるお手軽さが特徴です。",en:'A pie chart that can be drawn with a single CSS property called "conic-gradient". The feature is that it is easy to create without even using SVG from JS.'},inputs:{colors:[{legend:{ja:"グラフの色",en:"Graph color"},defaultValue:i.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:i.COLOR.SILVER}],radios:[{legend:{ja:"割合の表示",en:"rate display"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}],ranges:[{legend:{ja:"割合",en:"rate"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:t,radios:e,ranges:a})=>({html:`<div class="pie-chart-1">${e[0]?`
+const d={id:1,name:{ja:"スタンダード",en:"Standard"},comment:{ja:"CSSの「conic-gradient」というプロパティ1つで描ける円グラフ。jsどころからSVGすら使わずに作れるお手軽さが特徴です。",en:'A pie chart that can be drawn with a single CSS property called "conic-gradient". The feature is that it is easy to create without even using SVG from JS.'},inputs:{colors:[{legend:{ja:"グラフの色",en:"Graph color"},defaultValue:i.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:i.COLOR.SILVER}],radios:[{legend:{ja:"割合の表示",en:"rate display"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}],ranges:[{legend:{ja:"割合",en:"rate"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:t,radios:e,ranges:a})=>({html:`<div class="pie-chart-1">${e[0]?`
     <span>${a[0]}%</span>
 `:""}</div>`,css:`.pie-chart-1 {${e[0]?`
     position: relative;`:""}
@@ -8378,7 +8587,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return d.codeFunc(params); };
   })(_di_consts, _di_functions_pie_chart.getTextPositionStyle);
   root.designInserterPartCodeFuncs['pie-chart-3'] = (function(n){
-    const h = {id:3,name:{ja:"項目×2",en:"2 items"},comment:{ja:"項目を2つ設定できるようにした円グラフ。右に並ぶ凡例のおかげで各項目が分かりやすくなってはいますが、こちらの有無に関してはお好みでどうぞ。",en:"A pie chart that allows you to set two items. The legends on the right make each item easier to understand, but it's up to you to decide whether to include them or not."},inputs:{colors:[{legend:{ja:"項目1の色",en:"Item-1 color"},defaultValue:n.COLOR.BLUE},{legend:{ja:"項目2の色",en:"Item-2 color"},defaultValue:"#5ba9f7"},{legend:{ja:"背景色",en:"Background color"},defaultValue:n.COLOR.SILVER}],radios:[{legend:{ja:"凡例",en:"legend"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}],ranges:[{legend:{ja:"項目1の割合",en:"Rate of item-1"},defaultValue:70,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}},{legend:{ja:"項目2の割合",en:"Rate of item-2"},defaultValue:20,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:e,radios:a,ranges:t})=>{const i=t[0]+t[1];return{html:a[0]?`<div class="pie-chart-3">
+const h={id:3,name:{ja:"項目×2",en:"2 items"},comment:{ja:"項目を2つ設定できるようにした円グラフ。右に並ぶ凡例のおかげで各項目が分かりやすくなってはいますが、こちらの有無に関してはお好みでどうぞ。",en:"A pie chart that allows you to set two items. The legends on the right make each item easier to understand, but it's up to you to decide whether to include them or not."},inputs:{colors:[{legend:{ja:"項目1の色",en:"Item-1 color"},defaultValue:n.COLOR.BLUE},{legend:{ja:"項目2の色",en:"Item-2 color"},defaultValue:"#5ba9f7"},{legend:{ja:"背景色",en:"Background color"},defaultValue:n.COLOR.SILVER}],radios:[{legend:{ja:"凡例",en:"legend"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}],ranges:[{legend:{ja:"項目1の割合",en:"Rate of item-1"},defaultValue:70,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}},{legend:{ja:"項目2の割合",en:"Rate of item-2"},defaultValue:20,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:e,radios:a,ranges:t})=>{const i=t[0]+t[1];return{html:a[0]?`<div class="pie-chart-3">
     <div></div>
     <ol>
         <li><span>項目1</span>${t[0]}%</li>
@@ -8437,7 +8646,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return h.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['pie-chart-2'] = (function(a){
-    const l = {id:2,name:{ja:"スタンダード",en:"Standard"},comment:{ja:"ドーナツのように、真ん中に穴を空けた円グラフ。グラフだけでなくテキストも目立たせたい場合におすすめです。",en:"A pie chart with a hole in the middle, like a donut. Recommended if you want not only the graph but also the text to stand out."},inputs:{colors:[{legend:{ja:"グラフの色",en:"Graph color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:a.COLOR.SILVER}],ranges:[{legend:{ja:"割合",en:"rate"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:e,ranges:t})=>({html:'<div class="pie-chart-2">円グラフの例</div>',css:`.pie-chart-2 {
+const l={id:2,name:{ja:"スタンダード",en:"Standard"},comment:{ja:"ドーナツのように、真ん中に穴を空けた円グラフ。グラフだけでなくテキストも目立たせたい場合におすすめです。",en:"A pie chart with a hole in the middle, like a donut. Recommended if you want not only the graph but also the text to stand out."},inputs:{colors:[{legend:{ja:"グラフの色",en:"Graph color"},defaultValue:a.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:a.COLOR.SILVER}],ranges:[{legend:{ja:"割合",en:"rate"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:e,ranges:t})=>({html:'<div class="pie-chart-2">円グラフの例</div>',css:`.pie-chart-2 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8451,7 +8660,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return l.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['radio-1'] = (function(a){
-    const d = {id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.SILVER}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:a.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]}]},{legend:{ja:"チェック時のアニメーション",en:"Animation when checking"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:o,radios:e})=>({html:`<fieldset class="radio-1">
+const d={id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.SILVER}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:a.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]}]},{legend:{ja:"チェック時のアニメーション",en:"Animation when checking"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:o,radios:e})=>({html:`<fieldset class="radio-1">
     <label>
         <input type="radio" name="radio-1" checked/>
         radio1
@@ -8520,7 +8729,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return d.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['radio-2'] = (function(a){
-    const t = {id:2,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:a.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]}]},{legend:{ja:"チェック時のアニメーション",en:"Animation when checking"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:o,radios:e})=>({html:`<fieldset class="radio-2">
+const t={id:2,name:{ja:"枠線あり",en:"With border"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"円",en:"Circle"},value:a.BORDER_RADIUS.HALF},{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]}]},{legend:{ja:"チェック時のアニメーション",en:"Animation when checking"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]}]},codeFunc:({colors:o,radios:e})=>({html:`<fieldset class="radio-2">
     <label>
         <input type="radio" name="radio-2" checked/>
         radio1
@@ -8594,7 +8803,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return t.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['radio-3'] = (function(a){
-    const n = {id:3,name:{ja:"枠線 & 背景色",en:"Border & background color"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:a.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:o})=>({html:`<fieldset class="radio-3">
+const n={id:3,name:{ja:"枠線 & 背景色",en:"Border & background color"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:a.COLOR.BLUE}],radios:[{legend:{ja:"形状",en:"Shape"},choices:[{label:{ja:"四角",en:"Square"},value:a.BORDER_RADIUS["3PX"]},{label:{ja:"角丸",en:"Rounded corners"},value:a.BORDER_RADIUS.ELLIPSE}]}]},codeFunc:({colors:e,radios:o})=>({html:`<fieldset class="radio-3">
     <label>
         <input type="radio" name="radio-3" checked/>
         radio1
@@ -8658,7 +8867,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return n.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['toc-1'] = (function(a){
-    const r = {id:1,name:{ja:"灰色背景 & 枠線",en:"Gray background & border"},comment:{ja:"とてもシンプルな、由緒正しきデザインの目次です。aタグのスタイルに手を加えないことによって、各見出しがクリック可であることが直感的に伝わりやすくなっています。",en:"This is a table of contents with a very simple and time-honored design. By not changing the style of the tag, it is easy to intuitively convey that each heading is clickable."},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#f7f7f7"}],radios:[{legend:{ja:"開閉機能",en:"Opening/Closing function"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"タイトルのアイコン",en:"Title icon"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"マーカーの種類",en:"Marker type"},choices:[{label:{ja:"数字",en:"Decimal"},value:a.LIST_TYPE.decimal},{label:{ja:"点",en:"Disc"},value:a.LIST_TYPE.disc}]}]},codeFunc:({colors:l,radios:e})=>({html:`<div class="toc-001">
+const r={id:1,name:{ja:"灰色背景 & 枠線",en:"Gray background & border"},comment:{ja:"とてもシンプルな、由緒正しきデザインの目次です。aタグのスタイルに手を加えないことによって、各見出しがクリック可であることが直感的に伝わりやすくなっています。",en:"This is a table of contents with a very simple and time-honored design. By not changing the style of the tag, it is easy to intuitively convey that each heading is clickable."},inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#f7f7f7"}],radios:[{legend:{ja:"開閉機能",en:"Opening/Closing function"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"タイトルのアイコン",en:"Title icon"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"マーカーの種類",en:"Marker type"},choices:[{label:{ja:"数字",en:"Decimal"},value:a.LIST_TYPE.decimal},{label:{ja:"点",en:"Disc"},value:a.LIST_TYPE.disc}]}]},codeFunc:({colors:l,radios:e})=>({html:`<div class="toc-001">
     <div>
         目次${e[0]?`
         <label><input type="checkbox"/></label>`:""}
@@ -8742,7 +8951,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['toc-2'] = (function(o){
-    const r = {id:2,name:{ja:"フラットデザイン & 枠線",en:"Flat design & border"},comment:{ja:"タイトルの背景と枠線の色を統一した、可愛らしい目次です。ぜひご自身のサイトのテーマカラーを基調色として設定してみてください。",en:"This is a cute table of contents with a unified title background and border color. Please try setting your own site's theme color as the base color."},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"開閉機能",en:"Opening/Closing function"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"タイトルのアイコン",en:"Title icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]},{legend:{ja:"マーカーの種類",en:"Marker type"},choices:[{label:{ja:"数字",en:"Decimal"},value:o.LIST_TYPE.decimal},{label:{ja:"点",en:"Disc"},value:o.LIST_TYPE.disc}]}]},codeFunc:({colors:t,radios:e})=>({html:`<div class="toc-002">
+const r={id:2,name:{ja:"フラットデザイン & 枠線",en:"Flat design & border"},comment:{ja:"タイトルの背景と枠線の色を統一した、可愛らしい目次です。ぜひご自身のサイトのテーマカラーを基調色として設定してみてください。",en:"This is a cute table of contents with a unified title background and border color. Please try setting your own site's theme color as the base color."},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:o.COLOR.BLUE}],radios:[{legend:{ja:"開閉機能",en:"Opening/Closing function"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"タイトルのアイコン",en:"Title icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]},{legend:{ja:"マーカーの種類",en:"Marker type"},choices:[{label:{ja:"数字",en:"Decimal"},value:o.LIST_TYPE.decimal},{label:{ja:"点",en:"Disc"},value:o.LIST_TYPE.disc}]}]},codeFunc:({colors:t,radios:e})=>({html:`<div class="toc-002">
     <div>
         目次${e[0]?`
         <label><input type="checkbox"/></label>`:""}
@@ -8842,7 +9051,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['toc-5'] = (function(l){
-    const r = {id:5,name:{ja:"フラットデザイン",en:"Flat design"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:l.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:l.COLOR.SILVER}],radios:[{legend:{ja:"開閉機能",en:"Opening/Closing function"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"タイトルのアイコン",en:"Title icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]},{legend:{ja:"マーカーの種類",en:"Marker type"},choices:[{label:{ja:"数字",en:"Decimal"},value:l.LIST_TYPE.decimal},{label:{ja:"点",en:"Disc"},value:l.LIST_TYPE.disc}]}]},codeFunc:({colors:o,radios:e})=>({html:`<div class="toc-005">
+const r={id:5,name:{ja:"フラットデザイン",en:"Flat design"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:l.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:l.COLOR.SILVER}],radios:[{legend:{ja:"開閉機能",en:"Opening/Closing function"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]},{legend:{ja:"タイトルのアイコン",en:"Title icon"},choices:[{label:{ja:"あり",en:"ON"},value:!0},{label:{ja:"なし",en:"OFF"},value:!1}]},{legend:{ja:"マーカーの種類",en:"Marker type"},choices:[{label:{ja:"数字",en:"Decimal"},value:l.LIST_TYPE.decimal},{label:{ja:"点",en:"Disc"},value:l.LIST_TYPE.disc}]}]},codeFunc:({colors:o,radios:e})=>({html:`<div class="toc-005">
     <div>
         目次${e[0]?`
         <label><input type="checkbox"/></label>`:""}
@@ -8942,7 +9151,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_consts);
   root.designInserterPartCodeFuncs['bar-chart-1'] = (function(r, d, e){
-    const s = {id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}],ranges:[{legend:{ja:"項目1の値",en:"Item 1 value"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:i,radios:a,ranges:t})=>({html:`<dl class="bar-chart-1">
+const s={id:1,name:{ja:"スタンダード",en:"Standard"},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:r.COLOR.BLUE}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}],ranges:[{legend:{ja:"項目1の値",en:"Item 1 value"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:i,radios:a,ranges:t})=>({html:`<dl class="bar-chart-1">
     <div>
         <dt>項目1</dt>
         <dd style="width: ${t[0]}%">${t[0]}%</dd>
@@ -8991,7 +9200,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return s.codeFunc(params); };
   })(_di_consts, _di_functions_bar_chart.get2ndText, _di_functions_bar_chart.get3rdText);
   root.designInserterPartCodeFuncs['bar-chart-2'] = (function(e, i, r){
-    const h = {id:2,name:{ja:"背景色あり",en:"With background color"},inputs:{colors:[{legend:{ja:"バーの色",en:"Bar color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:e.COLOR.SILVER}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}],ranges:[{legend:{ja:"項目1の値",en:"Item 1 value"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:t,radios:d,ranges:a})=>({html:`<dl class="bar-chart-002">
+const h={id:2,name:{ja:"背景色あり",en:"With background color"},inputs:{colors:[{legend:{ja:"バーの色",en:"Bar color"},defaultValue:e.COLOR.BLUE},{legend:{ja:"背景色",en:"Background color"},defaultValue:e.COLOR.SILVER}],radios:[{legend:{ja:"アニメーション",en:"Animation"},choices:[{label:{ja:"なし",en:"OFF"},value:!1},{label:{ja:"あり",en:"ON"},value:!0}]}],ranges:[{legend:{ja:"項目1の値",en:"Item 1 value"},defaultValue:60,min:0,max:100,step:.1,unit:{ja:"%",en:"%"}}]},codeFunc:({colors:t,radios:d,ranges:a})=>({html:`<dl class="bar-chart-002">
     <div>
         <dt>項目1</dt>
         <dd><span style="width: ${a[0]}%">${a[0]}%</span></dd>
@@ -9047,7 +9256,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return h.codeFunc(params); };
   })(_di_consts, _di_functions_bar_chart.get2ndText, _di_functions_bar_chart.get3rdText);
   root.designInserterPartCodeFuncs['modal-1'] = (function(l, a){
-    const r = {id:1,name:{ja:"リンク風",en:"Link style"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"リンクの色",en:"Link color"},defaultValue:a.COLOR.BLUE_LINK},{legend:{ja:"ホバー時の色",en:"Color on hover"},defaultValue:a.COLOR.ORANGE_LINK_HOVER}]},codeFunc:({colors:o})=>({html:`<div class="modal-1__wrap">
+const r={id:1,name:{ja:"リンク風",en:"Link style"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"リンクの色",en:"Link color"},defaultValue:a.COLOR.BLUE_LINK},{legend:{ja:"ホバー時の色",en:"Color on hover"},defaultValue:a.COLOR.ORANGE_LINK_HOVER}]},codeFunc:({colors:o})=>({html:`<div class="modal-1__wrap">
   <input type="radio" id="modal-1__open" class="modal-1__open-input" name="modal-1__trigger"/>
   <label for="modal-1__open"  class="modal-1__open-label">モーダルを開く</label>
   <input type="radio" id="modal-1__close" name="modal-1__trigger"/>
@@ -9176,7 +9385,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return r.codeFunc(params); };
   })(_di_common_modal.COMMON, _di_consts);
   root.designInserterPartCodeFuncs['modal-2'] = (function(a, e){
-    const p = {id:2,name:{ja:"ボタン風",en:"Button style"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#2589d0"},{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.WHITE}]},codeFunc:({colors:o})=>({html:`<div class="modal-2__wrap">
+const p={id:2,name:{ja:"ボタン風",en:"Button style"},imgFormat:"gif",inputs:{colors:[{legend:{ja:"背景色",en:"Background color"},defaultValue:"#2589d0"},{legend:{ja:"文字色",en:"Text color"},defaultValue:a.COLOR.WHITE}]},codeFunc:({colors:o})=>({html:`<div class="modal-2__wrap">
     <input type="radio" id="modal-2__open" class="modal-2__open-input" name="modal-2__trigger"/>
     <label for="modal-2__open" class="modal-2__open-label">モーダルを開く</label>
     <input type="radio" id="modal-2__close" name="modal-2__trigger"/>
@@ -9311,7 +9520,7 @@ ${e[0]?`.quote-4 cite {
     return function(params){ return p.codeFunc(params); };
   })(_di_consts, _di_common_modal.COMMON);
   root.designInserterPartCodeFuncs['timeline-3'] = (function(i){
-    const s = {id:3,name:{ja:"ステップバー",en:"Step bar"},comment:{ja:"当サイトでも使用している、ナビゲーションとして設置するのに適したタイムライン。ユーザー登録や商品購入などのフローを分かりやすく可視化することができます。ちなみにアクティブ化するには、現在のステップの項目に「current」クラスを、それ以前の項目に「prev」を付けてあげる必要があります。",en:'A timeline suitable for setting up as a navigation, which is also used on this site. You can easily visualize the flow of user registration, product purchase, etc. By the way, to activate it, you need to add "current" class to the item of the current step and "prev" to the previous item.'},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:i.COLOR.BLUE}]},codeFunc:({colors:e})=>({html:`<ol class="timeline-003">
+const s={id:3,name:{ja:"ステップバー",en:"Step bar"},comment:{ja:"当サイトでも使用している、ナビゲーションとして設置するのに適したタイムライン。ユーザー登録や商品購入などのフローを分かりやすく可視化することができます。ちなみにアクティブ化するには、現在のステップの項目に「current」クラスを、それ以前の項目に「prev」を付けてあげる必要があります。",en:'A timeline suitable for setting up as a navigation, which is also used on this site. You can easily visualize the flow of user registration, product purchase, etc. By the way, to activate it, you need to add "current" class to the item of the current step and "prev" to the previous item.'},inputs:{colors:[{legend:{ja:"基調色",en:"Base color"},defaultValue:i.COLOR.BLUE}]},codeFunc:({colors:e})=>({html:`<ol class="timeline-003">
     <li class="prev">step1</li>
     <li class="prev">step2</li>
     <li class="current">step3</li>
