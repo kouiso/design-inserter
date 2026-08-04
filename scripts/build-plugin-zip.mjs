@@ -192,11 +192,7 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
   }
 }
 
-/**
- * カタログが参照するプラグイン相対のプレビューパスを集める。
- * CSS Stock は parts[].previewImage、Template Party は parts[].previewImage と templates[].thumb。
- * 絶対 URL や空文字は配布物の中身と対応せんので落とす（誤検知でリリースを止めんため）。
- */
+// 絶対 URL や空文字は配布物の中身と対応せんので落とす（誤検知でリリースを止めんため）。
 export function collectPreviewReferences(catalog) {
   if (catalog === null || typeof catalog !== 'object') {
     return [];
