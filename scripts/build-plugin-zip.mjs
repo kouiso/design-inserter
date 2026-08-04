@@ -11,10 +11,8 @@ const pluginDir = path.join(root, 'wp-content/plugins', pluginSlug);
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const distDir = path.join(root, 'dist');
 
-/** git-crypt v0 が暗号文の先頭に置く 10 バイトの署名。 */
 export const GIT_CRYPT_MAGIC = Buffer.from([0x00, 0x47, 0x49, 0x54, 0x43, 0x52, 0x59, 0x50, 0x54, 0x00]);
 
-/** Template Party カタログ: プラグイン相対パスと、中に必ず配列で入っとるべきキー。 */
 export const TEMPLATE_PARTY_CATALOGS = [
   { relative: 'data/template-party-parts.json', key: 'parts' },
   { relative: 'data/template-party-templates.json', key: 'templates' },

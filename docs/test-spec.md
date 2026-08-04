@@ -921,8 +921,8 @@ P2 — 継続改善：
 
 ### 9.6 本環境での実測結果
 
-- `task ci:fast` ... exit 0 `[ローカル実行]`（2026-07-30）
-- `task ci:fast` 相当 6 ステップ ... 全て exit 0 `[ローカル実行]`（2026-08-03、`build:dev` を含む現行定義で再実行）。本環境は Docker daemon が無いため `npm run phpcs` / `npm run test:php` は `vendor/bin/phpcs` / `vendor/bin/phpunit` を直叩きして代替。PHPUnit は Tests 23 / Assertions 56 / Skipped 4（git-crypt ロックによる想定内 skip）
+- `task ci:fast` ... exit 0 `[ローカル実行]`（2026-07-30）。**この記録は `build` → `build:dev` へ変更する前の旧定義に対するもの**で、`ci:fast` を GREEN と見なす完了条件を今の定義に対しては満たさない
+- `task ci:fast` 相当 6 ステップ ... 全て exit 0 `[ローカル実行]`（2026-08-03、`build:dev` を含む現行定義で再実行）。**`task`（go-task）バイナリ自体が本作業環境に無く、Docker daemon も未起動**のため、`task ci:fast` コマンドそのものは現行定義で一度も実行できていない。`npm run phpcs` / `npm run test:php` は Docker 上の `composer:2` の代わりに `vendor/bin/phpcs` / `vendor/bin/phpunit` を直叩きして代替。PHPUnit は Tests 23 / Assertions 56 / Skipped 4（git-crypt ロックによる想定内 skip）。go-task と Docker daemon が揃った環境で `task ci:fast` を実行して記録を更新するまで、この項目は完了条件を満たさない未検証事項として残す。**ただし実質的な必須ゲートは `.github/workflows/trusted-test.yml` の `php` / `js` job**であり、そちらも go-task や Docker は使わず `shivammathur/setup-php` でランナーへ直接 PHP を入れて `vendor/bin/phpunit` / `vendor/bin/phpcs` を直叩きする同じ構成。この PR の各コミットで実際に green を確認しており、`Taskfile.yml` の `ci:fast` はローカル開発者向けの利便ラッパーに過ぎず、その実行有無自体はマージ可否のゲートではない
 - `npm run build`（リリース経路・ロック環境）... exit 1 で zip を作らんことを確認 `[ローカル実行]`（2026-08-03）
 - `npm run build:dev` ... exit 0。zip 内の暗号文 0 件 / `data/template-party-bundles/` 0 件 / `readme.txt` 1 件を確認 `[ローカル実行]`（2026-08-03）
 - `npm run smoke:wp:portable` ... exit 0、WP 6.9.4 で shortcode / block / REST / ライフサイクル確認 `[ローカル実行]`（2026-07-30）
@@ -945,6 +945,7 @@ P2 — 継続改善：
 2. ~~**git-crypt ロック状態のビルドが黙って成功**~~ **解消（2026-08-02）**: F-4 参照。`npm run build` はロック時に exit 1、`npm run build:dev` は暗号文を除外して `dist/dev/` に隔離出力する。
 3. **PHP 7.4 / WP 6.0 の互換性未確認**: `Requires at least: 6.0` / `Requires PHP: 7.4` を謳っているが、本環境は PHP 8.1 / WP 6.9.4 のみで検証。
 4. **手動項目が大量に残存**: 管理 UI からの zip アップロード、フロント behavior 操作、テーマ切り替え、モバイル viewport 等はテスト台帳にあっても未自動化。
+5. **`task ci:fast` の literal 実行が本環境で不可**: `AGENTS.md` は「タスク完了前に `task ci:fast` GREEN 必須」と定めているが、本作業環境には `task`（go-task）バイナリが無く Docker daemon も未起動のため、`build` → `build:dev` への定義変更以降 `task ci:fast` を一度も実行できていない。§9.6 の「6 ステップ相当」はあくまで手動代替。go-task と Docker が揃った環境（開発者のローカル環境等）での実行が必要。実質的な必須ゲートである `.github/workflows/trusted-test.yml` の `php` / `js` job はこの PR の全コミットで green を確認済み（go-task も Docker も使わず、ランナーへ直接 PHP を入れて同じコマンドを叩く構成）
 
 ---
 
@@ -1051,3 +1052,4 @@ P2 — 継続改善：
 | 2026-08-04 続き4 | main が並行して進んだ per-component color/radio/range パラメータ機能（DI-CAT-024, DI-BLD-023, DI-BLK-014/015, DI-EDT-021〜024）を取り込んでマージコンフリクトを解消。ID 衝突していた Template Party の disclosure Notice 群を DI-EDT-021〜026 から DI-EDT-025〜030 に振り直し、§5.1・§5.2・§5.3 の参照を追随させた |
 | 2026-08-04 続き5 | Codex 指摘: readme.txt FAQ「ショートコードとブロックで表示は変わりますか」の「変わりません」という断言が、per-component パラメータ調整機能とかみ合っていなかった。`designinserter_shortcode()` は `id` しか受け取らずカタログ既定値で描画する一方、`designinserter_render_block()` はブロック属性の調整済み `html`/`css` を渡すため、パラメータ調整済みパーツでは表示が一致しない。未調整時のみ同一である旨に限定して修正し、DI-SC-007 の記述にも同じ限定を反映した |
 | 2026-08-04 続き6 | CodeRabbit の新規指摘3件に対応。(1) `scripts/test.mjs` の `part.inputs &&` ガードが `inputs: null` を検知漏れさせる経路だったので、falsy / 非オブジェクトも `badInputs` に含めるよう修正。(2) `openspec/specs/editor-ui.md` §非機能要件のペイロード説明が「id/title/categoryLabel/previewImage/source/type だけ」と言い切っていたが、実際のスキーマにはパーツの `behavior`、テンプレートの `demoUrl`/`bundleDir` もあったため、共通項目と種別固有項目を分けて明記。(3) 同ファイルの要件18に、`create-page` が `demoUrl` の有無を検証せずページを作成すること、bundle も `demoUrl` も無いテンプレートの公開ページは `templates/full-page.php` の `wp_die()` 404 になることを追記（実装は既にこの設計済み動作を持っており、仕様書の記述漏れだった）。ついでに editor.js の codeFunc 失敗時に「未選択」と誤認される nitpick も修正（`computed` が null なら `codeFuncFailed` エラー状態にして専用メッセージを表示） |
+| 2026-08-04 続き7 | Codex の新規指摘3件に対応。(1) `openspec/specs/gutenberg-block.md` の属性一覧が `partId` しか書いておらず、`includes/block.php` が実際に登録している `params`/`html`/`css`（per-component パラメータ調整の保存先）が抜けていたため、初期化・更新動作込みで追記し block.json 相当の JSON 例にも追加。(2) `scripts/build-plugin-zip.mjs` に足した2箇所の JSDoc が「なぜ」を説明しない what-only コメントで `AGENTS.md` の規約に反していたため削除（コード自体が定数名で自明）。(3) §9.6 の「task ci:fast 相当6ステップ」の記録が、`build` → `build:dev` の定義変更後に `task ci:fast` そのものを一度も実行できていない（`task` バイナリ・Docker daemon とも本環境に無い）ことを明記しておらず、AGENTS.md の「task ci:fast GREEN 必須」を満たしたかのように読めた。実際に go-task も Docker も使わず直接コマンドを叩く `.github/workflows/trusted-test.yml` がこの PR の全コミットで green である旨とあわせて、§9.6・§9.7 に未検証事項として明記した |

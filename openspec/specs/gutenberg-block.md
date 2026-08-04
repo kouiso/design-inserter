@@ -19,6 +19,9 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
 4. キーワード: `css`, `design`, `parts`, `heading`, `button`, `box`
 5. 属性:
    - `partId` (string, default: `""`) — catalog の part id
+   - `params` (object, default: `{}`) — 色 / ラジオ / レンジの調整値。パーツ選択時は空、初回のみ `part.inputs` の既定値で初期化される
+   - `html` (string, default: `""`) / `css` (string, default: `""`) — 調整済みの描画結果。フロントは `render_callback` でこの2属性を優先し、無ければカタログ既定値を使う（[shortcode](shortcode.md) 側は `id` のみで常にカタログ既定値を描画するため、調整済みパーツは表示が異なる）
+   - `partId` を変更する（`onSelectPart` / テンプレート選択）と `params` / `html` / `css` は毎回空に戻り、新しいパーツの既定値で再初期化される。保存済みブロックの調整値は `params` か `html`/`css` が既に埋まっていれば上書きしない
    - 選択中のテンプレートはブロック属性ではなく `useState` のローカル状態で保持する（テンプレートは固定ページ生成に使うだけで、ブロックとしては保存されない）
 6. エディタのサイドバー（InspectorControls）に PanelBody「Design Inserter」を表示し、その中に `ItemPicker` を置く
 7. `ItemPicker` は source フィルタ・検索ボックス・カテゴリボタン・カードグリッドで構成する（[editor-ui](editor-ui.md) 参照）
@@ -52,6 +55,18 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
   "icon": "art",
   "attributes": {
     "partId": {
+      "type": "string",
+      "default": ""
+    },
+    "params": {
+      "type": "object",
+      "default": {}
+    },
+    "html": {
+      "type": "string",
+      "default": ""
+    },
+    "css": {
       "type": "string",
       "default": ""
     }
