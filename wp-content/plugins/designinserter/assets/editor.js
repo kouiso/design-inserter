@@ -402,7 +402,12 @@
 			if ( window.designInserterPartCodeFuncs && window.designInserterPartCodeFuncs[ partId ] ) {
 				var computed = computePartContent( partId, params );
 				setLoading( false );
-				setContent( computed );
+				if ( computed ) {
+					setContent( computed );
+				} else {
+					// codeFunc 失敗を「未選択」と区別できるようにする（さもないと無反応に見える）。
+					setError( { status: null, codeFuncFailed: true } );
+				}
 				return;
 			}
 
@@ -441,7 +446,9 @@
 		if ( errorVal ) {
 			var label = errorVal.status
 				? __( 'プレビュー取得に失敗しました', 'designinserter' ) + ' (HTTP ' + errorVal.status + ')'
-				: __( 'プレビュー取得に失敗しました (ネットワーク or サーバ応答なし)', 'designinserter' );
+				: errorVal.codeFuncFailed
+					? __( 'プレビューの生成に失敗しました', 'designinserter' )
+					: __( 'プレビュー取得に失敗しました (ネットワーク or サーバ応答なし)', 'designinserter' );
 			return el( Notice, { status: 'error', isDismissible: false },
 				el( 'div', {},
 					el( 'p', { style: { margin: '0 0 8px 0' } }, label ),

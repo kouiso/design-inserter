@@ -54,7 +54,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 
 16. `template.demoUrl` を `src` に持つ `iframe.di-preview__iframe`（高さ 480px）を描画する。`demoUrl` が無ければ「プレビューURLがありません」
 17. ボタンの上に常時 `Notice`（status: info）「このテンプレートで固定ページを作成すると、公開ページはテンプレートのデモサイトへのリンクになります（テンプレート本体の HTML はこのプラグインに同梱されていません）。」を表示する。テンプレート本体（`data/template-party-bundles/`）は ToS 上再配布不可で配布 zip に常に含まれず、配布 zip の購入者環境では公開ページは `demoUrl` へリダイレクトされる（`templates/full-page.php`）ため、作成前に必ず案内する。ローカル bundle が存在する復号済み開発環境ではこの限りでない
-18. 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page`（`X-WP-Nonce` 付き）を呼ぶ
+18. 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page`（`X-WP-Nonce` 付き）を呼ぶ。`create-page` は `demoUrl` の有無を検証せずページを作成する。bundle も `demoUrl` も無いテンプレートを公開すると、公開ページは `wp_die()` による 404（「Template bundle not found. Please run the scraper to download template files.」）になる（`templates/full-page.php`）
 19. 成功時は `div.di-create-page-result` に `Notice`（success）「固定ページを作成しました」と「ページを編集する →」リンクを出す。失敗時は `Notice`（error）
 
 ### InsertConfirmNotice
@@ -72,7 +72,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
    - **`allow-same-origin` は意図的に付与しない**。iframe を不透明オリジンに閉じ込めるため
    - カタログ HTML に `dangerouslySetInnerHTML` を使わない。改ざんされたカタログ JSON が編集画面で実行されるのを防ぐ
    - Template Party プレビューだけは外部サイトを読むため `sandbox="allow-scripts allow-same-origin"`
-5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限（id / title / categoryLabel / previewImage / source / type）だけで、実体は REST で 1 件ずつ取る
+5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限の metadata で、実体は REST で 1 件ずつ取る。共通項目は id / title / categoryLabel / previewImage / source / type、パーツには `behavior`、テンプレートには `demoUrl` / `bundleDir` を追加で含める
 6. **権限**: `/parts/{id}` は `edit_posts`、`/templates/{id}/create-page` は `edit_pages` を要求する。プレビュー取得には `X-WP-Nonce` を付ける
 7. **国際化**: `__()` 関数と `designinserter` テキストドメインを使用する（UI 文言には直書きの日本語も混在する）
 8. **CSS スコープ**: パーツプレビューは iframe 内なので、パーツ CSS が編集画面へ漏れない

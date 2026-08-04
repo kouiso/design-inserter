@@ -168,10 +168,11 @@ function testCatalog() {
     }
 
     if (
-      part.inputs &&
-      (!Object.hasOwn(part.inputs, 'colors') ||
-        !Object.hasOwn(part.inputs, 'radios') ||
-        !Object.hasOwn(part.inputs, 'ranges'))
+      !part.inputs ||
+      typeof part.inputs !== 'object' ||
+      !Object.hasOwn(part.inputs, 'colors') ||
+      !Object.hasOwn(part.inputs, 'radios') ||
+      !Object.hasOwn(part.inputs, 'ranges')
     ) {
       badInputs.push(part.id);
     }
