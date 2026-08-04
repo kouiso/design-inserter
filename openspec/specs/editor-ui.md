@@ -136,11 +136,11 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 - [ ] 検索結果 0 件で「該当するデザインがありません」が表示されること（DI-EDT-014）
 - [ ] ページリロード後も `partId` 属性が保持されること（DI-BLK-011）
 - [ ] JavaScript エラーがコンソールに出力されないこと（DI-FE-010）
-- [ ] `TemplatePreview` が `demoUrl` を iframe に描画すること。無ければ「プレビューURLがありません」が表示されること（DI-EDT-021）
-- [ ] 固定ページ作成前に、公開ページがデモサイトへのリンクになる旨の `Notice` が常時表示されること（DI-EDT-022）
-- [ ] 「このテンプレで固定ページを作成」ボタンから create-page REST が呼ばれること（DI-EDT-023）
-- [ ] create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` が表示されること（DI-EDT-024）
-- [ ] パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示されること（DI-EDT-025）
+- [ ] `TemplatePreview` が `demoUrl` を iframe に描画すること。無ければ「プレビューURLがありません」が表示されること（DI-EDT-025）
+- [ ] 固定ページ作成前に、公開ページがデモサイトへのリンクになる旨の `Notice` が常時表示されること（DI-EDT-026）
+- [ ] 「このテンプレで固定ページを作成」ボタンから create-page REST が呼ばれること（DI-EDT-027）
+- [ ] create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` が表示されること（DI-EDT-028）
+- [ ] パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示されること（DI-EDT-029）
 
 ## 将来拡張（未実装）
 

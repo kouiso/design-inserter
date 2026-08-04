@@ -27,6 +27,7 @@
   },
   "license": "GPL-2.0-or-later",
   "devDependencies": {
-    "@playwright/test": "1.60.0"
+    "@playwright/test": "1.60.0",
+    "acorn": "^8.18.0"
   }
 }

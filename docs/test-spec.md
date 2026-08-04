@@ -128,6 +128,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-CAT-021 | behavior 件数の内訳 | scrollTop 1 / tooltip 5 / readMore 4 / tabs 4 / modal 2（計 16） | 同上 | 自動済 2026-07-28 |
 | DI-CAT-022 | Template Party パーツが 138 件 | 138 | `DesignInserterCoreTest::test_catalog_template_party_parts_have_correct_source` | 自動済 2026-07-30 [ローカル実行] |
 | DI-CAT-023 | Template Party テンプレートが 1017 件 | 1017 | `DesignInserterCoreTest::test_get_templates_returns_all_template_party_templates` | 自動済 2026-07-30 [ローカル実行] |
+| DI-CAT-024 | 全 parts に `inputs`（`colors` / `radios` / `ranges`）が定義される | 欠損 0、構造 `{ colors: [], radios: [], ranges: [] }` | `scripts/test.mjs` `testCatalog()` | 自動済 2026-07-30 |
 
 ### 4.2 DI-DAT — データ層
 
@@ -205,6 +206,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLK-011 | リロード後も `partId` 属性が保持される | 選択維持 | 実機: エディタ再読込 | 手動要 |
 | DI-BLK-012 | プラグイン無効化後、保存済み投稿がエラーにならん | 500 なし・出力が消える | 実機: `wp plugin deactivate` → フロント表示 | 手動要 |
 | DI-BLK-013 | 再有効化で出力が復活する | 復活 | 実機: `wp plugin activate` | 手動要 |
+| DI-BLK-014 | ブロック属性に `params` / `html` / `css` が追加される | `attributes` 登録済み | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-30 |
+| DI-BLK-015 | 保存時に `html` / `css` が属性として永続化される | `serialize( { html, css } )` | `assets/editor.js` `save` | 自動済 2026-07-30 |
 
 ### 4.6 DI-EDT — エディタ UI
 
@@ -230,12 +233,16 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-018 | REST fetch に `X-WP-Nonce` が付く | ヘッダ有り | 実機: ネットワーク監視 | 手動要 |
 | DI-EDT-019 | カードの `aria-pressed` / `aria-label` が選択状態と同期する | 同期 | 実機: a11y スナップショット | 手動要 |
 | DI-EDT-020 | 管理画面 9 色テーマで選択状態が視認できる | コントラスト確保 | 実機: 各テーマ | 手動要 |
-| DI-EDT-021 | `TemplatePreview` が `template.demoUrl` を `src` に持つ iframe を描画する。無ければ「プレビューURLがありません」 | iframe 表示 or 代替テキスト | `tests/e2e/template-party.spec.mjs`（`.di-preview--template iframe` の src 検証） | 環境制約NG（Docker + git-crypt） |
-| DI-EDT-022 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `scripts/test.mjs` `testEditorAssetContract()`（告知文言の存在チェック） | 自動済 2026-08-04 [ローカル実行] |
-| DI-EDT-023 | 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page` を呼ぶ | REST 呼び出し | 実機: ボタンクリック → ネットワーク監視 | 手動要 |
-| DI-EDT-024 | create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` を表示する | 状態遷移が UI に反映 | 実機 | 手動要 |
-| DI-EDT-025 | パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示される | Notice + リンク | 実機 | 手動要 |
-| DI-EDT-026 | 投稿状態の変化に `useSelect` で追従し、無い環境では一度きり読み取りにフォールバックする | 購読 or フォールバック動作 | コードレビュー | 手動要 |
+| DI-EDT-021 | プレビュー下に「パラメータ調整」パネルが出る | `.di-params` 表示 | 実機: heading-1 選択 | 実機済 2026-07-30 |
+| DI-EDT-022 | 色指定がプレビューに即反映される | 色 input 変更で iframe 内の要素が変化 | 実機: 左線の色を変更 | 実機済 2026-07-30 |
+| DI-EDT-023 | パーツ切替時にパラメータがそのパーツの既定値に戻る | `params` 属性リセット | `assets/editor.js` `onSelectPart` | 自動済 2026-07-30 |
+| DI-EDT-024 | レンジ / ラジオ指定がプレビューに反映される | 数値・選択切替で変化 | 実機: bar-chart-1 / list-1 / textbox-1 の range / radio を変更して iframe プレビューが変化 | 実機済 2026-07-30 |
+| DI-EDT-025 | `TemplatePreview` が `template.demoUrl` を `src` に持つ iframe を描画する。無ければ「プレビューURLがありません」 | iframe 表示 or 代替テキスト | `tests/e2e/template-party.spec.mjs`（`.di-preview--template iframe` の src 検証） | 環境制約NG（Docker + git-crypt） |
+| DI-EDT-026 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `scripts/test.mjs` `testEditorAssetContract()`（告知文言の存在チェック） | 自動済 2026-08-04 [ローカル実行] |
+| DI-EDT-027 | 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page` を呼ぶ | REST 呼び出し | 実機: ボタンクリック → ネットワーク監視 | 手動要 |
+| DI-EDT-028 | create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` を表示する | 状態遷移が UI に反映 | 実機 | 手動要 |
+| DI-EDT-029 | パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示される | Notice + リンク | 実機 | 手動要 |
+| DI-EDT-030 | 投稿状態の変化に `useSelect` で追従し、無い環境では一度きり読み取りにフォールバックする | 購読 or フォールバック動作 | コードレビュー | 手動要 |
 
 ### 4.7 DI-SC — ショートコード
 
@@ -374,6 +381,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-020 | zip を管理 UI からアップロードして有効化できる | 有効化成功 | 実機: `plugin-install.php` | 手動要 |
 | DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | `npm run smoke:wp:portable` | 手動要（現状の証跡は dist zip を展開しての `plugin activate` 成功のみ。`wp plugin install --activate` の zip インストール・展開・有効化という直接経路は未実施。直接経路を実測したら `自動済` に戻す） |
 | DI-BLD-022 | git-crypt ロック環境でのビルドを検出して失敗する | 明示エラー・exit 1 | `scripts/build-plugin-zip.mjs` `assertCatalogsUsable()` + `tests/build-plugin-zip.test.mjs` | 自動済 2026-08-02 [ローカル実行] |
+| DI-BLD-023 | `part-code-funcs.js` が 222 パーツ分登録される | `window.designInserterPartCodeFuncs` に全 id 存在 | `scripts/test.mjs` `testPartCodeFuncs()` | 自動済 2026-07-30 |
 
 ### 4.14 DI-CMP — 互換性・ライフサイクル
 
@@ -455,11 +463,11 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | editor-ui | 未選択で案内メッセージ | DI-EDT-014 | 手動要 |
 | editor-ui | リロード後も選択状態を保持 | DI-BLK-011 | 手動要 |
 | editor-ui | JS エラーがコンソールに出ん | DI-EDT-016 | 自動済 |
-| editor-ui | TemplatePreview が demoUrl を iframe に描画（無ければ代替テキスト） | DI-EDT-021 | 環境制約NG |
-| editor-ui | 固定ページ作成前にデモリンク挙動を明示する Notice を表示 | DI-EDT-022 | 自動済 2026-08-04 [ローカル実行] |
-| editor-ui | create-page ボタンから REST を呼ぶ | DI-EDT-023 | 手動要 |
-| editor-ui | create-page 成功/失敗時に Notice を出す | DI-EDT-024 | 手動要 |
-| editor-ui | 選択直後に InsertConfirmNotice を出す | DI-EDT-025 | 手動要 |
+| editor-ui | TemplatePreview が demoUrl を iframe に描画（無ければ代替テキスト） | DI-EDT-025 | 環境制約NG |
+| editor-ui | 固定ページ作成前にデモリンク挙動を明示する Notice を表示 | DI-EDT-026 | 自動済 2026-08-04 [ローカル実行] |
+| editor-ui | create-page ボタンから REST を呼ぶ | DI-EDT-027 | 手動要 |
+| editor-ui | create-page 成功/失敗時に Notice を出す | DI-EDT-028 | 手動要 |
+| editor-ui | 選択直後に InsertConfirmNotice を出す | DI-EDT-029 | 手動要 |
 | gutenberg-block | 挿入パネルに Design Inserter | DI-BLK-009 | 自動済 |
 | gutenberg-block | 検索付きビジュアル picker に 360 件 + テンプレ 1017 件 | DI-EDT-002 | 自動済 2026-08-02 [ローカル実行] |
 | gutenberg-block | 選択後にエディタ内プレビュー | DI-EDT-008 | 自動済 |
@@ -497,7 +505,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 集計: 自動済 36 / 環境制約NG 1 / 手動要 13 / 未実装 5 / 不整合 0。
 
-（2026-08-02: openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂したことで、DI-EDT-002 に紐づく 3 行がすべて `不整合` から `自動済` になった。§5.1 の `不整合` は 0 件。）
+（2026-08-02: openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂したことで、DI-EDT-002 に紐づく 3 行がすべて `不整合` から `自動済` になった。§5.1 の `不整合` は 0 件。2026-08-04: Template Party disclosure Notice 群の ID を DI-EDT-025〜029 に振り直した以外、origin/main のパラメータ調整パネル機能は §5.1 に個別行を追加していないため集計に変動なし。）
 
 ### 5.2 requirements 成功基準 → テストケース ID
 
@@ -516,7 +524,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ファイル | カバーする ID |
 |---|---|
-| `scripts/test.mjs` | DI-CAT-001〜015・018〜021, DI-BLD-001〜012・018, DI-BLK-004・005, DI-EDT-009〜011, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
+| `scripts/test.mjs` | DI-CAT-001〜015・018〜024, DI-BLD-001〜012・018・023, DI-BLK-004・005・014・015, DI-EDT-009〜011・023, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
 | `tests/render-smoke.php` | DI-RND-001〜011・013・015, DI-SCP-001〜004・006, DI-BLK-001〜003・006・007, DI-SC-001・003〜005・008, DI-API-001〜013, DI-ADM-001〜007, DI-FE-012, DI-DAT-009・011・017, DI-CAT-016, DI-SEC-002〜004・006, DI-TPL-001 |
 | `tests/catalog-fallback.php` | DI-DAT-007・008 |
 | `tests/tp-availability.php` | DI-DAT-005 |
@@ -1040,3 +1048,4 @@ P2 — 継続改善：
 | 2026-08-04 続き | Template Party の bundles 除外（DI-SEC-014）に伴い、購入者環境では「固定ページを作成」が常に `demoUrl` へのリダイレクトになる（`templates/full-page.php` の設計済みフォールバック）。作成前に気付けるよう `CreatePageButton` にデモリンク挙動を明示する `Notice` を追加し、`readme.txt` の説明文も「フルページレイアウトの固定ページを作成できます」という誤解を招く表現から実態に合わせて修正した。`scripts/test.mjs` に告知文言の回帰テストを追加。`openspec/specs/editor-ui.md` の機能要件・受け入れ基準を更新 |
 | 2026-08-04 続き2 | CodeRabbit / Codex の新規指摘3件に対応。(1) `includes/templates.php` / `templates/full-page.php` が `verifyZip()` の `required` と `testDistributionShape()` の `requiredFiles` に未登録で、削除しても `npm test` / `build:dev` が exit 0 のまま素通りしていた（Codex）。両方に追加。(2) `editor-ui.md` の Notice 説明文「公開ページは常に `demoUrl` へリダイレクトされる」が、bundle が存在するローカル復号済み開発環境の実態と食い違っていたため、配布 zip の購入者環境に限定する表現へ修正（CodeRabbit）。(3) 仮想スクロールの説明が parts 360 件のみを記載していたので templates 1,017 件を含む最大 1,377 件に修正、TemplatePreview/CreatePageButton/InsertConfirmNotice（要件16〜21）の受け入れ基準が欠けていたので DI-EDT-021〜025 を追加し §5.1 のトレーサビリティ表・集計（55 項目）も追随させた（CodeRabbit）。§4.6 の残存「CSS Stock」表記も同時に修正 |
 | 2026-08-04 続き3 | Codex 指摘: `verifyZip()` の Template Party プレビュー検査が参照先の存在しか見ておらず、`tp-*.webp` が空ファイルや HTML エラーページに差し替わっても検出できなかった。`scripts/test.mjs` の CSS Stock 側で既に使っていた署名判定（拡張子 vs 実バイト列）を `detectPreviewKind()` として `scripts/build-plugin-zip.mjs` 側に一本化してエクスポートし、`verifyZip()` の Template Party ループで存在する参照先すべてに適用。`scripts/test.mjs` はこの共有関数を import する側に変更し、重複定義を解消。`tests/build-plugin-zip.test.mjs` に signature 判定のユニットテストを追加。DI-BLD-016 の現状列を更新 |
+| 2026-08-04 続き4 | main が並行して進んだ per-component color/radio/range パラメータ機能（DI-CAT-024, DI-BLD-023, DI-BLK-014/015, DI-EDT-021〜024）を取り込んでマージコンフリクトを解消。ID 衝突していた Template Party の disclosure Notice 群を DI-EDT-021〜026 から DI-EDT-025〜030 に振り直し、§5.1・§5.2・§5.3 の参照を追随させた |

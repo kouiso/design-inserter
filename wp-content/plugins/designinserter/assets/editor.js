@@ -4,7 +4,6 @@
 	var useEffect = element.useEffect;
 	var Fragment = element.Fragment;
 	var useRef = element.useRef;
-	// wp.data.useSelect でエディター状態を購読し、ステータスやプレビューリンクの変化に追従させる
 	var useSelect = data && data.useSelect ? data.useSelect : null;
 	var InspectorControls = blockEditor.InspectorControls;
 	var PanelBody = components.PanelBody;
@@ -20,6 +19,66 @@
 	var restUrl = catalog.restUrl || '';
 	var templatesRestUrl = catalog.templatesRestUrl || '';
 	var nonce = catalog.nonce || '';
+
+	function getPartById( partId ) {
+		for ( var i = 0; i < allParts.length; i++ ) {
+			if ( allParts[ i ].id === partId ) {
+				return allParts[ i ];
+			}
+		}
+		return null;
+	}
+
+	function getDefaultParams( inputs ) {
+		var params = {};
+		if ( ! inputs || typeof inputs !== 'object' ) {
+			return params;
+		}
+		[ 'colors', 'radios', 'ranges' ].forEach( function( group ) {
+			var arr = inputs[ group ] || [];
+			arr.forEach( function( input ) {
+				if ( input && input.key ) {
+					params[ input.key ] = input.defaultValue;
+				}
+			} );
+		} );
+		return params;
+	}
+
+	function buildCodeFuncParams( params, inputs ) {
+		var result = { colors: [], radios: [], ranges: [] };
+		if ( ! inputs || typeof inputs !== 'object' ) {
+			return result;
+		}
+		[ 'colors', 'radios', 'ranges' ].forEach( function( group ) {
+			var arr = inputs[ group ] || [];
+			result[ group ] = arr.map( function( input ) {
+				if ( params && input.key in params ) {
+					return params[ input.key ];
+				}
+				return input.defaultValue;
+			} );
+		} );
+		return result;
+	}
+
+	function computePartContent( partId, params ) {
+		var codeFuncs = window.designInserterPartCodeFuncs || {};
+		var codeFunc = codeFuncs[ partId ];
+		if ( ! codeFunc ) {
+			return null;
+		}
+		var part = getPartById( partId );
+		var inputs = part && part.inputs ? part.inputs : {};
+		try {
+			return codeFunc( buildCodeFuncParams( params, inputs ) );
+		} catch ( err ) {
+			if ( window.console ) {
+				window.console.error( 'DesignInserter codeFunc error:', err );
+			}
+			return null;
+		}
+	}
 
 	function fetchPartContent( partId, callback, signal ) {
 		window.fetch( restUrl + partId, {
@@ -62,7 +121,7 @@
 					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🎨' ),
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '️' ),
 			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, part.title )
 		);
@@ -89,7 +148,7 @@
 					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🖼️' ),
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '' ),
 			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, template.title ),
 			el( 'span', { className: 'di-card__badge', 'aria-hidden': 'true' }, 'テンプレ' )
@@ -172,7 +231,7 @@
 							onClick: function() { setActiveSource( src.id ); setActiveCat( '' ); }
 						}, src.label );
 					} )
-				)
+				  )
 				: null,
 			el( TextControl, {
 				placeholder: 'デザインを検索...',
@@ -205,7 +264,7 @@
 						key: part.id,
 						part: part,
 						isSelected: part.id === currentPartId,
-						onClick: function() { onSelectPart( part.id ); }
+						onClick: function() { onSelectPart( part ); }
 					} );
 				} ),
 				filteredTemplates.map( function( template ) {
@@ -227,13 +286,97 @@
 							onClick: clearFilters
 						}, '検索 / カテゴリをクリア' )
 						: null
-				)
+				  )
 				: null
+		);
+	}
+
+	function getInputLabel( input ) {
+		if ( input.legend && input.legend.ja ) {
+			return input.legend.ja;
+		}
+		if ( input.legend && input.legend.en ) {
+			return input.legend.en;
+		}
+		return input.key;
+	}
+
+	function getChoiceLabel( choice ) {
+		if ( choice.label && choice.label.ja ) {
+			return choice.label.ja;
+		}
+		if ( choice.label && choice.label.en ) {
+			return choice.label.en;
+		}
+		return String( choice.value );
+	}
+
+	function ParamControl( props ) {
+		var input = props.input;
+		var value = props.value;
+		var onChange = props.onChange;
+		var scope = props.scope || 'di';
+		var label = getInputLabel( input );
+
+		if ( input.choices ) {
+			return el( 'fieldset', { className: 'di-param__group di-param__radio' },
+				el( 'legend', { className: 'di-param__label' }, label ),
+				input.choices.map( function( choice, idx ) {
+					var choiceId = scope + '-' + input.key + '-' + idx;
+					return el( 'label', { key: idx, className: 'di-param__choice', htmlFor: choiceId },
+						el( 'input', {
+							id: choiceId,
+							type: 'radio',
+							name: scope + '-' + input.key,
+							checked: value === choice.value,
+							onChange: function() { onChange( choice.value ); }
+						} ),
+						el( 'span', {}, ' ' + getChoiceLabel( choice ) )
+					);
+				} )
+			);
+		}
+
+		if ( input.min !== undefined && input.max !== undefined ) {
+			var unit = input.unit && input.unit.ja ? input.unit.ja : ( input.unit && input.unit.en ? input.unit.en : '' );
+			return el( 'div', { className: 'di-param__group di-param__range' },
+				el( 'label', { className: 'di-param__label' },
+					el( 'span', {}, label ),
+					el( 'span', {}, ': ' + value + unit )
+				),
+				el( 'input', {
+					type: 'range',
+					min: input.min,
+					max: input.max,
+					step: input.step || 1,
+					value: value,
+					onChange: function( e ) { onChange( parseFloat( e.target.value ) ); }
+				} )
+			);
+		}
+
+		return el( 'div', { className: 'di-param__group di-param__color' },
+			el( 'label', { className: 'di-param__label' }, label ),
+			el( 'input', {
+				type: 'color',
+				value: value,
+				onChange: function( e ) { onChange( e.target.value ); }
+			} )
 		);
 	}
 
 	function LivePreview( props ) {
 		var partId = props.partId;
+		var params = props.params || {};
+		var paramsKey = JSON.stringify( params );
+		var onParamsChange = props.onParamsChange;
+		var onContentChange = props.onContentChange;
+		var scope = props.scope || partId;
+
+		var part = getPartById( partId );
+		var inputs = part && part.inputs ? part.inputs : {};
+		var allInputs = ( inputs.colors || [] ).concat( inputs.radios || [] ).concat( inputs.ranges || [] );
+
 		var contentState = useState( null );
 		var content = contentState[0];
 		var setContent = contentState[1];
@@ -253,9 +396,17 @@
 				setError( null );
 				return;
 			}
-			var controller = ( typeof AbortController === 'function' ) ? new AbortController() : null;
 			setLoading( true );
 			setError( null );
+
+			if ( window.designInserterPartCodeFuncs && window.designInserterPartCodeFuncs[ partId ] ) {
+				var computed = computePartContent( partId, params );
+				setLoading( false );
+				setContent( computed );
+				return;
+			}
+
+			var controller = ( typeof AbortController === 'function' ) ? new AbortController() : null;
 			fetchPartContent( partId, function( err, data ) {
 				setLoading( false );
 				if ( err ) {
@@ -270,7 +421,22 @@
 			return function() {
 				if ( controller ) { controller.abort(); }
 			};
-		}, [ partId, retryNonce ] );
+		}, [ partId, paramsKey, retryNonce ] );
+
+		useEffect( function() {
+			if ( onContentChange && content ) {
+				onContentChange( content );
+			}
+		}, [ content ] );
+
+		function updateParam( key, value ) {
+			if ( ! onParamsChange ) {
+				return;
+			}
+			var next = Object.assign( {}, params );
+			next[ key ] = value;
+			onParamsChange( next );
+		}
 
 		if ( errorVal ) {
 			var label = errorVal.status
@@ -296,13 +462,6 @@
 			return el( Notice, { status: 'info', isDismissible: false }, '左の「探す」エリアでデザインを選んでください' );
 		}
 
-		// C-02: render in sandboxed iframe to isolate untrusted/tampered
-		// catalog HTML from the editor context. Sandbox attribute with
-		// empty value disables scripts/forms/popups/plugins/top-nav.
-		// 'allow-same-origin' is intentionally NOT granted — keeps the
-		// iframe in a unique opaque origin.
-		// H-12 (merged from PR #15): aria-busy + overlay during refresh
-		// so the prior preview stays visible while iframe reloads.
 		var srcdoc = [
 			'<!doctype html><html><head><meta charset="utf-8">',
 			'<style>html,body{margin:0;padding:0;}body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:8px;}',
@@ -313,6 +472,8 @@
 		].join( '' );
 
 		var wrapperClass = 'di-preview' + ( loading ? ' di-preview--refreshing' : '' );
+		var hasParams = allInputs.length > 0;
+
 		return el( 'div', { className: 'di-selection' },
 			el( 'div', { className: 'di-selection__guide' },
 				el( 'strong', {}, '選ぶ / 調整' ),
@@ -327,7 +488,21 @@
 					style: { width: '100%', minHeight: '120px', border: 0, display: 'block' }
 				} ),
 				loading ? el( 'div', { className: 'di-preview__overlay' }, el( Spinner ) ) : null
-			)
+			),
+			hasParams
+				? el( 'div', { className: 'di-params' },
+					el( 'p', { className: 'di-params__title' }, 'パラメータ調整' ),
+					allInputs.map( function( input ) {
+						return el( ParamControl, {
+							key: input.key,
+							input: input,
+							value: params[ input.key ] !== undefined ? params[ input.key ] : input.defaultValue,
+							onChange: function( value ) { updateParam( input.key, value ); },
+							scope: scope
+						} );
+					} )
+				  )
+				: null
 		);
 	}
 
@@ -389,7 +564,6 @@
 	function InsertConfirmNotice( props ) {
 		var insertedKey = props.insertedKey;
 		var noticeRef = useRef( null );
-		// useSelect が使える環境ではエディター状態を購読して自動再描画。無ければ従来の一度きり読み取りにフォールバック。
 		var target = useSelect
 			? useSelect( function( select ) {
 				return computePostConfirmTarget( select( 'core/editor' ) );
@@ -485,6 +659,16 @@
 		);
 	}
 
+	function partDefaultContent( part ) {
+		if ( ! part ) {
+			return { html: '', css: '' };
+		}
+		return {
+			html: part.html || '',
+			css: part.css || ''
+		};
+	}
+
 	blocks.registerBlockType( 'designinserter/css-part', {
 		title: 'Design Inserter',
 		description: 'CSSデザインパーツを挿入',
@@ -492,16 +676,57 @@
 		category: 'design',
 		keywords: [ 'css', 'design', 'parts', 'heading', 'button', 'box' ],
 		attributes: {
-			partId: { type: 'string', default: '' }
+			partId: { type: 'string', default: '' },
+			params: { type: 'object', default: {} },
+			html: { type: 'string', default: '' },
+			css: { type: 'string', default: '' }
 		},
 		edit: function( props ) {
 			var partId = props.attributes.partId || '';
+			var params = props.attributes.params || {};
+			var htmlAttr = props.attributes.html || '';
+			var cssAttr = props.attributes.css || '';
 			var selectedTemplateState = useState( null );
 			var selectedTemplate = selectedTemplateState[0];
 			var setSelectedTemplate = selectedTemplateState[1];
 			var insertedKeyState = useState( '' );
 			var insertedKey = insertedKeyState[0];
 			var setInsertedKey = insertedKeyState[1];
+			var part = getPartById( partId );
+
+			useEffect( function() {
+				if ( ! part ) {
+					return;
+				}
+				// 保存済みブロックの調整値を上書きしない。まだ初期化されていない場合だけ既定値を適用する。
+				if ( Object.keys( params ).length > 0 || htmlAttr || cssAttr ) {
+					return;
+				}
+				var defaults = getDefaultParams( part.inputs );
+				var defaultsContent = computePartContent( part.id, defaults ) || partDefaultContent( part );
+				props.setAttributes( { params: defaults, html: defaultsContent.html, css: defaultsContent.css } );
+			}, [ partId ] );
+
+			function onSelectPart( selectedPart ) {
+				props.setAttributes( {
+					partId: selectedPart.id,
+					params: {},
+					html: '',
+					css: ''
+				} );
+				setSelectedTemplate( null );
+				setInsertedKey( 'part:' + selectedPart.id + ':' + Date.now() );
+			}
+
+			function onParamsChange( nextParams ) {
+				props.setAttributes( { params: nextParams } );
+			}
+
+			function onContentChange( content ) {
+				if ( content && ( content.html !== htmlAttr || content.css !== cssAttr ) ) {
+					props.setAttributes( { html: content.html || '', css: content.css || '' } );
+				}
+			}
 
 			return el( Fragment, {},
 				el( InspectorControls, {},
@@ -509,14 +734,10 @@
 						el( ItemPicker, {
 							currentPartId: partId,
 							currentTemplateId: selectedTemplate ? selectedTemplate.id : '',
-							onSelectPart: function( id ) {
-								props.setAttributes( { partId: id } );
-								setSelectedTemplate( null );
-								setInsertedKey( 'part:' + id + ':' + Date.now() );
-							},
+							onSelectPart: onSelectPart,
 							onSelectTemplate: function( tmpl ) {
 								setSelectedTemplate( tmpl );
-								props.setAttributes( { partId: '' } );
+								props.setAttributes( { partId: '', params: {}, html: '', css: '' } );
 								setInsertedKey( 'template:' + tmpl.id + ':' + Date.now() );
 							}
 						} )
@@ -528,7 +749,13 @@
 						el( TemplatePreview, { template: selectedTemplate } ),
 						el( CreatePageButton, { template: selectedTemplate } )
 					  )
-					: el( LivePreview, { partId: partId } )
+					: el( LivePreview, {
+						partId: partId,
+						params: params,
+						onParamsChange: onParamsChange,
+						onContentChange: onContentChange,
+						scope: props.clientId || partId
+					} )
 			);
 		},
 		save: function() { return null; }
