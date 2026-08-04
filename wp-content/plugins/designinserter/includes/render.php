@@ -8,19 +8,17 @@ function designinserter_render_part( $part_id, $html = null, $css = null ) {
 	static $rendered_styles = array();
 	static $rendered_instances = 0;
 
-	$part = null;
-	if ( null === $html || null === $css ) {
-		$part = designinserter_get_part( $part_id );
-		if ( ! $part ) {
-			return '';
-		}
+	// インライン内容が渡された場合もメタデータと挙動情報が必要なため、パーツは常に解決する。
+	$part = designinserter_get_part( $part_id );
+	if ( ! $part && null === $html && null === $css ) {
+		return '';
 	}
 
 	$id        = esc_attr( $part ? $part['id'] : $part_id );
 	$title_raw = $part ? designinserter_get_part_display_title( $part ) : $part_id;
 	$title     = esc_html( $title_raw );
-	$html   = null !== $html ? designinserter_resolve_local_asset_urls( (string) $html ) : ( isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '' );
-	$css    = null !== $css ? designinserter_resolve_local_asset_urls( (string) $css ) : ( isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( $part['css'] ) : '' );
+	$html   = null !== $html ? designinserter_resolve_local_asset_urls( wp_kses_post( (string) $html ) ) : ( isset( $part['html'] ) ? designinserter_resolve_local_asset_urls( $part['html'] ) : '' );
+	$css    = null !== $css ? designinserter_resolve_local_asset_urls( designinserter_sanitize_inline_css( (string) $css ) ) : ( isset( $part['css'] ) ? designinserter_resolve_local_asset_urls( designinserter_sanitize_inline_css( $part['css'] ) ) : '' );
 	$source = $part && isset( $part['sourceUrl'] ) ? esc_url( $part['sourceUrl'] ) : esc_url( DESIGNINSERTER_SOURCE_URL );
 	$behavior = $part ? designinserter_get_part_behavior( $part ) : array();
 	if ( designinserter_behavior_requires_js( $behavior ) ) {
@@ -55,6 +53,11 @@ function designinserter_render_part( $part_id, $html = null, $css = null ) {
 		esc_attr( $title_raw ),
 		$html
 	);
+}
+
+function designinserter_sanitize_inline_css( $css ) {
+	// CSS 内に HTML タグが混入すると <style> ブロックを閉じられてしまうため、タグを除去する。
+	return wp_strip_all_tags( $css );
 }
 
 function designinserter_resolve_local_asset_urls( $value ) {

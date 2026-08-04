@@ -59,8 +59,7 @@ async function cleanupExternalDatabase() {
 
 async function loginAsAdmin(page, redirectPath = '/wp-admin/') {
 	const redirectTo = `${baseUrl}${redirectPath}`;
-	// すでにログイン済みの場合はリダイレクト先に直接遷移する。
-	// 未ログインの場合は wp-login.php へ飛ばされるので、その後でログインする。
+	// 認証済み・未認証の両方を同じヘルパーで扱うため、目的ページを直接開く。
 	await page.goto(redirectTo, { waitUntil: 'domcontentloaded' });
 
 	const loginInput = page.locator('#user_login').first();

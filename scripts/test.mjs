@@ -404,6 +404,18 @@ function testRenderSmoke() {
   }
 }
 
+function buildCodeFuncParamsFromInputs(inputs) {
+  const result = { colors: [], radios: [], ranges: [] };
+  if (!inputs || typeof inputs !== 'object') {
+    return result;
+  }
+  for (const group of Object.keys(result)) {
+    const arr = inputs[group] || [];
+    result[group] = arr.map((input) => input.defaultValue);
+  }
+  return result;
+}
+
 function testPartCodeFuncs() {
   const src = fs.readFileSync(path.join(pluginDir, 'assets/part-code-funcs.js'), 'utf8');
   const ctx = { window: {}, console };
@@ -430,6 +442,28 @@ function testPartCodeFuncs() {
 
   const loading = funcs['loading-16']({ colors: ['#123456'], ranges: [5] });
   assert(loading && loading.css.includes('#123456'), 'loading-16 color param updates gradient color');
+
+  const catalog = readJson(catalogPath);
+  const parts = Array.isArray(catalog.parts) ? catalog.parts : [];
+  const throwing = [];
+  const badShape = [];
+  for (const part of parts) {
+    const f = funcs[part.id];
+    if (!f) {
+      badShape.push(`${part.id}: missing function`);
+      continue;
+    }
+    try {
+      const out = f(buildCodeFuncParamsFromInputs(part.inputs));
+      if (!out || typeof out.html !== 'string') {
+        badShape.push(part.id);
+      }
+    } catch (error) {
+      throwing.push(`${part.id}: ${error.message}`);
+    }
+  }
+  assert(throwing.length === 0, `all 222 generators execute without throwing${throwing.length ? `: ${throwing.slice(0, 5).join(', ')}` : ''}`);
+  assert(badShape.length === 0, `all 222 generators return an html string${badShape.length ? `: ${badShape.slice(0, 5).join(', ')}` : ''}`);
 }
 
 function testReadyChecklistArtifactSelection() {
