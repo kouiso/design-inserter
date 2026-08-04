@@ -454,6 +454,11 @@
 		}
 
 		return el( 'div', { className: 'di-create-page' },
+			// バンドル実体は ToS 上配布 zip に同梱できず（DI-SEC-014）、購入者環境では常にデモサイトへリダイレクトされる（full-page.php）。
+			// 作成前に必ず案内する。
+			el( Notice, { status: 'info', isDismissible: false, style: { marginBottom: '8px' } },
+				__( 'このテンプレートで固定ページを作成すると、公開ページはテンプレートのデモサイトへのリンクになります（テンプレート本体の HTML はこのプラグインに同梱されていません）。', 'designinserter' )
+			),
 			error ? el( Notice, { status: 'error', isDismissible: false, style: { marginBottom: '8px' } }, error ) : null,
 			el( Button, {
 				variant: 'primary',

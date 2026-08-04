@@ -53,13 +53,14 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 ### TemplatePreview / CreatePageButton（テンプレートを選んだとき）
 
 16. `template.demoUrl` を `src` に持つ `iframe.di-preview__iframe`（高さ 480px）を描画する。`demoUrl` が無ければ「プレビューURLがありません」
-17. 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page`（`X-WP-Nonce` 付き）を呼ぶ
-18. 成功時は `div.di-create-page-result` に `Notice`（success）「固定ページを作成しました」と「ページを編集する →」リンクを出す。失敗時は `Notice`（error）
+17. ボタンの上に常時 `Notice`（status: info）「このテンプレートで固定ページを作成すると、公開ページはテンプレートのデモサイトへのリンクになります（テンプレート本体の HTML はこのプラグインに同梱されていません）。」を表示する。テンプレート本体（`data/template-party-bundles/`）は ToS 上再配布不可で配布 zip に常に含まれず、公開ページは常に `demoUrl` へリダイレクトされる（`templates/full-page.php`）ため、作成前に必ず案内する
+18. 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page`（`X-WP-Nonce` 付き）を呼ぶ
+19. 成功時は `div.di-create-page-result` に `Notice`（success）「固定ページを作成しました」と「ページを編集する →」リンクを出す。失敗時は `Notice`（error）
 
 ### InsertConfirmNotice
 
-19. パーツ / テンプレートを選んだ直後に、公開済みなら「公開ページで確認」、下書きなら「プレビューで確認」リンク付きの `Notice`（success）を出す
-20. `wp.data.useSelect( select => select('core/editor') )` で投稿状態を購読する。`useSelect` が無い環境では一度きりの読み取りにフォールバックする
+20. パーツ / テンプレートを選んだ直後に、公開済みなら「公開ページで確認」、下書きなら「プレビューで確認」リンク付きの `Notice`（success）を出す
+21. `wp.data.useSelect( select => select('core/editor') )` で投稿状態を購読する。`useSelect` が無い環境では一度きりの読み取りにフォールバックする
 
 ## 非機能要件
 
@@ -127,7 +128,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 - [ ] カテゴリボタンで絞り込みができ、件数が併記されること（DI-EDT-004）
 - [ ] source フィルタが 3 種表示されること（DI-EDT-005）
 - [ ] Template Party フィルタで template カードが「テンプレ」badge 付きで出ること（DI-EDT-006）
-- [ ] CSS Stock フィルタで template カードが隠れること（DI-EDT-007）
+- [ ] デザインパーツフィルタで template カードが隠れること（DI-EDT-007）
 - [ ] カードクリックでプレビューが表示されること（DI-EDT-008）
 - [ ] プレビューが `window.fetch(restUrl + partId)` で遅延ロードされること（DI-EDT-009）
 - [ ] プレビューが `sandbox=''` + `srcDoc` の iframe に隔離され、`dangerouslySetInnerHTML` を使わないこと（DI-EDT-010）

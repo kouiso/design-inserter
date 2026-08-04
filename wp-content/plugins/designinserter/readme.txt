@@ -8,20 +8,20 @@ Stable tag: 0.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Design Inserter は 222 種類の CSS Stock デザインパーツと、Template Party テンプレートを Gutenberg エディタから直接挿入できる WordPress プラグインです。
+Design Inserter は 222 種類のデザインパーツと、Template Party テンプレートを Gutenberg エディタから直接挿入できる WordPress プラグインです。
 
 == Description ==
 
-見出し、ボタン、FAQ、チャート、アコーディオンなど 222 の CSS Stock パーツを、検索・カテゴリ絞り込み・プレビュー付きで Gutenberg に挿入できます。
-Template Party テンプレートからはフルページレイアウトの固定ページを作成できます。
+見出し、ボタン、FAQ、チャート、アコーディオンなど 222 のデザインパーツを、検索・カテゴリ絞り込み・プレビュー付きで Gutenberg に挿入できます。
+Template Party テンプレートを選ぶと、テンプレートのデモサイトへリンクする固定ページを作成できます。
 
 主な機能:
 
 * 検索ボックスとカテゴリ絞り込み付きのビジュアルパーツピッカー
-* CSS Stock / Template Party のソース切り替え
+* デザインパーツ / Template Party のソース切り替え
 * プレビューは REST 経由で遅延ロードし、サンドボックス化した iframe に隔離して表示
 * ショートコード `[designinserter_part id="heading-1"]` でクラシックエディタやウィジェットからも利用可能
-* Template Party テンプレートからフルページ固定ページを作成
+* Template Party テンプレートのデモサイトへリンクする固定ページを作成
 
 == Installation ==
 
@@ -33,6 +33,10 @@ Template Party テンプレートからはフルページレイアウトの固�
 = Template Party のテンプレートが表示されません =
 
 `data/template-party-*.json` が git-crypt により暗号化されている場合は、鍵を持っている環境でビルドした zip を使用してください。
+
+= Template Party テンプレートで「固定ページを作成」すると何が表示されますか =
+
+作成した固定ページを公開すると、テンプレートのデモサイトへ自動的にリンクします。テンプレート本体の HTML/CSS はこのプラグインには同梱されていません。
 
 = ショートコードとブロックで表示は変わりますか =
 

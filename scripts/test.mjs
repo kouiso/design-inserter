@@ -374,6 +374,7 @@ function testEditorAssetContract() {
   assert(editor.includes("sandbox: ''"), 'editor preview isolates catalog HTML in sandboxed iframe (C-02 XSS hardening)');
   assert(editor.includes('srcDoc:'), 'editor preview uses srcDoc inline document (no separate URL fetch)');
   assert(!editor.includes('dangerouslySetInnerHTML'), 'editor preview does NOT use dangerouslySetInnerHTML on catalog HTML (replaced by iframe sandbox)');
+  assert(editor.includes('デモサイトへのリンクになります'), 'editor discloses that Template Party create-page links to the demo site (bundle not distributed)');
   assert(block.includes("'wp-block-editor'"), 'block registration declares wp-block-editor dependency');
   assert(block.includes("'DesignInserterCatalog'"), 'block registration localizes editor catalog');
   assert(block.includes("'render_callback' => 'designinserter_render_block'"), 'block registration uses PHP render callback');
