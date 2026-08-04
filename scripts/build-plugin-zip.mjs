@@ -194,7 +194,8 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
 export function detectPreviewKind(buffer) {
   const textStart = buffer.subarray(0, 128).toString('utf8').trimStart();
 
-  if (textStart.startsWith('<svg') || textStart.startsWith('<?xml')) return 'svg';
+  if (textStart.startsWith('<svg')) return 'svg';
+  if (textStart.startsWith('<?xml') && /<svg[\s>]/.test(textStart)) return 'svg';
   if (buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP') return 'webp';
   if (buffer.subarray(0, 3).toString('ascii') === 'GIF') return 'gif';
   if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';

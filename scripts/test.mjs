@@ -379,6 +379,9 @@ function testEditorAssetContract() {
   assert(editor.includes('srcDoc:'), 'editor preview uses srcDoc inline document (no separate URL fetch)');
   assert(!editor.includes('dangerouslySetInnerHTML'), 'editor preview does NOT use dangerouslySetInnerHTML on catalog HTML (replaced by iframe sandbox)');
   assert(editor.includes('デモサイトへのリンクになります'), 'editor discloses that Template Party create-page links to the demo site (bundle not distributed)');
+  // 絵文字プレースホルダは過去に base 文字が欠落し variation selector だけ残る文字化けが起きたので、実体を検査する。
+  assert(editor.includes("'🎨'"), 'PartCard placeholder renders the actual 🎨 emoji, not a bare variation selector');
+  assert(editor.includes("'🖼️'"), 'TemplateCard placeholder renders the actual 🖼️ emoji, not an empty string');
   assert(block.includes("'wp-block-editor'"), 'block registration declares wp-block-editor dependency');
   assert(block.includes("'DesignInserterCatalog'"), 'block registration localizes editor catalog');
   assert(block.includes("'render_callback' => 'designinserter_render_block'"), 'block registration uses PHP render callback');

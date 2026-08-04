@@ -301,6 +301,11 @@ test('clicking a template card shows iframe preview', async ({ page }) => {
 	const iframeSrc = await previewIframe.getAttribute('src');
 	expect(iframeSrc).toMatch(/template-party\.com/);
 
+	// DI-EDT-026: 作成前に必ずデモリンク挙動の disclosure Notice が可視状態で出ること
+	// （文字列が editor.js のどこかに存在するだけでは、実際に表示されているかは分からない）。
+	const disclosureNotice = page.locator('.di-create-page').getByText('公開ページはテンプレートのデモサイトへのリンクになります');
+	await expect(disclosureNotice).toBeVisible({ timeout: 15000 });
+
 	await page.screenshot({ path: path.join(evidenceDir, 'template-iframe-preview.png'), fullPage: false });
 });
 

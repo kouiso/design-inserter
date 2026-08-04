@@ -121,7 +121,7 @@
 					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '️' ),
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🎨' ),
 			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, part.title )
 		);
@@ -148,7 +148,7 @@
 					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '' ),
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🖼️' ),
 			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, template.title ),
 			el( 'span', { className: 'di-card__badge', 'aria-hidden': 'true' }, 'テンプレ' )

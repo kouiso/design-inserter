@@ -43,10 +43,10 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 
 ### LivePreview（パーツを選んだとき）
 
-10. `partId` の変化を `useEffect` で監視し、`window.fetch( restUrl + partId, { headers: { 'X-WP-Nonce': nonce } } )` で **REST から遅延ロード**する。カタログ全件の `html` / `css` は最初から配らない
-11. `AbortController` があれば前回のリクエストを中断する。到着したレスポンスの `data.id` が現在の `partId` と違えば捨てる（競合状態対策）
-12. 取得中は `div.di-preview--loading` に `Spinner`。再取得中は前のプレビューを残したまま `div.di-preview--refreshing` + `aria-busy="true"` + `div.di-preview__overlay` を重ねる
-13. 取得失敗時は `Notice`（status: error）に「プレビュー取得に失敗しました」（HTTP ステータスがあれば併記）と「再試行」ボタンを出す
+10. `partId` の変化を `useEffect` で監視する。**`window.designInserterPartCodeFuncs[partId]`（`assets/part-code-funcs.js`）にローカル生成関数があれば、それを最優先で同期的に呼んで `html`/`css` を得る**。CSS Stock 222 件は全パーツがこの生成関数を持つ（`testPartCodeFuncs()` で担保）ため、主要カタログは REST を経由しない。生成関数が無いパーツ（現状は Template Party）のときだけ `window.fetch( restUrl + partId, { headers: { 'X-WP-Nonce': nonce } } )` で **REST から遅延ロード**する。カタログ全件の `html` / `css` は最初から配らない
+11. REST 経路のみ: `AbortController` があれば前回のリクエストを中断する。到着したレスポンスの `data.id` が現在の `partId` と違えば捨てる（競合状態対策）
+12. REST 経路のみ: 取得中は `div.di-preview--loading` に `Spinner`。再取得中は前のプレビューを残したまま `div.di-preview--refreshing` + `aria-busy="true"` + `div.di-preview__overlay` を重ねる。ローカル生成は同期的なのでローディング状態を経ない
+13. 取得失敗時は `Notice`（status: error）に失敗理由（REST は HTTP ステータス併記の「プレビュー取得に失敗しました」、ローカル生成関数が例外を投げた場合は「プレビューの生成に失敗しました」）と「再試行」ボタンを出す
 14. 取得成功時は `div.di-selection` にガイド「選ぶ / 調整」と `iframe.di-preview__iframe` を描画する
 15. パーツ未選択時は `Notice`（status: info）で「左の「探す」エリアでデザインを選んでください」を表示する
 

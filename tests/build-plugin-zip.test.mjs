@@ -223,6 +223,8 @@ test('preview kind detection matches real file signatures, not extensions', () =
   // 空ファイルや HTML エラーページへの差し替えは、どの署名にも一致せず unknown になる。
   assert.equal(detectPreviewKind(Buffer.alloc(0)), 'unknown');
   assert.equal(detectPreviewKind(Buffer.from('<html><body>404</body></html>')), 'unknown');
+  // XML 宣言だけでは svg と判定しない（S3 の AccessDenied 等の XML エラー応答が誤検知で通り抜けるのを防ぐ）。
+  assert.equal(detectPreviewKind(Buffer.from('<?xml version="1.0"?><Error>AccessDenied</Error>')), 'unknown');
 });
 
 test('the ciphertext sweep fails the release build and is skipped in dev mode', () => {
