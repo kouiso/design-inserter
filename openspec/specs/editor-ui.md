@@ -136,7 +136,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 - [ ] Template Party フィルタで template カードが「テンプレ」badge 付きで出ること（DI-EDT-006）
 - [ ] デザインパーツフィルタで template カードが隠れること（DI-EDT-007）
 - [ ] カードクリックでプレビューが表示されること（DI-EDT-008）
-- [ ] プレビューが `window.fetch(restUrl + partId)` で遅延ロードされること（DI-EDT-009）
+- [ ] 生成関数を持たないパーツ（現状 Template Party）は `window.fetch(restUrl + partId)` で遅延ロードされること。CSS Stock 222 件は `part-code-funcs.js` のローカル生成が優先され REST を経由しないこと（DI-EDT-009）
 - [ ] プレビューが `sandbox=''` + `srcDoc` の iframe に隔離され、`dangerouslySetInnerHTML` を使わないこと（DI-EDT-010）
 - [ ] 未選択状態で「左の「探す」エリアでデザインを選んでください」が表示されること
 - [ ] 検索結果 0 件で「該当するデザインがありません」が表示されること（DI-EDT-014）

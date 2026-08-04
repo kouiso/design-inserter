@@ -221,7 +221,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-006 | Template Party フィルタで template カードが badge 付きで出る | badge 表示 | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-007 | デザインパーツフィルタで template カードが隠れる | parts のみ | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-008 | カードクリックでプレビューが即表示される | プレビュー描画 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
-| DI-EDT-009 | プレビューが REST 経由で遅延ロードされる | `window.fetch(restUrl + partId)` | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-28 |
+| DI-EDT-009 | 生成関数の無いパーツ（現状 Template Party）だけが REST 経由で遅延ロードされる。CSS Stock 222 件はローカル生成が優先され REST を経由しない | `window.fetch(restUrl + partId)` はローカル生成関数が無い場合のみ | `scripts/test.mjs` `testPartCodeFuncs()`（CSS Stock 222 件全件に生成関数がある事を担保）+ `testEditorAssetContract()`（REST 経路のコード存在チェック）。generator-first の優先順位そのものの実行時検証は `tests/e2e/template-party.spec.mjs` の TP カードプレビュー経路のみ | 自動済（構造的な担保。優先順位の E2E 実行はこの環境では未実施） |
 | DI-EDT-010 | プレビューが sandbox iframe に隔離される | `sandbox: ''` + `srcDoc` | 同上 | 自動済 2026-07-28 |
 | DI-EDT-011 | カタログ HTML に `dangerouslySetInnerHTML` を使わん | 不使用 | 同上 | 自動済 2026-07-28 |
 | DI-EDT-012 | template プレビュー iframe の sandbox 強度 | `allow-scripts allow-same-origin`（part 側と意図的に異なる） | — | 未実装。差分の妥当性を §7 で判断 |
@@ -238,7 +238,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-023 | パーツ切替時にパラメータがそのパーツの既定値に戻る | `params` 属性リセット | `assets/editor.js` `onSelectPart` | 自動済 2026-07-30 |
 | DI-EDT-024 | レンジ / ラジオ指定がプレビューに反映される | 数値・選択切替で変化 | 実機: bar-chart-1 / list-1 / textbox-1 の range / radio を変更して iframe プレビューが変化 | 実機済 2026-07-30 |
 | DI-EDT-025 | `TemplatePreview` が `template.demoUrl` を `src` に持つ iframe を描画する。無ければ「プレビューURLがありません」 | iframe 表示 or 代替テキスト | `tests/e2e/template-party.spec.mjs`（`.di-preview--template iframe` の src 検証） | 環境制約NG（Docker + git-crypt） |
-| DI-EDT-026 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `tests/e2e/template-party.spec.mjs`（`.di-create-page` 内の文言を実際に可視状態で検証）。`scripts/test.mjs` `testEditorAssetContract()` は文言の存在チェックのみで補助的 | 自動済（コード実装 2026-08-04、E2E は Docker 未起動のためこの環境では未実行 [ローカル実行]） |
+| DI-EDT-026 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `tests/e2e/template-party.spec.mjs`（`.di-create-page` 内の文言を実際に可視状態で検証）。`scripts/test.mjs` `testEditorAssetContract()` は文言の存在チェックのみで補助的 | 環境制約NG（E2E 未実行、Docker 未起動）。コード契約（文言存在チェック）のみ自動済 2026-08-04 [ローカル実行] |
 | DI-EDT-027 | 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page` を呼ぶ | REST 呼び出し | 実機: ボタンクリック → ネットワーク監視 | 手動要 |
 | DI-EDT-028 | create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` を表示する | 状態遷移が UI に反映 | 実機 | 手動要 |
 | DI-EDT-029 | パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示される | Notice + リンク | 実機 | 手動要 |
@@ -464,14 +464,14 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | editor-ui | Template Party フィルタで template カードが badge 付きで出る | DI-EDT-006 | 自動済 2026-07-30 [ローカル実行] |
 | editor-ui | デザインパーツフィルタで template カードが隠れる | DI-EDT-007 | 自動済 2026-07-30 [ローカル実行] |
 | editor-ui | 選択後にプレビューが即表示 | DI-EDT-008 | 自動済 |
-| editor-ui | プレビューが REST 経由で遅延ロードされる | DI-EDT-009 | 自動済 |
+| editor-ui | 生成関数の無いパーツだけが REST 経由で遅延ロードされる（CSS Stock 222 件は経由しない） | DI-EDT-009 | 自動済（構造的な担保） |
 | editor-ui | プレビューが sandbox iframe に隔離される | DI-EDT-010 | 自動済 |
 | editor-ui | SVG-only のプレビューに style タグなし | DI-EDT-013 | 手動要 |
 | editor-ui | 未選択で案内メッセージ | DI-EDT-014 | 手動要 |
 | editor-ui | リロード後も選択状態を保持 | DI-BLK-011 | 手動要 |
 | editor-ui | JS エラーがコンソールに出ん | DI-EDT-016 | 自動済 |
 | editor-ui | TemplatePreview が demoUrl を iframe に描画（無ければ代替テキスト） | DI-EDT-025 | 環境制約NG |
-| editor-ui | 固定ページ作成前にデモリンク挙動を明示する Notice を表示 | DI-EDT-026 | 自動済（E2E は Docker 未起動のためこの環境では未実行） |
+| editor-ui | 固定ページ作成前にデモリンク挙動を明示する Notice を表示 | DI-EDT-026 | 環境制約NG（E2E 未実行、コード契約のみ自動済） |
 | editor-ui | create-page ボタンから REST を呼ぶ | DI-EDT-027 | 手動要 |
 | editor-ui | create-page 成功/失敗時に Notice を出す | DI-EDT-028 | 手動要 |
 | editor-ui | 選択直後に InsertConfirmNotice を出す | DI-EDT-029 | 手動要 |
@@ -512,7 +512,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | shortcode | 出力がブロック出力と同一 | DI-SC-007 | 未実装 |
 | shortcode | テキストウィジェットで描画 | DI-SC-009 | 手動要 |
 
-集計: 自動済 44 / 環境制約NG 1 / 手動要 14 / 未実装 5 / 不整合 0。
+集計: 自動済 43 / 環境制約NG 2 / 手動要 14 / 未実装 5 / 不整合 0。
 
 （2026-08-02: openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂したことで、DI-EDT-002 に紐づく 3 行がすべて `不整合` から `自動済` になった。§5.1 の `不整合` は 0 件。2026-08-04: Template Party disclosure Notice 群の ID を DI-EDT-025〜029 に振り直した。同日、`openspec/specs/*.md` の未チェック項目が実際には 63 件（旧集計は 55 件と誤って記載）あり、§5.1 が editor-ui の検索/カテゴリ/source フィルタ・REST 遅延ロード・sandbox 隔離・useSelect と、gutenberg-block のテンプレート create-page 項目（計 9 件）を欠いていたため追加し、64 行に更新した。）
 
@@ -539,7 +539,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | `tests/tp-availability.php` | DI-DAT-005 |
 | `tests/php/DesignInserterCoreTest.php` | DI-DAT-001〜004・012〜018, DI-CAT-022・023, DI-RND-002・012・015, DI-SCP-005, DI-SC-002 |
 | `tests/e2e/fresh-install-222.spec.mjs` | DI-E2E-001〜004, DI-BLK-009・010, DI-EDT-001・003・004・008・016・017, DI-ADM-009, DI-SC-012, DI-FE-010, DI-CMP-006, DI-API-015 |
-| `tests/e2e/template-party.spec.mjs` | DI-E2E-005〜009, DI-EDT-005〜007・026, DI-API-014・017・019 |
+| `tests/e2e/template-party.spec.mjs` | DI-E2E-005〜009, DI-EDT-005〜007・025〜026, DI-API-014・017・019 |
 | `scripts/build-plugin-zip.mjs` | DI-BLD-013〜016・019・022, DI-SEC-014 |
 | `tests/build-plugin-zip.test.mjs` | DI-BLD-022, DI-SEC-014 |
 | `scripts/wp-smoke.mjs` | DI-BLD-017, DI-CMP-005 |
@@ -1064,3 +1064,4 @@ P2 — 継続改善：
 | 2026-08-04 続き7 | Codex の新規指摘3件に対応。(1) `openspec/specs/gutenberg-block.md` の属性一覧が `partId` しか書いておらず、`includes/block.php` が実際に登録している `params`/`html`/`css`（per-component パラメータ調整の保存先）が抜けていたため、初期化・更新動作込みで追記し block.json 相当の JSON 例にも追加。(2) `scripts/build-plugin-zip.mjs` に足した2箇所の JSDoc が「なぜ」を説明しない what-only コメントで `AGENTS.md` の規約に反していたため削除（コード自体が定数名で自明）。(3) §9.6 の「task ci:fast 相当6ステップ」の記録が、`build` → `build:dev` の定義変更後に `task ci:fast` そのものを一度も実行できていない（`task` バイナリ・Docker daemon とも本環境に無い）ことを明記しておらず、AGENTS.md の「task ci:fast GREEN 必須」を満たしたかのように読めた。実際に go-task も Docker も使わず直接コマンドを叩く `.github/workflows/trusted-test.yml` がこの PR の全コミットで green である旨とあわせて、§9.6・§9.7 に未検証事項として明記した |
 | 2026-08-04 続き8 | Codex の新規指摘3件に対応。(1) `gutenberg-block.md` のエッジケースが「360 件の一括描画」（parts のみ）と記載していたが、`ItemPicker` は templates 1,017 件も同じカードグリッドに連結するため、正しくは最大 1,377 件。受け入れ基準の記述と揃えた。(2) `editor-ui.md` の受け入れ基準が要件21（`useSelect` 購読・フォールバック）に対応する DI-EDT-030 チェックボックスを欠いていたため追加。あわせて「将来拡張」に残っていた「カラーカスタマイズ UI（inputs メタデータ使用）」は既に実装済みの機能だったので削除。(3) 同ファイルのペイロード説明・カタログ JSON 例が `includes/data.php` の `designinserter_shape_part_for_editor_catalog()` が実際に渡す `inputs`（colors/radios/ranges の調整 UI 定義）を欠いていたため、実データの構造に基づいて追記した |
 | 2026-08-04 続き9 | Codex の新規指摘5件に対応。(1) `detectPreviewKind()` が `<?xml` 接頭辞だけで svg 判定していたため、`<Error>AccessDenied</Error>` のような XML エラー応答も svg として通っていた。実際に `<svg` ルート要素があるかを見るよう修正しユニットテストを追加。(2) `PartCard`/`TemplateCard` の絵文字プレースホルダが文字化けしていた（🎨 は base 文字が欠落し variation selector だけ残存、🖼️ は空文字列）ため実際の絵文字に修正し、`scripts/test.mjs` に実体を検査する回帰テストを追加。(3) `docs/test-spec.md` §5.1 が「openspec 未チェック項目 55 件を全件対応付けた」と主張していたが実数は 63 件で、editor-ui の検索/カテゴリ/source フィルタ・REST 遅延ロード・sandbox 隔離・useSelect と gutenberg-block のテンプレート create-page 項目（計 9 件）が §5.1 に無かったため追加し、集計・冒頭の SSOT 図の項目数も 63 に訂正した。(4) `editor-ui.md` 要件10が全パーツを REST 遅延ロードすると規定していたが、CSS Stock 222 件は全パーツが `part-code-funcs.js` のローカル生成関数を持ち（`testPartCodeFuncs()` で担保）実際には REST を経由しない。generator-first の実装に合わせて記述を修正。(5) DI-EDT-026（disclosure Notice）の自動検証が `scripts/test.mjs` の文言 grep のみで、コメントや到達しない分岐に文言があっても green になり得たため、`tests/e2e/template-party.spec.mjs` にテンプレートカード選択後に `.di-create-page` 内の Notice が実際に可視状態であることを検証するアサーションを追加した |
+| 2026-08-04 続き10 | Codex 続報1件 + CodeRabbit 新規指摘4件に対応。(1) [Codex] `Taskfile.yml` の `ci:fast` が `build` → `build:dev` に変わった後も、以前の `npm run build` が残した `dist/designinserter-<version>.zip` が消えず、`generate-ready-checklist.mjs`（K036）がソース変更後もそれを「存在する」だけで現行候補として green 扱いし得た。`build:dev` の直前に `dist/designinserter-*.zip` を削除するステップを追加。(2) [CodeRabbit] `docs/test-spec.md` の DI-EDT-026 が「自動済」だったが、実体は `scripts/test.mjs` の文言存在チェックのみで、実際に可視状態であることを検証する E2E はこの環境では未実行だったため `環境制約NG` に訂正（コード契約チェックは自動済のまま明記）。(3) [CodeRabbit] §5.3 逆引き表の `tests/e2e/template-party.spec.mjs` 行に `DI-EDT-025` が抜けていたため追加。(4) [CodeRabbit] `detectPreviewKind()` の XML 判定が `<svg/>` のような自己終了ルート要素にマッチせず、正当な svg プレビューを `unknown` として拒否していたため、正規表現に `/` を追加しユニットテストを追加。(5) [CodeRabbit] `editor.js` の `LivePreview` が codeFunc 失敗時・REST 失敗時に古い `content` を残したまま `setError()` するだけで、ブロックの保存済み `html`/`css` 属性が実際には失敗した新しい partId のものではなく前のパーツのものになり得た。両エラー経路で `setContent(null)` を追加し、あわせて AbortController 非対応環境向けの stale-response ガードも、リクエスト自身の `partId` と `latestPartIdRef.current`（最新選択）を比較する形に強化した（従来は自分自身の partId としか比較しておらず実質無意味だった）。ついでに `verifyZip()` に readme.txt の Stable tag 値検証（存在チェックのみだった）と、dev モードで欠けているカタログが本当に `lockedFiles` に含まれるか（単純な選定バグでないか）の検証を追加した |

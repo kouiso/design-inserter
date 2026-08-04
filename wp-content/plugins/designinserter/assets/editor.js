@@ -390,6 +390,11 @@
 		var retryNonce = retryState[0];
 		var setRetry = retryState[1];
 
+		// AbortController が無い環境では古いリクエストを中断できず、閉じ込めた partId と
+		// 自分自身の応答を比べても常に一致してしまう。最新の選択を ref で追って比較する。
+		var latestPartIdRef = useRef( partId );
+		latestPartIdRef.current = partId;
+
 		useEffect( function() {
 			if ( ! partId ) {
 				setContent( null );
@@ -405,6 +410,9 @@
 				if ( computed ) {
 					setContent( computed );
 				} else {
+					// 古い content を残すと、失敗した新しい partId に前のパーツの html/css が
+					// ブロック属性として紐付いたまま保存されてしまう。
+					setContent( null );
 					// codeFunc 失敗を「未選択」と区別できるようにする（さもないと無反応に見える）。
 					setError( { status: null, codeFuncFailed: true } );
 				}
@@ -414,11 +422,17 @@
 			var controller = ( typeof AbortController === 'function' ) ? new AbortController() : null;
 			fetchPartContent( partId, function( err, data ) {
 				setLoading( false );
+				// AbortController の無い環境では古いリクエストが後から解決し得る。
+				// 自分が要求した partId が現在の選択と食い違っていれば、成功・失敗を問わず無視する。
+				if ( latestPartIdRef.current !== partId ) {
+					return;
+				}
 				if ( err ) {
+					setContent( null );
 					setError( err );
 					return;
 				}
-				if ( data && data.id && data.id !== partId ) {
+				if ( data && data.id && data.id !== latestPartIdRef.current ) {
 					return;
 				}
 				setContent( data );

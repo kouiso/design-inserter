@@ -28,7 +28,7 @@ Neither mode can put ciphertext into a zip — the flag chooses between *fail* a
 
 `data/template-party-bundles/` and `data/template-party-scrape-state.json` are excluded in *both* modes. They only exist on a machine that has run the scraper, and redistributing the bundles violates Template Party's terms — no CI run can catch that, so the build itself has to.
 
-`task ci:fast` runs `build:dev` so the gate stays green without the key. The release path is exercised by `.github/workflows/trusted-test.yml`, which is the only workflow that runs `git-crypt unlock`.
+`task ci:fast` runs `build:dev` so the gate stays green without the key. The release path is exercised by `.github/workflows/trusted-test.yml`, which is the only workflow that runs `git-crypt unlock`. Before running `build:dev`, `ci:fast` removes any `dist/designinserter-*.zip` left over from an earlier `npm run build` — otherwise that stale release zip keeps matching the expected filename and `scripts/generate-ready-checklist.mjs` (K036) would report it as the current candidate without ever re-verifying it against the now-changed sources.
 
 ## Template Party data and git-crypt
 

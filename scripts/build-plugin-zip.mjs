@@ -195,7 +195,7 @@ export function detectPreviewKind(buffer) {
   const textStart = buffer.subarray(0, 128).toString('utf8').trimStart();
 
   if (textStart.startsWith('<svg')) return 'svg';
-  if (textStart.startsWith('<?xml') && /<svg[\s>]/.test(textStart)) return 'svg';
+  if (textStart.startsWith('<?xml') && /<svg[\s/>]/.test(textStart)) return 'svg';
   if (buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP') return 'webp';
   if (buffer.subarray(0, 3).toString('ascii') === 'GIF') return 'gif';
   if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
@@ -425,7 +425,9 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
   for (const catalog of TEMPLATE_PARTY_CATALOGS) {
     const entry = `${pluginSlug}/${catalog.relative}`;
     if (!entrySet.has(entry)) {
-      if (!allowLocked) {
+      // dev で大目に見るんは「ロックされとって意図的に除外した」場合だけ。
+      // ファイル選定バグ等で単純に消えとる場合は allowLocked でも落とす。
+      if (!allowLocked || !lockedEntries.has(entry)) {
         templatePartyFailures.push(`${entry} が zip に無い`);
       }
       continue;
@@ -469,6 +471,7 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
   }
 
   const main = readZipEntry(outPath, `${pluginSlug}/designinserter.php`);
+  const readme = readZipEntry(outPath, `${pluginSlug}/readme.txt`);
   const catalog = JSON.parse(readZipEntry(outPath, `${pluginSlug}/data/css-stock-parts.json`));
   const parts = Array.isArray(catalog.parts) ? catalog.parts : [];
   const missingPreviewEntries = parts
@@ -492,6 +495,7 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
     main.includes('License: GPL-2.0-or-later') ? '' : 'missing GPL header',
     main.includes('License URI: https://www.gnu.org/licenses/gpl-2.0.html') ? '' : 'missing GPL license URI header',
     main.includes('Text Domain: designinserter') ? '' : 'missing text domain',
+    new RegExp(`^Stable tag:\\s+${packageJson.version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'm').test(readme) ? '' : 'readme.txt Stable tag does not match package.json version',
   ].filter(Boolean);
 
   const catalogFailures = [

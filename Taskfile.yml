@@ -6,6 +6,10 @@ tasks:
       - npm ci
       - npm run phpcs
       - npm run php:lint
+      # dev ゲートは dist/dev/ にしか書かん。以前の npm run build が残した
+      # dist/*.zip をここで消しとかんと、ready:checklist (K036) が
+      # ソース変更後の古いリリース候補を「存在する」だけで green と誤判定する。
+      - rm -f dist/designinserter-*.zip
       # git-crypt ロック環境でもゲートを通す。リリース zip は復号済み環境の npm run build が担当。
       - npm run build:dev
       - npm test

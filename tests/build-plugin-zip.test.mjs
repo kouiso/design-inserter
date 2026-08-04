@@ -218,6 +218,7 @@ test('preview kind detection matches real file signatures, not extensions', () =
   assert.equal(detectPreviewKind(Buffer.concat([Buffer.from('RIFF\0\0\0\0WEBP'), Buffer.alloc(4)])), 'webp');
   assert.equal(detectPreviewKind(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>')), 'svg');
   assert.equal(detectPreviewKind(Buffer.from('<?xml version="1.0"?><svg></svg>')), 'svg');
+  assert.equal(detectPreviewKind(Buffer.from('<?xml version="1.0"?><svg width="10" height="10"/>')), 'svg');
   assert.equal(detectPreviewKind(Buffer.from('GIF89a')), 'gif');
   assert.equal(detectPreviewKind(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])), 'png');
   // 空ファイルや HTML エラーページへの差し替えは、どの署名にも一致せず unknown になる。
