@@ -366,7 +366,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-018 | テスト・ビルド支援ファイルが gitignore されとらん | ignore 0 | `scripts/test.mjs` `testGitVisibility()` | 自動済 2026-07-28 |
 | DI-BLD-019 | `readme.txt`（Stable tag / Tested up to）がある | 存在 | `scripts/build-plugin-zip.mjs` `verifyZip()` の required + `scripts/test.mjs` `testDistributionShape()` | 自動済 2026-08-02 [ローカル実行] |
 | DI-BLD-020 | zip を管理 UI からアップロードして有効化できる | 有効化成功 | 実機: `plugin-install.php` | 手動要 |
-| DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | `npm run smoke:wp:portable` | 自動済 2026-07-29（間接。dist zip を展開して `plugin activate` は成功。`plugin install` 経路自体は未） |
+| DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | `npm run smoke:wp:portable` | 手動要（現状の証跡は dist zip を展開しての `plugin activate` 成功のみ。`wp plugin install --activate` の zip インストール・展開・有効化という直接経路は未実施。直接経路を実測したら `自動済` に戻す） |
 | DI-BLD-022 | git-crypt ロック環境でのビルドを検出して失敗する | 明示エラー・exit 1 | `scripts/build-plugin-zip.mjs` `assertCatalogsUsable()` + `tests/build-plugin-zip.test.mjs` | 自動済 2026-08-02 [ローカル実行] |
 
 ### 4.14 DI-CMP — 互換性・ライフサイクル
@@ -917,7 +917,7 @@ P2 — 継続改善：
 
 1Password から git-crypt 鍵を取得し復号したため、Template Party の 138 parts / 1017 templates / REST create-page 経路も自動検証できた。
 
-- `UI ユーザーストーリー録画` ... Chrome CDP で実際の WP 管理画面を録画。US-1（28 カテゴリ Gutenberg 挿入・公開・フロント behavior 操作）、US-2（shortcode `[designinserter_part id="heading-1"]`）、US-3（Template Party `tp_wa1_blue` フルページ生成）を一個ずつ実施した `[実機目視]`（2026-07-30）。動画ファイル `screencasts/design-inserter-ui-video-1785413/design-inserter-ui-video-1785413-edited.mp4`
+- `UI ユーザーストーリー録画` ... Chrome CDP で実際の WP 管理画面を録画。US-1（28 カテゴリ Gutenberg 挿入・公開・フロント behavior 操作）、US-2（shortcode `[designinserter_part id="heading-1"]`）、US-3（Template Party `tp_wa1_blue` フルページ生成）を一個ずつ実施した `[実機目視]`（2026-07-30）。動画ファイルは `.work/qa/ui-evidence/run-1785413347347/`（§11.7 参照）に保存済み
 - `DI-E2E-010` ... 生成ページが `full-page.php` テンプレートでレンダリングされることを上記録画で確認 `[実機目視]`（2026-07-30）。
 
 ### 9.7 残存リスク
@@ -1005,7 +1005,7 @@ P2 — 継続改善：
 
 ### 11.7 実測実施結果
 
-本項は 2026-07-30 に Chrome CDP（`http://localhost:29229`）で実施した `UI ユーザーストーリー録画` の結果を記す。録画は `/home/ubuntu/screencasts/design-inserter-ui-video-1785413/design-inserter-ui-video-1785413-edited.mp4` に保存済み。
+本項は 2026-07-30 に Chrome CDP（`http://localhost:29229`）で実施した `UI ユーザーストーリー録画` の結果を記す。録画・スクリーンショットの保存先は下記備考のとおり `.work/qa/ui-evidence/run-1785413347347/`（リポジトリ相対、実行環境のローカルパスなので gitignore 対象）で統一する。
 
 | US | 操作 | 結果 | 証拠スクリーンショット |
 |---|---|---|---|
@@ -1015,7 +1015,7 @@ P2 — 継続改善：
 
 備考：録画・スクリーンショットの保存先は `.work/qa/ui-evidence/run-1785413347347/`。コンソールエラー / ページエラー / 致命的な 404 は検出されなかった。`wp-json` 関連の `ERR_ABORTED` はナビゲーション時の in-flight リクエスト破棄によるもので、機能影響なし。
 
-## 10. 変更履歴
+## 12. 変更履歴
 
 | 日付 | 内容 |
 |---|---|
@@ -1025,3 +1025,4 @@ P2 — 継続改善：
 | 2026-07-30 続き | 1Password から git-crypt 鍵を取得し Template Party データを復号。`npm run e2e:template-party` を実行し 5 tests passed。`docs/test-spec.md` の DI-CAT-022/023、DI-DAT-001/003/012/014/016、DI-EDT-005/006/007、DI-API-014/015/017/019、DI-BLK-010、DI-ADM-009、DI-FE-010、DI-E2E-005〜009 を `自動済` に更新。`includes/admin.php` の parts count 表示、`assets/editor.js` の source filter クラス、`tests/e2e/template-party.spec.mjs` の catalog グローバル名・login ロジック・compose volume マウントを修正 |
 | 2026-07-30 UI 録画 | WP 管理画面で 28 カテゴリ一個ずつ Gutenberg 挿入 → 公開 → フロント behavior 操作、shortcode、Template Party フルページ生成を録画。`designinserter.php` に `includes/templates.php` の require を追加して F-1 解消。`DI-E2E-010` を実機目視で更新。`docs/test-spec.md` §9.6 / §9.7 / §11.4 / §11.7 に証拠を追加 |
 | 2026-08-02 | 残存 issue 5 件を一括対応（#52 / #53 / #54 / #55 / #57）。F-4 のビルドガード（git-crypt 暗号文検出 + 再配布不可データ除外 + `build` / `build:dev` の 2 モード）、`readme.txt` 追加、openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせ全面改訂、DI-TPL-001 回帰テスト追加、`scripts/wp-smoke.mjs` の配布ファイル選定を build と共通化。`.github/workflows/trusted-test.yml` に復号済みリリースビルドを追加。**本作業環境は git-crypt ロック・Docker daemon 未起動**のため、`npm run phpcs` / `npm run test:php` は Docker やのうて `vendor/bin/` を直叩きして代替実行し、E2E は `--list` の起動確認のみ。復号済み `npm run build` の成功経路と Docker 実機確認は未実施 |
+| 2026-08-04 | PR #70 の CodeRabbit / Codex レビュー指摘を精査。DI-BLD-021 を `自動済`（間接確認のみやのに）から `手動要` に訂正。§9.6 / §11.7 の UI 証跡パスを `.work/qa/ui-evidence/run-1785413347347/` に一本化（`screencasts/...` と `/home/ubuntu/screencasts/...` の 2 通りが混在しとった）。§10 と §11 の見出し番号順序が本文の並びと逆転しとった件は、`§11.x` の相互参照が複数箇所にあるため機械的な入れ替えを避け、`変更履歴` を `§12` に振り直して昇順を回復（`§10` は欠番）。`gutenberg-block.md:64` のリンク形式変更（`admin.php` の `Parts` ラベル改名）は E2E / 既存リンク規約と衝突するため見送り。判断根拠は PR #70 の issue comment に記載 |
