@@ -35,6 +35,17 @@ function esc_url( $url ) {
 	return filter_var( (string) $url, FILTER_SANITIZE_URL );
 }
 
+function wp_kses_post( $content ) {
+	return (string) $content;
+}
+
+function wp_strip_all_tags( $string, $remove_breaks = false ) {
+	if ( $remove_breaks ) {
+		return preg_replace( '/\s+/', ' ', (string) $string );
+	}
+	return (string) $string;
+}
+
 function trailingslashit( $value ) {
 	return rtrim( (string) $value, '/' ) . '/';
 }

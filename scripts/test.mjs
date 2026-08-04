@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 
 const root = process.cwd();
 const pluginDir = 'wp-content/plugins/designinserter';
@@ -152,7 +153,7 @@ function testCatalog() {
   const categories = Array.isArray(catalog.categories) ? catalog.categories : [];
   const ids = new Set();
   const categoryCounts = new Map();
-  const requiredKeys = ['id', 'sourcePartId', 'category', 'categoryLabel', 'title', 'html'];
+  const requiredKeys = ['id', 'sourcePartId', 'category', 'categoryLabel', 'title', 'html', 'inputs'];
   const badRequired = [];
   const badIds = [];
   const duplicateIds = [];
@@ -163,6 +164,7 @@ function testCatalog() {
   const missingAssetRefs = [];
   const badAssetRefKind = [];
   const badSource = [];
+  const badInputs = [];
 
   for (const category of categories) {
     categoryCounts.set(category.slug, 0);
@@ -171,6 +173,15 @@ function testCatalog() {
   for (const part of parts) {
     if (!requiredKeys.every((key) => Object.hasOwn(part, key))) {
       badRequired.push(part.id || '<missing id>');
+    }
+
+    if (
+      part.inputs &&
+      (!Object.hasOwn(part.inputs, 'colors') ||
+        !Object.hasOwn(part.inputs, 'radios') ||
+        !Object.hasOwn(part.inputs, 'ranges'))
+    ) {
+      badInputs.push(part.id);
     }
 
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9]+$/.test(part.id)) {
@@ -241,6 +252,7 @@ function testCatalog() {
   assert(missingAssetRefs.length === 0, `all catalog embedded asset references exist${missingAssetRefs.length ? `: ${missingAssetRefs.slice(0, 5).join(', ')}` : ''}`);
   assert(badAssetRefKind.length === 0, `catalog embedded asset extensions match file signatures${badAssetRefKind.length ? `: ${badAssetRefKind.slice(0, 5).join(', ')}` : ''}`);
   assert(badSource.length === 0, `part sourceUrl values point to source-site anchors${badSource.length ? `: ${badSource.slice(0, 5).join(', ')}` : ''}`);
+  assert(badInputs.length === 0, `catalog inputs have colors/radios/ranges groups${badInputs.length ? `: ${badInputs.slice(0, 5).join(', ')}` : ''}`);
   assert(svgOnly.length > 0, 'catalog includes SVG-only loading parts with empty CSS');
 }
 
@@ -392,6 +404,68 @@ function testRenderSmoke() {
   }
 }
 
+function buildCodeFuncParamsFromInputs(inputs) {
+  const result = { colors: [], radios: [], ranges: [] };
+  if (!inputs || typeof inputs !== 'object') {
+    return result;
+  }
+  for (const group of Object.keys(result)) {
+    const arr = inputs[group] || [];
+    result[group] = arr.map((input) => input.defaultValue);
+  }
+  return result;
+}
+
+function testPartCodeFuncs() {
+  const src = fs.readFileSync(path.join(pluginDir, 'assets/part-code-funcs.js'), 'utf8');
+  const ctx = { window: {}, console };
+  vm.createContext(ctx);
+  vm.runInContext(src, ctx);
+  const funcs = ctx.window.designInserterPartCodeFuncs;
+
+  assert(Object.keys(funcs).length === 222, 'part-code-funcs.js registers all 222 parts');
+
+  const heading = funcs['heading-1']({ colors: ['#ff0000', '#333333'] });
+  assert(heading && heading.css.includes('#ff0000'), 'heading-1 color param changes border color');
+
+  const list = funcs['list-1']({ colors: ['#2589d0'], radios: ['ol', false] });
+  assert(list && list.html.startsWith('<ol'), 'list-1 radio tag switches to ol');
+
+  const bar = funcs['bar-chart-1']({ colors: ['#2589d0'], radios: [true], ranges: [80] });
+  assert(bar && bar.html.includes('80%'), 'bar-chart-1 range param updates first bar width');
+
+  const button = funcs['button-37']({ colors: ['#123456'], radios: ['25px', false] });
+  assert(button && button.css.includes('#123456'), 'button-37 color param changes border color');
+
+  const radar = funcs['radar-chart-4']({ colors: ['#ff0000'], ranges: [8, 5, 6, 7, 6, 5, 4] });
+  assert(radar && radar.html.includes('<svg'), 'radar-chart-4 generates svg from range params');
+
+  const loading = funcs['loading-16']({ colors: ['#123456'], ranges: [5] });
+  assert(loading && loading.css.includes('#123456'), 'loading-16 color param updates gradient color');
+
+  const catalog = readJson(catalogPath);
+  const parts = Array.isArray(catalog.parts) ? catalog.parts : [];
+  const throwing = [];
+  const badShape = [];
+  for (const part of parts) {
+    const f = funcs[part.id];
+    if (!f) {
+      badShape.push(`${part.id}: missing function`);
+      continue;
+    }
+    try {
+      const out = f(buildCodeFuncParamsFromInputs(part.inputs));
+      if (!out || typeof out.html !== 'string') {
+        badShape.push(part.id);
+      }
+    } catch (error) {
+      throwing.push(`${part.id}: ${error.message}`);
+    }
+  }
+  assert(throwing.length === 0, `all 222 generators execute without throwing${throwing.length ? `: ${throwing.slice(0, 5).join(', ')}` : ''}`);
+  assert(badShape.length === 0, `all 222 generators return an html string${badShape.length ? `: ${badShape.slice(0, 5).join(', ')}` : ''}`);
+}
+
 function testReadyChecklistArtifactSelection() {
   const result = run('node', ['--test', 'tests/generate-ready-checklist.test.mjs']);
   if (result.status === 0) {
@@ -410,6 +484,7 @@ testBehaviorMetadata();
 testDistributionShape();
 testEditorAssetContract();
 testRenderSmoke();
+testPartCodeFuncs();
 testReadyChecklistArtifactSelection();
 
 if (failures > 0) {

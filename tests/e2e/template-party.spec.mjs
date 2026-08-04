@@ -59,11 +59,17 @@ async function cleanupExternalDatabase() {
 
 async function loginAsAdmin(page, redirectPath = '/wp-admin/') {
 	const redirectTo = `${baseUrl}${redirectPath}`;
-	await page.goto(`${baseUrl}/wp-login.php?redirect_to=${encodeURIComponent(redirectTo)}`, { waitUntil: 'domcontentloaded' });
-	await page.locator('#user_login').fill('admin');
-	await page.locator('#user_pass').fill('admin');
-	await page.locator('#wp-submit').click();
-	await page.waitForURL((url) => url.href.startsWith(redirectTo), { timeout: 30000 });
+	// 認証済み・未認証の両方を同じヘルパーで扱うため、目的ページを直接開く。
+	await page.goto(redirectTo, { waitUntil: 'domcontentloaded' });
+
+	const loginInput = page.locator('#user_login').first();
+	if (await loginInput.isVisible().catch(() => false)) {
+		await loginInput.fill('admin');
+		await page.locator('#user_pass').fill('admin');
+		await page.locator('#wp-submit').click();
+	}
+
+	await page.waitForURL((url) => url.href.startsWith(redirectTo), { waitUntil: 'domcontentloaded', timeout: 30000 });
 }
 
 async function waitForEditorReady(page) {
@@ -120,7 +126,7 @@ async function writeFreshCompose() {
       WP_ADMIN_EMAIL: admin@example.com
     volumes:
       - wp_core_tp:/var/www/html
-      - ${yamlDoubleQuoted(`${path.join(repoRoot, '.tmp', 'dist')}:/dist:ro`)}
+      - ${yamlDoubleQuoted(`${path.join(repoRoot, 'dist')}:/dist:ro`)}
       - ${yamlDoubleQuoted(`${tmpRoot}:/e2e`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'php.ini')}:/usr/local/etc/php/conf.d/custom.ini:ro`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'mysql-client.cnf')}:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro`)}
@@ -302,43 +308,13 @@ test('create-page REST endpoint creates a draft page for a template', async ({ p
 	await loginAsAdmin(page, '/wp-admin/');
 
 	// Retrieve nonce from WP REST API via the admin.
-	const nonceResponse = await page.evaluate(async () => {
-		try {
-			const r = await fetch('/wp-json/?_fields=authentication', { credentials: 'include' });
-			// Fall back to the nonce printed in the editor.
-			const dataEl = document.querySelector('[data-designinserter-catalog]');
-			if (dataEl) {
-				return JSON.parse(dataEl.dataset.designinserterCatalog).nonce;
-			}
-		} catch { /* ignore */ }
-		return null;
-	});
-
-	// Get a known template ID from the catalog via REST (authenticated).
-	const catalogNonce = await page.evaluate(async () => {
-		const r = await fetch(`/wp-admin/admin-ajax.php?action=rest-nonce`, { credentials: 'include' });
-		return null; // Ajax nonce not needed; use cookie-based request.
-	});
-
-	// Use wp-json to retrieve REST nonce via the standard endpoint.
-	const nonceVal = await page.evaluate(async () => {
-		const r = await fetch('/wp-admin/admin-ajax.php', {
-			method: 'POST',
-			credentials: 'include',
-			body: new URLSearchParams({ action: 'wp_api_nonce' }),
-		});
-		return null; // Fallback: use wp.apiSettings.nonce if available in admin.
-	});
-
 	// Navigate to the editor page so wp object is available for nonce.
 	await page.goto(`${baseUrl}/wp-admin/post.php?post=${editorPageId}&action=edit`, { waitUntil: 'domcontentloaded' });
 	await waitForEditorReady(page);
 
 	const createResult = await page.evaluate(async (restBase) => {
-		const nonce = window.wpApiSettings?.nonce || window.wp?.apiFetch?.nonceMiddleware?.nonce || '';
-
 		// Find the templatesRestUrl and first template ID from catalog.
-		const catalog = window.designinserterCatalog || null;
+		const catalog = window.DesignInserterCatalog || null;
 		if (!catalog || !catalog.templatesRestUrl || !catalog.templates || !catalog.templates[0]) {
 			return { error: 'catalog not available', catalog: JSON.stringify(catalog).slice(0, 200) };
 		}
