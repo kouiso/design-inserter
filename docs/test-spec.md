@@ -9,7 +9,7 @@
 ### SSOT の関係
 
 ```text
-openspec/specs/*.md   要件・仕様の正本（受け入れ基準 63 項目）
+openspec/specs/*.md   要件・仕様の正本（受け入れ基準 65 項目）
         │
         ├─ docs/requirements.md   要件（FR / NFR / 成功基準 6 項目）
         ├─ docs/specifications.md 詳細仕様（JSON スキーマ・出力 HTML）
@@ -208,6 +208,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLK-013 | 再有効化で出力が復活する | 復活 | 実機: `wp plugin activate` | 手動要 |
 | DI-BLK-014 | ブロック属性に `params` / `html` / `css` が追加される | `attributes` 登録済み | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-30 |
 | DI-BLK-015 | 保存時に `html` / `css` が属性として永続化される | `serialize( { html, css } )` | `assets/editor.js` `save` | 自動済 2026-07-30 |
+| DI-BLK-016 | 保存済みブロックを開き直しても `params` の調整値が既定値へ再初期化されない | `params` か `html`/`css` が既に埋まっていれば初期化 useEffect が走らない | `assets/editor.js` `edit` 関数の初期化 `useEffect`（`partId` 依存） | 自動済（コード契約） |
+| DI-BLK-017 | `html` / `css` は保存済み `params` を現在の generator に通した結果へ自動的に再同期される（`params` 自体は変わらないが、generator 側の出力が変わればそれに追従する） | `LivePreview` が再計算した `content` を `onContentChange()` で書き戻す | `assets/editor.js` `LivePreview` / `onContentChange` | 自動済（コード契約） |
 
 ### 4.6 DI-EDT — エディタ UI
 
@@ -225,7 +227,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-010 | プレビューが sandbox iframe に隔離される | `sandbox: ''` + `srcDoc` | 同上 | 自動済 2026-07-28 |
 | DI-EDT-011 | カタログ HTML に `dangerouslySetInnerHTML` を使わん | 不使用 | 同上 | 自動済 2026-07-28 |
 | DI-EDT-012 | template プレビュー iframe の sandbox 強度 | `allow-scripts allow-same-origin`（part 側と意図的に異なる） | — | 未実装。差分の妥当性を §7 で判断 |
-| DI-EDT-013 | SVG-only パーツのプレビューに style タグが含まれん | style 無し | 実機: loading 系を選択 | 手動要 |
+| DI-EDT-013 | SVG-only パーツのプレビューでパーツ固有 CSS が出力されん（基本スタイル用の style タグ自体は常に残る） | `content.css` 相当が空 | 実機: loading 系を選択 | 手動要 |
 | DI-EDT-014 | 未選択時に案内メッセージが出る | 「CSS パーツを選択してください」 | 実機 | 手動要 |
 | DI-EDT-015 | 該当 0 件時に empty state とフィルタ解除が出る | `di-picker__empty` 表示・clear で復帰 | 実機: 存在せん語で検索 | 手動要 |
 | DI-EDT-016 | エディタ操作中に JS console error が出ん | error 0 / failed request 0 | `fresh-install-222.spec.mjs` `collectBrowserIssues()` | 自動済 2026-07-29 [ローカル実行] |
@@ -443,7 +445,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 ### 5.1 openspec 受け入れ基準 → テストケース ID
 
-`openspec/specs/*.md` の未チェック項目は全 6 ファイルで 63 件（catalog 8 / editor-ui 20 / gutenberg-block 8 / rendering 8 / scraper 12 / shortcode 7）。全件をテストケース ID に対応付けた（一部は同一 ID を複数項目で共有、または 1 項目に複数 ID が対応するため、下表は 64 行）。
+`openspec/specs/*.md` の未チェック項目は全 6 ファイルで 65 件（catalog 8 / editor-ui 20 / gutenberg-block 10 / rendering 8 / scraper 12 / shortcode 7）。全件をテストケース ID に対応付けた（一部は同一 ID を複数項目で共有、または 1 項目に複数 ID が対応するため、下表は 66 行）。
 
 | spec | 受け入れ基準 | ID | 現状 |
 |---|---|---|---|
@@ -466,7 +468,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | editor-ui | 選択後にプレビューが即表示 | DI-EDT-008 | 自動済 |
 | editor-ui | 生成関数の無いパーツだけが REST 経由で遅延ロードされる（CSS Stock 222 件は経由しない） | DI-EDT-009 | 自動済（構造的な担保） |
 | editor-ui | プレビューが sandbox iframe に隔離される | DI-EDT-010 | 自動済 |
-| editor-ui | SVG-only のプレビューに style タグなし | DI-EDT-013 | 手動要 |
+| editor-ui | SVG-only のプレビューでパーツ固有 CSS が空（基本 style は残る） | DI-EDT-013 | 手動要 |
 | editor-ui | 未選択で案内メッセージ | DI-EDT-014 | 手動要 |
 | editor-ui | リロード後も選択状態を保持 | DI-BLK-011 | 手動要 |
 | editor-ui | JS エラーがコンソールに出ん | DI-EDT-016 | 自動済 |
@@ -479,11 +481,13 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | gutenberg-block | 挿入パネルに Design Inserter | DI-BLK-009 | 自動済 |
 | gutenberg-block | 検索付きビジュアル picker に 360 件 + テンプレ 1017 件 | DI-EDT-002 | 自動済 2026-08-02 [ローカル実行] |
 | gutenberg-block | 選択後にエディタ内プレビュー | DI-EDT-008 | 自動済 |
-| gutenberg-block | SVG-only で style タグ出力なし | DI-EDT-013 | 手動要 |
+| gutenberg-block | SVG-only でパーツ固有 CSS が空（基本 style は残る） | DI-EDT-013 | 手動要 |
 | gutenberg-block | 保存後フロントで HTML+CSS 描画 | DI-BLK-010 | 自動済 2026-07-30 [ローカル実行] |
 | gutenberg-block | 無効 partId でフロント表示なし | DI-BLK-008 | 未実装 |
 | gutenberg-block | 無効化後も保存済み投稿でエラーなし | DI-BLK-012 | 手動要 |
 | gutenberg-block | テンプレートカードから固定ページを作成できる | DI-API-019 / DI-E2E-009 | 自動済 2026-07-30 [ローカル実行] |
+| gutenberg-block | 保存済みブロックの `params` が再初期化されない | DI-BLK-016 | 自動済（コード契約） |
+| gutenberg-block | `html`/`css` が `params` から自動再同期される | DI-BLK-017 | 自動済（コード契約） |
 | rendering | 有効 partId で HTML+CSS+コメント | DI-RND-001 | 自動済 |
 | rendering | 無効 partId で空文字列 | DI-RND-006 | 自動済 |
 | rendering | SVG-only で style タグなし | DI-RND-007 | 自動済 |
@@ -512,7 +516,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | shortcode | 出力がブロック出力と同一 | DI-SC-007 | 未実装 |
 | shortcode | テキストウィジェットで描画 | DI-SC-009 | 手動要 |
 
-集計: 自動済 43 / 環境制約NG 2 / 手動要 14 / 未実装 5 / 不整合 0。
+集計: 自動済 45 / 環境制約NG 2 / 手動要 14 / 未実装 5 / 不整合 0。
 
 （2026-08-02: openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂したことで、DI-EDT-002 に紐づく 3 行がすべて `不整合` から `自動済` になった。§5.1 の `不整合` は 0 件。2026-08-04: Template Party disclosure Notice 群の ID を DI-EDT-025〜029 に振り直した。同日、`openspec/specs/*.md` の未チェック項目が実際には 63 件（旧集計は 55 件と誤って記載）あり、§5.1 が editor-ui の検索/カテゴリ/source フィルタ・REST 遅延ロード・sandbox 隔離・useSelect と、gutenberg-block のテンプレート create-page 項目（計 9 件）を欠いていたため追加し、64 行に更新した。）
 
@@ -1066,3 +1070,4 @@ P2 — 継続改善：
 | 2026-08-04 続き9 | Codex の新規指摘5件に対応。(1) `detectPreviewKind()` が `<?xml` 接頭辞だけで svg 判定していたため、`<Error>AccessDenied</Error>` のような XML エラー応答も svg として通っていた。実際に `<svg` ルート要素があるかを見るよう修正しユニットテストを追加。(2) `PartCard`/`TemplateCard` の絵文字プレースホルダが文字化けしていた（🎨 は base 文字が欠落し variation selector だけ残存、🖼️ は空文字列）ため実際の絵文字に修正し、`scripts/test.mjs` に実体を検査する回帰テストを追加。(3) `docs/test-spec.md` §5.1 が「openspec 未チェック項目 55 件を全件対応付けた」と主張していたが実数は 63 件で、editor-ui の検索/カテゴリ/source フィルタ・REST 遅延ロード・sandbox 隔離・useSelect と gutenberg-block のテンプレート create-page 項目（計 9 件）が §5.1 に無かったため追加し、集計・冒頭の SSOT 図の項目数も 63 に訂正した。(4) `editor-ui.md` 要件10が全パーツを REST 遅延ロードすると規定していたが、CSS Stock 222 件は全パーツが `part-code-funcs.js` のローカル生成関数を持ち（`testPartCodeFuncs()` で担保）実際には REST を経由しない。generator-first の実装に合わせて記述を修正。(5) DI-EDT-026（disclosure Notice）の自動検証が `scripts/test.mjs` の文言 grep のみで、コメントや到達しない分岐に文言があっても green になり得たため、`tests/e2e/template-party.spec.mjs` にテンプレートカード選択後に `.di-create-page` 内の Notice が実際に可視状態であることを検証するアサーションを追加した |
 | 2026-08-04 続き10 | Codex 続報1件 + CodeRabbit 新規指摘4件に対応。(1) [Codex] `Taskfile.yml` の `ci:fast` が `build` → `build:dev` に変わった後も、以前の `npm run build` が残した `dist/designinserter-<version>.zip` が消えず、`generate-ready-checklist.mjs`（K036）がソース変更後もそれを「存在する」だけで現行候補として green 扱いし得た。`build:dev` の直前に `dist/designinserter-*.zip` を削除するステップを追加。(2) [CodeRabbit] `docs/test-spec.md` の DI-EDT-026 が「自動済」だったが、実体は `scripts/test.mjs` の文言存在チェックのみで、実際に可視状態であることを検証する E2E はこの環境では未実行だったため `環境制約NG` に訂正（コード契約チェックは自動済のまま明記）。(3) [CodeRabbit] §5.3 逆引き表の `tests/e2e/template-party.spec.mjs` 行に `DI-EDT-025` が抜けていたため追加。(4) [CodeRabbit] `detectPreviewKind()` の XML 判定が `<svg/>` のような自己終了ルート要素にマッチせず、正当な svg プレビューを `unknown` として拒否していたため、正規表現に `/` を追加しユニットテストを追加。(5) [CodeRabbit] `editor.js` の `LivePreview` が codeFunc 失敗時・REST 失敗時に古い `content` を残したまま `setError()` するだけで、ブロックの保存済み `html`/`css` 属性が実際には失敗した新しい partId のものではなく前のパーツのものになり得た。両エラー経路で `setContent(null)` を追加し、あわせて AbortController 非対応環境向けの stale-response ガードも、リクエスト自身の `partId` と `latestPartIdRef.current`（最新選択）を比較する形に強化した（従来は自分自身の partId としか比較しておらず実質無意味だった）。ついでに `verifyZip()` に readme.txt の Stable tag 値検証（存在チェックのみだった）と、dev モードで欠けているカタログが本当に `lockedFiles` に含まれるか（単純な選定バグでないか）の検証を追加した |
 | 2026-08-04 続き11 | Codex の新規指摘5件に対応。(1) `gutenberg-block.md` 要件9が「プレビュー内容は REST から遅延ロード」と書いたままで、`editor-ui.md` を generator-first に直した後も兄弟 spec 間で通信契約が矛盾していた。CSS Stock 222 件はローカル生成関数を最優先で使い、REST は生成関数の無いパーツ（現状 Template Party）だけの経路である旨に統一。(2) `editor-ui.md` の受け入れ基準で、未選択メッセージに ID が無く、検索結果 0 件の行に誤って `DI-EDT-014` が付いていた（正本の `docs/test-spec.md` では未選択＝DI-EDT-014、0件＝DI-EDT-015）。それぞれ正しい ID に修正。(3) `gutenberg-block.md` 属性5の「`params` か `html`/`css` が既に埋まっていれば上書きしない」という記述が、`LivePreview` が毎回 `params` から `html`/`css` を再計算し `onContentChange()` で書き戻す実装と食い違っていた（`params` 自体は再初期化されないが、`html`/`css` は generator の現在の出力に自動追従するキャッシュである）。実装通りの挙動に記述を修正。(4) [P2] `editor.js` の `LivePreview` の REST コールバックが、stale 応答の判定より先に `setLoading(false)` を実行していたため、AbortController 非対応環境で別パーツ選択直後に古い応答が先着すると、新しいフェッチが継続中でも spinner が消えて古い content が完了済みのように見えるリスクがあった。stale 判定を先頭に移し、stale 応答では `setLoading` を含む一切の state 更新を行わないよう修正。(5) [P2] DI-BLD-019 は「Stable tag / Tested up to」両方の自動検証を謳っていたが、実装は Stable tag のみを検証しており `Tested up to` は readme.txt の存在チェックにしか掛かっていなかった（削除や不正な値でも green のまま通り得た）。`scripts/test.mjs` と `verifyZip()` の両方に `Tested up to` の書式検証（`\d+(\.\d+){1,2}` 形式）を追加し、台帳の記述と実装を一致させた |
+| 2026-08-04 続き12 | Codex の新規指摘6件に対応（うち1件は保留・要ユーザー判断としてコード変更せず）。(1) `docs/test-spec.md` の DI-EDT-013（SVG-only パーツのプレビュー）が「style タグが含まれん」と記載していたが、`LivePreview` の `srcDoc` は margin/padding/font-family のリセット用ベース style を常に出力し、空になるのはパーツ固有 CSS（`content.css`）だけ。台帳の期待値を実装（`gutenberg-block.md` は既に正しかった）に合わせて訂正した（3箇所）。(2) `gutenberg-block.md` の受け入れ基準に、属性5で新設した「保存済み `params` を再初期化しない」「`html`/`css` は generator の現在の出力へ自動再同期される」という契約に対応するチェックボックスが無く、この挙動を一度も検証しないまま全基準を満たした扱いにできた。DI-BLK-016/017 を新設して追加し、§5.1・集計・冒頭 SSOT の受け入れ基準数を 63→65 項目に更新した。(3) `scripts/scrape-template-party-parts.mjs` が Template Party パーツへ常に `inputs: []`（空配列）を設定し、`includes/data.php` の `designinserter_shape_part_for_editor_catalog()` がそれをそのまま editor カタログへ渡していたため、`editor-ui.md` が規定する「調整 UI が無ければ `inputs` キー自体が無い」契約に違反していた（CSS Stock 222 件は全件が実際に colors/radios/ranges のいずれかを持つため、この契約は今まで一度も検証されていなかった）。`data.php` 側で colors/radios/ranges が全て空なら `inputs` キーごと省略するよう正規化し、スクレイパー側も `inputs: []` を書かないよう修正（次回スクレイプから反映。既存の暗号化済みデータは data.php 側の正規化で救済される）。(4) `editor.js` の `LivePreview` が生成関数失敗時に `content` を `null` にするだけで、ブロックの保存済み `html`/`css` 属性はクリアしないため、直前の成功結果が残ったまま公開されると現在の `params` と食い違う懸念について: 属性を明示的に空へ書き換える案は、`computePartContent` が例外を投げる経路は全 222 パーツの回帰テスト（既定値）では踏まないレアケースである一方、書き換えを実装すると一時的なエラーで正当な保存済みカスタマイズを消してしまうリスクの方が大きいと判断し、見送った（理由は PR スレッドに返信）。(5) `scripts/build-plugin-zip.mjs` の `LOCAL_ONLY_PREFIXES` が `data/template-party-bundles/` と `scrape-state.json` しか除外せず、`.gitattributes` が git-crypt 暗号化対象として明記する `template-party-parts.json` / `templates.json` / `assets/previews/tp-*` は復号済み環境では平文で配布 zip に入るため、`.gitattributes` のコメント「personal use only, ToS non-redistribution」と矛盾するとの指摘: これは #53（git-crypt ビルドガード）の設計そのもの（復号済みなら Template Party を同梱するのが正しい、が P0 の前提）と真っ向から対立する事業判断であり、コードで一方的に決めず、PR コメントで @kouiso に判断を仰いだ |

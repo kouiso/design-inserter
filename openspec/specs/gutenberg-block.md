@@ -131,6 +131,8 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
 - [ ] サイドバーの picker がカードグリッドで、CSS Stock 222 件 + Template Party 138 件 + テンプレート 1017 件を扱えること（DI-EDT-002）
 - [ ] カード選択後、ブロック本体に sandbox iframe のプレビューが描画されること（DI-EDT-008 / DI-EDT-010）
 - [ ] SVG-only パーツ選択時、style にパーツ固有 CSS が出力されないこと（DI-EDT-013）
+- [ ] 保存済みブロックを開き直しても `params` の調整値が既定値へ再初期化されないこと（DI-BLK-016）
+- [ ] `html` / `css` は保存済み `params` を現在の generator に通した結果へ自動的に再同期されること（generator の出力が変わればそれに追従する）（DI-BLK-017）
 - [ ] 投稿を保存し、フロントエンドで正しい HTML+CSS が描画されること（DI-BLK-010）
 - [ ] 無効な partId の場合、フロントエンドで何も表示されないこと（DI-BLK-008）
 - [ ] プラグイン無効化後、保存済み投稿でエラーが発生しないこと（DI-BLK-012）
