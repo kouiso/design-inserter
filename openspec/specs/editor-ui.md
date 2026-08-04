@@ -72,7 +72,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
    - **`allow-same-origin` は意図的に付与しない**。iframe を不透明オリジンに閉じ込めるため
    - カタログ HTML に `dangerouslySetInnerHTML` を使わない。改ざんされたカタログ JSON が編集画面で実行されるのを防ぐ
    - Template Party プレビューだけは外部サイトを読むため `sandbox="allow-scripts allow-same-origin"`
-5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限の metadata で、実体は REST で 1 件ずつ取る。共通項目は id / title / categoryLabel / previewImage / source / type、パーツには `behavior`、テンプレートには `demoUrl` / `bundleDir` を追加で含める
+5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限の metadata で、実体は REST で 1 件ずつ取る。共通項目は id / title / categoryLabel / previewImage / source / type、パーツには `behavior` と `inputs`（色/ラジオ/レンジの調整 UI 定義。無いパーツには含まれない）、テンプレートには `demoUrl` / `bundleDir` を追加で含める
 6. **権限**: `/parts/{id}` は `edit_posts`、`/templates/{id}/create-page` は `edit_pages` を要求する。プレビュー取得には `X-WP-Nonce` を付ける
 7. **国際化**: `__()` 関数と `designinserter` テキストドメインを使用する（UI 文言には直書きの日本語も混在する）
 8. **CSS スコープ**: パーツプレビューは iframe 内なので、パーツ CSS が編集画面へ漏れない
@@ -87,7 +87,13 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 {
   // CSS Stock 222 件 + Template Party 138 件
   parts: [ { id, title, categoryLabel, previewImage, source, type: "part",
-             behavior?: { type, requiresJs, enhancementLevel } } ],
+             behavior?: { type, requiresJs, enhancementLevel },
+             // 色/ラジオ/レンジの調整 UI を持つパーツにだけ付く。無ければキー自体が無い
+             inputs?: {
+               colors: [ { key, legend: { ja, en }, defaultValue } ],
+               radios: [ { key, legend: { ja, en }, defaultValue, choices: [ { label: { ja, en }, value } ] } ],
+               ranges: [ { key, legend: { ja, en }, defaultValue, min, max, step, unit: { ja, en } } ]
+             } } ],
   // 1017 件
   templates: [ { id, title, categoryLabel, previewImage, source, type: "template", demoUrl, bundleDir } ],
   sources: [ { id: "all", label: "すべて" },
@@ -141,11 +147,11 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 - [ ] 「このテンプレで固定ページを作成」ボタンから create-page REST が呼ばれること（DI-EDT-027）
 - [ ] create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` が表示されること（DI-EDT-028）
 - [ ] パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示されること（DI-EDT-029）
+- [ ] 投稿状態の変化に `useSelect` で追従すること。`wp.data.useSelect` が無い環境では一度きりの読み取りにフォールバックし、`InsertConfirmNotice` のリンク先が破綻しないこと（DI-EDT-030）
 
 ## 将来拡張（未実装）
 
 - `@wordpress/scripts` によるビルドステップ導入
-- カラーカスタマイズ UI（inputs メタデータ使用）
 - カードグリッドの仮想スクロール（現状は parts 360 件 + templates 1,017 件、最大 1,377 件を一括描画）
 - プレビュー iframe の高さ自動調整
 
