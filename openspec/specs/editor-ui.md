@@ -53,7 +53,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 ### TemplatePreview / CreatePageButton（テンプレートを選んだとき）
 
 16. `template.demoUrl` を `src` に持つ `iframe.di-preview__iframe`（高さ 480px）を描画する。`demoUrl` が無ければ「プレビューURLがありません」
-17. ボタンの上に常時 `Notice`（status: info）「このテンプレートで固定ページを作成すると、公開ページはテンプレートのデモサイトへのリンクになります（テンプレート本体の HTML はこのプラグインに同梱されていません）。」を表示する。テンプレート本体（`data/template-party-bundles/`）は ToS 上再配布不可で配布 zip に常に含まれず、公開ページは常に `demoUrl` へリダイレクトされる（`templates/full-page.php`）ため、作成前に必ず案内する
+17. ボタンの上に常時 `Notice`（status: info）「このテンプレートで固定ページを作成すると、公開ページはテンプレートのデモサイトへのリンクになります（テンプレート本体の HTML はこのプラグインに同梱されていません）。」を表示する。テンプレート本体（`data/template-party-bundles/`）は ToS 上再配布不可で配布 zip に常に含まれず、配布 zip の購入者環境では公開ページは `demoUrl` へリダイレクトされる（`templates/full-page.php`）ため、作成前に必ず案内する。ローカル bundle が存在する復号済み開発環境ではこの限りでない
 18. 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page`（`X-WP-Nonce` 付き）を呼ぶ
 19. 成功時は `div.di-create-page-result` に `Notice`（success）「固定ページを作成しました」と「ページを編集する →」リンクを出す。失敗時は `Notice`（error）
 
@@ -136,12 +136,17 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 - [ ] 検索結果 0 件で「該当するデザインがありません」が表示されること（DI-EDT-014）
 - [ ] ページリロード後も `partId` 属性が保持されること（DI-BLK-011）
 - [ ] JavaScript エラーがコンソールに出力されないこと（DI-FE-010）
+- [ ] `TemplatePreview` が `demoUrl` を iframe に描画すること。無ければ「プレビューURLがありません」が表示されること（DI-EDT-021）
+- [ ] 固定ページ作成前に、公開ページがデモサイトへのリンクになる旨の `Notice` が常時表示されること（DI-EDT-022）
+- [ ] 「このテンプレで固定ページを作成」ボタンから create-page REST が呼ばれること（DI-EDT-023）
+- [ ] create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` が表示されること（DI-EDT-024）
+- [ ] パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示されること（DI-EDT-025）
 
 ## 将来拡張（未実装）
 
 - `@wordpress/scripts` によるビルドステップ導入
 - カラーカスタマイズ UI（inputs メタデータ使用）
-- カードグリッドの仮想スクロール（現状は 360 件を一括描画）
+- カードグリッドの仮想スクロール（現状は parts 360 件 + templates 1,017 件、最大 1,377 件を一括描画）
 - プレビュー iframe の高さ自動調整
 
 ## 関連spec

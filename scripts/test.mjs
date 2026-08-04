@@ -339,6 +339,8 @@ function testDistributionShape() {
     'includes/block.php',
     'includes/admin.php',
     'includes/rest-api.php',
+    'includes/templates.php',
+    'templates/full-page.php',
   ];
   const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(pluginDir, file)));
 

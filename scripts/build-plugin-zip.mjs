@@ -394,6 +394,8 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
     `${pluginSlug}/includes/data.php`,
     `${pluginSlug}/includes/render.php`,
     `${pluginSlug}/includes/rest-api.php`,
+    `${pluginSlug}/includes/templates.php`,
+    `${pluginSlug}/templates/full-page.php`,
   ];
   const expectedEntries = sourceFiles.map((file) => `${pluginSlug}/${path.relative(pluginDir, file).split(path.sep).join('/')}`);
   const missing = required.filter((entry) => !entrySet.has(entry));

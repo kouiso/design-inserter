@@ -9,7 +9,7 @@
 ### SSOT の関係
 
 ```text
-openspec/specs/*.md   要件・仕様の正本（受け入れ基準 50 項目）
+openspec/specs/*.md   要件・仕様の正本（受け入れ基準 55 項目）
         │
         ├─ docs/requirements.md   要件（FR / NFR / 成功基準 6 項目）
         ├─ docs/specifications.md 詳細仕様（JSON スキーマ・出力 HTML）
@@ -216,7 +216,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-004 | カテゴリボタンで絞り込める | 該当のみ | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-005 | source フィルタ 3 種が表示される | 3 ボタン | `tests/e2e/template-party.spec.mjs` | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-006 | Template Party フィルタで template カードが badge 付きで出る | badge 表示 | 同上 | 自動済 2026-07-30 [ローカル実行] |
-| DI-EDT-007 | CSS Stock フィルタで template カードが隠れる | parts のみ | 同上 | 自動済 2026-07-30 [ローカル実行] |
+| DI-EDT-007 | デザインパーツフィルタで template カードが隠れる | parts のみ | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-008 | カードクリックでプレビューが即表示される | プレビュー描画 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-009 | プレビューが REST 経由で遅延ロードされる | `window.fetch(restUrl + partId)` | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-28 |
 | DI-EDT-010 | プレビューが sandbox iframe に隔離される | `sandbox: ''` + `srcDoc` | 同上 | 自動済 2026-07-28 |
@@ -230,6 +230,12 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-018 | REST fetch に `X-WP-Nonce` が付く | ヘッダ有り | 実機: ネットワーク監視 | 手動要 |
 | DI-EDT-019 | カードの `aria-pressed` / `aria-label` が選択状態と同期する | 同期 | 実機: a11y スナップショット | 手動要 |
 | DI-EDT-020 | 管理画面 9 色テーマで選択状態が視認できる | コントラスト確保 | 実機: 各テーマ | 手動要 |
+| DI-EDT-021 | `TemplatePreview` が `template.demoUrl` を `src` に持つ iframe を描画する。無ければ「プレビューURLがありません」 | iframe 表示 or 代替テキスト | `tests/e2e/template-party.spec.mjs`（`.di-preview--template iframe` の src 検証） | 環境制約NG（Docker + git-crypt） |
+| DI-EDT-022 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `scripts/test.mjs` `testEditorAssetContract()`（告知文言の存在チェック） | 自動済 2026-08-04 [ローカル実行] |
+| DI-EDT-023 | 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page` を呼ぶ | REST 呼び出し | 実機: ボタンクリック → ネットワーク監視 | 手動要 |
+| DI-EDT-024 | create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` を表示する | 状態遷移が UI に反映 | 実機 | 手動要 |
+| DI-EDT-025 | パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示される | Notice + リンク | 実機 | 手動要 |
+| DI-EDT-026 | 投稿状態の変化に `useSelect` で追従し、無い環境では一度きり読み取りにフォールバックする | 購読 or フォールバック動作 | コードレビュー | 手動要 |
 
 ### 4.7 DI-SC — ショートコード
 
@@ -429,7 +435,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 ### 5.1 openspec 受け入れ基準 → テストケース ID
 
-`openspec/specs/*.md` の未チェック項目 50 件を全件対応付けた。
+`openspec/specs/*.md` の未チェック項目 55 件を全件対応付けた。
 
 | spec | 受け入れ基準 | ID | 現状 |
 |---|---|---|---|
@@ -449,6 +455,11 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | editor-ui | 未選択で案内メッセージ | DI-EDT-014 | 手動要 |
 | editor-ui | リロード後も選択状態を保持 | DI-BLK-011 | 手動要 |
 | editor-ui | JS エラーがコンソールに出ん | DI-EDT-016 | 自動済 |
+| editor-ui | TemplatePreview が demoUrl を iframe に描画（無ければ代替テキスト） | DI-EDT-021 | 環境制約NG |
+| editor-ui | 固定ページ作成前にデモリンク挙動を明示する Notice を表示 | DI-EDT-022 | 自動済 2026-08-04 [ローカル実行] |
+| editor-ui | create-page ボタンから REST を呼ぶ | DI-EDT-023 | 手動要 |
+| editor-ui | create-page 成功/失敗時に Notice を出す | DI-EDT-024 | 手動要 |
+| editor-ui | 選択直後に InsertConfirmNotice を出す | DI-EDT-025 | 手動要 |
 | gutenberg-block | 挿入パネルに Design Inserter | DI-BLK-009 | 自動済 |
 | gutenberg-block | 検索付きビジュアル picker に 360 件 + テンプレ 1017 件 | DI-EDT-002 | 自動済 2026-08-02 [ローカル実行] |
 | gutenberg-block | 選択後にエディタ内プレビュー | DI-EDT-008 | 自動済 |
@@ -484,7 +495,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | shortcode | 出力がブロック出力と同一 | DI-SC-007 | 未実装 |
 | shortcode | テキストウィジェットで描画 | DI-SC-009 | 手動要 |
 
-集計: 自動済 35 / 環境制約NG 0 / 手動要 10 / 未実装 5 / 不整合 0。
+集計: 自動済 36 / 環境制約NG 1 / 手動要 13 / 未実装 5 / 不整合 0。
 
 （2026-08-02: openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂したことで、DI-EDT-002 に紐づく 3 行がすべて `不整合` から `自動済` になった。§5.1 の `不整合` は 0 件。）
 
@@ -1027,3 +1038,4 @@ P2 — 継続改善：
 | 2026-08-02 | 残存 issue 5 件を一括対応（#52 / #53 / #54 / #55 / #57）。F-4 のビルドガード（git-crypt 暗号文検出 + 再配布不可データ除外 + `build` / `build:dev` の 2 モード）、`readme.txt` 追加、openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせ全面改訂、DI-TPL-001 回帰テスト追加、`scripts/wp-smoke.mjs` の配布ファイル選定を build と共通化。`.github/workflows/trusted-test.yml` に復号済みリリースビルドを追加。**本作業環境は git-crypt ロック・Docker daemon 未起動**のため、`npm run phpcs` / `npm run test:php` は Docker やのうて `vendor/bin/` を直叩きして代替実行し、E2E は `--list` の起動確認のみ。復号済み `npm run build` の成功経路と Docker 実機確認は未実施 |
 | 2026-08-04 | PR #70 の CodeRabbit / Codex レビュー指摘を精査。DI-BLD-021 を `自動済`（間接確認のみやのに）から `手動要` に訂正。§9.6 / §11.7 の UI 証跡パスを `.work/qa/ui-evidence/run-1785413347347/` に一本化（`screencasts/...` と `/home/ubuntu/screencasts/...` の 2 通りが混在しとった）。§10 と §11 の見出し番号順序が本文の並びと逆転しとった件は、`§11.x` の相互参照が複数箇所にあるため機械的な入れ替えを避け、`変更履歴` を `§12` に振り直して昇順を回復（`§10` は欠番）。`gutenberg-block.md:64` のリンク形式変更（`admin.php` の `Parts` ラベル改名）は E2E / 既存リンク規約と衝突するため見送り。判断根拠は PR #70 の issue comment に記載 |
 | 2026-08-04 続き | Template Party の bundles 除外（DI-SEC-014）に伴い、購入者環境では「固定ページを作成」が常に `demoUrl` へのリダイレクトになる（`templates/full-page.php` の設計済みフォールバック）。作成前に気付けるよう `CreatePageButton` にデモリンク挙動を明示する `Notice` を追加し、`readme.txt` の説明文も「フルページレイアウトの固定ページを作成できます」という誤解を招く表現から実態に合わせて修正した。`scripts/test.mjs` に告知文言の回帰テストを追加。`openspec/specs/editor-ui.md` の機能要件・受け入れ基準を更新 |
+| 2026-08-04 続き2 | CodeRabbit / Codex の新規指摘3件に対応。(1) `includes/templates.php` / `templates/full-page.php` が `verifyZip()` の `required` と `testDistributionShape()` の `requiredFiles` に未登録で、削除しても `npm test` / `build:dev` が exit 0 のまま素通りしていた（Codex）。両方に追加。(2) `editor-ui.md` の Notice 説明文「公開ページは常に `demoUrl` へリダイレクトされる」が、bundle が存在するローカル復号済み開発環境の実態と食い違っていたため、配布 zip の購入者環境に限定する表現へ修正（CodeRabbit）。(3) 仮想スクロールの説明が parts 360 件のみを記載していたので templates 1,017 件を含む最大 1,377 件に修正、TemplatePreview/CreatePageButton/InsertConfirmNotice（要件16〜21）の受け入れ基準が欠けていたので DI-EDT-021〜025 を追加し §5.1 のトレーサビリティ表・集計（55 項目）も追随させた（CodeRabbit）。§4.6 の残存「CSS Stock」表記も同時に修正 |
