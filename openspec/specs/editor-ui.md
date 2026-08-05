@@ -72,7 +72,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
    - **`allow-same-origin` は意図的に付与しない**。iframe を不透明オリジンに閉じ込めるため
    - カタログ HTML に `dangerouslySetInnerHTML` を使わない。改ざんされたカタログ JSON が編集画面で実行されるのを防ぐ
    - Template Party プレビューだけは外部サイトを読むため `sandbox="allow-scripts allow-same-origin"`
-5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限の metadata で、実体は REST で 1 件ずつ取る。共通項目は id / title / categoryLabel / previewImage / source / type、パーツには `behavior` と `inputs`（色/ラジオ/レンジの調整 UI 定義。無いパーツには含まれない）、テンプレートには `demoUrl` / `bundleDir` を追加で含める
+5. **ペイロード**: カタログには `html` / `css` を含めない。エディタに渡すのは表示に要る最小限の metadata で、実体（`html`/`css`）は `part-code-funcs.js` のローカル生成関数（CSS Stock 222 件）か、生成関数の無いパーツ（現状 Template Party）だけの REST で 1 件ずつ取る。共通項目は id / title / categoryLabel / previewImage / source / type、パーツには `behavior` と `inputs`（色/ラジオ/レンジの調整 UI 定義。無いパーツには含まれない）、テンプレートには `demoUrl` / `bundleDir` を追加で含める
 6. **権限**: `/parts/{id}` は `edit_posts`、`/templates/{id}/create-page` は `edit_pages` を要求する。プレビュー取得には `X-WP-Nonce` を付ける
 7. **国際化**: `__()` 関数と `designinserter` テキストドメインを使用する（UI 文言には直書きの日本語も混在する）
 8. **CSS スコープ**: パーツプレビューは iframe 内なので、パーツ CSS が編集画面へ漏れない
@@ -141,7 +141,7 @@ Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレ�
 - [ ] 未選択状態で「左の「探す」エリアでデザインを選んでください」が表示されること（DI-EDT-014）
 - [ ] 検索結果 0 件で「該当するデザインがありません」が表示されること（DI-EDT-015）
 - [ ] ページリロード後も `partId` 属性が保持されること（DI-BLK-011）
-- [ ] JavaScript エラーがコンソールに出力されないこと（DI-FE-010）
+- [ ] JavaScript エラーがコンソールに出力されないこと（DI-EDT-016）
 - [ ] `TemplatePreview` が `demoUrl` を iframe に描画すること。無ければ「プレビューURLがありません」が表示されること（DI-EDT-025）
 - [ ] 固定ページ作成前に、公開ページがデモサイトへのリンクになる旨の `Notice` が常時表示されること（DI-EDT-026）
 - [ ] 「このテンプレで固定ページを作成」ボタンから create-page REST が呼ばれること（DI-EDT-027）

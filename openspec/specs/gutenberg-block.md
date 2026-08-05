@@ -38,7 +38,7 @@ WordPress Gutenberg エディタで CSS Stock パーツと Template Party テン
 1. ビルドステップなし — `assets/editor.js` を直接 `wp_register_script` で読み込む
 2. 依存: `wp-blocks`, `wp-element`, `wp-components`, `wp-block-editor`, `wp-i18n`, `wp-data`
 3. catalog のメタデータは `wp_localize_script` で `DesignInserterCatalog` としてエディタに渡す。**`html` / `css` は渡さない**
-4. パーツの HTML / CSS は `GET /designinserter/v1/parts/{id}`（`edit_posts` 必須・`X-WP-Nonce` 付き）で 1 件ずつ取得する
+4. パーツの HTML / CSS は、`part-code-funcs.js` にローカル生成関数があればそれを最優先で同期的に使う（CSS Stock 222 件はこの経路）。生成関数が無いパーツ（現状 Template Party）だけ `GET /designinserter/v1/parts/{id}`（`edit_posts` 必須・`X-WP-Nonce` 付き）で 1 件ずつ REST 取得する
 5. エディタプレビューは iframe の `srcDoc` 内に `<style>` としてインライン出力する。編集画面の DOM には挿入しない（C-02）
 6. SVG-only パーツ（css が空）の場合、srcDoc の `<style>` にはプレビュー用の基本スタイルだけが残り、パーツ固有 CSS の部分が空になる
 7. プラグイン停止時、保存済みブロックはフロントエンドで何も描画しない（空文字列を返す）
