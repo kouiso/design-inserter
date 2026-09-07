@@ -27,7 +27,8 @@
 ```bash
 npm ci               # 依存インストール（CI）
 npm install          # 依存インストール（開発）
-npm run build        # プラグイン zip ビルド
+npm run build        # リリース zip ビルド（git-crypt ロック時は失敗する）
+npm run build:dev    # 開発 zip ビルド（暗号文を除外して dist/dev/ に出力）
 npm test             # JS ユニットテスト
 npm run phpcs        # PHP コーディング規約チェック（Docker）
 npm run test:php     # PHP ユニットテスト（Docker）
@@ -35,7 +36,7 @@ npm run php:lint     # PHP 構文チェック（Docker）
 npm run e2e:fresh    # 新規インストール E2E（Playwright）
 
 # Taskfile
-task ci:fast         # npm ci + phpcs + php:lint + build + test + test:php
+task ci:fast         # npm ci + phpcs + php:lint + build:dev + test + test:php
 task ci              # ci:fast のエイリアス
 ```
 

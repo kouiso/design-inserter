@@ -36,6 +36,9 @@ assert_true( isset( $state['shortcodes']['designinserter_part'] ), 'plugin regis
 assert_true( isset( $state['actions']['init'] ), 'plugin registers init hook on load' );
 assert_true( isset( $state['actions']['rest_api_init'] ), 'plugin registers REST hook on load' );
 assert_true( isset( $state['actions']['admin_menu'] ), 'plugin registers admin menu hook on load' );
+// DI-TPL-001: includes/templates.php の require が消えるとフルページテンプレートが黙って効かんくなる（F-1）。
+assert_true( isset( $state['filters']['theme_page_templates'] ), 'plugin registers theme_page_templates filter on load' );
+assert_true( isset( $state['filters']['template_include'] ), 'plugin registers template_include filter on load' );
 
 do_action( 'init' );
 do_action( 'rest_api_init' );

@@ -273,7 +273,7 @@ async function writeFreshCompose() {
       WP_ADMIN_EMAIL: admin@example.com
     volumes:
       - wp_core:/var/www/html
-      - ${yamlDoubleQuoted(`${path.join(repoRoot, 'dist')}:/dist:ro`)}
+      - ${yamlDoubleQuoted(`${path.join(repoRoot, 'dist', 'dev')}:/dist:ro`)}
       - ${yamlDoubleQuoted(`${tmpRoot}:/e2e`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'php.ini')}:/usr/local/etc/php/conf.d/custom.ini:ro`)}
       - ${yamlDoubleQuoted(`${path.join(repoRoot, '.docker', 'conf', 'mysql-client.cnf')}:/etc/mysql/mariadb.conf.d/99-docker.cnf:ro`)}
@@ -301,7 +301,8 @@ test.describe.configure({ mode: 'serial' });
 
 test.beforeAll(async () => {
 	await writeFreshCompose();
-	await run('npm', ['run', 'build:zip']);
+	// CSS Stock 222 件のフォールバックを見るテストなので、git-crypt ロック環境でも通る dev ビルドを使う。
+	await run('npm', ['run', 'build:dev']);
 	await dockerCompose(['down', '-v', '--remove-orphans']).catch(() => '');
 	// Issue #13: bring up self-contained db + wordpress, THEN prepareDatabase
 	// (was running prepareDatabase before up, which referenced an external
@@ -313,7 +314,7 @@ test.beforeAll(async () => {
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'option', 'update', 'permalink_structure', '', '--allow-root'], { timeout: 60000 });
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'rewrite', 'flush', '--allow-root'], { timeout: 60000 });
 
-	const zipPath = `/dist/designinserter-${packageJson.version}.zip`;
+	const zipPath = `/dist/designinserter-${packageJson.version}-dev.zip`;
 	await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'plugin', 'install', zipPath, '--activate', '--allow-root'], { timeout: 60000 });
 	const contentPath = await createAllDesignsBlockContent();
 	allDesignsPageId = await dockerCompose(['exec', '-T', 'wordpress', 'wp', 'post', 'create', '/e2e/all-designs-blocks.html', '--post_type=page', '--post_status=publish', '--post_title=All Designs E2E', '--porcelain', '--allow-root'], { timeout: 60000 });

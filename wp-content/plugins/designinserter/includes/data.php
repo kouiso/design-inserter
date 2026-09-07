@@ -126,7 +126,14 @@ function designinserter_shape_part_for_editor_catalog( $part ) {
 	}
 
 	if ( isset( $part['inputs'] ) && is_array( $part['inputs'] ) ) {
-		$item['inputs'] = $part['inputs'];
+		$colors = isset( $part['inputs']['colors'] ) && is_array( $part['inputs']['colors'] ) ? $part['inputs']['colors'] : array();
+		$radios = isset( $part['inputs']['radios'] ) && is_array( $part['inputs']['radios'] ) ? $part['inputs']['radios'] : array();
+		$ranges = isset( $part['inputs']['ranges'] ) && is_array( $part['inputs']['ranges'] ) ? $part['inputs']['ranges'] : array();
+		// scraper が置く `inputs: []`（キーなし配列）も含め、調整 UI が実際には無い場合はキーごと省く。
+		// editor-ui.md の契約（無ければキー自体が無い）と一致させる。
+		if ( $colors || $radios || $ranges ) {
+			$item['inputs'] = $part['inputs'];
+		}
 	}
 
 	return $item;
