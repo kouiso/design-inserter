@@ -121,7 +121,7 @@
 					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '️' ),
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🎨' ),
 			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, part.title )
 		);
@@ -148,7 +148,7 @@
 					'aria-hidden': 'true',
 					loading: 'lazy'
 				} )
-				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '' ),
+				: el( 'div', { className: 'di-card__placeholder', 'aria-hidden': 'true' }, '🖼️' ),
 			isSelected ? el( 'span', { className: 'di-card__selected-badge' }, '選択中' ) : null,
 			el( 'span', { className: 'di-card__title', 'aria-hidden': 'true' }, template.title ),
 			el( 'span', { className: 'di-card__badge', 'aria-hidden': 'true' }, 'テンプレ' )
@@ -390,6 +390,11 @@
 		var retryNonce = retryState[0];
 		var setRetry = retryState[1];
 
+		// AbortController が無い環境では古いリクエストを中断できず、閉じ込めた partId と
+		// 自分自身の応答を比べても常に一致してしまう。最新の選択を ref で追って比較する。
+		var latestPartIdRef = useRef( partId );
+		latestPartIdRef.current = partId;
+
 		useEffect( function() {
 			if ( ! partId ) {
 				setContent( null );
@@ -402,18 +407,34 @@
 			if ( window.designInserterPartCodeFuncs && window.designInserterPartCodeFuncs[ partId ] ) {
 				var computed = computePartContent( partId, params );
 				setLoading( false );
-				setContent( computed );
+				if ( computed ) {
+					setContent( computed );
+				} else {
+					// 古い content を残すと、失敗した新しい partId に前のパーツの html/css が
+					// ブロック属性として紐付いたまま保存されてしまう。
+					setContent( null );
+					// codeFunc 失敗を「未選択」と区別できるようにする（さもないと無反応に見える）。
+					setError( { status: null, codeFuncFailed: true } );
+				}
 				return;
 			}
 
 			var controller = ( typeof AbortController === 'function' ) ? new AbortController() : null;
 			fetchPartContent( partId, function( err, data ) {
+				// AbortController の無い環境では古いリクエストが後から解決し得る。
+				// 自分が要求した partId が現在の選択と食い違っていれば、setLoading も含め一切の
+				// state 更新を行わない。先に setLoading(false) してしまうと、後続で選んだ別パーツの
+				// フェッチがまだ進行中でも spinner が消えて古い content が完了済みに見えてしまう。
+				if ( latestPartIdRef.current !== partId ) {
+					return;
+				}
 				setLoading( false );
 				if ( err ) {
+					setContent( null );
 					setError( err );
 					return;
 				}
-				if ( data && data.id && data.id !== partId ) {
+				if ( data && data.id && data.id !== latestPartIdRef.current ) {
 					return;
 				}
 				setContent( data );
@@ -441,7 +462,9 @@
 		if ( errorVal ) {
 			var label = errorVal.status
 				? __( 'プレビュー取得に失敗しました', 'designinserter' ) + ' (HTTP ' + errorVal.status + ')'
-				: __( 'プレビュー取得に失敗しました (ネットワーク or サーバ応答なし)', 'designinserter' );
+				: errorVal.codeFuncFailed
+					? __( 'プレビューの生成に失敗しました', 'designinserter' )
+					: __( 'プレビュー取得に失敗しました (ネットワーク or サーバ応答なし)', 'designinserter' );
 			return el( Notice, { status: 'error', isDismissible: false },
 				el( 'div', {},
 					el( 'p', { style: { margin: '0 0 8px 0' } }, label ),
@@ -628,6 +651,11 @@
 		}
 
 		return el( 'div', { className: 'di-create-page' },
+			// バンドル実体は ToS 上配布 zip に同梱できず（DI-SEC-014）、購入者環境では常にデモサイトへリダイレクトされる（full-page.php）。
+			// 作成前に必ず案内する。
+			el( Notice, { status: 'info', isDismissible: false, style: { marginBottom: '8px' } },
+				__( 'このテンプレートで固定ページを作成すると、公開ページはテンプレートのデモサイトへのリンクになります（テンプレート本体の HTML はこのプラグインに同梱されていません）。', 'designinserter' )
+			),
 			error ? el( Notice, { status: 'error', isDismissible: false, style: { marginBottom: '8px' } }, error ) : null,
 			el( Button, {
 				variant: 'primary',

@@ -106,3 +106,7 @@ jobs:
 
       - name: npm test (catalog + contract + stub smoke)
         run: npm test
+
+      # 復号済みの環境でしかリリースビルドは通らん。ここが唯一そのゲートを踏める場所（DI-BLD-022 / DI-SEC-014）。
+      - name: Release build (decrypted catalog)
+        run: npm run build

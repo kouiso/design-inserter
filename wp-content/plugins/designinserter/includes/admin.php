@@ -19,7 +19,7 @@ function designinserter_admin_page() {
 	$catalog = designinserter_get_catalog();
 	$parts   = isset( $catalog['parts'] ) ? $catalog['parts'] : array();
 
-	$css_stock_count    = 0;
+	$css_stock_count      = 0;
 	$template_party_count = 0;
 	foreach ( $parts as $part ) {
 		$source = isset( $part['source'] ) ? $part['source'] : 'css-stock';

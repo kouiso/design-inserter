@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 
+import { inspectTemplatePartyCatalogs, detectPreviewKind } from './build-plugin-zip.mjs';
+
 const root = process.cwd();
 const pluginDir = 'wp-content/plugins/designinserter';
 const themeDir = 'wp-content/themes/designinserter-dev';
@@ -85,6 +87,7 @@ function testGitVisibility() {
     'tests/catalog-fallback.php',
     'tests/portable-smoke-integration.php',
     'tests/generate-ready-checklist.test.mjs',
+    'tests/build-plugin-zip.test.mjs',
     'scripts/test.mjs',
     'scripts/wp-smoke.mjs',
     'scripts/build-plugin-zip.mjs',
@@ -117,17 +120,6 @@ function testJavaScriptSyntax() {
   }
 
   pass(`JavaScript syntax passed for ${jsFiles.length} files`);
-}
-
-function getPreviewKind(buffer) {
-  const textStart = buffer.subarray(0, 128).toString('utf8').trimStart();
-
-  if (textStart.startsWith('<svg') || textStart.startsWith('<?xml')) return 'svg';
-  if (buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP') return 'webp';
-  if (buffer.subarray(0, 3).toString('ascii') === 'GIF') return 'gif';
-  if (buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
-
-  return 'unknown';
 }
 
 function extractCatalogAssetReferences(part) {
@@ -176,10 +168,11 @@ function testCatalog() {
     }
 
     if (
-      part.inputs &&
-      (!Object.hasOwn(part.inputs, 'colors') ||
-        !Object.hasOwn(part.inputs, 'radios') ||
-        !Object.hasOwn(part.inputs, 'ranges'))
+      !part.inputs ||
+      typeof part.inputs !== 'object' ||
+      !Object.hasOwn(part.inputs, 'colors') ||
+      !Object.hasOwn(part.inputs, 'radios') ||
+      !Object.hasOwn(part.inputs, 'ranges')
     ) {
       badInputs.push(part.id);
     }
@@ -211,7 +204,7 @@ function testCatalog() {
         missingPreview.push(part.id);
       } else {
         const ext = path.extname(previewPath).slice(1);
-        const kind = getPreviewKind(fs.readFileSync(previewPath));
+        const kind = detectPreviewKind(fs.readFileSync(previewPath));
         if (kind !== ext) {
           badPreviewKind.push(`${part.id}: .${ext} contains ${kind}`);
         }
@@ -227,7 +220,7 @@ function testCatalog() {
         missingAssetRefs.push(`${part.id}:${assetRef.field}:${assetRef.path}`);
       } else {
         const ext = path.extname(assetPath).slice(1);
-        const kind = getPreviewKind(fs.readFileSync(assetPath));
+        const kind = detectPreviewKind(fs.readFileSync(assetPath));
         if (kind !== ext) {
           badAssetRefKind.push(`${part.id}: ${assetRef.path} contains ${kind}`);
         }
@@ -334,10 +327,10 @@ function testDistributionShape() {
   const catalog = readJson(catalogPath);
   const mainFile = path.join(pluginDir, 'designinserter.php');
   const main = fs.readFileSync(mainFile, 'utf8');
-  const notice = fs.readFileSync(path.join(pluginDir, 'NOTICE.md'), 'utf8');
   const requiredFiles = [
     'designinserter.php',
     'NOTICE.md',
+    'readme.txt',
     'assets/editor.js',
     'assets/editor.css',
     'assets/frontend.js',
@@ -348,16 +341,26 @@ function testDistributionShape() {
     'includes/block.php',
     'includes/admin.php',
     'includes/rest-api.php',
+    'includes/templates.php',
+    'templates/full-page.php',
   ];
   const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(pluginDir, file)));
 
   assert(missing.length === 0, `plugin distribution files exist${missing.length ? `: ${missing.join(', ')}` : ''}`);
+
+  // 読み込みはここから。存在アサートより前に読むと ENOENT のスタックトレースで理由が埋もれる。
+  const notice = fs.readFileSync(path.join(pluginDir, 'NOTICE.md'), 'utf8');
+  const readme = fs.readFileSync(path.join(pluginDir, 'readme.txt'), 'utf8');
   assert(packageJson.license === 'GPL-2.0-or-later', 'package.json license matches plugin distribution license');
   assert(packageLock.packages && packageLock.packages[''] && packageLock.packages[''].license === packageJson.license, 'package-lock root license matches package.json');
   assert(main.includes('Plugin Name: Design Inserter'), 'plugin header has Plugin Name');
   assert(main.includes(`Version: ${packageJson.version}`), 'plugin header version matches package.json');
   assert(main.includes(`define( 'DESIGNINSERTER_VERSION', '${packageJson.version}' );`), 'plugin version constant matches package.json');
   assert(main.includes(`define( 'DESIGNINSERTER_SOURCE_URL', '${catalog.sourceUrl}' );`), 'plugin source URL constant matches catalog sourceUrl');
+  // WP.org は Stable tag で配布版を決める。バージョン上げで readme.txt を忘れると古い版が配られる。
+  assert(new RegExp(`^Stable tag:\\s+${packageJson.version.replace(/\./g, '\\.')}\\s*$`, 'm').test(readme), 'readme.txt Stable tag matches package.json version');
+  // Tested up to が消えたり不正な値になっても "readme.txt が存在する" だけでは検出できない。値の形式まで見る。
+  assert(/^Tested up to:\s+\d+(?:\.\d+){1,2}\s*$/m.test(readme), 'readme.txt declares a valid Tested up to WordPress version');
   assert(/Requires at least:\s+6\.0/.test(main), 'plugin header declares minimum WordPress version');
   assert(/Requires PHP:\s+7\.4/.test(main), 'plugin header declares minimum PHP version');
   assert(/License:\s+GPL-2\.0-or-later/.test(main), 'plugin header declares GPL-2.0-or-later');
@@ -377,6 +380,10 @@ function testEditorAssetContract() {
   assert(editor.includes("sandbox: ''"), 'editor preview isolates catalog HTML in sandboxed iframe (C-02 XSS hardening)');
   assert(editor.includes('srcDoc:'), 'editor preview uses srcDoc inline document (no separate URL fetch)');
   assert(!editor.includes('dangerouslySetInnerHTML'), 'editor preview does NOT use dangerouslySetInnerHTML on catalog HTML (replaced by iframe sandbox)');
+  assert(editor.includes('デモサイトへのリンクになります'), 'editor discloses that Template Party create-page links to the demo site (bundle not distributed)');
+  // 絵文字プレースホルダは過去に base 文字が欠落し variation selector だけ残る文字化けが起きたので、実体を検査する。
+  assert(editor.includes("'🎨'"), 'PartCard placeholder renders the actual 🎨 emoji, not a bare variation selector');
+  assert(editor.includes("'🖼️'"), 'TemplateCard placeholder renders the actual 🖼️ emoji, not an empty string');
   assert(block.includes("'wp-block-editor'"), 'block registration declares wp-block-editor dependency');
   assert(block.includes("'DesignInserterCatalog'"), 'block registration localizes editor catalog');
   assert(block.includes("'render_callback' => 'designinserter_render_block'"), 'block registration uses PHP render callback');
@@ -475,6 +482,28 @@ function testReadyChecklistArtifactSelection() {
   }
 }
 
+function testBuildCatalogGuard() {
+  const result = run('node', ['--test', 'tests/build-plugin-zip.test.mjs']);
+  if (result.status === 0) {
+    pass('Build guard classifies git-crypt / locked / malformed catalogs');
+  } else {
+    fail(`Build guard classification failed\n${result.stderr || result.stdout}`);
+  }
+}
+
+// 実データを見る側。ロック環境では skip せず「locked」と印字して通し、
+// 復号済み環境ではカタログ退行の検出器になる。
+function testTemplatePartyCatalogState() {
+  const states = inspectTemplatePartyCatalogs();
+  // locked（鍵が無いだけ）と ok 以外は退行。カタログを消しても npm test が通ると、
+  // PR の JS ジョブはビルドを回さんので、マージ後の trusted build まで気づかれん。
+  const broken = states.filter((state) => state.status !== 'ok' && state.status !== 'locked');
+  const detail = broken.map((state) => `${state.relative}=${state.status}${state.reason ? ` (${state.reason})` : ''}`).join(', ');
+
+  assert(broken.length === 0, `Template Party catalogs are neither missing nor malformed${detail ? `: ${detail}` : ''}`);
+  console.log(`# Template Party catalog mode: ${states.every((state) => state.status === 'ok') ? 'decrypted' : states.map((state) => `${state.relative}=${state.status}`).join(' ')}`);
+}
+
 testPhpSyntax();
 testGitVisibility();
 testJavaScriptSyntax();
@@ -486,6 +515,8 @@ testEditorAssetContract();
 testRenderSmoke();
 testPartCodeFuncs();
 testReadyChecklistArtifactSelection();
+testBuildCatalogGuard();
+testTemplatePartyCatalogState();
 
 if (failures > 0) {
   console.error(`\n${failures} check(s) failed`);

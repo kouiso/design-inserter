@@ -140,7 +140,6 @@ async function main() {
 			description:   description || '',
 			html:          html.trim(),
 			css:           css.trim(),
-			inputs:        [],
 			previewImage:  previewImagePath,
 			sourceUrl:     `${PARTS_BASE}/catalog.php#${id}`,
 			source:        'template-party',
