@@ -2,7 +2,7 @@
 /**
  * Template Party のカタログは ToS 上の再配布制限があるため git-crypt で暗号化してある。
  * 鍵を持たん環境（外部コントリビュータ・CI の一部）では復号できず、
- * designinserter_get_catalog() は CSS Stock の 222 件だけを返す。
+ * designinserter_get_catalog() はデザインパーツの 222 件だけを返す。
  * 期待値をどちらに合わせるかを実データから判定するために在否を返す。
  */
 

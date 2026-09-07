@@ -35,7 +35,7 @@ graph TB
 | ブロック | Gutenberg ブロック登録・エディタスクリプト注入 | `includes/block.php` |
 | 管理 | 設定ページ UI | `includes/admin.php` |
 | エディタ | ブロック選択 UI・プレビュー | `assets/editor.js`, `assets/editor.css` |
-| スクレイパー | CSS Stock からのデータ収集 | `scripts/scrape-css-stock.mjs` |
+| スクレイパー | 外部サイトからのデータ収集 | `scripts/scrape-css-stock.mjs` |
 
 ---
 
@@ -47,7 +47,7 @@ graph TB
 
 ```json
 {
-  "sourceName": "CSS Stock",
+  "sourceName": "Design Parts",
   "sourceUrl": "https://pote-chil.com/css-stock/ja",
   "sourceNotice": "string — ライセンス表記",
   "scrapedAt": "2026-05-01T12:38:07.170Z",
@@ -64,7 +64,7 @@ graph TB
 |------------|-----|------|-----|
 | `slug` | string | カテゴリ識別子 | `"heading"` |
 | `label` | string | 日本語表示名 | `"見出し"` |
-| `url` | string | CSS Stock カテゴリページ URL | `"https://pote-chil.com/css-stock/ja/heading"` |
+| `url` | string | 外部サイトのカテゴリページ URL | `"https://pote-chil.com/css-stock/ja/heading"` |
 | `sectionCount` | number | カテゴリ内セクション数 | `5` |
 | `expectedPartCount` | number | カテゴリ内パーツ数 | `39` |
 
@@ -73,7 +73,7 @@ graph TB
 | フィールド | 型 | 説明 | 例 |
 |------------|-----|------|-----|
 | `id` | string | プラグイン内一意 ID | `"heading-1"` |
-| `sourcePartId` | number | CSS Stock 側のパーツ番号 | `1` |
+| `sourcePartId` | number | 外部サイト側のパーツ番号 | `1` |
 | `category` | string | カテゴリ slug | `"heading"` |
 | `categoryLabel` | string | カテゴリ表示名 | `"見出し"` |
 | `categoryTitle` | string | カテゴリページタイトル | `"HTML・CSSでつくるおしゃれな見出しのデザイン39選"` |
@@ -197,8 +197,8 @@ $style = '' !== trim( $css )
 
 ### スコープ
 
-- 現状: グローバル CSS（CSS Stock のクラス名をそのまま使用）
-- CSS Stock のクラス名形式: `.heading-1`, `.button-5`, `.box-3` 等
+- 現状: グローバル CSS（デザインパーツのクラス名をそのまま使用）
+- デザインパーツのクラス名形式: `.heading-1`, `.button-5`, `.box-3` 等
 - 衝突が発生した場合の対策: selector prefixer 追加を検討
 
 ---
@@ -209,7 +209,7 @@ $style = '' !== trim( $css )
 
 ```mermaid
 graph LR
-    A[CSS Stock<br/>外部サイト] -->|スクレイプ| B[JSON カタログ<br/>リポジトリ管理]
+    A[外部サイト] -->|スクレイプ| B[JSON カタログ<br/>リポジトリ管理]
     B -->|diff review| C[コミット]
     C -->|読み込み| D[WordPress<br/>レンダリング]
 ```
@@ -226,7 +226,7 @@ graph LR
 
 ### wp_kses_post を使わない理由
 
-CSS Stock パーツには以下の要素が含まれる:
+デザインパーツには以下の要素が含まれる:
 
 - `<input type="checkbox">` / `<input type="radio">` — タブ・トグル UI
 - `<svg>` / `<path>` / `<circle>` — ローディングアニメーション

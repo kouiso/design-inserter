@@ -5,7 +5,7 @@
 
 ## 概要
 
-Gutenberg エディタ内で CSS Stock パーツと Template Party テンプレートを検索・選択・プレビューするための UI コンポーネント。vanilla JS で実装し、ビルドステップなしで動作する。
+Gutenberg エディタ内で デザインパーツと Template Party テンプレートを検索・選択・プレビューするための UI コンポーネント。vanilla JS で実装し、ビルドステップなしで動作する。
 
 エディタ画面は 2 つの領域からなる:
 

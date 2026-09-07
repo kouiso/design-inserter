@@ -32,7 +32,7 @@ function designinserter_admin_page() {
 	?>
 	<div class="wrap">
 		<h1>Design Inserter</h1>
-		<p>CSS Stock から収集した CSS パーツを Gutenberg block または shortcode で挿入します。</p>
+		<p>デザインパーツコレクションから収集した CSS パーツを Gutenberg block または shortcode で挿入します。</p>
 		<table class="widefat striped">
 			<tbody>
 				<tr>

@@ -4,7 +4,7 @@
 
 # design-inserter
 
-CSS Stock のデザインパーツ（222件）＆テンプレートを Gutenberg エディターに挿入できる WordPress プラグイン。販売プロダクトとして商用品質が必須。
+デザインパーツ（222件）＆テンプレートを Gutenberg エディターに挿入できる WordPress プラグイン。販売プロダクトとして商用品質が必須。
 
 - **配布形式**: WordPress プラグイン（admin から zip インストール）
 - **本番 URL**: なし（プラグインは WP サイトに直接インストール）

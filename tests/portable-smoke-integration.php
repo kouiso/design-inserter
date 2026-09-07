@@ -37,7 +37,7 @@ if (!$script || empty($script->extra['data']) || false === strpos($script->extra
 
 // Template Party のデータは git-crypt で暗号化されとるので、鍵の有無で総件数が変わる
 // （ロック時 222 / 復号時 360）。222 を直書きするとリリース用の復号済み環境で必ず落ちる。
-// CSS Stock 由来が 222 件という不変条件だけを固定し、総数はカタログ実体から引く。
+// デザインパーツ由来が 222 件という不変条件だけを固定し、総数はカタログ実体から引く。
 $catalog_parts    = designinserter_get_catalog()['parts'];
 $expected_total   = count($catalog_parts);
 $css_stock_parts  = array_filter($catalog_parts, static fn($p) => ($p['source'] ?? '') === 'css-stock');

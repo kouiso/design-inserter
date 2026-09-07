@@ -32,7 +32,7 @@ Neither mode can put ciphertext into a zip — the flag chooses between *fail* a
 
 ## Template Party data and git-crypt
 
-`data/template-party-*.json` and `assets/previews/tp-*` are git-crypt encrypted. Without the key the catalog falls back to the 222 CSS Stock parts. `tests/tp-availability.php` detects which mode is active; Template Party assertions are reported as skips with a count rather than silently passing. See `docs/test-spec.md` §2.
+`data/template-party-*.json` and `assets/previews/tp-*` are git-crypt encrypted. Without the key the catalog falls back to the 222 design parts. `tests/tp-availability.php` detects which mode is active; Template Party assertions are reported as skips with a count rather than silently passing. See `docs/test-spec.md` §2.
 
 `scripts/build-plugin-zip.mjs` mirrors that three-way judgement in JavaScript (`inspectCatalogFile()`): locked → skip or fail depending on the build mode, decrypted-but-broken → always fail, valid → proceed. A malformed catalog is never downgraded to "locked", because that would let a data regression pass as a missing key. `tests/build-plugin-zip.test.mjs` covers the classification with fixtures, so it runs without the key.
 

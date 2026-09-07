@@ -6,7 +6,7 @@
 
 ## 目的
 
-CSS Stock（pote-chil.com）が公開する 222 個の CSS パーツを、WordPress の投稿・固定ページに簡単に挿入するプラグインを開発する。
+外部サイト（pote-chil.com）が公開する 222 個の CSS パーツを、WordPress の投稿・固定ページに簡単に挿入するプラグインを開発する。
 
 ---
 
@@ -54,7 +54,7 @@ CSS Stock（pote-chil.com）が公開する 222 個の CSS パーツを、WordPr
 
 ## ドメイン知識
 
-- **CSS Stock**: pote-chil.com が公開する CSS スニペット集
+- **外部サイト**: pote-chil.com が公開する CSS スニペット集
 - **カテゴリ数**: 28（heading, button, box, list, table, etc.）
 - **パーツ数**: 222
 - **SVG-only パーツ**: loading カテゴリ等、CSS が空で SVG のみのパーツが存在する
