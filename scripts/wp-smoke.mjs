@@ -263,7 +263,7 @@ function assertDistributionZipFresh(zipPath) {
     file,
   ]));
   const zipCrcs = readZipCrcs(zipPath);
-  const staleMessage = 'Distribution zip is stale; run npm run build before portable zip smoke.';
+  const staleMessage = 'Distribution zip is stale; run pnpm run build before portable zip smoke.';
   const missingEntries = [...expectedEntries.keys()].filter((entry) => !zipCrcs.has(entry));
   const unexpectedEntries = [...zipCrcs.keys()].filter((entry) => !expectedEntries.has(entry));
   const changedEntries = [];
@@ -304,7 +304,7 @@ function getDistributionZipPath() {
     ));
 
     if (staleZips.length) {
-      throw new Error(`Distribution zip version mismatch; expected ${expectedName} but found ${staleZips.join(', ')}. Run npm run build before portable zip smoke.`);
+      throw new Error(`Distribution zip version mismatch; expected ${expectedName} but found ${staleZips.join(', ')}. Run pnpm run build before portable zip smoke.`);
     }
   }
 
@@ -400,7 +400,7 @@ function runPortableSmoke() {
       runWpCli(wpCliPath, ['plugin', 'deactivate', 'designinserter', `--path=${wpDir}`, '--quiet']);
       runWpCli(wpCliPath, ['plugin', 'delete', 'designinserter', `--path=${wpDir}`, '--quiet']);
     } else {
-      console.warn('Distribution zip not found; skipping portable zip install smoke. Run npm run build first to cover this path.');
+      console.warn('Distribution zip not found; skipping portable zip install smoke. Run pnpm run build first to cover this path.');
     }
 
     linkPluginIntoPortableWp(wpDir);

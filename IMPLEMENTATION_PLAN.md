@@ -31,7 +31,7 @@
 ## Implementation
 
 1. Scraper
-   - `npm run scrape:css-stock` fetches the guide page, discovers category pages, extracts each part from Astro-rendered `<template>` blocks, and writes JSON.
+   - `pnpm run scrape:css-stock` fetches the guide page, discovers category pages, extracts each part from Astro-rendered `<template>` blocks, and writes JSON.
    - The scraper validates the extracted total against category counts from the source page.
 
 2. Catalog

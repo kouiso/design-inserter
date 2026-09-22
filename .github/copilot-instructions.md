@@ -23,24 +23,25 @@
 | テスト (PHP) | PHPUnit（Docker 経由） |
 | Linter (PHP) | PHPCS（Docker 経由） |
 | E2E | Playwright |
+| パッケージ管理 | pnpm |
 | タスクランナー | Taskfile |
 | 配布 | プラグイン zip ビルド |
 
 ## コマンド
 
 ```bash
-npm ci               # 依存インストール（CI）
-npm install          # 依存インストール（開発）
-npm run build        # リリース zip ビルド（git-crypt ロック時は失敗する）
-npm run build:dev    # 開発 zip ビルド（暗号文を除外して dist/dev/ に出力）
-npm test             # JS ユニットテスト
-npm run phpcs        # PHP コーディング規約チェック（Docker）
-npm run test:php     # PHP ユニットテスト（Docker）
-npm run php:lint     # PHP 構文チェック（Docker）
-npm run e2e:fresh    # 新規インストール E2E（Playwright）
+pnpm install --frozen-lockfile  # 依存インストール（CI）
+pnpm install                    # 依存インストール（開発）
+pnpm run build        # リリース zip ビルド（git-crypt ロック時は失敗する）
+pnpm run build:dev    # 開発 zip ビルド（暗号文を除外して dist/dev/ に出力）
+pnpm test             # JS ユニットテスト
+pnpm run phpcs        # PHP コーディング規約チェック（Docker）
+pnpm run test:php     # PHP ユニットテスト（Docker）
+pnpm run php:lint     # PHP 構文チェック（Docker）
+pnpm run e2e:fresh    # 新規インストール E2E（Playwright）
 
 # Taskfile
-task ci:fast         # npm ci + phpcs + php:lint + build:dev + test + test:php
+task ci:fast         # pnpm install --frozen-lockfile + phpcs + php:lint + build:dev + test + test:php
 task ci              # ci:fast のエイリアス
 ```
 

@@ -302,7 +302,7 @@ test.describe.configure({ mode: 'serial' });
 test.beforeAll(async () => {
 	await writeFreshCompose();
 	// CSS Stock 222 件のフォールバックを見るテストなので、git-crypt ロック環境でも通る dev ビルドを使う。
-	await run('npm', ['run', 'build:dev']);
+	await run('pnpm', ['run', 'build:dev']);
 	await dockerCompose(['down', '-v', '--remove-orphans']).catch(() => '');
 	// Issue #13: bring up self-contained db + wordpress, THEN prepareDatabase
 	// (was running prepareDatabase before up, which referenced an external

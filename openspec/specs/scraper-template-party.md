@@ -8,7 +8,7 @@ Template Party（template-party.com）からフルページテンプレートの
 
 ## スクリプト一覧
 
-| スクリプト | npm script | 出力 |
+| スクリプト | pnpm script | 出力 |
 |---|---|---|
 | `scripts/scrape-template-party.mjs` | `scrape:template-party` | `data/template-party-templates.json` + thumbnails + bundles |
 | `scripts/scrape-template-party.mjs --skip-zips` | `scrape:template-party:meta` | メタデータ + thumbnails のみ（ZIPなし） |

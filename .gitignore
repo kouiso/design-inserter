@@ -37,6 +37,7 @@ Thumbs.db
 # Node.
 node_modules/
 npm-debug.log*
+pnpm-debug.log*
 
 # PHP tooling.
 vendor/

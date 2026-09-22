@@ -323,7 +323,9 @@ function testBehaviorMetadata() {
 
 function testDistributionShape() {
   const packageJson = readJson('package.json');
-  const packageLock = readJson('package-lock.json');
+  // pnpm-lock.yaml は license 情報を持たない。存在と lockfileVersion でロックファイルの
+  // 管理状態を担保し、package.json との同期そのものは --frozen-lockfile 側が検証する。
+  const pnpmLock = fs.readFileSync('pnpm-lock.yaml', 'utf8');
   const catalog = readJson(catalogPath);
   const mainFile = path.join(pluginDir, 'designinserter.php');
   const main = fs.readFileSync(mainFile, 'utf8');
@@ -352,7 +354,7 @@ function testDistributionShape() {
   const notice = fs.readFileSync(path.join(pluginDir, 'NOTICE.md'), 'utf8');
   const readme = fs.readFileSync(path.join(pluginDir, 'readme.txt'), 'utf8');
   assert(packageJson.license === 'GPL-2.0-or-later', 'package.json license matches plugin distribution license');
-  assert(packageLock.packages && packageLock.packages[''] && packageLock.packages[''].license === packageJson.license, 'package-lock root license matches package.json');
+  assert(pnpmLock.includes('lockfileVersion:'), 'pnpm-lock.yaml is a valid pnpm lockfile');
   assert(main.includes('Plugin Name: Design Inserter'), 'plugin header has Plugin Name');
   assert(main.includes(`Version: ${packageJson.version}`), 'plugin header version matches package.json');
   assert(main.includes(`define( 'DESIGNINSERTER_VERSION', '${packageJson.version}' );`), 'plugin version constant matches package.json');
@@ -392,7 +394,7 @@ function testEditorAssetContract() {
 // NOTE: testSmokeScriptContract / testBuildScriptContract removed (Issue #7).
 // They grepped script source strings, which is brittle (Gemini PR #6 review).
 // Smoke and build behavior is verified by running them directly
-// (`npm run smoke:wp:portable` / `npm run build`); contract drift will surface
+// (`pnpm run smoke:wp:portable` / `pnpm run build`); contract drift will surface
 // there as a real failure instead of a string-includes false positive.
 
 
@@ -495,7 +497,7 @@ function testBuildCatalogGuard() {
 // 復号済み環境ではカタログ退行の検出器になる。
 function testTemplatePartyCatalogState() {
   const states = inspectTemplatePartyCatalogs();
-  // locked（鍵が無いだけ）と ok 以外は退行。カタログを消しても npm test が通ると、
+  // locked（鍵が無いだけ）と ok 以外は退行。カタログを消しても pnpm test が通ると、
   // PR の JS ジョブはビルドを回さんので、マージ後の trusted build まで気づかれん。
   const broken = states.filter((state) => state.status !== 'ok' && state.status !== 'locked');
   const detail = broken.map((state) => `${state.relative}=${state.status}${state.reason ? ` (${state.reason})` : ''}`).join(', ');
