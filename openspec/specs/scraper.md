@@ -9,7 +9,7 @@ CSS Stock（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの
 ## 機能要件
 
 1. スクリプトパス: `scripts/scrape-css-stock.mjs`
-2. 実行コマンド: `npm run scrape:css-stock`
+2. 実行コマンド: `pnpm run scrape:css-stock`
 3. 出力先:
    - `wp-content/plugins/designinserter/data/css-stock-parts.json`
    - `wp-content/plugins/designinserter/assets/previews/*`
@@ -81,7 +81,7 @@ CSS Stock（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの
 
 ## 受け入れ基準
 
-- [ ] `npm run scrape:css-stock` が正常終了すること（exit code 0）
+- [ ] `pnpm run scrape:css-stock` が正常終了すること（exit code 0）
 - [ ] 出力 JSON に 222 件の parts が含まれること
 - [ ] 28 カテゴリすべてのパーツが抽出されること
 - [ ] 各カテゴリの抽出数がコンソールに `{slug}: {actual}/{expected}` 形式で出力されること

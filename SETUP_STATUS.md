@@ -152,7 +152,7 @@
 
 ### 完了内容
 - CSS Stock の guide page とカテゴリページをスクレイピングする `scripts/scrape-css-stock.mjs` を作成した。
-- `npm run scrape:css-stock` を実行し、全カテゴリ/全パーツの catalog を生成した。
+- `pnpm run scrape:css-stock` を実行し、全カテゴリ/全パーツの catalog を生成した。
   - Categories: 28
   - Expected parts from source counts: 222
   - Scraped parts: 222
