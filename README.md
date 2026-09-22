@@ -4,7 +4,7 @@
 
 ## インストール
 
-1. [Releases](https://github.com/kouiso/wordpress-plugin-designinserter/releases) から最新の `designinserter-x.x.x.zip` をダウンロード
+1. [Releases](https://github.com/kouiso/design-inserter/releases) から最新の `designinserter-x.x.x.zip` をダウンロード
 2. WordPress 管理画面 → プラグイン → 新規追加 → 「プラグインのアップロード」
 3. zipファイルを選択 → インストール → 有効化
 
@@ -59,9 +59,9 @@ WordPress smoke:
 portable smoke は既定で WordPress 6.9.4 / WP-CLI 2.12.0 を使います。別バージョン検証は `WP_SMOKE_WP_VERSION=6.8.3 pnpm run smoke:wp:portable` のように指定できます。
 Docker smoke は `WP_PORT` / `MYSQL_PORT` の衝突を起動前に確認し、`WP_PORT` 指定時は smoke 内の `WP_HOME` と WordPress install URL も同じ port に合わせます。
 
-stub smoke の範囲と不足: `docs/testing.md`
+stub smoke の範囲と不足: `doc/testing.md`
 
-カタログ・同梱プレビュー再取得: `node scripts/scrape-css-stock.mjs`
+カタログ・同梱プレビュー再取得: `node script/scrape-css-stock.mjs`
 
 ## ライセンスとクレジット
 
