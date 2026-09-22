@@ -65,7 +65,7 @@
   - 旧テスト、VRT、Playwright、gulp、Taskfile、プロンプト/エージェント設定、ステージング同期設定。
   - Bedrock/Bogo 用 Dockerfile。
 - 代わりに `wp-content/themes/designinserter-dev` を最小テーマとして作成した。
-- `package.json` / `package-lock.json` を Design Inserter 用の最小 npm 設定に更新した。
+- `package.json` / `pnpm-lock.yaml` を Design Inserter 用の最小 pnpm 設定に更新した。
 - `docker compose config --quiet` で Compose 構文を確認済み。
 - `SETUP_STATUS.md` 以外に `musashi` / `muashi` / `musashipaint` 参照が残っていないことを `rg` で確認済み。
 
@@ -129,7 +129,7 @@
   - `includes/block.php`: dynamic Gutenberg block 登録。
   - `includes/admin.php`: 設定画面に件数/source/shortcode を表示。
   - `assets/editor.js` / `assets/editor.css`: Gutenberg editor UI。
-- npm は既存の重い build tool を削除し、`package.json` を最小の plugin dev 用 script に更新済み。
+- pnpm は既存の重い build tool を削除し、`package.json` を最小の plugin dev 用 script に更新済み。
 
 ### ブロッカー
 - Docker/OrbStack VM hang のため、WordPress admin のプラグイン一覧表示・有効化 UI は未確認。
@@ -152,7 +152,7 @@
 
 ### 完了内容
 - CSS Stock の guide page とカテゴリページをスクレイピングする `scripts/scrape-css-stock.mjs` を作成した。
-- `npm run scrape:css-stock` を実行し、全カテゴリ/全パーツの catalog を生成した。
+- `pnpm run scrape:css-stock` を実行し、全カテゴリ/全パーツの catalog を生成した。
   - Categories: 28
   - Expected parts from source counts: 222
   - Scraped parts: 222

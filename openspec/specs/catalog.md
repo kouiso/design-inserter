@@ -20,7 +20,7 @@
 1. JSON は整形済み（`JSON.stringify(data, null, 2)`）で保存する
 2. ファイルサイズは現状約 2-3 MB（222 パーツ分の HTML/CSS を含む）
 3. プラグインアップデート時は catalog ごと配布する（動的取得しない）
-4. catalog の更新は `npm run scrape:css-stock` で再生成し、diff レビュー後にコミットする
+4. catalog の更新は `pnpm run scrape:css-stock` で再生成し、diff レビュー後にコミットする
 
 ## データ構造
 

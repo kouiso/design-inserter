@@ -5,15 +5,15 @@ Tool-level notes only. What is verified, by which test case, and its current sta
 ## Local Gate
 
 ```bash
-npm test
-npm run build
-npm run php:lint
-npm run smoke:wp
+pnpm test
+pnpm run build
+pnpm run php:lint
+pnpm run smoke:wp
 ```
 
-`npm run smoke:wp` uses Docker when Docker is available. If Docker is unavailable, it tries the portable WordPress smoke first, then falls back to the Docker-free WordPress stub smoke in `tests/render-smoke.php`.
+`pnpm run smoke:wp` uses Docker when Docker is available. If Docker is unavailable, it tries the portable WordPress smoke first, then falls back to the Docker-free WordPress stub smoke in `tests/render-smoke.php`.
 
-`npm run build` creates `dist/designinserter-<version>.zip` and verifies the archive before reporting success (cases DI-BLD-013 through DI-BLD-016, DI-BLD-019).
+`pnpm run build` creates `dist/designinserter-<version>.zip` and verifies the archive before reporting success (cases DI-BLD-013 through DI-BLD-016, DI-BLD-019).
 
 ## Build modes
 
@@ -21,14 +21,14 @@ There are two build modes. They differ in what happens when the Template Party c
 
 | Command | Locked catalog | Decrypted catalog | Output |
 |---|---|---|---|
-| `npm run build` (`build:zip`) | fails with exit 1 and prints the `git-crypt unlock` recovery steps; no zip is produced | full release zip | `dist/designinserter-<version>.zip` |
-| `npm run build:dev` (`--allow-locked-catalog`) | warns, drops every git-crypt ciphertext file, and succeeds | full zip, still quarantined | `dist/dev/designinserter-<version>-dev.zip` |
+| `pnpm run build` (`build:zip`) | fails with exit 1 and prints the `git-crypt unlock` recovery steps; no zip is produced | full release zip | `dist/designinserter-<version>.zip` |
+| `pnpm run build:dev` (`--allow-locked-catalog`) | warns, drops every git-crypt ciphertext file, and succeeds | full zip, still quarantined | `dist/dev/designinserter-<version>-dev.zip` |
 
 Neither mode can put ciphertext into a zip — the flag chooses between *fail* and *exclude*, never *include* (DI-BLD-022, DI-SEC-014). The dev output lives in `dist/dev/` on purpose: `scripts/generate-ready-checklist.mjs` and `scripts/wp-smoke.mjs` both glob `dist/*.zip`, so a degraded artifact must never be able to occupy the release filename.
 
 `data/template-party-bundles/` and `data/template-party-scrape-state.json` are excluded in *both* modes. They only exist on a machine that has run the scraper, and redistributing the bundles violates Template Party's terms — no CI run can catch that, so the build itself has to.
 
-`task ci:fast` runs `build:dev` so the gate stays green without the key. The release path is exercised by `.github/workflows/trusted-test.yml`, which is the only workflow that runs `git-crypt unlock`. Before running `build:dev`, `ci:fast` removes any `dist/designinserter-*.zip` left over from an earlier `npm run build` — otherwise that stale release zip keeps matching the expected filename and `scripts/generate-ready-checklist.mjs` (K036) would report it as the current candidate without ever re-verifying it against the now-changed sources.
+`task ci:fast` runs `build:dev` so the gate stays green without the key. The release path is exercised by `.github/workflows/trusted-test.yml`, which is the only workflow that runs `git-crypt unlock`. Before running `build:dev`, `ci:fast` removes any `dist/designinserter-*.zip` left over from an earlier `pnpm run build` — otherwise that stale release zip keeps matching the expected filename and `scripts/generate-ready-checklist.mjs` (K036) would report it as the current candidate without ever re-verifying it against the now-changed sources.
 
 ## Template Party data and git-crypt
 
@@ -39,10 +39,10 @@ Neither mode can put ciphertext into a zip — the flag chooses between *fail* a
 ## Portable WordPress Smoke
 
 ```bash
-npm run smoke:wp:portable
+pnpm run smoke:wp:portable
 ```
 
-Downloads WP-CLI and WordPress into a unique `/tmp/designinserter-real-wp-smoke-*` directory, installs the SQLite drop-in, and activates the plugin. If `dist/designinserter-<version>.zip` exists, it first verifies the zip entries match the current plugin source tree, unpacks that zip into the portable WordPress plugin directory, activates it through WP-CLI, then deletes it and runs the source-tree activation smoke. A stale zip or a zip from another package version fails with an instruction to run `npm run build`.
+Downloads WP-CLI and WordPress into a unique `/tmp/designinserter-real-wp-smoke-*` directory, installs the SQLite drop-in, and activates the plugin. If `dist/designinserter-<version>.zip` exists, it first verifies the zip entries match the current plugin source tree, unpacks that zip into the portable WordPress plugin directory, activates it through WP-CLI, then deletes it and runs the source-tree activation smoke. A stale zip or a zip from another package version fails with an instruction to run `pnpm run build`.
 
 The zip is unpacked directly instead of using `wp plugin install` because the WP-CLI upgrader path can trigger noisy `information_schema` queries with the SQLite drop-in.
 

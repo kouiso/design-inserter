@@ -184,8 +184,8 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
       'リリースビルド中止: Template Party カタログが git-crypt で暗号化されたままです。',
       unusable.map((state) => `  ${path.relative(root, state.path)} (git-crypt 暗号文)`).join('\n'),
       'このまま zip を作ると Template Party のパーツ / テンプレートが丸ごと欠けた配布物になります (F-4 / DI-BLD-022)。',
-      '対処: git-crypt unlock <keyfile> を実行してから npm run build をやり直してください。',
-      '鍵の無い環境で zip 生成だけ確認したい場合は npm run build:dev（dist/dev/ に出力。リリースには使えません）。',
+      '対処: git-crypt unlock <keyfile> を実行してから pnpm run build をやり直してください。',
+      '鍵の無い環境で zip 生成だけ確認したい場合は pnpm run build:dev（dist/dev/ に出力。リリースには使えません）。',
     ].join('\n'));
   }
 }
@@ -236,7 +236,7 @@ export function assertNoCiphertext(lockedFiles, { allowLocked = false } = {}) {
   throw new Error([
     `リリースビルド中止: git-crypt 暗号文のファイルが配布対象に ${lockedFiles.length} 件あります (DI-SEC-014)。`,
     formatPathList(lockedFiles),
-    '対処: git-crypt unlock <keyfile> を実行してから npm run build をやり直してください。',
+    '対処: git-crypt unlock <keyfile> を実行してから pnpm run build をやり直してください。',
   ].join('\n'));
 }
 
@@ -584,7 +584,7 @@ export function main(argv = process.argv.slice(2)) {
   if (allowLocked && lockedFiles.length) {
     console.warn(`警告: git-crypt ロック環境の開発ビルドです。Template Party データ ${lockedFiles.length} 件を zip から除外しました。`);
     console.warn(`  出力: ${path.relative(root, outPath)}`);
-    console.warn('  この zip はリリースに使えません。リリースは復号済み環境で npm run build を実行してください。');
+    console.warn('  この zip はリリースに使えません。リリースは復号済み環境で pnpm run build を実行してください。');
   }
 
   console.log(`Built ${path.relative(root, outPath)} (${entryCount} files, ${size} bytes)`);

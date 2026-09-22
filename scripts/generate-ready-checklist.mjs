@@ -40,27 +40,27 @@ const ticketLabels = {
 
 const commandBook = {
 	generateChecklist: {
-		command: 'npm run ready:checklist',
+		command: 'pnpm run ready:checklist',
 		artifact: '.tmp/ready-checklist/designinserter-ready-checklist.json',
 	},
 	buildZip: {
-		command: 'npm run build:zip',
+		command: 'pnpm run build:zip',
 		artifact: 'dist/designinserter-<package.version>.zip',
 	},
 	phpunit: {
-		command: 'npm run test:php',
+		command: 'pnpm run test:php',
 		artifact: '.tmp/ready-checklist/phpunit.txt',
 	},
 	phpcs: {
-		command: 'npm run phpcs',
+		command: 'pnpm run phpcs',
 		artifact: '.tmp/ready-checklist/phpcs.txt',
 	},
 	phpLint: {
-		command: 'npm run php:lint',
+		command: 'pnpm run php:lint',
 		artifact: '.tmp/ready-checklist/php-lint.txt',
 	},
 	e2eFresh: {
-		command: 'npm run e2e:fresh',
+		command: 'pnpm run e2e:fresh',
 		artifact: '.tmp/e2e-fresh-wp/evidence/fresh-report.json',
 	},
 	errorLogAudit: {

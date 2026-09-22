@@ -26,6 +26,7 @@
     "smoke:wp:stubs": "node scripts/wp-smoke.mjs --stubs"
   },
   "license": "GPL-2.0-or-later",
+  "packageManager": "pnpm@12.5.1",
   "devDependencies": {
     "@playwright/test": "1.60.0",
     "acorn": "^8.18.0"

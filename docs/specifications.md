@@ -7,7 +7,7 @@
 ```mermaid
 graph TB
     subgraph "開発時"
-        S[scrape-css-stock.mjs] -->|npm run scrape:css-stock| J[css-stock-parts.json]
+        S[scrape-css-stock.mjs] -->|pnpm run scrape:css-stock| J[css-stock-parts.json]
     end
 
     subgraph "WordPress ランタイム"

@@ -20,6 +20,12 @@ jobs:
           script: |
             const login = context.payload.pull_request.user.login;
 
+            // bot 作成の PR はエージェント割当禁止のためスキップ
+            if (login.endsWith('[bot]')) {
+              console.info('Skipping assignee for bot-authored PR by ' + login);
+              return;
+            }
+
             await github.graphql(`
               mutation($input: AddAssigneesToAssignableInput!) {
                 addAssigneesToAssignable(input: $input) {

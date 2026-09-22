@@ -40,7 +40,7 @@
 ### Phase 6: 本体実装 + カタログ生成
 
 - `scripts/scrape-css-stock.mjs` スクレイパー作成
-- `npm run scrape:css-stock` 実行: 28 カテゴリ / 222 パーツ抽出成功
+- `pnpm run scrape:css-stock` 実行: 28 カテゴリ / 222 パーツ抽出成功
 - `data/css-stock-parts.json` 生成
 - SVG-only パーツ（CSS 空）の `<style>` 非出力対応
 - `IMPLEMENTATION_PLAN.md` 作成
