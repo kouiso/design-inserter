@@ -6,7 +6,7 @@
  *   3. How copy-paste part HTML/CSS is exposed on /parts/catalog.php.
  *
  * Run from worktree root:
- *   node scripts/scrape-tp-spike.mjs
+ *   node script/scrape-tp-spike.mjs
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';

@@ -35,7 +35,7 @@ WordPress Gutenberg エディタで デザインパーツと Template Party テ�
 
 ## 非機能要件
 
-1. ビルドステップなし — `assets/editor.js` を直接 `wp_register_script` で読み込む
+1. ビルドステップなし — `asset/editor.js` を直接 `wp_register_script` で読み込む
 2. 依存: `wp-blocks`, `wp-element`, `wp-components`, `wp-block-editor`, `wp-i18n`, `wp-data`
 3. catalog のメタデータは `wp_localize_script` で `DesignInserterCatalog` としてエディタに渡す。**`html` / `css` は渡さない**
 4. パーツの HTML / CSS は、`part-code-funcs.js` にローカル生成関数があればそれを最優先で同期的に使う（CSS Stock 222 件はこの経路）。生成関数が無いパーツ（現状 Template Party）だけ `GET /designinserter/v1/parts/{id}`（`edit_posts` 必須・`X-WP-Nonce` 付き）で 1 件ずつ REST 取得する
@@ -85,7 +85,7 @@ WordPress Gutenberg エディタで デザインパーツと Template Party テ�
       "id": "heading-1",
       "title": "シンプルな見出し",
       "categoryLabel": "見出し",
-      "previewImage": "https://example.com/wp-content/plugins/designinserter/assets/previews/heading-1.webp",
+      "previewImage": "https://example.com/wp-content/plugins/designinserter/asset/previews/heading-1.webp",
       "source": "css-stock",
       "type": "part"
     }

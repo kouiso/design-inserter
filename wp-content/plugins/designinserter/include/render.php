@@ -61,13 +61,13 @@ function designinserter_sanitize_inline_css( $css ) {
 }
 
 function designinserter_resolve_local_asset_urls( $value ) {
-	if ( '' === $value || false === strpos( $value, 'assets/' ) ) {
+	if ( '' === $value || false === strpos( $value, 'asset/' ) ) {
 		return $value;
 	}
 
 	$base_url = trailingslashit( DESIGNINSERTER_PLUGIN_URL );
 	$value = preg_replace_callback(
-		'/\b(src|href)=(["\'])(assets\/(?:embedded|previews)\/[^"\']+)\2/',
+		'/\b(src|href)=(["\'])(asset\/(?:embedded|previews)\/[^"\']+)\2/',
 		function ( $matches ) use ( $base_url ) {
 			return sprintf( '%s=%s%s%s', $matches[1], $matches[2], esc_url( $base_url . $matches[3] ), $matches[2] );
 		},
@@ -75,7 +75,7 @@ function designinserter_resolve_local_asset_urls( $value ) {
 	);
 
 	return preg_replace_callback(
-		'/url\(\s*(["\']?)(assets\/(?:embedded|previews)\/[^)"\']+)\1\s*\)/',
+		'/url\(\s*(["\']?)(asset\/(?:embedded|previews)\/[^)"\']+)\1\s*\)/',
 		function ( $matches ) use ( $base_url ) {
 			return sprintf( 'url("%s")', esc_url( $base_url . $matches[2] ) );
 		},

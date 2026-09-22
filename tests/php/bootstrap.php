@@ -88,5 +88,5 @@ function add_shortcode( $tag, $callback ) {
 }
 
 require_once __DIR__ . '/../tp-availability.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/data.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/render.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/data.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/render.php';

@@ -4,10 +4,10 @@ import path from 'node:path';
 const baseUrl = 'https://pote-chil.com';
 const indexUrl = `${baseUrl}/css-stock/ja`;
 const outputPath = path.resolve('wp-content/plugins/designinserter/data/css-stock-parts.json');
-const previewOutputDir = path.resolve('wp-content/plugins/designinserter/assets/previews');
-const previewTempDir = path.resolve('wp-content/plugins/designinserter/assets/.previews-tmp');
-const embeddedAssetOutputDir = path.resolve('wp-content/plugins/designinserter/assets/embedded');
-const embeddedAssetTempDir = path.resolve('wp-content/plugins/designinserter/assets/.embedded-tmp');
+const previewOutputDir = path.resolve('wp-content/plugins/designinserter/asset/previews');
+const previewTempDir = path.resolve('wp-content/plugins/designinserter/asset/.previews-tmp');
+const embeddedAssetOutputDir = path.resolve('wp-content/plugins/designinserter/asset/embedded');
+const embeddedAssetTempDir = path.resolve('wp-content/plugins/designinserter/asset/.embedded-tmp');
 
 function decodeHtml(value) {
 	return value
@@ -58,7 +58,7 @@ function getPreviewAssetPath(partId, imagePath) {
 
 	const sourcePath = new URL(imagePath, baseUrl).pathname;
 	const ext = path.extname(sourcePath).toLowerCase() || '.svg';
-	return `assets/previews/${partId}${ext}`;
+	return `asset/previews/${partId}${ext}`;
 }
 
 function detectPreviewExtension(bytes, contentType, sourceUrl) {
@@ -87,7 +87,7 @@ function getEmbeddedAssetPath(sourcePath, ext) {
 		.replace(/^-+|-+$/g, '')
 		.toLowerCase();
 
-	return `assets/embedded/${stem}${ext}`;
+	return `asset/embedded/${stem}${ext}`;
 }
 
 function extractEmbeddedAssetRefs(value) {
@@ -326,7 +326,7 @@ async function downloadPreviewAssets(parts) {
 
 		const { bytes, contentType } = await fetchAsset(part.previewSourceImage);
 		const ext = detectPreviewExtension(bytes, contentType, part.previewSourceImage);
-		part.previewImage = `assets/previews/${part.id}${ext}`;
+		part.previewImage = `asset/previews/${part.id}${ext}`;
 		const outputFile = path.join(previewTempDir, path.basename(part.previewImage));
 		await writeFile(outputFile, bytes);
 		downloaded += 1;

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function designinserter_register_block() {
 	wp_register_script(
 		'designinserter-frontend',
-		DESIGNINSERTER_PLUGIN_URL . 'assets/frontend.js',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/frontend.js',
 		array(),
 		DESIGNINSERTER_VERSION,
 		true
@@ -15,14 +15,14 @@ function designinserter_register_block() {
 
 	wp_register_style(
 		'designinserter-frontend',
-		DESIGNINSERTER_PLUGIN_URL . 'assets/frontend.css',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/frontend.css',
 		array(),
 		DESIGNINSERTER_VERSION
 	);
 
 	wp_register_script(
 		'designinserter-part-code-funcs',
-		DESIGNINSERTER_PLUGIN_URL . 'assets/part-code-funcs.js',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/part-code-funcs.js',
 		array(),
 		DESIGNINSERTER_VERSION,
 		true
@@ -30,7 +30,7 @@ function designinserter_register_block() {
 
 	wp_register_script(
 		'designinserter-editor',
-		DESIGNINSERTER_PLUGIN_URL . 'assets/editor.js',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/editor.js',
 		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-data', 'wp-i18n', 'designinserter-frontend', 'designinserter-part-code-funcs' ),
 		DESIGNINSERTER_VERSION,
 		true
@@ -38,7 +38,7 @@ function designinserter_register_block() {
 
 	wp_register_style(
 		'designinserter-editor',
-		DESIGNINSERTER_PLUGIN_URL . 'assets/editor.css',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/editor.css',
 		array( 'designinserter-frontend' ),
 		DESIGNINSERTER_VERSION
 	);

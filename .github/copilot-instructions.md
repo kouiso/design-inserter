@@ -1,6 +1,6 @@
-<!-- AUTO-GENERATED from AGENTS.md by scripts/sync-ai-rules.sh -->
+<!-- AUTO-GENERATED from AGENTS.md by script/sync-ai-rules.sh -->
 <!-- DO NOT HAND-EDIT — changes will be overwritten on next sync -->
-<!-- To update: edit AGENTS.md, then run: bash scripts/sync-ai-rules.sh -->
+<!-- To update: edit AGENTS.md, then run: bash script/sync-ai-rules.sh -->
 
 # design-inserter
 
@@ -10,7 +10,7 @@
 - **本番 URL**: なし（プラグインは WP サイトに直接インストール）
 
 > ⚠️ `.gemini/styleguide.md` と `.github/copilot-instructions.md` はこのファイルから
-> `scripts/sync-ai-rules.sh` で自動生成される。直接編集禁止。
+> `script/sync-ai-rules.sh` で自動生成される。直接編集禁止。
 
 ## 技術スタック
 
@@ -47,8 +47,8 @@ task ci              # ci:fast のエイリアス
 
 ## テスト
 
-テストケース台帳・実行手順・現状は `docs/test-spec.md` が正本。テストを足す前にそこを読む。
-ツールの使い方（portable smoke の環境変数など）は `docs/testing.md`。
+テストケース台帳・実行手順・現状は `doc/test-spec.md` が正本。テストを足す前にそこを読む。
+ツールの使い方（portable smoke の環境変数など）は `doc/testing.md`。
 
 ## コーディング規約
 

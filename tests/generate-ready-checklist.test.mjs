@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import test from 'node:test';
 import path from 'node:path';
 
-import { collectPackageFacts } from '../scripts/generate-ready-checklist.mjs';
+import { collectPackageFacts } from '../script/generate-ready-checklist.mjs';
 
 test('ready checklist selects only the current package version archive', async () => {
 	const fixtureRoot = await mkdtemp(path.join(tmpdir(), 'designinserter-ready-checklist-'));

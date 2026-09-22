@@ -13,7 +13,7 @@ import {
 const REPO_DIR = process.env.DI_REPO_DIR || process.cwd();
 const PLUGIN_DIR = path.join(REPO_DIR, 'wp-content', 'plugins', 'designinserter');
 const DATA_FILE = path.join(PLUGIN_DIR, 'data', 'css-stock-parts.json');
-const OUT_FILE = path.join(PLUGIN_DIR, 'assets', 'part-code-funcs.js');
+const OUT_FILE = path.join(PLUGIN_DIR, 'asset', 'part-code-funcs.js');
 
 function stripModuleExports(source) {
   return source.replace(/export\{[^}]*\}\s*;?/g, '');

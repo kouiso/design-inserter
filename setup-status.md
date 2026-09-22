@@ -1,4 +1,4 @@
-# SETUP_STATUS
+# setup-status
 
 ## Phase 1: Clone & Rename
 
@@ -67,7 +67,7 @@
 - 代わりに `wp-content/themes/designinserter-dev` を最小テーマとして作成した。
 - `package.json` / `pnpm-lock.yaml` を Design Inserter 用の最小 pnpm 設定に更新した。
 - `docker compose config --quiet` で Compose 構文を確認済み。
-- `SETUP_STATUS.md` 以外に `musashi` / `muashi` / `musashipaint` 参照が残っていないことを `rg` で確認済み。
+- `setup-status.md` 以外に `musashi` / `muashi` / `musashipaint` 参照が残っていないことを `rg` で確認済み。
 
 ### プレモーテム所見
 - WordPress core は Docker volume にダウンロードする構成のため、volume が壊れた場合は `docker compose down -v` で再生成する。
@@ -124,11 +124,11 @@
 - `wp-content/plugins/designinserter/` を作成した。
 - `designinserter.php` を作成し、指定の WordPress plugin header を記載した。
 - skeleton だけでなく、Phase 6 実装に接続しやすい最小構成を追加した:
-  - `includes/data.php`: JSON catalog loader。
-  - `includes/render.php`: shortcode/render 関数。
-  - `includes/block.php`: dynamic Gutenberg block 登録。
-  - `includes/admin.php`: 設定画面に件数/source/shortcode を表示。
-  - `assets/editor.js` / `assets/editor.css`: Gutenberg editor UI。
+  - `include/data.php`: JSON catalog loader。
+  - `include/render.php`: shortcode/render 関数。
+  - `include/block.php`: dynamic Gutenberg block 登録。
+  - `include/admin.php`: 設定画面に件数/source/shortcode を表示。
+  - `asset/editor.js` / `asset/editor.css`: Gutenberg editor UI。
 - pnpm は既存の重い build tool を削除し、`package.json` を最小の plugin dev 用 script に更新済み。
 
 ### ブロッカー
@@ -145,20 +145,20 @@
 
 ### 次 Phase 計画
 - CSS Stock をスクレイピングし、全カテゴリ/全パーツの HTML/CSS を `data/css-stock-parts.json` に保存する。
-- `IMPLEMENTATION_PLAN.md` に UX 計画とプレモーテムを記載する。
+- `implementation-plan.md` に UX 計画とプレモーテムを記載する。
 - 生成 catalog を使って Gutenberg block / shortcode で挿入できる状態にする。
 
 ## Phase 6: プラグイン本体実装計画 + 初期実装
 
 ### 完了内容
-- CSS Stock の guide page とカテゴリページをスクレイピングする `scripts/scrape-css-stock.mjs` を作成した。
+- CSS Stock の guide page とカテゴリページをスクレイピングする `script/scrape-css-stock.mjs` を作成した。
 - `pnpm run scrape:css-stock` を実行し、全カテゴリ/全パーツの catalog を生成した。
   - Categories: 28
   - Expected parts from source counts: 222
   - Scraped parts: 222
   - Output: `wp-content/plugins/designinserter/data/css-stock-parts.json`
 - SVG-only loading partsは CSS が空のため、空 `<style>` を出力しないよう renderer/editor を調整した。
-- `IMPLEMENTATION_PLAN.md` を作成し、UX 方針を記載した。
+- `implementation-plan.md` を作成し、UX 方針を記載した。
 - 実装済み UX:
   - Gutenberg dynamic block: `designinserter/css-part`
   - shortcode: `[designinserter_part id="heading-1"]`

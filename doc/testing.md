@@ -1,6 +1,6 @@
 # Testing Notes
 
-Tool-level notes only. What is verified, by which test case, and its current status all live in `docs/test-spec.md` — do not duplicate the case list here.
+Tool-level notes only. What is verified, by which test case, and its current status all live in `doc/test-spec.md` — do not duplicate the case list here.
 
 ## Local Gate
 
@@ -24,17 +24,17 @@ There are two build modes. They differ in what happens when the Template Party c
 | `pnpm run build` (`build:zip`) | fails with exit 1 and prints the `git-crypt unlock` recovery steps; no zip is produced | full release zip | `dist/designinserter-<version>.zip` |
 | `pnpm run build:dev` (`--allow-locked-catalog`) | warns, drops every git-crypt ciphertext file, and succeeds | full zip, still quarantined | `dist/dev/designinserter-<version>-dev.zip` |
 
-Neither mode can put ciphertext into a zip — the flag chooses between *fail* and *exclude*, never *include* (DI-BLD-022, DI-SEC-014). The dev output lives in `dist/dev/` on purpose: `scripts/generate-ready-checklist.mjs` and `scripts/wp-smoke.mjs` both glob `dist/*.zip`, so a degraded artifact must never be able to occupy the release filename.
+Neither mode can put ciphertext into a zip — the flag chooses between *fail* and *exclude*, never *include* (DI-BLD-022, DI-SEC-014). The dev output lives in `dist/dev/` on purpose: `script/generate-ready-checklist.mjs` and `script/wp-smoke.mjs` both glob `dist/*.zip`, so a degraded artifact must never be able to occupy the release filename.
 
 `data/template-party-bundles/` and `data/template-party-scrape-state.json` are excluded in *both* modes. They only exist on a machine that has run the scraper, and redistributing the bundles violates Template Party's terms — no CI run can catch that, so the build itself has to.
 
-`task ci:fast` runs `build:dev` so the gate stays green without the key. The release path is exercised by `.github/workflows/trusted-test.yml`, which is the only workflow that runs `git-crypt unlock`. Before running `build:dev`, `ci:fast` removes any `dist/designinserter-*.zip` left over from an earlier `pnpm run build` — otherwise that stale release zip keeps matching the expected filename and `scripts/generate-ready-checklist.mjs` (K036) would report it as the current candidate without ever re-verifying it against the now-changed sources.
+`task ci:fast` runs `build:dev` so the gate stays green without the key. The release path is exercised by `.github/workflows/trusted-test.yml`, which is the only workflow that runs `git-crypt unlock`. Before running `build:dev`, `ci:fast` removes any `dist/designinserter-*.zip` left over from an earlier `pnpm run build` — otherwise that stale release zip keeps matching the expected filename and `script/generate-ready-checklist.mjs` (K036) would report it as the current candidate without ever re-verifying it against the now-changed sources.
 
 ## Template Party data and git-crypt
 
-`data/template-party-*.json` and `assets/previews/tp-*` are git-crypt encrypted. Without the key the catalog falls back to the 222 design parts. `tests/tp-availability.php` detects which mode is active; Template Party assertions are reported as skips with a count rather than silently passing. See `docs/test-spec.md` §2.
+`data/template-party-*.json` and `asset/previews/tp-*` are git-crypt encrypted. Without the key the catalog falls back to the 222 design parts. `tests/tp-availability.php` detects which mode is active; Template Party assertions are reported as skips with a count rather than silently passing. See `doc/test-spec.md` §2.
 
-`scripts/build-plugin-zip.mjs` mirrors that three-way judgement in JavaScript (`inspectCatalogFile()`): locked → skip or fail depending on the build mode, decrypted-but-broken → always fail, valid → proceed. A malformed catalog is never downgraded to "locked", because that would let a data regression pass as a missing key. `tests/build-plugin-zip.test.mjs` covers the classification with fixtures, so it runs without the key.
+`script/build-plugin-zip.mjs` mirrors that three-way judgement in JavaScript (`inspectCatalogFile()`): locked → skip or fail depending on the build mode, decrypted-but-broken → always fail, valid → proceed. A malformed catalog is never downgraded to "locked", because that would let a data regression pass as a missing key. `tests/build-plugin-zip.test.mjs` covers the classification with fixtures, so it runs without the key.
 
 ## Portable WordPress Smoke
 

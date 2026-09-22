@@ -5,15 +5,15 @@
  * extracts the bundle, downloads thumbnails, and writes a catalog JSON.
  *
  * Usage:
- *   node scripts/scrape-template-party.mjs            # full run
- *   node scripts/scrape-template-party.mjs --limit 5  # test: process only first N detail IDs
- *   node scripts/scrape-template-party.mjs --skip-zips # metadata only, no ZIP download
+ *   node script/scrape-template-party.mjs            # full run
+ *   node script/scrape-template-party.mjs --limit 5  # test: process only first N detail IDs
+ *   node script/scrape-template-party.mjs --skip-zips # metadata only, no ZIP download
  *
  * Outputs (relative to repo root):
  *   wp-content/plugins/designinserter/data/template-party-templates.json
  *   wp-content/plugins/designinserter/data/template-party-scrape-state.json  (progress, git-ignored)
  *   wp-content/plugins/designinserter/data/template-party-bundles/<variantId>/  (git-ignored)
- *   wp-content/plugins/designinserter/assets/previews/tp-<variantId>.webp
+ *   wp-content/plugins/designinserter/asset/previews/tp-<variantId>.webp
  */
 
 import { mkdir, writeFile, readFile, rm, copyFile, readdir, stat } from 'node:fs/promises';
@@ -28,7 +28,7 @@ const DATA_DIR      = path.join(PLUGIN_DIR, 'data');
 const BUNDLES_DIR   = path.join(DATA_DIR, 'template-party-bundles');
 const CATALOG_PATH  = path.join(DATA_DIR, 'template-party-templates.json');
 const STATE_PATH    = path.join(DATA_DIR, 'template-party-scrape-state.json');
-const PREVIEWS_DIR  = path.join(PLUGIN_DIR, 'assets', 'previews');
+const PREVIEWS_DIR  = path.join(PLUGIN_DIR, 'asset', 'previews');
 const TMP_ZIP       = '/tmp/tp-template-download.zip';
 const TMP_EXTRACT   = '/tmp/tp-template-extract';
 
@@ -199,7 +199,7 @@ async function processDetailPages(state) {
 				zipUrl,
 				demoUrl,
 				sourceUrl,
-				thumb: `assets/previews/tp-${variantId}.webp`,
+				thumb: `asset/previews/tp-${variantId}.webp`,
 				bundleDir: `data/template-party-bundles/${variantId}`,
 				entryHtml: 'index.html',
 				source: 'template-party',

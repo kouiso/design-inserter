@@ -77,16 +77,16 @@
 ```
 wp-content/plugins/designinserter/
   designinserter.php       # Plugin entry point
-  includes/
+  include/
     data.php               # Catalog loader
     render.php             # Shortcode + render function
     block.php              # Gutenberg block registration
     admin.php              # Settings page
-  assets/
+  asset/
     editor.js              # Editor UI (vanilla JS)
     editor.css             # Editor styles
   data/
     css-stock-parts.json   # Scraped catalog (222 parts)
-scripts/
+script/
   scrape-css-stock.mjs     # Scraper script
 ```

@@ -32,7 +32,7 @@ if ( 'invalid' === $mode ) {
 
 define( 'DESIGNINSERTER_PLUGIN_DIR', $root . '/' );
 
-require __DIR__ . '/../wp-content/plugins/designinserter/includes/data.php';
+require __DIR__ . '/../wp-content/plugins/designinserter/include/data.php';
 
 $catalog = designinserter_get_catalog();
 

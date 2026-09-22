@@ -14,7 +14,7 @@ import {
   isGitCryptCiphertext,
   resolveOutputPath,
   selectDistributionFiles,
-} from '../scripts/build-plugin-zip.mjs';
+} from '../script/build-plugin-zip.mjs';
 
 function withTempDir(run) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'designinserter-build-guard-'));
@@ -171,23 +171,23 @@ test('preview references are collected from both parts and templates', () => {
   assert.deepEqual(
     collectPreviewReferences({
       parts: [
-        { previewImage: 'assets/previews/tp-1.webp' },
-        { previewImage: 'assets/previews/tp-2.webp' },
+        { previewImage: 'asset/previews/tp-1.webp' },
+        { previewImage: 'asset/previews/tp-2.webp' },
       ],
     }),
-    ['assets/previews/tp-1.webp', 'assets/previews/tp-2.webp'],
+    ['asset/previews/tp-1.webp', 'asset/previews/tp-2.webp'],
   );
   assert.deepEqual(
-    collectPreviewReferences({ templates: [{ thumb: 'assets/previews/tp-wa1.webp' }] }),
-    ['assets/previews/tp-wa1.webp'],
+    collectPreviewReferences({ templates: [{ thumb: 'asset/previews/tp-wa1.webp' }] }),
+    ['asset/previews/tp-wa1.webp'],
   );
   // 同じプレビューを複数エントリが指しても 1 回だけ検証する。
   assert.deepEqual(
     collectPreviewReferences({
-      parts: [{ previewImage: 'assets/previews/tp-1.webp' }],
-      templates: [{ thumb: 'assets/previews/tp-1.webp' }],
+      parts: [{ previewImage: 'asset/previews/tp-1.webp' }],
+      templates: [{ thumb: 'asset/previews/tp-1.webp' }],
     }),
-    ['assets/previews/tp-1.webp'],
+    ['asset/previews/tp-1.webp'],
   );
 });
 
@@ -243,8 +243,8 @@ test('distribution files split into included, locked and local-only', () => {
     writeFile(dir, 'designinserter.php', '<?php');
     writeFile(dir, 'data/css-stock-parts.json', '{"parts":[]}');
     writeFile(dir, 'data/template-party-parts.json', locked());
-    writeFile(dir, 'assets/previews/tp-1.webp', locked());
-    writeFile(dir, 'assets/previews/heading-1.webp', 'RIFF');
+    writeFile(dir, 'asset/previews/tp-1.webp', locked());
+    writeFile(dir, 'asset/previews/heading-1.webp', 'RIFF');
     writeFile(dir, 'data/template-party-bundles/wa1/index.html', '<html>');
     writeFile(dir, 'data/template-party-scrape-state.json', '{}');
     writeFile(dir, '.DS_Store', 'junk');
@@ -253,12 +253,12 @@ test('distribution files split into included, locked and local-only', () => {
     const relative = (files) => files.map((file) => path.relative(dir, file).split(path.sep).join('/'));
 
     assert.deepEqual(relative(included), [
-      'assets/previews/heading-1.webp',
+      'asset/previews/heading-1.webp',
       'data/css-stock-parts.json',
       'designinserter.php',
     ]);
     assert.deepEqual(relative(lockedFiles), [
-      'assets/previews/tp-1.webp',
+      'asset/previews/tp-1.webp',
       'data/template-party-parts.json',
     ]);
     assert.deepEqual(relative(localOnlyFiles), [

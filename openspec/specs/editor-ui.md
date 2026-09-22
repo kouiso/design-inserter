@@ -21,7 +21,7 @@ Gutenberg エディタ内で デザインパーツと Template Party テンプ�
 
 ### 共通
 
-1. ファイルパス: `wp-content/plugins/designinserter/assets/editor.js`
+1. ファイルパス: `wp-content/plugins/designinserter/asset/editor.js`
 2. IIFE パターンで WordPress グローバル変数（`wp.blocks` / `wp.element` / `wp.blockEditor` / `wp.components` / `wp.i18n` / `wp.data`）を注入する
 3. InspectorControls 内に PanelBody「Design Inserter」を表示し、その中に `ItemPicker` を置く
 
@@ -43,7 +43,7 @@ Gutenberg エディタ内で デザインパーツと Template Party テンプ�
 
 ### LivePreview（パーツを選んだとき）
 
-10. `partId` の変化を `useEffect` で監視する。**`window.designInserterPartCodeFuncs[partId]`（`assets/part-code-funcs.js`）にローカル生成関数があれば、それを最優先で同期的に呼んで `html`/`css` を得る**。CSS Stock 222 件は全パーツがこの生成関数を持つ（`testPartCodeFuncs()` で担保）ため、主要カタログは REST を経由しない。生成関数が無いパーツ（現状は Template Party）のときだけ `window.fetch( restUrl + partId, { headers: { 'X-WP-Nonce': nonce } } )` で **REST から遅延ロード**する。カタログ全件の `html` / `css` は最初から配らない
+10. `partId` の変化を `useEffect` で監視する。**`window.designInserterPartCodeFuncs[partId]`（`asset/part-code-funcs.js`）にローカル生成関数があれば、それを最優先で同期的に呼んで `html`/`css` を得る**。CSS Stock 222 件は全パーツがこの生成関数を持つ（`testPartCodeFuncs()` で担保）ため、主要カタログは REST を経由しない。生成関数が無いパーツ（現状は Template Party）のときだけ `window.fetch( restUrl + partId, { headers: { 'X-WP-Nonce': nonce } } )` で **REST から遅延ロード**する。カタログ全件の `html` / `css` は最初から配らない
 11. REST 経路のみ: `AbortController` があれば前回のリクエストを中断する。到着したレスポンスの `data.id` が現在の `partId` と違えば捨てる（競合状態対策）
 12. REST 経路のみ: 取得中は `div.di-preview--loading` に `Spinner`。再取得中は前のプレビューを残したまま `div.di-preview--refreshing` + `aria-busy="true"` + `div.di-preview__overlay` を重ねる。ローカル生成は同期的なのでローディング状態を経ない
 13. 取得失敗時は `Notice`（status: error）に失敗理由（REST は HTTP ステータス併記の「プレビュー取得に失敗しました」、ローカル生成関数が例外を投げた場合は「プレビューの生成に失敗しました」）と「再試行」ボタンを出す
@@ -81,7 +81,7 @@ Gutenberg エディタ内で デザインパーツと Template Party テンプ�
 
 ### window.DesignInserterCatalog
 
-`designinserter_get_editor_catalog()`（`includes/data.php`）が生成する。
+`designinserter_get_editor_catalog()`（`include/data.php`）が生成する。
 
 ```javascript
 {

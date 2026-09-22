@@ -72,7 +72,7 @@ const commandBook = {
 		artifact: '.tmp/ready-checklist/persona-drift-grep.txt',
 	},
 	contentCrossCheck: {
-		command: 'node scripts/generate-ready-checklist.mjs --stdout',
+		command: 'node script/generate-ready-checklist.mjs --stdout',
 		artifact: '.tmp/ready-checklist/designinserter-ready-checklist.json',
 	},
 };
@@ -408,8 +408,8 @@ const buildManualAuditBlocks = (facts) => ({
 		],
 		knownInputs: [
 			'wp-content/plugins/designinserter',
-			'scripts',
-			'docs',
+			'script',
+			'doc',
 			'openspec',
 			'.tmp/e2e-fresh-wp/evidence/fresh-report.json',
 		],
@@ -556,7 +556,7 @@ const buildChecklist = async () => {
 	return {
 		schemaVersion: 1,
 		generatedAt: new Date().toISOString(),
-		generatedBy: 'scripts/generate-ready-checklist.mjs',
+		generatedBy: 'script/generate-ready-checklist.mjs',
 		project: {
 			name: facts.package.name,
 			pluginSlug,

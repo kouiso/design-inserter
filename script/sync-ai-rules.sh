@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # sync-ai-rules.sh — AGENTS.md を single source として bridge ファイルを再生成する
-# 使い方: bash scripts/sync-ai-rules.sh
+# 使い方: bash script/sync-ai-rules.sh
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -15,9 +15,9 @@ fi
 
 AGENTS_CONTENT=$(cat "$AGENTS")
 
-GEMINI_PROLOG='<!-- AUTO-GENERATED from AGENTS.md by scripts/sync-ai-rules.sh -->
+GEMINI_PROLOG='<!-- AUTO-GENERATED from AGENTS.md by script/sync-ai-rules.sh -->
 <!-- DO NOT HAND-EDIT — changes will be overwritten on next sync -->
-<!-- To update: edit AGENTS.md, then run: bash scripts/sync-ai-rules.sh -->
+<!-- To update: edit AGENTS.md, then run: bash script/sync-ai-rules.sh -->
 
 # design-inserter — Gemini Code Assist スタイルガイド
 
@@ -35,9 +35,9 @@ GEMINI_PROLOG='<!-- AUTO-GENERATED from AGENTS.md by scripts/sync-ai-rules.sh --
 
 <!-- ===== AGENTS.md CONTENT (auto-synced) ===== -->'
 
-COPILOT_PROLOG='<!-- AUTO-GENERATED from AGENTS.md by scripts/sync-ai-rules.sh -->
+COPILOT_PROLOG='<!-- AUTO-GENERATED from AGENTS.md by script/sync-ai-rules.sh -->
 <!-- DO NOT HAND-EDIT — changes will be overwritten on next sync -->
-<!-- To update: edit AGENTS.md, then run: bash scripts/sync-ai-rules.sh -->'
+<!-- To update: edit AGENTS.md, then run: bash script/sync-ai-rules.sh -->'
 
 generate_gemini() {
   printf '%s\n\n%s\n' "$GEMINI_PROLOG" "$AGENTS_CONTENT"

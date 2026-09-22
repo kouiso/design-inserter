@@ -9,7 +9,7 @@ Phase 1 deep research → Phase 2 self-review (100/100) → Phase 3 pre-mortem (
 
 **Phase 1 最重要発見**: origin/main と local `release/v0.2.0-interactive-parts-2026-05-04` branch の v1.0.0 commit (`d2a62f82`) が 8 日間放置・並行進化していた。
 
-**self-correction (Phase 4 sim 結果)**: 初稿で「v1.0.0 が PR #4/#6/#10 の 2,740 行を削除する」と書いたが、これは **不正確**。v1.0.0 は PR #4/#6/#10 が生まれる前の branch point から分岐しているため、main 側で「追加」された file は 3-way merge で **preserved** され、削除されない。実際の merge 衝突は **6 ファイルのみ** (README.md / package.json / package-lock.json / scripts/build-plugin-zip.mjs / designinserter.php / render.php)。
+**self-correction (Phase 4 sim 結果)**: 初稿で「v1.0.0 が PR #4/#6/#10 の 2,740 行を削除する」と書いたが、これは **不正確**。v1.0.0 は PR #4/#6/#10 が生まれる前の branch point から分岐しているため、main 側で「追加」された file は 3-way merge で **preserved** され、削除されない。実際の merge 衝突は **6 ファイルのみ** (README.md / package.json / package-lock.json / script/build-plugin-zip.mjs / designinserter.php / render.php)。
 
 **Phase 5 直接対応 (副長指示 OPTION B 実行済み)**:
 - 新 worktree `v1-release-candidate` で v1.0.0 base + main 側 audit/test 統合
@@ -60,17 +60,17 @@ diff --stat origin/main..d2a62f82
  composer.json                                      |   17 +    [新規]
  composer.lock                                      | 1894 ++++  [新規]
  doc/ux-audit-2026-05-16.md                         |  428 -----  [PR #4 deliverable 削除]
- docs/test-matrix-2026-05-17.md                     |  231 ---    [PR #6 deliverable 削除]
- docs/testing.md                                    |   85 -      [PR #6 file 削除]
+ doc/test-matrix-2026-05-17.md                     |  231 ---    [PR #6 deliverable 削除]
+ doc/testing.md                                    |   85 -      [PR #6 file 削除]
  package-lock.json                                  |   68 +-
  package.json                                       |   21 +-     [scripts 全面入替]
  phpcs.xml.dist                                     |   28 +    [新規]
  phpunit.xml.dist                                   |   12 +    [新規]
  playwright.config.mjs                              |   13 +    [新規]
- scripts/build-plugin-zip.mjs                       |  327 +---  [大幅縮約]
- scripts/generate-ready-checklist.mjs               |  645 +++   [新規 645行]
- scripts/test.mjs                                   |  467 -----  [PR #6 file 削除]
- scripts/wp-smoke.mjs                               |  603 -----  [PR #6/#10 file 削除]
+ script/build-plugin-zip.mjs                       |  327 +---  [大幅縮約]
+ script/generate-ready-checklist.mjs               |  645 +++   [新規 645行]
+ script/test.mjs                                   |  467 -----  [PR #6 file 削除]
+ script/wp-smoke.mjs                               |  603 -----  [PR #6/#10 file 削除]
  tests/catalog-fallback.php                         |   45 -      [PR #6 file 削除]
  tests/e2e/fresh-install-222.spec.mjs               |  484 +++   [新規 Playwright E2E]
  tests/php/DesignInserterCoreTest.php               |   74 +    [新規 PHPUnit]
@@ -78,8 +78,8 @@ diff --stat origin/main..d2a62f82
  tests/render-smoke.php                             |  154 --     [PR #6 file 削除]
  tests/wp-stubs.php                                 |  400 ---    [PR #6 file 削除]
  wp-content/plugins/designinserter/designinserter.php  |    9 +-
- wp-content/plugins/designinserter/includes/data.php   |   10 +-
- wp-content/plugins/designinserter/includes/render.php |    8 +-
+ wp-content/plugins/designinserter/include/data.php   |   10 +-
+ wp-content/plugins/designinserter/include/render.php |    8 +-
  25 files changed, 3411 insertions(+), 2717 deletions(-)
 ```
 
@@ -99,7 +99,7 @@ diff --stat origin/main..d2a62f82
 - Plugin: aria-label escaping fix (`esc_attr` 使用、`esc_html` 二重エスケープ修正)
 - Tooling: PHPUnit 9 + PHPCS 3 (composer)
 - Tooling: Playwright E2E `fresh-install-222.spec.mjs` (4 tests, 222-part 全網羅、consoleErrors=0 検証)
-- Tooling: `scripts/generate-ready-checklist.mjs` (10 K-ticket 観点での出荷判定 JSON 出力)
+- Tooling: `script/generate-ready-checklist.mjs` (10 K-ticket 観点での出荷判定 JSON 出力)
 - Tooling: `.gitignore` に vendor/, .phpunit.result.cache, .agents/, .claude/ 追記
 - 検証 (commit message から): 7 PHPUnit tests, 24 assertions all pass. PHPCS exit 0. E2E 4/4 pass.
 
@@ -126,7 +126,7 @@ diff --stat origin/main..d2a62f82
 | T-15 | stale remote branch cleanup (merge 後の chore/* 4本) | **NEVER-STARTED** | 残存 |
 | T-16 | Playwright E2E 導入 (PR #6 §D-1 推奨) | **DONE (parallel implementation)** | v1.0.0 commit が独立に導入済 |
 | T-17 | CI workflow 化 (PR #6 §D-2 推奨) | **NEVER-STARTED** | `.github/workflows/` 無し |
-| T-18 | `docs/test-strategy.md` 体系化 (PR #6 §D-3 推奨) | **NEVER-STARTED** | doc 無し |
+| T-18 | `doc/test-strategy.md` 体系化 (PR #6 §D-3 推奨) | **NEVER-STARTED** | doc 無し |
 | T-19 | ux-audit doc を doc/ → docs/ 統一 (Gemini PR #5 指摘 #1) | **NEVER-STARTED** | PR #4 で `doc/` に配置済、rename PR 無し |
 | T-20 | follow-up issue (#7, #8) | DONE | PR #10 で close |
 
@@ -144,7 +144,7 @@ diff --stat origin/main..d2a62f82
 |---|---|---|---|
 | S-01 | **session 開始時点で local branch / working tree を inspect しなかった** | PR #4/#6/#10 を origin/main 基準で立てた結果、local の v1.0.0 commit と衝突する 2,740 行を main に書き込んだ | session 開始時の context inventory が不十分。`git branch --show-current` と `git log -3` を見れば気付けた |
 | S-02 | **user に「local-only な進行中 work あるか」確認しなかった** | v1.0.0 commit の存在に audit 終盤まで気付かず | readback-protocol skill 不適用 |
-| S-03 | **untracked file (scripts/test.mjs ほか) を「main に commit すべき dev infra」と判断** | PR #6 で 1,900 LOC を main に push したが、それは v1.0.0 が削除する対象だった | 「untracked = main に必要」と短絡。v1.0.0 commit の存在を見れば「これは捨てる予定のファイル」と判定可能だった |
+| S-03 | **untracked file (script/test.mjs ほか) を「main に commit すべき dev infra」と判断** | PR #6 で 1,900 LOC を main に push したが、それは v1.0.0 が削除する対象だった | 「untracked = main に必要」と短絡。v1.0.0 commit の存在を見れば「これは捨てる予定のファイル」と判定可能だった |
 | S-04 | **PR #4 audit doc を main に置く前に v1.0.0 commit の inclusion を user に確認しなかった** | merge 後の doc が v1.0.0 merge で削除されることに気付けていなかった | 同上、pre-mortem 不足 |
 | S-05 | **v1.0.0 commit の動作確認結果を再検証せず commit message 主張のみ信頼** | 「7 PHPUnit / 24 assertions / Playwright 4/4」が現時点で再現可能か不明 | verification-source-mandate 違反 (Codex 自己申告でなく commit-message 自己申告レベル) |
 
@@ -290,7 +290,7 @@ diff --stat origin/main..d2a62f82
 
 - 本 audit ターン中に subagent (Agent tool) で jsonl 解析を background 投入。結果は本ドキュメント完成までに到着しなければ別途追記。
 - Codex Cloud env 未登録のため local codex 経由で adversarial を submit (Bash run_in_background:true)。
-- 本 audit doc 自体も v1.0.0 commit (もし merge 後に doc/ ディレクトリを保持) と整合する場所に配置が必要。当面 `doc/` 配下 (前 audit doc と同じ場所) で PR 化、user 判断で `docs/` 移動 or v1.0.0 統合時の処理。
+- 本 audit doc 自体も v1.0.0 commit (もし merge 後に doc/ ディレクトリを保持) と整合する場所に配置が必要。当面 `doc/` 配下 (前 audit doc と同じ場所) で PR 化、user 判断で `doc/` 移動 or v1.0.0 統合時の処理。
 
 ---
 

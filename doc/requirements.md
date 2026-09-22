@@ -45,7 +45,7 @@ Design Inserter は、[外部サイト](https://pote-chil.com/css-stock/ja) が�
 | 更新方法 | `pnpm run scrape:css-stock` で再生成 |
 | 件数 | 28 カテゴリ / 222 パーツ |
 
-### FR-5: スクレイパー (`scripts/scrape-css-stock.mjs`)
+### FR-5: スクレイパー (`script/scrape-css-stock.mjs`)
 
 | 項目 | 仕様 |
 |------|------|

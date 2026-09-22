@@ -10,9 +10,9 @@ Template Party（template-party.com）からフルページテンプレートの
 
 | スクリプト | pnpm script | 出力 |
 |---|---|---|
-| `scripts/scrape-template-party.mjs` | `scrape:template-party` | `data/template-party-templates.json` + thumbnails + bundles |
-| `scripts/scrape-template-party.mjs --skip-zips` | `scrape:template-party:meta` | メタデータ + thumbnails のみ（ZIPなし） |
-| `scripts/scrape-template-party-parts.mjs` | `scrape:template-party:parts` | `data/template-party-parts.json` + thumbnails |
+| `script/scrape-template-party.mjs` | `scrape:template-party` | `data/template-party-templates.json` + thumbnails + bundles |
+| `script/scrape-template-party.mjs --skip-zips` | `scrape:template-party:meta` | メタデータ + thumbnails のみ（ZIPなし） |
+| `script/scrape-template-party-parts.mjs` | `scrape:template-party:parts` | `data/template-party-parts.json` + thumbnails |
 
 ## フルテンプレートスクレイパー（scrape-template-party.mjs）
 
@@ -24,7 +24,7 @@ Template Party（template-party.com）からフルページテンプレートの
 4. `--skip-zips` フラグ指定時はメタデータとサムネのみ取得（ZIP DL スキップ）
 5. ZIP DL → 展開 → `index.html` 内の相対 asset/CSS パスを `bundleDir` 基準にリライト
 6. 著作権表示行（`Web Design:Template-Party`）は**必ず保持**（削除・変更禁止）
-7. サムネ DL → `assets/previews/tp-<variantId>.webp`
+7. サムネ DL → `asset/previews/tp-<variantId>.webp`
 8. 進捗を `data/template-party-scrape-state.json` に書き込む（resumable）
 9. 既取得 variant は skip（idempotent）
 10. rate-limit: 逐次処理 + sleep（サーバー負荷軽減）
@@ -46,7 +46,7 @@ Template Party（template-party.com）からフルページテンプレートの
     "category": "japanese-food",
     "categoryLabel": "和食・寿司・うどん",
     "title": "和菓子店向け tp_wa1_blue",
-    "thumb": "assets/previews/tp-wa1_blue.webp",
+    "thumb": "asset/previews/tp-wa1_blue.webp",
     "demoUrl": "https://template-party.com/template/tp_wa1/tp_wa1_blue/",
     "sourceUrl": "https://template-party.com/db_new/detail?category=template&id=...",
     "bundleDir": "data/template-party-bundles/tp_wa1_blue",
@@ -61,7 +61,7 @@ Template Party（template-party.com）からフルページテンプレートの
 | アーティファクト | Git |
 |---|---|
 | `data/template-party-templates.json` | 管理 |
-| `assets/previews/tp-*.webp` | 管理 |
+| `asset/previews/tp-*.webp` | 管理 |
 | `data/template-party-bundles/` | **非管理**（.gitignore） |
 | `data/template-party-scrape-state.json` | **非管理**（.gitignore） |
 
@@ -72,7 +72,7 @@ Template Party（template-party.com）からフルページテンプレートの
 1. `/parts/catalog.php` から全カテゴリ（見出し・ボタン・タブ・アコーディオン等）のパーツ一覧を取得
 2. 各パーツの HTML/CSS をスクレイプして `template-party-parts.json` に格納
 3. `source: "template-party"` を全パーツに付与
-4. サムネ DL → `assets/previews/tp-parts-<partId>.webp`
+4. サムネ DL → `asset/previews/tp-parts-<partId>.webp`
 5. デザインパーツと同一スキーマ: `{id, category, categoryLabel, title, html, css, inputs, previewImage, sourceUrl, source}`
 
 ### 出力 JSON スキーマ（template-party-parts.json）
@@ -92,7 +92,7 @@ Template Party（template-party.com）からフルページテンプレートの
     "html": "...",
     "css": "...",
     "inputs": [],
-    "previewImage": "assets/previews/tp-parts-list-voice1.webp",
+    "previewImage": "asset/previews/tp-parts-list-voice1.webp",
     "sourceUrl": "https://template-party.com/parts/...",
     "source": "template-party"
   }]

@@ -6,7 +6,7 @@
  * and writes a catalog JSON in css-stock-compatible schema.
  *
  * Usage:
- *   node scripts/scrape-template-party-parts.mjs
+ *   node script/scrape-template-party-parts.mjs
  */
 
 import { mkdir, writeFile, rm, readdir, copyFile } from 'node:fs/promises';
@@ -18,8 +18,8 @@ const PARTS_BASE    = `${BASE}/parts`;
 const PLUGIN_DIR    = path.resolve('wp-content/plugins/designinserter');
 const DATA_DIR      = path.join(PLUGIN_DIR, 'data');
 const CATALOG_PATH  = path.join(DATA_DIR, 'template-party-parts.json');
-const PREVIEWS_DIR  = path.join(PLUGIN_DIR, 'assets', 'previews');
-const PREVIEWS_TMP  = path.join(PLUGIN_DIR, 'assets', '.previews-tp-parts-tmp');
+const PREVIEWS_DIR  = path.join(PLUGIN_DIR, 'asset', 'previews');
+const PREVIEWS_TMP  = path.join(PLUGIN_DIR, 'asset', '.previews-tp-parts-tmp');
 
 const SLEEP_MS = 400;
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) research-scraper/1.0';
@@ -122,7 +122,7 @@ async function main() {
 				const ext = detectExt(bytes);
 				const filename = `tp-parts-${id}${ext}`;
 				await writeFile(path.join(PREVIEWS_TMP, filename), bytes);
-				previewImagePath = `assets/previews/${filename}`;
+				previewImagePath = `asset/previews/${filename}`;
 				previewCount += 1;
 			} catch {
 				// not fatal
