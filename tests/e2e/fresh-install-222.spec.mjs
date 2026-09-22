@@ -555,7 +555,9 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 	expect(selectedState.designInserterBlockCount).toBe(1);
 	expect(selectedState.selectedBlockName).toBe('designinserter/css-part');
 	expect(selectedState.partId).toBe('button-54');
-	expect(previewRaceEvents.filter((event) => event.id === 'button-54' && event.event === 'fulfilled')).toHaveLength(1);
+	// params 対応パーツのプレビューはクライアント側 computePartContent で生成されるため
+	// REST フェッチ自体が発生しない。残すガードは「最終選択以外のパーツの fulfilled がない」こと。
+	expect(previewRaceEvents.filter((event) => event.event === 'fulfilled' && event.id !== 'button-54')).toHaveLength(0);
 	expect(Date.now() - startedAt).toBeGreaterThanOrEqual(continuousUseMs);
 	expect(unexpectedFailedRequests).toHaveLength(0);
 	expect(issues.consoleErrors).toHaveLength(0);
