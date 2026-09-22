@@ -369,8 +369,8 @@ test('fresh WordPress install activates zip and renders all 222 parts', async ({
 			behaviorCount: data.filter((item) => item.behavior).length,
 			initializedBehaviorCount: data.filter((item) => item.behavior && item.initialized === 'true').length,
 			zeroBox: data.filter((item) => item.width <= 0 || item.height <= 0),
-			frontendCss: Array.from(document.querySelectorAll('link[href*="designinserter/assets/frontend.css"]')).map((link) => link.href),
-			frontendJs: Array.from(document.querySelectorAll('script[src*="designinserter/assets/frontend.js"]')).map((script) => script.src),
+			frontendCss: Array.from(document.querySelectorAll('link[href*="designinserter/asset/frontend.css"]')).map((link) => link.href),
+			frontendJs: Array.from(document.querySelectorAll('script[src*="designinserter/asset/frontend.js"]')).map((script) => script.src),
 		};
 	});
 

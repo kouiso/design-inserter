@@ -2,7 +2,7 @@
 /**
  * Portable WordPress integration smoke executed via `wp eval-file`.
  *
- * Extracted from scripts/wp-smoke.mjs (previously embedded as a giant
+ * Extracted from script/wp-smoke.mjs (previously embedded as a giant
  * JS string) so the PHP can be syntax-highlighted, linted, and debugged
  * as a real PHP file. See follow-up issue #8.
  *
@@ -54,7 +54,7 @@ if (
     || count($localized_catalog['parts']) !== $expected_total
     || rest_url('designinserter/v1/parts/') !== $localized_catalog['restUrl']
     || empty($localized_catalog['nonce'])
-    || 0 !== strpos($localized_catalog['parts'][0]['previewImage'], DESIGNINSERTER_PLUGIN_URL . 'assets/previews/')
+    || 0 !== strpos($localized_catalog['parts'][0]['previewImage'], DESIGNINSERTER_PLUGIN_URL . 'asset/previews/')
 ) {
     fwrite(STDERR, "editor catalog contract smoke failed\n");
     exit(1);
@@ -128,8 +128,8 @@ if (
 
 $box_render = designinserter_render_part('box-2');
 if (
-    false !== strpos($box_render, 'src="assets/embedded/')
-    || false === strpos($box_render, DESIGNINSERTER_PLUGIN_URL . 'assets/embedded/css-stock-img-about-coding.svg')
+    false !== strpos($box_render, 'src="asset/embedded/')
+    || false === strpos($box_render, DESIGNINSERTER_PLUGIN_URL . 'asset/embedded/css-stock-img-about-coding.svg')
 ) {
     fwrite(STDERR, "embedded asset render smoke failed\n");
     exit(1);
@@ -194,8 +194,8 @@ $box_response = rest_do_request($box_request);
 $box_data     = $box_response->get_data();
 if (
     $box_response->is_error()
-    || false !== strpos($box_data['html'], 'src="assets/embedded/')
-    || false === strpos($box_data['html'], DESIGNINSERTER_PLUGIN_URL . 'assets/embedded/css-stock-img-about-coding.svg')
+    || false !== strpos($box_data['html'], 'src="asset/embedded/')
+    || false === strpos($box_data['html'], DESIGNINSERTER_PLUGIN_URL . 'asset/embedded/css-stock-img-about-coding.svg')
 ) {
     fwrite(STDERR, "REST embedded asset smoke failed\n");
     exit(1);

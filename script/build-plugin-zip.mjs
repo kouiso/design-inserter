@@ -190,7 +190,7 @@ export function assertCatalogsUsable(states, { allowLocked = false } = {}) {
   }
 }
 
-// scripts/test.mjs の CSS Stock 側検査と同じ判定を共有する（拡張子と中身がズレる改竄・破損を両カタログで検出するため）。
+// script/test.mjs の CSS Stock 側検査と同じ判定を共有する（拡張子と中身がズレる改竄・破損を両カタログで検出するため）。
 export function detectPreviewKind(buffer) {
   const textStart = buffer.subarray(0, 128).toString('utf8').trimStart();
 
@@ -219,7 +219,7 @@ export function collectPreviewReferences(catalog) {
     const items = Array.isArray(catalog[collection]) ? catalog[collection] : [];
     for (const item of items) {
       const value = item && typeof item[field] === 'string' ? item[field] : '';
-      if (value.startsWith('assets/')) {
+      if (value.startsWith('asset/')) {
         refs.push(value);
       }
     }
@@ -367,7 +367,7 @@ function readZipEntry(outPath, entry) {
 
 function extractCatalogAssetReferences(part) {
   const refs = [];
-  const pattern = /\b(?:src|href)=(['"])(assets\/(?:embedded|previews)\/[^'"]+)\1|url\(\s*(['"]?)(assets\/(?:embedded|previews)\/[^)'" \t\r\n]+)\3\s*\)/g;
+  const pattern = /\b(?:src|href)=(['"])(asset\/(?:embedded|previews)\/[^'"]+)\1|url\(\s*(['"]?)(asset\/(?:embedded|previews)\/[^)'" \t\r\n]+)\3\s*\)/g;
 
   for (const field of ['html', 'css']) {
     const text = typeof part[field] === 'string' ? part[field] : '';
@@ -400,17 +400,17 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
     `${pluginSlug}/index.php`,
     `${pluginSlug}/NOTICE.md`,
     `${pluginSlug}/readme.txt`,
-    `${pluginSlug}/assets/editor.js`,
-    `${pluginSlug}/assets/editor.css`,
-    `${pluginSlug}/assets/frontend.js`,
-    `${pluginSlug}/assets/frontend.css`,
+    `${pluginSlug}/asset/editor.js`,
+    `${pluginSlug}/asset/editor.css`,
+    `${pluginSlug}/asset/frontend.js`,
+    `${pluginSlug}/asset/frontend.css`,
     `${pluginSlug}/data/css-stock-parts.json`,
-    `${pluginSlug}/includes/admin.php`,
-    `${pluginSlug}/includes/block.php`,
-    `${pluginSlug}/includes/data.php`,
-    `${pluginSlug}/includes/render.php`,
-    `${pluginSlug}/includes/rest-api.php`,
-    `${pluginSlug}/includes/templates.php`,
+    `${pluginSlug}/include/admin.php`,
+    `${pluginSlug}/include/block.php`,
+    `${pluginSlug}/include/data.php`,
+    `${pluginSlug}/include/render.php`,
+    `${pluginSlug}/include/rest-api.php`,
+    `${pluginSlug}/include/templates.php`,
     `${pluginSlug}/templates/full-page.php`,
   ];
   const expectedEntries = sourceFiles.map((file) => `${pluginSlug}/${path.relative(pluginDir, file).split(path.sep).join('/')}`);
@@ -419,8 +419,8 @@ function verifyZip(outPath, sourceFiles, { allowLocked = false, lockedFiles = []
   const missingSourceFiles = expectedEntries.filter((entry) => !entrySet.has(entry));
   const unexpectedDevFiles = entries.filter((entry) => {
     const relative = entry.slice(`${pluginSlug}/`.length);
-    return /^(?:tests|docs|scripts|dist|node_modules|\.git|\.github|data\/template-party-bundles)\//.test(relative) ||
-      /(?:^|\/)(?:package(?:-lock)?\.json|docker-compose\.yml|SETUP_STATUS\.md|README\.md|template-party-scrape-state\.json)$/.test(relative);
+    return /^(?:tests|doc|script|dist|node_modules|\.git|\.github|data\/template-party-bundles)\//.test(relative) ||
+      /(?:^|\/)(?:package(?:-lock)?\.json|docker-compose\.yml|setup-status\.md|README\.md|template-party-scrape-state\.json)$/.test(relative);
   });
 
   // リリース zip は Template Party を必ず平文で含む。sweep 済みやが、実際に固めた中身でも押さえる。

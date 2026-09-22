@@ -21,9 +21,9 @@ define( 'DESIGNINSERTER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DESIGNINSERTER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'DESIGNINSERTER_SOURCE_URL', 'https://pote-chil.com/css-stock/ja' );
 
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/data.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/render.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/block.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/admin.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/templates.php';
-require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/rest-api.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/data.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/render.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/block.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/admin.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/templates.php';
+require_once DESIGNINSERTER_PLUGIN_DIR . 'include/rest-api.php';

@@ -31,19 +31,19 @@
 
 - `wp-content/plugins/designinserter/` ディレクトリ構成を作成
 - `designinserter.php` プラグインヘッダー + 定数定義
-- `includes/data.php` カタログローダー
-- `includes/render.php` レンダラー + ショートコード
-- `includes/block.php` Gutenberg ブロック登録
-- `includes/admin.php` 管理画面
-- `assets/editor.js` + `assets/editor.css` エディタ UI
+- `include/data.php` カタログローダー
+- `include/render.php` レンダラー + ショートコード
+- `include/block.php` Gutenberg ブロック登録
+- `include/admin.php` 管理画面
+- `asset/editor.js` + `asset/editor.css` エディタ UI
 
 ### Phase 6: 本体実装 + カタログ生成
 
-- `scripts/scrape-css-stock.mjs` スクレイパー作成
+- `script/scrape-css-stock.mjs` スクレイパー作成
 - `pnpm run scrape:css-stock` 実行: 28 カテゴリ / 222 パーツ抽出成功
 - `data/css-stock-parts.json` 生成
 - SVG-only パーツ（CSS 空）の `<style>` 非出力対応
-- `IMPLEMENTATION_PLAN.md` 作成
+- `implementation-plan.md` 作成
 
 ---
 

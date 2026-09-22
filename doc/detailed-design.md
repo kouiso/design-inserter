@@ -6,18 +6,18 @@
 wp-content/plugins/designinserter/
 ├── designinserter.php          # プラグインエントリポイント（定数定義 + require）
 ├── index.php                   # 直接アクセス防止
-├── includes/
+├── include/
 │   ├── index.php               # 直接アクセス防止
 │   ├── data.php                # カタログデータ読み込み・キャッシュ・検索
 │   ├── render.php              # パーツ HTML/CSS レンダリング + ショートコード登録
 │   ├── block.php               # Gutenberg ブロック登録 + render_callback
 │   └── admin.php               # 管理画面メニュー・ページ
-├── assets/
+├── asset/
 │   ├── editor.js               # Gutenberg エディタ UI（ブロック定義）
 │   └── editor.css              # エディタプレビュー用スタイル
 ├── data/
 │   └── css-stock-parts.json    # スクレイプ済みカタログ（222 パーツ）
-scripts/
+script/
 └── scrape-css-stock.mjs        # 外部サイト用スクレイパー（Node.js）
 ```
 
@@ -42,13 +42,13 @@ scripts/
 **読み込み順序:**
 
 ```php
-require_once ... 'includes/data.php';    // 1. データ層（他モジュールが依存）
-require_once ... 'includes/render.php';  // 2. レンダリング（data に依存）
-require_once ... 'includes/block.php';   // 3. ブロック登録（data + render に依存）
-require_once ... 'includes/admin.php';   // 4. 管理画面（data に依存）
+require_once ... 'include/data.php';    // 1. データ層（他モジュールが依存）
+require_once ... 'include/render.php';  // 2. レンダリング（data に依存）
+require_once ... 'include/block.php';   // 3. ブロック登録（data + render に依存）
+require_once ... 'include/admin.php';   // 4. 管理画面（data に依存）
 ```
 
-### 2. includes/data.php — カタログローダー
+### 2. include/data.php — カタログローダー
 
 **責務:** JSON カタログの読み込み、static キャッシュ、パーツ検索
 
@@ -92,7 +92,7 @@ sequenceDiagram
     data.php-->>Caller: part array or null
 ```
 
-### 3. includes/render.php — レンダラー
+### 3. include/render.php — レンダラー
 
 **責務:** パーツ ID からフロントエンド HTML 文字列を生成、ショートコード登録
 
@@ -131,7 +131,7 @@ add_shortcode( 'designinserter_part', 'designinserter_shortcode' );
 
 `shortcode_atts` で `id` 属性のみ受け付け、`designinserter_render_part` に委譲。
 
-### 4. includes/block.php — Gutenberg ブロック登録
+### 4. include/block.php — Gutenberg ブロック登録
 
 **責務:** ブロック登録、エディタアセット読み込み、カタログのクライアント注入
 
@@ -153,7 +153,7 @@ function designinserter_render_block( $attributes ) {
 }
 ```
 
-### 5. includes/admin.php — 管理画面
+### 5. include/admin.php — 管理画面
 
 **責務:** 設定メニュー追加、管理ページ表示
 
@@ -165,7 +165,7 @@ function designinserter_render_block( $attributes ) {
 - ページスラッグ: `designinserter`
 - 表示内容: パーツ件数、ソース URL リンク、ショートコード例
 
-### 6. assets/editor.js — Gutenberg エディタ UI
+### 6. asset/editor.js — Gutenberg エディタ UI
 
 **責務:** ブロック定義（edit / save）、パーツ選択 UI、エディタプレビュー
 
@@ -200,7 +200,7 @@ flowchart TD
 
 **save 関数:** `return null` — Dynamic block のためクライアントサイド保存なし。
 
-### 7. assets/editor.css — エディタスタイル
+### 7. asset/editor.css — エディタスタイル
 
 **責務:** エディタプレビューのコンテナスタイル
 
@@ -212,7 +212,7 @@ flowchart TD
 }
 ```
 
-### 8. scripts/scrape-css-stock.mjs — スクレイパー
+### 8. script/scrape-css-stock.mjs — スクレイパー
 
 **責務:** 外部サイトからパーツデータを収集し JSON カタログを生成
 

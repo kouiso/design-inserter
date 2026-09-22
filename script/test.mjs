@@ -88,10 +88,10 @@ function testGitVisibility() {
     'tests/portable-smoke-integration.php',
     'tests/generate-ready-checklist.test.mjs',
     'tests/build-plugin-zip.test.mjs',
-    'scripts/test.mjs',
-    'scripts/wp-smoke.mjs',
-    'scripts/build-plugin-zip.mjs',
-    'docs/testing.md',
+    'script/test.mjs',
+    'script/wp-smoke.mjs',
+    'script/build-plugin-zip.mjs',
+    'doc/testing.md',
   ];
   const ignored = [];
 
@@ -107,8 +107,8 @@ function testGitVisibility() {
 
 function testJavaScriptSyntax() {
   const jsFiles = [
-    ...listFiles('scripts', (file) => file.endsWith('.mjs') || file.endsWith('.js')),
-    ...listFiles(path.join(pluginDir, 'assets'), (file) => file.endsWith('.js')),
+    ...listFiles('script', (file) => file.endsWith('.mjs') || file.endsWith('.js')),
+    ...listFiles(path.join(pluginDir, 'asset'), (file) => file.endsWith('.js')),
   ].sort();
 
   for (const file of jsFiles) {
@@ -124,7 +124,7 @@ function testJavaScriptSyntax() {
 
 function extractCatalogAssetReferences(part) {
   const refs = [];
-  const pattern = /\b(?:src|href)=(['"])(assets\/(?:embedded|previews)\/[^'"]+)\1|url\(\s*(['"]?)(assets\/(?:embedded|previews)\/[^)'" \t\r\n]+)\3\s*\)/g;
+  const pattern = /\b(?:src|href)=(['"])(asset\/(?:embedded|previews)\/[^'"]+)\1|url\(\s*(['"]?)(asset\/(?:embedded|previews)\/[^)'" \t\r\n]+)\3\s*\)/g;
 
   for (const field of ['html', 'css']) {
     const text = typeof part[field] === 'string' ? part[field] : '';
@@ -264,7 +264,7 @@ function testCatalogFallbacks() {
 function testBehaviorMetadata() {
   const catalog = readJson(catalogPath);
   const parts = Array.isArray(catalog.parts) ? catalog.parts : [];
-  const frontend = fs.readFileSync(path.join(pluginDir, 'assets/frontend.js'), 'utf8');
+  const frontend = fs.readFileSync(path.join(pluginDir, 'asset/frontend.js'), 'utf8');
   const supportedTypes = ['scrollTop', 'tooltip', 'readMore', 'tabs', 'modal'];
   const expectedCounts = new Map([
     ['scrollTop', 1],
@@ -334,17 +334,17 @@ function testDistributionShape() {
     'designinserter.php',
     'NOTICE.md',
     'readme.txt',
-    'assets/editor.js',
-    'assets/editor.css',
-    'assets/frontend.js',
-    'assets/frontend.css',
+    'asset/editor.js',
+    'asset/editor.css',
+    'asset/frontend.js',
+    'asset/frontend.css',
     'data/css-stock-parts.json',
-    'includes/data.php',
-    'includes/render.php',
-    'includes/block.php',
-    'includes/admin.php',
-    'includes/rest-api.php',
-    'includes/templates.php',
+    'include/data.php',
+    'include/render.php',
+    'include/block.php',
+    'include/admin.php',
+    'include/rest-api.php',
+    'include/templates.php',
     'templates/full-page.php',
   ];
   const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(pluginDir, file)));
@@ -379,8 +379,8 @@ function testDistributionShape() {
 }
 
 function testEditorAssetContract() {
-  const editor = fs.readFileSync(path.join(pluginDir, 'assets/editor.js'), 'utf8');
-  const block = fs.readFileSync(path.join(pluginDir, 'includes/block.php'), 'utf8');
+  const editor = fs.readFileSync(path.join(pluginDir, 'asset/editor.js'), 'utf8');
+  const block = fs.readFileSync(path.join(pluginDir, 'include/block.php'), 'utf8');
 
   assert(editor.includes("window.DesignInserterCatalog || {}"), 'editor reads localized DesignInserterCatalog');
   assert(editor.includes("blocks.registerBlockType( 'designinserter/css-part'"), 'editor registers designinserter/css-part block');
@@ -433,7 +433,7 @@ function buildCodeFuncParamsFromInputs(inputs) {
 }
 
 function testPartCodeFuncs() {
-  const src = fs.readFileSync(path.join(pluginDir, 'assets/part-code-funcs.js'), 'utf8');
+  const src = fs.readFileSync(path.join(pluginDir, 'asset/part-code-funcs.js'), 'utf8');
   const ctx = { window: {}, console };
   vm.createContext(ctx);
   vm.runInContext(src, ctx);

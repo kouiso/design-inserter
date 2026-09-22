@@ -67,7 +67,7 @@
   "inputs": [
     { "label": "メインカラー", "defaultValue": "#333333" }
   ],
-  "previewImage": "assets/previews/heading-1.svg",
+  "previewImage": "asset/previews/heading-1.svg",
   "sourceUrl": "https://pote-chil.com/css-stock/ja/heading#1"
 }
 ```
@@ -165,7 +165,7 @@ $editor_catalog = designinserter_get_editor_catalog();
   "category": "japanese-food",
   "categoryLabel": "和食・寿司・うどん",
   "title": "和菓子店向け tp_wa1_blue",
-  "thumb": "assets/previews/tp-wa1_blue.webp",
+  "thumb": "asset/previews/tp-wa1_blue.webp",
   "demoUrl": "https://template-party.com/template/tp_wa1/tp_wa1_blue/",
   "sourceUrl": "https://template-party.com/db_new/detail?category=template&id=12345",
   "bundleDir": "data/template-party-bundles/tp_wa1_blue",

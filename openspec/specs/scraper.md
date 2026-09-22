@@ -8,11 +8,11 @@
 
 ## 機能要件
 
-1. スクリプトパス: `scripts/scrape-css-stock.mjs`
+1. スクリプトパス: `script/scrape-css-stock.mjs`
 2. 実行コマンド: `pnpm run scrape:css-stock`
 3. 出力先:
    - `wp-content/plugins/designinserter/data/css-stock-parts.json`
-   - `wp-content/plugins/designinserter/assets/previews/*`
+   - `wp-content/plugins/designinserter/asset/previews/*`
 4. 処理フロー:
    - guide ページ（`/css-stock/ja`）を取得する
    - カテゴリ一覧（slug, label, URL, sectionCount, expectedPartCount）を抽出する
@@ -20,7 +20,7 @@
    - Astro レンダリングされた `<snippet-card>` + `<template>` ブロックからパーツを抽出する
    - HTML は `HTMLをコピペする` セクション、CSS は `CSSをコピペする` セクションから取得する
    - `<snippet-card>` の `<img>` を取得し、実体形式に合う拡張子でローカル保存する
-   - catalog の `previewImage` は `assets/previews/{partId}.{ext}` の相対パスにする
+   - catalog の `previewImage` は `asset/previews/{partId}.{ext}` の相対パスにする
 5. カラー入力メタデータ（`<output>` タグ内のカラーコード）を抽出する
 6. 抽出完了後、total と expectedTotal の一致を検証する
 7. 不一致の場合は非ゼロ exit code で終了する

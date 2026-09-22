@@ -103,7 +103,7 @@ jobs:
 
       - name: JS syntax check
         run: |
-          for f in scripts/*.mjs wp-content/plugins/designinserter/assets/*.js; do
+          for f in script/*.mjs wp-content/plugins/designinserter/asset/*.js; do
             node --check "$f"
           done
 

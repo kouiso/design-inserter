@@ -102,7 +102,7 @@ final class DesignInserterCoreTest extends TestCase {
 
 		$this->assertCount( $this->expectedTotalPartCount(), $catalog['parts'] );
 		$this->assertCount( designinserter_tp_data_available() ? self::EXPECTED_TP_TEMPLATE_COUNT : 0, $catalog['templates'] );
-		$this->assertStringStartsWith( DESIGNINSERTER_PLUGIN_URL . 'assets/previews/', $catalog['parts'][0]['previewImage'] );
+		$this->assertStringStartsWith( DESIGNINSERTER_PLUGIN_URL . 'asset/previews/', $catalog['parts'][0]['previewImage'] );
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/parts/', $catalog['restUrl'] );
 		$this->assertSame( 'nonce-wp_rest', $catalog['nonce'] );
 		$this->assertSame( 'https://example.test/wp-json/designinserter/v1/templates/', $catalog['templatesRestUrl'] );
@@ -193,15 +193,15 @@ final class DesignInserterCoreTest extends TestCase {
 	}
 
 	public function test_asset_urls_are_resolved_to_plugin_urls() {
-		$html = '<img src="assets/embedded/example.svg"><a href="assets/previews/example.svg">Preview</a>';
-		$css  = '.x { background-image: url(assets/embedded/example.svg); }';
+		$html = '<img src="asset/embedded/example.svg"><a href="asset/previews/example.svg">Preview</a>';
+		$css  = '.x { background-image: url(asset/embedded/example.svg); }';
 
 		$this->assertSame(
-			'<img src="' . DESIGNINSERTER_PLUGIN_URL . 'assets/embedded/example.svg"><a href="' . DESIGNINSERTER_PLUGIN_URL . 'assets/previews/example.svg">Preview</a>',
+			'<img src="' . DESIGNINSERTER_PLUGIN_URL . 'asset/embedded/example.svg"><a href="' . DESIGNINSERTER_PLUGIN_URL . 'asset/previews/example.svg">Preview</a>',
 			designinserter_resolve_local_asset_urls( $html )
 		);
 		$this->assertSame(
-			'.x { background-image: url("' . DESIGNINSERTER_PLUGIN_URL . 'assets/embedded/example.svg"); }',
+			'.x { background-image: url("' . DESIGNINSERTER_PLUGIN_URL . 'asset/embedded/example.svg"); }',
 			designinserter_resolve_local_asset_urls( $css )
 		);
 	}

@@ -36,7 +36,7 @@ assert_true( isset( $state['shortcodes']['designinserter_part'] ), 'plugin regis
 assert_true( isset( $state['actions']['init'] ), 'plugin registers init hook on load' );
 assert_true( isset( $state['actions']['rest_api_init'] ), 'plugin registers REST hook on load' );
 assert_true( isset( $state['actions']['admin_menu'] ), 'plugin registers admin menu hook on load' );
-// DI-TPL-001: includes/templates.php の require が消えるとフルページテンプレートが黙って効かんくなる（F-1）。
+// DI-TPL-001: include/templates.php の require が消えるとフルページテンプレートが黙って効かんくなる（F-1）。
 assert_true( isset( $state['filters']['theme_page_templates'] ), 'plugin registers theme_page_templates filter on load' );
 assert_true( isset( $state['filters']['template_include'] ), 'plugin registers template_include filter on load' );
 
@@ -103,8 +103,8 @@ assert_true( isset( $modal_id_2[1] ) && $modal_id_1[1] !== $modal_id_2[1], 'mult
 assert_true( strpos( $modal_render_1, 'id="modal-1__open"' ) === false, 'interactive raw ids are not left unscoped' );
 
 $embedded_render = designinserter_render_part( 'box-2' );
-assert_true( strpos( $embedded_render, 'src="assets/embedded/' ) === false, 'render resolves embedded asset src values' );
-assert_true( strpos( $embedded_render, DESIGNINSERTER_PLUGIN_URL . 'assets/embedded/css-stock-img-about-coding.svg' ) !== false, 'render resolves embedded asset URLs to plugin URL' );
+assert_true( strpos( $embedded_render, 'src="asset/embedded/' ) === false, 'render resolves embedded asset src values' );
+assert_true( strpos( $embedded_render, DESIGNINSERTER_PLUGIN_URL . 'asset/embedded/css-stock-img-about-coding.svg' ) !== false, 'render resolves embedded asset URLs to plugin URL' );
 
 $svg_only = null;
 $form_part = null;
@@ -158,8 +158,8 @@ $rest_part = designinserter_stub_call( $route['callback'], array( array( 'id' =>
 assert_true( isset( $rest_part['id'] ) && 'heading-3' === $rest_part['id'], 'REST callback returns requested part' );
 assert_true( isset( $rest_part['html'], $rest_part['css'] ), 'REST callback returns html and css' );
 $rest_box = designinserter_stub_call( $route['callback'], array( array( 'id' => 'box-2' ) ) );
-assert_true( strpos( $rest_box['html'], 'src="assets/embedded/' ) === false, 'REST callback resolves embedded asset src values' );
-assert_true( strpos( $rest_box['html'], DESIGNINSERTER_PLUGIN_URL . 'assets/embedded/css-stock-img-about-coding.svg' ) !== false, 'REST callback resolves embedded asset URLs to plugin URL' );
+assert_true( strpos( $rest_box['html'], 'src="asset/embedded/' ) === false, 'REST callback resolves embedded asset src values' );
+assert_true( strpos( $rest_box['html'], DESIGNINSERTER_PLUGIN_URL . 'asset/embedded/css-stock-img-about-coding.svg' ) !== false, 'REST callback resolves embedded asset URLs to plugin URL' );
 $rest_modal = designinserter_stub_call( $route['callback'], array( array( 'id' => 'modal-1' ) ) );
 preg_match( '/<input[^>]+\bid="([^"]+)"/', $rest_modal['html'], $rest_modal_id );
 preg_match( '/<label[^>]+\bfor="([^"]+)"/', $rest_modal['html'], $rest_modal_for );

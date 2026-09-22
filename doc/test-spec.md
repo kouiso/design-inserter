@@ -11,12 +11,12 @@
 ```text
 openspec/specs/*.md   要件・仕様の正本（受け入れ基準 65 項目）
         │
-        ├─ docs/requirements.md   要件（FR / NFR / 成功基準 6 項目）
-        ├─ docs/specifications.md 詳細仕様（JSON スキーマ・出力 HTML）
+        ├─ doc/requirements.md   要件（FR / NFR / 成功基準 6 項目）
+        ├─ doc/specifications.md 詳細仕様（JSON スキーマ・出力 HTML）
         ↓
-本書 docs/test-spec.md   受け入れ基準 → テストケース ID → 検証手段 の対応表
+本書 doc/test-spec.md   受け入れ基準 → テストケース ID → 検証手段 の対応表
         ↓
-tests/ · scripts/test.mjs   実際のテストコード
+tests/ · script/test.mjs   実際のテストコード
 ```
 
 上流（openspec / requirements）が変わったら本書の台帳を更新する。本書が変わったらテストコードを更新する。逆流はさせん。
@@ -25,9 +25,9 @@ tests/ · scripts/test.mjs   実際のテストコード
 
 | ファイル | 担当 |
 |---|---|
-| `docs/testing.md` | ツールの使い方（portable smoke の環境変数・バージョン pin など）。テストケースの列挙は持たん |
+| `doc/testing.md` | ツールの使い方（portable smoke の環境変数・バージョン pin など）。テストケースの列挙は持たん |
 | `openspec/specs/*.md` | 受け入れ基準の原文。本書 §6 が ID へ対応付ける |
-| `docs/requirements.md` / `docs/specifications.md` | 要件と仕様。テストの正本やない |
+| `doc/requirements.md` / `doc/specifications.md` | 要件と仕様。テストの正本やない |
 
 ## 2. テスト環境
 
@@ -37,13 +37,13 @@ tests/ · scripts/test.mjs   実際のテストコード
 | Docker dev WP | Phase 5 実機確認 | `docker compose up -d --wait` | `http://localhost:8080`（`admin` / `admin`） | Docker 稼働。ポート 8080・3316 が空いとること |
 | Playwright E2E（fresh install） | Phase 4 | `pnpm run e2e:fresh` | ポート 18082（spec が専用 compose を生成） | Docker 稼働。Chromium |
 | Playwright E2E（Template Party） | Phase 4 | `pnpm run e2e:template-party` | ポート 18083（同上） | Docker 稼働。Chromium。git-crypt 復号済み |
-| portable WP smoke | Phase 3 | `pnpm run smoke:wp:portable` | 一時ディレクトリ | WP 6.9.4 / WP-CLI 2.12.0 を取得。詳細は `docs/testing.md` |
+| portable WP smoke | Phase 3 | `pnpm run smoke:wp:portable` | 一時ディレクトリ | WP 6.9.4 / WP-CLI 2.12.0 を取得。詳細は `doc/testing.md` |
 
 Docker dev stack は `wp-content/themes` と `wp-content/plugins` をバインドマウントするので、プラグインの編集が即反映される。WP-CLI は `pnpm run wp -- <コマンド>`。
 
 ### git-crypt と Template Party データ
 
-`data/template-party-parts.json` / `template-party-templates.json` / `assets/previews/tp-*` は Template Party の ToS（再配布禁止）に従って git-crypt で暗号化してある。鍵を持たん環境では復号できず、`designinserter_get_catalog()` はデザインパーツの 222 件だけを返す。
+`data/template-party-parts.json` / `template-party-templates.json` / `asset/previews/tp-*` は Template Party の ToS（再配布禁止）に従って git-crypt で暗号化してある。鍵を持たん環境では復号できず、`designinserter_get_catalog()` はデザインパーツの 222 件だけを返す。
 
 テストはこの2モードを自分で判定する（`tests/tp-availability.php`）。
 
@@ -61,8 +61,8 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | Prefix | 対象 |
 |---|---|
 | `DI-CAT` | カタログ JSON のデータ整合性 |
-| `DI-DAT` | データ層 PHP（`includes/data.php`） |
-| `DI-RND` | レンダリング（`includes/render.php`） |
+| `DI-DAT` | データ層 PHP（`include/data.php`） |
+| `DI-RND` | レンダリング（`include/render.php`） |
 | `DI-SCP` | インタラクティブ属性（id / for / name）のスコープ化 |
 | `DI-BLK` | Gutenberg ブロック |
 | `DI-EDT` | エディタ UI（picker・検索・プレビュー） |
@@ -105,7 +105,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-CAT-001 | parts が 222 件 | `total === expectedTotal === 222` | `scripts/test.mjs` `testCatalog()` | 自動済 2026-07-28 |
+| DI-CAT-001 | parts が 222 件 | `total === expectedTotal === 222` | `script/test.mjs` `testCatalog()` | 自動済 2026-07-28 |
 | DI-CAT-002 | categories が 28 件 | 28 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-003 | sourceName が `Design Parts` | 一致 | 同上 | 自動済 2026-08-04 |
 | DI-CAT-004 | 全 parts に必須キーが揃う | id / sourcePartId / category / categoryLabel / title / html の欠損 0 | 同上 | 自動済 2026-07-28 |
@@ -122,13 +122,13 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-CAT-015 | 埋め込み asset の拡張子と実体が一致 | 不一致 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-016 | PHP `json_decode` がエラーを出さん | fatal なし | `tests/render-smoke.php` | 自動済 2026-07-28 [ローカル実行] |
 | DI-CAT-017 | JSON が 2 スペース整形済み | `JSON.stringify(data, null, 2)` と一致 | — | 未実装 |
-| DI-CAT-018 | behavior type が frontend.js のハンドラ 5 種に含まれる | 未対応 0 | `scripts/test.mjs` `testBehaviorMetadata()` | 自動済 2026-07-28 |
+| DI-CAT-018 | behavior type が frontend.js のハンドラ 5 種に含まれる | 未対応 0 | `script/test.mjs` `testBehaviorMetadata()` | 自動済 2026-07-28 |
 | DI-CAT-019 | `requiresJs` パーツが `rootSelector` を持つ | 欠損 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-020 | `requiresJs` パーツが `selectors` を持つ | 欠損 0 | 同上 | 自動済 2026-07-28 |
 | DI-CAT-021 | behavior 件数の内訳 | scrollTop 1 / tooltip 5 / readMore 4 / tabs 4 / modal 2（計 16） | 同上 | 自動済 2026-07-28 |
 | DI-CAT-022 | Template Party パーツが 138 件 | 138 | `DesignInserterCoreTest::test_catalog_template_party_parts_have_correct_source` | 自動済 2026-07-30 [ローカル実行] |
 | DI-CAT-023 | Template Party テンプレートが 1017 件 | 1017 | `DesignInserterCoreTest::test_get_templates_returns_all_template_party_templates` | 自動済 2026-07-30 [ローカル実行] |
-| DI-CAT-024 | 全 parts に `inputs`（`colors` / `radios` / `ranges`）が定義される | 欠損 0、構造 `{ colors: [], radios: [], ranges: [] }` | `scripts/test.mjs` `testCatalog()` | 自動済 2026-07-30 |
+| DI-CAT-024 | 全 parts に `inputs`（`colors` / `radios` / `ranges`）が定義される | 欠損 0、構造 `{ colors: [], radios: [], ranges: [] }` | `script/test.mjs` `testCatalog()` | 自動済 2026-07-30 |
 
 ### 4.2 DI-DAT — データ層
 
@@ -151,7 +151,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-DAT-015 | editor catalog の source フィルタが 3 種 | all / css-stock / template-party | `test_editor_catalog_exposes_three_source_filters` | 自動済 2026-07-28 |
 | DI-DAT-016 | editor catalog の template エントリが必須フィールドを持つ | id / type / source / demoUrl / bundleDir | `test_editor_catalog_template_entries_have_required_fields` | 自動済 2026-07-30 [ローカル実行] |
 | DI-DAT-017 | editor catalog が restUrl / nonce / templatesRestUrl を持つ | 3 キー存在 | `render-smoke.php`（restUrl / nonce）/ `test_editor_catalog_exposes_merged_parts_and_templates`（templatesRestUrl） | 自動済 2026-07-28 |
-| DI-DAT-018 | previewImage がプラグイン URL に絶対化される | `PLUGIN_URL + assets/previews/` 前置 | `test_editor_catalog_exposes_merged_parts_and_templates` | 自動済 2026-07-28 |
+| DI-DAT-018 | previewImage がプラグイン URL に絶対化される | `PLUGIN_URL + asset/previews/` 前置 | `test_editor_catalog_exposes_merged_parts_and_templates` | 自動済 2026-07-28 |
 | DI-DAT-019 | `designinserter_sanitize_bundle_dir()` がパストラバーサルを除去 | `../../etc` → `etc` | — | 未実装（DI-SEC-008 と対） |
 
 ### 4.3 DI-RND — レンダリング
@@ -169,7 +169,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-RND-009 | form / input を含むパーツが破壊されん | `<input` 残存 | 同上 | 自動済 2026-07-28 |
 | DI-RND-010 | `sanitize_key` で不正文字が除去される | `Heading-1!!` → `heading-1` | 同上 | 自動済 2026-07-28 |
 | DI-RND-011 | 埋め込み asset の `src=` がプラグイン URL に解決される | 相対パスが残らん | 同上 | 自動済 2026-07-28 |
-| DI-RND-012 | CSS の `url(assets/...)` がプラグイン URL に解決される | 絶対 URL + ダブルクォート | `test_asset_urls_are_resolved_to_plugin_urls` | 自動済 2026-07-28 |
+| DI-RND-012 | CSS の `url(asset/...)` がプラグイン URL に解決される | 絶対 URL + ダブルクォート | `test_asset_urls_are_resolved_to_plugin_urls` | 自動済 2026-07-28 |
 | DI-RND-013 | behavior 属性 `data-designinserter-behavior` を出力 | tooltip-1 で `="tooltip"` | `render-smoke.php` | 自動済 2026-07-28 |
 | DI-RND-014 | `rootSelector` がある場合 `data-designinserter-root-selector` を出力 | 属性出力 | — | 未実装 |
 | DI-RND-015 | requiresJs パーツが frontend script / style を enqueue | 両方 enqueued | `render-smoke.php` / `test_render_part_enqueues_behavior_assets` | 自動済 2026-07-28 |
@@ -196,7 +196,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLK-001 | `init` で `designinserter/css-part` が登録される | 登録済み | `render-smoke.php` | 自動済 2026-07-28 |
 | DI-BLK-002 | editor script / style が register される | 4 ハンドル | 同上 | 自動済 2026-07-28 |
 | DI-BLK-003 | `wp_localize_script` で `DesignInserterCatalog` を注入 | 存在 | 同上 | 自動済 2026-07-28 |
-| DI-BLK-004 | render_callback が PHP 側にある（dynamic block） | `'render_callback' => 'designinserter_render_block'` | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-28 |
+| DI-BLK-004 | render_callback が PHP 側にある（dynamic block） | `'render_callback' => 'designinserter_render_block'` | `script/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-28 |
 | DI-BLK-005 | `save` が null を返す | `return null;` | 同上 | 自動済 2026-07-28 |
 | DI-BLK-006 | `do_blocks()` でフロント HTML が描画される | `data-designinserter-id="heading-2"` + style | `render-smoke.php` | 自動済 2026-07-28 |
 | DI-BLK-007 | `the_content` フィルタ経由で描画される | heading-5 描画 | 同上 | 自動済 2026-07-28 |
@@ -206,24 +206,24 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLK-011 | リロード後も `partId` 属性が保持される | 選択維持 | 実機: エディタ再読込 | 手動要 |
 | DI-BLK-012 | プラグイン無効化後、保存済み投稿がエラーにならん | 500 なし・出力が消える | 実機: `wp plugin deactivate` → フロント表示 | 手動要 |
 | DI-BLK-013 | 再有効化で出力が復活する | 復活 | 実機: `wp plugin activate` | 手動要 |
-| DI-BLK-014 | ブロック属性に `params` / `html` / `css` が追加される | `attributes` 登録済み | `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-30 |
-| DI-BLK-015 | 保存時に `html` / `css` が属性として永続化される | `serialize( { html, css } )` | `assets/editor.js` `save` | 自動済 2026-07-30 |
-| DI-BLK-016 | 保存済みブロックを開き直しても `params` の調整値が既定値へ再初期化されない | `params` か `html`/`css` が既に埋まっていれば初期化 useEffect が走らない | `assets/editor.js` `edit` 関数の初期化 `useEffect`（`partId` 依存） | 自動済（コード契約） |
-| DI-BLK-017 | `html` / `css` は保存済み `params` を現在の generator に通した結果へ自動的に再同期される（`params` 自体は変わらないが、generator 側の出力が変わればそれに追従する） | `LivePreview` が再計算した `content` を `onContentChange()` で書き戻す | `assets/editor.js` `LivePreview` / `onContentChange` | 自動済（コード契約） |
+| DI-BLK-014 | ブロック属性に `params` / `html` / `css` が追加される | `attributes` 登録済み | `script/test.mjs` `testEditorAssetContract()` | 自動済 2026-07-30 |
+| DI-BLK-015 | 保存時に `html` / `css` が属性として永続化される | `serialize( { html, css } )` | `asset/editor.js` `save` | 自動済 2026-07-30 |
+| DI-BLK-016 | 保存済みブロックを開き直しても `params` の調整値が既定値へ再初期化されない | `params` か `html`/`css` が既に埋まっていれば初期化 useEffect が走らない | `asset/editor.js` `edit` 関数の初期化 `useEffect`（`partId` 依存） | 自動済（コード契約） |
+| DI-BLK-017 | `html` / `css` は保存済み `params` を現在の generator に通した結果へ自動的に再同期される（`params` 自体は変わらないが、generator 側の出力が変わればそれに追従する） | `LivePreview` が再計算した `content` を `onContentChange()` で書き戻す | `asset/editor.js` `LivePreview` / `onContentChange` | 自動済（コード契約） |
 
 ### 4.6 DI-EDT — エディタ UI
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
 | DI-EDT-001 | サイドバーに Design Inserter パネルが出る | 表示 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
-| DI-EDT-002 | パーツ選択 UI の形式 | 検索付きビジュアル picker（`.di-picker__grid`）。`SelectControl` ではない | openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂（2026-08-02）+ `scripts/test.mjs` `testEditorAssetContract()` | 自動済 2026-08-02 [ローカル実行] |
+| DI-EDT-002 | パーツ選択 UI の形式 | 検索付きビジュアル picker（`.di-picker__grid`）。`SelectControl` ではない | openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせて改訂（2026-08-02）+ `script/test.mjs` `testEditorAssetContract()` | 自動済 2026-08-02 [ローカル実行] |
 | DI-EDT-003 | 検索ボックスで絞り込める | 該当のみ表示 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-004 | カテゴリボタンで絞り込める | 該当のみ | 同上 | 自動済 2026-07-29 [ローカル実行] |
 | DI-EDT-005 | source フィルタ 3 種が表示される | 3 ボタン | `tests/e2e/template-party.spec.mjs` | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-006 | Template Party フィルタで template カードが badge 付きで出る | badge 表示 | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-007 | デザインパーツフィルタで template カードが隠れる | parts のみ | 同上 | 自動済 2026-07-30 [ローカル実行] |
 | DI-EDT-008 | カードクリックでプレビューが即表示される | プレビュー描画 | `fresh-install-222.spec.mjs` | 自動済 2026-07-29 [ローカル実行] |
-| DI-EDT-009 | 生成関数の無いパーツ（現状 Template Party）だけが REST 経由で遅延ロードされる。CSS Stock 222 件はローカル生成が優先され REST を経由しない | `window.fetch(restUrl + partId)` はローカル生成関数が無い場合のみ | `scripts/test.mjs` `testPartCodeFuncs()`（CSS Stock 222 件全件に生成関数がある事を担保）+ `testEditorAssetContract()`（REST 経路のコード存在チェック）。generator-first の優先順位そのものの実行時検証は `tests/e2e/template-party.spec.mjs` の TP カードプレビュー経路のみ | 自動済（構造的な担保。優先順位の E2E 実行はこの環境では未実施） |
+| DI-EDT-009 | 生成関数の無いパーツ（現状 Template Party）だけが REST 経由で遅延ロードされる。CSS Stock 222 件はローカル生成が優先され REST を経由しない | `window.fetch(restUrl + partId)` はローカル生成関数が無い場合のみ | `script/test.mjs` `testPartCodeFuncs()`（CSS Stock 222 件全件に生成関数がある事を担保）+ `testEditorAssetContract()`（REST 経路のコード存在チェック）。generator-first の優先順位そのものの実行時検証は `tests/e2e/template-party.spec.mjs` の TP カードプレビュー経路のみ | 自動済（構造的な担保。優先順位の E2E 実行はこの環境では未実施） |
 | DI-EDT-010 | プレビューが sandbox iframe に隔離される | `sandbox: ''` + `srcDoc` | 同上 | 自動済 2026-07-28 |
 | DI-EDT-011 | カタログ HTML に `dangerouslySetInnerHTML` を使わん | 不使用 | 同上 | 自動済 2026-07-28 |
 | DI-EDT-012 | template プレビュー iframe の sandbox 強度 | `allow-scripts allow-same-origin`（part 側と意図的に異なる） | — | 未実装。差分の妥当性を §7 で判断 |
@@ -237,10 +237,10 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-EDT-020 | 管理画面 9 色テーマで選択状態が視認できる | コントラスト確保 | 実機: 各テーマ | 手動要 |
 | DI-EDT-021 | プレビュー下に「パラメータ調整」パネルが出る | `.di-params` 表示 | 実機: heading-1 選択 | 実機済 2026-07-30 |
 | DI-EDT-022 | 色指定がプレビューに即反映される | 色 input 変更で iframe 内の要素が変化 | 実機: 左線の色を変更 | 実機済 2026-07-30 |
-| DI-EDT-023 | パーツ切替時にパラメータがそのパーツの既定値に戻る | `params` 属性リセット | `assets/editor.js` `onSelectPart` | 自動済 2026-07-30 |
+| DI-EDT-023 | パーツ切替時にパラメータがそのパーツの既定値に戻る | `params` 属性リセット | `asset/editor.js` `onSelectPart` | 自動済 2026-07-30 |
 | DI-EDT-024 | レンジ / ラジオ指定がプレビューに反映される | 数値・選択切替で変化 | 実機: bar-chart-1 / list-1 / textbox-1 の range / radio を変更して iframe プレビューが変化 | 実機済 2026-07-30 |
 | DI-EDT-025 | `TemplatePreview` が `template.demoUrl` を `src` に持つ iframe を描画する。無ければ「プレビューURLがありません」 | iframe 表示 or 代替テキスト | `tests/e2e/template-party.spec.mjs`（`.di-preview--template iframe` の src 検証） | 環境制約NG（Docker + git-crypt） |
-| DI-EDT-026 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `tests/e2e/template-party.spec.mjs`（`.di-create-page` 内の文言を実際に可視状態で検証）。`scripts/test.mjs` `testEditorAssetContract()` は文言の存在チェックのみで補助的 | 環境制約NG（E2E 未実行、Docker 未起動）。コード契約（文言存在チェック）のみ自動済 2026-08-04 [ローカル実行] |
+| DI-EDT-026 | 固定ページ作成前に「公開ページはデモサイトへのリンクになる」旨の `Notice` が常時表示される | Notice 表示 | `tests/e2e/template-party.spec.mjs`（`.di-create-page` 内の文言を実際に可視状態で検証）。`script/test.mjs` `testEditorAssetContract()` は文言の存在チェックのみで補助的 | 環境制約NG（E2E 未実行、Docker 未起動）。コード契約（文言存在チェック）のみ自動済 2026-08-04 [ローカル実行] |
 | DI-EDT-027 | 「このテンプレで固定ページを作成」ボタンから `POST {templatesRestUrl}{id}/create-page` を呼ぶ | REST 呼び出し | 実機: ボタンクリック → ネットワーク監視 | 手動要 |
 | DI-EDT-028 | create-page 成功時に成功 `Notice` + 編集リンク、失敗時に error `Notice` を表示する | 状態遷移が UI に反映 | 実機 | 手動要 |
 | DI-EDT-029 | パーツ / テンプレート選択直後に `InsertConfirmNotice` が公開・下書き状態に応じたリンク付きで表示される | Notice + リンク | 実機 | 手動要 |
@@ -292,11 +292,11 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 ### 4.9 DI-TPL — フルページテンプレート
 
-**2026-07-30 に `designinserter.php` で `includes/templates.php` を require する修正を実施。DI-TPL-003 は UI ユーザーストーリー録画で `full-page.php` 適用を確認。2026-08-02 に DI-TPL-001 の回帰テストを `tests/render-smoke.php` へ追加（F-1 の再発検知）。DI-TPL-002 / 004〜007 は引き続き未自動化。**
+**2026-07-30 に `designinserter.php` で `include/templates.php` を require する修正を実施。DI-TPL-003 は UI ユーザーストーリー録画で `full-page.php` 適用を確認。2026-08-02 に DI-TPL-001 の回帰テストを `tests/render-smoke.php` へ追加（F-1 の再発検知）。DI-TPL-002 / 004〜007 は引き続き未自動化。**
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-TPL-001 | `includes/templates.php` が require され、フィルタが登録される | `theme_page_templates` / `template_include` が登録済み | `tests/render-smoke.php`（require を外すと赤くなることを確認済み） | 自動済 2026-08-02 [ローカル実行] |
+| DI-TPL-001 | `include/templates.php` が require され、フィルタが登録される | `theme_page_templates` / `template_include` が登録済み | `tests/render-smoke.php`（require を外すと赤くなることを確認済み） | 自動済 2026-08-02 [ローカル実行] |
 | DI-TPL-002 | ページテンプレート一覧に選択肢が出る | 表示 | 実機: ページ編集画面 | 未実装 |
 | DI-TPL-003 | create-page で作ったページがプラグインテンプレートで表示される | `templates/full-page.php` が使われる | UI ユーザーストーリー録画 | 実機目視 2026-07-30 [実機目視] |
 | DI-TPL-004 | bundle があれば `index.html` に `<base>` を挿入して出力 | base タグ挿入 | — | 未実装 |
@@ -324,7 +324,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-FE-001 | 5 種ハンドラが存在する | scrollTop / tooltip / readMore / tabs / modal | `scripts/test.mjs` `testBehaviorMetadata()` | 自動済 2026-07-28 |
+| DI-FE-001 | 5 種ハンドラが存在する | scrollTop / tooltip / readMore / tabs / modal | `script/test.mjs` `testBehaviorMetadata()` | 自動済 2026-07-28 |
 | DI-FE-002 | scrollTop クリックでページ先頭に戻る | scroll 0 | 実機 | 手動要 |
 | DI-FE-003 | tooltip がフォーカスで表示される | 表示 + aria | 実機: Tab フォーカス | 手動要 |
 | DI-FE-004 | readMore の `aria-expanded` が同期する | true / false 切替 | 実機 | 手動要 |
@@ -347,21 +347,21 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-SEC-004 | REST parts が `edit_posts` 必須 | 拒否動作 | 同上 | 自動済 2026-07-28 |
 | DI-SEC-005 | REST create-page が `edit_pages` 必須 | 拒否 | — | 未実装 |
 | DI-SEC-006 | 管理画面が `manage_options` 必須 | 一致 | `render-smoke.php` | 自動済 2026-07-28 |
-| DI-SEC-007 | エディタプレビューが sandbox iframe で隔離される | `sandbox: ''` | `scripts/test.mjs` | 自動済 2026-07-28 |
+| DI-SEC-007 | エディタプレビューが sandbox iframe で隔離される | `sandbox: ''` | `script/test.mjs` | 自動済 2026-07-28 |
 | DI-SEC-008 | `bundleDir` のパストラバーサルが遮断される | basename + 文字制限 + realpath 検証 | — | 未実装（重要） |
 | DI-SEC-009 | カタログ HTML を意図的に `wp_kses_post` に通さん設計が明文化されとる | 仕様どおり素通し | コードレビュー | 手動要 |
 | DI-SEC-010 | phpcs 違反 0 | exit 0 | `./vendor/bin/phpcs` | 自動済 2026-07-28（ただし `phpcs.xml.dist` は Generic / Squiz のみ。WordPress Coding Standards は未導入） |
 | DI-SEC-011 | 出力エスケープ漏れが無い | 違反 0 | — | 未実装。現行 phpcs にエスケープ sniff（`WordPress.Security.EscapeOutput`）が無いので、phpcs の緑を根拠にできん |
 | DI-SEC-012 | `full-page.php` の無エスケープ echo が realpath ガードの内側にある | ガード内 | コードレビュー + DI-TPL-007 | 手動要 |
 | DI-SEC-013 | Template Party データが暗号化されたままコミットされとる | ciphertext である | `git check-attr filter` + 先頭バイト確認 | 手動要（2026-07-28 に手で実行して確認。どのゲートにも組み込まれとらん） |
-| DI-SEC-014 | 配布 zip に git-crypt 暗号文および再配布不可のローカル専用データ（`data/template-party-bundles/`）が混入せん | 混入 0 | `scripts/build-plugin-zip.mjs` `selectDistributionFiles()` / `assertNoCiphertext()` + `tests/build-plugin-zip.test.mjs` | 自動済 2026-08-02 [ローカル実行] |
-| DI-SEC-015 | phpcs の検査範囲が `tests/` 直下と `scripts/` を含む | 含む | 現状 `phpcs.xml.dist` は `wp-content/plugins/designinserter` と `tests/php` のみ | 未実装 |
+| DI-SEC-014 | 配布 zip に git-crypt 暗号文および再配布不可のローカル専用データ（`data/template-party-bundles/`）が混入せん | 混入 0 | `script/build-plugin-zip.mjs` `selectDistributionFiles()` / `assertNoCiphertext()` + `tests/build-plugin-zip.test.mjs` | 自動済 2026-08-02 [ローカル実行] |
+| DI-SEC-015 | phpcs の検査範囲が `tests/` 直下と `script/` を含む | 含む | 現状 `phpcs.xml.dist` は `wp-content/plugins/designinserter` と `tests/php` のみ | 未実装 |
 
 ### 4.13 DI-BLD — ビルド・配布
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-BLD-001 | 必須配布ファイル 12 件が揃う | 欠損 0 | `scripts/test.mjs` `testDistributionShape()` | 自動済 2026-07-28 |
+| DI-BLD-001 | 必須配布ファイル 12 件が揃う | 欠損 0 | `script/test.mjs` `testDistributionShape()` | 自動済 2026-07-28 |
 | DI-BLD-002 | package.json の license が `GPL-2.0-or-later` | 一致 | 同上 | 自動済 2026-07-28 |
 | DI-BLD-003 | pnpm-lock.yaml が存在し lockfileVersion を持つ | 有効な pnpm lockfile | 同上 | 自動済 2026-07-28 |
 | DI-BLD-004 | Plugin Name ヘッダが存在 | 一致 | 同上 | 自動済 2026-07-28 |
@@ -375,21 +375,21 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-BLD-012 | NOTICE.md に出典名と URL が残る | 含む | 同上 | 自動済 2026-07-28 |
 | DI-BLD-013 | zip 整合性 | `unzip -tq` exit 0 | `pnpm run build` + `unzip -tq` | 自動済 2026-07-28 |
 | DI-BLD-014 | zip root が `designinserter/` 単一 | 単一 | 同上 | 自動済 2026-07-28 |
-| DI-BLD-015 | dev / test / build ファイルが zip に混入せん | 混入 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 自動済 2026-07-28 |
-| DI-BLD-016 | zip 内 catalog の総数・プレビュー画像が揃う | 配布対象の欠損 0 | `scripts/build-plugin-zip.mjs` `verifyZip()` | 手動要（デザインパーツ 222 件は参照先・拡張子と中身の署名一致まで自動確認。Template Party 側も `4b054ba` 以降、参照先の存在に加え `detectPreviewKind()` による署名一致を自動確認するが、復号済み環境でのリリースビルド実行はこの環境では未検証。全配布物の独立した固定 manifest チェックは無い） |
+| DI-BLD-015 | dev / test / build ファイルが zip に混入せん | 混入 0 | `script/build-plugin-zip.mjs` `verifyZip()` | 自動済 2026-07-28 |
+| DI-BLD-016 | zip 内 catalog の総数・プレビュー画像が揃う | 配布対象の欠損 0 | `script/build-plugin-zip.mjs` `verifyZip()` | 手動要（デザインパーツ 222 件は参照先・拡張子と中身の署名一致まで自動確認。Template Party 側も `4b054ba` 以降、参照先の存在に加え `detectPreviewKind()` による署名一致を自動確認するが、復号済み環境でのリリースビルド実行はこの環境では未検証。全配布物の独立した固定 manifest チェックは無い） |
 | DI-BLD-017 | 古い zip / 別バージョン zip を検出して失敗する | 明示エラー | `pnpm run smoke:wp:portable` | 手動要 |
-| DI-BLD-018 | テスト・ビルド支援ファイルが gitignore されとらん | ignore 0 | `scripts/test.mjs` `testGitVisibility()` | 自動済 2026-07-28 |
-| DI-BLD-019 | `readme.txt`（Stable tag / Tested up to）がある | 存在 | `scripts/build-plugin-zip.mjs` `verifyZip()` の required + `scripts/test.mjs` `testDistributionShape()` | 自動済 2026-08-02 [ローカル実行] |
+| DI-BLD-018 | テスト・ビルド支援ファイルが gitignore されとらん | ignore 0 | `script/test.mjs` `testGitVisibility()` | 自動済 2026-07-28 |
+| DI-BLD-019 | `readme.txt`（Stable tag / Tested up to）がある | 存在 | `script/build-plugin-zip.mjs` `verifyZip()` の required + `script/test.mjs` `testDistributionShape()` | 自動済 2026-08-02 [ローカル実行] |
 | DI-BLD-020 | zip を管理 UI からアップロードして有効化できる | 有効化成功 | 実機: `plugin-install.php` | 手動要 |
 | DI-BLD-021 | zip から `wp plugin install --activate` が成功する | `installed successfully` | `pnpm run smoke:wp:portable` | 手動要（現状の証跡は dist zip を展開しての `plugin activate` 成功のみ。`wp plugin install --activate` の zip インストール・展開・有効化という直接経路は未実施。直接経路を実測したら `自動済` に戻す） |
-| DI-BLD-022 | git-crypt ロック環境でのビルドを検出して失敗する | 明示エラー・exit 1 | `scripts/build-plugin-zip.mjs` `assertCatalogsUsable()` + `tests/build-plugin-zip.test.mjs` | 自動済 2026-08-02 [ローカル実行] |
-| DI-BLD-023 | `part-code-funcs.js` が 222 パーツ分登録される | `window.designInserterPartCodeFuncs` に全 id 存在 | `scripts/test.mjs` `testPartCodeFuncs()` | 自動済 2026-07-30 |
+| DI-BLD-022 | git-crypt ロック環境でのビルドを検出して失敗する | 明示エラー・exit 1 | `script/build-plugin-zip.mjs` `assertCatalogsUsable()` + `tests/build-plugin-zip.test.mjs` | 自動済 2026-08-02 [ローカル実行] |
+| DI-BLD-023 | `part-code-funcs.js` が 222 パーツ分登録される | `window.designInserterPartCodeFuncs` に全 id 存在 | `script/test.mjs` `testPartCodeFuncs()` | 自動済 2026-07-30 |
 
 ### 4.14 DI-CMP — 互換性・ライフサイクル
 
 | ID | 確認内容 | 期待結果 | 検証方法 | 現状 |
 |---|---|---|---|---|
-| DI-CMP-001 | 全 PHP ファイルが構文エラーなし | exit 0 | `scripts/test.mjs` `testPhpSyntax()` | 自動済 2026-07-28 |
+| DI-CMP-001 | 全 PHP ファイルが構文エラーなし | exit 0 | `script/test.mjs` `testPhpSyntax()` | 自動済 2026-07-28 |
 | DI-CMP-002 | 全 JS ファイルが構文エラーなし | exit 0 | `testJavaScriptSyntax()` | 自動済 2026-07-28 |
 | DI-CMP-003 | PHP 7.4 で fatal が出ん | OK | — | 未実装（現状 PHP 8.4 のみで検証） |
 | DI-CMP-004 | WordPress 6.0 で有効化できる | 成功 | — | 未実装（portable smoke は 6.9.4 固定） |
@@ -416,7 +416,7 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 | DI-SCR-008 | 拡張子と実体形式が一致 | 一致 | DI-CAT-012 | 自動済 2026-07-28（間接） |
 | DI-SCR-009 | SVG-only の css が空 | 空 | DI-CAT-008 | 自動済 2026-07-28（間接） |
 | DI-SCR-010 | HTML エンティティがデコード済み | デコード済 | — | 未実装 |
-| DI-SCR-011 | 出力が `JSON.parse` できる | 成功 | `scripts/test.mjs` | 自動済 2026-07-28 |
+| DI-SCR-011 | 出力が `JSON.parse` できる | 成功 | `script/test.mjs` | 自動済 2026-07-28 |
 | DI-SCR-012 | 2 回実行で冪等（scrapedAt 除く） | 差分なし | — | 未実装 |
 | DI-SCR-013 | TP テンプレートスクレイパーが bundle を展開する | bundle 生成 | 手動 | 手動要 |
 | DI-SCR-014 | TP パーツスクレイパーが 138 件を出力 | 138 | 手動 | 手動要 |
@@ -537,16 +537,16 @@ Template Party 依存のアサーションは鍵なしモードで **skip とし
 
 | ファイル | カバーする ID |
 |---|---|
-| `scripts/test.mjs` | DI-CAT-001〜015・018〜024, DI-BLD-001〜012・018・023, DI-BLK-004・005・014・015, DI-EDT-009〜011・023, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
+| `script/test.mjs` | DI-CAT-001〜015・018〜024, DI-BLD-001〜012・018・023, DI-BLK-004・005・014・015, DI-EDT-009〜011・023, DI-SEC-007, DI-CMP-001・002, DI-FE-001, DI-SCR-011 |
 | `tests/render-smoke.php` | DI-RND-001〜011・013・015, DI-SCP-001〜004・006, DI-BLK-001〜003・006・007, DI-SC-001・003〜005・008, DI-API-001〜013, DI-ADM-001〜007, DI-FE-012, DI-DAT-009・011・017, DI-CAT-016, DI-SEC-002〜004・006, DI-TPL-001 |
 | `tests/catalog-fallback.php` | DI-DAT-007・008 |
 | `tests/tp-availability.php` | DI-DAT-005 |
 | `tests/php/DesignInserterCoreTest.php` | DI-DAT-001〜004・012〜018, DI-CAT-022・023, DI-RND-002・012・015, DI-SCP-005, DI-SC-002 |
 | `tests/e2e/fresh-install-222.spec.mjs` | DI-E2E-001〜004, DI-BLK-009・010, DI-EDT-001・003・004・008・016・017, DI-ADM-009, DI-SC-012, DI-FE-010, DI-CMP-006, DI-API-015 |
 | `tests/e2e/template-party.spec.mjs` | DI-E2E-005〜009, DI-EDT-005〜007・025〜026, DI-API-014・017・019 |
-| `scripts/build-plugin-zip.mjs` | DI-BLD-013〜016・019・022, DI-SEC-014 |
+| `script/build-plugin-zip.mjs` | DI-BLD-013〜016・019・022, DI-SEC-014 |
 | `tests/build-plugin-zip.test.mjs` | DI-BLD-022, DI-SEC-014 |
-| `scripts/wp-smoke.mjs` | DI-BLD-017, DI-CMP-005 |
+| `script/wp-smoke.mjs` | DI-BLD-017, DI-CMP-005 |
 | `./vendor/bin/phpcs` | DI-SEC-010・011, DI-ADM-008 |
 
 ---
@@ -690,7 +690,7 @@ Phase 1〜3 が exit 0、Phase 4 が全 pass、Phase 5 の各経路が期待マ�
 
 ## 7. 既知の欠陥・制約
 
-### F-1 `includes/templates.php` が読み込まれとらん（P0・修正済み 2026-07-30）
+### F-1 `include/templates.php` が読み込まれとらん（P0・修正済み 2026-07-30）
 
 当時、`designinserter.php` の `require_once` は data / render / block / admin / rest-api の 5 本のみで、`templates.php` への参照が 0 件だった。
 
@@ -698,7 +698,7 @@ Phase 1〜3 が exit 0、Phase 4 が全 pass、Phase 5 の各経路が期待マ�
 
 再現手順（当時）: `wp eval 'var_dump(has_filter("template_include"));'` が `false` を返す。
 
-2026-07-30 に `designinserter.php` へ `require_once DESIGNINSERTER_PLUGIN_DIR . 'includes/templates.php';` を追加して解消。2026-08-02 に `tests/render-smoke.php` へ `theme_page_templates` / `template_include` のフィルタ登録検証（DI-TPL-001）を回帰テストとして追加した。require を外すと `pnpm test` が赤くなることを実測で確認済み。
+2026-07-30 に `designinserter.php` へ `require_once DESIGNINSERTER_PLUGIN_DIR . 'include/templates.php';` を追加して解消。2026-08-02 に `tests/render-smoke.php` へ `theme_page_templates` / `template_include` のフィルタ登録検証（DI-TPL-001）を回帰テストとして追加した。require を外すと `pnpm test` が赤くなることを実測で確認済み。
 
 対応ケース: DI-TPL-001〜007, DI-E2E-010
 
@@ -714,7 +714,7 @@ Phase 1〜3 が exit 0、Phase 4 が全 pass、Phase 5 の各経路が期待マ�
 
 WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Stable tag / Tested up to / 説明文）が存在せんかった。zip 配布だけなら動くが、公式ディレクトリ掲載の道が閉じる。
 
-2026-08-02 に `wp-content/plugins/designinserter/readme.txt` を追加し、`verifyZip()` の `required` と `scripts/test.mjs` の `testDistributionShape()` の両方に必須ファイルとして登録した。片方だけやとゲート同士が食い違うため必ず 2 箇所そろえる。
+2026-08-02 に `wp-content/plugins/designinserter/readme.txt` を追加し、`verifyZip()` の `required` と `script/test.mjs` の `testDistributionShape()` の両方に必須ファイルとして登録した。片方だけやとゲート同士が食い違うため必ず 2 箇所そろえる。
 
 対応ケース: DI-BLD-019（検証済み）
 
@@ -724,10 +724,10 @@ WP.org のプラグインディレクトリ提出に必須の `readme.txt`（Sta
 
 `.github/workflows/ci.yml` と `test.yml` は git-crypt unlock をせん。`test.yml` は PR 専用の縮退テストで、Secret 式自体を持たん。main push は別の `trusted-test.yml` と main 限定 Environment でだけ復号し、鍵が無ければ失敗する。
 
-2026-08-02 に `scripts/build-plugin-zip.mjs` へ 2 層のガードを入れた。
+2026-08-02 に `script/build-plugin-zip.mjs` へ 2 層のガードを入れた。
 
 1. **カタログ検査**（`inspectCatalogFile()`）: `tests/tp-availability.php` の `designinserter_tp_catalog_file_available()` と同じ三分岐を移植。先頭 10 バイトが `\0GITCRYPT\0` なら `locked`、復号済みやが JSON が壊れとる / `parts`・`templates` 配列が無い場合は `malformed`、正常なら `ok`。**`malformed` は開発ビルドでも通さん**（ロックとちごうてデータ退行の疑いやから）
-2. **暗号文 sweep**（`selectDistributionFiles()`）: zip に入れる全ファイルの先頭 10 バイトを見て、暗号文なら分離する。パス決め打ちやのうて署名で拾うので、`assets/previews/tp-*` 1087 件も、将来 `.gitattributes` に足されたパスも自動で覆う
+2. **暗号文 sweep**（`selectDistributionFiles()`）: zip に入れる全ファイルの先頭 10 バイトを見て、暗号文なら分離する。パス決め打ちやのうて署名で拾うので、`asset/previews/tp-*` 1087 件も、将来 `.gitattributes` に足されたパスも自動で覆う
 
 sweep だけでは「復号済みやが壊れた JSON」を検出できず、カタログ検査だけでは「ロックされたプレビュー画像」を検出できん。両方要る。
 
@@ -740,7 +740,7 @@ sweep だけでは「復号済みやが壊れた JSON」を検出できず、カ
 | `pnpm run build`（リリース） | exit 1・zip を作らん | 成功 | `dist/designinserter-<ver>.zip` |
 | `pnpm run build:dev`（`--allow-locked-catalog`） | 警告 + 暗号文を除外して成功 | 成功 | `dist/dev/designinserter-<ver>-dev.zip` |
 
-出力先を分けるのが肝。`scripts/generate-ready-checklist.mjs` と `scripts/wp-smoke.mjs` はどちらも `dist/*.zip` を拾うので、劣化 zip がリリースのファイル名を占拠すると偽の証跡になる。`dist/dev/` ならどちらのグロブにも掛からん。**どのフラグでも暗号文が zip に入る経路は無い**（フラグは *fail* か *exclude* かを選ぶだけ）。
+出力先を分けるのが肝。`script/generate-ready-checklist.mjs` と `script/wp-smoke.mjs` はどちらも `dist/*.zip` を拾うので、劣化 zip がリリースのファイル名を占拠すると偽の証跡になる。`dist/dev/` ならどちらのグロブにも掛からん。**どのフラグでも暗号文が zip に入る経路は無い**（フラグは *fail* か *exclude* かを選ぶだけ）。
 
 `Taskfile.yml` の `ci:fast` は `pnpm run build` → `pnpm run build:dev` に変更した。ロック環境でゲートが恒久的に赤になると回されんようになり、F-7 の再演になるため。代わりに `.github/workflows/trusted-test.yml`（唯一 `git-crypt unlock` する main push 用ワークフロー）に `pnpm run build` を 1 ステップ足して、リリース経路そのものを CI で踏む。従来はどのワークフローもビルドを回しとらんかった。
 
@@ -756,8 +756,8 @@ sweep だけでは「復号済みやが壊れた JSON」を検出できず、カ
 
 2026-07-30 には git-crypt 鍵を取得し Template Party データを復号。`pnpm run e2e:fresh`（4 シナリオ）と `pnpm run e2e:template-party`（5 シナリオ）を両方通した。Template Party E2E を通すために以下も修正した。
 
-- `assets/editor.js`: source filter ボタンに `di-picker__source` クラスが無くて Playwright セレクタが当たらんかった。テスト可用性クラスを追加。
-- `includes/admin.php`: CSS Stock parts 数と Template Party parts 数、Total を分けて表示。`e2e:fresh` の `Parts = 222` と、`tests/render-smoke.php` の `<td>360</td>` 両方を満たす。
+- `asset/editor.js`: source filter ボタンに `di-picker__source` クラスが無くて Playwright セレクタが当たらんかった。テスト可用性クラスを追加。
+- `include/admin.php`: CSS Stock parts 数と Template Party parts 数、Total を分けて表示。`e2e:fresh` の `Parts = 222` と、`tests/render-smoke.php` の `<td>360</td>` 両方を満たす。
 - `tests/e2e/template-party.spec.mjs`: `window.designinserterCatalog`（小文字）を `window.DesignInserterCatalog`（大文字）に修正。未ログイン / 既ログイン両方を扱える `loginAsAdmin` に変更。`.tmp/dist` の compose volume マウントを `dist/` に直して zip ビルド後の zip が見えるようにした。
 
 対応ケース: DI-E2E-001〜009（検証済み）、DI-E2E-010（未実装）
@@ -817,7 +817,7 @@ E-1 の一部は `pnpm run smoke:wp:portable` で回避できる。これは Wor
 | 3 viewport でのレイアウト検証 | DI-CMP-009 |
 | PHP 7.4 での動作確認（`Requires PHP: 7.4` を主張しとる） | DI-CMP-003 |
 | ショートコードとブロックの出力等価比較 | DI-SC-007 |
-| phpcs の検査範囲を `tests/` 直下と `scripts/` へ拡大 | DI-SEC-015 |
+| phpcs の検査範囲を `tests/` 直下と `script/` へ拡大 | DI-SEC-015 |
 | phpcs へ WordPress Coding Standards（`WordPress.Security.EscapeOutput`）を導入。現行は Generic / Squiz だけでエスケープ漏れを検出できん | DI-SEC-010, DI-SEC-011 |
 | `git check-attr` による ciphertext 確認をゲートへ組み込む（現状は手作業） | DI-SEC-013 |
 
@@ -840,7 +840,7 @@ E-1 の一部は `pnpm run smoke:wp:portable` で回避できる。これは Wor
 
 ### 9.1 レビュー方法
 
-`docs/test-spec.md` を Proposer / Critic の 5 ラウンドで敵対レビューした。
+`doc/test-spec.md` を Proposer / Critic の 5 ラウンドで敵対レビューした。
 
 | ラウンド | Proposer 主張 | Critic 反論 | 合意 |
 |---|---|---|---|
@@ -858,7 +858,7 @@ E-1 の一部は `pnpm run smoke:wp:portable` で回避できる。これは Wor
 |---|---|---|---|---|---|
 | US-1 | 新規購入者 | zip を WP 管理画面からアップロードして有効化し、投稿にブロックを挿入・公開・フロント確認 | プラグインアップローダー、Gutenberg、フロント | DI-BLD-020, DI-CMP-006, DI-BLK-009〜010, DI-EDT-001, DI-EDT-008, DI-FE-010 | zip アップロード UI は `pnpm run smoke:wp:portable` 未カバー。実機目視で補う |
 | US-2 | 既存サイト運用者 | クラシックエディタ / ウィジェット / 再利用ブロックでショートコードを使う | ショートコード `[designinserter_part id="..."]` | DI-SC-001, DI-SC-003〜005, DI-SC-009, DI-SC-012 | テキストウィジェット、ショートコードとブロックの出力等価が未 |
-| US-3 | テンプレート利用者 | Template Party のテンプレートカードから固定ページを生成する | TP source filter, カード, iframe, create-page REST, `full-page.php` | DI-TPL-001〜007, DI-E2E-005〜009 | 本環境で git-crypt 解除済み。F-1 は `designinserter.php` に `includes/templates.php` の require を追加して解消 |
+| US-3 | テンプレート利用者 | Template Party のテンプレートカードから固定ページを生成する | TP source filter, カード, iframe, create-page REST, `full-page.php` | DI-TPL-001〜007, DI-E2E-005〜009 | 本環境で git-crypt 解除済み。F-1 は `designinserter.php` に `include/templates.php` の require を追加して解消 |
 | US-4 | 開発者 / CI | clone して `task ci:fast` / `pnpm run e2e:fresh` / `pnpm run smoke:wp:portable` / `pnpm run e2e:template-party` が通る | npm / composer / Taskfile / Docker / Playwright | DI-CMP-001〜002, DI-CAT-001, DI-BLD-001〜022, DI-E2E-001〜012 | E2E は Docker 必須。Template Party E2E は git-crypt 鍵が要るが本環境では解除済み |
 | US-5 | 非技術的購入者 | エディター側パネルで 222 パーツを検索・カテゴリ絞込・プレビューして選択 | Gutenberg サイドバー、検索、ビジュアル picker、iframe sandbox | DI-EDT-001〜004, DI-EDT-008, DI-EDT-013〜017, DI-FE-001 | openspec の 223 オプション記述と実装の差は F-2 |
 
@@ -874,7 +874,7 @@ E-1 の一部は `pnpm run smoke:wp:portable` で回避できる。これは Wor
 | 技術 | `frontend.js` 読み込み前に DOM 挿入 / `DOMContentLoaded` 未発火 | behavior パーツ（アコーディオン等）動作せず | DI-FE-002〜009 | 手動要 |
 | UX | 検索結果 0 件のとき「該当なし」表示がない | 購入者がパーツが存在しないと誤認 | DI-EDT-015 | 手動要 |
 | UX | 222 パーツ全部を 1 ページに入れて公開 → モバイルでレイアウト崩壊 | 購入者の LP 品質低下 | DI-CMP-009 | 未実装 |
-| ビジネス | 配布 zip に `tests/` / `scripts/` / `.tmp/` / `.git` が混入 | セキュリティリスク、ファイルサイズ肥大 | DI-BLD-015 | 自動済 |
+| ビジネス | 配布 zip に `tests/` / `script/` / `.tmp/` / `.git` が混入 | セキュリティリスク、ファイルサイズ肥大 | DI-BLD-015 | 自動済 |
 | ビジネス | `readme.txt` が無いため WP.org ディレクトリ提出不可 | 販売チャネル制限 | DI-BLD-019 | 自動済 2026-08-02 |
 | ビジネス | `pnpm run build` が git-crypt ロック状態で通り、暗号文 zip に混入 | 購入者に Template Party コンテンツが欠損したまま届く | DI-BLD-022, DI-SEC-014 | 自動済 2026-08-02。リリース経路は exit 1 で zip を作らん。`pnpm run build:dev` だけが暗号文を除外した zip を `dist/dev/` に出す（リリース不可） |
 | ビジネス | 復号済みメンテナ環境で `data/template-party-bundles/`（再配布不可）が zip に同梱される | Template Party の ToS 違反 | DI-SEC-014 | 自動済 2026-08-02。`selectDistributionFiles()` が全モードで除外 |
@@ -895,7 +895,7 @@ P0 — 販売前に必須：
 
 | # | 項目 | 対応ケース | 理由 |
 |---|---|---|---|
-| 1 | `includes/templates.php` を `designinserter.php` から読み込む（完了 2026-07-30。回帰テスト DI-TPL-001 を 2026-08-02 に追加） | F-1, DI-TPL-001〜007, DI-E2E-010 | Template Party のコア機能が動作せず。購入者は有料コンテンツを使えない |
+| 1 | `include/templates.php` を `designinserter.php` から読み込む（完了 2026-07-30。回帰テスト DI-TPL-001 を 2026-08-02 に追加） | F-1, DI-TPL-001〜007, DI-E2E-010 | Template Party のコア機能が動作せず。購入者は有料コンテンツを使えない |
 | 2 | git-crypt ロック状態でのビルドを即座に失敗させる（完了 2026-08-02） | F-4, DI-BLD-022, DI-SEC-014 | 暗号文 zip を購入者に誤配布するリスク |
 | 3 | `bundleDir` パストラバーサル遮断の自動テスト | DI-SEC-008, DI-DAT-019, DI-TPL-007 | 外部からの catalog JSON 改ざん時の防御 |
 | 4 | create-page REST の権限・異常系テスト | DI-API-017〜020, DI-SEC-005 | 未認証・低権限アクセスでページ生成されると被害大 |
@@ -910,7 +910,7 @@ P1 — 販売前に埋めたい：
 | 8 | axe-core による a11y 自動検査 | DI-FE-011 |
 | 9 | 3 viewport レイアウト検証 | DI-CMP-009 |
 | 10 | PHP 7.4 / WordPress 6.0 互換性検証 | DI-CMP-003〜004 |
-| 11 | `phpcs` 範囲を `tests/` 直下・`scripts/` に拡大 + WordPress Security sniff 追加 | DI-SEC-010〜011, DI-SEC-015 |
+| 11 | `phpcs` 範囲を `tests/` 直下・`script/` に拡大 + WordPress Security sniff 追加 | DI-SEC-010〜011, DI-SEC-015 |
 | 12 | git-crypt 復号環境で Template Party E2E 実行（完了 2026-07-30 [ローカル実行]） | DI-E2E-005〜009 |
 
 P2 — 継続改善：
@@ -956,7 +956,7 @@ P2 — 継続改善：
 
 ### 9.7 残存リスク
 
-1. ~~**F-1 回帰**~~ **解消（2026-08-02）**: `designinserter.php` で `includes/templates.php` を読み込む修正に加え、`tests/render-smoke.php` に `theme_page_templates` / `template_include` のフィルタ登録検証（DI-TPL-001）を追加した。require を外すと `pnpm test` が赤くなることを実測で確認済み。
+1. ~~**F-1 回帰**~~ **解消（2026-08-02）**: `designinserter.php` で `include/templates.php` を読み込む修正に加え、`tests/render-smoke.php` に `theme_page_templates` / `template_include` のフィルタ登録検証（DI-TPL-001）を追加した。require を外すと `pnpm test` が赤くなることを実測で確認済み。
 2. ~~**git-crypt ロック状態のビルドが黙って成功**~~ **解消（2026-08-02）**: F-4 参照。`pnpm run build` はロック時に exit 1、`pnpm run build:dev` は暗号文を除外して `dist/dev/` に隔離出力する。
 3. **PHP 7.4 / WP 6.0 の互換性未確認**: `Requires at least: 6.0` / `Requires PHP: 7.4` を謳っているが、本環境は PHP 8.1 / WP 6.9.4 のみで検証。
 4. **手動項目が大量に残存**: 管理 UI からの zip アップロード、フロント behavior 操作、テーマ切り替え、モバイル viewport 等はテスト台帳にあっても未自動化。
@@ -980,7 +980,7 @@ P2 — 継続改善：
 | # | 操作 | 使用する partId / カテゴリ | 期待される結果 | 確認観点 |
 |---|---|---|---|---|
 | 1-1 | WP ログイン後、ダッシュボード → プラグイン → インストール済みプラグイン | Design Inserter | プラグインが有効化済み | バージョン・説明文に齟齬がない |
-| 1-2 | 設定 → Design Inserter | - | Parts 222 / Template Party Parts 138 / Total 360 | `includes/admin.php` の source 別カウント |
+| 1-2 | 設定 → Design Inserter | - | Parts 222 / Template Party Parts 138 / Total 360 | `include/admin.php` の source 別カウント |
 | 1-3 | 投稿 → 新規追加 | - | Gutenberg エディターが開く | ブロック一覧に「Design Inserter」が表示される |
 | 1-4 | 「Design Inserter」ブロックを挿入 | - | 左に「探す」、右に「選ぶ / 調整」が表示 | picker 初期状態で CSS Stock パーツが読み込まれている |
 | 1-5 | source filter で「CSS Stock パーツ」を選択 | - | カテゴリボタンに 28 カテゴリが表示 | `button.di-picker__source` 選択状態が切り替わる |
@@ -1017,7 +1017,7 @@ P2 — 継続改善：
 | 3-3 | カテゴリ「和菓子店向け」→ `tp_wa1_blue` を選択 | `tp_wa1_blue` | テンプレートプレビュー iframe が表示される | プレビュー URL のサイトが読み込まれる |
 | 3-4 | 「このテンプレで固定ページを作成」をクリック | - | 「固定ページを作成しました」と「ページを編集する →」ボタン | REST `create-page` が成功 |
 | 3-5 | 「ページを編集する →」をクリック | - | 生成された固定ページ編集画面へ遷移 | タイトル・本文にテンプレート HTML が含まれる |
-| 3-6 | 公開してフロント表示 | - | テンプレート HTML/CSS がレンダリングされる | `designinserter.php` に `includes/templates.php` の require を追加後、`full-page.php` ルートが適用されることを確認 |
+| 3-6 | 公開してフロント表示 | - | テンプレート HTML/CSS がレンダリングされる | `designinserter.php` に `include/templates.php` の require を追加後、`full-page.php` ルートが適用されることを確認 |
 
 ### 11.5 手順の成否基準
 
@@ -1031,7 +1031,7 @@ P2 — 継続改善：
 
 | 観点 | 失敗シナリオ | 防止策 / 確認 |
 |---|---|---|
-| 技術 | picker 読み込み時に `window.DesignInserterCatalog` が undefined → 真っ白 | `includes/block.php` の `wp_localize_script` を確認 |
+| 技術 | picker 読み込み時に `window.DesignInserterCatalog` が undefined → 真っ白 | `include/block.php` の `wp_localize_script` を確認 |
 | 技術 | REST `/parts/{id}` 404/403 → プレビュー取得失敗 | 未ログイン / nonce 期限切れを確認 |
 | UX | 検索結果 0 件で「該当なし」が表示されない | `di-picker__empty` 要素を確認 |
 | UX | editor の sandbox iframe 内で CSS animation / 疑似要素が切れる | iframe 幅・高さ・ viewport メタを確認 |
@@ -1054,25 +1054,25 @@ P2 — 継続改善：
 
 | 日付 | 内容 |
 |---|---|
-| 2026-07-28 | 初版。`docs/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 226 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
+| 2026-07-28 | 初版。`doc/test-matrix-2026-05-17.md` と `doc/qa-runbook-2026-05-18.md` を統合し、両ファイルを削除。台帳 226 ケース、openspec 受け入れ基準 50 項目のトレーサビリティを作成。Phase 1〜3 を実測して現状列を確定。F-1・F-4 を新規に発見 |
 | 2026-07-29 | Docker 抜きで実 WordPress を立てられる `smoke:wp:portable` 経路で Phase 5 の一部を実測。8 ケースを環境制約NGから実測済みへ更新。その過程で F-7（実 WP スモークが黙って赤）を発見して修正 |
 | 2026-07-30 | `ritmo-inc/wordpress-plugin-designinserter` は `kouiso/design-inserter` の古い重複版で追加統合不要。敵対レビューとプレモーテム分析を §9 として追加。`task ci:fast` / `smoke:wp:portable` / `smoke:wp:docker` / `e2e:fresh` / `ready:checklist` を実測済みに更新。1Password から git-crypt 鍵を取得し `e2e:template-party` も実行し 5 tests passed |
-| 2026-07-30 続き | 1Password から git-crypt 鍵を取得し Template Party データを復号。`pnpm run e2e:template-party` を実行し 5 tests passed。`docs/test-spec.md` の DI-CAT-022/023、DI-DAT-001/003/012/014/016、DI-EDT-005/006/007、DI-API-014/015/017/019、DI-BLK-010、DI-ADM-009、DI-FE-010、DI-E2E-005〜009 を `自動済` に更新。`includes/admin.php` の parts count 表示、`assets/editor.js` の source filter クラス、`tests/e2e/template-party.spec.mjs` の catalog グローバル名・login ロジック・compose volume マウントを修正 |
-| 2026-07-30 UI 録画 | WP 管理画面で 28 カテゴリ一個ずつ Gutenberg 挿入 → 公開 → フロント behavior 操作、shortcode、Template Party フルページ生成を録画。`designinserter.php` に `includes/templates.php` の require を追加して F-1 解消。`DI-E2E-010` を実機目視で更新。`docs/test-spec.md` §9.6 / §9.7 / §11.4 / §11.7 に証拠を追加 |
-| 2026-08-02 | 残存 issue 5 件を一括対応（#52 / #53 / #54 / #55 / #57）。F-4 のビルドガード（git-crypt 暗号文検出 + 再配布不可データ除外 + `build` / `build:dev` の 2 モード）、`readme.txt` 追加、openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせ全面改訂、DI-TPL-001 回帰テスト追加、`scripts/wp-smoke.mjs` の配布ファイル選定を build と共通化。`.github/workflows/trusted-test.yml` に復号済みリリースビルドを追加。**本作業環境は git-crypt ロック・Docker daemon 未起動**のため、`pnpm run phpcs` / `pnpm run test:php` は Docker やのうて `vendor/bin/` を直叩きして代替実行し、E2E は `--list` の起動確認のみ。復号済み `pnpm run build` の成功経路と Docker 実機確認は未実施 |
+| 2026-07-30 続き | 1Password から git-crypt 鍵を取得し Template Party データを復号。`pnpm run e2e:template-party` を実行し 5 tests passed。`doc/test-spec.md` の DI-CAT-022/023、DI-DAT-001/003/012/014/016、DI-EDT-005/006/007、DI-API-014/015/017/019、DI-BLK-010、DI-ADM-009、DI-FE-010、DI-E2E-005〜009 を `自動済` に更新。`include/admin.php` の parts count 表示、`asset/editor.js` の source filter クラス、`tests/e2e/template-party.spec.mjs` の catalog グローバル名・login ロジック・compose volume マウントを修正 |
+| 2026-07-30 UI 録画 | WP 管理画面で 28 カテゴリ一個ずつ Gutenberg 挿入 → 公開 → フロント behavior 操作、shortcode、Template Party フルページ生成を録画。`designinserter.php` に `include/templates.php` の require を追加して F-1 解消。`DI-E2E-010` を実機目視で更新。`doc/test-spec.md` §9.6 / §9.7 / §11.4 / §11.7 に証拠を追加 |
+| 2026-08-02 | 残存 issue 5 件を一括対応（#52 / #53 / #54 / #55 / #57）。F-4 のビルドガード（git-crypt 暗号文検出 + 再配布不可データ除外 + `build` / `build:dev` の 2 モード）、`readme.txt` 追加、openspec `editor-ui.md` / `gutenberg-block.md` を実装に合わせ全面改訂、DI-TPL-001 回帰テスト追加、`script/wp-smoke.mjs` の配布ファイル選定を build と共通化。`.github/workflows/trusted-test.yml` に復号済みリリースビルドを追加。**本作業環境は git-crypt ロック・Docker daemon 未起動**のため、`pnpm run phpcs` / `pnpm run test:php` は Docker やのうて `vendor/bin/` を直叩きして代替実行し、E2E は `--list` の起動確認のみ。復号済み `pnpm run build` の成功経路と Docker 実機確認は未実施 |
 | 2026-08-04 | PR #70 の CodeRabbit / Codex レビュー指摘を精査。DI-BLD-021 を `自動済`（間接確認のみやのに）から `手動要` に訂正。§9.6 / §11.7 の UI 証跡パスを `.work/qa/ui-evidence/run-1785413347347/` に一本化（`screencasts/...` と `/home/ubuntu/screencasts/...` の 2 通りが混在しとった）。§10 と §11 の見出し番号順序が本文の並びと逆転しとった件は、`§11.x` の相互参照が複数箇所にあるため機械的な入れ替えを避け、`変更履歴` を `§12` に振り直して昇順を回復（`§10` は欠番）。`gutenberg-block.md:64` のリンク形式変更（`admin.php` の `Parts` ラベル改名）は E2E / 既存リンク規約と衝突するため見送り。判断根拠は PR #70 の issue comment に記載 |
-| 2026-08-04 続き | Template Party の bundles 除外（DI-SEC-014）に伴い、購入者環境では「固定ページを作成」が常に `demoUrl` へのリダイレクトになる（`templates/full-page.php` の設計済みフォールバック）。作成前に気付けるよう `CreatePageButton` にデモリンク挙動を明示する `Notice` を追加し、`readme.txt` の説明文も「フルページレイアウトの固定ページを作成できます」という誤解を招く表現から実態に合わせて修正した。`scripts/test.mjs` に告知文言の回帰テストを追加。`openspec/specs/editor-ui.md` の機能要件・受け入れ基準を更新 |
-| 2026-08-04 続き2 | CodeRabbit / Codex の新規指摘3件に対応。(1) `includes/templates.php` / `templates/full-page.php` が `verifyZip()` の `required` と `testDistributionShape()` の `requiredFiles` に未登録で、削除しても `pnpm test` / `build:dev` が exit 0 のまま素通りしていた（Codex）。両方に追加。(2) `editor-ui.md` の Notice 説明文「公開ページは常に `demoUrl` へリダイレクトされる」が、bundle が存在するローカル復号済み開発環境の実態と食い違っていたため、配布 zip の購入者環境に限定する表現へ修正（CodeRabbit）。(3) 仮想スクロールの説明が parts 360 件のみを記載していたので templates 1,017 件を含む最大 1,377 件に修正、TemplatePreview/CreatePageButton/InsertConfirmNotice（要件16〜21）の受け入れ基準が欠けていたので DI-EDT-021〜025 を追加し §5.1 のトレーサビリティ表・集計（55 項目）も追随させた（CodeRabbit）。§4.6 の残存「CSS Stock」表記も同時に修正 |
-| 2026-08-04 続き3 | Codex 指摘: `verifyZip()` の Template Party プレビュー検査が参照先の存在しか見ておらず、`tp-*.webp` が空ファイルや HTML エラーページに差し替わっても検出できなかった。`scripts/test.mjs` の CSS Stock 側で既に使っていた署名判定（拡張子 vs 実バイト列）を `detectPreviewKind()` として `scripts/build-plugin-zip.mjs` 側に一本化してエクスポートし、`verifyZip()` の Template Party ループで存在する参照先すべてに適用。`scripts/test.mjs` はこの共有関数を import する側に変更し、重複定義を解消。`tests/build-plugin-zip.test.mjs` に signature 判定のユニットテストを追加。DI-BLD-016 の現状列を更新 |
+| 2026-08-04 続き | Template Party の bundles 除外（DI-SEC-014）に伴い、購入者環境では「固定ページを作成」が常に `demoUrl` へのリダイレクトになる（`templates/full-page.php` の設計済みフォールバック）。作成前に気付けるよう `CreatePageButton` にデモリンク挙動を明示する `Notice` を追加し、`readme.txt` の説明文も「フルページレイアウトの固定ページを作成できます」という誤解を招く表現から実態に合わせて修正した。`script/test.mjs` に告知文言の回帰テストを追加。`openspec/specs/editor-ui.md` の機能要件・受け入れ基準を更新 |
+| 2026-08-04 続き2 | CodeRabbit / Codex の新規指摘3件に対応。(1) `include/templates.php` / `templates/full-page.php` が `verifyZip()` の `required` と `testDistributionShape()` の `requiredFiles` に未登録で、削除しても `pnpm test` / `build:dev` が exit 0 のまま素通りしていた（Codex）。両方に追加。(2) `editor-ui.md` の Notice 説明文「公開ページは常に `demoUrl` へリダイレクトされる」が、bundle が存在するローカル復号済み開発環境の実態と食い違っていたため、配布 zip の購入者環境に限定する表現へ修正（CodeRabbit）。(3) 仮想スクロールの説明が parts 360 件のみを記載していたので templates 1,017 件を含む最大 1,377 件に修正、TemplatePreview/CreatePageButton/InsertConfirmNotice（要件16〜21）の受け入れ基準が欠けていたので DI-EDT-021〜025 を追加し §5.1 のトレーサビリティ表・集計（55 項目）も追随させた（CodeRabbit）。§4.6 の残存「CSS Stock」表記も同時に修正 |
+| 2026-08-04 続き3 | Codex 指摘: `verifyZip()` の Template Party プレビュー検査が参照先の存在しか見ておらず、`tp-*.webp` が空ファイルや HTML エラーページに差し替わっても検出できなかった。`script/test.mjs` の CSS Stock 側で既に使っていた署名判定（拡張子 vs 実バイト列）を `detectPreviewKind()` として `script/build-plugin-zip.mjs` 側に一本化してエクスポートし、`verifyZip()` の Template Party ループで存在する参照先すべてに適用。`script/test.mjs` はこの共有関数を import する側に変更し、重複定義を解消。`tests/build-plugin-zip.test.mjs` に signature 判定のユニットテストを追加。DI-BLD-016 の現状列を更新 |
 | 2026-08-04 続き4 | main が並行して進んだ per-component color/radio/range パラメータ機能（DI-CAT-024, DI-BLD-023, DI-BLK-014/015, DI-EDT-021〜024）を取り込んでマージコンフリクトを解消。ID 衝突していた Template Party の disclosure Notice 群を DI-EDT-021〜026 から DI-EDT-025〜030 に振り直し、§5.1・§5.2・§5.3 の参照を追随させた |
 | 2026-08-04 続き5 | Codex 指摘: readme.txt FAQ「ショートコードとブロックで表示は変わりますか」の「変わりません」という断言が、per-component パラメータ調整機能とかみ合っていなかった。`designinserter_shortcode()` は `id` しか受け取らずカタログ既定値で描画する一方、`designinserter_render_block()` はブロック属性の調整済み `html`/`css` を渡すため、パラメータ調整済みパーツでは表示が一致しない。未調整時のみ同一である旨に限定して修正し、DI-SC-007 の記述にも同じ限定を反映した |
-| 2026-08-04 続き6 | CodeRabbit の新規指摘3件に対応。(1) `scripts/test.mjs` の `part.inputs &&` ガードが `inputs: null` を検知漏れさせる経路だったので、falsy / 非オブジェクトも `badInputs` に含めるよう修正。(2) `openspec/specs/editor-ui.md` §非機能要件のペイロード説明が「id/title/categoryLabel/previewImage/source/type だけ」と言い切っていたが、実際のスキーマにはパーツの `behavior`、テンプレートの `demoUrl`/`bundleDir` もあったため、共通項目と種別固有項目を分けて明記。(3) 同ファイルの要件18に、`create-page` が `demoUrl` の有無を検証せずページを作成すること、bundle も `demoUrl` も無いテンプレートの公開ページは `templates/full-page.php` の `wp_die()` 404 になることを追記（実装は既にこの設計済み動作を持っており、仕様書の記述漏れだった）。ついでに editor.js の codeFunc 失敗時に「未選択」と誤認される nitpick も修正（`computed` が null なら `codeFuncFailed` エラー状態にして専用メッセージを表示） |
-| 2026-08-04 続き7 | Codex の新規指摘3件に対応。(1) `openspec/specs/gutenberg-block.md` の属性一覧が `partId` しか書いておらず、`includes/block.php` が実際に登録している `params`/`html`/`css`（per-component パラメータ調整の保存先）が抜けていたため、初期化・更新動作込みで追記し block.json 相当の JSON 例にも追加。(2) `scripts/build-plugin-zip.mjs` に足した2箇所の JSDoc が「なぜ」を説明しない what-only コメントで `AGENTS.md` の規約に反していたため削除（コード自体が定数名で自明）。(3) §9.6 の「task ci:fast 相当6ステップ」の記録が、`build` → `build:dev` の定義変更後に `task ci:fast` そのものを一度も実行できていない（`task` バイナリ・Docker daemon とも本環境に無い）ことを明記しておらず、AGENTS.md の「task ci:fast GREEN 必須」を満たしたかのように読めた。実際に go-task も Docker も使わず直接コマンドを叩く `.github/workflows/trusted-test.yml` がこの PR の全コミットで green である旨とあわせて、§9.6・§9.7 に未検証事項として明記した |
-| 2026-08-04 続き8 | Codex の新規指摘3件に対応。(1) `gutenberg-block.md` のエッジケースが「360 件の一括描画」（parts のみ）と記載していたが、`ItemPicker` は templates 1,017 件も同じカードグリッドに連結するため、正しくは最大 1,377 件。受け入れ基準の記述と揃えた。(2) `editor-ui.md` の受け入れ基準が要件21（`useSelect` 購読・フォールバック）に対応する DI-EDT-030 チェックボックスを欠いていたため追加。あわせて「将来拡張」に残っていた「カラーカスタマイズ UI（inputs メタデータ使用）」は既に実装済みの機能だったので削除。(3) 同ファイルのペイロード説明・カタログ JSON 例が `includes/data.php` の `designinserter_shape_part_for_editor_catalog()` が実際に渡す `inputs`（colors/radios/ranges の調整 UI 定義）を欠いていたため、実データの構造に基づいて追記した |
-| 2026-08-04 続き9 | Codex の新規指摘5件に対応。(1) `detectPreviewKind()` が `<?xml` 接頭辞だけで svg 判定していたため、`<Error>AccessDenied</Error>` のような XML エラー応答も svg として通っていた。実際に `<svg` ルート要素があるかを見るよう修正しユニットテストを追加。(2) `PartCard`/`TemplateCard` の絵文字プレースホルダが文字化けしていた（🎨 は base 文字が欠落し variation selector だけ残存、🖼️ は空文字列）ため実際の絵文字に修正し、`scripts/test.mjs` に実体を検査する回帰テストを追加。(3) `docs/test-spec.md` §5.1 が「openspec 未チェック項目 55 件を全件対応付けた」と主張していたが実数は 63 件で、editor-ui の検索/カテゴリ/source フィルタ・REST 遅延ロード・sandbox 隔離・useSelect と gutenberg-block のテンプレート create-page 項目（計 9 件）が §5.1 に無かったため追加し、集計・冒頭の SSOT 図の項目数も 63 に訂正した。(4) `editor-ui.md` 要件10が全パーツを REST 遅延ロードすると規定していたが、CSS Stock 222 件は全パーツが `part-code-funcs.js` のローカル生成関数を持ち（`testPartCodeFuncs()` で担保）実際には REST を経由しない。generator-first の実装に合わせて記述を修正。(5) DI-EDT-026（disclosure Notice）の自動検証が `scripts/test.mjs` の文言 grep のみで、コメントや到達しない分岐に文言があっても green になり得たため、`tests/e2e/template-party.spec.mjs` にテンプレートカード選択後に `.di-create-page` 内の Notice が実際に可視状態であることを検証するアサーションを追加した |
-| 2026-08-04 続き10 | Codex 続報1件 + CodeRabbit 新規指摘4件に対応。(1) [Codex] `Taskfile.yml` の `ci:fast` が `build` → `build:dev` に変わった後も、以前の `pnpm run build` が残した `dist/designinserter-<version>.zip` が消えず、`generate-ready-checklist.mjs`（K036）がソース変更後もそれを「存在する」だけで現行候補として green 扱いし得た。`build:dev` の直前に `dist/designinserter-*.zip` を削除するステップを追加。(2) [CodeRabbit] `docs/test-spec.md` の DI-EDT-026 が「自動済」だったが、実体は `scripts/test.mjs` の文言存在チェックのみで、実際に可視状態であることを検証する E2E はこの環境では未実行だったため `環境制約NG` に訂正（コード契約チェックは自動済のまま明記）。(3) [CodeRabbit] §5.3 逆引き表の `tests/e2e/template-party.spec.mjs` 行に `DI-EDT-025` が抜けていたため追加。(4) [CodeRabbit] `detectPreviewKind()` の XML 判定が `<svg/>` のような自己終了ルート要素にマッチせず、正当な svg プレビューを `unknown` として拒否していたため、正規表現に `/` を追加しユニットテストを追加。(5) [CodeRabbit] `editor.js` の `LivePreview` が codeFunc 失敗時・REST 失敗時に古い `content` を残したまま `setError()` するだけで、ブロックの保存済み `html`/`css` 属性が実際には失敗した新しい partId のものではなく前のパーツのものになり得た。両エラー経路で `setContent(null)` を追加し、あわせて AbortController 非対応環境向けの stale-response ガードも、リクエスト自身の `partId` と `latestPartIdRef.current`（最新選択）を比較する形に強化した（従来は自分自身の partId としか比較しておらず実質無意味だった）。ついでに `verifyZip()` に readme.txt の Stable tag 値検証（存在チェックのみだった）と、dev モードで欠けているカタログが本当に `lockedFiles` に含まれるか（単純な選定バグでないか）の検証を追加した |
-| 2026-08-04 続き11 | Codex の新規指摘5件に対応。(1) `gutenberg-block.md` 要件9が「プレビュー内容は REST から遅延ロード」と書いたままで、`editor-ui.md` を generator-first に直した後も兄弟 spec 間で通信契約が矛盾していた。CSS Stock 222 件はローカル生成関数を最優先で使い、REST は生成関数の無いパーツ（現状 Template Party）だけの経路である旨に統一。(2) `editor-ui.md` の受け入れ基準で、未選択メッセージに ID が無く、検索結果 0 件の行に誤って `DI-EDT-014` が付いていた（正本の `docs/test-spec.md` では未選択＝DI-EDT-014、0件＝DI-EDT-015）。それぞれ正しい ID に修正。(3) `gutenberg-block.md` 属性5の「`params` か `html`/`css` が既に埋まっていれば上書きしない」という記述が、`LivePreview` が毎回 `params` から `html`/`css` を再計算し `onContentChange()` で書き戻す実装と食い違っていた（`params` 自体は再初期化されないが、`html`/`css` は generator の現在の出力に自動追従するキャッシュである）。実装通りの挙動に記述を修正。(4) [P2] `editor.js` の `LivePreview` の REST コールバックが、stale 応答の判定より先に `setLoading(false)` を実行していたため、AbortController 非対応環境で別パーツ選択直後に古い応答が先着すると、新しいフェッチが継続中でも spinner が消えて古い content が完了済みのように見えるリスクがあった。stale 判定を先頭に移し、stale 応答では `setLoading` を含む一切の state 更新を行わないよう修正。(5) [P2] DI-BLD-019 は「Stable tag / Tested up to」両方の自動検証を謳っていたが、実装は Stable tag のみを検証しており `Tested up to` は readme.txt の存在チェックにしか掛かっていなかった（削除や不正な値でも green のまま通り得た）。`scripts/test.mjs` と `verifyZip()` の両方に `Tested up to` の書式検証（`\d+(\.\d+){1,2}` 形式）を追加し、台帳の記述と実装を一致させた |
-| 2026-08-04 続き12 | Codex の新規指摘6件に対応（うち1件は保留・要ユーザー判断としてコード変更せず）。(1) `docs/test-spec.md` の DI-EDT-013（SVG-only パーツのプレビュー）が「style タグが含まれん」と記載していたが、`LivePreview` の `srcDoc` は margin/padding/font-family のリセット用ベース style を常に出力し、空になるのはパーツ固有 CSS（`content.css`）だけ。台帳の期待値を実装（`gutenberg-block.md` は既に正しかった）に合わせて訂正した（3箇所）。(2) `gutenberg-block.md` の受け入れ基準に、属性5で新設した「保存済み `params` を再初期化しない」「`html`/`css` は generator の現在の出力へ自動再同期される」という契約に対応するチェックボックスが無く、この挙動を一度も検証しないまま全基準を満たした扱いにできた。DI-BLK-016/017 を新設して追加し、§5.1・集計・冒頭 SSOT の受け入れ基準数を 63→65 項目に更新した。(3) `scripts/scrape-template-party-parts.mjs` が Template Party パーツへ常に `inputs: []`（空配列）を設定し、`includes/data.php` の `designinserter_shape_part_for_editor_catalog()` がそれをそのまま editor カタログへ渡していたため、`editor-ui.md` が規定する「調整 UI が無ければ `inputs` キー自体が無い」契約に違反していた（CSS Stock 222 件は全件が実際に colors/radios/ranges のいずれかを持つため、この契約は今まで一度も検証されていなかった）。`data.php` 側で colors/radios/ranges が全て空なら `inputs` キーごと省略するよう正規化し、スクレイパー側も `inputs: []` を書かないよう修正（次回スクレイプから反映。既存の暗号化済みデータは data.php 側の正規化で救済される）。(4) `editor.js` の `LivePreview` が生成関数失敗時に `content` を `null` にするだけで、ブロックの保存済み `html`/`css` 属性はクリアしないため、直前の成功結果が残ったまま公開されると現在の `params` と食い違う懸念について: 属性を明示的に空へ書き換える案は、`computePartContent` が例外を投げる経路は全 222 パーツの回帰テスト（既定値）では踏まないレアケースである一方、書き換えを実装すると一時的なエラーで正当な保存済みカスタマイズを消してしまうリスクの方が大きいと判断し、見送った（理由は PR スレッドに返信）。(5) `scripts/build-plugin-zip.mjs` の `LOCAL_ONLY_PREFIXES` が `data/template-party-bundles/` と `scrape-state.json` しか除外せず、`.gitattributes` が git-crypt 暗号化対象として明記する `template-party-parts.json` / `templates.json` / `assets/previews/tp-*` は復号済み環境では平文で配布 zip に入るため、`.gitattributes` のコメント「personal use only, ToS non-redistribution」と矛盾するとの指摘: これは #53（git-crypt ビルドガード）の設計そのもの（復号済みなら Template Party を同梱するのが正しい、が P0 の前提）と真っ向から対立する事業判断であり、コードで一方的に決めず、PR コメントで @kouiso に判断を仰いだ |
-| 2026-08-04 続き13 | Codex の新規指摘2件に対応。(1) `detectPreviewKind()` の直接 `<svg` から始まる分岐が要素名の境界を見ておらず、`<svg-error>AccessDenied</svg-error>` のような非 SVG タグも `svg` と誤判定していた（先に修正した `<?xml>` 経由の分岐と同じ穴が残っていた）。同じ境界検査（`/^<svg[\s\/>]/`）を適用し回帰テストを追加した。(2) `docs/test-spec.md` の F-1（`includes/templates.php` 未読み込み）が 2026-07-30 に解消済みにもかかわらず、§7 の見出し・本文と Phase 5 の実機手順（660・674行）が「現状は false が返る」「選択肢が出んことが F-1 の証跡」と当時のままの現在形で残っていた。この手順どおりに実機確認すると、正常に修正済みの配布候補を FAIL 扱いにしかねない。F-2/F-3 と同じ「（P0・修正済み 日付）」の記法に統一し、Phase 5 の手順も修正後の期待値（`true` が返る／選択肢が出る）に書き換えた |
-| 2026-08-04 続き14 | Codex の新規指摘3件に対応。(1) `editor-ui.md` §非機能要件5、`gutenberg-block.md` §非機能要件4、`readme.txt` の3箇所が generator-first 修正後も「実体は REST で取得」という古い記述のままだった。CSS Stock 222 件はローカル生成関数を最優先で使い、REST は生成関数の無いパーツ（現状 Template Party）だけの経路である旨に統一（readme.txt は技術詳細を削り「サンドボックス化した iframe に隔離して表示」に簡略化）。(2) `docs/test-spec.md` の DI-EDT-014 の期待文言が「CSS パーツを選択してください」のままだったが、実装（`editor.js:485`）は「左の「探す」エリアでデザインを選んでください」を表示する。台帳の期待値を実装に合わせて修正。ついでに §9.3 premortem 表の 0 件検索行が同じ理由で誤って DI-EDT-014 を参照していた（正しくは DI-EDT-015）ことを自己レビューで発見し、あわせて修正した。(3) `editor-ui.md` の受け入れ基準で、エディタ操作中の console error チェックがフロント用の `DI-FE-010` を参照していた（正しくは `DI-EDT-016`）。§5.1 は既に `DI-EDT-016` を正しく参照しており、editor-ui.md 側だけがずれていたため修正した |
+| 2026-08-04 続き6 | CodeRabbit の新規指摘3件に対応。(1) `script/test.mjs` の `part.inputs &&` ガードが `inputs: null` を検知漏れさせる経路だったので、falsy / 非オブジェクトも `badInputs` に含めるよう修正。(2) `openspec/specs/editor-ui.md` §非機能要件のペイロード説明が「id/title/categoryLabel/previewImage/source/type だけ」と言い切っていたが、実際のスキーマにはパーツの `behavior`、テンプレートの `demoUrl`/`bundleDir` もあったため、共通項目と種別固有項目を分けて明記。(3) 同ファイルの要件18に、`create-page` が `demoUrl` の有無を検証せずページを作成すること、bundle も `demoUrl` も無いテンプレートの公開ページは `templates/full-page.php` の `wp_die()` 404 になることを追記（実装は既にこの設計済み動作を持っており、仕様書の記述漏れだった）。ついでに editor.js の codeFunc 失敗時に「未選択」と誤認される nitpick も修正（`computed` が null なら `codeFuncFailed` エラー状態にして専用メッセージを表示） |
+| 2026-08-04 続き7 | Codex の新規指摘3件に対応。(1) `openspec/specs/gutenberg-block.md` の属性一覧が `partId` しか書いておらず、`include/block.php` が実際に登録している `params`/`html`/`css`（per-component パラメータ調整の保存先）が抜けていたため、初期化・更新動作込みで追記し block.json 相当の JSON 例にも追加。(2) `script/build-plugin-zip.mjs` に足した2箇所の JSDoc が「なぜ」を説明しない what-only コメントで `AGENTS.md` の規約に反していたため削除（コード自体が定数名で自明）。(3) §9.6 の「task ci:fast 相当6ステップ」の記録が、`build` → `build:dev` の定義変更後に `task ci:fast` そのものを一度も実行できていない（`task` バイナリ・Docker daemon とも本環境に無い）ことを明記しておらず、AGENTS.md の「task ci:fast GREEN 必須」を満たしたかのように読めた。実際に go-task も Docker も使わず直接コマンドを叩く `.github/workflows/trusted-test.yml` がこの PR の全コミットで green である旨とあわせて、§9.6・§9.7 に未検証事項として明記した |
+| 2026-08-04 続き8 | Codex の新規指摘3件に対応。(1) `gutenberg-block.md` のエッジケースが「360 件の一括描画」（parts のみ）と記載していたが、`ItemPicker` は templates 1,017 件も同じカードグリッドに連結するため、正しくは最大 1,377 件。受け入れ基準の記述と揃えた。(2) `editor-ui.md` の受け入れ基準が要件21（`useSelect` 購読・フォールバック）に対応する DI-EDT-030 チェックボックスを欠いていたため追加。あわせて「将来拡張」に残っていた「カラーカスタマイズ UI（inputs メタデータ使用）」は既に実装済みの機能だったので削除。(3) 同ファイルのペイロード説明・カタログ JSON 例が `include/data.php` の `designinserter_shape_part_for_editor_catalog()` が実際に渡す `inputs`（colors/radios/ranges の調整 UI 定義）を欠いていたため、実データの構造に基づいて追記した |
+| 2026-08-04 続き9 | Codex の新規指摘5件に対応。(1) `detectPreviewKind()` が `<?xml` 接頭辞だけで svg 判定していたため、`<Error>AccessDenied</Error>` のような XML エラー応答も svg として通っていた。実際に `<svg` ルート要素があるかを見るよう修正しユニットテストを追加。(2) `PartCard`/`TemplateCard` の絵文字プレースホルダが文字化けしていた（🎨 は base 文字が欠落し variation selector だけ残存、🖼️ は空文字列）ため実際の絵文字に修正し、`script/test.mjs` に実体を検査する回帰テストを追加。(3) `doc/test-spec.md` §5.1 が「openspec 未チェック項目 55 件を全件対応付けた」と主張していたが実数は 63 件で、editor-ui の検索/カテゴリ/source フィルタ・REST 遅延ロード・sandbox 隔離・useSelect と gutenberg-block のテンプレート create-page 項目（計 9 件）が §5.1 に無かったため追加し、集計・冒頭の SSOT 図の項目数も 63 に訂正した。(4) `editor-ui.md` 要件10が全パーツを REST 遅延ロードすると規定していたが、CSS Stock 222 件は全パーツが `part-code-funcs.js` のローカル生成関数を持ち（`testPartCodeFuncs()` で担保）実際には REST を経由しない。generator-first の実装に合わせて記述を修正。(5) DI-EDT-026（disclosure Notice）の自動検証が `script/test.mjs` の文言 grep のみで、コメントや到達しない分岐に文言があっても green になり得たため、`tests/e2e/template-party.spec.mjs` にテンプレートカード選択後に `.di-create-page` 内の Notice が実際に可視状態であることを検証するアサーションを追加した |
+| 2026-08-04 続き10 | Codex 続報1件 + CodeRabbit 新規指摘4件に対応。(1) [Codex] `Taskfile.yml` の `ci:fast` が `build` → `build:dev` に変わった後も、以前の `pnpm run build` が残した `dist/designinserter-<version>.zip` が消えず、`generate-ready-checklist.mjs`（K036）がソース変更後もそれを「存在する」だけで現行候補として green 扱いし得た。`build:dev` の直前に `dist/designinserter-*.zip` を削除するステップを追加。(2) [CodeRabbit] `doc/test-spec.md` の DI-EDT-026 が「自動済」だったが、実体は `script/test.mjs` の文言存在チェックのみで、実際に可視状態であることを検証する E2E はこの環境では未実行だったため `環境制約NG` に訂正（コード契約チェックは自動済のまま明記）。(3) [CodeRabbit] §5.3 逆引き表の `tests/e2e/template-party.spec.mjs` 行に `DI-EDT-025` が抜けていたため追加。(4) [CodeRabbit] `detectPreviewKind()` の XML 判定が `<svg/>` のような自己終了ルート要素にマッチせず、正当な svg プレビューを `unknown` として拒否していたため、正規表現に `/` を追加しユニットテストを追加。(5) [CodeRabbit] `editor.js` の `LivePreview` が codeFunc 失敗時・REST 失敗時に古い `content` を残したまま `setError()` するだけで、ブロックの保存済み `html`/`css` 属性が実際には失敗した新しい partId のものではなく前のパーツのものになり得た。両エラー経路で `setContent(null)` を追加し、あわせて AbortController 非対応環境向けの stale-response ガードも、リクエスト自身の `partId` と `latestPartIdRef.current`（最新選択）を比較する形に強化した（従来は自分自身の partId としか比較しておらず実質無意味だった）。ついでに `verifyZip()` に readme.txt の Stable tag 値検証（存在チェックのみだった）と、dev モードで欠けているカタログが本当に `lockedFiles` に含まれるか（単純な選定バグでないか）の検証を追加した |
+| 2026-08-04 続き11 | Codex の新規指摘5件に対応。(1) `gutenberg-block.md` 要件9が「プレビュー内容は REST から遅延ロード」と書いたままで、`editor-ui.md` を generator-first に直した後も兄弟 spec 間で通信契約が矛盾していた。CSS Stock 222 件はローカル生成関数を最優先で使い、REST は生成関数の無いパーツ（現状 Template Party）だけの経路である旨に統一。(2) `editor-ui.md` の受け入れ基準で、未選択メッセージに ID が無く、検索結果 0 件の行に誤って `DI-EDT-014` が付いていた（正本の `doc/test-spec.md` では未選択＝DI-EDT-014、0件＝DI-EDT-015）。それぞれ正しい ID に修正。(3) `gutenberg-block.md` 属性5の「`params` か `html`/`css` が既に埋まっていれば上書きしない」という記述が、`LivePreview` が毎回 `params` から `html`/`css` を再計算し `onContentChange()` で書き戻す実装と食い違っていた（`params` 自体は再初期化されないが、`html`/`css` は generator の現在の出力に自動追従するキャッシュである）。実装通りの挙動に記述を修正。(4) [P2] `editor.js` の `LivePreview` の REST コールバックが、stale 応答の判定より先に `setLoading(false)` を実行していたため、AbortController 非対応環境で別パーツ選択直後に古い応答が先着すると、新しいフェッチが継続中でも spinner が消えて古い content が完了済みのように見えるリスクがあった。stale 判定を先頭に移し、stale 応答では `setLoading` を含む一切の state 更新を行わないよう修正。(5) [P2] DI-BLD-019 は「Stable tag / Tested up to」両方の自動検証を謳っていたが、実装は Stable tag のみを検証しており `Tested up to` は readme.txt の存在チェックにしか掛かっていなかった（削除や不正な値でも green のまま通り得た）。`script/test.mjs` と `verifyZip()` の両方に `Tested up to` の書式検証（`\d+(\.\d+){1,2}` 形式）を追加し、台帳の記述と実装を一致させた |
+| 2026-08-04 続き12 | Codex の新規指摘6件に対応（うち1件は保留・要ユーザー判断としてコード変更せず）。(1) `doc/test-spec.md` の DI-EDT-013（SVG-only パーツのプレビュー）が「style タグが含まれん」と記載していたが、`LivePreview` の `srcDoc` は margin/padding/font-family のリセット用ベース style を常に出力し、空になるのはパーツ固有 CSS（`content.css`）だけ。台帳の期待値を実装（`gutenberg-block.md` は既に正しかった）に合わせて訂正した（3箇所）。(2) `gutenberg-block.md` の受け入れ基準に、属性5で新設した「保存済み `params` を再初期化しない」「`html`/`css` は generator の現在の出力へ自動再同期される」という契約に対応するチェックボックスが無く、この挙動を一度も検証しないまま全基準を満たした扱いにできた。DI-BLK-016/017 を新設して追加し、§5.1・集計・冒頭 SSOT の受け入れ基準数を 63→65 項目に更新した。(3) `script/scrape-template-party-parts.mjs` が Template Party パーツへ常に `inputs: []`（空配列）を設定し、`include/data.php` の `designinserter_shape_part_for_editor_catalog()` がそれをそのまま editor カタログへ渡していたため、`editor-ui.md` が規定する「調整 UI が無ければ `inputs` キー自体が無い」契約に違反していた（CSS Stock 222 件は全件が実際に colors/radios/ranges のいずれかを持つため、この契約は今まで一度も検証されていなかった）。`data.php` 側で colors/radios/ranges が全て空なら `inputs` キーごと省略するよう正規化し、スクレイパー側も `inputs: []` を書かないよう修正（次回スクレイプから反映。既存の暗号化済みデータは data.php 側の正規化で救済される）。(4) `editor.js` の `LivePreview` が生成関数失敗時に `content` を `null` にするだけで、ブロックの保存済み `html`/`css` 属性はクリアしないため、直前の成功結果が残ったまま公開されると現在の `params` と食い違う懸念について: 属性を明示的に空へ書き換える案は、`computePartContent` が例外を投げる経路は全 222 パーツの回帰テスト（既定値）では踏まないレアケースである一方、書き換えを実装すると一時的なエラーで正当な保存済みカスタマイズを消してしまうリスクの方が大きいと判断し、見送った（理由は PR スレッドに返信）。(5) `script/build-plugin-zip.mjs` の `LOCAL_ONLY_PREFIXES` が `data/template-party-bundles/` と `scrape-state.json` しか除外せず、`.gitattributes` が git-crypt 暗号化対象として明記する `template-party-parts.json` / `templates.json` / `asset/previews/tp-*` は復号済み環境では平文で配布 zip に入るため、`.gitattributes` のコメント「personal use only, ToS non-redistribution」と矛盾するとの指摘: これは #53（git-crypt ビルドガード）の設計そのもの（復号済みなら Template Party を同梱するのが正しい、が P0 の前提）と真っ向から対立する事業判断であり、コードで一方的に決めず、PR コメントで @kouiso に判断を仰いだ |
+| 2026-08-04 続き13 | Codex の新規指摘2件に対応。(1) `detectPreviewKind()` の直接 `<svg` から始まる分岐が要素名の境界を見ておらず、`<svg-error>AccessDenied</svg-error>` のような非 SVG タグも `svg` と誤判定していた（先に修正した `<?xml>` 経由の分岐と同じ穴が残っていた）。同じ境界検査（`/^<svg[\s\/>]/`）を適用し回帰テストを追加した。(2) `doc/test-spec.md` の F-1（`include/templates.php` 未読み込み）が 2026-07-30 に解消済みにもかかわらず、§7 の見出し・本文と Phase 5 の実機手順（660・674行）が「現状は false が返る」「選択肢が出んことが F-1 の証跡」と当時のままの現在形で残っていた。この手順どおりに実機確認すると、正常に修正済みの配布候補を FAIL 扱いにしかねない。F-2/F-3 と同じ「（P0・修正済み 日付）」の記法に統一し、Phase 5 の手順も修正後の期待値（`true` が返る／選択肢が出る）に書き換えた |
+| 2026-08-04 続き14 | Codex の新規指摘3件に対応。(1) `editor-ui.md` §非機能要件5、`gutenberg-block.md` §非機能要件4、`readme.txt` の3箇所が generator-first 修正後も「実体は REST で取得」という古い記述のままだった。CSS Stock 222 件はローカル生成関数を最優先で使い、REST は生成関数の無いパーツ（現状 Template Party）だけの経路である旨に統一（readme.txt は技術詳細を削り「サンドボックス化した iframe に隔離して表示」に簡略化）。(2) `doc/test-spec.md` の DI-EDT-014 の期待文言が「CSS パーツを選択してください」のままだったが、実装（`editor.js:485`）は「左の「探す」エリアでデザインを選んでください」を表示する。台帳の期待値を実装に合わせて修正。ついでに §9.3 premortem 表の 0 件検索行が同じ理由で誤って DI-EDT-014 を参照していた（正しくは DI-EDT-015）ことを自己レビューで発見し、あわせて修正した。(3) `editor-ui.md` の受け入れ基準で、エディタ操作中の console error チェックがフロント用の `DI-FE-010` を参照していた（正しくは `DI-EDT-016`）。§5.1 は既に `DI-EDT-016` を正しく参照しており、editor-ui.md 側だけがずれていたため修正した |
 | 2026-08-04 続き15 | Codex の新規指摘1件に対応。`detectPreviewKind()` の `<?xml>` 経由の svg 判定が、宣言直後の実要素ではなく文字列中のどこかに `<svg` があるかだけを見ていたため、`<?xml version="1.0"?><Error><svg></svg></Error>` のような入れ子構造でも svg と誤判定していた（ルート要素は `<Error>`）。XML 宣言を取り除いた直後の実要素が `<svg[\s/>]` で始まるかを見るよう修正し、回帰テストを追加した |

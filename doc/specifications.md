@@ -30,12 +30,12 @@ graph TB
 
 | レイヤー | 責務 | ファイル |
 |----------|------|----------|
-| データ | カタログ JSON の読み込み・キャッシュ・検索 | `includes/data.php` |
-| レンダリング | パーツ HTML/CSS の組み立て・出力 | `includes/render.php` |
-| ブロック | Gutenberg ブロック登録・エディタスクリプト注入 | `includes/block.php` |
-| 管理 | 設定ページ UI | `includes/admin.php` |
-| エディタ | ブロック選択 UI・プレビュー | `assets/editor.js`, `assets/editor.css` |
-| スクレイパー | 外部サイトからのデータ収集 | `scripts/scrape-css-stock.mjs` |
+| データ | カタログ JSON の読み込み・キャッシュ・検索 | `include/data.php` |
+| レンダリング | パーツ HTML/CSS の組み立て・出力 | `include/render.php` |
+| ブロック | Gutenberg ブロック登録・エディタスクリプト注入 | `include/block.php` |
+| 管理 | 設定ページ UI | `include/admin.php` |
+| エディタ | ブロック選択 UI・プレビュー | `asset/editor.js`, `asset/editor.css` |
+| スクレイパー | 外部サイトからのデータ収集 | `script/scrape-css-stock.mjs` |
 
 ---
 
@@ -82,7 +82,7 @@ graph TB
 | `html` | string | パーツの HTML コード | `"<h2 class=\"heading-1\">..."` |
 | `css` | string | パーツの CSS コード（空文字可） | `".heading-1 { ... }"` |
 | `inputs` | Input[] | カスタマイズ可能パラメータ | `[{"label": "左線の色", "defaultValue": "#2589d0"}]` |
-| `previewImage` | string | 同梱プレビュー画像の相対パス | `"assets/previews/heading-1.svg"` |
+| `previewImage` | string | 同梱プレビュー画像の相対パス | `"asset/previews/heading-1.svg"` |
 | `sourceUrl` | string | 元パーツの URL | `"https://pote-chil.com/css-stock/ja/heading#1"` |
 
 ### Input オブジェクト
@@ -244,7 +244,7 @@ graph LR
 ```php
 wp_register_script(
     'designinserter-editor',
-    DESIGNINSERTER_PLUGIN_URL . 'assets/editor.js',
+    DESIGNINSERTER_PLUGIN_URL . 'asset/editor.js',
     array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-i18n' ),
     DESIGNINSERTER_VERSION,
     true
