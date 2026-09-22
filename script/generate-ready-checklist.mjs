@@ -64,11 +64,11 @@ const commandBook = {
 		artifact: '.tmp/e2e-fresh-wp/evidence/fresh-report.json',
 	},
 	errorLogAudit: {
-		command: 'rg -n "(console\\.(error|warn)|throw new Error|error_log|wp_die|trigger_error)" wp-content/plugins/designinserter scripts docs openspec -S',
+		command: 'rg -n "(console\\.(error|warn)|throw new Error|error_log|wp_die|trigger_error)" wp-content/plugins/designinserter script doc openspec -S',
 		artifact: '.tmp/ready-checklist/error-log-audit.txt',
 	},
 	personaDriftGrep: {
-		command: 'rg -n "(taishi|kumicho|persona|ready checklist|K0(36|41|7[0-7])|TODO|FIXME|lorem|placeholder)" README.md docs openspec wp-content/plugins/designinserter scripts -S',
+		command: 'rg -n "(taishi|kumicho|persona|ready checklist|K0(36|41|7[0-7])|TODO|FIXME|lorem|placeholder)" README.md doc openspec wp-content/plugins/designinserter script -S',
 		artifact: '.tmp/ready-checklist/persona-drift-grep.txt',
 	},
 	contentCrossCheck: {
