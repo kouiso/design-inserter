@@ -48,6 +48,8 @@ docker compose exec wordpress wp theme activate designinserter-dev --allow-root
 docker compose exec wordpress wp plugin activate designinserter --allow-root
 ```
 
+DB は `mysql:9.7` です。MySQL 8.0 時代の `db_data` ボリュームが残っている開発環境では 9.x が直接開けず DB が起動しません（メジャースキップ非対応）。開発用データは捨ててよい前提のため、既存環境から更新する場合は一度 `docker compose down -v` でボリュームごと作り直してください。
+
 WordPress smoke:
 
 - `pnpm run smoke:wp`: Docker が使える場合はコンテナ上の WordPress/WP-CLI smoke、使えない場合は portable WordPress smoke、portable も不可の場合は PHP stubs による Docker-free smoke
