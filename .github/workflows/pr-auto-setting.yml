@@ -1,0 +1,53 @@
+name: PR Auto Setting
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  assign-author:
+    name: Assign Author
+    if: github.event.action == 'opened' || github.event.action == 'reopened'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const login = context.payload.pull_request.user.login;
+
+            // bot 作成の PR はエージェント割当禁止のためスキップ
+            if (login.endsWith('[bot]')) {
+              console.info('Skipping assignee for bot-authored PR by ' + login);
+              return;
+            }
+
+            await github.graphql(`
+              mutation($input: AddAssigneesToAssignableInput!) {
+                addAssigneesToAssignable(input: $input) {
+                  assignable {
+                    ... on PullRequest { number }
+                  }
+                }
+              }
+            `, {
+              input: {
+                assignableId: context.payload.pull_request.node_id,
+                assigneeIds: [context.payload.pull_request.user.node_id]
+              }
+            });
+
+            console.info('Assigned ' + login + ' to PR #' + context.issue.number);
+
+  pr-labeler:
+    name: Add PR Labels
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@b8dd2d9be0f68b860e7dae5dae7d772984eacd6d # v6
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: false

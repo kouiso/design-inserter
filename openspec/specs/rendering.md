@@ -25,7 +25,7 @@ catalog のパーツ ID を受け取り、HTML + CSS + source コメントを生
 1. **セキュリティ**: catalog は信頼済みローカルデータとして扱い、`wp_kses_post` を適用しない
    - 理由: form/input/SVG 要素が破壊されるため
    - catalog 更新時に diff レビューを行うことで安全性を担保する
-2. **CSS 衝突リスク**: CSS Stock のクラス名はグローバルスコープ
+2. **CSS 衝突リスク**: デザインパーツのクラス名はグローバルスコープ
    - 現状は衝突を許容する
    - 将来的に衝突が発生した場合は selector prefixer を追加する
 3. **placeholder 画像**: 一部パーツが `/css-stock/img/...` パスを含む

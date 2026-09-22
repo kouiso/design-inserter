@@ -1,0 +1,49 @@
+=== Design Inserter ===
+Contributors: kouiso
+Tags: design, gutenberg, block, css, template
+Requires at least: 6.0
+Tested up to: 6.9
+Requires PHP: 7.4
+Stable tag: 0.2.0
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Design Inserter は 222 種類のデザインパーツと、Template Party テンプレートを Gutenberg エディタから直接挿入できる WordPress プラグインです。
+
+== Description ==
+
+見出し、ボタン、FAQ、チャート、アコーディオンなど 222 のデザインパーツを、検索・カテゴリ絞り込み・プレビュー付きで Gutenberg に挿入できます。
+Template Party テンプレートを選ぶと、テンプレートのデモサイトへリンクする固定ページを作成できます。
+
+主な機能:
+
+* 検索ボックスとカテゴリ絞り込み付きのビジュアルパーツピッカー
+* デザインパーツ / Template Party のソース切り替え
+* プレビューはサンドボックス化した iframe に隔離して表示
+* ショートコード `[designinserter_part id="heading-1"]` でクラシックエディタやウィジェットからも利用可能
+* Template Party テンプレートのデモサイトへリンクする固定ページを作成
+
+== Installation ==
+
+1. `designinserter.zip` を WordPress 管理画面の「プラグイン > 新規追加 > プラグインのアップロード」からインストールしてください
+2. 「Design Inserter」を有効化してください
+
+== Frequently Asked Questions ==
+
+= Template Party のテンプレートが表示されません =
+
+`data/template-party-*.json` が git-crypt により暗号化されている場合は、鍵を持っている環境でビルドした zip を使用してください。
+
+= Template Party テンプレートで「固定ページを作成」すると何が表示されますか =
+
+作成した固定ページを公開すると、テンプレートのデモサイトへ自動的にリンクします。テンプレート本体の HTML/CSS はこのプラグインには同梱されていません。
+
+= ショートコードとブロックで表示は変わりますか =
+
+パーツを未調整のまま使う場合は変わりません。どちらも同じレンダラーを通るため、カタログ既定の HTML と CSS がそのまま出力されます。
+ただし Gutenberg エディタで色・ラジオ・レンジなどのパラメータを調整した場合、その調整結果はブロックの `html` / `css` 属性に保存されて反映されますが、ショートコード `[designinserter_part id="..."]` は `id` しか受け取らずカタログの既定内容を描画するため、調整前の見た目に戻ります。
+
+== Changelog ==
+
+= 0.2.0 =
+* Initial release.

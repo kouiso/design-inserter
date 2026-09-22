@@ -2,7 +2,10 @@ name: wordpress-plugin-designinserter
 
 services:
   db:
-    image: mysql:8.0
+    # MySQL 8.0 時代に作成した既存の db_data ボリュームは 9.x で直接開けない
+    # (メジャースキップ非対応)。開発用データは捨ててよい前提のため、既存環境からの
+    # 移行時は `docker compose down -v` でボリュームごと再作成する。
+    image: mysql:9.7
     container_name: designinserter-db
     restart: unless-stopped
     ports:

@@ -1,0 +1,15 @@
+.designinserter-tooltip-visible > span,
+.designinserter-tooltip-visible > p {
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+
+.designinserter-part [role="button"]:focus-visible,
+.designinserter-part [role="tab"]:focus-visible {
+	outline: 2px solid #1e75bb;
+	outline-offset: 2px;
+}
+
+body.designinserter-modal-open {
+	overflow: hidden;
+}

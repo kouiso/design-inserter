@@ -1,0 +1,97 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+function designinserter_register_block() {
+	wp_register_script(
+		'designinserter-frontend',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/frontend.js',
+		array(),
+		DESIGNINSERTER_VERSION,
+		true
+	);
+
+	wp_register_style(
+		'designinserter-frontend',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/frontend.css',
+		array(),
+		DESIGNINSERTER_VERSION
+	);
+
+	wp_register_script(
+		'designinserter-part-code-funcs',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/part-code-funcs.js',
+		array(),
+		DESIGNINSERTER_VERSION,
+		true
+	);
+
+	wp_register_script(
+		'designinserter-editor',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/editor.js',
+		array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-block-editor', 'wp-data', 'wp-i18n', 'designinserter-frontend', 'designinserter-part-code-funcs' ),
+		DESIGNINSERTER_VERSION,
+		true
+	);
+
+	wp_register_style(
+		'designinserter-editor',
+		DESIGNINSERTER_PLUGIN_URL . 'asset/editor.css',
+		array( 'designinserter-frontend' ),
+		DESIGNINSERTER_VERSION
+	);
+
+	wp_localize_script(
+		'designinserter-editor',
+		'DesignInserterCatalog',
+		designinserter_get_editor_catalog()
+	);
+
+	register_block_type(
+		'designinserter/css-part',
+		array(
+			'api_version'   => 2,
+			'editor_script' => 'designinserter-editor',
+			'editor_style'  => 'designinserter-editor',
+			'style'         => 'designinserter-frontend',
+			'attributes'    => array(
+				'partId' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'params' => array(
+					'type'    => 'object',
+					'default' => array(),
+				),
+				'html'   => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'css'    => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+			),
+			'render_callback' => 'designinserter_render_block',
+		)
+	);
+}
+add_action( 'init', 'designinserter_register_block' );
+
+function designinserter_enqueue_frontend_base_styles() {
+	wp_enqueue_style( 'designinserter-frontend' );
+}
+add_action( 'wp_enqueue_scripts', 'designinserter_enqueue_frontend_base_styles' );
+
+function designinserter_render_block( $attributes ) {
+	$part_id = isset( $attributes['partId'] ) ? $attributes['partId'] : '';
+	if ( ! $part_id ) {
+		return '';
+	}
+	// 空文字は「未設定」とみなし、保存済みパーツの内容を使う。
+	$html = ! empty( $attributes['html'] ) ? $attributes['html'] : null;
+	$css  = ! empty( $attributes['css'] ) ? $attributes['css'] : null;
+	return designinserter_render_part( $part_id, $html, $css );
+}

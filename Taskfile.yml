@@ -1,0 +1,20 @@
+version: '3'
+
+tasks:
+  ci:fast:
+    cmds:
+      - pnpm install --frozen-lockfile
+      - pnpm run phpcs
+      - pnpm run php:lint
+      # dev ゲートは dist/dev/ にしか書かん。以前の pnpm run build が残した
+      # dist/*.zip をここで消しとかんと、ready:checklist (K036) が
+      # ソース変更後の古いリリース候補を「存在する」だけで green と誤判定する。
+      - rm -f dist/designinserter-*.zip
+      # git-crypt ロック環境でもゲートを通す。リリース zip は復号済み環境の pnpm run build が担当。
+      - pnpm run build:dev
+      - pnpm test
+      - pnpm run test:php
+
+  ci:
+    cmds:
+      - task: ci:fast

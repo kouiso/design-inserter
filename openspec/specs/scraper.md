@@ -4,15 +4,15 @@
 
 ## 概要
 
-CSS Stock（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの HTML/CSS とプレビュー画像を抽出し、プラグイン用の catalog JSON と同梱プレビューアセットを生成する Node.js スクリプト。
+外部サイト（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの HTML/CSS とプレビュー画像を抽出し、プラグイン用の catalog JSON と同梱プレビューアセットを生成する Node.js スクリプト。
 
 ## 機能要件
 
-1. スクリプトパス: `scripts/scrape-css-stock.mjs`
+1. スクリプトパス: `script/scrape-css-stock.mjs`
 2. 実行コマンド: `pnpm run scrape:css-stock`
 3. 出力先:
    - `wp-content/plugins/designinserter/data/css-stock-parts.json`
-   - `wp-content/plugins/designinserter/assets/previews/*`
+   - `wp-content/plugins/designinserter/asset/previews/*`
 4. 処理フロー:
    - guide ページ（`/css-stock/ja`）を取得する
    - カテゴリ一覧（slug, label, URL, sectionCount, expectedPartCount）を抽出する
@@ -20,7 +20,7 @@ CSS Stock（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの
    - Astro レンダリングされた `<snippet-card>` + `<template>` ブロックからパーツを抽出する
    - HTML は `HTMLをコピペする` セクション、CSS は `CSSをコピペする` セクションから取得する
    - `<snippet-card>` の `<img>` を取得し、実体形式に合う拡張子でローカル保存する
-   - catalog の `previewImage` は `assets/previews/{partId}.{ext}` の相対パスにする
+   - catalog の `previewImage` は `asset/previews/{partId}.{ext}` の相対パスにする
 5. カラー入力メタデータ（`<output>` タグ内のカラーコード）を抽出する
 6. 抽出完了後、total と expectedTotal の一致を検証する
 7. 不一致の場合は非ゼロ exit code で終了する
@@ -37,7 +37,7 @@ CSS Stock（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの
 
 ## データ構造
 
-### 入力（CSS Stock のHTML構造）
+### 入力（外部サイトのHTML構造）
 
 ```html
 <!-- guide ページのカテゴリカード -->
@@ -75,7 +75,7 @@ CSS Stock（pote-chil.com/css-stock/ja）から全カテゴリ・全パーツの
 | CSS が存在しないパーツ（SVG-only） | css フィールドを空文字列で格納 | `CSSをコピペする` セクションが見つからない |
 | preview URL の拡張子と実体形式が不一致 | 実体の magic bytes / content-type を優先して保存拡張子を決める | 例: URL は `.webp` だが PNG を返すケース |
 | HTML にエンティティが含まれる | デコードして格納 | `decodeHtml()` 関数で処理 |
-| 同一カテゴリ内で ID が重複 | 後勝ち（実際には発生しない） | CSS Stock 側で一意 |
+| 同一カテゴリ内で ID が重複 | 後勝ち（実際には発生しない） | 外部サイト側で一意 |
 | expectedTotal と scraped total が不一致 | Error を throw し、exit code 1 | ソース側の変更を検知 |
 | 出力ディレクトリが存在しない | `mkdir` で再帰作成 | `{ recursive: true }` |
 

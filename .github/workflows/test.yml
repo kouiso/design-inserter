@@ -1,0 +1,77 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [main, release-candidate-v1.0.0]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  php:
+    name: PHPUnit + PHPCS
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+
+      - name: Cache composer dependencies
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Composer install
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit --configuration phpunit.xml.dist
+
+      - name: PHPCS
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
+
+      - name: PHP lint (plugin source)
+        run: find wp-content/plugins/designinserter tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  js:
+    name: JS syntax + catalog smoke
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Setup PHP 8.2 (for pnpm test PHP smoke)
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: JS syntax check
+        run: |
+          for f in script/*.mjs wp-content/plugins/designinserter/asset/*.js; do
+            node --check "$f"
+          done
+
+      - name: pnpm test (catalog + contract + stub smoke)
+        run: pnpm test
