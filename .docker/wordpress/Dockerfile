@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.5-apache
 
 # システム依存パッケージ
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,7 +23,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         zip \
         intl \
         exif \
-        opcache \
         mbstring
 
 # XDebug
