@@ -533,9 +533,12 @@ test('Gutenberg editor inserts, selects, searches, categorizes, clicks cards, an
 	}
 
 	await page.screenshot({ path: path.join(evidenceDir, 'continuous-use-audit.png'), fullPage: false });
+	// ERR_ABORTED はキャンセル意味論: heading-1 は preview race の意図的遅延、
+	// blob: は WP コア (block-editor.min.js の createObjectURL / blob.min.js) が出すノイズ。
 	const unexpectedFailedRequests = issues.failedRequests.filter((requestInfo) => !(
 		requestInfo.failure === 'net::ERR_ABORTED' &&
-		requestInfo.url.includes('/designinserter/v1/parts/heading-1')
+		(requestInfo.url.includes('/designinserter/v1/parts/heading-1') ||
+			requestInfo.url.startsWith('blob:'))
 	));
 	await writeEvidenceJson('gutenberg-cta-report.json', {
 		url: editorUrl,
