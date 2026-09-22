@@ -570,7 +570,7 @@ docker info                > "$EV/p0-docker.txt" 2>&1 || echo "Docker 停止中:
 command -v git-crypt > "$EV/p0-gitcrypt.txt" 2>&1 \
   && git-crypt status -e >> "$EV/p0-gitcrypt.txt" 2>&1 \
   || echo "git-crypt 未導入。暗号化状態は未確認として扱う" >> "$EV/p0-gitcrypt.txt"
-node --version && ppnpm install --frozen-lockfile   > "$EV/p0-pnpm-install.txt" 2>&1
+node --version && pnpm install --frozen-lockfile   > "$EV/p0-pnpm-install.txt" 2>&1
 composer install --no-interaction --no-progress > "$EV/p0-composer.txt" 2>&1
 ```
 
@@ -752,7 +752,7 @@ sweep だけでは「復号済みやが壊れた JSON」を検出できず、カ
 
 ### F-6 E2E コマンドの起動前提が不足しとった（P1・修正済み）
 
-`@playwright/test` を `devDependencies` に固定バージョンで追加し、`ppnpm install --frozen-lockfile` 後に `playwright` を起動できるようにした。E2E 2 本の `beforeAll` が呼ぶ `pnpm run build:zip` も `package.json` の alias として追加したため、zip ビルド前に `Missing script: "build:zip"` で止まる経路も解消済み。
+`@playwright/test` を `devDependencies` に固定バージョンで追加し、`pnpm install --frozen-lockfile` 後に `playwright` を起動できるようにした。E2E 2 本の `beforeAll` が呼ぶ `pnpm run build:zip` も `package.json` の alias として追加したため、zip ビルド前に `Missing script: "build:zip"` で止まる経路も解消済み。
 
 2026-07-30 には git-crypt 鍵を取得し Template Party データを復号。`pnpm run e2e:fresh`（4 シナリオ）と `pnpm run e2e:template-party`（5 シナリオ）を両方通した。Template Party E2E を通すために以下も修正した。
 

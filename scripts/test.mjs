@@ -323,8 +323,9 @@ function testBehaviorMetadata() {
 
 function testDistributionShape() {
   const packageJson = readJson('package.json');
-  // pnpm-lock.yaml は license 情報を持たない。存在と lockfileVersion でロックファイルの
-  // 管理状態を担保し、package.json との同期そのものは --frozen-lockfile 側が検証する。
+  // pnpm-lock.yaml は license 情報を持たない。importers セクションが package.json の
+  // devDependencies を網羅しているかでロックファイルの有効性を担保し、
+  // package.json との同期そのものは --frozen-lockfile 側が検証する。
   const pnpmLock = fs.readFileSync('pnpm-lock.yaml', 'utf8');
   const catalog = readJson(catalogPath);
   const mainFile = path.join(pluginDir, 'designinserter.php');
@@ -355,6 +356,12 @@ function testDistributionShape() {
   const readme = fs.readFileSync(path.join(pluginDir, 'readme.txt'), 'utf8');
   assert(packageJson.license === 'GPL-2.0-or-later', 'package.json license matches plugin distribution license');
   assert(pnpmLock.includes('lockfileVersion:'), 'pnpm-lock.yaml is a valid pnpm lockfile');
+  assert(pnpmLock.includes('importers:'), 'pnpm-lock.yaml declares package importers');
+  for (const [name, specifier] of Object.entries(packageJson.devDependencies ?? {})) {
+    const importerLine = new RegExp(`^\\s+'?${name.replace(/[/\\^$.*+?()[\]{}|]/g, '\\$&')}'?:\\s*$`, 'm');
+    assert(importerLine.test(pnpmLock), `pnpm-lock.yaml covers devDependency ${name}`);
+    assert(pnpmLock.includes(`specifier: ${specifier}`), `pnpm-lock.yaml specifier matches package.json for ${name}`);
+  }
   assert(main.includes('Plugin Name: Design Inserter'), 'plugin header has Plugin Name');
   assert(main.includes(`Version: ${packageJson.version}`), 'plugin header version matches package.json');
   assert(main.includes(`define( 'DESIGNINSERTER_VERSION', '${packageJson.version}' );`), 'plugin version constant matches package.json');
