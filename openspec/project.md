@@ -18,7 +18,7 @@ CSS Stock（pote-chil.com）が公開する 222 個の CSS パーツを、WordPr
 | サーバー言語 | PHP | 8.x |
 | エディタ | Gutenberg（vanilla JS） | WordPress 同梱 |
 | スクレイパー | Node.js + fetch | 20+ |
-| パッケージ管理 | npm | — |
+| パッケージ管理 | pnpm | — |
 | コンテナ | Docker + OrbStack | — |
 
 ---

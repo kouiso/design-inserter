@@ -42,14 +42,14 @@ CSS Stock は見出し・ボタン・ボックス・ローディングアニメ�
 |------|------|
 | データ形式 | JSON ファイル (`data/css-stock-parts.json`) |
 | 格納場所 | プラグインディレクトリ内（リポジトリ管理） |
-| 更新方法 | `npm run scrape:css-stock` で再生成 |
+| 更新方法 | `pnpm run scrape:css-stock` で再生成 |
 | 件数 | 28 カテゴリ / 222 パーツ |
 
 ### FR-5: スクレイパー (`scripts/scrape-css-stock.mjs`)
 
 | 項目 | 仕様 |
 |------|------|
-| 実行方法 | `npm run scrape:css-stock` |
+| 実行方法 | `pnpm run scrape:css-stock` |
 | 処理 | ガイドページ → カテゴリページ → パーツ抽出 → JSON 書き出し |
 | バリデーション | ソースページ記載のパーツ数と抽出数の一致を検証 |
 | 出力 | `wp-content/plugins/designinserter/data/css-stock-parts.json` |
@@ -121,7 +121,7 @@ CSS Stock は見出し・ボタン・ボックス・ローディングアニメ�
 | CSS プレフィクサー / スコープ分離 | 衝突が報告されるまでは不要 |
 | カラーカスタマイズ UI | カタログに `inputs` フィールドはあるが v1.0 では未活用 |
 | 多言語対応 | CSS Stock は日本語版のみスクレイプ |
-| 自動カタログ更新 | 手動 `npm run scrape:css-stock` + diff review で運用 |
+| 自動カタログ更新 | 手動 `pnpm run scrape:css-stock` + diff review で運用 |
 | REST API | ブロックエディタは `wp_localize_script` でカタログを注入 |
 
 ---

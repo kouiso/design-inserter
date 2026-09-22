@@ -8,5 +8,6 @@
     "wp": "docker compose exec -T wordpress wp --allow-root",
     "php:lint": "docker compose exec -T wordpress php -l wp-content/plugins/designinserter/designinserter.php"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@9.15.9"
 }
