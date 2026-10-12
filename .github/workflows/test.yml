@@ -5,8 +5,9 @@ name: Test
 on:
   workflow_call:
 
+# caller (CI) と衝突しないよう、workflow 名依存ではなく callee 固有の接頭辞を付ける。
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: test-reusable-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
