@@ -58,8 +58,9 @@ jobs:
       - name: PHPCS
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
-      - name: PHP lint (plugin source)
-        run: find wp-content/plugins/designinserter tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      # 旧 ci.yml 固有の themes/designinserter-dev も含める（pnpm run php:lint と同じ探索集合）。
+      - name: PHP lint (plugin + theme source)
+        run: find wp-content/plugins/designinserter wp-content/themes/designinserter-dev tests -name '*.php' -print0 | xargs -0 -n1 php -l
 
   js:
     name: JS syntax + catalog smoke (decrypted catalog)
