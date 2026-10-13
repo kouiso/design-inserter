@@ -14,6 +14,7 @@ jobs:
     name: Assign Author
     if: github.event.action == 'opened' || github.event.action == 'reopened'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
@@ -46,6 +47,7 @@ jobs:
   pr-labeler:
     name: Add PR Labels
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/labeler@b8dd2d9be0f68b860e7dae5dae7d772984eacd6d # v6
         with:

@@ -15,6 +15,7 @@ jobs:
   php:
     name: PHPUnit + PHPCS (decrypted catalog)
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     environment: git-crypt-ci
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -57,12 +58,15 @@ jobs:
       - name: PHPCS
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
-      - name: PHP lint (plugin source)
-        run: find wp-content/plugins/designinserter tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      # push:main では CI が走らなくなったので、CI 側 (pnpm run php:lint) が見ていた
+      # themes/designinserter-dev もここで lint して検査範囲を保つ。
+      - name: PHP lint (plugin + theme source)
+        run: find wp-content/plugins/designinserter wp-content/themes/designinserter-dev tests -name '*.php' -print0 | xargs -0 -n1 php -l
 
   js:
     name: JS syntax + catalog smoke (decrypted catalog)
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     environment: git-crypt-ci
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
