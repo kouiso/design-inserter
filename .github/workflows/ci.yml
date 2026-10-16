@@ -26,20 +26,17 @@ jobs:
       - name: Setup PHP 8.2
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           coverage: none
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
       - name: Setup Node 22
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      # なぜ: PHP 構文検査に JS 依存の install は不要。
+      - name: Shared CI entry contracts
+        run: node --test .github/ci/check.test.mjs
 
       - name: PHP syntax check
-        run: pnpm run php:lint
+        run: node .github/ci/run.mjs php-lint
