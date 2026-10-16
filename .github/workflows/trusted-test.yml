@@ -22,7 +22,7 @@ jobs:
       - name: Setup PHP 8.2
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           tools: composer:v2
           coverage: none
 
@@ -51,14 +51,8 @@ jobs:
           printf '%s' "$GIT_CRYPT_KEY" | base64 --decode > "$key_file"
           git-crypt unlock "$key_file"
 
-      - name: PHPUnit
-        run: vendor/bin/phpunit --configuration phpunit.xml.dist
-
-      - name: PHPCS
-        run: vendor/bin/phpcs --standard=phpcs.xml.dist
-
-      - name: PHP lint (plugin source)
-        run: find wp-content/plugins/designinserter tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: PHPUnit + PHPCS + PHP lint
+        run: node .github/ci/run.mjs php
 
   js:
     name: JS syntax + catalog smoke (decrypted catalog)
@@ -73,13 +67,13 @@ jobs:
       - name: Setup Node 22
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Setup PHP 8.2 (for pnpm test PHP smoke)
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           coverage: none
 
       - name: pnpm install
@@ -101,15 +95,9 @@ jobs:
           printf '%s' "$GIT_CRYPT_KEY" | base64 --decode > "$key_file"
           git-crypt unlock "$key_file"
 
-      - name: JS syntax check
-        run: |
-          for f in script/*.mjs wp-content/plugins/designinserter/asset/*.js; do
-            node --check "$f"
-          done
-
-      - name: pnpm test (catalog + contract + stub smoke)
-        run: pnpm test
+      - name: Shared JS syntax, catalog and contract checks
+        run: node .github/ci/run.mjs trusted-js
 
       # 復号済みの環境でしかリリースビルドは通らん。ここが唯一そのゲートを踏める場所（DI-BLD-022 / DI-SEC-014）。
       - name: Release build (decrypted catalog)
-        run: pnpm run build
+        run: node .github/ci/run.mjs release
