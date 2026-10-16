@@ -158,6 +158,13 @@ test("cloud and Task aliases point to the shared phases without changing trust b
   assert.ok(w.includes("node .github/ci/run.mjs php"));
   assert.ok(w.includes("node .github/ci/run.mjs js"));
   assert.ok(!w.includes("GIT_CRYPT_KEY"));
+  for (const name of ["test.yml", "trusted-test.yml"]) {
+    const phpJob = readFileSync(
+      join(root, ".github/workflows", name),
+      "utf8",
+    ).split("\n  js:")[0];
+    assert.ok(phpJob.includes("Setup Node 22 for shared CI entry"));
+  }
   const task = readFileSync(join(root, "Taskfile.yml"), "utf8");
   assert.ok(task.includes("pnpm install --frozen-lockfile"));
   assert.ok(task.includes("node .github/ci/run.mjs local"));
