@@ -4,6 +4,8 @@ import { existsSync, readdirSync, unlinkSync } from "node:fs";
 function run(command, args = []) {
   const result = spawnSync(command, args, { stdio: "inherit" });
   if (result.error) console.error(result.error.message);
+  // SIGKILL 等で落ちた場合は status が null になり generic な exit 1 しか出ないため、シグナル名を先に出す
+  if (result.signal) console.error(`${command} terminated by ${result.signal}`);
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 function files(directory, suffix, recursive = false) {
