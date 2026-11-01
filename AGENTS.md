@@ -54,3 +54,9 @@ task ci              # ci:fast のエイリアス
 - タスク完了前に `task ci:fast` GREEN 必須（販売プロダクトのため品質厳守）
 - `git reset --hard/--soft/--mixed` 禁止
 - `--no-verify` 禁止・`--force`（`--force-with-lease` 以外）禁止
+
+## 旧 CLAUDE.md から移行した指示
+
+## プロジェクトの存在理由
+
+デザインパーツを使えるWordPressプラグインを販売する。メルマガでLPを流して販売予定。販売プロダクトとしての品質が求められる。
