@@ -105,7 +105,7 @@ diff --stat origin/main..d2a62f82
 
 ### 1.5 タスク累積分類 — DONE / IN-PROGRESS / DROPPED / NEVER-STARTED
 
-(jsonl ingestion 不可のため、本 session の git/gh と CLAUDE.md / 既存 doc から再構成)
+(jsonl ingestion 不可のため、本 session の git/gh と AGENTS.md / 既存 doc から再構成)
 
 | ID | Topic | Classification | Evidence |
 |---|---|---|---|
