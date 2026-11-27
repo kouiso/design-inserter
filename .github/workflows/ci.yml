@@ -38,5 +38,9 @@ jobs:
       - name: Shared CI entry contracts
         run: node --test .github/ci/check.test.mjs
 
+      # なぜ: develop 向け PR は test.yml が走らんので、書き方チェックの契約はここでも流す。
+      - name: Issue/PR format check contracts
+        run: node --test tests/format-check.test.mjs
+
       - name: PHP syntax check
         run: node .github/ci/run.mjs php-lint
