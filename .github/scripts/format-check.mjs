@@ -23,17 +23,20 @@ export const AUTOMATED_ISSUE_LABELS = [
 ];
 
 // 見出し名 → 受け入れる見出しの頭（空白を除いて小文字化した形で前方一致）。
+// 先頭が正式名、2つ目以降は別名。別名はアカウント既定の様式
+// （kouiso/.github の ISSUE_TEMPLATE/*.yml と pull_request_template.md）の見出し。
+// 既定の様式に「今どこまで」「誰の判断待ち」に当たる欄は無い。課題の指定どおり別名を作らず必須のままにする。
 export const ISSUE_SECTIONS = [
-  { name: "背景", prefixes: ["背景"] },
+  { name: "背景", prefixes: ["背景", "なぜ直したいか", "なぜ欲しいか", "何が起きたか"] },
   { name: "今どこまで", prefixes: ["今どこまで"] },
-  { name: "次にやること", prefixes: ["次にやること"] },
+  { name: "次にやること", prefixes: ["次にやること", "やること", "何をしてほしいか"] },
   { name: "誰の判断待ち", prefixes: ["誰の判断待ち"] },
-  { name: "完了条件", prefixes: ["完了条件"] },
+  { name: "完了条件", prefixes: ["完了条件", "どうなったら終わりか", "完成の定義"] },
 ];
 export const PR_SECTIONS = [
   { name: "概要", prefixes: ["概要"] },
   // アカウント既定の PR テンプレートでは「やったこと」が変更内容にあたる。
-  { name: "変更内容", prefixes: ["変更内容", "やったこと"], alias: "やったこと" },
+  { name: "変更内容", prefixes: ["変更内容", "やったこと"] },
   { name: "関連Issue", prefixes: ["関連issue"], issueRef: true },
 ];
 
@@ -51,7 +54,7 @@ function normalizeHeading(text) {
 
 // 本文を見出し（# 〜 ####）で区切る。コードブロック内の # は見出しにしない。
 // 節は「同じかより浅い見出し」まで続く（深い見出しは中身として数える）。
-export function parseSections(body) {
+function splitBody(body) {
   const lines = String(body ?? "").replace(/\r\n?/g, "\n").split("\n");
   const headings = [];
   let fence = null;
@@ -66,7 +69,8 @@ export function parseSections(body) {
     const m = line.match(/^ {0,3}(#{1,4})[ \t]+(.+?)[ \t]*#*[ \t]*$/);
     if (m) headings.push({ index, level: m[1].length, title: m[2] });
   });
-  return headings.map((heading, i) => {
+  const preamble = lines.slice(0, headings.length ? headings[0].index : lines.length).join("\n");
+  const sections = headings.map((heading, i) => {
     let end = lines.length;
     for (let j = i + 1; j < headings.length; j += 1) {
       if (headings[j].level <= heading.level) {
@@ -80,21 +84,44 @@ export function parseSections(body) {
       .replace(/<!--[\s\S]*?-->/g, "");
     return { title: heading.title, key: normalizeHeading(heading.title), content };
   });
+  return { preamble, sections };
 }
+
+export const parseSections = (body) => splitBody(body).sections;
 
 // 見出しだけ・「-」だけ・「- [ ]」だけ・HTML コメントだけ・空白だけは中身なし。
 // 「_No response_」は issue フォームが空欄に自動で入れる文字なので同じ扱い。
 export function hasContent(content) {
+  let inAlert = false;
   return String(content ?? "")
     .split("\n")
     .some((raw) => {
       const line = raw.trim();
+      // 既定の issue フォームが初期値に入れる `> [!TIP]` の囲みは案内文なので中身にしない。
+      if (/^>\s*\[!(?:note|tip|important|warning|caution)\]/i.test(line)) {
+        inAlert = true;
+        return false;
+      }
+      if (inAlert && line.startsWith(">")) return false;
+      inAlert = false;
       if (line === "") return false;
       if (/^#{1,6}(\s.*)?$/.test(line)) return false;
       if (/^(?:[-*+]|\d+[.)])\s*(?:\[[ xX]?\])?\s*$/.test(line)) return false;
+      // 「- 本当はこうなってほしい：」のように、ラベルだけで答えが無い箇条書き。
+      if (/^[-*+]\s+[^:：]+[:：]\s*$/.test(line)) return false;
       if (/^_?no response_?$/i.test(line)) return false;
       return true;
     });
+}
+
+// 見出しが「メモ」だけ（前置きの文も無い）なら、既定の SBI フォーム（メモ（任意）のみ）の形。
+export function isSbiBody(body) {
+  const { preamble, sections } = splitBody(body);
+  return (
+    sections.length > 0 &&
+    !hasContent(preamble) &&
+    sections.every((s) => s.key.startsWith("メモ"))
+  );
 }
 
 function evaluate(body, definitions) {
@@ -143,6 +170,9 @@ export function shouldSkip(kind, item) {
   if (isBot(item?.user)) return "bot が作成";
   if (kind === "pr" && item?.draft === true) return "下書きの PR";
   if (kind === "issue") {
+    // 既定の SBI フォームは本文が空でよい。サブ issue（SBI）は書き方を問わない。
+    if (item?.parent_issue_url) return "サブ issue（SBI）";
+    if (isSbiBody(item?.body)) return "SBI フォームの issue";
     const names = (item?.labels ?? []).map((l) =>
       String(typeof l === "string" ? l : l?.name ?? "").toLowerCase(),
     );
@@ -154,7 +184,8 @@ export function shouldSkip(kind, item) {
 
 function describeSection(name) {
   const def = [...ISSUE_SECTIONS, ...PR_SECTIONS].find((d) => d.name === name);
-  return def?.alias ? `${name}（または「${def.alias}」）` : name;
+  const others = (def?.prefixes ?? []).slice(1);
+  return others.length > 0 ? `${name}（${others.map((o) => `「${o}」`).join("")}でも可）` : name;
 }
 
 // コメントには見出し名と固定の案内だけを書く。本文の文字は一切引用しない。

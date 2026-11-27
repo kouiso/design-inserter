@@ -203,7 +203,7 @@ test("コメントは見出し名だけで、本文の文字を引用しない",
   assert.ok(comment.startsWith(MARKER));
   assert.ok(!comment.includes(secret));
   assert.match(comment, /今どこまで/);
-  assert.match(buildComment("pr", checkPr("## 概要\nあり")), /変更内容（または「やったこと」）/);
+  assert.match(buildComment("pr", checkPr("## 概要\nあり")), /変更内容（「やったこと」でも可）/);
   assert.match(buildComment("pr", checkPr(GOOD_PR)), /OK/);
 });
 
@@ -454,4 +454,119 @@ test("実行: API 失敗・トークン無し・イベント無しは exit 2（�
   } finally {
     await api.close();
   }
+});
+
+// ---------- アカウント既定の様式（kouiso/.github）との整合 ----------
+
+// 既定の pull_request_template.md の、このチェックが見る部分（コメントと初期値は原文のまま）。
+const DEFAULT_PR_TEMPLATE_UNFILLED = `## 関連 Issue
+
+<!-- 最後の PR だけ SBI を Closes。途中の PR と PBI は Refs。別リポジトリの場合: Closes オーナー名/リポジトリ名#番号 -->
+
+- Closes #
+- Refs:
+
+## 概要・背景・妥協点
+
+<!--
+何を・なぜ を1〜2行で。結論から。
+- Issue の記述と違う進め方をした箇所と、その理由
+-->
+
+## やったこと
+
+<!-- 1行に1つ。変更が3つ以上なら「対象 / 変更 / 理由」の表にする。 -->
+
+-
+
+## やっていないこと
+
+- なし
+
+## Before / After
+
+> [!TIP]
+> 画面まわりならスクリーンショット・動画を前後で並べる。
+
+| Before | After |
+| --- | --- |
+| | |
+`;
+
+test("既定の PR テンプレートは、書く前は赤・書くと緑", () => {
+  const r = checkPr(DEFAULT_PR_TEMPLATE_UNFILLED);
+  assert.equal(r.ok, false);
+  assert.deepEqual(r.missing, []);
+  assert.deepEqual(r.empty, ["概要", "変更内容"]);
+  assert.deepEqual(r.invalid.map((i) => i.name), ["関連Issue"]);
+
+  const filled = DEFAULT_PR_TEMPLATE_UNFILLED.replace("- Closes #\n- Refs:", "- Closes #12\n- Refs: #3")
+    .replace("-->\n\n## やったこと", "-->\nチェックを足す。\n\n## やったこと")
+    .replace("-->\n\n-\n", "-->\n\n- スクリプトを足した\n");
+  assert.deepEqual(checkPr(filled), { ok: true, missing: [], empty: [], invalid: [] });
+  // 「Closes #」「Refs:」だけ残して番号を書かないと赤のまま
+  assert.equal(checkPr(filled.replace("- Closes #12\n- Refs: #3", "- Closes #\n- Refs:")).ok, false);
+});
+
+// GitHub の issue フォームは、各欄を「### ラベル」＋入力値の形で本文にする。
+const form = (...fields) => fields.map(([label, value]) => `### ${label}\n\n${value}`).join("\n\n");
+const DONE_DEFAULT =
+  "> [!TIP]\n> ここが合否のラインです。「動くこと」やなく「何がどうなっとれば終わりか」を書いてください。\n\n- [ ]";
+
+test("既定の issue フォームの見出しは別名として通る（背景・次にやること・完了条件）", () => {
+  const bug = form(
+    ["なぜ直したいか（必須）", "注文履歴が開けん。"],
+    [
+      "何が起きたか（必須）",
+      "- 本当はこうなってほしい：開く\n- 実際はこうなった：開かん\n- どうしたら同じことが起きるか：履歴を押す",
+    ],
+    ["どうなったら終わりか（必須）", DONE_DEFAULT.replace("- [ ]", "- [ ] 履歴が開く")],
+  );
+  const r = checkIssue(bug);
+  // 既定の様式に無い欄は課題の指定どおり必須のまま
+  assert.deepEqual(r.missing, ["今どこまで", "次にやること", "誰の判断待ち"]);
+  assert.deepEqual(r.empty, []);
+
+  const todo = form(["何をしてほしいか（必須）", "期限を調べる。"], ["どうなったら終わりか（必須）", "- [ ] 日付が書いてある"]);
+  assert.deepEqual(checkIssue(todo).missing, ["背景", "今どこまで", "誰の判断待ち"]);
+  assert.equal(checkIssue(form(["なぜ欲しいか（必須）", "手作業がつらい"])).missing.includes("背景"), false);
+  assert.equal(checkIssue("## やること\n- a\n").missing.includes("次にやること"), false);
+  assert.equal(checkIssue("## 完成の定義\n- a\n").missing.includes("完了条件"), false);
+  assert.equal(checkIssue("## 背景・目的\na\n").missing.includes("背景"), false);
+});
+
+test("既定フォームを書き換えずに出した欄（案内の囲み・- [ ] だけ・ラベルだけ）は未記入", () => {
+  const body = form(
+    ["なぜ直したいか（必須）", "困っとる。"],
+    ["何が起きたか（必須）", "- 本当はこうなってほしい：\n- 実際はこうなった：\n- どうしたら同じことが起きるか："],
+    ["どうなったら終わりか（必須）", DONE_DEFAULT],
+  );
+  const r = checkIssue(body);
+  assert.deepEqual(r.empty, ["完了条件"]);
+  assert.equal(r.missing.includes("背景"), false);
+  const onlyLabels = form(["何が起きたか（必須）", "- 本当はこうなってほしい：\n- 実際はこうなった："]);
+  assert.deepEqual(checkIssue(onlyLabels).empty, ["背景"]);
+  assert.equal(hasContent("> [!TIP]\n> 案内\n\n- [ ] 書いた"), true);
+  assert.equal(hasContent("> 引用だけ"), true);
+});
+
+test("既定に無い「今どこまで」「誰の判断待ち」は、他の見出しでは通さない", () => {
+  for (const heading of ["何が起きたか", "手がかり", "その他", "どれくらい困っとるか"]) {
+    const r = checkIssue(`## ${heading}\nあり\n`);
+    assert.ok(r.missing.includes("今どこまで"), heading);
+    assert.ok(r.missing.includes("誰の判断待ち"), heading);
+  }
+});
+
+test("対象外: 既定の SBI フォーム（メモ（任意）だけ）とサブ issue", () => {
+  const user = { login: "kouiso", type: "User" };
+  for (const body of ["### メモ（任意）\n\n_No response_", "### メモ（任意）\n\n子の作業メモ", "### メモ（任意）\n\n"]) {
+    assert.ok(shouldSkip("issue", { user, body }), body);
+  }
+  assert.ok(shouldSkip("issue", { user, body: "", parent_issue_url: "https://api.github.com/repos/o/r/issues/1" }));
+  // 前置きの文や他の見出しが混ざる・空の本文は除外しない
+  assert.equal(shouldSkip("issue", { user, body: "" }), null);
+  assert.equal(shouldSkip("issue", { user, body: "前置き\n### メモ（任意）\nx" }), null);
+  assert.equal(shouldSkip("issue", { user, body: "### メモ（任意）\nx\n### 背景\ny" }), null);
+  assert.equal(shouldSkip("pr", { user, body: "### メモ（任意）\n" }), null);
 });
