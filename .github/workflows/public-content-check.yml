@@ -3,8 +3,12 @@ name: Public Content Check
 # なぜ: このリポは公開されている。issue・PR・コメントに秘密や個人情報を書いても気づける仕組みが無かった。
 # 本文は検査して知らせるだけで、自動編集・削除はしない。詳細は doc/public-content-check.md。
 #
-# 注意: issues / issue_comment / pull_request_target 系のワークフローは、既定の枝（main）にある物だけが動く。
-# develop にマージしただけでは動かず、develop から main へのリリース後に効き始める。
+# 動き始める時期:
+# - issues / issue_comment / pull_request_target は、既定の枝（main）にある物だけが動く。
+#   develop にマージしただけでは動かず、develop から main へのリリース後に効く。
+# - pull_request_review / pull_request_review_comment は、ワークフローの定義そのものが「PR 側の版」で動く。
+#   develop に入ると、develop 向けの PR で（main へのリリース前から）動き始める。
+#   フォークからの PR では、トークンは読み取り専用で、secret も渡されない（コメントは書けず、赤だけが残る）。
 on:
   issues:
     types: [opened, edited]
@@ -36,15 +40,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      # ref を指定しない。pull_request_target では base（既定の枝）が取り出され、PR の head は取り出さない。
-      # PR の外から来たコードは取り出さない・実行しない。使うのは base にある検査スクリプトと規則ファイルだけ。
-      - name: Checkout (base only)
+      # 実行するスクリプトと規則は、常に既定の枝（main）の物を使う。ref を明示するのが要点:
+      # pull_request_review / pull_request_review_comment の GITHUB_SHA は PR のマージコミットなので、
+      # ref を省くと PR 側（フォーク含む）のスクリプトが動いてしまう。PR の head・merge は取り出さない。
+      - name: Checkout (default branch only)
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
+          ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
-          sparse-checkout: |
-            .github/scripts
-            .github/public-content-rules.json
+          sparse-checkout: .github
 
       - name: Setup Node 22
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -57,4 +61,10 @@ jobs:
           # 持ち主固有の語（顧客名・禁止語・DB 名など）の規則。公開リポのファイルには書けないので secret で渡す。
           # 未設定なら空文字になり、何も足さない。渡し方（secret を作るか）は持ち主が決める。
           PUBLIC_CONTENT_EXTRA_RULES: ${{ secrets.PUBLIC_CONTENT_EXTRA_RULES }}
-        run: node .github/scripts/public-content-check.mjs
+        run: |
+          # リリース前（既定の枝にスクリプトがまだ無い）に develop 向けのレビューイベントで起動した時は、何もしない。
+          if [ ! -f .github/scripts/public-content-check.mjs ]; then
+            echo "::notice::既定の枝に public-content-check.mjs がまだ無いので検査しません"
+            exit 0
+          fi
+          node .github/scripts/public-content-check.mjs

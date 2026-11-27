@@ -41,7 +41,32 @@
       "category": "secret-value",
       "description": "kebab-case の普通の語（sk-circle など）に当たらないよう、32 文字以上で数字を 1 つ以上含むものだけ。",
       "patterns": [
-        "\\bsk-(?!ant-)(?:proj-|svcacct-|admin-)?(?=[A-Za-z0-9_-]*\\d)[A-Za-z0-9_-]{32,}"
+        "\\bsk-(?!ant-)(?:proj-|svcacct-|admin-)?(?=[A-Za-z0-9_-]{0,80}\\d)[A-Za-z0-9_-]{32,}"
+      ]
+    },
+    {
+      "id": "stripe-key",
+      "label": "Stripe の本番キー",
+      "category": "secret-value",
+      "patterns": [
+        "\\b[sr]k_live_[A-Za-z0-9]{16,}"
+      ]
+    },
+    {
+      "id": "jwt-bearer",
+      "label": "Bearer の JWT",
+      "category": "secret-value",
+      "description": "Authorization: Bearer eyJ… の形（JWT）。",
+      "patterns": [
+        "\\b[Bb]earer[ \\t]+eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}(?:\\.[A-Za-z0-9_-]*)?"
+      ]
+    },
+    {
+      "id": "google-api-key",
+      "label": "Google の API キー",
+      "category": "secret-value",
+      "patterns": [
+        "\\bAIza[0-9A-Za-z_-]{35}(?![0-9A-Za-z_-])"
       ]
     },
     {
@@ -49,28 +74,27 @@
       "label": "秘密鍵の見出し",
       "category": "secret-value",
       "patterns": [
-        "-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY(?: BLOCK)?-----"
+        "-----BEGIN (?:[A-Z0-9]+ ){0,4}PRIVATE KEY(?: BLOCK)?-----"
       ]
     },
     {
       "id": "secret-assignment",
-      "label": "password / secret / token / api_key への長い値の代入",
+      "label": "password / secret / token / api_key などへの値の代入",
       "category": "secret-value",
-      "description": "名前に password・secret・token・api_key を含む項目に、16 文字以上の値を `=` か `:` で入れている形。値が引用符つき、または英字と数字を両方含む 20 文字以上のときだけ当たる（GITHUB_TOKEN という語や process.env.X、${{ secrets.X }} には当たらない）。",
+      "description": "名前に password・secret・token・api_key・AUTH_KEY・SALT・パスワード・暗証番号などを含む項目へ、値を `=` `:` `=>` `,`（define の形）全角コロン等で入れている形。引用符つきは 8 文字以上（8〜15 文字は数字か記号を含むとき）、引用符なしは英字と数字を含む 20 文字以上。GITHUB_TOKEN という語、process.env.X、${{ secrets.X }}、見本の値（your-… / x の連続 / …_here など値の全体が見本の形のもの）、URL・パスには当たらない。引用符なしの値は、英小文字と数字と - _ だけでできた kebab / snake 形の語には当たらない。",
       "flags": "i",
       "patterns": [
-        "(?:password|passwd|secret|token|api[_-]?key)[\\w-]*[\"']?[ \\t]*[:=][ \\t]*(?:\"[^\\s\"'`$<>{}]{16,}\"|'[^\\s\"'`$<>{}]{16,}'|(?=[A-Za-z0-9+/_=-]*\\d)(?=[A-Za-z0-9+/_=-]*[A-Za-z])[A-Za-z0-9+/_=-]{20,}(?![\\w(${]))"
+        "(?:password|passwd|secret|token|api[_-]?key|(?:access|private|auth|secure[_-]?auth|logged[_-]?in|nonce)[_-]?(?:key|salt)|パスワード|暗証番号|パスコード|シークレット|トークン|秘密鍵)[\\w-]{0,40}[\"']?[ \\t]{0,10}\\)?[ \\t]{0,10}(?:=>|[:：=＝は]|,(?=[ \\t]{0,10}[\"']))[ \\t]{0,10}(?:(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>|(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{20,200}(?![\\w(${])))"
       ],
       "exclude": [
-        "x{4,}",
-        "your",
-        "example",
-        "placeholder",
-        "changeme",
-        "dummy",
-        "sample",
-        "\\*{3,}",
-        "\\.{3}"
+        "^x{4,}$",
+        "^\\*{3,}$",
+        "^\\.{3,}$",
+        "^(?:your|example|sample|dummy|placeholder|replace|insert|put)[-_a-z]*$",
+        "^change[-_]?me$",
+        "^[-_a-z]*[-_]here$",
+        "^(?:https?|file)://",
+        "^\\.{0,2}/"
       ]
     },
     {
@@ -80,7 +104,7 @@
       "description": "postgres / mysql / mongodb / redis の URL に user:password@ が付いている形。password や <password> など明らかな見本は除く。",
       "flags": "i",
       "patterns": [
-        "\\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\\+srv)?|rediss?)://[^\\s:@/]*:[^\\s@/]+@[^\\s]+"
+        "\\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\\+srv)?|rediss?)://[^\\s:@/]{0,100}:[^\\s@/]{1,200}@[^\\s]{1,200}"
       ],
       "exclude": [
         "://[^:@/]*:(?:pass(?:word)?|pwd|x+|\\*+|<[^>]*>|\\$\\{?\\w+\\}?|\\{\\{[^}]*\\}\\}|%\\w+%)@"
@@ -90,10 +114,10 @@
       "id": "personal-email",
       "label": "個人のメールアドレス",
       "category": "personal-email",
-      "description": "メールアドレスの形をしたもの全般。noreply 系・見本用ドメイン・ファイル名（image@2x.png）・git の SSH 先は除く。会社の代表アドレスなどを許すときは exclude に足す。 資格情報つきの接続文字列の一部（user:pass@host）は db-connection-string の側で扱う。",
+      "description": "メールアドレスの形をしたもの全般（全角の ＠ や %40 も戻して照合する）。noreply 系・見本用ドメイン・ファイル名（image@2x.png）・git の SSH 先・URL の資格情報（://user:pass@host）は除く。会社の代表アドレスなどを許すときは exclude に足す。",
       "flags": "i",
       "patterns": [
-        "(?<!://[^\\s@/]*)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}"
+        "(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}"
       ],
       "exclude": [
         "@(?:[a-z0-9-]+\\.)*users\\.noreply\\.github\\.com$",
@@ -101,6 +125,9 @@
         "@(?:[a-z0-9-]+\\.)*example\\.(?:com|org|net|jp)$",
         "^git@",
         "\\.(?:png|jpe?g|gif|svg|webp|avif|ico|css|js|mjs|json|php|md|txt|html|zip)$"
+      ],
+      "excludeBefore": [
+        "://[^\\s@/]*$"
       ]
     }
   ]
