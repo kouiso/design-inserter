@@ -88,6 +88,9 @@ function testGitVisibility() {
     'tests/portable-smoke-integration.php',
     'tests/generate-ready-checklist.test.mjs',
     'tests/build-plugin-zip.test.mjs',
+    'tests/public-content-check.test.mjs',
+    '.github/scripts/public-content-check.mjs',
+    '.github/public-content-rules.json',
     'script/test.mjs',
     'script/wp-smoke.mjs',
     'script/build-plugin-zip.mjs',
@@ -500,6 +503,16 @@ function testBuildCatalogGuard() {
   }
 }
 
+// 公開リポの issue・PR・コメントを検査するワークフロー (#114)。偽の GitHub API サーバーで実走する。
+function testPublicContentCheck() {
+  const result = run('node', ['--test', 'tests/public-content-check.test.mjs']);
+  if (result.status === 0) {
+    pass('Public content check detects secrets / emails, stays quiet on normal text, and never echoes matches');
+  } else {
+    fail(`Public content check failed\n${result.stderr || result.stdout}`);
+  }
+}
+
 // 実データを見る側。ロック環境では skip せず「locked」と印字して通し、
 // 復号済み環境ではカタログ退行の検出器になる。
 function testTemplatePartyCatalogState() {
@@ -525,6 +538,7 @@ testRenderSmoke();
 testPartCodeFuncs();
 testReadyChecklistArtifactSelection();
 testBuildCatalogGuard();
+testPublicContentCheck();
 testTemplatePartyCatalogState();
 
 if (failures > 0) {

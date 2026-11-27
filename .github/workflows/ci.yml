@@ -40,3 +40,7 @@ jobs:
 
       - name: PHP syntax check
         run: node .github/ci/run.mjs php-lint
+
+      # なぜ: 公開内容チェック (#114) のテストは依存なしの Node だけで動く。develop 向け PR でも必ず流す。
+      - name: Public content check tests
+        run: node --test tests/public-content-check.test.mjs

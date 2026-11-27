@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "description": "公開内容チェックの規則（形の決まった汎用規則だけ）。issue・PR・コメントの本文を 1 行ずつ検査する (.github/scripts/public-content-check.mjs)。顧客名・禁止語・DB の名前・秘密の名前など持ち主固有の語は、公開リポのこのファイルには書かない。Actions の secret PUBLIC_CONTENT_EXTRA_RULES から渡す（doc/public-content-check.md）。",
+  "rules": [
+    {
+      "id": "aws-access-key",
+      "label": "AWS アクセスキー",
+      "category": "secret-value",
+      "patterns": [
+        "\\b(?:AKIA|ASIA)[0-9A-Z]{16}\\b"
+      ]
+    },
+    {
+      "id": "github-token",
+      "label": "GitHub トークン",
+      "category": "secret-value",
+      "patterns": [
+        "\\bgh[pousr]_[A-Za-z0-9]{36,}\\b",
+        "\\bgithub_pat_[A-Za-z0-9_]{22,}"
+      ]
+    },
+    {
+      "id": "slack-token",
+      "label": "Slack トークン",
+      "category": "secret-value",
+      "patterns": [
+        "\\bxox[abprs]-[A-Za-z0-9-]{10,}"
+      ]
+    },
+    {
+      "id": "anthropic-key",
+      "label": "Anthropic 型の API キー",
+      "category": "secret-value",
+      "patterns": [
+        "\\bsk-ant-[A-Za-z0-9_-]{24,}"
+      ]
+    },
+    {
+      "id": "openai-key",
+      "label": "OpenAI 型の API キー",
+      "category": "secret-value",
+      "description": "kebab-case の普通の語（sk-circle など）に当たらないよう、32 文字以上で数字を 1 つ以上含むものだけ。",
+      "patterns": [
+        "\\bsk-(?!ant-)(?:proj-|svcacct-|admin-)?(?=[A-Za-z0-9_-]*\\d)[A-Za-z0-9_-]{32,}"
+      ]
+    },
+    {
+      "id": "private-key-header",
+      "label": "秘密鍵の見出し",
+      "category": "secret-value",
+      "patterns": [
+        "-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY(?: BLOCK)?-----"
+      ]
+    },
+    {
+      "id": "secret-assignment",
+      "label": "password / secret / token / api_key への長い値の代入",
+      "category": "secret-value",
+      "description": "名前に password・secret・token・api_key を含む項目に、16 文字以上の値を `=` か `:` で入れている形。値が引用符つき、または英字と数字を両方含む 20 文字以上のときだけ当たる（GITHUB_TOKEN という語や process.env.X、${{ secrets.X }} には当たらない）。",
+      "flags": "i",
+      "patterns": [
+        "(?:password|passwd|secret|token|api[_-]?key)[\\w-]*[\"']?[ \\t]*[:=][ \\t]*(?:\"[^\\s\"'`$<>{}]{16,}\"|'[^\\s\"'`$<>{}]{16,}'|(?=[A-Za-z0-9+/_=-]*\\d)(?=[A-Za-z0-9+/_=-]*[A-Za-z])[A-Za-z0-9+/_=-]{20,}(?![\\w(${]))"
+      ],
+      "exclude": [
+        "x{4,}",
+        "your",
+        "example",
+        "placeholder",
+        "changeme",
+        "dummy",
+        "sample",
+        "\\*{3,}",
+        "\\.{3}"
+      ]
+    },
+    {
+      "id": "db-connection-string",
+      "label": "資格情報つきのデータベース接続文字列",
+      "category": "database",
+      "description": "postgres / mysql / mongodb / redis の URL に user:password@ が付いている形。password や <password> など明らかな見本は除く。",
+      "flags": "i",
+      "patterns": [
+        "\\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\\+srv)?|rediss?)://[^\\s:@/]*:[^\\s@/]+@[^\\s]+"
+      ],
+      "exclude": [
+        "://[^:@/]*:(?:pass(?:word)?|pwd|x+|\\*+|<[^>]*>|\\$\\{?\\w+\\}?|\\{\\{[^}]*\\}\\}|%\\w+%)@"
+      ]
+    },
+    {
+      "id": "personal-email",
+      "label": "個人のメールアドレス",
+      "category": "personal-email",
+      "description": "メールアドレスの形をしたもの全般。noreply 系・見本用ドメイン・ファイル名（image@2x.png）・git の SSH 先は除く。会社の代表アドレスなどを許すときは exclude に足す。 資格情報つきの接続文字列の一部（user:pass@host）は db-connection-string の側で扱う。",
+      "flags": "i",
+      "patterns": [
+        "(?<!://[^\\s@/]*)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}"
+      ],
+      "exclude": [
+        "@(?:[a-z0-9-]+\\.)*users\\.noreply\\.github\\.com$",
+        "^no-?reply@",
+        "@(?:[a-z0-9-]+\\.)*example\\.(?:com|org|net|jp)$",
+        "^git@",
+        "\\.(?:png|jpe?g|gif|svg|webp|avif|ico|css|js|mjs|json|php|md|txt|html|zip)$"
+      ]
+    }
+  ]
+}
