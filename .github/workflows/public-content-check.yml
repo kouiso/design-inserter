@@ -1,0 +1,79 @@
+name: Public Content Check
+
+# なぜ: このリポは公開されている。issue・PR・コメントに秘密や個人情報を書いても気づける仕組みが無かった。
+# 本文は検査して知らせるだけで、自動編集・削除はしない。詳細は doc/public-content-check.md。
+#
+# 動き始める時期:
+# - issues / issue_comment / pull_request_target は、既定の枝（main）にある物だけが動く。
+#   develop にマージしただけでは動かず、develop から main へのリリース後に効く。
+# - pull_request_review / pull_request_review_comment は、ワークフローの定義そのものが「PR 側の版」で動く。
+#   develop に入ると、develop 向けの PR で（main へのリリース前から）動き始める。
+#   フォークからの PR では、トークンは読み取り専用で、secret も渡されない（コメントは書けず、赤だけが残る）。
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created, edited]
+  pull_request_target:
+    types: [opened, edited, reopened]
+  pull_request_review_comment:
+    types: [created, edited]
+  pull_request_review:
+    types: [submitted, edited]
+
+# 外から来たコードを取り出して実行しないための最小権限。書き込みはコメントの作成・更新だけ。
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+# なぜ: 対象ごとに直列化して、同じ目印コメントを 2 つ作らない。別の対象は互いに待たせない。
+concurrency:
+  group: public-content-check-${{ github.event_name }}-${{ github.event.comment.id || github.event.review.id || github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check public content
+    # 自分（github-actions[bot]）のコメントを検査すると、コメント更新が次の起動を呼んで止まらなくなる。
+    if: github.event.comment.user.login != 'github-actions[bot]' && github.event.review.user.login != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # 実行するスクリプトと規則は、常に既定の枝（main）の物を使う。ref を明示するのが要点:
+      # pull_request_review / pull_request_review_comment の GITHUB_SHA は PR のマージコミットなので、
+      # ref を省くと PR 側（フォーク含む）のスクリプトが動いてしまう。PR の head・merge は取り出さない。
+      - name: Checkout (default branch only)
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          sparse-checkout: .github
+
+      - name: Setup Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Scan issue / PR / comment text
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 持ち主固有の語（顧客名・禁止語・DB 名など）の規則。公開リポのファイルには書けないので secret で渡す。
+          # 未設定なら空文字になり、何も足さない。渡し方（secret を作るか）は持ち主が決める。
+          PUBLIC_CONTENT_EXTRA_RULES: ${{ secrets.PUBLIC_CONTENT_EXTRA_RULES }}
+        run: |
+          # 既定の枝にスクリプトがまだ無いのは、リリース前に develop 向けのレビュー系イベントで起動した時だけ（定義が PR 側の版で動くため）。
+          # その 2 つのイベントだけは何もせず成功にし、それ以外でスクリプトが無いのは異常なので赤にする。
+          if [ ! -f .github/scripts/public-content-check.mjs ]; then
+            case "$GITHUB_EVENT_NAME" in
+              pull_request_review | pull_request_review_comment)
+                echo "::notice::既定の枝に public-content-check.mjs がまだ無いので検査しません"
+                exit 0
+                ;;
+              *)
+                echo "::error::既定の枝に public-content-check.mjs が無いので検査できません"
+                exit 1
+                ;;
+            esac
+          fi
+          node .github/scripts/public-content-check.mjs

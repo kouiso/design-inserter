@@ -88,6 +88,9 @@ function testGitVisibility() {
     'tests/portable-smoke-integration.php',
     'tests/generate-ready-checklist.test.mjs',
     'tests/build-plugin-zip.test.mjs',
+    'tests/public-content-check.test.mjs',
+    '.github/scripts/public-content-check.mjs',
+    '.github/public-content-rules.json',
     'tests/format-check.test.mjs',
     '.github/scripts/format-check.mjs',
     '.github/workflows/issue-pr-format-check.yml',
@@ -503,6 +506,16 @@ function testBuildCatalogGuard() {
   }
 }
 
+// 公開リポの issue・PR・コメントを検査するワークフロー (#114)。偽の GitHub API サーバーで実走する。
+function testPublicContentCheck() {
+  const result = run('node', ['--test', 'tests/public-content-check.test.mjs']);
+  if (result.status === 0) {
+    pass('Public content check detects secrets / emails, stays quiet on normal text, and never echoes matches');
+  } else {
+    fail(`Public content check failed\n${result.stderr || result.stdout}`);
+  }
+}
+
 // issue / PR の書き方チェック（.github/scripts/format-check.mjs）。偽の GitHub API を立てて実走させる。
 function testFormatCheck() {
   const result = run('node', ['--test', 'tests/format-check.test.mjs']);
@@ -538,6 +551,7 @@ testRenderSmoke();
 testPartCodeFuncs();
 testReadyChecklistArtifactSelection();
 testBuildCatalogGuard();
+testPublicContentCheck();
 testFormatCheck();
 testTemplatePartyCatalogState();
 
