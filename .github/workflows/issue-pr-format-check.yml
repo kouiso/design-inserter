@@ -1,0 +1,78 @@
+name: Issue PR Format Check
+
+# issue と PR の書き方（見出しと中身）を文字の規則だけで検査する。AI・外部サービスは使わない。
+# なぜ pull_request_target: fork 由来の PR でもコメントを書ける書き込み権限が要るため。
+# その代わり PR の head（外から来たコード）は絶対に checkout しない。
+# 動かすスクリプトは base 側（issue は既定ブランチ）の .github/scripts だけ。
+#
+# labeled / unlabeled（issue）と converted_to_draft（PR）は、後から対象外になった物に
+# 残っている赤いコメントを「対象外」に更新するために受ける。
+on:
+  issues:
+    types: [opened, edited, reopened, labeled, unlabeled]
+  pull_request_target:
+    types: [opened, edited, reopened, ready_for_review, converted_to_draft]
+
+# イベントごとの権限は各ジョブに付ける。ここは既定（何も書かない）にしておく。
+permissions:
+  contents: read
+
+# 同時実行の制御はジョブごとに持つ（下記）。
+jobs:
+  issue-check:
+    name: Format check (issue)
+    if: github.event_name == 'issues'
+    # cancel-in-progress にしない: ラベル付きで作った issue は opened と labeled がほぼ同時に来る。
+    # 取り消すと opened（見出しの書き換え前の本文を判定する回）が消えて判定がぶれるので、順に流す。
+    concurrency:
+      group: format-check-issue-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      # ref を指定しない = 既定ブランチ。スクリプトのディレクトリだけ取る。
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      # 本文は GITHUB_EVENT_PATH の JSON から読む。シェルや式に本文を埋め込まない。
+      - name: Check format
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/format-check.mjs
+
+  pr-check:
+    name: Format check (PR)
+    if: github.event_name == 'pull_request_target'
+    # PR は本文だけを見る。同じ PR の実行は新しい方だけ残す。
+    concurrency:
+      group: format-check-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      # ref を指定しない = PR の base 側の既定の取り出し（head は取らない）。
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Check format
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/format-check.mjs
