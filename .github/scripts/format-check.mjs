@@ -22,7 +22,7 @@ export const AUTOMATED_ISSUE_LABELS = [
   "monitoring",
 ];
 
-// 見出し名 → 受け入れる見出しの頭（空白を除いて小文字化した形で前方一致）。
+// 見出し名 → 受け入れる見出しの頭（番号・記号・空白を落として小文字化した形で前方一致）。
 // 先頭が正式名、2つ目以降は別名。別名はアカウント既定の様式
 // （kouiso/.github の ISSUE_TEMPLATE/*.yml と pull_request_template.md）の見出し。
 // 既定の様式に「今どこまで」「誰の判断待ち」に当たる欄は無い。課題の指定どおり別名を作らず必須のままにする。
@@ -42,61 +42,122 @@ export const PR_SECTIONS = [
 
 // Closes / Refs の他に、GitHub が閉じる語として扱う Fixes / Resolves 系も許す。
 const ISSUE_REF_PATTERN =
-  /(?:^|[^A-Za-z0-9_])(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|refs?)\s*:?\s+(?:[\w.-]+\/[\w.-]+)?#\d+/i;
+  /(?:^|[^A-Za-z0-9_])(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|refs?)(?:\s*:\s*|\s+)(?:[\w.-]+\/[\w.-]+)?#\d+/i;
 
-function normalizeHeading(text) {
-  return text
+const ZERO_WIDTH = /[​-‍⁠﻿]/g;
+
+// 見出しの比較用の形。全角→半角、装飾と空白を落とし、頭の番号・記号・【】・絵文字も落とす。
+export function normalizeHeading(text) {
+  return String(text ?? "")
+    .replace(ZERO_WIDTH, "")
     .normalize("NFKC")
     .replace(/[*_`~]/g, "")
     .replace(/\s+/g, "")
+    .replace(/^[\p{N}\p{P}\p{S}\p{Extended_Pictographic}‍️]+/u, "")
     .toLowerCase();
 }
 
-// 本文を見出し（# 〜 ####）で区切る。コードブロック内の # は見出しにしない。
-// 節は「同じかより浅い見出し」まで続く（深い見出しは中身として数える）。
-function splitBody(body) {
-  const lines = String(body ?? "").replace(/\r\n?/g, "\n").split("\n");
-  const headings = [];
+// fix-issue-headings.yml が opened のときに本文へかける書き換えと同じ。
+// 判定は書き換え後の本文で行い、workflow の実行順に左右されないようにする。
+export function rewriteIssueHeadings(body) {
+  return String(body ?? "")
+    .replace(/^### /gm, "## ")
+    .replace(/^#### /gm, "### ");
+}
+
+// 本文を行に分け、フェンスの外の HTML コメントを取り除く（閉じていないコメントは本文の終わりまで）。
+// フェンスは開いた長さを覚え、閉じは「字下げ3以下・同じ文字・同じ長さ以上・情報文字列なし」だけ。
+function scan(body) {
+  const raw = String(body ?? "").replace(ZERO_WIDTH, "").replace(/\r\n?/g, "\n").split("\n");
+  const lines = [];
+  const fenced = [];
   let fence = null;
-  lines.forEach((line, index) => {
-    const fenceMatch = line.match(/^\s*(`{3,}|~{3,})/);
-    if (fenceMatch) {
-      if (fence === null) fence = fenceMatch[1][0];
-      else if (fenceMatch[1][0] === fence) fence = null;
-      return;
+  let inComment = false;
+  for (let line of raw) {
+    if (inComment) {
+      const end = line.indexOf("-->");
+      if (end < 0) {
+        lines.push("");
+        fenced.push(false);
+        continue;
+      }
+      inComment = false;
+      line = line.slice(end + 3);
+    } else if (fence) {
+      const close = line.match(/^ {0,3}(`{3,}|~{3,})[ \t]*$/);
+      if (close && close[1][0] === fence.char && close[1].length >= fence.len) fence = null;
+      lines.push(line);
+      fenced.push(true);
+      continue;
+    } else {
+      const open = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
+      if (open && !(open[1][0] === "`" && open[2].includes("`"))) {
+        fence = { char: open[1][0], len: open[1].length };
+        lines.push(line);
+        fenced.push(true);
+        continue;
+      }
     }
-    if (fence !== null) return;
+    for (;;) {
+      const start = line.indexOf("<!--");
+      if (start < 0) break;
+      const end = line.indexOf("-->", start + 4);
+      if (end < 0) {
+        line = line.slice(0, start);
+        inComment = true;
+        break;
+      }
+      line = line.slice(0, start) + line.slice(end + 3);
+    }
+    lines.push(line);
+    fenced.push(false);
+  }
+  return { lines, fenced };
+}
+
+// 本文を見出し（# 〜 ####）で区切る。コードブロックとコメントの中の # は見出しにしない。
+// 節は「同じかより浅い見出し」か「別の必須見出し（別名を含む）」まで続く。
+function splitBody(body, definitions = []) {
+  const { lines, fenced } = scan(body);
+  const requiredPrefixes = definitions.flatMap((d) => d.prefixes.map(normalizeHeading));
+  const isRequiredKey = (key) => requiredPrefixes.some((p) => key.startsWith(p));
+  const headings = [];
+  lines.forEach((line, index) => {
+    if (fenced[index]) return;
     const m = line.match(/^ {0,3}(#{1,4})[ \t]+(.+?)[ \t]*#*[ \t]*$/);
-    if (m) headings.push({ index, level: m[1].length, title: m[2] });
+    if (m) headings.push({ index, level: m[1].length, title: m[2], key: normalizeHeading(m[2]) });
   });
   const preamble = lines.slice(0, headings.length ? headings[0].index : lines.length).join("\n");
   const sections = headings.map((heading, i) => {
     let end = lines.length;
     for (let j = i + 1; j < headings.length; j += 1) {
-      if (headings[j].level <= heading.level) {
+      if (headings[j].level <= heading.level || isRequiredKey(headings[j].key)) {
         end = headings[j].index;
         break;
       }
     }
-    const content = lines
-      .slice(heading.index + 1, end)
-      .join("\n")
-      .replace(/<!--[\s\S]*?-->/g, "");
-    return { title: heading.title, key: normalizeHeading(heading.title), content };
+    return {
+      title: heading.title,
+      key: heading.key,
+      content: lines.slice(heading.index + 1, end).join("\n"),
+    };
   });
   return { preamble, sections };
 }
 
-export const parseSections = (body) => splitBody(body).sections;
+export const parseSections = (body, definitions = []) => splitBody(body, definitions).sections;
 
-// 見出しだけ・「-」だけ・「- [ ]」だけ・HTML コメントだけ・空白だけは中身なし。
+// 見出しだけ・「-」だけ・「- [ ]」だけ・HTML コメントだけ・空白だけなどは中身なし。
 // 「_No response_」は issue フォームが空欄に自動で入れる文字なので同じ扱い。
 export function hasContent(content) {
   let inAlert = false;
   return String(content ?? "")
+    .replace(ZERO_WIDTH, "")
     .split("\n")
     .some((raw) => {
-      const line = raw.trim();
+      const line = raw
+        .replace(/<br\s*\/?>|&nbsp;|&#0*160;|&#x0*a0;/gi, " ")
+        .trim();
       // 既定の issue フォームが初期値に入れる `> [!TIP]` の囲みは案内文なので中身にしない。
       if (/^>\s*\[!(?:note|tip|important|warning|caution)\]/i.test(line)) {
         inAlert = true;
@@ -106,33 +167,42 @@ export function hasContent(content) {
       inAlert = false;
       if (line === "") return false;
       if (/^#{1,6}(\s.*)?$/.test(line)) return false;
-      if (/^(?:[-*+]|\d+[.)])\s*(?:\[[ xX]?\])?\s*$/.test(line)) return false;
+      // コードブロックの開始・終了の行そのものは中身にしない（中の行は数える）。
+      if (/^(?:`{3,}|~{3,})[\w-]*$/.test(line)) return false;
+      // 区切り線（---・***・___）。
+      if (/^([-*_])(?:\s*\1){2,}$/.test(line)) return false;
+      // 引用の記号だけ。
+      if (/^(?:>\s*)+$/.test(line)) return false;
+      // 箇条書き・番号・チェックボックスの記号だけ。
+      if (/^(?:[-*+・•●○]|\d+[.)])\s*(?:\[[ xX]?\])?\s*$/.test(line)) return false;
       // 「- 本当はこうなってほしい：」のように、ラベルだけで答えが無い箇条書き。
       if (/^[-*+]\s+[^:：]+[:：]\s*$/.test(line)) return false;
+      // 中身が空の表の行（| | |、| --- | --- |）。
+      if (/^\|[\s|:-]*$/.test(line)) return false;
       if (/^_?no response_?$/i.test(line)) return false;
       return true;
     });
 }
 
-// 見出しが「メモ」だけ（前置きの文も無い）なら、既定の SBI フォーム（メモ（任意）のみ）の形。
+// 既定の SBI フォームの形か。見出しが「メモ（任意）」に完全一致する 1 つだけで、前置きも中身も無い。
 export function isSbiBody(body) {
-  const { preamble, sections } = splitBody(body);
+  const { preamble, sections } = splitBody(rewriteIssueHeadings(body));
   return (
-    sections.length > 0 &&
+    sections.length === 1 &&
+    sections[0].key === normalizeHeading("メモ（任意）") &&
     !hasContent(preamble) &&
-    sections.every((s) => s.key.startsWith("メモ"))
+    !hasContent(sections[0].content)
   );
 }
 
 function evaluate(body, definitions) {
-  const sections = parseSections(body);
+  const sections = parseSections(body, definitions);
   const missing = [];
   const empty = [];
   const invalid = [];
   for (const def of definitions) {
-    const found = sections.filter((s) =>
-      def.prefixes.some((prefix) => s.key.startsWith(normalizeHeading(prefix))),
-    );
+    const prefixes = def.prefixes.map(normalizeHeading);
+    const found = sections.filter((s) => prefixes.some((p) => s.key.startsWith(p)));
     if (found.length === 0) {
       missing.push(def.name);
       continue;
@@ -157,7 +227,7 @@ function evaluate(body, definitions) {
   };
 }
 
-export const checkIssue = (body) => evaluate(body, ISSUE_SECTIONS);
+export const checkIssue = (body) => evaluate(rewriteIssueHeadings(body), ISSUE_SECTIONS);
 export const checkPr = (body) => evaluate(body, PR_SECTIONS);
 
 export function isBot(user) {
@@ -170,11 +240,12 @@ export function shouldSkip(kind, item) {
   if (isBot(item?.user)) return "bot が作成";
   if (kind === "pr" && item?.draft === true) return "下書きの PR";
   if (kind === "issue") {
-    // 既定の SBI フォームは本文が空でよい。サブ issue（SBI）は書き方を問わない。
-    if (item?.parent_issue_url) return "サブ issue（SBI）";
+    // 既定の SBI フォーム（メモ（任意）が空）と、本文が空のサブ issue は書き方を問わない。
+    // サブ issue でも本文に何か書いてあれば検査する。
     if (isSbiBody(item?.body)) return "SBI フォームの issue";
+    if (item?.parent_issue_url && !hasContent(item?.body)) return "本文が空のサブ issue";
     const names = (item?.labels ?? []).map((l) =>
-      String(typeof l === "string" ? l : l?.name ?? "").toLowerCase(),
+      String(typeof l === "string" ? l : (l?.name ?? "")).toLowerCase(),
     );
     const hit = names.find((n) => AUTOMATED_ISSUE_LABELS.includes(n));
     if (hit) return `自動作成の issue（ラベル ${hit}）`;
@@ -186,6 +257,11 @@ function describeSection(name) {
   const def = [...ISSUE_SECTIONS, ...PR_SECTIONS].find((d) => d.name === name);
   const others = (def?.prefixes ?? []).slice(1);
   return others.length > 0 ? `${name}（${others.map((o) => `「${o}」`).join("")}でも可）` : name;
+}
+
+// 後から対象外になった（下書きに戻した・アラート系ラベルが付いた）ときに、残っている目印コメントを置き換える文。
+export function buildSkipComment() {
+  return `${MARKER}\n## 書き方チェック: 対象外\n対象外になったので検査しません。\n`;
 }
 
 // コメントには見出し名と固定の案内だけを書く。本文の文字は一切引用しない。
@@ -270,32 +346,38 @@ export async function main(env = process.env, log = console) {
       log.log("skip: PR 由来のイベント");
       return 0;
     }
-    const skipReason = shouldSkip(kind, item);
-    if (skipReason) {
-      log.log(`skip: ${skipReason}`);
-      return 0;
-    }
     const repo = env.GITHUB_REPOSITORY || payload.repository?.full_name;
     if (!repo) throw new Error("GITHUB_REPOSITORY がありません");
 
-    const result = isPr ? checkPr(item.body) : checkIssue(item.body);
     const existing = await findMarkerComment(env, repo, item.number);
+    const update = (body) =>
+      existing.body === body
+        ? null
+        : request(env, "PATCH", `/repos/${repo}/issues/comments/${existing.id}`, { body });
+
+    // 後から対象外になった場合、前に書いた赤いコメントが残らないよう更新する。無ければ何も書かない。
+    const skipReason = shouldSkip(kind, item);
+    if (skipReason) {
+      if (existing) await update(buildSkipComment());
+      log.log(`skip: ${skipReason}`);
+      return 0;
+    }
+
+    const result = isPr ? checkPr(item.body) : checkIssue(item.body);
     const body = buildComment(kind, result);
 
     if (!result.ok) {
       if (!existing) {
         await request(env, "POST", `/repos/${repo}/issues/${item.number}/comments`, { body });
-      } else if (existing.body !== body) {
-        await request(env, "PATCH", `/repos/${repo}/issues/comments/${existing.id}`, { body });
+      } else {
+        await update(body);
       }
       log.log(
         `NG: missing=${result.missing.join(",")} empty=${result.empty.join(",")} invalid=${result.invalid.map((i) => i.name).join(",")}`,
       );
       return 1;
     }
-    if (existing && existing.body !== body) {
-      await request(env, "PATCH", `/repos/${repo}/issues/comments/${existing.id}`, { body });
-    }
+    if (existing) await update(body);
     log.log("OK");
     return 0;
   } catch (error) {
