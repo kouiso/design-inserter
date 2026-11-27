@@ -980,6 +980,8 @@ test("再々レビュー1: 文の途中の閉じない <!-- は、同じ段落�
   assert.deepEqual(checkIssue(`${base}\n\`\`\`\na --> b\n\`\`\``), green);
   // 空行で段落が切れたあとの --> も数えない
   assert.deepEqual(checkIssue(`## 背景\n記号 <!-- と\n\n赤 --> 緑\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`), green);
+  // 空行の後ろの --> と組にすると「本文」が消えて背景が未記入になる。空行で切ることを縛る
+  assert.deepEqual(checkIssue(`## 背景\n- <!-- a\n\n本文\n-->\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`), green);
   // 同じ段落の中のフェンスの手前までしか見ない
   assert.deepEqual(checkIssue(`## 背景\n記号 <!-- と\n\`\`\`\na --> b\n\`\`\`\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`), green);
   // 同じ段落に --> があれば、コメントとして中身から除く
