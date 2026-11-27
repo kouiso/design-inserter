@@ -172,7 +172,10 @@ function countInText(text, rule) {
     for (const match of text.matchAll(matcher)) {
       if (rule.excludes.length || rule.excludesCaseSensitive.length) {
         const value = valueOf(match);
-        if (rule.excludes.some((ex) => ex.test(value)) || rule.excludesCaseSensitive.some((ex) => ex.test(value))) continue;
+        // excludeCaseSensitive は、名前つきグループ valueAnn が当たったとき（型の注記の形）だけに効かせる。
+        const annotated = match.groups?.valueAnn !== undefined;
+        if (rule.excludes.some((ex) => ex.test(value))) continue;
+        if (annotated && rule.excludesCaseSensitive.some((ex) => ex.test(value))) continue;
       }
       if (rule.excludeBefore.length) {
         const before = text.slice(Math.max(0, match.index - CONTEXT_CHARS), match.index);

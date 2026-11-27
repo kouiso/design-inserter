@@ -1013,13 +1013,6 @@ test("secret-assignment: define の KEY / SALT は大文字小文字を区別し
   assert.deepEqual(ids(scan(`define( 'DB_${PW.toUpperCase()}', 'lowercaseonly' );`, rules)), ["secret-assignment-define"], "…PASSWORD は値が何でも当てる");
 });
 
-test("secret-assignment: 引用符なしの password 系で、名前の後ろに付けてよい語は限る", () => {
-  const v = "Xk9mP2qLr7vT";
-  assert.deepEqual(ids(scan(`${PW}_new: ${v}`, rules)), ["secret-assignment-bare"]);
-  assert.deepEqual(ids(scan(`${PW}_confirm = ${v}`, rules)), ["secret-assignment-bare"]);
-  assert.deepEqual(scan(`${PW}_policy: ${v}`, rules), []);
-  assert.deepEqual(scan(`${PW}_hash: ${v}`, rules), []);
-});
 
 // ---- 3: 追加規則の項目名と空の規則 ----
 test("mergeExtraRules: 知らない項目名は、規則の id と項目名だけを出して拒否する", () => {
@@ -1075,4 +1068,68 @@ test("scan: 同じ場所に複数の patterns が当たっても 1 件（重な�
   assert.equal(scan("abc123", overlap)[0].count, 1);
   assert.equal(scan("abc123 abc456", overlap)[0].count, 2, "離れた 2 か所は 2 件");
   assert.equal(scan("abc123abc456", overlap)[0].count, 2, "隣り合う別の当たりは 2 件");
+});
+
+// ======== 四回目のレビュー（#119）への対応で足したテスト ========
+// secret-assignment-bare: 型の注記の形（英語の password: / password?: の直後で、値の後ろが ; , | ) > [ か行末）だけ、
+// パスカルケースと全部大文字の名前を除く。= ＝ は と日本語の名前には効かせない。
+
+const bareHits = {
+  "日本語の名前: 単語＋数字": () => "パスワード: Tanaka1985",
+  "日本語の名前 + は": () => "パスワードは Kouiso2024 です",
+  "= の形: 単語＋数字": () => `DB_${PW.toUpperCase()}=Summer2024`,
+  "= の形: パスカルケース": () => `ADMIN_${PW.toUpperCase()}=SummerTime2024`,
+  "= の形: 大文字の名前に見える値": () => `${PW}=Passw0rd123`,
+  "英語のコロン: 名前の直後が pass で始まる値": () => `${PW}: passXk9mP2qL`,
+  "名前の後ろに _PROD": () => `${PW.toUpperCase()}_PROD=Xk9mP2qLr7`,
+  "名前の前後に付く語（DB_ … _PRODUCTION）": () => `DB_${PW.toUpperCase()}_PRODUCTION=Xk9mP2qLr7`,
+  "名前の後ろに ForAdmin（admin の中の min は除外語ではない）": () => `${PW}ForAdmin: Xk9mP2qLr7`,
+  "名前の後ろに数字": () => `${PW}2=Xk9mP2qLr7`,
+  "英語のコロン: 後ろに文章が続く（型の注記ではない）": () => `${PW}: Summer2024 です`,
+  "= の形: 後ろが ;": () => `${PW} = Summer2024;`,
+  "英語のコロン: 型の注記ではない値（行末）": () => `${PW}: Xk9mP2qLr7vT`,
+  "英語の ?: の形": () => `${PW}?: Xk9mP2qLr7;`,
+  "pwd は = の形": () => "pwd = Xk9mP2qLr7",
+};
+for (const [name, make] of Object.entries(bareHits)) {
+  test(`secret-assignment-bare（再々レビュー）: 当たる: ${name}`, () => {
+    const text = make();
+    const results = scan(text, rules);
+    assert.deepEqual(ids(results), ["secret-assignment-bare"], text);
+    assert.equal(results[0].count, 1);
+  });
+}
+
+const bareMisses = {
+  "英語のコロン + 行末の単語＋数字（型名か本物か区別できないので当てない）": () => `${PW}: Summer2024`,
+  "英語のコロン + 行末の大文字と数字": () => `${PW}: AB12CD34EF`,
+  "英語のコロン + ; の前のパスカルケース": () => `${PW}: PasswordHash256;`,
+  "英語の ?: + | の前のパスカルケース": () => `${PW}?: PasswordHash256 | null;`,
+  "英語のコロン + , の前のパスカルケース": () => `${PW}: Summer2024, next`,
+  "hash を含む名前": () => `${PW}_hash=Xk9mP2qLr7`,
+  "policy を含む名前": () => `${PW}_policy: min8+symbol`,
+  "confirm を含む名前": () => `${PW}_confirm = Xk9mP2qLr7`,
+  "min / length を含む名前": () => `${PW}_min_length: 8chars12`,
+  "日本語の名前 + アルゴリズム名": () => "パスワードは PBKDF2-SHA256 でハッシュ化する",
+  "日本語の名前 + password で始まる例": () => "パスワードは password123 のように推測しやすいものを禁止",
+  "値が password だけ（数字つき）": () => `${PW}=${PW}123`,
+  "process.env の参照": () => `${PW} = process.env.DB_${PW.toUpperCase()}_V2`,
+  "pwd の ~ パス": () => "pwd = ~/work/design-inserter",
+  "pwd は : の形では当てない": () => "pwd: Xk9mP2qLr7",
+};
+for (const [name, make] of Object.entries(bareMisses)) {
+  test(`secret-assignment-bare（再々レビュー）: 当たらない: ${name}`, () => {
+    const text = make();
+    assert.deepEqual(scan(text, rules), [], text);
+  });
+}
+
+test("secret-assignment-bare: 型の注記の形を決める後ろの文字は ; , | ) > [ と行末だけ", () => {
+  const typeName = "Summer2024";
+  for (const tail of [";", ",", " |", ")", ">", "[", " ;", ""]) {
+    assert.deepEqual(scan(`${PW}: ${typeName}${tail}`, rules), [], JSON.stringify(tail));
+  }
+  for (const tail of [" です", " # メモ", "。", " (本番)", " end"]) {
+    assert.deepEqual(ids(scan(`${PW}: ${typeName}${tail}`, rules)), ["secret-assignment-bare"], JSON.stringify(tail));
+  }
 });
