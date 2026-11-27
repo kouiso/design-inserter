@@ -16,6 +16,7 @@ import {
   checkIssue,
   checkPr,
   hasContent,
+  isBlankBody,
   rewriteIssueHeadings,
   shouldSkip,
 } from "../.github/scripts/format-check.mjs";
@@ -419,8 +420,6 @@ test("実行: bot・下書き PR・アラート系ラベルの issue は何も�
   try {
     const badBody = "何も書いていない";
     const cases = [
-      issueEvent(badBody, { user: { login: "renovate[bot]", type: "Bot" } }),
-      prEvent(badBody, { user: { login: "dependabot[bot]", type: "Bot" } }),
       prEvent(badBody, { draft: true }),
       issueEvent(badBody, { labels: [{ name: "alert" }] }),
       { action: "opened", issue: { number: 9, body: badBody, user: human, labels: [], pull_request: {} } },
@@ -432,6 +431,31 @@ test("実行: bot・下書き PR・アラート系ラベルの issue は何も�
     }
     assert.equal(api.writes().length, 0);
     assert.ok(api.requests.every((q) => q.method === "GET"));
+  } finally {
+    await api.close();
+  }
+});
+
+test("実行: bot が作った issue / PR は API を 1 回も呼ばず exit 0（API が 500 を返す状態でも）", async () => {
+  const api = await startFakeApi();
+  try {
+    api.failWith = 500;
+    const cases = [
+      issueEvent("何も無い", { user: { login: "renovate[bot]", type: "Bot" } }),
+      prEvent("何も無い", { user: { login: "dependabot[bot]", type: "Bot" } }),
+      prEvent("何も無い", { user: { login: "someapp", type: "Bot" } }),
+      prEvent("何も無い", { user: { login: "x[bot]", type: "User" } }),
+    ];
+    for (const event of cases) {
+      const r = await runScript(api, event);
+      assert.equal(r.code, 0, r.stderr);
+      assert.match(r.stdout, /skip: bot/);
+    }
+    assert.equal(api.requests.length, 0);
+    // bot ではない物は、同じ状態だと API 失敗で exit 2
+    assert.equal((await runScript(api, prEvent("何も無い"))).code, 2);
+    // 下書きなど bot 以外の対象外は、目印コメントを探すので API を呼ぶ
+    assert.equal((await runScript(api, prEvent("何も無い", { draft: true }))).code, 2);
   } finally {
     await api.close();
   }
@@ -782,14 +806,14 @@ test("レビュー6: Refs:#3（コロンの後に空白なし）も通る。キ�
   }
 });
 
-test("レビュー8: issue は fix-issue-headings.yml と同じ書き換え後の本文で判定する", () => {
+test("レビュー8: opened の issue は fix-issue-headings.yml と同じ書き換え後の本文で判定する", () => {
   assert.equal(rewriteIssueHeadings("### a\n#### b\n##### c\n## d\n    ### e"), "## a\n### b\n##### c\n## d\n    ### e");
   assert.equal(rewriteIssueHeadings(null), "");
   // 書き換え後は ### が ## になるので、直前の節の子ではなく兄弟になる（書き換え前なら子で、緑になってしまう）
   const raw = "## 次にやること\n### 手順\nx\n## 背景\nx\n## 今どこまで\nx\n## 誰の判断待ち\nx\n## 完了条件\nx";
-  assert.deepEqual(checkIssue(raw).empty, ["次にやること"]);
+  assert.deepEqual(checkIssue(raw, { rewrite: true }).empty, ["次にやること"]);
   // 書き換え前に ### だけで書かれた issue（フォームの出力）は、書き換え後と同じ結果になる
-  assert.deepEqual(checkIssue(raw), checkIssue(rewriteIssueHeadings(raw)));
+  assert.deepEqual(checkIssue(raw, { rewrite: true }), checkIssue(rewriteIssueHeadings(raw)));
   // PR 本文は書き換えない
   assert.equal(checkPr("## 概要\n### 補足\nx\n## 変更内容\nx\n## 関連Issue\nRefs #1").ok, true);
 });
@@ -818,5 +842,113 @@ test("実行: 目印コメントの更新は、書き換え前後・CRLF の本�
     assert.ok(!api.comments[0].body.includes("## 今どこまで\r"));
   } finally {
     await api.close();
+  }
+});
+
+// ---------- 再レビュー（b33e083）の指摘 1〜4 に対応するテスト ----------
+
+const NESTED_BODY = `## 背景\n### 経緯\nx\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`;
+const parentUrl = "https://api.github.com/repos/o/r/issues/1";
+
+test("再レビュー1: 見出しの繰り上げは opened のときだけ（edited で二重に繰り上げない）", () => {
+  // 正しく入れ子で書いた本文は、そのまま判定すれば緑
+  assert.deepEqual(checkIssue(NESTED_BODY), { ok: true, missing: [], empty: [], invalid: [] });
+  // opened のときは、fix-issue-headings.yml がこの本文を ### → ## に書き換えるのと同じ結果（背景が空）
+  assert.deepEqual(checkIssue(NESTED_BODY, { rewrite: true }).empty, ["背景"]);
+  // #### を含む原文は、opened なら ### に繰り上げた後で判定する（入れ子のまま緑）
+  const deep = NESTED_BODY.replace("### 経緯", "#### 経緯");
+  assert.equal(checkIssue(deep, { rewrite: true }).ok, true);
+  assert.equal(checkIssue(deep).ok, true);
+});
+
+test("実行: edited の issue は繰り上げず、opened の issue だけ繰り上げて判定する", async () => {
+  const api = await startFakeApi();
+  try {
+    // ## 背景 / ### 経緯 と正しく入れ子で書いて編集した → 緑（赤のまま直せない不具合の回帰）
+    const edited = await runScript(api, { ...issueEvent(NESTED_BODY), action: "edited" });
+    assert.equal(edited.code, 0, edited.stderr);
+    assert.equal(api.writes().length, 0);
+    // opened は、workflow が本文を書き換えた後の形で判定する → 背景が空で赤
+    const opened = await runScript(api, { ...issueEvent(NESTED_BODY), action: "opened" });
+    assert.equal(opened.code, 1, opened.stderr);
+    assert.match(api.comments[0].body, /背景/);
+    // 書き換え済みの本文（## 経緯）で edited が来ても赤のまま。本文を直せば緑に戻る
+    const rewritten = NESTED_BODY.replace("### 経緯", "## 経緯");
+    assert.equal((await runScript(api, { ...issueEvent(rewritten), action: "edited" })).code, 1);
+    const fixed = await runScript(api, { ...issueEvent(NESTED_BODY.replace("### 経緯", "#### 経緯")), action: "edited" });
+    assert.equal(fixed.code, 0, fixed.stderr);
+    assert.match(api.comments[0].body, /OK/);
+    // #### を含む原文の opened は、繰り上げた後も入れ子で緑
+    const deepOpened = await runScript(api, { ...issueEvent(NESTED_BODY.replace("### 経緯", "#### 経緯")), action: "opened" });
+    assert.equal(deepOpened.code, 0, deepOpened.stderr);
+  } finally {
+    await api.close();
+  }
+});
+
+test("再レビュー2: 閉じない <!-- は行頭の時だけ本文の終わりまで。行の途中・バッククォートの中は別", () => {
+  const tail = `## 今どこまで\nx\n${FULL_ISSUE_TAIL}`;
+  // バッククォートで書いた <!-- は文字。見出しを失わない
+  const inline = checkIssue(`## 背景\nHTML コメント（\`<!--\`）だけの欄は未記入\n${tail}`);
+  assert.deepEqual(inline, { ok: true, missing: [], empty: [], invalid: [] });
+  assert.equal(checkIssue(`## 背景\n\`\`<!--\`\` と書く\n${tail}`).ok, true);
+  // 後ろに普通のコメント（--> がある）があっても、バッククォートの中の <!-- はそれと組にならない
+  const withLaterComment = `## 背景\nHTML コメント（\`<!--\`）の話\n${tail}\n<!-- 末尾の普通のコメント -->`;
+  assert.deepEqual(checkIssue(withLaterComment), { ok: true, missing: [], empty: [], invalid: [] });
+  assert.equal(checkIssue(`## 背景\n\`<!--\` と \`-->\` の話\n${tail}`).ok, true);
+  // 行の途中で始まり、本文のどこにも閉じが無い → ただの文字
+  assert.equal(checkIssue(`## 背景\n文の途中に <!-- がある\n${tail}`).ok, true);
+  // 字下げ 4 以上の行頭も、閉じが無ければただの文字
+  assert.equal(checkIssue(`## 背景\n    <!--\n${tail}`).ok, true);
+  // 行の途中で始まり、後ろに --> がある → コメント（間の見出しは見出しにしない）
+  const closed = checkIssue(`## 背景\nあり <!--\n## 今どこまで\nx\n-->\n${FULL_ISSUE_TAIL}`);
+  assert.deepEqual(closed.missing, ["今どこまで"]);
+  // 行頭（字下げ 3 まで）で始まり閉じが無い → 本文の終わりまでコメント
+  for (const lead of ["<!--", "   <!--", "<!-- 始まり"]) {
+    const open = checkIssue(`## 背景\nあり\n${lead}\n${tail}`);
+    assert.equal(open.ok, false, lead);
+    assert.ok(open.missing.includes("今どこまで"), lead);
+  }
+  // 同じ行で閉じるコメントは、前後の文字を残して取り除く
+  assert.deepEqual(checkIssue(`## 背景\n<!-- a --> x <!-- b -->\n${tail}`).empty, []);
+  assert.deepEqual(checkIssue(`## 背景\n<!-- a --> <!-- b -->\n${tail}`).empty, ["背景"]);
+});
+
+test("再レビュー3: 本文が空のサブ issue の「空」は、コメントを除いて空白か _No response_ だけの時に限る", () => {
+  const user = { login: "kouiso", type: "User" };
+  for (const body of ["", null, undefined, "  \n\t\n", "​\n", "<!-- メモ -->", "<!--\n複数行\n-->\n", "_No response_", "<!-- c -->\n_No response_\n"]) {
+    assert.ok(shouldSkip("issue", { user, body, parent_issue_url: parentUrl }), JSON.stringify(body));
+    assert.ok(isBlankBody(body), JSON.stringify(body));
+  }
+  // 5 見出しだけの本文・「-」だけ・見出し 1 つだけ・本文ありは検査する
+  const headingsOnly = "## 背景\n## 今どこまで\n## 次にやること\n## 誰の判断待ち\n## 完了条件\n";
+  for (const body of [headingsOnly, "-", "- [ ]", "## 背景\n", "背景だけ書いた", "---", "・"]) {
+    assert.equal(shouldSkip("issue", { user, body, parent_issue_url: parentUrl }), null, JSON.stringify(body));
+    assert.equal(isBlankBody(body), false, JSON.stringify(body));
+  }
+  assert.equal(checkIssue(headingsOnly).ok, false);
+  assert.equal(checkIssue(headingsOnly).empty.length, 5);
+  // サブ issue でなければ、空の本文でも検査する
+  assert.equal(shouldSkip("issue", { user, body: "" }), null);
+});
+
+test("実行: 5 見出しだけのサブ issue は赤、空本文のサブ issue は対象外", async () => {
+  const api = await startFakeApi();
+  try {
+    const headingsOnly = "## 背景\n## 今どこまで\n## 次にやること\n## 誰の判断待ち\n## 完了条件\n";
+    const red = await runScript(api, issueEvent(headingsOnly, { parent_issue_url: parentUrl }));
+    assert.equal(red.code, 1, red.stderr);
+    assert.equal(api.writes().length, 1);
+  } finally {
+    await api.close();
+  }
+  const api2 = await startFakeApi();
+  try {
+    const blank = await runScript(api2, issueEvent("<!-- 空 -->", { parent_issue_url: parentUrl }));
+    assert.equal(blank.code, 0, blank.stderr);
+    assert.match(blank.stdout, /サブ issue/);
+    assert.equal(api2.writes().length, 0);
+  } finally {
+    await api2.close();
   }
 });

@@ -65,15 +65,20 @@ export function rewriteIssueHeadings(body) {
     .replace(/^#### /gm, "### ");
 }
 
-// 本文を行に分け、フェンスの外の HTML コメントを取り除く（閉じていないコメントは本文の終わりまで）。
+// インラインコード（`...`）。中の <!-- はコメントの始まりにしない。
+const CODE_SPAN = /(`+)(?!`)[\s\S]*?(?<!`)\1(?!`)/g;
+
+// 本文を行に分け、フェンスの外の HTML コメントを取り除く（行頭で始まる閉じていないコメントは本文の終わりまで）。
 // フェンスは開いた長さを覚え、閉じは「字下げ3以下・同じ文字・同じ長さ以上・情報文字列なし」だけ。
 function scan(body) {
   const raw = String(body ?? "").replace(ZERO_WIDTH, "").replace(/\r\n?/g, "\n").split("\n");
+  const lastClose = raw.findLastIndex((l) => l.includes("-->"));
   const lines = [];
   const fenced = [];
   let fence = null;
   let inComment = false;
-  for (let line of raw) {
+  for (let lineIndex = 0; lineIndex < raw.length; lineIndex += 1) {
+    let line = raw[lineIndex];
     if (inComment) {
       const end = line.indexOf("-->");
       if (end < 0) {
@@ -99,12 +104,18 @@ function scan(body) {
       }
     }
     for (;;) {
-      const start = line.indexOf("<!--");
+      // バッククォートで囲んだ `<!--` は文字として書いただけなので、コメントの始まりにしない。
+      const masked = line.replace(CODE_SPAN, (m) => "\u0000".repeat(m.length));
+      const start = masked.indexOf("<!--");
       if (start < 0) break;
       const end = line.indexOf("-->", start + 4);
       if (end < 0) {
-        line = line.slice(0, start);
-        inComment = true;
+        // 閉じない <!-- は、行頭（字下げ3以下）か、後ろに --> がある時だけコメントとして扱う。
+        // 行の途中で閉じも無いなら、ただの文字として残す。
+        if (/^ {0,3}$/.test(line.slice(0, start)) || lastClose > lineIndex) {
+          line = line.slice(0, start);
+          inComment = true;
+        }
         break;
       }
       line = line.slice(0, start) + line.slice(end + 3);
@@ -186,13 +197,20 @@ export function hasContent(content) {
 
 // 既定の SBI フォームの形か。見出しが「メモ（任意）」に完全一致する 1 つだけで、前置きも中身も無い。
 export function isSbiBody(body) {
-  const { preamble, sections } = splitBody(rewriteIssueHeadings(body));
+  const { preamble, sections } = splitBody(body);
   return (
     sections.length === 1 &&
     sections[0].key === normalizeHeading("メモ（任意）") &&
     !hasContent(preamble) &&
     !hasContent(sections[0].content)
   );
+}
+
+// 本文が「空」か。HTML コメントを除いた後が、空白（ゼロ幅文字を含む）だけか `_No response_` だけのとき。
+// 見出しだけの本文や「-」だけの本文は空と見なさない（hasContent とは別の、より狭い判定）。
+export function isBlankBody(body) {
+  const text = scan(body).lines.join("\n").trim();
+  return text === "" || /^_?no response_?$/i.test(text);
 }
 
 function evaluate(body, definitions) {
@@ -227,7 +245,9 @@ function evaluate(body, definitions) {
   };
 }
 
-export const checkIssue = (body) => evaluate(rewriteIssueHeadings(body), ISSUE_SECTIONS);
+// opened のときだけ、fix-issue-headings.yml の書き換え後の本文で判定する（edited で二重に繰り上げない）。
+export const checkIssue = (body, { rewrite = false } = {}) =>
+  evaluate(rewrite ? rewriteIssueHeadings(body) : body, ISSUE_SECTIONS);
 export const checkPr = (body) => evaluate(body, PR_SECTIONS);
 
 export function isBot(user) {
@@ -243,7 +263,7 @@ export function shouldSkip(kind, item) {
     // 既定の SBI フォーム（メモ（任意）が空）と、本文が空のサブ issue は書き方を問わない。
     // サブ issue でも本文に何か書いてあれば検査する。
     if (isSbiBody(item?.body)) return "SBI フォームの issue";
-    if (item?.parent_issue_url && !hasContent(item?.body)) return "本文が空のサブ issue";
+    if (item?.parent_issue_url && isBlankBody(item?.body)) return "本文が空のサブ issue";
     const names = (item?.labels ?? []).map((l) =>
       String(typeof l === "string" ? l : (l?.name ?? "")).toLowerCase(),
     );
@@ -346,6 +366,11 @@ export async function main(env = process.env, log = console) {
       log.log("skip: PR 由来のイベント");
       return 0;
     }
+    // bot が作った物には目印コメントが付くことが無いので、API を呼ばずに終える。
+    if (isBot(item.user)) {
+      log.log("skip: bot が作成");
+      return 0;
+    }
     const repo = env.GITHUB_REPOSITORY || payload.repository?.full_name;
     if (!repo) throw new Error("GITHUB_REPOSITORY がありません");
 
@@ -363,7 +388,10 @@ export async function main(env = process.env, log = console) {
       return 0;
     }
 
-    const result = isPr ? checkPr(item.body) : checkIssue(item.body);
+    // fix-issue-headings.yml は opened のときだけ見出しを繰り上げる。同じ書き換えは opened のときだけかける。
+    const result = isPr
+      ? checkPr(item.body)
+      : checkIssue(item.body, { rewrite: payload.action === "opened" });
     const body = buildComment(kind, result);
 
     if (!result.ok) {
