@@ -88,6 +88,9 @@ function testGitVisibility() {
     'tests/portable-smoke-integration.php',
     'tests/generate-ready-checklist.test.mjs',
     'tests/build-plugin-zip.test.mjs',
+    'tests/format-check.test.mjs',
+    '.github/scripts/format-check.mjs',
+    '.github/workflows/issue-pr-format-check.yml',
     'script/test.mjs',
     'script/wp-smoke.mjs',
     'script/build-plugin-zip.mjs',
@@ -500,6 +503,16 @@ function testBuildCatalogGuard() {
   }
 }
 
+// issue / PR の書き方チェック（.github/scripts/format-check.mjs）。偽の GitHub API を立てて実走させる。
+function testFormatCheck() {
+  const result = run('node', ['--test', 'tests/format-check.test.mjs']);
+  if (result.status === 0) {
+    pass('Issue / PR format check goes red on missing sections and green once fixed');
+  } else {
+    fail(`Issue / PR format check failed\n${result.stdout || ''}${result.stderr || ''}`);
+  }
+}
+
 // 実データを見る側。ロック環境では skip せず「locked」と印字して通し、
 // 復号済み環境ではカタログ退行の検出器になる。
 function testTemplatePartyCatalogState() {
@@ -525,6 +538,7 @@ testRenderSmoke();
 testPartCodeFuncs();
 testReadyChecklistArtifactSelection();
 testBuildCatalogGuard();
+testFormatCheck();
 testTemplatePartyCatalogState();
 
 if (failures > 0) {

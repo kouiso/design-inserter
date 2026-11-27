@@ -1,0 +1,42 @@
+name: Issue PR Format Check
+
+# issue と PR の書き方（見出しと中身）を文字の規則だけで検査する。AI・外部サービスは使わない。
+# なぜ pull_request_target: fork 由来の PR でもコメントを書ける書き込み権限が要るため。
+# その代わり PR の head（外から来たコード）は絶対に checkout しない。
+# 動かすスクリプトは base 側（issue は既定ブランチ）の .github/scripts だけ。
+on:
+  issues:
+    types: [opened, edited, reopened]
+  pull_request_target:
+    types: [opened, edited, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: format-check-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  format-check:
+    name: Format check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # ref を指定しない = base 側の既定の取り出し。スクリプトのディレクトリだけ取る。
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      # 本文は GITHUB_EVENT_PATH の JSON から読む。シェルや式に本文を埋め込まない。
+      - name: Check format
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/format-check.mjs
