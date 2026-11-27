@@ -19,11 +19,12 @@
 ## 初期の汎用規則
 
 - 秘密の値: AWS アクセスキー、GitHub トークン、Slack トークン、OpenAI / Anthropic 型の API キー、Stripe の本番キー（`sk_live_` / `rk_live_`）、`Bearer eyJ…`（JWT）、Google の `AIza…`、秘密鍵の見出し。
-- 名前つきの値の代入（`secret-assignment`）: 名前に `password` `secret` `token` `api_key` `AUTH_KEY` `…_SALT` `パスワード` `暗証番号` などを含む項目へ、`=` `:` `=>` 全角コロン（日本語の名前だけ `は` も）で値を入れている形と、PHP の `define( 'DB_PASSWORD', '…' )`。名前で厳しさを変える。
-  - `password` / `passwd` / `pwd` / `パスワード` / `暗証番号`: 引用符つきは 8 文字以上（8〜15 文字は数字か記号を含むとき。数字だけの `"12345678"` も当たる）、引用符なしも 8 文字以上（英字と、数字か記号を含む）。`define` の `…PASSWORD` は値が何でも 8 文字以上で当たる。
-  - `secret` / `api_key` / `AUTH_KEY` / `…_SALT` など: 引用符つき 8 文字以上、引用符なしは英字と数字を含む 20 文字以上。`define` の `…KEY` / `…SALT` は数字か記号を含む 8 文字以上。
-  - `token` / `トークン`（誤検知が多い名前）: 引用符つき 16 文字以上、引用符なしは 32 文字以上。
-  - 当たらないもの: `GITHUB_TOKEN` という語、`process.env.X`、`${{ secrets.X }}`、URL・パス、ドット区切りの名前や版（`color.primary.500`、`v1.2.0`）、見本の値（`your-` で始まる、`xxxx` を含む、値の全体が `…_here`・`changeme`・`put your …`）、引用符なしで英小文字と数字と `-` `_` だけの語（kebab / snake）。
+- 名前つきの値の代入。名前ごとに 4 つの規則に分け、厳しさを変えている。`=` `:` `=>` 全角コロンで値を入れている形（日本語の名前だけ `は` も）。
+  - `secret-assignment`（引用符つき）: `password` / `passwd` / `pwd`（`=` だけ）/ `secret` / `api_key` / `AUTH_KEY` / `…_SALT` / `パスワード` / `暗証番号` などへ、引用符つきの値（8 文字以上。8〜15 文字は数字か記号を含むとき。数字だけの `"12345678"` も当たる）。`secret` / `api_key` / `AUTH_KEY` など（password 系を除く）は、引用符なしでも英字と数字を含む 20 文字以上で当たる。
+  - `secret-assignment-bare`（引用符なしの password 系）: `password` / `passwd` / `pwd`（`=` だけ）/ `パスワード` / `暗証番号` へ、引用符なしの 8 文字以上（英字と、数字か記号を含む）。名前の後ろに付けてよい語は `_new` `_old` `_current` `_confirm` `_plain` `_raw` `_text` `_value` `_string` `_input` `_admin` `_root` と数字だけ（`password_policy` などは当てない）。`~` で始まる値、`password` で始まる値（`password123`）、`process.env.X` のような参照、英大文字と数字と `-` だけの名前（`PBKDF2-SHA256`）、パスカルケースの名前（`PasswordHash256`）は当てない。そのため、引用符なしの `Summer2024` のような単語＋数字は当たらない（引用符つきなら当たる）。
+  - `secret-assignment-token`（`token` / `トークン`。誤検知が多い名前）: 引用符つき 16 文字以上、引用符なしは 32 文字以上。ドット区切りの名前や版（`color.primary.500`、`v1.2.0`）は当てない。**ドット区切りの除外は、この規則だけが持つ**（`password: "Summer.2024"` や `api_key: "abC123.dEf456.gHi789"` は当たる）。
+  - `secret-assignment-define`（PHP の `define`）: 名前が `…PASSWORD` なら値は何でも 8 文字以上。WordPress の `AUTH_KEY` / `SECURE_AUTH_KEY` / `LOGGED_IN_KEY` / `NONCE_KEY` と各 `_SALT`、`…_SECRET_KEY` は、数字か記号を含む 8 文字以上。定数名は大文字小文字を区別し、それ以外の定数（`DI_CACHE_KEY`、`MONKEY`）には当てない。
+  - どの規則も、`GITHUB_TOKEN` という語、`process.env.X`、`${{ secrets.X }}`、URL・パス、見本の値（`your-` で始まる、`xxxx` を含む、値の全体が `…_here`・`changeme`・`put your …`）には当たらない。
 - 資格情報つきの DB 接続文字列（postgres / mysql / mongodb / redis）。
 - 個人のメールアドレス（`users.noreply.github.com`・`noreply@`・example.com/.org/.net・example.jp・`git@`・画像などのファイル名・URL の資格情報（`://user:pass@host`）は除く。`?email=`・`#`・パスの後ろに付いたメールは当てる）。
 - 全規則とも、行を NFKC にそろえた形と、`%XX` を戻した形でも照合する（全角の `＠`、`%40`、全角英字）。行番号は元の行のまま。
@@ -55,6 +56,7 @@
 - `sameLineAs`: 別の規則の id。その規則が当たった行でだけ検査する。参照先の `words` / `patterns` が空なら、この規則は何もしない。上の例では、顧客名と同じ行に円・¥ の金額があるときだけ当たる。
 - 既存の汎用規則と同じ `id` を書いたときに足せるのは、`exclude` / `excludeBefore` だけ（例: 個人メールの `exclude` に会社の代表アドレスを足す）。`words` / `patterns` などを書くと、規則の id だけを出して exit 2 で止まる（汎用規則の行番号は外の人にも見せるので、持ち主の語を混ぜると一覧を当てられるため）。語を足したいときは、新しい `id` の規則にする。
 - `words` `patterns` `exclude` `excludeBefore` は文字列の配列でなければならない（違うと検査は exit 2 で止まる。ログには中身を出さず、規則の id だけを出す）。JSON が壊れている・正規表現が使えないときも同じ。
+- 追加規則に使える項目は `id` `label` `flags` `words` `patterns` `exclude` `excludeBefore` `sameLineAs` だけ。これ以外の項目（綴りの間違いなど）があると、規則の id と項目名だけを出して exit 2 で止まる。新しい `id` の規則で `words` も `patterns` も空（または無い）のときも exit 2（何にも当たらない規則を、効いていると思い込まないため）。
 
 ### 外の人に見せるもの
 

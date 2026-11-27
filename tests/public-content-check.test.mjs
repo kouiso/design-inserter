@@ -37,6 +37,8 @@ const fakes = {
 };
 const fakeRuleId = (key) => key.replace(/-pat$/, "");
 
+const assignIds = (results) => ids(results).map((id) => (id.startsWith("secret-assignment") ? "secret-assignment" : id));
+
 function ids(results) {
   return results.map((r) => r.ruleId);
 }
@@ -55,9 +57,9 @@ for (const [key, make] of Object.entries(fakes)) {
 
 test("scan: 秘密の名前の代入は、引用符つき・英数字混じりの長い値の両方で当たる", () => {
   const value = "Zx9".repeat(8);
-  assert.deepEqual(ids(scan(`API_KEY: ${value}`, rules)), ["secret-assignment"]);
-  assert.deepEqual(ids(scan(`"client_secret": "${value}"`, rules)), ["secret-assignment"]);
-  assert.deepEqual(ids(scan(`DB_PASSWORD=${value}`, rules)), ["secret-assignment"]);
+  assert.deepEqual(assignIds(scan(`API_KEY: ${value}`, rules)), ["secret-assignment"]);
+  assert.deepEqual(assignIds(scan(`"client_secret": "${value}"`, rules)), ["secret-assignment"]);
+  assert.deepEqual(assignIds(scan(`DB_PASSWORD=${value}`, rules)), ["secret-assignment"]);
 });
 
 // ---- scan(): 普通の文章は緑 ----
@@ -120,7 +122,7 @@ test("scan: 複数の規則に当たったら規則ごとに返す", () => {
 test("規則ファイルは汎用規則だけで、持ち主固有の欄（顧客名・禁止語など）を持たない", () => {
   assert.deepEqual(
     rulesJson.rules.map((r) => r.id),
-    ["aws-access-key", "github-token", "slack-token", "anthropic-key", "openai-key", "stripe-key", "jwt-bearer", "google-api-key", "private-key-header", "secret-assignment", "db-connection-string", "personal-email"],
+    ["aws-access-key", "github-token", "slack-token", "anthropic-key", "openai-key", "stripe-key", "jwt-bearer", "google-api-key", "private-key-header", "secret-assignment", "secret-assignment-token", "secret-assignment-bare", "secret-assignment-define", "db-connection-string", "personal-email"],
   );
   for (const rule of rulesJson.rules) {
     assert.ok(!("words" in rule), `${rule.id} は words を持たない`);
@@ -138,7 +140,7 @@ test("mergeExtraRules: 新しい規則の追加と、同じ id への words 追�
     { id: "personal-email", exclude: ["@corp-sample\\.test$"] },
   ];
   const merged = compileRules(mergeExtraRules(rulesJson, extra));
-  assert.equal(rulesJson.rules.length, 12, "元の規則を書き換えない");
+  assert.equal(rulesJson.rules.length, 15, "元の規則を書き換えない");
   assert.ok(!rulesJson.rules.some((r) => r.id === "customer-names"));
 
   const text = [`${customer}への請求は 120,000円`, "別の行で 5,000円 と書いた", `${customer}について打ち合わせ`, `${fakes["personal-email"]()}`].join("\n");
@@ -155,7 +157,7 @@ test("sameLineAs: 前提の規則が空なら、金額だけの行には当た�
     { id: "customer-names", label: "顧客名", words: [] },
     { id: "customer-amount", label: "金額", sameLineAs: "customer-names", patterns: ["[0-9][0-9,]*円"] },
   ];
-  assert.deepEqual(scan("請求は 120,000円", compileRules(mergeExtraRules(rulesJson, extra))), []);
+  assert.deepEqual(scan("請求は 120,000円", compileRules(extra)), []);
 });
 
 test("compileRules: 壊れた正規表現・空文字に当たる規則は、中身を出さずに止める", () => {
@@ -539,7 +541,7 @@ const secretForms = {
 for (const [name, make] of Object.entries(secretForms)) {
   test(`secret-assignment: ${name}`, () => {
     const text = make();
-    assert.deepEqual(ids(scan(`前の行\n${text}\n`, rules)), ["secret-assignment"], text);
+    assert.deepEqual(assignIds(scan(`前の行\n${text}\n`, rules)), ["secret-assignment"], text);
   });
 }
 
@@ -824,7 +826,7 @@ for (const [name, make] of Object.entries(moreSecretForms)) {
   test(`secret-assignment（再レビュー）: ${name}`, () => {
     const text = make();
     const results = scan(`前の行\n${text}\n`, rules);
-    assert.deepEqual(ids(results), ["secret-assignment"], text);
+    assert.deepEqual(assignIds(results), ["secret-assignment"], text);
     assert.equal(results[0].count, 1, "複数の patterns に当たっても 1 件");
     assert.deepEqual(results[0].lines, [2]);
   });
@@ -954,4 +956,123 @@ test("ワークフロー: 既定の枝にスクリプトが無い時、成功で
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ======== 三回目のレビュー（#119）への対応で足したテスト ========
+
+// ---- 1: ドット区切りの除外は token の規則だけ。password / api_key / define には効かない ----
+const dottedSecretForms = {
+  "引用符つきの password（ドット入り）": () => `${PW}: "Summer.2024"`,
+  "引用符なしの password（ドット入り）": () => `${PW}: hunter2.secret`,
+  "api_key（ドット区切りの 3 部分）": () => `api_key: "abC123.dEf456.gHi789"`,
+  "define の PASSWORD（ドット入り）": () => `define( 'DB_${PW.toUpperCase()}', 'my.pass.2024' );`,
+};
+for (const [name, make] of Object.entries(dottedSecretForms)) {
+  test(`secret-assignment（ドット区切り）: ${name} は当たる`, () => {
+    const text = make();
+    const results = scan(text, rules);
+    assert.equal(results.length, 1, text);
+    assert.ok(results[0].ruleId.startsWith("secret-assignment"), results[0].ruleId);
+    assert.equal(results[0].count, 1);
+  });
+}
+
+test("規則ファイル: ドット区切りの除外を持つのは token の規則だけ", () => {
+  const withDotted = rulesJson.rules.filter((r) => (r.exclude ?? []).some((e) => e.includes("(?:\\.")) && r.id.startsWith("secret-assignment")).map((r) => r.id);
+  assert.deepEqual(withDotted, ["secret-assignment-token"]);
+});
+
+// ---- 2: 当たらない側 ----
+const stillNotSecret = [
+  "define( 'DI_META_KEY', '_di_meta_v2' );",
+  "define( 'DI_CACHE_KEY', 'di-cache-2' );",
+  "define( 'MONKEY', 'banana-42' );",
+  "define( 'AUTH_KEY_VERSION', 'v2-2024-01' );",
+  "pwd: ~/work/design-inserter",
+  "pwd " + "= ~/work/design-inserter",
+  `${PW}_policy: min8+symbol`,
+  `${PW}: PasswordHash256;`,
+  `${PW}: PBKDF2-SHA256`,
+  "パスワードは PBKDF2-SHA256 でハッシュ化する",
+  "パスワードは password123 のように推測しやすいものを禁止",
+  `${PW} = process.env.DB_${PW.toUpperCase()}_V2`,
+];
+for (const text of stillNotSecret) {
+  test(`secret-assignment（誤検知）: 当たらない (${JSON.stringify(text.slice(0, 34))})`, () => {
+    assert.deepEqual(scan(text, rules), [], text);
+  });
+}
+
+test("secret-assignment: define の KEY / SALT は大文字小文字を区別し、WordPress の鍵と …_SECRET_KEY だけ当てる", () => {
+  const v = "Zx9Zx9Zx9Zx9";
+  for (const name of ["AUTH_KEY", "SECURE_AUTH_KEY", "LOGGED_IN_KEY", "NONCE_KEY", "AUTH_SALT", "SECURE_AUTH_SALT", "LOGGED_IN_SALT", "NONCE_SALT", "JWT_SECRET_KEY"]) {
+    assert.deepEqual(ids(scan(`define( '${name}', '${v}' );`, rules)), ["secret-assignment-define"], name);
+  }
+  assert.deepEqual(scan(`define( 'auth_key', '${v}' );`, rules), [], "小文字の定数名には当てない");
+  assert.deepEqual(scan(`define( 'MY_API_KEY', '${v}' );`, rules), [], "WordPress の鍵ではない KEY は当てない");
+  assert.deepEqual(ids(scan(`define( 'DB_${PW.toUpperCase()}', 'lowercaseonly' );`, rules)), ["secret-assignment-define"], "…PASSWORD は値が何でも当てる");
+});
+
+test("secret-assignment: 引用符なしの password 系で、名前の後ろに付けてよい語は限る", () => {
+  const v = "Xk9mP2qLr7vT";
+  assert.deepEqual(ids(scan(`${PW}_new: ${v}`, rules)), ["secret-assignment-bare"]);
+  assert.deepEqual(ids(scan(`${PW}_confirm = ${v}`, rules)), ["secret-assignment-bare"]);
+  assert.deepEqual(scan(`${PW}_policy: ${v}`, rules), []);
+  assert.deepEqual(scan(`${PW}_hash: ${v}`, rules), []);
+});
+
+// ---- 3: 追加規則の項目名と空の規則 ----
+test("mergeExtraRules: 知らない項目名は、規則の id と項目名だけを出して拒否する", () => {
+  const secretWord = "顧客" + "ひみつ";
+  for (const key of ["word", "description", "category", "owner", "excludeCaseSensitive", "pattern"]) {
+    assert.throws(
+      () => mergeExtraRules(rulesJson, [{ id: "my-rule", words: ["a"], [key]: secretWord }]),
+      (error) => error.message.includes("my-rule") && error.message.includes(key) && !error.message.includes(secretWord),
+      key,
+    );
+  }
+  // 汎用規則に知らない項目を足しても同じ
+  assert.throws(() => mergeExtraRules(rulesJson, [{ id: "personal-email", exclude: ["x"], wordz: ["a"] }]), /personal-email.*wordz/);
+  // 許される項目だけなら通る
+  assert.doesNotThrow(() => mergeExtraRules(rulesJson, [{ id: "ok", label: "l", flags: "i", words: ["a"], patterns: ["b"], exclude: ["c"], excludeBefore: ["d"], sameLineAs: "personal-email" }]));
+});
+
+test("mergeExtraRules: words も patterns も空の新しい規則は拒否する", () => {
+  for (const def of [{ id: "empty-1" }, { id: "empty-2", words: [] }, { id: "empty-3", words: [], patterns: [] }, { id: "empty-4", words: [""], patterns: [""] }, { id: "empty-5", exclude: ["x"] }]) {
+    assert.throws(() => mergeExtraRules(rulesJson, [def]), new RegExp(`規則 ${def.id} は words も patterns も空`), def.id);
+  }
+  assert.doesNotThrow(() => mergeExtraRules(rulesJson, [{ id: "one", patterns: ["a"] }]));
+});
+
+test("実走: 知らない項目名・空の規則の追加規則は、規則の id と項目名だけを出して exit 2", async () => {
+  const api = await startFakeGitHub();
+  try {
+    const word = "顧客" + "ひみつ";
+    const cases = [
+      [[{ id: "typo-rule", word: [word] }], "typo-rule", "word"],
+      [[{ id: "empty-rule", words: [] }], "empty-rule", "words も patterns も空"],
+    ];
+    for (const [extra, id, detail] of cases) {
+      const r = await runScript({ eventName: "issues", event: issueEvent(83, "普通"), apiUrl: api.url, extraEnv: { PUBLIC_CONTENT_EXTRA_RULES: JSON.stringify(extra) } });
+      assert.equal(r.code, 2, r.output);
+      assert.ok(r.output.includes(id) && r.output.includes(detail), r.output);
+      assert.ok(!r.output.includes(word));
+    }
+    assert.equal(api.state.requests.length, 0);
+  } finally {
+    await api.close();
+  }
+});
+
+// ---- 4: 重なりを 1 件にまとめる ----
+test("scan: 同じ場所に複数の patterns が当たっても 1 件（重なりをまとめる）", () => {
+  const results = scan(`${PW}: Xk9mP2qLr7vTzz88aaQQ`, rules);
+  assert.equal(results.length, 1);
+  assert.equal(results[0].count, 1);
+  assert.deepEqual(results[0].lines, [1]);
+  // 規則 1 つに、重なる patterns を 2 つ持たせた場合
+  const overlap = compileRules([{ id: "o", patterns: ["abc\\d+", "bc\\d+", "c\\d+"] }]);
+  assert.equal(scan("abc123", overlap)[0].count, 1);
+  assert.equal(scan("abc123 abc456", overlap)[0].count, 2, "離れた 2 か所は 2 件");
+  assert.equal(scan("abc123abc456", overlap)[0].count, 2, "隣り合う別の当たりは 2 件");
 });

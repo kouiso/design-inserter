@@ -37,7 +37,10 @@ function compileList(source, flags, ruleId, kind) {
   }
 }
 
-const LIST_KEYS = ["words", "patterns", "exclude", "excludeBefore"];
+// excludeCaseSensitive は規則ファイル専用（exclude は常に大文字小文字を区別しない。こちらは区別する）。
+const LIST_KEYS = ["words", "patterns", "exclude", "excludeBefore", "excludeCaseSensitive"];
+// secret（持ち主の追加規則）で使える項目。これ以外が来たら、規則の id と項目名だけを出して止める。
+const EXTRA_RULE_KEYS = new Set(["id", "label", "flags", "words", "patterns", "exclude", "excludeBefore", "sameLineAs"]);
 
 /** 規則 1 件の型を確かめる。エラーに出すのは id だけ（中身は出さない）。 */
 export function validateRuleDef(def, index) {
@@ -70,6 +73,7 @@ function compileRule(def, index) {
   }
   const excludes = (def.exclude ?? []).filter((p) => p !== "").map((p) => compileList(p, "i", def.id, "exclude"));
   const excludeBefore = (def.excludeBefore ?? []).filter((p) => p !== "").map((p) => compileList(p, "", def.id, "excludeBefore"));
+  const excludesCaseSensitive = (def.excludeCaseSensitive ?? []).filter((p) => p !== "").map((p) => compileList(p, "", def.id, "excludeCaseSensitive"));
   return {
     id: def.id,
     label: String(def.label ?? def.id),
@@ -77,6 +81,7 @@ function compileRule(def, index) {
     sameLineAs: def.sameLineAs ?? null,
     matchers,
     excludes,
+    excludesCaseSensitive,
     excludeBefore,
   };
 }
@@ -113,10 +118,18 @@ export function compileRules(rules) {
 export function mergeExtraRules(base, extra) {
   const merged = ruleDefs(base, "規則").map((def) => ({ ...def }));
   const extraDefs = ruleDefs(extra, "追加規則");
-  extraDefs.forEach((add, index) => validateRuleDef(add, index));
+  extraDefs.forEach((add, index) => {
+    validateRuleDef(add, index);
+    // なぜ: 綴りの間違い（word など）を黙って無視すると、規則が効かないまま気づけない。
+    const unknown = Object.keys(add).filter((key) => !EXTRA_RULE_KEYS.has(key));
+    if (unknown.length > 0) throw new Error(`規則 ${add.id} に知らない項目がある: ${unknown.join(" / ")}`);
+  });
   for (const add of extraDefs) {
     const target = merged.find((def) => def.id === add.id);
     if (!target) {
+      // なぜ: words も patterns も空の規則は何にも当たらない。効いていると思い込ませないよう止める。
+      const hasTerm = [...(add.words ?? []), ...(add.patterns ?? [])].some((term) => term !== "");
+      if (!hasTerm) throw new Error(`規則 ${add.id} は words も patterns も空`);
       merged.push({ ...add, owner: true });
       continue;
     }
@@ -157,9 +170,9 @@ function countInText(text, rule) {
   for (const matcher of rule.matchers) {
     matcher.lastIndex = 0;
     for (const match of text.matchAll(matcher)) {
-      if (rule.excludes.length) {
+      if (rule.excludes.length || rule.excludesCaseSensitive.length) {
         const value = valueOf(match);
-        if (rule.excludes.some((ex) => ex.test(value))) continue;
+        if (rule.excludes.some((ex) => ex.test(value)) || rule.excludesCaseSensitive.some((ex) => ex.test(value))) continue;
       }
       if (rule.excludeBefore.length) {
         const before = text.slice(Math.max(0, match.index - CONTEXT_CHARS), match.index);
