@@ -84,35 +84,11 @@
       "description": "名前に password・passwd・pwd・secret・api_key・AUTH_KEY・SALT・パスワード・暗証番号などを含む項目へ、引用符つきの値（8 文字以上。8〜15 文字は数字か記号を含むとき）を `=` `:` `=>` 全角コロン（日本語の名前だけ `は` も。pwd は `=` だけ）で入れている形。secret / api_key / AUTH_KEY など（password 系を除く）は、引用符なしでも英字と数字を含む 20 文字以上で当たる。GITHUB_TOKEN という語、process.env.X、${{ secrets.X }}、見本の値（your- で始まる、x の連続、…_here、changeme など）、URL・パスには当たらない。",
       "flags": "i",
       "patterns": [
-        "(?:(?:password|passwd)|(?:secret|api[_-]?key|(?:access|private|auth|secure[_-]?auth|logged[_-]?in|nonce)[_-]?(?:key|salt)))[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[:：=＝])[ \\t]{0,10}(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>",
-        "(?:(?:パスワード|パスコード|暗証番号)|(?:シークレット|秘密鍵))[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[:：=＝は])[ \\t]{0,10}(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>",
-        "pwd[\\w-]{0,40}[\"']?[ \\t]{0,10}[=＝][ \\t]{0,10}(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>",
-        "(?:secret|api[_-]?key|(?:access|private|auth|secure[_-]?auth|logged[_-]?in|nonce)[_-]?(?:key|salt))[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[:：=＝])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{20,200}(?![\\w(${]))",
-        "(?:シークレット|秘密鍵)[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[:：=＝は])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{20,200}(?![\\w(${]))"
-      ],
-      "exclude": [
-        "x{4,}",
-        "^\\*{3,}$",
-        "^\\.{3,}$",
-        "^your[-_]",
-        "^(?:your|example|sample|dummy|placeholder|replace|insert|put)[-_a-z ]*$",
-        "^change[-_]?me$",
-        "^[-_a-z]*[-_]here$",
-        "^\\$\\{[^}]*\\}$",
-        "^<[^>]*>$",
-        "^%\\w+%$",
-        "^(?:https?|file)://",
-        "^\\.{0,2}/"
-      ]
-    },
-    {
-      "id": "secret-assignment-token",
-      "label": "token への値の代入",
-      "category": "secret-value",
-      "description": "名前に token・トークン を含む項目へ、引用符つき 16 文字以上（引用符なしは 32 文字以上）の値を入れている形。誤検知が多い名前なので長さを厳しくし、ドット区切りの名前や版（color.primary.500、v1.2.0）、日付、見本の値、URL・パスは除く。",
-      "flags": "i",
-      "patterns": [
-        "(?:token|トークン)[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[:：=＝])[ \\t]{0,10}(?:(?<q>[\"'])(?<value>[^\\s\"'`$<>{}]{16,})\\k<q>|(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{32,200}(?![\\w(${])))"
+        "(?:(?:password|passwd)|(?:secret|api[_-]?key|(?:access|private|auth|secure[_-]?auth|logged[_-]?in|nonce)[_-]?(?:key|salt)))[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[:：=＝])[ \\t]{0,10}(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>",
+        "(?:(?:パスワード|パスコード|暗証番号)|(?:シークレット|秘密鍵))[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[:：=＝は])[ \\t]{0,10}(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>",
+        "pwd[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}[=＝][ \\t]{0,10}(?<q>[\"'])(?<value>(?=[^\\s\"'`$<>{}]{0,14}[^A-Za-z_\\-\\s\"'`$<>{}])[^\\s\"'`$<>{}]{8,15}|[^\\s\"'`$<>{}]{16,})\\k<q>",
+        "(?:secret|api[_-]?key|(?:access|private|auth|secure[_-]?auth|logged[_-]?in|nonce)[_-]?(?:key|salt))[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[:：=＝])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{20,200}(?![\\w(${]))",
+        "(?:シークレット|秘密鍵)[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[:：=＝は])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{20,200}(?![\\w(${]))"
       ],
       "exclude": [
         "x{4,}",
@@ -127,20 +103,48 @@
         "^%\\w+%$",
         "^(?:https?|file)://",
         "^\\.{0,2}/",
-        "^\\w{1,12}(?:\\.\\w{1,12})+$"
+        "\\*\\*$"
+      ]
+    },
+    {
+      "id": "secret-assignment-token",
+      "label": "token への値の代入",
+      "category": "secret-value",
+      "description": "名前に token・トークン を含む項目へ、引用符つき 16 文字以上（引用符なしは 32 文字以上）の値を入れている形。誤検知が多い名前なので長さを厳しくし、ドット区切りの名前や版（color.primary.500、v1.2.0）、日付、見本の値、URL・パスは除く。",
+      "flags": "i",
+      "patterns": [
+        "(?:token|トークン)[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[:：=＝])[ \\t]{0,10}(?:(?<q>[\"'])(?<value>[^\\s\"'`$<>{}]{16,})\\k<q>|(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}\\d)(?=[A-Za-z0-9+/_=&%#@!^*~-]{0,200}[A-Za-z])(?![a-z0-9]{0,200}[-_][a-z0-9_-]{0,200}(?![A-Za-z0-9+/_=&%#@!^*~-]))[A-Za-z0-9+/_=&%#@!^*~-]{32,200}(?![\\w(${])))"
+      ],
+      "exclude": [
+        "x{4,}",
+        "^\\*{3,}$",
+        "^\\.{3,}$",
+        "^your[-_]",
+        "^(?:your|example|sample|dummy|placeholder|replace|insert|put)[-_a-z ]*$",
+        "^change[-_]?me$",
+        "^[-_a-z]*[-_]here$",
+        "^\\$\\{[^}]*\\}$",
+        "^<[^>]*>$",
+        "^%\\w+%$",
+        "^(?:https?|file)://",
+        "^\\.{0,2}/",
+        "^\\w{1,12}(?:\\.\\w{1,12})+$",
+        "\\*\\*$"
       ]
     },
     {
       "id": "secret-assignment-bare",
       "label": "password への引用符なしの値の代入",
       "category": "secret-value",
-      "description": "password / passwd / pwd（`=` の形だけ）/ パスワード / 暗証番号へ、引用符なしの 8 文字以上の値（英字と、数字か記号を含む。ドット入りも可）を入れている形。区切りは `:` `=` `＝` `=>` と、表の区切り `|`（日本語の名前は `は` も）。名前の後ろに付く語は、policy / length / min / max / rule / reset / hash / field / label など（password_policy、password_hash など）なら当てず、それ以外（DB_PASSWORD_PROD、passwordForAdmin、password_confirm、password2 など）は当てる。値が ~ で始まる物、password / passwd / pass だけの値、password1 〜 password1234（見本によく使われる弱い値）、process.env.X のような参照、アルゴリズム名（PBKDF2-SHA256 など）は当てない。**型の注記の形（英語の password: / password?: の直後で、値の後ろが ; > [ のとき。または値が Hash / Digest / Type / String / Str / Array / Buffer / Bytes / Field / Input / Value で終わり、後ろが , | ) か行末のとき）だけ**、パスカルケースの名前（PasswordHash256、Uint8Array、SecretStr、Sha256Digest など）も当てない。= ＝ は | と日本語の名前の形には効かせない。そのため、英語の `password:` の行末の Summer2024 のような単語＋数字は当たる（型らしい語尾を持たない）。引用符つきの値は secret-assignment 側で当てる。",
+      "description": "password / passwd / pwd（`=` の形だけ）/ パスワード / 暗証番号へ、引用符なしの 8 文字以上の値（英字と、数字か記号を含む。ドット入りも可）を入れている形。区切りは `:` `=` `＝` `=>`（日本語の名前は `は` も）。名前の直後の注記（パスワード（本番）: …）も可。マークダウンの `コード` と **強調** を除いた形でも照合する。`|` は、行頭が `|` の表の行の形（| password | 値 |）のときだけ区切りとして認める（echo $X | sha256sum のようなパイプには使わない）。名前の後ろに付く語は、policy / length / min / max / rule / reset / hash / field / label など（password_policy、password_hash など）なら当てず、それ以外（DB_PASSWORD_PROD、passwordForAdmin、password_confirm、password2 など）は当てる。値が ~ で始まる物、password / passwd / pass だけの値、password1 〜 password1234（見本によく使われる弱い値）、process.env.X のような参照、アルゴリズム名（PBKDF2-SHA256 など）、sha256sum などのコマンド名、min8 や 8+ で始まる方針の説明は当てない。**型の注記の形（英語の password: / password?: の直後で、値の後ろが ; > [ のとき。または値が Hash / Digest / Type / String / Str / Array / Buffer / Bytes / Field / Input / Value で終わり、後ろが , | ) か行末のとき）だけ**、パスカルケースの名前（PasswordHash256、Uint8Array、SecretStr、Sha256Digest など）も当てない。= ＝ は | と日本語の名前の形には効かせない。引用符つきの値は secret-assignment 側で当てる。",
       "flags": "i",
       "patterns": [
-        "(?:password|passwd)(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}[\"']?\\??[ \\t]{0,10}:[ \\t]{0,10}(?:(?<valueAnn>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))(?=[ \\t]{0,10}[;>\\[])|(?<valueAnnB>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{3,200}?(?:Hash|Digest|Type|String|Str|Array|Buffer|Bytes|Field|Input|Value)\\d{0,6})(?=[ \\t]{0,10}(?:[,|)]|$))|(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${])))",
-        "(?:password|passwd)(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[=＝|])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))",
-        "pwd(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}[\"']?[ \\t]{0,10}[=＝][ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))",
-        "(?:パスワード|パスコード|暗証番号)[\\w-]{0,40}[\"']?[ \\t]{0,10}(?:=>|[:：=＝は|])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))"
+        "(?:password|passwd)(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?\\??[ \\t]{0,10}:[ \\t]{0,10}(?:(?<valueAnn>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))(?=[ \\t]{0,10}`*[;>\\[])|(?<valueAnnB>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{3,200}?(?:Hash|Digest|Type|String|Str|Array|Buffer|Bytes|Field|Input|Value)\\d{0,6})(?=[ \\t]{0,10}`*(?:[,|)]|$))|(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${])))",
+        "(?:password|passwd)(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[=＝])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))",
+        "pwd(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}[=＝][ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))",
+        "(?:パスワード|パスコード|暗証番号)[\\w-]{0,40}[\"']?(?:[ \\t]{0,10}[（(][^）)]{1,20}[）)])?[ \\t]{0,10}(?:=>|[:：=＝は])[ \\t]{0,10}(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))",
+        "^[ \\t]*\\|(?:[^|\\n]{0,60}\\|){0,4}[ \\t]*(?:\\*\\*)?(?:password|passwd)(?!(?:[\\w-]{0,40}?[_-])?(?:policy|length|len|min|minimum|max|maximum|rule|rules|reset|hash|hashed|field|label|strength|regex|pattern|hint|placeholder|prompt|type|required|optional|complexity|history|expire|expires|expiry|attempts|count|validation|validator)(?![A-Za-z]))[\\w-]{0,40}(?:\\*\\*)?[\"']?[ \\t]*\\|[ \\t]*(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))",
+        "^[ \\t]*\\|(?:[^|\\n]{0,60}\\|){0,4}[ \\t]*(?:\\*\\*)?(?:パスワード|パスコード|暗証番号)[\\w-]{0,40}(?:\\*\\*)?[\"']?[ \\t]*\\|[ \\t]*(?<value2>(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}[A-Za-z])(?=[A-Za-z0-9+/_=&%#@!^*~.-]{0,200}(?:\\d|[+/=&%#@!^*~]))[A-Za-z0-9+/_=&%#@!^*~.-]{8,200}(?![\\w(${]))"
       ],
       "exclude": [
         "x{4,}",
@@ -159,7 +163,11 @@
         "^pass(?:word|wd)?$",
         "^password(?:1|12|123|1234)$",
         "^(?:process|env|config|settings|params|args|this|self|os|request|req|input|options|opts|data|user|form|window|document)\\.",
-        "^(?:pbkdf2|bcrypt|scrypt|argon2(?:id|i|d)?|sha-?\\d{1,3}|md5|hmac|aes|rsa)(?:[-_]\\w+)*$"
+        "^(?:pbkdf2|bcrypt|scrypt|argon2(?:id|i|d)?|sha-?\\d{1,3}|md5|hmac|aes|rsa)(?:[-_]\\w+)*$",
+        "^(?:sha\\d{1,3}|md5|b[23])sum$",
+        "^(?:min|max)\\d",
+        "^\\d+\\+",
+        "\\*\\*$"
       ],
       "excludeCaseSensitive": [
         "^(?:[A-Z][a-z0-9]*)+$"

@@ -148,11 +148,13 @@ export function mergeExtraRules(base, extra) {
 
 // ---- 検査（純関数） ----
 
-/** 行を、そのままの形・NFKC にそろえた形・さらに %XX を戻した形で照合する（全角の ＠ や %40 を取りこぼさない）。 */
+/** 行を、そのままの形・NFKC にそろえた形・%XX を戻した形・Markdown の飾りを除いた形で照合する（全角の ＠ や %40、`コード` を取りこぼさない）。 */
 function variantsOf(line) {
   const nfkc = line.normalize("NFKC");
   const decoded = nfkc.replace(/%([0-7][0-9a-fA-F])/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
-  return [...new Set([line, nfkc, decoded])];
+  // Markdown の飾り（`コード` と **強調** / __強調__）を除いた形。`Summer2024` のように書かれた資格情報も拾う。
+  const plain = decoded.replace(/`|\*\*|__/g, "");
+  return [...new Set([line, nfkc, decoded, plain])];
 }
 
 // 除外は、当たった文字の「値の部分」（名前つきグループ value* があればそこ）だけに当てる。

@@ -1209,3 +1209,113 @@ test("secret-assignment-bare: 表の区切り | は password 系と日本語の�
   assert.deepEqual(ids(scan("| パスワード | Xk9mP2qLr7vT |", rules)), ["secret-assignment-bare"]);
   assert.deepEqual(ids(scan(`| ${PW} | Xk9mP2qLr7vT |`, rules)), ["secret-assignment-bare"]);
 });
+
+// ======== 六回目のレビュー（#119）への対応で足したテスト ========
+// Markdown の `コード` と **強調** を除いた形でも照合する。名前の直後の注記（本番）を許す。
+// | は、行頭が | の表の行の形のときだけ区切りとして認める。
+
+const BT = String.fromCharCode(96); // バッククォート
+const markdownHits = {
+  "コードの英語 password": () => `${PW}: ${BT}Summer2024${BT}`,
+  "コードの日本語 パスワード": () => `パスワード: ${BT}Xk9mP2qLr7vT${BT}`,
+  "表の中のコード": () => `| パスワード | ${BT}Xk9mP2qLr7vT${BT} |`,
+  "リストの中のコード": () => `- パスワード: ${BT}Xk9mP2qLr7vT${BT}`,
+  "= の形のコード": () => `DB_${PW.toUpperCase()}=${BT}Xk9mP2qLr7vT${BT}`,
+  "api_key のコード（引用符なし 20 文字）": () => `api_key: ${BT}Ab12Cd34Ef56Gh78Ij90${BT}`,
+  "secret のコード（引用符なし 22 文字）": () => `secret: ${BT}Ab12Cd34Ef56Gh78Ij90Kl${BT}`,
+  "強調された名前": () => "**パスワード**: Xk9mP2qLr7vT",
+  "名前の直後の注記（日本語）": () => "パスワード（本番）: Xk9mP2qLr7vT",
+  "名前の直後の注記（半角かっこ・英語）": () => `${PW} (prod): Xk9mP2qLr7vT`,
+  "名前の直後の注記（api_key の引用符つき）": () => `api_key (本番): "Ab12Cd34Ef56Gh78Ij90"`,
+  "強調された英語の名前とコード": () => `**${PW}**: ${BT}Xk9mP2qLr7vT${BT}`,
+  "表の強調された名前": () => "| **パスワード** | Xk9mP2qLr7vT |",
+  "アンダースコアの強調": () => "__パスワード__: Xk9mP2qLr7vT",
+};
+for (const [name, make] of Object.entries(markdownHits)) {
+  test(`Markdown（六回目）: 当たる: ${name}`, () => {
+    const text = make();
+    const results = scan(text, rules);
+    assert.equal(results.length, 1, text);
+    assert.ok(results[0].ruleId.startsWith("secret-assignment"), results[0].ruleId);
+    assert.equal(results[0].count, 1, "形違いの照合で二重に数えない");
+    assert.deepEqual(results[0].lines, [1]);
+  });
+}
+
+test("Markdown: 行番号は元の行のまま（飾りを除いた形でも）", () => {
+  const text = ["# 見出し", "", `パスワード: ${BT}Xk9mP2qLr7vT${BT}`, "**説明**"].join("\n");
+  assert.deepEqual(scan(text, rules).map((r) => r.lines), [[3]]);
+});
+
+// これまでの「当たらない」例が、バッククォートや強調で包んでも当たらないこと
+test("Markdown: これまでの「当たらない」例を `コード` や **強調** で包んでも当たらない", () => {
+  const lists = [
+    notSecretForms,
+    moreNotSecret,
+    stillNotSecret,
+    ...[bareMisses, fifthMisses].map((group) => Object.values(group).map((make) => make())),
+  ];
+  let checked = 0;
+  for (const list of lists) {
+    for (const text of list) {
+      if (text.includes(BT)) continue;
+      for (const wrapped of [`${BT}${text}${BT}`, `**${text}**`, `- ${BT}${text}${BT}`]) {
+        assert.deepEqual(scan(wrapped, rules), [], wrapped);
+        checked += 1;
+      }
+    }
+  }
+  assert.ok(checked > 100, `確かめた数: ${checked}`);
+});
+
+test("Markdown: 型名をインラインコードにしても注記として扱う（値の後ろの閉じのバッククォートは無視する）", () => {
+  for (const text of [
+    `${BT}${PW}: PasswordHash256${BT}`,
+    `${BT}${PW}: Uint8Array;${BT}`,
+    `${PW}: ${BT}SecretStr${BT}`,
+    `${BT}${PW}?: Sha256Digest | null;${BT}`,
+  ]) {
+    assert.deepEqual(scan(text, rules), [], text);
+  }
+  // 型らしい語尾が無ければ、コードの中でも当てる
+  assert.deepEqual(ids(scan(`${BT}${PW}: Summer2024${BT}`, rules)), ["secret-assignment-bare"]);
+});
+
+// ---- 2: | は表の行の形のときだけ ----
+test("bare: | は行頭が | の表の行のときだけ区切りとして認める（パイプ・コマンドには使わない）", () => {
+  for (const text of [
+    `echo $DB_${PW.toUpperCase()} | sha256sum`,
+    `$${PW} | sha512sum`,
+    `echo ${PW} | md5sum`,
+    `cat file | grep ${PW} | Xk9mP2qLr7vT`,
+    `${PW} | Xk9mP2qLr7vT`, // 行頭が | でない
+    `a | ${PW} | Xk9mP2qLr7vT |`,
+  ]) {
+    assert.deepEqual(scan(text, rules), [], text);
+  }
+  for (const text of [
+    `| ${PW} | Summer2024 |`,
+    `  | ${PW} | Summer2024 |`, // 行頭に空白があってもよい
+    `| 本番 | ${PW} | Xk9mP2qLr7vT |`,
+    "| 本番 | パスワード | Xk9mP2qLr7vT | 備考 |",
+  ]) {
+    assert.deepEqual(ids(scan(text, rules)), ["secret-assignment-bare"], text);
+  }
+});
+
+test("bare: sha256sum / md5sum などのコマンド名と、方針の説明は値として当てない", () => {
+  for (const sample of ["sha256sum", "sha1sum", "sha512sum", "md5sum", "b2sum", "b3sum"]) {
+    assert.deepEqual(scan(`| ${PW} | ${sample} |`, rules), [], sample);
+    assert.deepEqual(scan(`${PW}=${sample}`, rules), [], sample);
+  }
+  for (const policy of ["min8+symbol", "min12chars", "max64chars", "8+chars", "8+symbol"]) {
+    assert.deepEqual(scan(`| ${PW} | ${policy} |`, rules), [], policy);
+    assert.deepEqual(scan(`${PW}: ${policy}`, rules), [], policy);
+  }
+});
+
+test("bare: 表の見出し行は引き続き当たらない（説明・英語の説明・別の列）", () => {
+  for (const text of [`| ${PW} | 説明 |`, `| ${PW} | Description |`, "| パスワード | 説明 |", `| Field | ${PW} | Description |`, `| ${PW} | --- |`]) {
+    assert.deepEqual(scan(text, rules), [], text);
+  }
+});
