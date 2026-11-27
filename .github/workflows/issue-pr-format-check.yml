@@ -17,14 +17,16 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: format-check-${{ github.event.issue.number || github.event.pull_request.number }}
-  cancel-in-progress: true
-
+# 同時実行の制御はジョブごとに持つ（下記）。
 jobs:
   issue-check:
     name: Format check (issue)
     if: github.event_name == 'issues'
+    # cancel-in-progress にしない: ラベル付きで作った issue は opened と labeled がほぼ同時に来る。
+    # 取り消すと opened（見出しの書き換え前の本文を判定する回）が消えて判定がぶれるので、順に流す。
+    concurrency:
+      group: format-check-issue-${{ github.event.issue.number }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -50,6 +52,10 @@ jobs:
   pr-check:
     name: Format check (PR)
     if: github.event_name == 'pull_request_target'
+    # PR は本文だけを見る。同じ PR の実行は新しい方だけ残す。
+    concurrency:
+      group: format-check-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

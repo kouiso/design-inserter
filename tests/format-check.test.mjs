@@ -241,11 +241,17 @@ test("workflow: 権限はジョブごとに最小、PR の head を取り出さ�
   }
   assert.equal([...yml.matchAll(/persist-credentials: false/g)].length, 2);
   assert.equal([...yml.matchAll(/sparse-checkout: /g)].length, 2);
-  // 同じ issue / PR の実行は新しい方だけ残す
+  // 同時実行はジョブごと。issue は取り消さず順に流し（opened が消えると判定がぶれる）、PR は新しい方だけ残す
+  assert.doesNotMatch(yml, /^concurrency:/m);
   assert.match(
-    yml,
-    /concurrency:\n {2}group: format-check-\$\{\{ github\.event\.issue\.number \|\| github\.event\.pull_request\.number \}\}\n {2}cancel-in-progress: true\n/,
+    issueJob,
+    /concurrency:\n {6}group: format-check-issue-\$\{\{ github\.event\.issue\.number \}\}\n {6}cancel-in-progress: false\n/,
   );
+  assert.match(
+    prJob,
+    /concurrency:\n {6}group: format-check-pr-\$\{\{ github\.event\.pull_request\.number \}\}\n {6}cancel-in-progress: true\n/,
+  );
+  assert.doesNotMatch(issueJob, /cancel-in-progress: true/);
   assert.doesNotMatch(yml, /\bpull_request:\s*$/m);
   assert.doesNotMatch(yml, /pull_request\.head|head_ref|head\.sha|head\.ref/);
   assert.doesNotMatch(yml, /^\s+ref:/m);
@@ -264,6 +270,7 @@ function startFakeApi(initialComments = []) {
     requests: [],
     nextId: 1000,
     failWith: null,
+    issue: null,
   };
   const server = createServer((req, res) => {
     let raw = "";
@@ -277,6 +284,10 @@ function startFakeApi(initialComments = []) {
         res.end(JSON.stringify(json));
       };
       if (state.failWith) return send(state.failWith, { message: "boom" });
+      const issueGet = url.pathname.match(/^\/repos\/o\/r\/issues\/(\d+)$/);
+      if (req.method === "GET" && issueGet) {
+        return state.issue ? send(200, state.issue) : send(404, { message: "no issue" });
+      }
       const list = url.pathname.match(/^\/repos\/o\/r\/issues\/(\d+)\/comments$/);
       const one = url.pathname.match(/^\/repos\/o\/r\/issues\/comments\/(\d+)$/);
       if (req.method === "GET" && list) {
@@ -489,6 +500,8 @@ test("実行: アラート系ラベルが付いた issue の赤いコメント�
   const api = await startFakeApi();
   try {
     assert.equal((await runScript(api, issueEvent("何も無い"))).code, 1);
+    // labeled は今の issue（本文とラベル）を API で読み直して判定する
+    api.issue = { number: 7, body: "何も無い", user: human, labels: [{ name: "Alert" }] };
     const labeled = await runScript(api, { ...issueEvent("何も無い", { labels: [{ name: "Alert" }] }), action: "labeled" });
     assert.equal(labeled.code, 0, labeled.stderr);
     assert.match(api.comments[0].body, /対象外になったので検査しません/);
@@ -900,9 +913,11 @@ test("再レビュー2: 閉じない <!-- は行頭の時だけ本文の終わ�
   assert.equal(checkIssue(`## 背景\n文の途中に <!-- がある\n${tail}`).ok, true);
   // 字下げ 4 以上の行頭も、閉じが無ければただの文字
   assert.equal(checkIssue(`## 背景\n    <!--\n${tail}`).ok, true);
-  // 行の途中で始まり、後ろに --> がある → コメント（間の見出しは見出しにしない）
-  const closed = checkIssue(`## 背景\nあり <!--\n## 今どこまで\nx\n-->\n${FULL_ISSUE_TAIL}`);
-  assert.deepEqual(closed.missing, ["今どこまで"]);
+  // 行の途中で始まり、同じ段落の後ろに --> がある → コメント（間の文は中身にしない）
+  assert.deepEqual(checkIssue(`## 背景\n- <!--\nx\n-->\n${tail}`).empty, ["背景"]);
+  assert.equal(checkIssue(`## 背景\nあり <!-- 注釈\n続き -->\n${tail}`).ok, true);
+  // 見出しの行をまたぐ <!-- は、行の途中で始まる限りコメントにしない（見出しを守る）
+  assert.equal(checkIssue(`## 背景\nあり <!--\n${tail}\n-->`).ok, true);
   // 行頭（字下げ 3 まで）で始まり閉じが無い → 本文の終わりまでコメント
   for (const lead of ["<!--", "   <!--", "<!-- 始まり"]) {
     const open = checkIssue(`## 背景\nあり\n${lead}\n${tail}`);
@@ -950,5 +965,71 @@ test("実行: 5 見出しだけのサブ issue は赤、空本文のサブ issue
     assert.equal(api2.writes().length, 0);
   } finally {
     await api2.close();
+  }
+});
+
+// ---------- 再々レビュー（64d4178）の指摘 1〜2 に対応するテスト ----------
+
+test("再々レビュー1: 文の途中の閉じない <!-- は、同じ段落に --> がある時だけコメント。フェンスの中の --> は数えない", () => {
+  const base = `## 背景\n記号 <!-- と\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`;
+  const green = { ok: true, missing: [], empty: [], invalid: [] };
+  assert.deepEqual(checkIssue(base), green);
+  // (a) 後ろの別の行に完結したコメント、(b) 後ろの文に --> 、(c) フェンスの中の -->
+  assert.deepEqual(checkIssue(`${base}\n<!-- メモ -->`), green);
+  assert.deepEqual(checkIssue(`${base}\n赤 --> 緑`), green);
+  assert.deepEqual(checkIssue(`${base}\n\`\`\`\na --> b\n\`\`\``), green);
+  // 空行で段落が切れたあとの --> も数えない
+  assert.deepEqual(checkIssue(`## 背景\n記号 <!-- と\n\n赤 --> 緑\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`), green);
+  // 同じ段落の中のフェンスの手前までしか見ない
+  assert.deepEqual(checkIssue(`## 背景\n記号 <!-- と\n\`\`\`\na --> b\n\`\`\`\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`), green);
+  // 同じ段落に --> があれば、コメントとして中身から除く
+  assert.deepEqual(checkIssue(`## 背景\n- <!--\nx\n赤\n-->\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`).empty, ["背景"]);
+  // 行頭で始まる閉じないコメントは、これまでどおり本文の終わりまで
+  assert.equal(checkIssue(`## 背景\nあり\n<!-- 始まり\n## 今どこまで\nx\n${FULL_ISSUE_TAIL}`).ok, false);
+});
+
+test("実行: labeled / unlabeled / reopened は payload でなく API の今の issue（本文・ラベル）で判定する", async () => {
+  const api = await startFakeApi();
+  try {
+    // payload の本文は書き換え前の古い物（足りない）。API の今の本文はそろっている → 緑、書き込みなし
+    api.issue = { number: 7, body: GOOD_ISSUE, user: human, labels: [] };
+    const stale = "何も書いていない";
+    for (const action of ["labeled", "unlabeled", "reopened"]) {
+      const r = await runScript(api, { ...issueEvent(stale), action });
+      assert.equal(r.code, 0, `${action}: ${r.stderr}`);
+    }
+    assert.equal(api.writes().length, 0);
+    assert.equal(api.requests.filter((q) => q.method === "GET" && q.path === "/repos/o/r/issues/7").length, 3);
+
+    // 逆に、payload の本文はそろっていても API の今の本文が足りなければ赤
+    api.issue = { number: 7, body: "## 背景\nあり\n", user: human, labels: [] };
+    const bad = await runScript(api, { ...issueEvent(GOOD_ISSUE), action: "labeled" });
+    assert.equal(bad.code, 1, bad.stderr);
+    assert.equal(api.writes().length, 1);
+
+    // 見出しの書き換え後の本文（## 経緯）は書き換えずに判定する（opened のときだけ繰り上げる）
+    api.issue = { number: 7, body: NESTED_BODY.replace("### 経緯", "#### 経緯"), user: human, labels: [] };
+    const nested = await runScript(api, { ...issueEvent("古い"), action: "labeled" });
+    assert.equal(nested.code, 0, nested.stderr);
+    assert.match(api.comments[0].body, /OK/);
+
+    // API の今の issue を読めなければ exit 2
+    api.issue = null;
+    assert.equal((await runScript(api, { ...issueEvent(GOOD_ISSUE), action: "labeled" })).code, 2);
+  } finally {
+    await api.close();
+  }
+});
+
+test("実行: opened / edited / PR は payload の本文で判定し、issue の読み直しはしない", async () => {
+  const api = await startFakeApi();
+  try {
+    api.issue = { number: 7, body: "API の本文は見ない", user: human, labels: [] };
+    assert.equal((await runScript(api, { ...issueEvent(GOOD_ISSUE), action: "opened" })).code, 0);
+    assert.equal((await runScript(api, { ...issueEvent(GOOD_ISSUE), action: "edited" })).code, 0);
+    assert.equal((await runScript(api, { ...prEvent(GOOD_PR), action: "reopened" })).code, 0);
+    assert.ok(api.requests.every((q) => !/^\/repos\/o\/r\/issues\/\d+$/.test(q.path)));
+  } finally {
+    await api.close();
   }
 });

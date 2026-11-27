@@ -72,7 +72,15 @@ const CODE_SPAN = /(`+)(?!`)[\s\S]*?(?<!`)\1(?!`)/g;
 // フェンスは開いた長さを覚え、閉じは「字下げ3以下・同じ文字・同じ長さ以上・情報文字列なし」だけ。
 function scan(body) {
   const raw = String(body ?? "").replace(ZERO_WIDTH, "").replace(/\r\n?/g, "\n").split("\n");
-  const lastClose = raw.findLastIndex((l) => l.includes("-->"));
+  // 行の途中で始まる閉じない <!-- は、同じ段落（次の空行・見出しの行・フェンスの手前まで）に --> がある時だけコメントにする。
+  const closesInParagraph = (from) => {
+    for (let j = from + 1; j < raw.length; j += 1) {
+      const next = raw[j];
+      if (next.trim() === "" || /^ {0,3}#{1,6}[ \t]/.test(next) || /^ {0,3}(`{3,}|~{3,})/.test(next)) return false;
+      if (next.includes("-->")) return true;
+    }
+    return false;
+  };
   const lines = [];
   const fenced = [];
   let fence = null;
@@ -112,7 +120,7 @@ function scan(body) {
       if (end < 0) {
         // 閉じない <!-- は、行頭（字下げ3以下）か、後ろに --> がある時だけコメントとして扱う。
         // 行の途中で閉じも無いなら、ただの文字として残す。
-        if (/^ {0,3}$/.test(line.slice(0, start)) || lastClose > lineIndex) {
+        if (/^ {0,3}$/.test(line.slice(0, start)) || closesInParagraph(lineIndex)) {
           line = line.slice(0, start);
           inComment = true;
         }
@@ -351,6 +359,8 @@ async function findMarkerComment(env, repo, number) {
   return null;
 }
 
+const REFETCH_ISSUE_ACTIONS = ["labeled", "unlabeled", "reopened"];
+
 // 戻り値は終了コード: 0 = 対象外 or そろっている、1 = 書き方が足りない、2 = 実行の失敗。
 export async function main(env = process.env, log = console) {
   try {
@@ -359,7 +369,7 @@ export async function main(env = process.env, log = console) {
     const payload = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8"));
     const isPr = Boolean(payload.pull_request);
     const kind = isPr ? "pr" : "issue";
-    const item = isPr ? payload.pull_request : payload.issue;
+    let item = isPr ? payload.pull_request : payload.issue;
     if (!item) throw new Error("イベントに issue も pull_request もありません");
     // issues イベントは PR では来ないが、念のため PR 由来の issue は見ない。
     if (!isPr && item.pull_request) {
@@ -373,6 +383,12 @@ export async function main(env = process.env, log = console) {
     }
     const repo = env.GITHUB_REPOSITORY || payload.repository?.full_name;
     if (!repo) throw new Error("GITHUB_REPOSITORY がありません");
+
+    // labeled / unlabeled / reopened の payload の本文は、ラベル付きで作った issue では
+    // fix-issue-headings.yml の書き換え前の古い物のことがある。今の本文とラベルを API で読み直して判定する。
+    if (!isPr && REFETCH_ISSUE_ACTIONS.includes(payload.action)) {
+      item = await request(env, "GET", `/repos/${repo}/issues/${item.number}`);
+    }
 
     const existing = await findMarkerComment(env, repo, item.number);
     const update = (body) =>
