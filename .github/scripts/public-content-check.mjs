@@ -106,7 +106,8 @@ export function compileRules(rules) {
 /**
  * 追加の規則（secret PUBLIC_CONTENT_EXTRA_RULES から来る JSON。規則の配列）を、規則ファイルの規則へ足す。
  * 顧客名・禁止語など持ち主固有の語は公開リポに置けないので、ここから足す。
- * 同じ id なら words / patterns / exclude を後ろへ足し（汎用規則のまま）、無い id なら「持ち主指定」の新しい規則にする。
+ * 汎用規則と同じ id なら exclude / excludeBefore だけを後ろへ足せる（words / patterns は不可。例外を投げる）。
+ * 無い id なら「持ち主指定」の新しい規則にする。
  * 持ち主指定の規則は、コメントでは総称 OWNER_LABEL にまとめ、id も出さない。
  */
 export function mergeExtraRules(base, extra) {
@@ -119,7 +120,13 @@ export function mergeExtraRules(base, extra) {
       merged.push({ ...add, owner: true });
       continue;
     }
-    for (const key of LIST_KEYS) {
+    // なぜ: 汎用規則（行番号を外の人にも見せる）に持ち主の語を混ぜると、その語の一覧を行番号から当てられる。
+    // 足せるのは、見本を除く exclude / excludeBefore だけ。語を足したいなら新しい id の規則にする。
+    const forbidden = Object.keys(add).filter((key) => key !== "id" && key !== "exclude" && key !== "excludeBefore" && add[key] !== undefined);
+    if (forbidden.length > 0) {
+      throw new Error(`規則 ${add.id} は汎用規則なので、足せるのは exclude / excludeBefore だけ（${forbidden.join(" / ")} は不可）`);
+    }
+    for (const key of ["exclude", "excludeBefore"]) {
       if (add[key]?.length) target[key] = [...(target[key] ?? []), ...add[key]];
     }
   }
@@ -145,7 +152,8 @@ function valueOf(match) {
 }
 
 function countInText(text, rule) {
-  let count = 0;
+  // なぜ: 同じ場所に複数の patterns が当たっても 1 件と数える（重なる範囲は 1 つにまとめる）。
+  const spans = [];
   for (const matcher of rule.matchers) {
     matcher.lastIndex = 0;
     for (const match of text.matchAll(matcher)) {
@@ -157,8 +165,15 @@ function countInText(text, rule) {
         const before = text.slice(Math.max(0, match.index - CONTEXT_CHARS), match.index);
         if (rule.excludeBefore.some((ex) => ex.test(before))) continue;
       }
-      count += 1;
+      spans.push([match.index, match.index + match[0].length]);
     }
+  }
+  spans.sort((a, b) => a[0] - b[0]);
+  let count = 0;
+  let end = -1;
+  for (const [from, to] of spans) {
+    if (from >= end) count += 1;
+    end = Math.max(end, to);
   }
   return count;
 }

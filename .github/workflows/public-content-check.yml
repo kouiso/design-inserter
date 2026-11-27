@@ -62,9 +62,18 @@ jobs:
           # 未設定なら空文字になり、何も足さない。渡し方（secret を作るか）は持ち主が決める。
           PUBLIC_CONTENT_EXTRA_RULES: ${{ secrets.PUBLIC_CONTENT_EXTRA_RULES }}
         run: |
-          # リリース前（既定の枝にスクリプトがまだ無い）に develop 向けのレビューイベントで起動した時は、何もしない。
+          # 既定の枝にスクリプトがまだ無いのは、リリース前に develop 向けのレビュー系イベントで起動した時だけ（定義が PR 側の版で動くため）。
+          # その 2 つのイベントだけは何もせず成功にし、それ以外でスクリプトが無いのは異常なので赤にする。
           if [ ! -f .github/scripts/public-content-check.mjs ]; then
-            echo "::notice::既定の枝に public-content-check.mjs がまだ無いので検査しません"
-            exit 0
+            case "$GITHUB_EVENT_NAME" in
+              pull_request_review | pull_request_review_comment)
+                echo "::notice::既定の枝に public-content-check.mjs がまだ無いので検査しません"
+                exit 0
+                ;;
+              *)
+                echo "::error::既定の枝に public-content-check.mjs が無いので検査できません"
+                exit 1
+                ;;
+            esac
           fi
           node .github/scripts/public-content-check.mjs

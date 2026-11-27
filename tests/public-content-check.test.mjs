@@ -3,7 +3,7 @@
 // 偽の秘密は、TruffleHog や push protection に引っかからないよう、実行時に文字列を組み立てる。
 // 実際の GitHub には何も書かない（GITHUB_API_URL をローカルサーバーへ向ける）。
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import http from "node:http";
 import { tmpdir } from "node:os";
@@ -803,4 +803,155 @@ test("ワークフロー: pull_request_review の起動と bot 除外、既定�
   assert.ok(w.includes("github.event.review.id"), "review ごとに直列化する");
   assert.match(w, /\[ ! -f \.github\/scripts\/public-content-check\.mjs \]/, "既定の枝にスクリプトが無い間は空振りする");
   assert.ok(w.includes("PR 側の版"), "レビュー系イベントではワークフロー定義が PR 側になる、と書いてある");
+});
+
+// ======== 再レビュー（#119）への対応で足したテスト ========
+
+// ---- 1: 取りこぼしていた代入の形 ----
+const moreSecretForms = {
+  "define の長い値（$ ^ & * % # @ ! を含む）": () => "define('NONCE_" + "SALT', 'q8#Lk2@fP!x9zR$mW3^vB7&nH5*tY1%c');",
+  "define の PASSWORD は小文字だけの値でも当たる": () => `define( 'DB_${PW.toUpperCase()}', 'correcthorsebattery' );`,
+  "パスワード（引用符なし 8 文字以上）": () => "パスワード: Xk9mP2qLr7vT",
+  "パスワードは（日本語の名前だけ）": () => "パスワードは Xk9mP2qLr7vT です",
+  "パスワード＝（全角の等号）": () => "パスワード＝Xk9mP2qLr7vT",
+  "password: 引用符なし 8 文字以上": () => `${PW}: Xk9mP2qLr7vT`,
+  "passwd = 引用符なし": () => "pass" + "wd = Xk9mP2qLr7vT",
+  "token は引用符つき 16 文字以上": () => `token: "${"Zx9".repeat(6)}"`,
+  "token は引用符なしなら 32 文字以上": () => "TOKEN=5f4dcc3b5aa765d61d8327deb882cf99",
+  "数字だけの引用符つき値（桁数が 8 以上）": () => `${PW}: "12345678"`,
+};
+for (const [name, make] of Object.entries(moreSecretForms)) {
+  test(`secret-assignment（再レビュー）: ${name}`, () => {
+    const text = make();
+    const results = scan(`前の行\n${text}\n`, rules);
+    assert.deepEqual(ids(results), ["secret-assignment"], text);
+    assert.equal(results[0].count, 1, "複数の patterns に当たっても 1 件");
+    assert.deepEqual(results[0].lines, [2]);
+  });
+}
+
+const moreNotSecret = [
+  'token: "color.primary.500"',
+  '"token": "2024-01-01"',
+  "cache_token: 'di-v1.2.0'",
+  "esc_html__( 'Invalid token', 'designinserter-admin' )",
+  "トークンは GitHubActions2024Workflow で使う",
+  "トークン: GitHubActions2024Workflow",
+  'api_key: "YOUR-API-KEY-1234"',
+  'api_key: "sk-xxxxxxxxxxxxxxxx"',
+  "define( 'DESIGNINSERTER_VERSION_KEY', 'designinserter_version' );",
+  `${PW}: Required`,
+  `${PW}: \${DB_${PW.toUpperCase()}}`,
+  "token: abc123",
+  "「パスワード」は管理画面で変更できます。",
+];
+for (const text of moreNotSecret) {
+  test(`secret-assignment（再レビュー）: 誤検知しない (${JSON.stringify(text.slice(0, 30))})`, () => {
+    assert.deepEqual(scan(text, rules), [], text);
+  });
+}
+
+// ---- 2: 汎用規則に足せるのは exclude / excludeBefore だけ ----
+test("mergeExtraRules: 汎用規則の id に words / patterns を足そうとすると、id だけを出して拒否する", () => {
+  const secretWord = "顧客" + "ひみつ";
+  for (const generic of ["personal-email", "secret-assignment", "aws-access-key"]) {
+    for (const key of ["words", "patterns", "label", "flags", "sameLineAs"]) {
+      const value = key === "words" || key === "patterns" ? [secretWord] : secretWord;
+      assert.throws(
+        () => mergeExtraRules(rulesJson, [{ id: generic, [key]: value }]),
+        (error) => error.message.includes(generic) && error.message.includes("exclude") && !error.message.includes(secretWord),
+        `${generic} / ${key}`,
+      );
+    }
+  }
+  // exclude / excludeBefore は足せる
+  const merged = mergeExtraRules(rulesJson, [{ id: "personal-email", exclude: ["@corp-sample\\.test$"], excludeBefore: ["x$"] }]);
+  const email = merged.find((r) => r.id === "personal-email");
+  assert.ok(email.exclude.includes("@corp-sample\\.test$"));
+  assert.ok(email.excludeBefore.includes("x$"));
+  assert.ok(!email.owner);
+  assert.deepEqual(scan(fakes["personal-email"](), compileRules(merged)), []);
+});
+
+test("実走: 汎用規則に words を足した追加規則は、規則の id だけを出して exit 2", async () => {
+  const api = await startFakeGitHub();
+  try {
+    const word = "顧客" + "ひみつ";
+    const extra = JSON.stringify([{ id: "personal-email", words: [word] }]);
+    const r = await runScript({ eventName: "issues", event: issueEvent(82, "普通"), apiUrl: api.url, extraEnv: { PUBLIC_CONTENT_EXTRA_RULES: extra } });
+    assert.equal(r.code, 2, r.output);
+    assert.ok(r.output.includes("personal-email"));
+    assert.ok(!r.output.includes(word));
+    assert.equal(api.state.requests.length, 0);
+  } finally {
+    await api.close();
+  }
+});
+
+// ---- 3: クエリ・フラグメントのメールは URL の資格情報として除外しない ----
+test("メール: URL の資格情報だけを除き、クエリ・フラグメント・パスの後ろのメールは当てる", () => {
+  const mail = "taro.sample" + AT + "corp-sample.test";
+  for (const text of [
+    `https://forms.test?email=${mail}`,
+    `https://forms.test/path?a=1&cc=${mail}`,
+    `https://forms.test/path#${mail}`,
+    `https://forms.test/${mail}`,
+  ]) {
+    assert.deepEqual(ids(scan(text, rules)), ["personal-email"], text);
+  }
+  assert.deepEqual(scan(`https://someone:pass1234${AT}host.test/x`, rules), []);
+  assert.deepEqual(scan(`https://someone${AT}host.test/x`, rules), [], "user@host の形（パスワードなし）も資格情報");
+});
+
+// ---- 6: 件数・文脈の長さ・全角の持ち主の語 ----
+test("scan: 全角を含む行でも、形違いで二重に数えない", () => {
+  const aws = fakes["aws-access-key"]();
+  const fullAws = "ＡＫＩＡ" + "X".repeat(16);
+  const mail = "taro.sample" + AT + "corp-sample.test";
+  const text = [`半角 ${aws}`, `全角 ${fullAws}`, `両方 ${aws} と ${fullAws}`, `全角メール taro.sample＠corp-sample.test と ${mail}`].join("\n");
+  const byId = Object.fromEntries(scan(text, rules).map((r) => [r.ruleId, r]));
+  assert.deepEqual(byId["aws-access-key"].lines, [1, 2, 3]);
+  assert.equal(byId["aws-access-key"].count, 1 + 1 + 2);
+  assert.deepEqual(byId["personal-email"].lines, [4]);
+  assert.equal(byId["personal-email"].count, 2);
+});
+
+test("メール: URL の資格情報の判定は直前 256 文字まで（それより前の :// は見ない）", () => {
+  const mail = "taro.sample" + AT + "corp-sample.test";
+  const near = `://${"a".repeat(100)}:${mail}`;
+  const far = `://${"a".repeat(300)}:${mail}`;
+  assert.deepEqual(scan(near, rules), [], "256 文字以内の :// は資格情報として除く");
+  assert.deepEqual(ids(scan(far, rules)), ["personal-email"], "256 文字より前の :// は見ないので当たる");
+});
+
+test("scan: 全角で書いた持ち主の語は、半角の本文にも当たる（NFKC）", () => {
+  const fullWidthWord = "ＣＵＳＴＯＭＥＲＺ";
+  const merged = compileRules(mergeExtraRules(rulesJson, [{ id: "mine", words: [fullWidthWord] }]));
+  assert.deepEqual(scan("1\ncustomerz の件", merged).map((r) => r.lines), [[2]]);
+  assert.deepEqual(scan("1\nＣＵＳＴＯＭＥＲＺ の件", merged).map((r) => r.lines), [[2]]);
+  assert.deepEqual(scan("1\nｃｕｓｔｏｍｅｒｚ の件", merged).map((r) => r.lines), [[2]]);
+});
+
+// ---- 5: スクリプトが無いときの扱い（ワークフローの run の分岐を実際に動かす） ----
+test("ワークフロー: 既定の枝にスクリプトが無い時、成功で終わるのは review 系の 2 イベントだけ", () => {
+  const w = readFileSync(join(root, ".github/workflows/public-content-check.yml"), "utf8");
+  const block = w.slice(w.indexOf("run: |\n", w.indexOf("Scan issue / PR / comment text")) + "run: |\n".length);
+  const script = block.split("\n").map((line) => line.replace(/^ {10}/, "")).join("\n");
+  assert.ok(script.includes("node .github/scripts/public-content-check.mjs"));
+  const dir = mkdtempSync(join(tmpdir(), "public-content-missing-"));
+  try {
+    const exitFor = (eventName) => spawnSync("bash", ["-c", script], { cwd: dir, env: { PATH: process.env.PATH, GITHUB_EVENT_NAME: eventName }, encoding: "utf8" });
+    for (const name of ["pull_request_review", "pull_request_review_comment"]) {
+      const r = exitFor(name);
+      assert.equal(r.status, 0, name);
+      assert.ok(r.stdout.includes("::notice::"));
+    }
+    for (const name of ["issues", "issue_comment", "pull_request_target"]) {
+      const r = exitFor(name);
+      assert.equal(r.status, 1, name);
+      assert.ok(r.stdout.includes("::error::"), name);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
