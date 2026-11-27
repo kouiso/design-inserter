@@ -1088,7 +1088,7 @@ const bareHits = {
   "英語のコロン: 後ろに文章が続く（型の注記ではない）": () => `${PW}: Summer2024 です`,
   "= の形: 後ろが ;": () => `${PW} = Summer2024;`,
   "英語のコロン: 型の注記ではない値（行末）": () => `${PW}: Xk9mP2qLr7vT`,
-  "英語の ?: の形": () => `${PW}?: Xk9mP2qLr7;`,
+  "英語の ?: の形": () => `${PW}?: xk9mp2qlr7;`,
   "pwd は = の形": () => "pwd = Xk9mP2qLr7",
 };
 for (const [name, make] of Object.entries(bareHits)) {
@@ -1101,14 +1101,10 @@ for (const [name, make] of Object.entries(bareHits)) {
 }
 
 const bareMisses = {
-  "英語のコロン + 行末の単語＋数字（型名か本物か区別できないので当てない）": () => `${PW}: Summer2024`,
-  "英語のコロン + 行末の大文字と数字": () => `${PW}: AB12CD34EF`,
   "英語のコロン + ; の前のパスカルケース": () => `${PW}: PasswordHash256;`,
   "英語の ?: + | の前のパスカルケース": () => `${PW}?: PasswordHash256 | null;`,
-  "英語のコロン + , の前のパスカルケース": () => `${PW}: Summer2024, next`,
   "hash を含む名前": () => `${PW}_hash=Xk9mP2qLr7`,
   "policy を含む名前": () => `${PW}_policy: min8+symbol`,
-  "confirm を含む名前": () => `${PW}_confirm = Xk9mP2qLr7`,
   "min / length を含む名前": () => `${PW}_min_length: 8chars12`,
   "日本語の名前 + アルゴリズム名": () => "パスワードは PBKDF2-SHA256 でハッシュ化する",
   "日本語の名前 + password で始まる例": () => "パスワードは password123 のように推測しやすいものを禁止",
@@ -1124,12 +1120,92 @@ for (const [name, make] of Object.entries(bareMisses)) {
   });
 }
 
-test("secret-assignment-bare: 型の注記の形を決める後ろの文字は ; , | ) > [ と行末だけ", () => {
-  const typeName = "Summer2024";
-  for (const tail of [";", ",", " |", ")", ">", "[", " ;", ""]) {
-    assert.deepEqual(scan(`${PW}: ${typeName}${tail}`, rules), [], JSON.stringify(tail));
+
+// ======== 五回目のレビュー（#119）への対応で足したテスト ========
+// 型の注記とみなすのは、(a) 値の後ろが ; > [ のとき、(b) 値が型らしい語尾（Hash / Digest / Type / String / Str / Array / Buffer /
+// Bytes / Field / Input / Value + 数字）で終わり、後ろが , | ) か行末のとき。| ) , と行末は、型らしい語尾を要求する。
+
+const fifthHits = {
+  "行末の単語＋数字": () => `${PW}: Summer2024`,
+  "リストの行頭の - つき": () => `- ${PW}: Summer2024`,
+  "別の項目と同じ行": () => `user: admin, ${PW}: Summer2024`,
+  "後ろがコンマだけ": () => `${PW}: Summer2024,`,
+  "かっこの中": () => `(${PW}: Summer2024)`,
+  "後ろが | だけ（表の区切りか型の合併か区別できないので、型らしい語尾が無ければ当てる）": () => `${PW}: Summer2024 |`,
+  "行末の大文字と数字": () => `${PW}: AB12CD34EF`,
+  "Pass 始まりの値（大文字）": () => `${PW}: Pass1234`,
+  "pass 始まりの値（小文字）": () => `${PW}: pass1234`,
+  "password を含む値（2024）": () => `${PW}: ${PW}2024`,
+  "名前に CONFIRM": () => `${PW.toUpperCase()}_CONFIRM=Xk9mP2qLr7`,
+  "名前に _confirmation": () => `${PW}_confirmation: Xk9mP2qLr7`,
+  "マークダウンの表（英語）": () => `| ${PW} | Summer2024 |`,
+  "マークダウンの表（日本語）": () => "| パスワード | Xk9mP2qLr7vT |",
+  "表の行頭に別の列がある": () => `| admin | ${PW} | Xk9mP2qLr7vT | 本番 |`,
+};
+for (const [name, make] of Object.entries(fifthHits)) {
+  test(`secret-assignment-bare（五回目）: 当たる: ${name}`, () => {
+    const text = make();
+    const results = scan(text, rules);
+    assert.deepEqual(ids(results), ["secret-assignment-bare"], text);
+    assert.equal(results[0].count, 1);
+  });
+}
+
+const fifthMisses = {
+  "行末の型名（Hash + 数字）": () => `${PW}: PasswordHash256`,
+  "行末の型名（Str）": () => `${PW}: SecretStr`,
+  "; の前の配列型": () => `${PW}: Uint8Array;`,
+  "コンマの前の型名（String）": () => `${PW}: Base64String,`,
+  "| の前の型名（Digest）と ?:": () => `${PW}?: Sha256Digest | null;`,
+  "行末の型名（Argon2Hash）": () => `${PW}: Argon2Hash`,
+  "readonly つきの行末の型名": () => `readonly ${PW}: Uint8Array`,
+  "かっこの中の型名": () => `login(${PW}: SecretStr)`,
+  "; の前のパスカルケース": () => `${PW}: PasswordHash256;`,
+  "見本によく使われる弱い値": () => `パスワードは ${PW}123 のように推測しやすいものを禁止`,
+  "表の見出し行（説明）": () => `| ${PW} | 説明 |`,
+  "表の見出し行（英語の説明）": () => `| ${PW} | Description |`,
+  "表の見出し行（日本語の名前）": () => "| パスワード | 説明 |",
+  "表の見出し行（別の列）": () => `| Field | ${PW} | Description |`,
+  "表の区切り行": () => `| ${PW} | --- |`,
+  "表の区切りだけの行": () => "| --- | --- |",
+};
+for (const [name, make] of Object.entries(fifthMisses)) {
+  test(`secret-assignment-bare（五回目）: 当たらない: ${name}`, () => {
+    const text = make();
+    assert.deepEqual(scan(text, rules), [], text);
+  });
+}
+
+test("secret-assignment-bare: 型の注記の判断（; > [ は無条件、, | ) と行末は型らしい語尾が必要）", () => {
+  const plain = "Summer2024"; // パスカルケースだが型らしい語尾を持たない
+  const typeLike = "Summer2024Value"; // 型らしい語尾を持つ
+  // 無条件の後ろ: 型らしい語尾が無くても注記
+  for (const tail of [";", " ;", ">", "["]) {
+    assert.deepEqual(scan(`${PW}: ${plain}${tail}`, rules), [], JSON.stringify(tail));
   }
+  // 型らしい語尾が必要な後ろ: 無ければ当たる、あれば注記
+  for (const tail of [",", " |", ")", ""]) {
+    assert.deepEqual(ids(scan(`${PW}: ${plain}${tail}`, rules)), ["secret-assignment-bare"], `plain ${JSON.stringify(tail)}`);
+    assert.deepEqual(scan(`${PW}: ${typeLike}${tail}`, rules), [], `typeLike ${JSON.stringify(tail)}`);
+  }
+  // 文章が続く形は注記ではない
   for (const tail of [" です", " # メモ", "。", " (本番)", " end"]) {
-    assert.deepEqual(ids(scan(`${PW}: ${typeName}${tail}`, rules)), ["secret-assignment-bare"], JSON.stringify(tail));
+    assert.deepEqual(ids(scan(`${PW}: ${plain}${tail}`, rules)), ["secret-assignment-bare"], JSON.stringify(tail));
   }
+});
+
+test("secret-assignment-bare: 除外は password / passwd / pass だけと、弱い見本の password1〜password1234", () => {
+  for (const sample of ["pass", "password", "passwd", "password1", "password12", "password123", "password1234"]) {
+    assert.deepEqual(scan(`${PW}=${sample}`, rules).filter((r) => r.ruleId === "secret-assignment-bare"), [], sample);
+  }
+  for (const real of ["Pass1234", "pass1234", "password2024", "password12345", "Passw0rd123"]) {
+    assert.deepEqual(ids(scan(`${PW}=${real}`, rules)), ["secret-assignment-bare"], real);
+  }
+});
+
+test("secret-assignment-bare: 表の区切り | は password 系と日本語の名前だけ（pwd・secret には使わない）", () => {
+  assert.deepEqual(scan("| pwd | Xk9mP2qLr7vT |", rules), []);
+  assert.deepEqual(scan("| token | Xk9mP2qLr7vT |", rules), []);
+  assert.deepEqual(ids(scan("| パスワード | Xk9mP2qLr7vT |", rules)), ["secret-assignment-bare"]);
+  assert.deepEqual(ids(scan(`| ${PW} | Xk9mP2qLr7vT |`, rules)), ["secret-assignment-bare"]);
 });

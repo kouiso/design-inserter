@@ -172,8 +172,9 @@ function countInText(text, rule) {
     for (const match of text.matchAll(matcher)) {
       if (rule.excludes.length || rule.excludesCaseSensitive.length) {
         const value = valueOf(match);
-        // excludeCaseSensitive は、名前つきグループ valueAnn が当たったとき（型の注記の形）だけに効かせる。
-        const annotated = match.groups?.valueAnn !== undefined;
+        // excludeCaseSensitive は、名前が valueAnn で始まるグループが当たったとき（型の注記の形）だけに効かせる。
+        const groups = match.groups ?? {};
+        const annotated = Object.keys(groups).some((key) => key.startsWith("valueAnn") && groups[key] !== undefined);
         if (rule.excludes.some((ex) => ex.test(value))) continue;
         if (annotated && rule.excludesCaseSensitive.some((ex) => ex.test(value))) continue;
       }
